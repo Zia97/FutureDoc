@@ -1,0 +1,60 @@
+{
+  "scenarios": [
+    {
+      "scenarioId": 1,
+      "labelSet": 1,
+      "resource": "Emily, the medical student, has a feedback session with her supervisor in the afternoon. Some time before the meeting, she becomes aware of a valuable teach-in session that will be going on simultaneously. Emma knows the teach-in will cover topics she is unfamiliar with and would be valuable to her.\n\nHow important to take into consideration are the following factors for the student when considering how to respond to the situation?",
+      "questions": [
+        {
+          "questionId": 1,
+          "questionText": "The importance of the feedback from her supervisor",
+          "answer": "Very important",
+          "answeringReason": "The feedback session was a pre-arranged commitment with a supervisor. Honouring professional obligations and making the most of direct supervisor feedback is essential for a medical student's development and professional conduct."
+        },
+        {
+          "questionId": 2,
+          "questionText": "That other opportunities may arise to extend her learning",
+          "answer": "Very important",
+          "answeringReason": "Recognising that learning opportunities recur is key to good decision-making. A student should not sacrifice a formal commitment for a one-off session when similar content may become available again."
+        },
+        {
+          "questionId": 3,
+          "questionText": "Her supervisor's view on whether she should attend this class",
+          "answer": "Important",
+          "answeringReason": "Seeking the supervisor's input shows respect and good communication, but the student should not rely solely on the supervisor's preference — her own professional judgement also matters, making this important but not the deciding factor."
+        }
+      ]
+    },
+    {
+      "scenarioId": 2,
+      "labelSet": 2,
+      "resource": "Max is a trainee doctor on a ward. A senior nurse asks Max to carry out a basic procedure on a patient who is in a great deal of pain. Max is comfortable and confident carrying out the procedure, however the patient remarks that she is worried that Max may be unable to perform it. Nobody else is available to carry out the procedure.\n\nRate the following responses that Max could give:",
+      "questions": [
+        {
+          "questionId": 1,
+          "questionText": "I have carried out this procedure many times, don't worry",
+          "answer": "Appropriate, but not ideal",
+          "answeringReason": "Reassuring the patient with experience is reasonable, but dismissing her concern with 'don't worry' does not fully acknowledge her feelings or invite her to express what specifically worries her."
+        },
+        {
+          "questionId": 2,
+          "questionText": "Would you prefer if I found somebody else to carry this out",
+          "answer": "Inappropriate, but not awful",
+          "answeringReason": "Nobody else is available, so offering this creates a false choice and may increase the patient's anxiety or delay urgent pain relief. It is not the right response given the circumstances, though it does attempt to respect patient autonomy."
+        },
+        {
+          "questionId": 3,
+          "questionText": "I understand, please tell me what you are worried about",
+          "answer": "A very appropriate thing to do",
+          "answeringReason": "Acknowledging the patient's concern and inviting her to share it demonstrates empathy and good communication. It addresses her anxiety directly, which may help reassure her and builds trust before the procedure."
+        },
+        {
+          "questionId": 4,
+          "questionText": "I am the only colleague available right now, if you would prefer someone else to carry this procedure out, there may be a delay",
+          "answer": "Appropriate, but not ideal",
+          "answeringReason": "Being honest about availability is good, and informing the patient of the consequences of waiting is relevant. However, this response does not address the patient's emotional concern and could feel abrupt, making it less than ideal."
+        }
+      ]
+    }
+  ]
+}

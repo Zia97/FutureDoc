@@ -6,6 +6,8 @@ import HomeScreen from '../screens/HomeScreen';
 import PracticeSectionsScreen from '../screens/PracticeSectionsScreen';
 import VRQuestionListScreen from '../screens/VRQuestionListScreen';
 import VRPassageScreen from '../screens/VRPassageScreen';
+import SJScenarioListScreen from '../screens/SJScenarioListScreen';
+import SJScenarioScreen from '../screens/SJScenarioScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,6 +42,16 @@ export default function AppNavigator() {
         <Stack.Screen
           name="VRPassage"
           component={VRPassageScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SJScenarioList"
+          component={SJScenarioListScreen}
+          options={{ title: 'Situational Judgement' }}
+        />
+        <Stack.Screen
+          name="SJScenario"
+          component={SJScenarioScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

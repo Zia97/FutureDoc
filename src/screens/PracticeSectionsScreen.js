@@ -44,6 +44,7 @@ export default function PracticeSectionsScreen({ navigation }) {
             activeOpacity={0.8}
             onPress={() => {
               if (section.id === 'VR') navigation.navigate('VRQuestionList');
+              if (section.id === 'SJ') navigation.navigate('SJScenarioList');
             }}
           >
             <View style={[styles.badge, { backgroundColor: section.color }]}>
