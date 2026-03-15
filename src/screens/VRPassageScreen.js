@@ -6,11 +6,19 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  SafeAreaView,
   PanResponder,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import questionData from '../data/verbalReasoning/questions.json';
+
+// Enable LayoutAnimation on Android
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental?.(true);
+}
 
 const PASSAGES = questionData.passages;
 
@@ -48,14 +56,16 @@ export default function VRPassageScreen({ route }) {
 
   const [passageIndex, setPassageIndex] = useState(initialPassageIndex);
   const [questionIndex, setQuestionIndex] = useState(0);
-  // answers[passageId][questionId] = selectedOption
   const [answers, setAnswers] = useState({});
+  const [panelExpanded, setPanelExpanded] = useState(true);
 
   const passage = PASSAGES[passageIndex];
   const question = passage.questions[questionIndex];
 
   const isFirstPassage = passageIndex === 0;
   const isLastPassage = passageIndex === PASSAGES.length - 1;
+  const isFirstQuestion = questionIndex === 0;
+  const isLastQuestion = questionIndex === passage.questions.length - 1;
 
   const selectedAnswer = answers[passage.passageId]?.[question.questionId] ?? null;
   const hasAnswered = !!selectedAnswer;
@@ -77,15 +87,17 @@ export default function VRPassageScreen({ route }) {
     setQuestionIndex(0);
   }
 
-  const isFirstQuestion = questionIndex === 0;
-  const isLastQuestion = questionIndex === passage.questions.length - 1;
-
   function goToNextQuestion() {
     if (!isLastQuestion) setQuestionIndex((i) => i + 1);
   }
 
   function goToPrevQuestion() {
     if (!isFirstQuestion) setQuestionIndex((i) => i - 1);
+  }
+
+  function togglePanel() {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setPanelExpanded((v) => !v);
   }
 
   // Refs so the PanResponder (created once) can read current state without stale closures
@@ -96,7 +108,6 @@ export default function VRPassageScreen({ route }) {
 
   const panResponder = useRef(
     PanResponder.create({
-      // Only intercept clearly horizontal gestures — lets vertical scrolling work normally
       onMoveShouldSetPanResponder: (_, { dx, dy }) =>
         Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 15,
       onPanResponderRelease: (_, { dx }) => {
@@ -148,7 +159,7 @@ export default function VRPassageScreen({ route }) {
         </TouchableOpacity>
       </View>
 
-      {/* Passage text */}
+      {/* Passage text — fills all remaining space */}
       <View style={styles.passageContainer}>
         <Text style={styles.passageLabel}>PASSAGE</Text>
         <ScrollView key={passageIndex} showsVerticalScrollIndicator>
@@ -156,62 +167,69 @@ export default function VRPassageScreen({ route }) {
         </ScrollView>
       </View>
 
-      {/* Question area */}
-      <ScrollView
-        style={styles.questionArea}
-        contentContainerStyle={styles.questionContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Question counter */}
-        <Text style={styles.questionCounter}>
-          Question {questionIndex + 1} of {passage.questions.length}
-        </Text>
+      {/* Collapsible question panel */}
+      <View style={styles.questionPanel}>
 
-        <Text style={styles.questionText}>{question.questionText}</Text>
+        {/* Panel handle / header — always visible */}
+        <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
+          <Text style={styles.panelQuestionCounter}>
+            Question {questionIndex + 1} of {passage.questions.length}
+          </Text>
+          <Text style={styles.panelChevron}>{panelExpanded ? '▾' : '▴'}</Text>
+        </TouchableOpacity>
 
-        <View style={styles.optionsContainer}>
-          {question.options.map((option) => (
-            <OptionButton
-              key={option}
-              label={option}
-              state={getOptionState(option)}
-              onPress={() => handleAnswer(option)}
-            />
-          ))}
-        </View>
+        {/* Collapsible content */}
+        {panelExpanded && (
+          <ScrollView
+            style={styles.panelContent}
+            contentContainerStyle={styles.panelContentInner}
+            showsVerticalScrollIndicator={false}
+          >
+            <Text style={styles.questionText}>{question.questionText}</Text>
 
-        {/* Answer feedback */}
-        {hasAnswered && (
-          <View style={[styles.feedbackBox, isCorrect ? styles.feedbackCorrect : styles.feedbackIncorrect]}>
-            <Text style={styles.feedbackTitle}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
-            {!isCorrect && (
-              <>
-                <Text style={styles.feedbackCorrectAnswer}>Correct answer: {question.answer}</Text>
-                <Text style={styles.feedbackReason}>{question.answeringReason}</Text>
-              </>
+            <View style={styles.optionsContainer}>
+              {question.options.map((option) => (
+                <OptionButton
+                  key={option}
+                  label={option}
+                  state={getOptionState(option)}
+                  onPress={() => handleAnswer(option)}
+                />
+              ))}
+            </View>
+
+            {hasAnswered && (
+              <View style={[styles.feedbackBox, isCorrect ? styles.feedbackCorrect : styles.feedbackIncorrect]}>
+                <Text style={styles.feedbackTitle}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
+                {!isCorrect && (
+                  <>
+                    <Text style={styles.feedbackCorrectAnswer}>Correct answer: {question.answer}</Text>
+                    <Text style={styles.feedbackReason}>{question.answeringReason}</Text>
+                  </>
+                )}
+              </View>
             )}
-          </View>
+
+            <View style={styles.questionNav}>
+              <TouchableOpacity
+                style={[styles.questionNavButton, isFirstQuestion && styles.questionNavButtonDisabled]}
+                onPress={goToPrevQuestion}
+                disabled={isFirstQuestion}
+              >
+                <Text style={styles.questionNavText}>← Previous</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={[styles.questionNavButton, isLastQuestion && styles.questionNavButtonDisabled]}
+                onPress={goToNextQuestion}
+                disabled={isLastQuestion}
+              >
+                <Text style={styles.questionNavText}>Next →</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         )}
-
-        {/* Prev / Next question buttons */}
-        <View style={styles.questionNav}>
-          <TouchableOpacity
-            style={[styles.questionNavButton, isFirstQuestion && styles.questionNavButtonDisabled]}
-            onPress={goToPrevQuestion}
-            disabled={isFirstQuestion}
-          >
-            <Text style={styles.questionNavText}>← Previous</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.questionNavButton, isLastQuestion && styles.questionNavButtonDisabled]}
-            onPress={goToNextQuestion}
-            disabled={isLastQuestion}
-          >
-            <Text style={styles.questionNavText}>Next →</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -262,12 +280,12 @@ const styles = StyleSheet.create({
     color: '#2d3748',
   },
 
-  // Passage
+  // Passage — fills all available space between nav bar and question panel
   passageContainer: {
     flex: 1,
     marginHorizontal: 20,
     marginTop: 12,
-    marginBottom: 8,
+    marginBottom: 0,
     backgroundColor: '#16213e',
     borderRadius: 14,
     padding: 16,
@@ -287,21 +305,40 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
 
-  // Question area
-  questionArea: {
-    flexGrow: 0,
+  // Collapsible question panel
+  questionPanel: {
+    backgroundColor: '#16213e',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopWidth: 1.5,
+    borderColor: '#2d3748',
+    marginTop: 8,
   },
-  questionContent: {
+  panelHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 12,
+    paddingVertical: 14,
+  },
+  panelQuestionCounter: {
+    color: '#a0aec0',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  panelChevron: {
+    color: '#7c3aed',
+    fontSize: 18,
+  },
+  panelContent: {
+    maxHeight: 380,
+  },
+  panelContentInner: {
+    paddingHorizontal: 20,
     paddingBottom: 24,
   },
-  questionCounter: {
-    color: '#a0aec0',
-    fontSize: 12,
-    fontWeight: '600',
-    marginBottom: 10,
-  },
+
+  // Question
   questionText: {
     color: '#ffffff',
     fontSize: 16,
@@ -315,7 +352,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   optionButton: {
-    backgroundColor: '#16213e',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 18,
@@ -385,7 +422,7 @@ const styles = StyleSheet.create({
   },
   questionNavButton: {
     flex: 1,
-    backgroundColor: '#16213e',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     paddingVertical: 13,
     alignItems: 'center',
