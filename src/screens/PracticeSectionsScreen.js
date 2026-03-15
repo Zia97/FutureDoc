@@ -43,7 +43,7 @@ export default function PracticeSectionsScreen({ navigation }) {
             style={[styles.card, { borderLeftColor: section.color }]}
             activeOpacity={0.8}
             onPress={() => {
-              // Will navigate to question screen in next build
+              if (section.id === 'VR') navigation.navigate('VRQuestionList');
             }}
           >
             <View style={[styles.badge, { backgroundColor: section.color }]}>

@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from '../screens/HomeScreen';
 import PracticeSectionsScreen from '../screens/PracticeSectionsScreen';
+import VRQuestionListScreen from '../screens/VRQuestionListScreen';
+import VRPassageScreen from '../screens/VRPassageScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +31,16 @@ export default function AppNavigator() {
           name="PracticeSections"
           component={PracticeSectionsScreen}
           options={{ title: 'Practice' }}
+        />
+        <Stack.Screen
+          name="VRQuestionList"
+          component={VRQuestionListScreen}
+          options={{ title: 'Verbal Reasoning' }}
+        />
+        <Stack.Screen
+          name="VRPassage"
+          component={VRPassageScreen}
+          options={{ headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
