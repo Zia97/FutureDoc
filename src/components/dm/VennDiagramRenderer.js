@@ -11,6 +11,121 @@ const STROKE = '#e2e8f0';
 const TEXT_FILL = '#e2e8f0';
 const STROKE_WIDTH = 2;
 const FONT_SIZE = 13;
+const MIN_OUTLINE_CLEARANCE = 10; // minimum px from label centre to any shape outline
+
+// --- Label safety helpers ---
+
+function distPointToSegment(px, py, x1, y1, x2, y2) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return Math.hypot(px - x1, py - y1);
+  const t = Math.max(0, Math.min(1, ((px - x1) * dx + (py - y1) * dy) / lenSq));
+  return Math.hypot(px - (x1 + t * dx), py - (y1 + t * dy));
+}
+
+/**
+ * Convert a shape + position into a geometry object used for outline-distance
+ * queries. Returns { type:'circle', cx, cy, r } or { type:'polygon', segs }.
+ */
+function shapeToGeometry(shapeType, cx, cy, w, h) {
+  const r = Math.min(w, h) / 2;
+  if (shapeType === 'circle') {
+    return { type: 'circle', cx, cy, r };
+  }
+  let pts;
+  if (shapeType === 'triangle') {
+    pts = [[cx, cy - r], [cx - r, cy + r], [cx + r, cy + r]];
+  } else if (shapeType === 'diamond') {
+    pts = [[cx, cy - r], [cx + r, cy], [cx, cy + r], [cx - r, cy]];
+  } else if (shapeType === 'pentagon') {
+    pts = Array.from({ length: 5 }, (_, i) => {
+      const a = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+      return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+    });
+  } else {
+    // square / rectangle
+    const hw = w / 2, hh = h / 2;
+    pts = [[cx - hw, cy - hh], [cx + hw, cy - hh], [cx + hw, cy + hh], [cx - hw, cy + hh]];
+  }
+  const segs = pts.map((p, i) => [...p, ...pts[(i + 1) % pts.length]]);
+  return { type: 'polygon', segs };
+}
+
+function distToOutline(px, py, geom) {
+  if (geom.type === 'circle') {
+    return Math.abs(Math.hypot(px - geom.cx, py - geom.cy) - geom.r);
+  }
+  return Math.min(...geom.segs.map(([x1, y1, x2, y2]) =>
+    distPointToSegment(px, py, x1, y1, x2, y2),
+  ));
+}
+
+function minDistToAllOutlines(px, py, geoms) {
+  return Math.min(...geoms.map(g => distToOutline(px, py, g)));
+}
+
+/** Returns true if the point is strictly inside the given geometry. */
+function isPointInsideShape(px, py, geom) {
+  if (geom.type === 'circle') {
+    return Math.hypot(px - geom.cx, py - geom.cy) < geom.r;
+  }
+  // Ray-casting for polygons
+  let inside = false;
+  for (const [x1, y1, x2, y2] of geom.segs) {
+    if ((y1 > py) !== (y2 > py)) {
+      const xIntersect = x1 + ((py - y1) * (x2 - x1)) / (y2 - y1);
+      if (px < xIntersect) inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/**
+ * Returns a string representing which shapes contain the point, e.g. "10110".
+ * Used to ensure a nudged label stays in the same logical region.
+ */
+function regionMembership(px, py, geoms) {
+  return geoms.map(g => (isPointInsideShape(px, py, g) ? '1' : '0')).join('');
+}
+
+/**
+ * Given a preferred label position, return a position that is:
+ *   1. at least `clearance` px from every shape outline, AND
+ *   2. in the same logical region (same set of containing shapes) as the original.
+ *
+ * IMPORTANT: `x` and `y` must be the visual centre of the text (i.e. the SVG
+ * element should use dominantBaseline="central"), so the clearance check is
+ * geometrically accurate — not offset by the SVG text baseline.
+ *
+ * If no candidate satisfies both constraints within the search radius, returns
+ * the candidate with the best (maximum) clearance that is still in the correct
+ * region, rather than falling back to the original position.
+ */
+function safeLabelPos(x, y, geoms, clearance) {
+  if (minDistToAllOutlines(x, y, geoms) >= clearance) return { x, y };
+
+  const targetRegion = regionMembership(x, y, geoms);
+  const DIRS = 16;
+  const angles = Array.from({ length: DIRS }, (_, i) => (i * 2 * Math.PI) / DIRS);
+
+  let bestPos = null;
+  let bestDist = -1;
+
+  for (let step = 3; step <= 60; step += 3) {
+    for (const angle of angles) {
+      const cx = x + Math.cos(angle) * step;
+      const cy = y + Math.sin(angle) * step;
+      if (regionMembership(cx, cy, geoms) !== targetRegion) continue;
+      const d = minDistToAllOutlines(cx, cy, geoms);
+      if (d >= clearance) return { x: cx, y: cy };
+      if (d > bestDist) { bestDist = d; bestPos = { x: cx, y: cy }; }
+    }
+  }
+
+  // Full clearance unachievable in this region (narrow sliver) — use the
+  // best position found rather than the original.
+  return bestPos ?? { x, y };
+}
 
 /**
  * Layout templates define shape positions and region label positions.
@@ -244,6 +359,11 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
     shapeById[s.id] = s.shape;
   });
 
+  // Build outline geometry for every set so labels can be safety-checked.
+  const shapeGeoms = layout.sets.map((pos) =>
+    shapeToGeometry(shapeById[pos.id] || 'circle', pos.cx, pos.cy, pos.w, pos.h),
+  );
+
   return (
     <View>
       <Svg
@@ -262,13 +382,15 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
             then the bright fill on top — so letters are readable on any boundary. */}
         {Object.entries(vennConfig.regions || {}).map(([regionKey, value]) => {
           if (value === undefined || value === null) return null;
-          const pos = layout.regions[regionKey];
-          if (!pos) return null;
+          const rawPos = layout.regions[regionKey];
+          if (!rawPos) return null;
+          const pos = safeLabelPos(rawPos.x, rawPos.y, shapeGeoms, MIN_OUTLINE_CLEARANCE);
           const sharedProps = {
             x: pos.x,
             y: pos.y,
             fontSize: FONT_SIZE,
             textAnchor: 'middle',
+            dominantBaseline: 'central',
             fontWeight: '600',
           };
           return (
