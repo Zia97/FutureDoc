@@ -279,7 +279,7 @@ const LAYOUTS = {
       set3_only: { x: 245, y: 212 },
       set1_set2: { x: 110, y: 130 },
       set1_set3: { x: 230, y: 145 },
-      set2_set3: { x: 160, y: 215 },
+      set2_set3: { x: 160, y: 228 },
       all_three: { x: 175, y: 156 },
       outside:   { x: 10,  y: 12  },
     },
@@ -292,15 +292,15 @@ const LAYOUTS = {
    *  set2 square    : cx=65  cy=75  w=105 h=105  → x:12–118   y:22–128  (upper-left, partly outside set1)
    *  set3 triangle  : cx=355 cy=120 r=80         → top(355,40) BL(275,200) BR(435,200) (right side, partly outside set1)
    *  set4 circle    : cx=185 cy=120 r=58         → x:127–243  y:62–178  (inside set1)
-   *  set5 diamond   : cx=270 cy=120 r=65         → x:205–335  y:55–185  (inside set1, overlaps set4 & set3)
+   *  set5 diamond   : cx=280 cy=120 r=65         → x:215–345  y:55–185  (inside set1, overlaps set4 & set3)
    *
    *  Labeled regions (all geometrically verified):
    *    set2_only       ( 65,  35)  set2 above set1
    *    set1_set2       ( 65, 100)  set1 ∩ set2
    *    set1_only       (140,  58)  set1 only — gap between set2 and set4
    *    set1_set4       (148, 120)  set1 ∩ set4 — left of set5
-   *    set1_set4_set5  (224, 120)  set1 ∩ set4 ∩ set5 — not set3
-   *    set1_set3_set5  (328, 120)  set1 ∩ set3 ∩ set5 — not set4
+   *    set1_set4_set5  (231, 120)  set1 ∩ set4 ∩ set5 — not set3
+   *    set1_set3_set5  (330, 120)  set1 ∩ set3 ∩ set5 — not set4
    *    set3_only       (395, 150)  set3 only — right of set1
    */
   five_complex: {
@@ -311,15 +311,15 @@ const LAYOUTS = {
       { id: 'set2', cx: 65,  cy: 75,  w: 105, h: 105 },
       { id: 'set3', cx: 355, cy: 120, w: 160, h: 160 },
       { id: 'set4', cx: 185, cy: 120, w: 116, h: 116 },
-      { id: 'set5', cx: 270, cy: 120, w: 130, h: 130 },
+      { id: 'set5', cx: 280, cy: 120, w: 130, h: 130 },
     ],
     regions: {
       set2_only:       { x: 65,  y: 35  },
       set1_set2:       { x: 65,  y: 100 },
       set1_only:       { x: 140, y: 70  },
       set1_set4:       { x: 148, y: 120 },
-      set1_set4_set5:  { x: 224, y: 120 },
-      set1_set3_set5:  { x: 316, y: 133 },
+      set1_set4_set5:  { x: 231, y: 120 },
+      set1_set3_set5:  { x: 330, y: 120 },
       set3_only:       { x: 395, y: 150 },
       outside:         { x: 12,  y: 12  },
     },

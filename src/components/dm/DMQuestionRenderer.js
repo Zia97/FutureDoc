@@ -38,7 +38,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 
   const contentWidth = screenWidth - 40; // 20px padding each side
   const stimulusCanvas = getCanvasSize(question.stimulusDiagram?.diagramLayout, question.stimulusDiagram);
-  const stimulusScale  = Math.min(1, contentWidth / stimulusCanvas.width);
+  const stimulusScale  = Math.min(1.2, contentWidth / stimulusCanvas.width);
   const expandedScale  = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
 
   function mcqOptionState(label) {
@@ -74,7 +74,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
                 disabled={submitted}
               >
                 <Text style={styles.vennOptionLabel}>{opt.label}</Text>
-                <VennDiagramRenderer vennConfig={opt.vennConfig} scale={0.72} />
+                <VennDiagramRenderer vennConfig={opt.vennConfig} scale={0.864} />
               </TouchableOpacity>
             );
           })}
