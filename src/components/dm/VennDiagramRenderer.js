@@ -127,6 +127,91 @@ function safeLabelPos(x, y, geoms, clearance) {
   return bestPos ?? { x, y };
 }
 
+// ---------------------------------------------------------------------------
+// Dynamic three_linear layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns the horizontal half-extent of a shape at its vertical centre.
+ * Two shapes "touch" at centre-height when their cx values are exactly
+ * (extA + extB) apart. Used to place shapes with a visible overlap or gap
+ * regardless of shape type.
+ */
+function shapeExtentAtCenter(shape, r) {
+  switch (shape) {
+    case 'triangle': return r * 0.5;                  // pointed top; cx±r/2 at cy
+    case 'pentagon': return r * Math.cos(Math.PI / 5); // ≈ 0.81r
+    default:         return r;                         // circle, square, rectangle, diamond
+  }
+}
+
+/**
+ * Builds a three_linear layout at runtime based on the actual shape types and
+ * which intersection regions are non-empty.
+ *
+ * - Adjacent pairs with a non-zero intersection count are drawn overlapping.
+ * - Adjacent pairs with a zero (or absent) intersection count are drawn with
+ *   a visible gap so the diagram structure itself reflects the data.
+ *
+ * All variants share a fixed canvas width (320 px) so option thumbnails are
+ * always the same size; shapes are centred within that canvas.
+ */
+function computeThreeLinearLayout(shapeTypes, regionCounts) {
+  const r          = 44;
+  const cy         = 57;
+  const CANVAS_W   = 320;
+  const CANVAS_H   = 115;
+  const OVERLAP_PX = 18; // visible overlap depth
+  const GAP_PX     = 14; // visible gap between non-overlapping shapes
+
+  const [s1, s2, s3] = shapeTypes;
+  const ext1 = shapeExtentAtCenter(s1, r);
+  const ext2 = shapeExtentAtCenter(s2, r);
+  const ext3 = shapeExtentAtCenter(s3, r);
+
+  const overlap12 = (regionCounts['set1_set2'] ?? 0) > 0;
+  const overlap23 = (regionCounts['set2_set3'] ?? 0) > 0;
+
+  const dist12 = overlap12 ? (ext1 + ext2 - OVERLAP_PX) : (ext1 + ext2 + GAP_PX);
+  const dist23 = overlap23 ? (ext2 + ext3 - OVERLAP_PX) : (ext2 + ext3 + GAP_PX);
+
+  // Centre the arrangement horizontally within the fixed canvas.
+  const totalWidth = dist12 + dist23 + 2 * r;
+  const cx1 = Math.round((CANVAS_W - totalWidth) / 2 + r);
+  const cx2 = cx1 + dist12;
+  const cx3 = cx2 + dist23;
+
+  const sets = [
+    { id: 'set1', cx: cx1, cy, w: r * 2, h: r * 2 },
+    { id: 'set2', cx: cx2, cy, w: r * 2, h: r * 2 },
+    { id: 'set3', cx: cx3, cy, w: r * 2, h: r * 2 },
+  ];
+
+  // set2_only sits at the top to avoid both overlap zones.
+  const regions = {
+    set1_only: { x: overlap12 ? cx1 - ext1 * 0.35 : cx1,        y: cy },
+    set2_only: { x: cx2,                                          y: cy - r * 0.55 },
+    set3_only: { x: overlap23 ? cx3 + ext3 * 0.35 : cx3,         y: cy },
+    outside:   { x: 8,                                            y: 8  },
+  };
+
+  if (overlap12) {
+    regions.set1_set2 = { x: (cx1 + cx2) / 2, y: cy - 8 };
+  }
+  if (overlap23) {
+    // Triangle shapes are narrow at the top, so their overlap zone sits in
+    // the lower portion of the shapes. Bias the label hint downward.
+    const yBias = (s2 === 'triangle' || s3 === 'triangle') ? r * 0.4 : 0;
+    regions.set2_set3 = { x: (cx2 + cx3) / 2, y: cy + yBias };
+  }
+
+  return { sets, regions, canvasWidth: CANVAS_W, canvasHeight: CANVAS_H };
+}
+
+// ---------------------------------------------------------------------------
+// Static layout templates
+// ---------------------------------------------------------------------------
+
 /**
  * Layout templates define shape positions and region label positions.
  * Shapes are positioned so adjacent sets overlap visually.
@@ -135,7 +220,7 @@ function safeLabelPos(x, y, geoms, clearance) {
  * Supported layouts:
  *   two_overlap        — two sets, partially overlapping
  *   two_separate       — two sets, no overlap
- *   three_linear       — three sets in a row; set1∩set2, set2∩set3, set1 not ∩ set3
+ *   three_linear       — DYNAMIC: see computeThreeLinearLayout above
  *   three_all_overlap  — three sets, all pairwise overlaps + centre
  *   three_one_separate — set1∩set2; set3 separate
  *   five_complex       — 5 shapes: large rectangle (set1), square overlapping top-left (set2),
@@ -171,25 +256,6 @@ const LAYOUTS = {
       set1_only: { x: 65,  y: 55 },
       set2_only: { x: 165, y: 55 },
       outside:   { x: 8,   y: 10 },
-    },
-  },
-
-  three_linear: {
-    canvasWidth: 275,
-    canvasHeight: 115,
-    sets: [
-      { id: 'set1', cx: 58,  cy: 57, w: 88, h: 88 },
-      { id: 'set2', cx: 133, cy: 57, w: 88, h: 88 },
-      { id: 'set3', cx: 208, cy: 57, w: 88, h: 88 },
-    ],
-    regions: {
-      set1_only: { x: 35,  y: 57 },
-      set1_set2: { x: 96,  y: 47 },
-      set2_only: { x: 133, y: 33 },
-      set2_set3: { x: 170, y: 47 },
-      set3_only: { x: 231, y: 57 },
-      all_three: { x: 133, y: 57 },
-      outside:   { x: 8,   y: 8  },
     },
   },
 
@@ -326,7 +392,25 @@ function renderShape(shape, cx, cy, w, h) {
   }
 }
 
-export function getCanvasSize(diagramLayout) {
+function resolveLayout(vennConfig) {
+  if (!vennConfig) return null;
+  if (vennConfig.diagramLayout === 'three_linear') {
+    const shapeTypes = (vennConfig.sets || []).map(s => s.shape || 'circle');
+    return computeThreeLinearLayout(shapeTypes, vennConfig.regions || {});
+  }
+  return LAYOUTS[vennConfig.diagramLayout] ?? null;
+}
+
+export function getCanvasSize(diagramLayout, vennConfig) {
+  if (diagramLayout === 'three_linear') {
+    // Use the dynamic layout if a full config is available; otherwise return
+    // the fixed canvas size that all three_linear variants share.
+    if (vennConfig) {
+      const layout = resolveLayout(vennConfig);
+      return { width: layout.canvasWidth, height: layout.canvasHeight };
+    }
+    return { width: 320, height: 115 };
+  }
   const layout = LAYOUTS[diagramLayout];
   return layout
     ? { width: layout.canvasWidth, height: layout.canvasHeight }
@@ -346,7 +430,7 @@ export function getCanvasSize(diagramLayout) {
  * scale: multiplied against the canvas size (use < 1 for small option thumbnails)
  */
 export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
-  const layout = LAYOUTS[vennConfig?.diagramLayout];
+  const layout = resolveLayout(vennConfig);
   if (!layout) return null;
 
   const canvasW = layout.canvasWidth;

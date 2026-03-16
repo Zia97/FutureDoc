@@ -37,7 +37,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   const isInterpVenn = isVenn && question.subtype === 'interpret_diagram';
 
   const contentWidth = screenWidth - 40; // 20px padding each side
-  const stimulusCanvas = getCanvasSize(question.stimulusDiagram?.diagramLayout);
+  const stimulusCanvas = getCanvasSize(question.stimulusDiagram?.diagramLayout, question.stimulusDiagram);
   const stimulusScale  = Math.min(1, contentWidth / stimulusCanvas.width);
   const expandedScale  = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
 
