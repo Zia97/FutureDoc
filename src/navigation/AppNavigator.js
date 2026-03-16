@@ -8,6 +8,8 @@ import VRQuestionListScreen from '../screens/VRQuestionListScreen';
 import VRPassageScreen from '../screens/VRPassageScreen';
 import SJScenarioListScreen from '../screens/SJScenarioListScreen';
 import SJScenarioScreen from '../screens/SJScenarioScreen';
+import DMQuestionListScreen from '../screens/DMQuestionListScreen';
+import DMQuestionScreen from '../screens/DMQuestionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,6 +54,16 @@ export default function AppNavigator() {
         <Stack.Screen
           name="SJScenario"
           component={SJScenarioScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DMQuestionList"
+          component={DMQuestionListScreen}
+          options={{ title: 'Decision Making' }}
+        />
+        <Stack.Screen
+          name="DMQuestion"
+          component={DMQuestionScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
