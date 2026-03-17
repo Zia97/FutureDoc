@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "FutureDoc",
-    "slug": "FutureDoc",
+    "name": "UCAT PrepAI",
+    "slug": "ucat-prepai",
+    "scheme": "ucatprepai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -12,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.qhz123.ucatprepai"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +23,7 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.qhz123.FutureDoc"
+      "package": "com.qhz123.ucatprepai"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,7 +34,8 @@
       }
     },
     "plugins": [
-      "expo-asset"
+      "expo-asset",
+      "expo-secure-store"
     ]
   }
 }
