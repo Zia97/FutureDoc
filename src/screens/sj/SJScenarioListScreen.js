@@ -1,5 +1,5 @@
-import questionData from '../data/situationalJudgement/questions.json';
-import SectionQuestionList from '../components/SectionQuestionList';
+import questionData from '../../data/situationalJudgement/questions.json';
+import SectionQuestionList from '../../components/SectionQuestionList';
 
 const SCENARIOS = questionData.scenarios;
 

@@ -1,6 +1,6 @@
-import questionData from '../data/verbalReasoning/questions.json';
-import PassageLayout from '../components/PassageLayout';
-import AnswerOptionButton from '../components/AnswerOptionButton';
+import questionData from '../../data/verbalReasoning/questions.json';
+import PassageLayout from '../../components/PassageLayout';
+import AnswerOptionButton from '../../components/AnswerOptionButton';
 
 const PASSAGES = questionData.passages;
 

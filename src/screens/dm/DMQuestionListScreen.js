@@ -1,5 +1,5 @@
-import questionsData from '../data/decisionMaking/questions.json';
-import SectionQuestionList from '../components/SectionQuestionList';
+import questionsData from '../../data/decisionMaking/questions.json';
+import SectionQuestionList from '../../components/SectionQuestionList';
 
 const QUESTIONS = questionsData.questions;
 

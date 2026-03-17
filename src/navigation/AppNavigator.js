@@ -2,14 +2,16 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import HomeScreen from '../screens/HomeScreen';
-import PracticeSectionsScreen from '../screens/PracticeSectionsScreen';
-import VRQuestionListScreen from '../screens/VRQuestionListScreen';
-import VRPassageScreen from '../screens/VRPassageScreen';
-import SJScenarioListScreen from '../screens/SJScenarioListScreen';
-import SJScenarioScreen from '../screens/SJScenarioScreen';
-import DMQuestionListScreen from '../screens/DMQuestionListScreen';
-import DMQuestionScreen from '../screens/DMQuestionScreen';
+import HomeScreen from '../screens/menus/HomeScreen';
+import PracticeSectionsScreen from '../screens/menus/PracticeSectionsScreen';
+import VRQuestionListScreen from '../screens/vr/VRQuestionListScreen';
+import VRPassageScreen from '../screens/vr/VRPassageScreen';
+import SJScenarioListScreen from '../screens/sj/SJScenarioListScreen';
+import SJScenarioScreen from '../screens/sj/SJScenarioScreen';
+import DMQuestionListScreen from '../screens/dm/DMQuestionListScreen';
+import DMQuestionScreen from '../screens/dm/DMQuestionScreen';
+import QRQuestionListScreen from '../screens/qr/QRQuestionListScreen';
+import QRQuestionScreen from '../screens/qr/QRQuestionScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -64,6 +66,16 @@ export default function AppNavigator() {
         <Stack.Screen
           name="DMQuestion"
           component={DMQuestionScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="QRQuestionList"
+          component={QRQuestionListScreen}
+          options={{ title: 'Quantitative Reasoning' }}
+        />
+        <Stack.Screen
+          name="QRQuestion"
+          component={QRQuestionScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

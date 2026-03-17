@@ -12,34 +12,24 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useItemNavigation } from '../hooks/useItemNavigation';
-import { useAnswers } from '../hooks/useAnswers';
-import { useSwipeGesture } from '../hooks/useSwipeGesture';
-import ScreenNavBar from './ScreenNavBar';
-import FeedbackBox from './FeedbackBox';
+import { useItemNavigation } from '../../hooks/useItemNavigation';
+import { useAnswers } from '../../hooks/useAnswers';
+import { useSwipeGesture } from '../../hooks/useSwipeGesture';
+import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
+import AnswerOptionButton from '../../components/AnswerOptionButton';
+import ScreenNavBar from '../../components/ScreenNavBar';
+import FeedbackBox from '../../components/FeedbackBox';
+import setsData from '../../data/quantitativeReasoning/questions.json';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
 
-// Props:
-//   items          — array of passage/scenario objects
-//   initialIndex   — starting item index
-//   itemLabel      — "Passage" | "Scenario"
-//   getTitle       — (item, index) => string  — text shown in the nav bar
-//   getId          — (item) => string|number  — unique item identifier for answer tracking
-//   renderOptions  — ({ item, question, getOptionState, onAnswer }) => ReactNode
-//   alwaysShowReason — bool — show answeringReason even on correct answer (default false)
+const SETS = setsData.sets;
 
-export default function PassageLayout({
-  items,
-  initialIndex,
-  itemLabel,
-  getTitle,
-  getId,
-  renderOptions,
-  alwaysShowReason = false,
-}) {
+export default function QRQuestionScreen({ route }) {
+  const { index: initialIndex = 0 } = route?.params ?? {};
+
   const {
     itemIndex,
     questionIndex,
@@ -52,13 +42,12 @@ export default function PassageLayout({
     goToItem,
     goToNextQuestion,
     goToPrevQuestion,
-  } = useItemNavigation(items, initialIndex);
+  } = useItemNavigation(SETS, initialIndex);
 
   const { handleAnswer, getAnswer } = useAnswers();
   const [panelExpanded, setPanelExpanded] = useState(true);
 
-  const itemId = getId(item);
-  const selectedAnswer = getAnswer(itemId, question.questionId);
+  const selectedAnswer = getAnswer(item.setId, question.questionId);
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === question.answer;
 
@@ -67,16 +56,16 @@ export default function PassageLayout({
     isLastItem ? null : () => goToItem(itemIndex + 1),
   );
 
+  function onAnswer(option) {
+    if (hasAnswered) return;
+    handleAnswer(item.setId, question.questionId, option);
+  }
+
   function getOptionState(option) {
     if (!hasAnswered) return 'idle';
     if (option === question.answer) return 'correct';
     if (option === selectedAnswer) return 'incorrect';
     return 'idle';
-  }
-
-  function onAnswer(option) {
-    if (hasAnswered) return;
-    handleAnswer(itemId, question.questionId, option);
   }
 
   function togglePanel() {
@@ -89,25 +78,28 @@ export default function PassageLayout({
       <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
 
       <ScreenNavBar
-        title={getTitle(item, itemIndex)}
-        meta={`${itemLabel} ${itemIndex + 1} of ${items.length}`}
+        title={item.title}
+        meta={`Set ${itemIndex + 1} of ${SETS.length}`}
         onPrev={() => goToItem(itemIndex - 1)}
         onNext={() => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
         isLast={isLastItem}
-        color="#7c3aed"
+        color="#059669"
       />
 
-      {/* Resource text */}
-      <View style={styles.resourceContainer}>
-        <Text style={styles.resourceLabel}>{itemLabel.toUpperCase()}</Text>
-        <ScrollView key={itemIndex} showsVerticalScrollIndicator>
-          <Text style={styles.resourceText}>{item.resource}</Text>
-        </ScrollView>
-      </View>
+      {/* Stimulus area */}
+      <ScrollView
+        key={itemIndex}
+        style={styles.stimulusScroll}
+        contentContainerStyle={styles.stimulusContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.dataLabel}>DATA</Text>
+        <QRStimulusRenderer stimulus={item.stimulus} />
+      </ScrollView>
 
-      {/* Collapsible question panel */}
-      <View style={styles.questionPanel}>
+      {/* Question panel */}
+      <View style={styles.panel}>
         <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
           <Text style={styles.panelCounter}>
             Question {questionIndex + 1} of {item.questions.length}
@@ -117,14 +109,21 @@ export default function PassageLayout({
 
         {panelExpanded && (
           <ScrollView
-            style={styles.panelContent}
-            contentContainerStyle={styles.panelContentInner}
+            style={styles.panelScroll}
+            contentContainerStyle={styles.panelContent}
             showsVerticalScrollIndicator={false}
           >
             <Text style={styles.questionText}>{question.questionText}</Text>
 
-            <View style={styles.optionsContainer}>
-              {renderOptions({ item, question, getOptionState, onAnswer })}
+            <View style={styles.options}>
+              {question.options.map((opt) => (
+                <AnswerOptionButton
+                  key={opt.label}
+                  label={`${opt.label}.  ${opt.text}`}
+                  state={getOptionState(opt.label)}
+                  onPress={() => onAnswer(opt.label)}
+                />
+              ))}
             </View>
 
             {hasAnswered && (
@@ -132,25 +131,24 @@ export default function PassageLayout({
                 isCorrect={isCorrect}
                 correctAnswer={question.answer}
                 reason={question.answeringReason}
-                showReason={!isCorrect || alwaysShowReason}
+                showReason
               />
             )}
 
             <View style={styles.questionNav}>
               <TouchableOpacity
-                style={[styles.questionNavButton, isFirstQuestion && styles.questionNavButtonDisabled]}
+                style={[styles.qNavBtn, isFirstQuestion && styles.qNavBtnDisabled]}
                 onPress={goToPrevQuestion}
                 disabled={isFirstQuestion}
               >
-                <Text style={styles.questionNavText}>← Previous</Text>
+                <Text style={styles.qNavText}>← Previous</Text>
               </TouchableOpacity>
-
               <TouchableOpacity
-                style={[styles.questionNavButton, isLastQuestion && styles.questionNavButtonDisabled]}
+                style={[styles.qNavBtn, isLastQuestion && styles.qNavBtnDisabled]}
                 onPress={goToNextQuestion}
                 disabled={isLastQuestion}
               >
-                <Text style={styles.questionNavText}>Next →</Text>
+                <Text style={styles.qNavText}>Next →</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -166,38 +164,33 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a1a2e',
   },
 
-  // Resource text area
-  resourceContainer: {
+  stimulusScroll: {
     flex: 1,
+  },
+  stimulusContent: {
     marginHorizontal: 20,
     marginTop: 12,
     backgroundColor: '#16213e',
     borderRadius: 14,
     padding: 16,
     borderLeftWidth: 3,
-    borderLeftColor: '#7c3aed',
+    borderLeftColor: '#059669',
+    marginBottom: 8,
   },
-  resourceLabel: {
-    color: '#7c3aed',
+  dataLabel: {
+    color: '#059669',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  resourceText: {
-    color: '#cbd5e0',
-    fontSize: 14,
-    lineHeight: 22,
+    marginBottom: 12,
   },
 
-  // Collapsible question panel
-  questionPanel: {
+  panel: {
     backgroundColor: '#16213e',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderTopWidth: 1.5,
     borderColor: '#2d3748',
-    marginTop: 8,
   },
   panelHeader: {
     flexDirection: 'row',
@@ -212,18 +205,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   panelChevron: {
-    color: '#7c3aed',
+    color: '#059669',
     fontSize: 18,
   },
-  panelContent: {
-    maxHeight: 380,
+  panelScroll: {
+    maxHeight: 390,
   },
-  panelContentInner: {
+  panelContent: {
     paddingHorizontal: 20,
-    paddingBottom: 24,
+    paddingBottom: 28,
   },
 
-  // Question
   questionText: {
     color: '#ffffff',
     fontSize: 16,
@@ -231,20 +223,17 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginBottom: 16,
   },
-
-  // Options
-  optionsContainer: {
+  options: {
     gap: 10,
   },
 
-  // Question prev/next
   questionNav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 20,
     gap: 12,
   },
-  questionNavButton: {
+  qNavBtn: {
     flex: 1,
     backgroundColor: '#1a1a2e',
     borderRadius: 12,
@@ -253,10 +242,10 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: '#2d3748',
   },
-  questionNavButtonDisabled: {
+  qNavBtnDisabled: {
     opacity: 0.3,
   },
-  questionNavText: {
+  qNavText: {
     color: '#ffffff',
     fontSize: 14,
     fontWeight: '600',
