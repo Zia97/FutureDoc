@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Linking from 'expo-linking';
 import { supabase } from '../lib/supabase';
 
 WebBrowser.maybeCompleteAuthSession();
@@ -25,6 +26,36 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe();
   }, []);
 
+  // Handle OAuth deep link callback — covers the case where Android kills
+  // the app while the browser is open and relaunches it via the deep link.
+  useEffect(() => {
+    const handleUrl = async ({ url }) => {
+      if (url.includes('auth/callback')) {
+        const hash = url.split('#')[1];
+        if (hash) {
+          const params = new URLSearchParams(hash);
+          const access_token = params.get('access_token');
+          const refresh_token = params.get('refresh_token');
+          if (access_token && refresh_token) {
+            await supabase.auth.setSession({ access_token, refresh_token });
+          }
+        }
+        const { data: { session } } = await supabase.auth.getSession();
+        setUser(session?.user ?? null);
+      }
+    };
+
+    // App was running in background when deep link fired
+    const subscription = Linking.addEventListener('url', handleUrl);
+
+    // App was killed and restarted by the deep link
+    Linking.getInitialURL().then((url) => {
+      if (url) handleUrl({ url });
+    });
+
+    return () => subscription.remove();
+  }, []);
+
   const signUp = (email, password) =>
     supabase.auth.signUp({ email, password });
 
@@ -46,8 +77,13 @@ export function AuthProvider({ children }) {
     const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
 
     if (result.type === 'success') {
-      const { url } = result;
-      const { error: sessionError } = await supabase.auth.exchangeCodeForSession(url);
+      const hash = result.url.split('#')[1];
+      if (!hash) return { error: new Error('No token in redirect URL') };
+      const params = new URLSearchParams(hash);
+      const access_token = params.get('access_token');
+      const refresh_token = params.get('refresh_token');
+      if (!access_token || !refresh_token) return { error: new Error('Missing tokens in redirect URL') };
+      const { error: sessionError } = await supabase.auth.setSession({ access_token, refresh_token });
       if (sessionError) return { error: sessionError };
     }
 
