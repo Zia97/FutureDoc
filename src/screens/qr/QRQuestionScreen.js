@@ -4,6 +4,7 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  Modal,
   StyleSheet,
   StatusBar,
   LayoutAnimation,
@@ -16,6 +17,7 @@ import { useItemNavigation } from '../../hooks/useItemNavigation';
 import { useAnswers } from '../../hooks/useAnswers';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
+import ZoomableView from '../../components/ZoomableView';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import FeedbackBox from '../../components/FeedbackBox';
@@ -46,6 +48,7 @@ export default function QRQuestionScreen({ route }) {
 
   const { handleAnswer, getAnswer } = useAnswers();
   const [panelExpanded, setPanelExpanded] = useState(true);
+  const [dataExpanded, setDataExpanded] = useState(false);
 
   const selectedAnswer = getAnswer(item.setId, question.questionId);
   const hasAnswered = !!selectedAnswer;
@@ -79,7 +82,7 @@ export default function QRQuestionScreen({ route }) {
 
       <ScreenNavBar
         title={item.title}
-        meta={`Set ${itemIndex + 1} of ${SETS.length}`}
+        meta={`Question ${itemIndex + 1} of ${SETS.length}`}
         onPrev={() => goToItem(itemIndex - 1)}
         onNext={() => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
@@ -87,16 +90,45 @@ export default function QRQuestionScreen({ route }) {
         color="#059669"
       />
 
-      {/* Stimulus area */}
-      <ScrollView
-        key={itemIndex}
-        style={styles.stimulusScroll}
-        contentContainerStyle={styles.stimulusContent}
-        showsVerticalScrollIndicator={false}
+      {/* Stimulus area — tap to expand */}
+      <TouchableOpacity
+        style={styles.stimulusContainer}
+        onPress={() => setDataExpanded(true)}
+        activeOpacity={0.85}
       >
-        <Text style={styles.dataLabel}>DATA</Text>
-        <QRStimulusRenderer stimulus={item.stimulus} />
-      </ScrollView>
+        <ScrollView
+          key={itemIndex}
+          style={styles.stimulusScroll}
+          contentContainerStyle={styles.stimulusContent}
+          showsVerticalScrollIndicator
+        >
+          <Text style={styles.dataLabel}>DATA</Text>
+          <QRStimulusRenderer stimulus={item.stimulus} />
+        </ScrollView>
+        <Text style={styles.tapHint}>Tap to expand</Text>
+      </TouchableOpacity>
+
+      {/* Expanded data modal */}
+      <Modal
+        visible={dataExpanded}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setDataExpanded(false)}
+      >
+        <TouchableOpacity
+          style={styles.modalOverlay}
+          onPress={() => setDataExpanded(false)}
+          activeOpacity={1}
+        >
+          <View style={styles.modalCard}>
+            <ZoomableView maxZoom={4}>
+              <Text style={styles.dataLabel}>DATA</Text>
+              <QRStimulusRenderer stimulus={item.stimulus} />
+            </ZoomableView>
+            <Text style={styles.modalDismiss}>Tap anywhere to close</Text>
+          </View>
+        </TouchableOpacity>
+      </Modal>
 
       {/* Question panel */}
       <View style={styles.panel}>
@@ -164,18 +196,22 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a1a2e',
   },
 
-  stimulusScroll: {
+  stimulusContainer: {
     flex: 1,
-  },
-  stimulusContent: {
     marginHorizontal: 20,
     marginTop: 12,
+    marginBottom: 8,
     backgroundColor: '#16213e',
     borderRadius: 14,
     padding: 16,
     borderLeftWidth: 3,
     borderLeftColor: '#059669',
-    marginBottom: 8,
+  },
+  stimulusScroll: {
+    flex: 1,
+  },
+  stimulusContent: {
+    paddingBottom: 4,
   },
   dataLabel: {
     color: '#059669',
@@ -183,6 +219,39 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 1.2,
     marginBottom: 12,
+  },
+  tapHint: {
+    color: '#059669',
+    fontSize: 11,
+    marginTop: 8,
+    opacity: 0.7,
+    textAlign: 'center',
+  },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.82)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalCard: {
+    backgroundColor: '#16213e',
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#2d3748',
+    padding: 20,
+    maxHeight: '85%',
+    width: '92%',
+  },
+  modalContent: {
+    paddingBottom: 8,
+  },
+  modalDismiss: {
+    color: '#059669',
+    fontSize: 12,
+    marginTop: 14,
+    opacity: 0.7,
+    textAlign: 'center',
   },
 
   panel: {
@@ -209,7 +278,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   panelScroll: {
-    maxHeight: 390,
+    maxHeight: 340,
   },
   panelContent: {
     paddingHorizontal: 20,

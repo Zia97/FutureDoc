@@ -90,7 +90,7 @@ export default function PassageLayout({
 
       <ScreenNavBar
         title={getTitle(item, itemIndex)}
-        meta={`${itemLabel} ${itemIndex + 1} of ${items.length}`}
+        meta={`Question ${itemIndex + 1} of ${items.length}`}
         onPrev={() => goToItem(itemIndex - 1)}
         onNext={() => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
