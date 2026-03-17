@@ -10,13 +10,15 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { useAuth } from '../../context/AuthContext';
 
 export default function LoginScreen({ navigation }) {
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle, signInWithApple } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [socialLoading, setSocialLoading] = useState(null);
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -27,6 +29,27 @@ export default function LoginScreen({ navigation }) {
     const { error } = await signIn(email, password);
     setLoading(false);
     if (error) Alert.alert('Login failed', error.message);
+  };
+
+  const handleGoogle = async () => {
+    setSocialLoading('google');
+    const { error } = await signInWithGoogle();
+    setSocialLoading(null);
+    if (error) Alert.alert('Google sign-in failed', error.message);
+  };
+
+  const handleApple = async () => {
+    setSocialLoading('apple');
+    try {
+      const { error } = await signInWithApple();
+      if (error) Alert.alert('Apple sign-in failed', error.message);
+    } catch (e) {
+      if (e.code !== 'ERR_REQUEST_CANCELED') {
+        Alert.alert('Apple sign-in failed', e.message);
+      }
+    } finally {
+      setSocialLoading(null);
+    }
   };
 
   return (
@@ -56,12 +79,36 @@ export default function LoginScreen({ navigation }) {
       />
 
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator color="#fff" />
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign In</Text>}
+      </TouchableOpacity>
+
+      <View style={styles.dividerRow}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.dividerText}>or</Text>
+        <View style={styles.dividerLine} />
+      </View>
+
+      <TouchableOpacity
+        style={[styles.socialButton, styles.googleButton]}
+        onPress={handleGoogle}
+        disabled={socialLoading !== null}
+      >
+        {socialLoading === 'google' ? (
+          <ActivityIndicator color="#000" />
         ) : (
-          <Text style={styles.buttonText}>Sign In</Text>
+          <Text style={styles.googleButtonText}>Continue with Google</Text>
         )}
       </TouchableOpacity>
+
+      {Platform.OS === 'ios' && (
+        <AppleAuthentication.AppleAuthenticationButton
+          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+          cornerRadius={10}
+          style={styles.appleButton}
+          onPress={handleApple}
+        />
+      )}
 
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
         <Text style={styles.link}>Don't have an account? Sign up</Text>
@@ -112,8 +159,45 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  dividerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#2a3a5e',
+  },
+  dividerText: {
+    color: '#8a8a9a',
+    marginHorizontal: 12,
+    fontSize: 14,
+  },
+  socialButton: {
+    width: '100%',
+    borderRadius: 10,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  googleButton: {
+    backgroundColor: '#ffffff',
+  },
+  googleButtonText: {
+    color: '#000000',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  appleButton: {
+    width: '100%',
+    height: 52,
+    marginBottom: 12,
+  },
   link: {
     color: '#4a9eff',
     fontSize: 14,
+    marginTop: 8,
   },
 });
