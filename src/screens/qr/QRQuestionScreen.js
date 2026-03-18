@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { useItemNavigation } from '../../hooks/useItemNavigation';
 import { useAnswers } from '../../hooks/useAnswers';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
+import { useQuantitativeReasoningAttempts } from '../../hooks/useQuantitativeReasoningAttempts';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -29,6 +30,7 @@ if (Platform.OS === 'android') {
 export default function QRQuestionScreen({ route }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const { sets, loading } = useQuantitativeReasoningSets();
+  const { submitAttempt, localAnswers, cacheLoading } = useQuantitativeReasoningAttempts();
 
   const {
     itemIndex,
@@ -44,14 +46,18 @@ export default function QRQuestionScreen({ route }) {
     goToPrevQuestion,
   } = useItemNavigation(sets, initialIndex);
 
-  const { handleAnswer, getAnswer } = useAnswers();
+  const { handleAnswer, getAnswer, resetAnswers } = useAnswers();
   const [panelExpanded, setPanelExpanded] = useState(true);
+
+  useEffect(() => {
+    if (!cacheLoading) resetAnswers(localAnswers);
+  }, [cacheLoading]);
   const panHandlers = useSwipeGesture(
     isFirstItem ? null : () => goToItem(itemIndex - 1),
     isLastItem ? null : () => goToItem(itemIndex + 1),
   );
 
-  if (loading || sets.length === 0) {
+  if (loading || cacheLoading || sets.length === 0) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
@@ -66,6 +72,12 @@ export default function QRQuestionScreen({ route }) {
   function onAnswer(option) {
     if (hasAnswered) return;
     handleAnswer(item.setId, question.questionId, option);
+    submitAttempt({
+      questionId: question.questionId,
+      setId: item.setId,
+      selectedAnswer: option,
+      totalQuestions: item.questions.length,
+    });
   }
 
   function getOptionState(option) {

@@ -14,5 +14,9 @@ export function useAnswers(initialAnswers = {}) {
     return answers[itemId]?.[questionId] ?? null;
   }
 
-  return { handleAnswer, getAnswer };
+  function resetAnswers(newAnswers) {
+    setAnswers(newAnswers);
+  }
+
+  return { handleAnswer, getAnswer, resetAnswers };
 }

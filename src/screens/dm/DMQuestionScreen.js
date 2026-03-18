@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
+import { useDecisionMakingAttempts } from '../../hooks/useDecisionMakingAttempts';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 
@@ -18,6 +19,14 @@ export default function DMQuestionScreen({ route }) {
   const [submitted, setSubmitted] = useState({});
 
   const { questions, loading } = useDecisionMakingQuestions();
+  const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
+
+  useEffect(() => {
+    if (!cacheLoading) {
+      setAnswers(localAnswers);
+      setSubmitted(localSubmitted);
+    }
+  }, [cacheLoading]);
 
   const question = questions[currentIndex];
   const isFirst = currentIndex === 0;
@@ -31,7 +40,7 @@ export default function DMQuestionScreen({ route }) {
     isLast ? null : goNext,
   );
 
-  if (loading || !question) {
+  if (loading || cacheLoading || !question) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
@@ -48,6 +57,7 @@ export default function DMQuestionScreen({ route }) {
     if (!isYesNo) {
       setAnswers((prev) => ({ ...prev, [question.id]: val }));
       setSubmitted((prev) => ({ ...prev, [question.id]: true }));
+      submitAttempt({ questionId: question.id, answer: val });
     } else {
       setAnswers((prev) => ({ ...prev, [question.id]: val }));
     }
@@ -55,6 +65,7 @@ export default function DMQuestionScreen({ route }) {
 
   function handleCheckAnswers() {
     setSubmitted((prev) => ({ ...prev, [question.id]: true }));
+    submitAttempt({ questionId: question.id, answer: currentAnswer });
   }
 
   const allStatementsAnswered =
