@@ -19,3 +19,9 @@ CREATE TABLE verbal_reasoning_questions (
 );
 
 CREATE INDEX idx_vr_questions_passage_id ON verbal_reasoning_questions (passage_id);
+
+ALTER TABLE verbal_reasoning_passages ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public read" ON verbal_reasoning_passages FOR SELECT USING (true);
+
+ALTER TABLE verbal_reasoning_questions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "public read" ON verbal_reasoning_questions FOR SELECT USING (true);
