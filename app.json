@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "UCAT PrepAI",
-    "slug": "FutureDoc",
+    "slug": "ucat-prepai",
     "scheme": "ucatprepai",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -30,7 +30,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "1e39dd12-a71d-44ca-9aba-49a0be086ae8"
+        "projectId": "4913378f-b0e2-4580-8e42-453f21adc56a"
       }
     },
     "plugins": [
