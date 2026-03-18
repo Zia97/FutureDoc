@@ -58,7 +58,8 @@ export default function PassageLayout({
   const [panelExpanded, setPanelExpanded] = useState(true);
 
   const itemId = getId(item);
-  const selectedAnswer = getAnswer(itemId, question.questionId);
+  const qid = question.questionId ?? question.id;
+  const selectedAnswer = getAnswer(itemId, qid);
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === question.answer;
 
@@ -76,7 +77,7 @@ export default function PassageLayout({
 
   function onAnswer(option) {
     if (hasAnswered) return;
-    handleAnswer(itemId, question.questionId, option);
+    handleAnswer(itemId, qid, option);
   }
 
   function togglePanel() {

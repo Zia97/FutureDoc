@@ -12,7 +12,7 @@ function mapPassages(data) {
     questions: [...p.verbal_reasoning_questions]
       .sort((a, b) => a.order_index - b.order_index)
       .map((q) => ({
-        id: q.id,
+        questionId: q.id,
         questionText: q.question_text,
         options: q.options,
         answer: q.correct_answer,
@@ -39,10 +39,6 @@ async function fetchFromDB() {
     `)
     .order('created_at', { ascending: true });
 
-  const { data: simpleTest, error: simpleError } = await supabase.from('verbal_reasoning_passages').select('id, title');
-  console.log('[VR] simple test:', JSON.stringify({ simpleTest, simpleError }));
-
-  console.log('[VR] raw DB response:', JSON.stringify({ data, error }));
   if (error) throw error;
   return mapPassages(data);
 }

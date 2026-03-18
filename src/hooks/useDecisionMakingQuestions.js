@@ -1,0 +1,119 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '../lib/supabase';
+import { getCached, saveCache } from '../services/contentCache';
+
+const SECTION = 'decision_making';
+
+function mapQuestions(data) {
+  return data.map((q) => ({
+    id: q.id,
+    title: q.title,
+    type: q.type,
+    stem: q.stem,
+    tableData: q.table_data,
+    stimulusDiagram: q.stimulus_diagram,
+    answer: q.correct_answer,
+    answeringReason: q.answer_reason,
+    subtype: q.stimulus_diagram
+      ? 'interpret_diagram'
+      : q.decision_making_question_options?.some((o) => o.option_data)
+      ? 'select_diagram'
+      : null,
+    options: [...(q.decision_making_question_options || [])]
+      .sort((a, b) => a.order_index - b.order_index)
+      .map((o) => ({
+        label: o.label,
+        text: o.option_text,
+        vennConfig: o.option_data,
+      })),
+    statements: [...(q.decision_making_question_statements || [])]
+      .sort((a, b) => a.order_index - b.order_index)
+      .map((s) => ({
+        text: s.statement_text,
+        answer: s.correct_answer,
+      })),
+  }));
+}
+
+async function fetchFromDB() {
+  const { data, error } = await supabase
+    .from('decision_making_questions')
+    .select(`
+      id,
+      title,
+      type,
+      stem,
+      table_data,
+      stimulus_diagram,
+      correct_answer,
+      answer_reason,
+      decision_making_question_options (
+        id,
+        label,
+        option_text,
+        option_data,
+        order_index
+      ),
+      decision_making_question_statements (
+        id,
+        statement_text,
+        correct_answer,
+        order_index
+      )
+    `)
+    .order('order_index', { ascending: true });
+
+  if (error) throw error;
+  return mapQuestions(data);
+}
+
+export function useDecisionMakingQuestions() {
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function load() {
+      const cached = await getCached(SECTION);
+      const hasValidCache = cached?.data?.length > 0;
+      if (hasValidCache) {
+        setQuestions(cached.data);
+        setLoading(false);
+      }
+
+      const { data: versionRow, error: versionError } = await supabase
+        .from('content_versions')
+        .select('version')
+        .eq('section', SECTION)
+        .single();
+
+      if (versionError) {
+        if (!hasValidCache) {
+          setError(versionError);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (hasValidCache && cached.version === versionRow.version) {
+        return;
+      }
+
+      try {
+        const fresh = await fetchFromDB();
+        setQuestions(fresh);
+        await saveCache(SECTION, versionRow.version, fresh);
+      } catch (err) {
+        if (!hasValidCache) {
+          setError(err);
+        }
+      } finally {
+        if (!hasValidCache) setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
+  return { questions, loading, error };
+}

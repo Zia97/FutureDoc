@@ -13,7 +13,7 @@ function mapScenarios(data) {
     questions: [...s.situational_judgement_questions]
       .sort((a, b) => a.order_index - b.order_index)
       .map((q) => ({
-        id: q.id,
+        questionId: q.id,
         questionText: q.question_text,
         answer: q.correct_answer,
         answeringReason: q.answer_reason,

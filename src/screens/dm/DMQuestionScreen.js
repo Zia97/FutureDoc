@@ -1,30 +1,27 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text } from 'react-native';
+import { ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
-import questionsData from '../../data/decisionMaking/questions.json';
+import { useDecisionMakingQuestions } from '../../hooks/useDecisionMakingQuestions';
 
-const QUESTIONS = questionsData.questions;
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 
 export default function DMQuestionScreen({ route }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
-  // answers: { [questionId]: string (MCQ) | object (Yes/No) }
+  // answers: { [id]: string (MCQ) | object (Yes/No) }
   const [answers, setAnswers] = useState({});
-  // submitted: { [questionId]: true }
+  // submitted: { [id]: true }
   const [submitted, setSubmitted] = useState({});
 
-  const question = QUESTIONS[currentIndex];
-  const isYesNo = YES_NO_TYPES.includes(question.type);
-  const currentAnswer = answers[question.questionId];
-  const isSubmitted = !!submitted[question.questionId];
+  const { questions, loading } = useDecisionMakingQuestions();
 
+  const question = questions[currentIndex];
   const isFirst = currentIndex === 0;
-  const isLast = currentIndex === QUESTIONS.length - 1;
+  const isLast = currentIndex === questions.length - 1;
 
   function goPrev() { if (!isFirst) setCurrentIndex((i) => i - 1); }
   function goNext() { if (!isLast) setCurrentIndex((i) => i + 1); }
@@ -34,18 +31,30 @@ export default function DMQuestionScreen({ route }) {
     isLast ? null : goNext,
   );
 
+  if (loading || !question) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  const isYesNo = YES_NO_TYPES.includes(question.type);
+  const currentAnswer = answers[question.id];
+  const isSubmitted = !!submitted[question.id];
+
   function handleAnswer(val) {
     if (isSubmitted) return;
     if (!isYesNo) {
-      setAnswers((prev) => ({ ...prev, [question.questionId]: val }));
-      setSubmitted((prev) => ({ ...prev, [question.questionId]: true }));
+      setAnswers((prev) => ({ ...prev, [question.id]: val }));
+      setSubmitted((prev) => ({ ...prev, [question.id]: true }));
     } else {
-      setAnswers((prev) => ({ ...prev, [question.questionId]: val }));
+      setAnswers((prev) => ({ ...prev, [question.id]: val }));
     }
   }
 
   function handleCheckAnswers() {
-    setSubmitted((prev) => ({ ...prev, [question.questionId]: true }));
+    setSubmitted((prev) => ({ ...prev, [question.id]: true }));
   }
 
   const allStatementsAnswered =
@@ -60,7 +69,7 @@ export default function DMQuestionScreen({ route }) {
 
       <ScreenNavBar
         title={question.title}
-        meta={`Question ${currentIndex + 1} of ${QUESTIONS.length}`}
+        meta={`Question ${currentIndex + 1} of ${questions.length}`}
         onPrev={goPrev}
         onNext={goNext}
         isFirst={isFirst}
@@ -95,6 +104,12 @@ export default function DMQuestionScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1a1a2e',
+  },
   container: {
     flex: 1,
     backgroundColor: '#1a1a2e',
