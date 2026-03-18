@@ -1,7 +1,7 @@
-import questionData from '../data/situationalJudgement/questions.json';
-import PassageLayout from '../components/PassageLayout';
-import AnswerOptionButton from '../components/AnswerOptionButton';
-import { LABEL_SETS } from '../constants/sjLabelSets';
+import questionData from '../../data/situationalJudgement/questions.json';
+import PassageLayout from '../../components/PassageLayout';
+import AnswerOptionButton from '../../components/AnswerOptionButton';
+import { LABEL_SETS } from '../../constants/sjLabelSets';
 
 const SCENARIOS = questionData.scenarios;
 

@@ -1,5 +1,5 @@
-import questionData from '../data/verbalReasoning/questions.json';
-import SectionQuestionList from '../components/SectionQuestionList';
+import questionData from '../../data/verbalReasoning/questions.json';
+import SectionQuestionList from '../../components/SectionQuestionList';
 
 const PASSAGES = questionData.passages;
 

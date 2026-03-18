@@ -8,6 +8,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import AnswerOptionButton from '../AnswerOptionButton';
+import ZoomableView from '../ZoomableView';
 import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
 import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
@@ -108,10 +109,12 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
               activeOpacity={1}
             >
               <View style={styles.modalCard}>
-                <VennDiagramRenderer
-                  vennConfig={question.stimulusDiagram}
-                  scale={expandedScale}
-                />
+                <ZoomableView maxZoom={4}>
+                  <VennDiagramRenderer
+                    vennConfig={question.stimulusDiagram}
+                    scale={expandedScale}
+                  />
+                </ZoomableView>
                 <Text style={styles.modalDismiss}>Tap anywhere to close</Text>
               </View>
             </TouchableOpacity>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   View,
   Text,
@@ -15,6 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useItemNavigation } from '../hooks/useItemNavigation';
 import { useAnswers } from '../hooks/useAnswers';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import ScreenNavBar from './ScreenNavBar';
+import FeedbackBox from './FeedbackBox';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -86,31 +88,15 @@ export default function PassageLayout({
     <SafeAreaView style={styles.container} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
 
-      {/* Item navigation bar */}
-      <View style={styles.navBar}>
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => goToItem(itemIndex - 1)}
-          disabled={isFirstItem}
-        >
-          <Text style={[styles.navArrow, isFirstItem && styles.disabled]}>‹</Text>
-        </TouchableOpacity>
-
-        <View style={styles.navCenter}>
-          <Text style={styles.navTitle} numberOfLines={1}>{getTitle(item, itemIndex)}</Text>
-          <Text style={styles.navMeta}>
-            {itemLabel} {itemIndex + 1} of {items.length}
-          </Text>
-        </View>
-
-        <TouchableOpacity
-          style={styles.navButton}
-          onPress={() => goToItem(itemIndex + 1)}
-          disabled={isLastItem}
-        >
-          <Text style={[styles.navArrow, isLastItem && styles.disabled]}>›</Text>
-        </TouchableOpacity>
-      </View>
+      <ScreenNavBar
+        title={getTitle(item, itemIndex)}
+        meta={`Question ${itemIndex + 1} of ${items.length}`}
+        onPrev={() => goToItem(itemIndex - 1)}
+        onNext={() => goToItem(itemIndex + 1)}
+        isFirst={isFirstItem}
+        isLast={isLastItem}
+        color="#7c3aed"
+      />
 
       {/* Resource text */}
       <View style={styles.resourceContainer}>
@@ -142,19 +128,12 @@ export default function PassageLayout({
             </View>
 
             {hasAnswered && (
-              <View style={[styles.feedbackBox, isCorrect ? styles.feedbackCorrect : styles.feedbackIncorrect]}>
-                <Text style={styles.feedbackTitle}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
-                {(!isCorrect || alwaysShowReason) && (
-                  <>
-                    {!isCorrect && (
-                      <Text style={styles.feedbackCorrectAnswer}>
-                        Correct answer: {question.answer}
-                      </Text>
-                    )}
-                    <Text style={styles.feedbackReason}>{question.answeringReason}</Text>
-                  </>
-                )}
-              </View>
+              <FeedbackBox
+                isCorrect={isCorrect}
+                correctAnswer={question.answer}
+                reason={question.answeringReason}
+                showReason={!isCorrect || alwaysShowReason}
+              />
             )}
 
             <View style={styles.questionNav}>
@@ -185,44 +164,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#1a1a2e',
-  },
-
-  // Nav bar
-  navBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 8,
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#16213e',
-  },
-  navButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  navArrow: {
-    color: '#7c3aed',
-    fontSize: 32,
-    lineHeight: 36,
-  },
-  navCenter: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  navTitle: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  navMeta: {
-    color: '#a0aec0',
-    fontSize: 12,
-    marginTop: 2,
-  },
-  disabled: {
-    color: '#2d3748',
   },
 
   // Resource text area
@@ -294,38 +235,6 @@ const styles = StyleSheet.create({
   // Options
   optionsContainer: {
     gap: 10,
-  },
-
-  // Feedback
-  feedbackBox: {
-    marginTop: 16,
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1.5,
-  },
-  feedbackCorrect: {
-    backgroundColor: '#1a3a2a',
-    borderColor: '#38a169',
-  },
-  feedbackIncorrect: {
-    backgroundColor: '#2a1a1a',
-    borderColor: '#e53e3e',
-  },
-  feedbackTitle: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '700',
-    marginBottom: 6,
-  },
-  feedbackCorrectAnswer: {
-    color: '#a0aec0',
-    fontSize: 13,
-    marginBottom: 8,
-  },
-  feedbackReason: {
-    color: '#cbd5e0',
-    fontSize: 14,
-    lineHeight: 21,
   },
 
   // Question prev/next
