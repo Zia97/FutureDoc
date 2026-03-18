@@ -9,6 +9,7 @@ export default function VRQuestionListScreen({ navigation }) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" />
+        <Text style={styles.loadingText}>Loading questions...</Text>
       </View>
     );
   }
@@ -33,5 +34,6 @@ export default function VRQuestionListScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  loadingText: { marginTop: 12, fontSize: 14, color: '#888' },
   error: { color: 'red', textAlign: 'center' },
 });
