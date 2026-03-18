@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
 
 const VW = 360;
-const VH = 210;
+const VH = 220;
 const CX = 95;
 const CY = 100;
 const R = 82;
@@ -38,7 +38,7 @@ export default function PieChartRenderer({ data }) {
     };
   });
 
-  const ROW_H = 34;
+  const ROW_H = 40;
   const legendStartY = Math.max(14, (VH - slices.length * ROW_H) / 2);
 
   return (
@@ -67,11 +67,11 @@ export default function PieChartRenderer({ data }) {
           const pct = ((slice.value / computedTotal) * 100).toFixed(1);
           return (
             <G key={i} x={200} y={ly}>
-              <Rect x={0} y={0} width={12} height={12} fill={slice.color} rx={3} />
-              <SvgText x={18} y={10} fontSize={9.5} fill="#e2e8f0" fontWeight="600">
+              <Rect x={0} y={0} width={13} height={13} fill={slice.color} rx={3} />
+              <SvgText x={19} y={11} fontSize={12} fill="#e2e8f0" fontWeight="600">
                 {slice.label}
               </SvgText>
-              <SvgText x={18} y={23} fontSize={8.5} fill="#718096">
+              <SvgText x={19} y={27} fontSize={11} fill="#718096">
                 {unit}{slice.value.toLocaleString()} ({pct}%)
               </SvgText>
             </G>

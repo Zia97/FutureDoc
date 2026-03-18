@@ -2,8 +2,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Polyline, Circle, Line, Text as SvgText } from 'react-native-svg';
 
 const VW = 360;
-const VH = 230;
-const M = { top: 20, right: 20, bottom: 56, left: 46 };
+const VH = 240;
+const M = { top: 20, right: 20, bottom: 62, left: 54 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
@@ -56,7 +56,7 @@ export default function LineGraphRenderer({ data }) {
                   x1={0} y1={y} x2={CW} y2={y}
                   stroke="#2d3748" strokeWidth={0.7}
                 />
-                <SvgText x={-5} y={y + 3} fontSize={8.5} fill="#718096" textAnchor="end">
+                <SvgText x={-5} y={y + 4} fontSize={11} fill="#718096" textAnchor="end">
                   {unit}{Math.round(val)}
                 </SvgText>
               </G>
@@ -66,9 +66,9 @@ export default function LineGraphRenderer({ data }) {
           {/* Y-axis label */}
           {yAxisLabel && (
             <SvgText
-              x={-32} y={CH / 2} fontSize={8} fill="#a0aec0"
+              x={-40} y={CH / 2} fontSize={10} fill="#a0aec0"
               textAnchor="middle" rotation="-90"
-              originX={-32} originY={CH / 2}
+              originX={-40} originY={CH / 2}
             >
               {yAxisLabel}
             </SvgText>
@@ -77,8 +77,8 @@ export default function LineGraphRenderer({ data }) {
           {/* X-axis labels */}
           {labels.map((label, i) => (
             <SvgText
-              key={i} x={xPos(i)} y={CH + 14}
-              fontSize={8.5} fill="#a0aec0" textAnchor="middle"
+              key={i} x={xPos(i)} y={CH + 16}
+              fontSize={11} fill="#a0aec0" textAnchor="middle"
             >
               {label}
             </SvgText>
@@ -120,10 +120,10 @@ export default function LineGraphRenderer({ data }) {
           series.map((s, si) => {
             const color = COLORS[si % COLORS.length];
             return (
-              <G key={s.name} x={M.left + si * 115} y={VH - 10}>
-                <Line x1={0} y1={-4} x2={14} y2={-4} stroke={color} strokeWidth={2} />
-                <Circle cx={7} cy={-4} r={3} fill={color} />
-                <SvgText x={18} y={0} fontSize={8.5} fill="#a0aec0">
+              <G key={s.name} x={M.left + si * 125} y={VH - 10}>
+                <Line x1={0} y1={-4} x2={16} y2={-4} stroke={color} strokeWidth={2} />
+                <Circle cx={8} cy={-4} r={3.5} fill={color} />
+                <SvgText x={20} y={0} fontSize={11} fill="#a0aec0">
                   {s.name}
                 </SvgText>
               </G>
