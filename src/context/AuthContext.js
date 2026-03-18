@@ -71,7 +71,7 @@ export function AuthProvider({ children }) {
       provider: 'google',
       options: { redirectTo, skipBrowserRedirect: true },
     });
-
+    
     if (error) return { error };
 
     const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);

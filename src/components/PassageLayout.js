@@ -39,6 +39,8 @@ export default function PassageLayout({
   getId,
   renderOptions,
   alwaysShowReason = false,
+  onAnswerCommit = null,
+  initialAnswers = {},
 }) {
   const {
     itemIndex,
@@ -54,7 +56,7 @@ export default function PassageLayout({
     goToPrevQuestion,
   } = useItemNavigation(items, initialIndex);
 
-  const { handleAnswer, getAnswer } = useAnswers();
+  const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [panelExpanded, setPanelExpanded] = useState(true);
 
   const itemId = getId(item);
@@ -78,6 +80,7 @@ export default function PassageLayout({
   function onAnswer(option) {
     if (hasAnswered) return;
     handleAnswer(itemId, qid, option);
+    onAnswerCommit?.(itemId, qid, option);
   }
 
   function togglePanel() {

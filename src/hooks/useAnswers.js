@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-export function useAnswers() {
-  const [answers, setAnswers] = useState({});
+export function useAnswers(initialAnswers = {}) {
+  const [answers, setAnswers] = useState(initialAnswers);
 
   function handleAnswer(itemId, questionId, option) {
     setAnswers((prev) => ({
