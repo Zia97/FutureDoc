@@ -9,26 +9,26 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useItemNavigation } from '../../hooks/useItemNavigation';
 import { useAnswers } from '../../hooks/useAnswers';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
+import { useQuantitativeReasoningSets } from '../../hooks/useQuantitativeReasoningSets';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import FeedbackBox from '../../components/FeedbackBox';
-import setsData from '../../data/quantitativeReasoning/questions.json';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
 
-const SETS = setsData.sets;
-
 export default function QRQuestionScreen({ route }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
+  const { sets, loading } = useQuantitativeReasoningSets();
 
   const {
     itemIndex,
@@ -42,19 +42,26 @@ export default function QRQuestionScreen({ route }) {
     goToItem,
     goToNextQuestion,
     goToPrevQuestion,
-  } = useItemNavigation(SETS, initialIndex);
+  } = useItemNavigation(sets, initialIndex);
 
   const { handleAnswer, getAnswer } = useAnswers();
   const [panelExpanded, setPanelExpanded] = useState(true);
-
-  const selectedAnswer = getAnswer(item.setId, question.questionId);
-  const hasAnswered = !!selectedAnswer;
-  const isCorrect = selectedAnswer === question.answer;
-
   const panHandlers = useSwipeGesture(
     isFirstItem ? null : () => goToItem(itemIndex - 1),
     isLastItem ? null : () => goToItem(itemIndex + 1),
   );
+
+  if (loading || sets.length === 0) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  const selectedAnswer = getAnswer(item.setId, question.questionId);
+  const hasAnswered = !!selectedAnswer;
+  const isCorrect = selectedAnswer === question.answer;
 
   function onAnswer(option) {
     if (hasAnswered) return;
@@ -79,7 +86,7 @@ export default function QRQuestionScreen({ route }) {
 
       <ScreenNavBar
         title={item.title}
-        meta={`Question ${itemIndex + 1} of ${SETS.length}`}
+        meta={`Question ${itemIndex + 1} of ${sets.length}`}
         onPrev={() => goToItem(itemIndex - 1)}
         onNext={() => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
@@ -157,6 +164,8 @@ export default function QRQuestionScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+
   container: {
     flex: 1,
     backgroundColor: '#1a1a2e',

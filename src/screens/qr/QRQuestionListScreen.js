@@ -1,15 +1,28 @@
-import setsData from '../../data/quantitativeReasoning/questions.json';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import SectionQuestionList from '../../components/SectionQuestionList';
-
-const SETS = setsData.sets;
+import { useQuantitativeReasoningSets } from '../../hooks/useQuantitativeReasoningSets';
 
 export default function QRQuestionListScreen({ navigation }) {
+  const { sets, loading } = useQuantitativeReasoningSets();
+
+  if (loading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
   return (
     <SectionQuestionList
-      items={SETS}
+      items={sets}
       getTitle={(item) => item.title}
       routeName="QRQuestion"
       navigation={navigation}
     />
   );
 }
+
+const styles = StyleSheet.create({
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+});

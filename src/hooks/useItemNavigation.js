@@ -5,12 +5,12 @@ export function useItemNavigation(items, initialIndex = 0) {
   const [questionIndex, setQuestionIndex] = useState(0);
 
   const item = items[itemIndex];
-  const question = item.questions[questionIndex];
+  const question = item?.questions[questionIndex];
 
   const isFirstItem = itemIndex === 0;
   const isLastItem = itemIndex === items.length - 1;
   const isFirstQuestion = questionIndex === 0;
-  const isLastQuestion = questionIndex === item.questions.length - 1;
+  const isLastQuestion = questionIndex === (item?.questions.length ?? 1) - 1;
 
   function goToItem(index) {
     setItemIndex(index);
