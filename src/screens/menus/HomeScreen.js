@@ -7,8 +7,8 @@ export default function HomeScreen({ navigation }) {
       <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
 
       <View style={styles.header}>
-        <Text style={styles.title}>FutureDoc</Text>
-        <Text style={styles.subtitle}>UCAT Preparation</Text>
+        <Text style={styles.title}>UCAT PrepAI</Text>
+        <Text style={styles.subtitle}>Built by doctors</Text>
       </View>
 
       <View style={styles.buttonContainer}>

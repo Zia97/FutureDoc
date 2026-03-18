@@ -57,7 +57,7 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={styles.title}>FutureDoc</Text>
+      <Text style={styles.title}>UCAT PrepAI</Text>
       <Text style={styles.subtitle}>Sign in to continue</Text>
 
       <TextInput

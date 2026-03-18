@@ -46,7 +46,7 @@ export default function SignUpScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={styles.title}>FutureDoc</Text>
+      <Text style={styles.title}>UCAT PrepAI</Text>
       <Text style={styles.subtitle}>Create your account</Text>
 
       <TextInput
