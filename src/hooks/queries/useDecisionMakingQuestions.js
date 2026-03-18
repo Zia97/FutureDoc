@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { getCached, saveCache } from '../services/contentCache';
+import { supabase } from '../../lib/supabase';
+import { getCached, saveCache } from '../../services/contentCache';
 
 const SECTION = 'decision_making';
 

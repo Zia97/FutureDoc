@@ -1,20 +1,20 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { getCached, saveCache } from '../services/contentCache';
+import { supabase } from '../../lib/supabase';
+import { getCached, saveCache } from '../../services/contentCache';
 
-const SECTION = 'quantitative_reasoning';
+const SECTION = 'situational_judgement';
 
-function mapSets(data) {
+function mapScenarios(data) {
   return data.map((s) => ({
-    setId: s.id,
-    title: s.title,
-    stimulus: s.stimulus,
-    questions: [...s.quantitative_reasoning_questions]
+    id: s.id,
+    scenarioId: s.id,
+    labelSet: s.label_set,
+    resource: s.body,
+    questions: [...s.situational_judgement_questions]
       .sort((a, b) => a.order_index - b.order_index)
       .map((q) => ({
         questionId: q.id,
         questionText: q.question_text,
-        options: q.options,
         answer: q.correct_answer,
         answeringReason: q.answer_reason,
       })),
@@ -23,15 +23,14 @@ function mapSets(data) {
 
 async function fetchFromDB() {
   const { data, error } = await supabase
-    .from('quantitative_reasoning_sets')
+    .from('situational_judgement_scenarios')
     .select(`
       id,
-      title,
-      stimulus,
-      quantitative_reasoning_questions (
+      label_set,
+      body,
+      situational_judgement_questions (
         id,
         question_text,
-        options,
         correct_answer,
         answer_reason,
         order_index
@@ -40,11 +39,11 @@ async function fetchFromDB() {
     .order('created_at', { ascending: true });
 
   if (error) throw error;
-  return mapSets(data);
+  return mapScenarios(data);
 }
 
-export function useQuantitativeReasoningSets() {
-  const [sets, setSets] = useState([]);
+export function useSituationalJudgementScenarios() {
+  const [scenarios, setScenarios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -53,7 +52,7 @@ export function useQuantitativeReasoningSets() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {
-        setSets(cached.data);
+        setScenarios(cached.data);
         setLoading(false);
       }
 
@@ -77,7 +76,7 @@ export function useQuantitativeReasoningSets() {
 
       try {
         const fresh = await fetchFromDB();
-        setSets(fresh);
+        setScenarios(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
         if (!hasValidCache) {
@@ -91,5 +90,5 @@ export function useQuantitativeReasoningSets() {
     load();
   }, []);
 
-  return { sets, loading, error };
+  return { scenarios, loading, error };
 }

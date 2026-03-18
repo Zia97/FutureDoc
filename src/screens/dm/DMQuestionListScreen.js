@@ -1,6 +1,6 @@
 import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
 import SectionQuestionList from '../../components/SectionQuestionList';
-import { useDecisionMakingQuestions } from '../../hooks/useDecisionMakingQuestions';
+import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 
 export default function DMQuestionListScreen({ navigation }) {
   const { questions, loading, error } = useDecisionMakingQuestions();

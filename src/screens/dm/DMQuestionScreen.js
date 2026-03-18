@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
-import { useDecisionMakingQuestions } from '../../hooks/useDecisionMakingQuestions';
+import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 

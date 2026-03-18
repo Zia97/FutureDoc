@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
-import { getCached, saveCache } from '../services/contentCache';
+import { supabase } from '../../lib/supabase';
+import { getCached, saveCache } from '../../services/contentCache';
 
 const SECTION = 'verbal_reasoning';
 
@@ -50,23 +50,18 @@ export function useVerbalReasoningPassages() {
 
   useEffect(() => {
     async function load() {
-      // 1. Load cache immediately so the user sees content with no delay
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
-      console.log('[VR] cache:', cached ? `v${cached.version}, ${cached.data?.length} passages` : 'none');
       if (hasValidCache) {
         setPassages(cached.data);
         setLoading(false);
       }
 
-      // 2. Check remote version (tiny single-row fetch)
       const { data: versionRow, error: versionError } = await supabase
         .from('content_versions')
         .select('version')
         .eq('section', SECTION)
         .single();
-
-      console.log('[VR] version check:', versionRow, versionError);
 
       if (versionError) {
         if (!hasValidCache) {
@@ -76,21 +71,15 @@ export function useVerbalReasoningPassages() {
         return;
       }
 
-      // 3. Cache is current — nothing more to do
       if (hasValidCache && cached.version === versionRow.version) {
-        console.log('[VR] cache is current, skipping fetch');
         return;
       }
 
-      // 4. No cache or version mismatch — fetch full data and update cache
       try {
-        console.log('[VR] fetching from DB...');
         const fresh = await fetchFromDB();
-        console.log('[VR] fetched', fresh.length, 'passages');
         setPassages(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
-        console.log('[VR] fetchFromDB error:', err);
         if (!hasValidCache) {
           setError(err);
         }

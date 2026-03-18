@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useItemNavigation } from '../../hooks/useItemNavigation';
 import { useAnswers } from '../../hooks/useAnswers';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
-import { useQuantitativeReasoningSets } from '../../hooks/useQuantitativeReasoningSets';
+import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';

@@ -1,6 +1,6 @@
 import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
 import SectionQuestionList from '../../components/SectionQuestionList';
-import { useSituationalJudgementScenarios } from '../../hooks/useSituationalJudgementScenarios';
+import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 
 export default function SJScenarioListScreen({ navigation }) {
   const { scenarios, loading, error } = useSituationalJudgementScenarios();

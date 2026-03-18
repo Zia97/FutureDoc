@@ -1,6 +1,6 @@
 import { ActivityIndicator, View, Text, StyleSheet } from 'react-native';
 import SectionQuestionList from '../../components/SectionQuestionList';
-import { useVerbalReasoningPassages } from '../../hooks/useVerbalReasoningPassages';
+import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 
 export default function VRQuestionListScreen({ navigation }) {
   const { passages, loading, error } = useVerbalReasoningPassages();

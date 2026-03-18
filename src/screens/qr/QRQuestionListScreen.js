@@ -1,6 +1,6 @@
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import SectionQuestionList from '../../components/SectionQuestionList';
-import { useQuantitativeReasoningSets } from '../../hooks/useQuantitativeReasoningSets';
+import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 
 export default function QRQuestionListScreen({ navigation }) {
   const { sets, loading } = useQuantitativeReasoningSets();

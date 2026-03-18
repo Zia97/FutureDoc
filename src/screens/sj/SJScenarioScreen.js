@@ -2,7 +2,7 @@ import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import PassageLayout from '../../components/PassageLayout';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
-import { useSituationalJudgementScenarios } from '../../hooks/useSituationalJudgementScenarios';
+import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 
 export default function SJScenarioScreen({ route }) {
   const { index } = route.params;

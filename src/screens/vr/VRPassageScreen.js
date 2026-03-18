@@ -1,7 +1,7 @@
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import PassageLayout from '../../components/PassageLayout';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
-import { useVerbalReasoningPassages } from '../../hooks/useVerbalReasoningPassages';
+import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 
 export default function VRPassageScreen({ route }) {
   const { index } = route.params;
