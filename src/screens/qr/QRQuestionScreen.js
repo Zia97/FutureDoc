@@ -152,6 +152,7 @@ export default function QRQuestionScreen({ route }) {
                     question: question.questionText,
                     questionType: item.stimulus?.type ?? 'quantitative_reasoning',
                     section: 'qr',
+                    options: question.options.map((o) => `${o.label}. ${o.text}`),
                     correctAnswer: question.answer,
                     userAnswer: selectedAnswer,
                     explanation: question.answeringReason,

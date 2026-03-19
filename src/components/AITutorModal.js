@@ -10,21 +10,15 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { useState, useRef } from 'react';
-import { useAITutor, TUTOR_ERROR } from '../hooks/useAITutor';
+import { useRef } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TUTOR_ERROR } from '../hooks/useAITutor';
 
-export default function AITutorModal({ visible, onClose, questionContext }) {
-  const { messages, streamingContent, isStreaming, error, sendMessage, reset } =
-    useAITutor(questionContext);
+export default function AITutorModal({ visible, onClose, questionContext, tutorState, inputText, setInputText }) {
+  const { messages, streamingContent, isStreaming, error, sendMessage } = tutorState;
 
-  const [inputText, setInputText] = useState('');
   const flatListRef = useRef(null);
-
-  function handleClose() {
-    reset();
-    setInputText('');
-    onClose();
-  }
+  const insets = useSafeAreaInsets();
 
   function handleSend() {
     const text = inputText.trim();
@@ -37,7 +31,6 @@ export default function AITutorModal({ visible, onClose, questionContext }) {
     flatListRef.current?.scrollToEnd({ animated: true });
   }
 
-  // Combine committed messages with the live streaming chunk
   const displayMessages = streamingContent
     ? [...messages, { role: 'assistant', content: streamingContent, streaming: true }]
     : messages;
@@ -47,21 +40,24 @@ export default function AITutorModal({ visible, onClose, questionContext }) {
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
-      onRequestClose={handleClose}
+      onRequestClose={onClose}
     >
       <KeyboardAvoidingView
-        style={styles.container}
+        style={[styles.container, { paddingBottom: insets.bottom }]}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : insets.bottom}
       >
+        {/* Drag handle */}
+        <TouchableOpacity onPress={onClose} activeOpacity={0.6} style={[styles.handleWrap, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
+          <View style={styles.handle} />
+        </TouchableOpacity>
+
         {/* Header */}
         <View style={styles.header}>
-          <View>
+          <View style={styles.headerCenter}>
             <Text style={styles.headerTitle}>AI Tutor</Text>
             <Text style={styles.headerSub}>Ask me anything about this question</Text>
           </View>
-          <TouchableOpacity onPress={handleClose} style={styles.closeBtn}>
-            <Text style={styles.closeBtnText}>Done</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Messages */}
@@ -71,6 +67,7 @@ export default function AITutorModal({ visible, onClose, questionContext }) {
           keyExtractor={(_, i) => String(i)}
           contentContainerStyle={styles.messageList}
           onContentSizeChange={scrollToBottom}
+          ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
           ListEmptyComponent={<WelcomePrompt />}
           renderItem={({ item }) => <MessageBubble message={item} />}
         />
@@ -90,7 +87,7 @@ export default function AITutorModal({ visible, onClose, questionContext }) {
               multiline
               maxLength={500}
               onSubmitEditing={handleSend}
-              blurOnSubmit={false}
+              submitBehavior="blurAndSubmit"
             />
             <TouchableOpacity
               style={[styles.sendBtn, (!inputText.trim() || isStreaming) && styles.sendBtnDisabled]}
@@ -107,6 +104,42 @@ export default function AITutorModal({ visible, onClose, questionContext }) {
         )}
       </KeyboardAvoidingView>
     </Modal>
+  );
+}
+
+function QuestionContextCard({ context }) {
+  const { userAnswer, correctAnswer, explanation } = context;
+
+  return (
+    <View style={styles.contextCard}>
+      <View style={styles.contextAnswerRow}>
+        <Text style={styles.contextAnswerMark}>✗</Text>
+        <View style={styles.contextAnswerTextWrap}>
+          <Text style={styles.contextAnswerHint}>Your answer</Text>
+          <Text style={[styles.contextAnswerText, styles.contextAnswerWrong]}>
+            {userAnswer || '—'}
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.contextAnswerRow}>
+        <Text style={[styles.contextAnswerMark, styles.contextCorrectMark]}>✓</Text>
+        <View style={styles.contextAnswerTextWrap}>
+          <Text style={styles.contextAnswerHint}>Correct answer</Text>
+          <Text style={[styles.contextAnswerText, styles.contextAnswerCorrect]}>
+            {correctAnswer || '—'}
+          </Text>
+        </View>
+      </View>
+
+      {explanation ? (
+        <>
+          <View style={styles.contextDivider} />
+          <Text style={styles.contextLabel}>EXPLANATION</Text>
+          <Text style={styles.contextExplanation}>{explanation}</Text>
+        </>
+      ) : null}
+    </View>
   );
 }
 
@@ -156,14 +189,27 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0f1117',
   },
+  handleWrap: {
+    alignItems: 'center',
+    paddingBottom: 8,
+  },
+  handle: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: '#2a2f45',
+  },
   header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 24,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#1e2130',
+    gap: 10,
+  },
+  headerCenter: {
+    flex: 1,
   },
   headerTitle: {
     color: '#fff',
@@ -175,28 +221,80 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 2,
   },
-  closeBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    backgroundColor: '#1e2130',
-    borderRadius: 8,
-  },
-  closeBtnText: {
-    color: '#a0aec0',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   messageList: {
     padding: 16,
     paddingBottom: 8,
     flexGrow: 1,
+  },
+  contextCard: {
+    backgroundColor: '#161a27',
+    borderRadius: 14,
+    padding: 14,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#2a2f45',
+  },
+  contextLabel: {
+    color: '#4a5568',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.8,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+  },
+  contextDivider: {
+    height: 1,
+    backgroundColor: '#2a2f45',
+    marginBottom: 12,
+  },
+  contextExplanation: {
+    color: '#a0aec0',
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  contextAnswerRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+    gap: 10,
+  },
+  contextAnswerMark: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#e53e3e',
+    width: 16,
+    marginTop: 1,
+  },
+  contextCorrectMark: {
+    color: '#38a169',
+  },
+  contextAnswerTextWrap: {
+    flex: 1,
+  },
+  contextAnswerHint: {
+    color: '#4a5568',
+    fontSize: 10,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+    marginBottom: 2,
+  },
+  contextAnswerText: {
+    fontSize: 13,
+    lineHeight: 19,
+  },
+  contextAnswerWrong: {
+    color: '#fc8181',
+  },
+  contextAnswerCorrect: {
+    color: '#68d391',
   },
   welcome: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
-    paddingTop: 60,
+    paddingTop: 40,
   },
   welcomeTitle: {
     color: '#e2e8f0',

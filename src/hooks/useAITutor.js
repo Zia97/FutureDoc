@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { streamAITutor } from '../services/aiTutor';
 
 export const TUTOR_ERROR = {
@@ -69,6 +69,15 @@ export function useAITutor(questionContext) {
       },
     });
   }, [isStreaming, questionContext]);
+
+  // Reset the session when the question changes (new question = fresh chat)
+  useEffect(() => {
+    setMessages([]);
+    setStreamingContent('');
+    setIsStreaming(false);
+    setError(null);
+    historyRef.current = [];
+  }, [questionContext?.question]);
 
   const reset = useCallback(() => {
     setMessages([]);

@@ -102,6 +102,9 @@ export default function DMQuestionScreen({ route }) {
             question: question.stem,
             questionType: question.type,
             section: 'dm',
+            options: isYesNo
+              ? question.statements?.map((s, i) => `${i + 1}. ${s}`)
+              : question.options?.map((o) => `${o.label}. ${o.text}`),
             correctAnswer: typeof question.answer === 'object'
               ? JSON.stringify(question.answer)
               : question.answer,

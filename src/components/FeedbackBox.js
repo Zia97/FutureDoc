@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AITutorModal from './AITutorModal';
+import { useAITutor } from '../hooks/useAITutor';
 
 // showReason: show the explanation text (default true).
 // Set to false when the answer is correct and you don't want to show the reason on correct answers.
@@ -8,6 +9,15 @@ import AITutorModal from './AITutorModal';
 //   Required to enable the "Teach Me" button on incorrect answers.
 export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
   const [tutorVisible, setTutorVisible] = useState(false);
+  const [inputText, setInputText] = useState('');
+
+  // State lives here so it survives modal open/close (Modal unmounts children when hidden)
+  const tutorState = useAITutor(questionContext);
+
+  // Clear draft input when the question or passage changes
+  useEffect(() => {
+    setInputText('');
+  }, [questionContext?.question]);
 
   return (
     <>
@@ -33,6 +43,9 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
           visible={tutorVisible}
           onClose={() => setTutorVisible(false)}
           questionContext={questionContext}
+          tutorState={tutorState}
+          inputText={inputText}
+          setInputText={setInputText}
         />
       )}
     </>
@@ -72,7 +85,7 @@ const styles = StyleSheet.create({
   },
   teachMeBtn: {
     marginTop: 14,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
     backgroundColor: '#2d3748',
     borderRadius: 8,
     paddingVertical: 8,

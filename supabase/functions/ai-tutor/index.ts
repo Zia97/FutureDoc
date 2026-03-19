@@ -6,7 +6,7 @@ import { BASE_PROMPT, buildQuestionContext } from './prompt.ts';
 
 // ── Limits ────────────────────────────────────────────────────────────────────
 const FREE_LIFETIME_LIMIT = 3;
-const PREMIUM_DAILY_LIMIT = 10;
+const PREMIUM_DAILY_LIMIT = 20;
 
 // ── Provider factory ──────────────────────────────────────────────────────────
 function getProvider() {

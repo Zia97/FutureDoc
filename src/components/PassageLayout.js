@@ -23,14 +23,15 @@ if (Platform.OS === 'android') {
 }
 
 // Props:
-//   items          — array of passage/scenario objects
-//   initialIndex   — starting item index
-//   itemLabel      — "Passage" | "Scenario"
-//   getTitle       — (item, index) => string  — text shown in the nav bar
-//   getId          — (item) => string|number  — unique item identifier for answer tracking
-//   renderOptions  — ({ item, question, getOptionState, onAnswer }) => ReactNode
-//   alwaysShowReason — bool — show answeringReason even on correct answer (default false)
-//   section        — 'vr' | 'sj' — used to build AI tutor context
+//   items              — array of passage/scenario objects
+//   initialIndex       — starting item index
+//   itemLabel          — "Passage" | "Scenario"
+//   getTitle           — (item, index) => string  — text shown in the nav bar
+//   getId              — (item) => string|number  — unique item identifier for answer tracking
+//   renderOptions      — ({ item, question, getOptionState, onAnswer }) => ReactNode
+//   getQuestionOptions — (item, question) => string[]  — flat string list of options for AI context
+//   alwaysShowReason   — bool — show answeringReason even on correct answer (default false)
+//   section            — 'vr' | 'sj' — used to build AI tutor context
 
 export default function PassageLayout({
   items,
@@ -39,6 +40,7 @@ export default function PassageLayout({
   getTitle,
   getId,
   renderOptions,
+  getQuestionOptions = null,
   alwaysShowReason = false,
   onAnswerCommit = null,
   initialAnswers = {},
@@ -143,6 +145,8 @@ export default function PassageLayout({
                   question: question.questionText,
                   questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
                   section,
+                  passage: item.resource ?? undefined,
+                  options: getQuestionOptions ? getQuestionOptions(item, question) : undefined,
                   correctAnswer: question.answer,
                   userAnswer: selectedAnswer,
                   explanation: question.answeringReason,
