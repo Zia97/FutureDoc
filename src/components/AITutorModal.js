@@ -10,7 +10,8 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
+import { PanResponder } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TUTOR_ERROR } from '../hooks/useAITutor';
 
@@ -19,6 +20,19 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
 
   const flatListRef = useRef(null);
   const insets = useSafeAreaInsets();
+  const scrollOffsetRef = useRef(0);
+  const onCloseRef = useRef(onClose);
+  useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
+
+  const swipePan = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponderCapture: (_, gs) =>
+        scrollOffsetRef.current <= 0 && gs.dy > 8 && gs.dy > Math.abs(gs.dx),
+      onPanResponderRelease: (_, gs) => {
+        if (gs.dy > 60) onCloseRef.current();
+      },
+    })
+  ).current;
 
   function handleSend() {
     const text = inputText.trim();
@@ -35,22 +49,24 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
     ? [...messages, { role: 'assistant', content: streamingContent, streaming: true }]
     : messages;
 
+  const Wrapper = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
+  const wrapperProps = Platform.OS === 'ios' ? { behavior: 'padding' } : {};
+  const containerStyle = [styles.container, { paddingBottom: insets.bottom }];
+
   return (
     <Modal
       visible={visible}
       animationType="slide"
       presentationStyle="pageSheet"
+      statusBarTranslucent
       onRequestClose={onClose}
     >
-      <KeyboardAvoidingView
-        style={[styles.container, { paddingBottom: insets.bottom }]}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : insets.bottom}
-      >
+      <Wrapper style={containerStyle} {...wrapperProps}>
+        <View style={styles.swipeLayer} {...swipePan.panHandlers}>
         {/* Drag handle */}
-        <TouchableOpacity onPress={onClose} activeOpacity={0.6} style={[styles.handleWrap, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
+        <View style={[styles.handleWrap, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
           <View style={styles.handle} />
-        </TouchableOpacity>
+        </View>
 
         {/* Header */}
         <View style={styles.header}>
@@ -58,6 +74,9 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
             <Text style={styles.headerTitle}>AI Tutor</Text>
             <Text style={styles.headerSub}>Ask me anything about this question</Text>
           </View>
+          <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
+            <Text style={styles.closeBtnText}>✕</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Messages */}
@@ -67,6 +86,8 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
           keyExtractor={(_, i) => String(i)}
           contentContainerStyle={styles.messageList}
           onContentSizeChange={scrollToBottom}
+          onScroll={(e) => { scrollOffsetRef.current = e.nativeEvent.contentOffset.y; }}
+          scrollEventThrottle={16}
           ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
           ListEmptyComponent={<WelcomePrompt />}
           renderItem={({ item }) => <MessageBubble message={item} />}
@@ -102,16 +123,25 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
             </TouchableOpacity>
           </View>
         )}
-      </KeyboardAvoidingView>
+        </View>
+      </Wrapper>
     </Modal>
   );
 }
 
 function QuestionContextCard({ context }) {
-  const { userAnswer, correctAnswer, explanation } = context;
+  const { question, userAnswer, correctAnswer, explanation } = context;
 
   return (
     <View style={styles.contextCard}>
+      {question ? (
+        <>
+          <Text style={styles.contextLabel}>Question</Text>
+          <Text style={styles.contextQuestion}>{question}</Text>
+          <View style={styles.contextDivider} />
+        </>
+      ) : null}
+
       <View style={styles.contextAnswerRow}>
         <Text style={styles.contextAnswerMark}>✗</Text>
         <View style={styles.contextAnswerTextWrap}>
@@ -189,6 +219,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#0f1117',
   },
+  swipeLayer: {
+    flex: 1,
+  },
   handleWrap: {
     alignItems: 'center',
     paddingBottom: 8,
@@ -210,6 +243,13 @@ const styles = StyleSheet.create({
   },
   headerCenter: {
     flex: 1,
+  },
+  closeBtn: {
+    padding: 4,
+  },
+  closeBtnText: {
+    color: '#718096',
+    fontSize: 16,
   },
   headerTitle: {
     color: '#fff',
@@ -241,6 +281,12 @@ const styles = StyleSheet.create({
     letterSpacing: 0.8,
     textTransform: 'uppercase',
     marginBottom: 8,
+  },
+  contextQuestion: {
+    color: '#cbd5e0',
+    fontSize: 14,
+    lineHeight: 21,
+    marginBottom: 12,
   },
   contextDivider: {
     height: 1,
