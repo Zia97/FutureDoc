@@ -5,7 +5,7 @@ import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
-import { useDecisionMakingAttempts } from '../../hooks/useDecisionMakingAttempts';
+import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 

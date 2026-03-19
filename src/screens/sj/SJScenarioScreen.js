@@ -3,7 +3,7 @@ import PassageLayout from '../../components/PassageLayout';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
-import { useSituationalJudgementAttempts } from '../../hooks/useSituationalJudgementAttempts';
+import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
 
 export default function SJScenarioScreen({ route }) {
   const { index } = route.params;

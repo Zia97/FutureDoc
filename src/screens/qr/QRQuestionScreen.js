@@ -17,7 +17,7 @@ import { useItemNavigation } from '../../hooks/useItemNavigation';
 import { useAnswers } from '../../hooks/useAnswers';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
-import { useQuantitativeReasoningAttempts } from '../../hooks/useQuantitativeReasoningAttempts';
+import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
