@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../context/AuthContext';
 
 const ATTEMPTS_KEY = 'sj_attempts';
 const PENDING_KEY  = 'sj_pending_sync';
+export const SJ_PROGRESS_CACHE_KEY = 'sj_scenario_progress';
 
 // Local attempts shape:  { [questionId]: { scenarioId, selectedAnswer, answeredAt } }
 // localAnswers shape:    { [scenarioId]: { [questionId]: selectedAnswer } }
@@ -49,8 +50,25 @@ export function useSituationalJudgementAttempts() {
         ...prev,
         [scenarioId]: { ...prev[scenarioId], [questionId]: selectedAnswer },
       }));
+
+      return attempts;
     } catch (err) {
       console.error('[useSituationalJudgementAttempts] saveToCache failed:', err);
+      return null;
+    }
+  }
+
+  async function updateProgressCache(scenarioId, totalQuestions, attempts) {
+    try {
+      const answeredCount = Object.values(attempts).filter((a) => a.scenarioId === scenarioId).length;
+      const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
+
+      const progressRaw = await AsyncStorage.getItem(SJ_PROGRESS_CACHE_KEY);
+      const progressMap = progressRaw ? JSON.parse(progressRaw) : {};
+      progressMap[scenarioId] = status;
+      await AsyncStorage.setItem(SJ_PROGRESS_CACHE_KEY, JSON.stringify(progressMap));
+    } catch (err) {
+      console.error('[useSituationalJudgementAttempts] updateProgressCache failed:', err);
     }
   }
 
@@ -140,7 +158,8 @@ export function useSituationalJudgementAttempts() {
     submitting.current.add(questionId);
 
     try {
-      await saveToCache(questionId, scenarioId, selectedAnswer);
+      const attempts = await saveToCache(questionId, scenarioId, selectedAnswer);
+      if (attempts) await updateProgressCache(scenarioId, totalQuestions, attempts);
 
       try {
         await writeAttemptToDB(user.id, { questionId, scenarioId, selectedAnswer, totalQuestions });

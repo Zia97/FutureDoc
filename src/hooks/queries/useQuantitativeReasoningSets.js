@@ -7,6 +7,7 @@ const SECTION = 'quantitative_reasoning';
 
 function mapSets(data) {
   return data.map((s) => ({
+    id: s.id,
     setId: s.id,
     title: s.title,
     stimulus: s.stimulus,

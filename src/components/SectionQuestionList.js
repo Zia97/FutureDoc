@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  View,
   Text,
   FlatList,
   TouchableOpacity,
@@ -9,26 +8,37 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-// getTitle: (item, index) => string
+// getTitle:  (item, index) => string
+// getStatus: (item) => 'completed' | 'in_progress' | null  (optional)
+// getIndex:  (item, index) => number  — override nav index, e.g. when list is filtered (optional)
 // routeName: navigation route to push, receives { index }
-export default function SectionQuestionList({ items, getTitle, routeName, navigation }) {
+export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, routeName, navigation }) {
   return (
     <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
       <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
       <FlatList
         data={items}
-        keyExtractor={(_, index) => index.toString()}
+        keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity
-            style={styles.row}
-            onPress={() => navigation.navigate(routeName, { index })}
-            activeOpacity={0.75}
-          >
-            <Text style={styles.number}>{index + 1}.</Text>
-            <Text style={styles.title} numberOfLines={2}>{getTitle(item, index)}</Text>
-          </TouchableOpacity>
-        )}
+        renderItem={({ item, index }) => {
+          const status = getStatus ? getStatus(item) : null;
+          const navIndex = getIndex ? getIndex(item, index) : index;
+          return (
+            <TouchableOpacity
+              style={styles.row}
+              onPress={() => navigation.navigate(routeName, { index: navIndex })}
+              activeOpacity={0.75}
+            >
+              <Text style={styles.number}>{index + 1}.</Text>
+              <Text style={styles.title} numberOfLines={2}>{getTitle(item, index)}</Text>
+              {getStatus && (
+                <Text style={styles.statusCircle}>
+                  {status === 'completed' ? '●' : status === 'in_progress' ? '◑' : '○'}
+                </Text>
+              )}
+            </TouchableOpacity>
+          );
+        }}
       />
     </SafeAreaView>
   );
@@ -63,5 +73,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     flex: 1,
+  },
+  statusCircle: {
+    color: '#7c3aed',
+    fontSize: 28,
   },
 });

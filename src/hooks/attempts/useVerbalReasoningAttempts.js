@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../context/AuthContext';
 
-const ATTEMPTS_KEY = 'vr_attempts';
-const PENDING_KEY  = 'vr_pending_sync';
+const ATTEMPTS_KEY  = 'vr_attempts';
+const PENDING_KEY   = 'vr_pending_sync';
+export const VR_PROGRESS_CACHE_KEY = 'vr_passage_progress';
 
 
 // Local attempts shape:  { [questionId]: { passageId, selectedAnswer, answeredAt } }
@@ -52,8 +53,25 @@ export function useVerbalReasoningAttempts() {
         ...prev,
         [passageId]: { ...prev[passageId], [questionId]: selectedAnswer },
       }));
+
+      return attempts;
     } catch (err) {
       console.error('[useVerbalReasoningAttempts] saveToCache failed:', err);
+      return null;
+    }
+  }
+
+  async function updateProgressCache(passageId, totalQuestions, attempts) {
+    try {
+      const answeredCount = Object.values(attempts).filter((a) => a.passageId === passageId).length;
+      const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
+
+      const progressRaw = await AsyncStorage.getItem(VR_PROGRESS_CACHE_KEY);
+      const progressMap = progressRaw ? JSON.parse(progressRaw) : {};
+      progressMap[passageId] = status;
+      await AsyncStorage.setItem(VR_PROGRESS_CACHE_KEY, JSON.stringify(progressMap));
+    } catch (err) {
+      console.error('[useVerbalReasoningAttempts] updateProgressCache failed:', err);
     }
   }
 
@@ -149,7 +167,8 @@ export function useVerbalReasoningAttempts() {
 
     try {
       // 1. Always persist locally first — works offline
-      await saveToCache(questionId, passageId, selectedAnswer);
+      const attempts = await saveToCache(questionId, passageId, selectedAnswer);
+      if (attempts) await updateProgressCache(passageId, totalQuestions, attempts);
 
       // 2. Attempt DB write
       try {

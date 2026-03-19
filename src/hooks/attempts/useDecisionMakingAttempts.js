@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../context/AuthContext';
 
-const ATTEMPTS_KEY = 'dm_attempts';
+export const DM_ATTEMPTS_KEY = 'dm_attempts';
+const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
 const PENDING_KEY  = 'dm_pending_sync';
 
 // DM has no parent grouping — questions are standalone.

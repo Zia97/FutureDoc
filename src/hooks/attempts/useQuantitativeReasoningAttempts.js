@@ -1,10 +1,11 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { supabase } from '../../lib/supabase';
+import { useAuth } from '../../context/AuthContext';
 
 const ATTEMPTS_KEY = 'qr_attempts';
 const PENDING_KEY  = 'qr_pending_sync';
+export const QR_PROGRESS_CACHE_KEY = 'qr_set_progress';
 
 // Local attempts shape:  { [questionId]: { setId, selectedAnswer, answeredAt } }
 // localAnswers shape:    { [setId]:      { [questionId]: selectedAnswer } }
@@ -49,8 +50,25 @@ export function useQuantitativeReasoningAttempts() {
         ...prev,
         [setId]: { ...prev[setId], [questionId]: selectedAnswer },
       }));
+
+      return attempts;
     } catch (err) {
       console.error('[useQuantitativeReasoningAttempts] saveToCache failed:', err);
+      return null;
+    }
+  }
+
+  async function updateProgressCache(setId, totalQuestions, attempts) {
+    try {
+      const answeredCount = Object.values(attempts).filter((a) => a.setId === setId).length;
+      const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
+
+      const progressRaw = await AsyncStorage.getItem(QR_PROGRESS_CACHE_KEY);
+      const progressMap = progressRaw ? JSON.parse(progressRaw) : {};
+      progressMap[setId] = status;
+      await AsyncStorage.setItem(QR_PROGRESS_CACHE_KEY, JSON.stringify(progressMap));
+    } catch (err) {
+      console.error('[useQuantitativeReasoningAttempts] updateProgressCache failed:', err);
     }
   }
 
@@ -140,7 +158,8 @@ export function useQuantitativeReasoningAttempts() {
     submitting.current.add(questionId);
 
     try {
-      await saveToCache(questionId, setId, selectedAnswer);
+      const attempts = await saveToCache(questionId, setId, selectedAnswer);
+      if (attempts) await updateProgressCache(setId, totalQuestions, attempts);
 
       try {
         await writeAttemptToDB(user.id, { questionId, setId, selectedAnswer, totalQuestions });
