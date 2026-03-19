@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 
@@ -23,23 +23,7 @@ function mapScenarios(data) {
 }
 
 async function fetchFromDB() {
-  const { data, error } = await supabase
-    .from('situational_judgement_scenarios')
-    .select(`
-      id,
-      label_set,
-      body,
-      situational_judgement_questions (
-        id,
-        question_text,
-        correct_answer,
-        answer_reason,
-        order_index
-      )
-    `)
-    .order('created_at', { ascending: true });
-
-  if (error) throw error;
+  const data = await db.fetchSJScenarios();
   return mapScenarios(data);
 }
 
@@ -59,15 +43,7 @@ export function useSituationalJudgementScenarios() {
 
       let versionRow;
       try {
-        versionRow = await withRetry(async () => {
-          const { data, error } = await supabase
-            .from('content_versions')
-            .select('version')
-            .eq('section', SECTION)
-            .single();
-          if (error) throw error;
-          return data;
-        });
+        versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
         if (!hasValidCache) {
           setError(versionError);

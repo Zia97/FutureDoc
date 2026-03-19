@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 
 export const DM_ATTEMPTS_KEY = 'dm_attempts';
@@ -73,15 +73,7 @@ export function useDecisionMakingAttempts() {
   }
 
   async function writeAttemptToDB(userId, { questionId, answer }) {
-    const { error: attemptError } = await supabase
-      .from('decision_making_question_attempts')
-      .insert({
-        user_id: userId,
-        question_id: questionId,
-        answer,
-      });
-
-    if (attemptError && attemptError.code !== '23505') throw attemptError;
+    await db.insertDMAttempt(userId, questionId, answer);
   }
 
   async function flushPendingQueue() {

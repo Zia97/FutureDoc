@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 
 const ATTEMPTS_KEY = 'sj_attempts';
@@ -84,42 +84,10 @@ export function useSituationalJudgementAttempts() {
   }
 
   async function writeAttemptToDB(userId, { questionId, scenarioId, selectedAnswer, totalQuestions }) {
-    const { error: attemptError } = await supabase
-      .from('situational_judgement_question_attempts')
-      .insert({
-        user_id: userId,
-        question_id: questionId,
-        scenario_id: scenarioId,
-        selected_answer: selectedAnswer,
-      });
-
-    if (attemptError && attemptError.code !== '23505') throw attemptError;
-
-    const { count: answeredCount, error: countError } = await supabase
-      .from('situational_judgement_question_attempts')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('scenario_id', scenarioId);
-
-    if (countError) throw countError;
-
+    await db.insertSJAttempt(userId, questionId, scenarioId, selectedAnswer);
+    const answeredCount = await db.countSJAttemptsForScenario(userId, scenarioId);
     const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
-
-    const { error: progressError } = await supabase
-      .from('situational_judgement_scenario_progress')
-      .upsert(
-        {
-          user_id: userId,
-          scenario_id: scenarioId,
-          status,
-          answered_count: answeredCount,
-          total_questions: totalQuestions,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id,scenario_id' },
-      );
-
-    if (progressError) throw progressError;
+    await db.upsertSJScenarioProgress(userId, scenarioId, status, answeredCount, totalQuestions);
   }
 
   async function flushPendingQueue() {

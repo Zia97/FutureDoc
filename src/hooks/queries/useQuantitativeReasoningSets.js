@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 
@@ -24,24 +24,7 @@ function mapSets(data) {
 }
 
 async function fetchFromDB() {
-  const { data, error } = await supabase
-    .from('quantitative_reasoning_sets')
-    .select(`
-      id,
-      title,
-      stimulus,
-      quantitative_reasoning_questions (
-        id,
-        question_text,
-        options,
-        correct_answer,
-        answer_reason,
-        order_index
-      )
-    `)
-    .order('created_at', { ascending: true });
-
-  if (error) throw error;
+  const data = await db.fetchQRSets();
   return mapSets(data);
 }
 
@@ -61,15 +44,7 @@ export function useQuantitativeReasoningSets() {
 
       let versionRow;
       try {
-        versionRow = await withRetry(async () => {
-          const { data, error } = await supabase
-            .from('content_versions')
-            .select('version')
-            .eq('section', SECTION)
-            .single();
-          if (error) throw error;
-          return data;
-        });
+        versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
         if (!hasValidCache) {
           setError(versionError);

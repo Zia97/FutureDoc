@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { VR_PROGRESS_CACHE_KEY } from '../attempts/useVerbalReasoningAttempts';
@@ -36,12 +36,7 @@ export function useVerbalReasoningProgress() {
     }
 
     try {
-      const { data, error } = await supabase
-        .from('verbal_reasoning_passage_progress')
-        .select('passage_id, status')
-        .eq('user_id', user.id);
-
-      if (error) throw error;
+      const data = await db.fetchVRPassageProgress(user.id);
 
       const map = {};
       for (const row of data) {

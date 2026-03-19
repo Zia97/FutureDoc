@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 
@@ -37,34 +37,7 @@ function mapQuestions(data) {
 }
 
 async function fetchFromDB() {
-  const { data, error } = await supabase
-    .from('decision_making_questions')
-    .select(`
-      id,
-      title,
-      type,
-      stem,
-      table_data,
-      stimulus_diagram,
-      correct_answer,
-      answer_reason,
-      decision_making_question_options (
-        id,
-        label,
-        option_text,
-        option_data,
-        order_index
-      ),
-      decision_making_question_statements (
-        id,
-        statement_text,
-        correct_answer,
-        order_index
-      )
-    `)
-    .order('order_index', { ascending: true });
-
-  if (error) throw error;
+  const data = await db.fetchDMQuestions();
   return mapQuestions(data);
 }
 
@@ -84,15 +57,7 @@ export function useDecisionMakingQuestions() {
 
       let versionRow;
       try {
-        versionRow = await withRetry(async () => {
-          const { data, error } = await supabase
-            .from('content_versions')
-            .select('version')
-            .eq('section', SECTION)
-            .single();
-          if (error) throw error;
-          return data;
-        });
+        versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
         if (!hasValidCache) {
           setError(versionError);

@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 
 const ATTEMPTS_KEY  = 'vr_attempts';
@@ -89,43 +89,10 @@ export function useVerbalReasoningAttempts() {
   // ── DB helpers ───────────────────────────────────────────────────────────────
 
   async function writeAttemptToDB(userId, { questionId, passageId, selectedAnswer, totalQuestions }) {
-    const { error: attemptError } = await supabase
-      .from('verbal_reasoning_question_attempts')
-      .insert({
-        user_id: userId,
-        question_id: questionId,
-        passage_id: passageId,
-        selected_answer: selectedAnswer,
-      });
-
-    // 23505 = unique_violation: already saved (e.g. response lost on a previous attempt) — safe to continue
-    if (attemptError && attemptError.code !== '23505') throw attemptError;
-
-    const { count: answeredCount, error: countError } = await supabase
-      .from('verbal_reasoning_question_attempts')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('passage_id', passageId);
-
-    if (countError) throw countError;
-
+    await db.insertVRAttempt(userId, questionId, passageId, selectedAnswer);
+    const answeredCount = await db.countVRAttemptsForPassage(userId, passageId);
     const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
-
-    const { error: progressError } = await supabase
-      .from('verbal_reasoning_passage_progress')
-      .upsert(
-        {
-          user_id: userId,
-          passage_id: passageId,
-          status,
-          answered_count: answeredCount,
-          total_questions: totalQuestions,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id,passage_id' },
-      );
-
-    if (progressError) throw progressError;
+    await db.upsertVRPassageProgress(userId, passageId, status, answeredCount, totalQuestions);
   }
 
   async function flushPendingQueue() {

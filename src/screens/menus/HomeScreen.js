@@ -1,10 +1,22 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 
 export default function HomeScreen({ navigation }) {
+  const { user } = useAuth();
+  const emailInitial = user?.email?.[0]?.toUpperCase() ?? '?';
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
+
+      <TouchableOpacity
+        style={styles.profileButton}
+        onPress={() => navigation.navigate('Profile')}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.profileInitial}>{emailInitial}</Text>
+      </TouchableOpacity>
 
       <View style={styles.header}>
         <Text style={styles.title}>UCAT PrepAI</Text>
@@ -31,6 +43,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 80,
     paddingHorizontal: 24,
+  },
+  profileButton: {
+    position: 'absolute',
+    top: 52,
+    right: 24,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#16213e',
+    borderWidth: 1,
+    borderColor: '#334155',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 10,
+  },
+  profileInitial: {
+    color: '#a0aec0',
+    fontSize: 16,
+    fontWeight: '700',
   },
   header: {
     alignItems: 'center',

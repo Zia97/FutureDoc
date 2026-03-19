@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../../lib/supabase';
+import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 
 const ATTEMPTS_KEY = 'qr_attempts';
@@ -84,42 +84,10 @@ export function useQuantitativeReasoningAttempts() {
   }
 
   async function writeAttemptToDB(userId, { questionId, setId, selectedAnswer, totalQuestions }) {
-    const { error: attemptError } = await supabase
-      .from('quantitative_reasoning_question_attempts')
-      .insert({
-        user_id: userId,
-        question_id: questionId,
-        set_id: setId,
-        selected_answer: selectedAnswer,
-      });
-
-    if (attemptError && attemptError.code !== '23505') throw attemptError;
-
-    const { count: answeredCount, error: countError } = await supabase
-      .from('quantitative_reasoning_question_attempts')
-      .select('id', { count: 'exact', head: true })
-      .eq('user_id', userId)
-      .eq('set_id', setId);
-
-    if (countError) throw countError;
-
+    await db.insertQRAttempt(userId, questionId, setId, selectedAnswer);
+    const answeredCount = await db.countQRAttemptsForSet(userId, setId);
     const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
-
-    const { error: progressError } = await supabase
-      .from('quantitative_reasoning_set_progress')
-      .upsert(
-        {
-          user_id: userId,
-          set_id: setId,
-          status,
-          answered_count: answeredCount,
-          total_questions: totalQuestions,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: 'user_id,set_id' },
-      );
-
-    if (progressError) throw progressError;
+    await db.upsertQRSetProgress(userId, setId, status, answeredCount, totalQuestions);
   }
 
   async function flushPendingQueue() {
