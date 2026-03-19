@@ -12,6 +12,7 @@ import ZoomableView from '../ZoomableView';
 import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
 import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
+import AITutorModal from '../AITutorModal';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic'];
@@ -20,22 +21,29 @@ const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic'];
  * Routes a DM question to the correct answer UI based on question.type.
  *
  * Props:
- *   question   — question object from JSON
- *   answer     — current answer state:
- *                  MCQ / venn select_diagram: string label e.g. 'A'
- *                  Yes/No: object keyed by statement index e.g. { 0: 'Yes', 2: 'No' }
- *   onAnswer   — (value) => void — called with the new answer value
- *   submitted  — boolean
+ *   question        — question object from JSON
+ *   answer          — current answer state:
+ *                       MCQ / venn select_diagram: string label e.g. 'A'
+ *                       Yes/No: object keyed by statement index e.g. { 0: 'Yes', 2: 'No' }
+ *   onAnswer        — (value) => void — called with the new answer value
+ *   submitted       — boolean
+ *   questionContext — AI tutor context built by DMQuestionScreen
  */
-export default function DMQuestionRenderer({ question, answer, onAnswer, submitted }) {
+export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext }) {
   const { width: screenWidth } = useWindowDimensions();
   const [diagramExpanded, setDiagramExpanded] = useState(false);
+
+  const [tutorVisible, setTutorVisible] = useState(false);
 
   const isYesNo      = YES_NO_TYPES.includes(question.type);
   const isMCQ        = MCQ_TYPES.includes(question.type);
   const isVenn       = question.type === 'venn_diagram';
   const isSelectVenn = isVenn && question.subtype === 'select_diagram';
   const isInterpVenn = isVenn && question.subtype === 'interpret_diagram';
+
+  const isCorrect = isYesNo
+    ? JSON.stringify(answer) === JSON.stringify(question.answer)
+    : answer === question.answer;
 
   const contentWidth = screenWidth - 40; // 20px padding each side
   const stimulusCanvas = getCanvasSize(question.stimulusDiagram?.diagramLayout, question.stimulusDiagram);
@@ -162,7 +170,20 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         <View style={styles.explanation}>
           <Text style={styles.explanationLabel}>Explanation</Text>
           <Text style={styles.explanationText}>{question.answeringReason}</Text>
+          {!isCorrect && questionContext && (
+            <TouchableOpacity style={styles.teachMeBtn} onPress={() => setTutorVisible(true)}>
+              <Text style={styles.teachMeBtnText}>Teach Me</Text>
+            </TouchableOpacity>
+          )}
         </View>
+      )}
+
+      {questionContext && (
+        <AITutorModal
+          visible={tutorVisible}
+          onClose={() => setTutorVisible(false)}
+          questionContext={questionContext}
+        />
       )}
     </View>
   );
@@ -254,5 +275,20 @@ const styles = StyleSheet.create({
     color: '#a0aec0',
     fontSize: 14,
     lineHeight: 21,
+  },
+  teachMeBtn: {
+    marginTop: 14,
+    alignSelf: 'flex-start',
+    backgroundColor: '#1a2535',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: '#4a5568',
+  },
+  teachMeBtnText: {
+    color: '#e2e8f0',
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

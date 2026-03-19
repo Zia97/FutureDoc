@@ -148,6 +148,15 @@ export default function QRQuestionScreen({ route }) {
                   correctAnswer={question.answer}
                   reason={question.answeringReason}
                   showReason
+                  questionContext={!isCorrect ? {
+                    question: question.questionText,
+                    questionType: item.stimulus?.type ?? 'quantitative_reasoning',
+                    section: 'qr',
+                    correctAnswer: question.answer,
+                    userAnswer: selectedAnswer,
+                    explanation: question.answeringReason,
+                    stimulusData: item.stimulus,
+                  } : undefined}
                 />
               )}
 

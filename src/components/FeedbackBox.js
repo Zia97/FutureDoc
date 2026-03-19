@@ -1,20 +1,41 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useState } from 'react';
+import AITutorModal from './AITutorModal';
 
 // showReason: show the explanation text (default true).
 // Set to false when the answer is correct and you don't want to show the reason on correct answers.
-export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true }) {
+// questionContext: { question, questionType, section, correctAnswer, userAnswer, explanation, stimulusData? }
+//   Required to enable the "Teach Me" button on incorrect answers.
+export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
+  const [tutorVisible, setTutorVisible] = useState(false);
+
   return (
-    <View style={[styles.box, isCorrect ? styles.correct : styles.incorrect]}>
-      <Text style={styles.title}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
-      {(!isCorrect || showReason) && (
-        <>
-          {!isCorrect && (
-            <Text style={styles.correctAnswer}>Correct answer: {correctAnswer}</Text>
-          )}
-          <Text style={styles.reason}>{reason}</Text>
-        </>
+    <>
+      <View style={[styles.box, isCorrect ? styles.correct : styles.incorrect]}>
+        <Text style={styles.title}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
+        {(!isCorrect || showReason) && (
+          <>
+            {!isCorrect && (
+              <Text style={styles.correctAnswer}>Correct answer: {correctAnswer}</Text>
+            )}
+            <Text style={styles.reason}>{reason}</Text>
+          </>
+        )}
+        {!isCorrect && questionContext && (
+          <TouchableOpacity style={styles.teachMeBtn} onPress={() => setTutorVisible(true)}>
+            <Text style={styles.teachMeBtnText}>Teach Me</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {questionContext && (
+        <AITutorModal
+          visible={tutorVisible}
+          onClose={() => setTutorVisible(false)}
+          questionContext={questionContext}
+        />
       )}
-    </View>
+    </>
   );
 }
 
@@ -48,5 +69,20 @@ const styles = StyleSheet.create({
     color: '#cbd5e0',
     fontSize: 14,
     lineHeight: 21,
+  },
+  teachMeBtn: {
+    marginTop: 14,
+    alignSelf: 'flex-start',
+    backgroundColor: '#2d3748',
+    borderRadius: 8,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderWidth: 1,
+    borderColor: '#4a5568',
+  },
+  teachMeBtnText: {
+    color: '#e2e8f0',
+    fontSize: 13,
+    fontWeight: '600',
   },
 });

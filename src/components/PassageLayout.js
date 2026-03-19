@@ -30,6 +30,7 @@ if (Platform.OS === 'android') {
 //   getId          — (item) => string|number  — unique item identifier for answer tracking
 //   renderOptions  — ({ item, question, getOptionState, onAnswer }) => ReactNode
 //   alwaysShowReason — bool — show answeringReason even on correct answer (default false)
+//   section        — 'vr' | 'sj' — used to build AI tutor context
 
 export default function PassageLayout({
   items,
@@ -41,6 +42,7 @@ export default function PassageLayout({
   alwaysShowReason = false,
   onAnswerCommit = null,
   initialAnswers = {},
+  section = 'vr',
 }) {
   const {
     itemIndex,
@@ -137,6 +139,14 @@ export default function PassageLayout({
                 correctAnswer={question.answer}
                 reason={question.answeringReason}
                 showReason={!isCorrect || alwaysShowReason}
+                questionContext={!isCorrect ? {
+                  question: question.questionText,
+                  questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
+                  section,
+                  correctAnswer: question.answer,
+                  userAnswer: selectedAnswer,
+                  explanation: question.answeringReason,
+                } : undefined}
               />
             )}
 

@@ -39,6 +39,7 @@ export default function SJScenarioScreen({ route }) {
       alwaysShowReason
       initialAnswers={localAnswers}
       onAnswerCommit={handleAnswerCommit}
+      section="sj"
       renderOptions={({ item, getOptionState, onAnswer }) =>
         LABEL_SETS[item.labelSet].map((opt) => (
           <AnswerOptionButton

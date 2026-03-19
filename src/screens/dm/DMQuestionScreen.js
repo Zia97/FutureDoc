@@ -98,6 +98,19 @@ export default function DMQuestionScreen({ route }) {
           answer={currentAnswer}
           onAnswer={handleAnswer}
           submitted={isSubmitted}
+          questionContext={isSubmitted ? {
+            question: question.stem,
+            questionType: question.type,
+            section: 'dm',
+            correctAnswer: typeof question.answer === 'object'
+              ? JSON.stringify(question.answer)
+              : question.answer,
+            userAnswer: typeof currentAnswer === 'object'
+              ? JSON.stringify(currentAnswer)
+              : (currentAnswer ?? ''),
+            explanation: question.answeringReason,
+            stimulusData: question.tableData ?? question.stimulusDiagram ?? undefined,
+          } : undefined}
         />
 
         {isYesNo && !isSubmitted && (
