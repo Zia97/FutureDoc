@@ -93,7 +93,7 @@ export default function AboutUCATScreen({ navigation }) {
           </Text>
           <InfoBox
             text="For 2026 entry, the UCAT testing window runs from mid-July to the end of September 2025. Always check the official UCAT website for exact dates."
-          />
+          styles={styles} />
         </View>
 
         {/* Exam Format */}
@@ -132,9 +132,9 @@ export default function AboutUCATScreen({ navigation }) {
 
         {/* Verbal Reasoning */}
         <View ref={registerRef('vr')} style={styles.section}>
-          <SectionBadge label="VR" color="#7c3aed" />
+          <SectionBadge label="VR" color="#7c3aed" styles={styles} />
           <Text style={styles.sectionTitle}>Verbal Reasoning</Text>
-          <StatRow items={[{ label: 'Questions', value: '44' }, { label: 'Time', value: '22 min' }, { label: 'Per question', value: '~30 sec' }]} />
+          <StatRow items={[{ label: 'Questions', value: '44' }, { label: 'Time', value: '22 min' }, { label: 'Per question', value: '~30 sec' }] } styles={styles}/>
           <Text style={styles.body}>
             Verbal Reasoning assesses your ability to read and critically evaluate written information.
             You are presented with 11 passages of text (approximately 200–300 words each), each followed
@@ -144,22 +144,22 @@ export default function AboutUCATScreen({ navigation }) {
           <BulletList items={[
             'True / False / Can\'t Tell — decide whether a statement is supported, contradicted, or cannot be determined from the passage.',
             'Free text questions — select the best answer from four options based on the passage content.',
-          ]} />
+          ]} styles={styles}/>
           <Text style={styles.subheading}>Key Skills</Text>
           <BulletList items={[
             'Reading comprehension under time pressure',
             'Distinguishing between what is stated and what is implied',
             'Avoiding assumptions based on prior knowledge',
             'Identifying the logical conclusion supported by the text',
-          ]} />
-          <InfoBox text="Do not use outside knowledge. Base every answer solely on the passage provided." />
+          ]} styles={styles}/>
+          <InfoBox text="Do not use outside knowledge. Base every answer solely on the passage provided." styles={styles} />
         </View>
 
         {/* Decision Making */}
         <View ref={registerRef('dm')} style={styles.section}>
-          <SectionBadge label="DM" color="#0891b2" />
+          <SectionBadge label="DM" color="#0891b2" styles={styles} />
           <Text style={styles.sectionTitle}>Decision Making</Text>
-          <StatRow items={[{ label: 'Questions', value: '35' }, { label: 'Time', value: '37 min' }, { label: 'Per question', value: '~63 sec' }]} />
+          <StatRow items={[{ label: 'Questions', value: '35' }, { label: 'Time', value: '37 min' }, { label: 'Per question', value: '~63 sec' }]} styles={styles}/>
           <Text style={styles.body}>
             Decision Making tests your ability to apply logic to reach sound decisions from complex
             information. Questions may draw on text, statistics, charts, or logical puzzles.
@@ -171,7 +171,7 @@ export default function AboutUCATScreen({ navigation }) {
             'Interpreting information — drawing inferences from data, charts, or diagrams.',
             'Recognising assumptions — identifying assumptions underlying an argument.',
             'Venn diagrams — using set logic to answer probability-style questions.',
-          ]} />
+          ]} styles={styles}/>
           <Text style={styles.subheading}>Scoring & Calculator</Text>
           <Text style={styles.body}>
             Single-answer questions are worth one mark. Multi-statement questions (where you match
@@ -182,9 +182,9 @@ export default function AboutUCATScreen({ navigation }) {
 
         {/* Quantitative Reasoning */}
         <View ref={registerRef('qr')} style={styles.section}>
-          <SectionBadge label="QR" color="#059669" />
+          <SectionBadge label="QR" color="#059669" styles={styles} />
           <Text style={styles.sectionTitle}>Quantitative Reasoning</Text>
-          <StatRow items={[{ label: 'Questions', value: '36' }, { label: 'Time', value: '26 min' }, { label: 'Per question', value: '~43 sec' }]} />
+          <StatRow items={[{ label: 'Questions', value: '36' }, { label: 'Time', value: '26 min' }, { label: 'Per question', value: '~43 sec' }]} styles={styles}/>
           <Text style={styles.body}>
             Quantitative Reasoning assesses your ability to use numerical and mathematical skills to
             solve problems. Questions are presented alongside tables, charts, or graphs and require
@@ -197,21 +197,21 @@ export default function AboutUCATScreen({ navigation }) {
             'Currency conversions and financial calculations',
             'Data interpretation from tables and graphs',
             'Area, volume, and basic geometry',
-          ]} />
+          ]} styles={styles}/>
           <Text style={styles.subheading}>Calculator Use</Text>
           <Text style={styles.body}>
             An on-screen calculator is available during this subtest (and also in Decision Making).
             The key skill is not raw arithmetic but knowing which calculation to perform efficiently
             within the tight time limit.
           </Text>
-          <InfoBox text="Practise reading tables and graphs quickly. The bottleneck is usually identifying the right numbers, not the calculation itself." />
+          <InfoBox text="Practise reading tables and graphs quickly. The bottleneck is usually identifying the right numbers, not the calculation itself." styles={styles}/>
         </View>
 
         {/* Situational Judgement */}
         <View ref={registerRef('sj')} style={styles.section}>
-          <SectionBadge label="SJ" color="#d97706" />
+          <SectionBadge label="SJ" color="#d97706" styles={styles} />
           <Text style={styles.sectionTitle}>Situational Judgement</Text>
-          <StatRow items={[{ label: 'Questions', value: '69' }, { label: 'Time', value: '26 min' }, { label: 'Per question', value: '~23 sec' }]} />
+          <StatRow items={[{ label: 'Questions', value: '69' }, { label: 'Time', value: '26 min' }, { label: 'Per question', value: '~23 sec' }]} styles={styles}/>
           <Text style={styles.body}>
             Situational Judgement assesses your ability to understand real-world situations and
             identify appropriate behaviour in a clinical or professional context. It is co-developed
@@ -225,7 +225,7 @@ export default function AboutUCATScreen({ navigation }) {
           <BulletList items={[
             'Appropriateness questions — rate each response as: Very Appropriate, Appropriate but not Ideal, Inappropriate but not Awful, or Very Inappropriate.',
             'Importance questions — rate how important each action is: Very Important, Important, Of Minor Importance, or Not Important at all.',
-          ]} />
+          ]} styles={styles}/>
           <Text style={styles.subheading}>Key Themes</Text>
           <BulletList items={[
             'Patient safety and escalation',
@@ -233,8 +233,8 @@ export default function AboutUCATScreen({ navigation }) {
             'Team communication and hierarchy',
             'Confidentiality and consent',
             'Personal wellbeing and limitations',
-          ]} />
-          <InfoBox text="SJ is scored separately (Band 1–4) and is not included in the overall UCAT scaled score. Many universities do consider it, so do not neglect it." />
+          ]} styles={styles}/>
+          <InfoBox text="SJ is scored separately (Band 1–4) and is not included in the overall UCAT scaled score. Many universities do consider it, so do not neglect it." styles={styles}/>
         </View>
 
         {/* Scoring */}
@@ -257,7 +257,7 @@ export default function AboutUCATScreen({ navigation }) {
             'Band 2 — performance similar to the majority of candidates',
             'Band 3 — below the majority of candidates',
             'Band 4 — significantly below the majority of candidates',
-          ]} />
+          ]} styles={styles}/>
           <Text style={styles.body}>
             Universities use UCAT scores differently. Some use score thresholds to shortlist for
             interview, others combine UCAT score with predicted A-level grades, and some use a
@@ -277,7 +277,7 @@ export default function AboutUCATScreen({ navigation }) {
             { label: 'VR Mean', value: '602' },
             { label: 'DM Mean', value: '628' },
             { label: 'QR Mean', value: '661' },
-          ]} />
+          ]} styles={styles}/>
           <Text style={styles.subheading}>SJ Band Distribution — 2025</Text>
           <SJBandBar />
           <Text style={styles.body}>
@@ -301,10 +301,10 @@ export default function AboutUCATScreen({ navigation }) {
             'After each session, review every wrong answer to understand why, not just what the right answer was.',
             'Rotate focus across all subtests weekly — do not neglect SJ.',
             'Use the official UCAT practice platform (Pearson VUE) to familiarise yourself with the interface.',
-          ]} />
+          ]} styles={styles}/>
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="VR" color="#7c3aed" />
+          <SectionBadge label="VR" color="#7c3aed" styles={styles} />
           <Text style={styles.subheading}>Verbal Reasoning</Text>
           <BulletList items={[
             'Base every answer solely on the passage — prior knowledge must be ignored completely.',
@@ -312,10 +312,10 @@ export default function AboutUCATScreen({ navigation }) {
             '"Can\'t Tell" means the passage neither confirms nor contradicts — not that you are unsure.',
             'If a question is taking more than 30 seconds, flag it and move on — return at the end.',
             'Skim the questions before reading the passage so you know what to look for.',
-          ]} />
+          ]} styles={styles}/>
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="DM" color="#0891b2" />
+          <SectionBadge label="DM" color="#0891b2" styles={styles} />
           <Text style={styles.subheading}>Decision Making</Text>
           <BulletList items={[
             'Use the whiteboard provided to sketch Venn diagrams for set-logic questions.',
@@ -323,10 +323,10 @@ export default function AboutUCATScreen({ navigation }) {
             'Recognise assumption questions require you to find what the argument depends on being true.',
             'The calculator is available — use it for any question involving numbers or probability.',
             'Multi-statement questions award partial marks — always attempt every statement.',
-          ]} />
+          ]} styles={styles}/>
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="QR" color="#059669" />
+          <SectionBadge label="QR" color="#059669" styles={styles} />
           <Text style={styles.subheading}>Quantitative Reasoning</Text>
           <BulletList items={[
             'Read the question before examining the data — identify exactly which numbers you need.',
@@ -334,10 +334,10 @@ export default function AboutUCATScreen({ navigation }) {
             'Plan your calculation before picking up the calculator — efficiency beats speed.',
             'Most questions test data interpretation, not complex maths. GCSE-level arithmetic is sufficient.',
             'Watch for unit changes (e.g. km to m, monthly to annual) — these are common traps.',
-          ]} />
+          ]} styles={styles}/>
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="SJ" color="#d97706" />
+          <SectionBadge label="SJ" color="#d97706" styles={styles} />
           <Text style={styles.subheading}>Situational Judgement</Text>
           <BulletList items={[
             'Patient safety is always the overriding priority — escalate anything that puts a patient at risk.',
@@ -345,7 +345,7 @@ export default function AboutUCATScreen({ navigation }) {
             'Read the GMC\'s Good Medical Practice for context on professional values and duties.',
             'Think about what a senior, experienced doctor would consider ideal — not just acceptable.',
             'SJ uses partial marking — a response close to the correct band still earns credit.',
-          ]} />
+          ]} styles={styles}/>
 
           <View style={styles.tipDivider} />
           <Text style={styles.subheading}>Test Day</Text>
@@ -355,7 +355,7 @@ export default function AboutUCATScreen({ navigation }) {
             'Use the flag feature to mark uncertain questions and revisit them before time expires.',
             'Check your remaining time every 5–6 questions to maintain pace.',
             'Each subtest is independently timed — unused time in one does not carry over to the next.',
-          ]} />
+          ]} styles={styles}/>
         </View>
 
         {/* Disclaimer */}
@@ -385,7 +385,7 @@ export default function AboutUCATScreen({ navigation }) {
   );
 }
 
-function SectionBadge({ label, color }) {
+function SectionBadge({ label, color, styles }) {
   return (
     <View style={[styles.badge, { backgroundColor: color + '22', borderColor: color }]}>
       <Text style={[styles.badgeText, { color }]}>{label}</Text>
@@ -393,7 +393,7 @@ function SectionBadge({ label, color }) {
   );
 }
 
-function StatRow({ items }) {
+function StatRow({ items, styles }) {
   return (
     <View style={styles.statRow}>
       {items.map((item, i) => (
@@ -406,7 +406,7 @@ function StatRow({ items }) {
   );
 }
 
-function BulletList({ items }) {
+function BulletList({ items, styles }) {
   return (
     <View style={styles.bulletList}>
       {items.map((item, i) => (
@@ -521,7 +521,7 @@ function SJBandBar() {
   );
 }
 
-function InfoBox({ text }) {
+function InfoBox({ text, styles }) {
   return (
     <View style={styles.infoBox}>
       <Text style={styles.infoBoxText}>{text}</Text>
