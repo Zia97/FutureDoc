@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import Svg, { Path, Line, Text as SvgText, G } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const SECTIONS = [
   { id: 'what', label: 'What is the UCAT?' },
@@ -26,6 +27,8 @@ const SECTIONS = [
 export default function AboutUCATScreen({ navigation }) {
   const scrollRef = useRef(null);
   const sectionRefs = useRef({});
+  const { theme: t } = useTheme();
+  const styles = makeStyles(t);
 
   function scrollToSection(id) {
     const ref = sectionRefs.current[id];
@@ -44,7 +47,7 @@ export default function AboutUCATScreen({ navigation }) {
 
   return (
     <View style={styles.screen}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
+      <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
       <ScrollView
         ref={scrollRef}
         style={styles.scroll}
@@ -526,10 +529,10 @@ function InfoBox({ text }) {
   );
 }
 
-const styles = StyleSheet.create({
+function makeStyles(t) { return StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: t.bgInput,
   },
   scroll: {
     flex: 1,
@@ -544,12 +547,12 @@ const styles = StyleSheet.create({
   pageTitle: {
     fontSize: 32,
     fontWeight: '800',
-    color: '#ffffff',
+    color: t.text,
     letterSpacing: 0.5,
   },
   pageSubtitle: {
     fontSize: 14,
-    color: '#a0aec0',
+    color: t.textSecondary,
     marginTop: 6,
     letterSpacing: 1,
     textTransform: 'uppercase',
@@ -557,17 +560,17 @@ const styles = StyleSheet.create({
 
   // Contents
   contentsCard: {
-    backgroundColor: '#16213e',
+    backgroundColor: t.bgCard,
     borderRadius: 14,
     padding: 18,
     marginBottom: 28,
     borderWidth: 1,
-    borderColor: '#1e3a5f',
+    borderColor: t.border,
   },
   contentsHeading: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#a0aec0',
+    color: t.textSecondary,
     letterSpacing: 1.5,
     textTransform: 'uppercase',
     marginBottom: 12,
@@ -578,15 +581,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#1e3a5f',
+    borderBottomColor: t.border,
   },
   contentsText: {
-    color: '#93c5fd',
+    color: t.accent,
     fontSize: 15,
     fontWeight: '500',
   },
   contentsArrow: {
-    color: '#4f46e5',
+    color: t.accent,
     fontSize: 20,
     fontWeight: '700',
   },
@@ -598,19 +601,19 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#ffffff',
+    color: t.text,
     marginBottom: 14,
   },
   subheading: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#e2e8f0',
+    color: t.text,
     marginTop: 14,
     marginBottom: 8,
   },
   body: {
     fontSize: 15,
-    color: '#cbd5e1',
+    color: t.textSecondary,
     lineHeight: 24,
     marginBottom: 10,
   },
@@ -638,21 +641,21 @@ const styles = StyleSheet.create({
   },
   statItem: {
     flex: 1,
-    backgroundColor: '#16213e',
+    backgroundColor: t.bgCard,
     borderRadius: 10,
     padding: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#1e3a5f',
+    borderColor: t.border,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#ffffff',
+    color: t.text,
   },
   statLabel: {
     fontSize: 11,
-    color: '#94a3b8',
+    color: t.textSecondary,
     marginTop: 3,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -676,22 +679,22 @@ const styles = StyleSheet.create({
   bulletText: {
     flex: 1,
     fontSize: 14,
-    color: '#cbd5e1',
+    color: t.textSecondary,
     lineHeight: 22,
   },
 
   // Info box
   infoBox: {
-    backgroundColor: '#1e3a5f',
+    backgroundColor: t.accentDim,
     borderLeftWidth: 3,
-    borderLeftColor: '#4f46e5',
+    borderLeftColor: t.accent,
     borderRadius: 8,
     padding: 14,
     marginTop: 10,
   },
   infoBoxText: {
     fontSize: 13,
-    color: '#93c5fd',
+    color: t.accent,
     lineHeight: 20,
     fontStyle: 'italic',
   },
@@ -702,16 +705,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#1e3a5f',
+    borderColor: t.border,
   },
   tableHeader: {
     flexDirection: 'row',
-    backgroundColor: '#0f172a',
+    backgroundColor: t.bg,
     paddingVertical: 10,
     paddingHorizontal: 12,
   },
   tableHeaderText: {
-    color: '#a0aec0',
+    color: t.textSecondary,
     fontWeight: '700',
     fontSize: 12,
     textTransform: 'uppercase',
@@ -721,30 +724,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#16213e',
+    backgroundColor: t.bgCard,
   },
   tableRowAlt: {
-    backgroundColor: '#1a2744',
+    backgroundColor: t.bgInput,
   },
   tableCell: {
     flex: 1,
     fontSize: 14,
-    color: '#e2e8f0',
+    color: t.text,
   },
 
   // Highlight box
   highlightBox: {
-    backgroundColor: '#1e3a5f',
+    backgroundColor: t.accentDim,
     borderRadius: 12,
     padding: 18,
     alignItems: 'center',
     marginVertical: 14,
     borderWidth: 1,
-    borderColor: '#4f46e5',
+    borderColor: t.accent,
   },
   highlightLabel: {
     fontSize: 12,
-    color: '#a0aec0',
+    color: t.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 1,
     marginBottom: 6,
@@ -752,36 +755,36 @@ const styles = StyleSheet.create({
   highlightValue: {
     fontSize: 28,
     fontWeight: '800',
-    color: '#ffffff',
+    color: t.text,
   },
 
   // Tip divider
   tipDivider: {
     height: 1,
-    backgroundColor: '#1e3a5f',
+    backgroundColor: t.border,
     marginVertical: 16,
   },
 
   // Chart
   chartCard: {
-    backgroundColor: '#0f172a',
+    backgroundColor: t.bg,
     borderRadius: 12,
     padding: 14,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#1e3a5f',
+    borderColor: t.border,
   },
   chartTitle: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#a0aec0',
+    color: t.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
     marginBottom: 10,
   },
   chartNote: {
     fontSize: 10,
-    color: '#4a5568',
+    color: t.textMuted,
     textAlign: 'center',
     marginTop: 6,
     fontStyle: 'italic',
@@ -819,4 +822,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
   },
-});
+}); }

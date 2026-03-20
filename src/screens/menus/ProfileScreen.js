@@ -7,10 +7,12 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
+  Switch,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 const SECTIONS = [
   {
@@ -45,6 +47,7 @@ const SECTIONS = [
 
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
+  const { theme: t, isDark, useUCATScheme, toggleDark, toggleUCATScheme } = useTheme();
   const [deleting, setDeleting] = useState(null);
   const [deletingAll, setDeletingAll] = useState(false);
 
@@ -123,52 +126,101 @@ export default function ProfileScreen() {
   const emailInitial = user?.email?.[0]?.toUpperCase() ?? '?';
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: t.bgInput }]}
+      contentContainerStyle={styles.content}
+    >
+      {/* Avatar */}
       <View style={styles.avatarRow}>
-        <View style={styles.avatar}>
+        <View style={[styles.avatar, { backgroundColor: t.accent }]}>
           <Text style={styles.avatarText}>{emailInitial}</Text>
         </View>
-        <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
+        <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{user?.email}</Text>
       </View>
 
-      <Text style={styles.sectionHeading}>Reset Progress</Text>
-      <Text style={styles.sectionSubheading}>
+      {/* Appearance */}
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Appearance</Text>
+
+      <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <View style={styles.toggleRow}>
+          <View style={styles.toggleLabel}>
+            <Text style={[styles.toggleTitle, { color: t.text }]}>Dark Mode</Text>
+            <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
+              Switch between light and dark theme
+            </Text>
+          </View>
+          <Switch
+            value={isDark}
+            onValueChange={toggleDark}
+            trackColor={{ false: t.border, true: t.accent }}
+            thumbColor="#ffffff"
+          />
+        </View>
+
+        <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />
+
+        <View style={styles.toggleRow}>
+          <View style={styles.toggleLabel}>
+            <Text style={[styles.toggleTitle, { color: t.text }]}>Use UCAT Colour Scheme in Questions</Text>
+            <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
+              Practice screens match the real UCAT interface
+            </Text>
+          </View>
+          <Switch
+            value={useUCATScheme}
+            onValueChange={toggleUCATScheme}
+            trackColor={{ false: t.border, true: t.accent }}
+            thumbColor="#ffffff"
+          />
+        </View>
+      </View>
+
+      {/* Reset Progress */}
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Reset Progress</Text>
+      <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
         Delete your answers and progress for a section. This cannot be undone.
       </Text>
 
       {SECTIONS.map((section) => (
-        <View key={section.id} style={[styles.card, { borderLeftColor: section.color }]}>
-          <Text style={styles.cardLabel}>{section.label}</Text>
+        <View
+          key={section.id}
+          style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
+        >
+          <Text style={[styles.cardLabel, { color: t.text }]}>{section.label}</Text>
           <TouchableOpacity
-            style={styles.deleteButton}
+            style={[styles.deleteButton, { borderColor: t.danger }]}
             onPress={() => handleDeleteProgress(section)}
             disabled={deleting === section.id}
             activeOpacity={0.75}
           >
             {deleting === section.id ? (
-              <ActivityIndicator size="small" color="#ef4444" />
+              <ActivityIndicator size="small" color={t.danger} />
             ) : (
-              <Text style={styles.deleteButtonText}>Delete Progress</Text>
+              <Text style={[styles.deleteButtonText, { color: t.danger }]}>Delete Progress</Text>
             )}
           </TouchableOpacity>
         </View>
       ))}
 
       <TouchableOpacity
-        style={styles.deleteAllButton}
+        style={[styles.deleteAllButton, { backgroundColor: t.bgCard, borderColor: t.danger }]}
         onPress={handleDeleteAll}
         disabled={deletingAll}
         activeOpacity={0.8}
       >
         {deletingAll ? (
-          <ActivityIndicator size="small" color="#ef4444" />
+          <ActivityIndicator size="small" color={t.danger} />
         ) : (
-          <Text style={styles.deleteAllText}>Delete All Progress</Text>
+          <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Progress</Text>
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.signOutButton} onPress={handleSignOut} activeOpacity={0.8}>
-        <Text style={styles.signOutText}>Sign Out</Text>
+      <TouchableOpacity
+        style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
+        onPress={handleSignOut}
+        activeOpacity={0.8}
+      >
+        <Text style={[styles.signOutText, { color: t.textSecondary }]}>Sign Out</Text>
       </TouchableOpacity>
     </ScrollView>
   );
@@ -177,7 +229,6 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
   },
   content: {
     paddingHorizontal: 24,
@@ -193,7 +244,6 @@ const styles = StyleSheet.create({
     width: 52,
     height: 52,
     borderRadius: 26,
-    backgroundColor: '#4f46e5',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
@@ -204,26 +254,57 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   email: {
-    color: '#a0aec0',
     fontSize: 15,
     flex: 1,
   },
   sectionHeading: {
-    color: '#ffffff',
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 6,
   },
   sectionSubheading: {
-    color: '#64748b',
     fontSize: 13,
     marginBottom: 20,
     lineHeight: 18,
   },
+
+  // Appearance toggles
+  toggleCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    marginBottom: 32,
+    overflow: 'hidden',
+  },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  toggleLabel: {
+    flex: 1,
+  },
+  toggleTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginBottom: 3,
+  },
+  toggleSubtitle: {
+    fontSize: 12,
+    lineHeight: 17,
+  },
+  toggleDivider: {
+    height: 1,
+    marginHorizontal: 18,
+  },
+
+  // Progress reset cards
   card: {
-    backgroundColor: '#16213e',
     borderRadius: 12,
     borderLeftWidth: 4,
+    borderWidth: 1,
     paddingVertical: 16,
     paddingHorizontal: 18,
     marginBottom: 12,
@@ -232,7 +313,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   cardLabel: {
-    color: '#e2e8f0',
     fontSize: 15,
     fontWeight: '600',
     flex: 1,
@@ -243,12 +323,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#ef4444',
     minWidth: 44,
     alignItems: 'center',
   },
   deleteButtonText: {
-    color: '#ef4444',
     fontSize: 13,
     fontWeight: '600',
   },
@@ -257,12 +335,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
-    backgroundColor: '#16213e',
     borderWidth: 1,
-    borderColor: '#ef4444',
   },
   deleteAllText: {
-    color: '#ef4444',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -271,12 +346,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
-    backgroundColor: '#16213e',
     borderWidth: 1,
-    borderColor: '#334155',
   },
   signOutText: {
-    color: '#94a3b8',
     fontSize: 16,
     fontWeight: '600',
   },

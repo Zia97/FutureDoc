@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "UCAT PrepAI",
-    "slug": "ucat-prepai",
-    "scheme": "ucatprepai",
+    "name": "UCAT Genius AI",
+    "slug": "ucat-genius-ai",
+    "scheme": "ucatgeniusai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.qhz123.ucatprepai"
+      "bundleIdentifier": "com.qhz123.ucatgeniusai"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +23,7 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "package": "com.qhz123.ucatprepai",
+      "package": "com.qhz123.ucatgeniusai",
       "softwareKeyboardLayoutMode": "pan"
     },
     "web": {

@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
@@ -23,14 +24,6 @@ import AboutUCATScreen from '../screens/menus/AboutUCATScreen';
 
 const Stack = createNativeStackNavigator();
 
-const screenOptions = {
-  headerStyle: { backgroundColor: '#16213e' },
-  headerTintColor: '#ffffff',
-  headerTitleStyle: { fontWeight: '700' },
-  headerBackTitle: 'Back',
-  animation: 'slide_from_right',
-};
-
 function AuthStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -41,6 +34,16 @@ function AuthStack() {
 }
 
 function AppStack() {
+  const { theme: t } = useTheme();
+
+  const screenOptions = {
+    headerStyle: { backgroundColor: t.headerBg },
+    headerTintColor: '#ffffff',
+    headerTitleStyle: { fontWeight: '700' },
+    headerBackTitle: 'Back',
+    animation: 'slide_from_right',
+  };
+
   return (
     <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
@@ -61,11 +64,12 @@ function AppStack() {
 
 export default function AppNavigator() {
   const { user, loading } = useAuth();
+  const { theme: t } = useTheme();
 
   if (loading) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#16213e', alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#4a9eff" />
+      <View style={{ flex: 1, backgroundColor: t.headerBg, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color={t.accent} />
       </View>
     );
   }

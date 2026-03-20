@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
   const signOut = () => supabase.auth.signOut();
 
   const signInWithGoogle = async () => {
-    const redirectTo = AuthSession.makeRedirectUri({ scheme: 'ucatprepai', path: 'auth/callback' });
+    const redirectTo = AuthSession.makeRedirectUri({ scheme: 'ucatgeniusai', path: 'auth/callback' });
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

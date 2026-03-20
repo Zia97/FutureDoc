@@ -6,9 +6,8 @@ import Svg, {
   Polygon,
   Text as SvgText,
 } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
-const STROKE = '#e2e8f0';
-const TEXT_FILL = '#e2e8f0';
 const STROKE_WIDTH = 2;
 const FONT_SIZE = 13;
 const MIN_OUTLINE_CLEARANCE = 10; // minimum px from label centre to any shape outline
@@ -343,10 +342,10 @@ const LAYOUTS = {
   },
 };
 
-function renderShape(shape, cx, cy, w, h) {
+function renderShape(shape, cx, cy, w, h, stroke) {
   const r = Math.min(w, h) / 2;
   const strokeProps = {
-    stroke: STROKE,
+    stroke: stroke,
     strokeWidth: STROKE_WIDTH,
     fill: 'none',
   };
@@ -430,6 +429,10 @@ export function getCanvasSize(diagramLayout, vennConfig) {
  * scale: multiplied against the canvas size (use < 1 for small option thumbnails)
  */
 export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
+  const { practiceTheme: t } = useTheme();
+  const STROKE = t.text;
+  const TEXT_FILL = t.text;
+
   const layout = resolveLayout(vennConfig);
   if (!layout) return null;
 
@@ -443,7 +446,6 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
     shapeById[s.id] = s.shape;
   });
 
-  // Build outline geometry for every set so labels can be safety-checked.
   const shapeGeoms = layout.sets.map((pos) =>
     shapeToGeometry(shapeById[pos.id] || 'circle', pos.cx, pos.cy, pos.w, pos.h),
   );
@@ -455,15 +457,11 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
         height={displayH}
         viewBox={`0 0 ${canvasW} ${canvasH}`}
       >
-        {/* Draw shapes for each set */}
         {layout.sets.map((pos) => {
           const shape = shapeById[pos.id] || 'circle';
-          return renderShape(shape, pos.cx, pos.cy, pos.w, pos.h);
+          return renderShape(shape, pos.cx, pos.cy, pos.w, pos.h, STROKE);
         })}
 
-        {/* Place labels in each region.
-            Each label is rendered twice: a thick dark stroke first (halo),
-            then the bright fill on top — so letters are readable on any boundary. */}
         {Object.entries(vennConfig.regions || {}).map(([regionKey, value]) => {
           if (value === undefined || value === null) return null;
           const rawPos = layout.regions[regionKey];
@@ -479,20 +477,10 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
           };
           return (
             <React.Fragment key={regionKey}>
-              {/* Dark halo — drawn first, behind the fill */}
-              <SvgText
-                {...sharedProps}
-                fill="#1a1a2e"
-                stroke="#1a1a2e"
-                strokeWidth={3}
-              >
+              <SvgText {...sharedProps} fill={t.bg} stroke={t.bg} strokeWidth={3}>
                 {value}
               </SvgText>
-              {/* Bright fill on top */}
-              <SvgText
-                {...sharedProps}
-                fill={TEXT_FILL}
-              >
+              <SvgText {...sharedProps} fill={TEXT_FILL}>
                 {value}
               </SvgText>
             </React.Fragment>

@@ -5,12 +5,13 @@ import LineGraphRenderer from './LineGraphRenderer';
 import PieChartRenderer from './PieChartRenderer';
 import DataTable from '../dm/DataTable';
 import ZoomableView from '../ZoomableView';
-
+import { useTheme } from '../../context/ThemeContext';
 
 function ChartWithExpand({ children }) {
   const [expanded, setExpanded] = useState(false);
   const { width: screenWidth } = useWindowDimensions();
   const chartWidth = screenWidth - 48;
+  const { practiceTheme: t } = useTheme();
 
   return (
     <>
@@ -21,7 +22,7 @@ function ChartWithExpand({ children }) {
           onPress={() => setExpanded(true)}
           activeOpacity={0.7}
         >
-          <Text style={styles.tapHint}>⤢ Tap to expand</Text>
+          <Text style={[styles.tapHint, { color: t.accent }]}>⤢ Tap to expand</Text>
         </TouchableOpacity>
       </View>
 
@@ -36,7 +37,7 @@ function ChartWithExpand({ children }) {
           onPress={() => setExpanded(false)}
           activeOpacity={1}
         >
-          <View style={styles.modalCard}>
+          <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
             <ZoomableView maxZoom={4}>
               <View style={{ width: chartWidth }}>
                 {children}
@@ -50,6 +51,8 @@ function ChartWithExpand({ children }) {
 }
 
 export default function QRStimulusRenderer({ stimulus }) {
+  const { practiceTheme: t } = useTheme();
+
   if (!stimulus) return null;
 
   if (stimulus.type === 'multi') {
@@ -64,50 +67,25 @@ export default function QRStimulusRenderer({ stimulus }) {
 
   switch (stimulus.type) {
     case 'bar_chart':
-      return (
-        <ChartWithExpand>
-          <BarChartRenderer data={stimulus.data} />
-        </ChartWithExpand>
-      );
+      return <ChartWithExpand><BarChartRenderer data={stimulus.data} /></ChartWithExpand>;
     case 'line_graph':
-      return (
-        <ChartWithExpand>
-          <LineGraphRenderer data={stimulus.data} />
-        </ChartWithExpand>
-      );
+      return <ChartWithExpand><LineGraphRenderer data={stimulus.data} /></ChartWithExpand>;
     case 'pie_chart':
-      return (
-        <ChartWithExpand>
-          <PieChartRenderer data={stimulus.data} />
-        </ChartWithExpand>
-      );
+      return <ChartWithExpand><PieChartRenderer data={stimulus.data} /></ChartWithExpand>;
     case 'table':
       return <DataTable tableData={stimulus.data} />;
     case 'text':
-      return <Text style={styles.text}>{stimulus.text}</Text>;
+      return <Text style={[styles.text, { color: t.textSecondary }]}>{stimulus.text}</Text>;
     default:
       return null;
   }
 }
 
 const styles = StyleSheet.create({
-  multi: {
-    gap: 16,
-  },
-  text: {
-    color: '#cbd5e0',
-    fontSize: 14,
-    lineHeight: 22,
-  },
-  tapHintBtn: {
-    alignItems: 'center',
-  },
-  tapHint: {
-    color: '#4a9eff',
-    fontSize: 11,
-    marginTop: 6,
-    opacity: 0.7,
-  },
+  multi: { gap: 16 },
+  text: { fontSize: 14, lineHeight: 22 },
+  tapHintBtn: { alignItems: 'center' },
+  tapHint: { fontSize: 11, marginTop: 6, opacity: 0.7 },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.82)',
@@ -115,17 +93,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalCard: {
-    backgroundColor: '#16213e',
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#2d3748',
     padding: 20,
     alignItems: 'center',
-  },
-  modalDismiss: {
-    color: '#4a9eff',
-    fontSize: 12,
-    marginTop: 14,
-    opacity: 0.7,
   },
 });

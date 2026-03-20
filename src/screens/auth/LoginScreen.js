@@ -12,9 +12,11 @@ import {
 } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function LoginScreen({ navigation }) {
   const { signIn, signInWithGoogle, signInWithApple } = useAuth();
+  const { theme: t } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -54,49 +56,49 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: t.bg }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={styles.title}>UCAT PrepAI</Text>
-      <Text style={styles.subtitle}>Sign in to continue</Text>
+      <Text style={[styles.title, { color: t.text }]}>UCAT Genius AI</Text>
+      <Text style={[styles.subtitle, { color: t.textMuted }]}>Sign in to continue</Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
         placeholder="Email"
-        placeholderTextColor="#8a8a9a"
+        placeholderTextColor={t.textMuted}
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
         placeholder="Password"
-        placeholderTextColor="#8a8a9a"
+        placeholderTextColor={t.textMuted}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: t.accent }]} onPress={handleLogin} disabled={loading}>
         {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign In</Text>}
       </TouchableOpacity>
 
       <View style={styles.dividerRow}>
-        <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>or</Text>
-        <View style={styles.dividerLine} />
+        <View style={[styles.dividerLine, { backgroundColor: t.border }]} />
+        <Text style={[styles.dividerText, { color: t.textMuted }]}>or</Text>
+        <View style={[styles.dividerLine, { backgroundColor: t.border }]} />
       </View>
 
       <TouchableOpacity
-        style={[styles.socialButton, styles.googleButton]}
+        style={[styles.socialButton, { backgroundColor: t.bgCard, borderColor: t.border, borderWidth: 1 }]}
         onPress={handleGoogle}
         disabled={socialLoading !== null}
       >
         {socialLoading === 'google' ? (
-          <ActivityIndicator color="#000" />
+          <ActivityIndicator color={t.text} />
         ) : (
-          <Text style={styles.googleButtonText}>Continue with Google</Text>
+          <Text style={[styles.googleButtonText, { color: t.text }]}>Continue with Google</Text>
         )}
       </TouchableOpacity>
 
@@ -111,7 +113,7 @@ export default function LoginScreen({ navigation }) {
       )}
 
       <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-        <Text style={styles.link}>Don't have an account? Sign up</Text>
+        <Text style={[styles.link, { color: t.accent }]}>Don't have an account? Sign up</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -120,7 +122,6 @@ export default function LoginScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#16213e',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -128,26 +129,22 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#ffffff',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#8a8a9a',
     marginBottom: 40,
   },
   input: {
     width: '100%',
-    backgroundColor: '#1a2950',
-    color: '#ffffff',
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
     marginBottom: 14,
+    borderWidth: 1,
   },
   button: {
     width: '100%',
-    backgroundColor: '#0f3460',
     borderRadius: 10,
     padding: 16,
     alignItems: 'center',
@@ -168,10 +165,8 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#2a3a5e',
   },
   dividerText: {
-    color: '#8a8a9a',
     marginHorizontal: 12,
     fontSize: 14,
   },
@@ -182,11 +177,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  googleButton: {
-    backgroundColor: '#ffffff',
-  },
   googleButtonText: {
-    color: '#000000',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -196,7 +187,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   link: {
-    color: '#4a9eff',
     fontSize: 14,
     marginTop: 8,
   },

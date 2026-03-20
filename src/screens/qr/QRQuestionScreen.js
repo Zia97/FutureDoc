@@ -23,6 +23,7 @@ import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import FeedbackBox from '../../components/FeedbackBox';
 import CalculatorModal from '../../components/CalculatorModal';
+import { useTheme } from '../../context/ThemeContext';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -32,6 +33,7 @@ export default function QRQuestionScreen({ route }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const { sets, loading } = useQuantitativeReasoningSets();
   const { submitAttempt, localAnswers, cacheLoading } = useQuantitativeReasoningAttempts();
+  const { practiceTheme: t } = useTheme();
 
   const {
     itemIndex,
@@ -54,6 +56,7 @@ export default function QRQuestionScreen({ route }) {
   useEffect(() => {
     if (!cacheLoading) resetAnswers(localAnswers);
   }, [cacheLoading]);
+
   const panHandlers = useSwipeGesture(
     isFirstItem ? null : () => goToItem(itemIndex - 1),
     isLastItem ? null : () => goToItem(itemIndex + 1),
@@ -61,8 +64,8 @@ export default function QRQuestionScreen({ route }) {
 
   if (loading || cacheLoading || sets.length === 0) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
+      <View style={[styles.centered, { backgroundColor: t.bg }]}>
+        <ActivityIndicator size="large" color={t.accent} />
       </View>
     );
   }
@@ -95,8 +98,8 @@ export default function QRQuestionScreen({ route }) {
   }
 
   return (
-    <SafeAreaView style={styles.container} {...panHandlers}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
+    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
+      <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
 
       <ScreenNavBar
         title={item.title}
@@ -105,7 +108,7 @@ export default function QRQuestionScreen({ route }) {
         onNext={() => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
         isLast={isLastItem}
-        color="#059669"
+        color={t.sectionQR}
         onCalculator={() => setCalcVisible(true)}
       />
 
@@ -117,24 +120,22 @@ export default function QRQuestionScreen({ route }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Stimulus area */}
-        <View style={styles.stimulusContainer}>
-          <Text style={styles.dataLabel}>DATA</Text>
+        <View style={[styles.stimulusContainer, { backgroundColor: t.bgCard, borderLeftColor: t.sectionQR, borderColor: t.border }]}>
+          <Text style={[styles.dataLabel, { color: t.sectionQR }]}>DATA</Text>
           <QRStimulusRenderer stimulus={item.stimulus} />
         </View>
 
-        {/* Question panel */}
-        <View style={styles.panel}>
+        <View style={[styles.panel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
           <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-            <Text style={styles.panelCounter}>
+            <Text style={[styles.panelCounter, { color: t.textSecondary }]}>
               Question {questionIndex + 1} of {item.questions.length}
             </Text>
-            <Text style={styles.panelChevron}>{panelExpanded ? '▾' : '▴'}</Text>
+            <Text style={[styles.panelChevron, { color: t.sectionQR }]}>{panelExpanded ? '▾' : '▴'}</Text>
           </TouchableOpacity>
 
           {panelExpanded && (
             <View style={styles.panelContent}>
-              <Text style={styles.questionText}>{question.questionText}</Text>
+              <Text style={[styles.questionText, { color: t.text }]}>{question.questionText}</Text>
 
               <View style={styles.options}>
                 {question.options.map((opt) => (
@@ -168,18 +169,18 @@ export default function QRQuestionScreen({ route }) {
 
               <View style={styles.questionNav}>
                 <TouchableOpacity
-                  style={[styles.qNavBtn, isFirstQuestion && styles.qNavBtnDisabled]}
+                  style={[styles.qNavBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isFirstQuestion && styles.qNavBtnDisabled]}
                   onPress={goToPrevQuestion}
                   disabled={isFirstQuestion}
                 >
-                  <Text style={styles.qNavText}>← Previous</Text>
+                  <Text style={[styles.qNavText, { color: t.text }]}>← Previous</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                  style={[styles.qNavBtn, isLastQuestion && styles.qNavBtnDisabled]}
+                  style={[styles.qNavBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isLastQuestion && styles.qNavBtnDisabled]}
                   onPress={goToNextQuestion}
                   disabled={isLastQuestion}
                 >
-                  <Text style={styles.qNavText}>Next →</Text>
+                  <Text style={[styles.qNavText, { color: t.text }]}>Next →</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -192,43 +193,28 @@ export default function QRQuestionScreen({ route }) {
 
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-
-  container: {
-    flex: 1,
-    backgroundColor: '#1a1a2e',
-  },
-
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 32,
-  },
-
+  container: { flex: 1 },
+  scroll: { flex: 1 },
+  scrollContent: { paddingBottom: 32 },
   stimulusContainer: {
     marginHorizontal: 20,
     marginTop: 12,
     marginBottom: 8,
-    backgroundColor: '#16213e',
     borderRadius: 14,
     padding: 16,
     borderLeftWidth: 3,
-    borderLeftColor: '#059669',
+    borderWidth: 1,
   },
   dataLabel: {
-    color: '#059669',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1.2,
     marginBottom: 12,
   },
-
   panel: {
-    backgroundColor: '#16213e',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderTopWidth: 1.5,
-    borderColor: '#2d3748',
   },
   panelHeader: {
     flexDirection: 'row',
@@ -238,30 +224,23 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   panelCounter: {
-    color: '#a0aec0',
     fontSize: 13,
     fontWeight: '600',
   },
   panelChevron: {
-    color: '#059669',
     fontSize: 18,
   },
   panelContent: {
     paddingHorizontal: 20,
     paddingBottom: 28,
   },
-
   questionText: {
-    color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 24,
     marginBottom: 16,
   },
-  options: {
-    gap: 10,
-  },
-
+  options: { gap: 10 },
   questionNav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -270,18 +249,13 @@ const styles = StyleSheet.create({
   },
   qNavBtn: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     paddingVertical: 13,
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: '#2d3748',
   },
-  qNavBtnDisabled: {
-    opacity: 0.3,
-  },
+  qNavBtnDisabled: { opacity: 0.3 },
   qNavText: {
-    color: '#ffffff',
     fontSize: 14,
     fontWeight: '600',
   },

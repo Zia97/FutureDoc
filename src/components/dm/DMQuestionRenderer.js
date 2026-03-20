@@ -14,26 +14,15 @@ import YesNoStatements from './YesNoStatements';
 import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
 import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/useAITutor';
+import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic'];
 
-/**
- * Routes a DM question to the correct answer UI based on question.type.
- *
- * Props:
- *   question        — question object from JSON
- *   answer          — current answer state:
- *                       MCQ / venn select_diagram: string label e.g. 'A'
- *                       Yes/No: object keyed by statement index e.g. { 0: 'Yes', 2: 'No' }
- *   onAnswer        — (value) => void — called with the new answer value
- *   submitted       — boolean
- *   questionContext — AI tutor context built by DMQuestionScreen
- */
 export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext }) {
   const { width: screenWidth } = useWindowDimensions();
+  const { practiceTheme: t } = useTheme();
   const [diagramExpanded, setDiagramExpanded] = useState(false);
-
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
   const tutorState = useAITutor(questionContext);
@@ -48,7 +37,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
     ? JSON.stringify(answer) === JSON.stringify(question.answer)
     : answer === question.answer;
 
-  const contentWidth = screenWidth - 40; // 20px padding each side
+  const contentWidth = screenWidth - 40;
   const stimulusCanvas = getCanvasSize(question.stimulusDiagram?.diagramLayout, question.stimulusDiagram);
   const stimulusScale  = Math.min(1.2, contentWidth / stimulusCanvas.width);
   const expandedScale  = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
@@ -62,30 +51,27 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 
   return (
     <View style={styles.container}>
-      {/* Optional table */}
       {question.tableData && <DataTable tableData={question.tableData} />}
 
-      {/* Stem */}
-      <Text style={styles.stem}>{question.stem}</Text>
+      <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
 
-      {/* ── Venn: select the correct diagram ─────────────────────────── */}
       {isSelectVenn && (
         <View style={styles.vennGrid}>
           {question.options.map((opt) => {
-            let borderColor = '#2d3748';
-            if (submitted && opt.label === question.answer) borderColor = '#38a169';
-            else if (submitted && opt.label === answer)     borderColor = '#e53e3e';
-            else if (!submitted && opt.label === answer)    borderColor = '#4a9eff';
+            let borderColor = t.borderStrong;
+            if (submitted && opt.label === question.answer) borderColor = t.correct;
+            else if (submitted && opt.label === answer)     borderColor = t.incorrect;
+            else if (!submitted && opt.label === answer)    borderColor = t.accent;
 
             return (
               <TouchableOpacity
                 key={opt.label}
-                style={[styles.vennOption, { borderColor }]}
+                style={[styles.vennOption, { backgroundColor: t.bgCard, borderColor }]}
                 onPress={() => !submitted && onAnswer(opt.label)}
                 activeOpacity={0.8}
                 disabled={submitted}
               >
-                <Text style={styles.vennOptionLabel}>{opt.label}</Text>
+                <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
                 <VennDiagramRenderer vennConfig={opt.vennConfig} scale={0.864} />
               </TouchableOpacity>
             );
@@ -93,19 +79,15 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         </View>
       )}
 
-      {/* ── Venn: interpret a given diagram ──────────────────────────── */}
       {isInterpVenn && (
         <>
           <TouchableOpacity
-            style={styles.vennStimulus}
+            style={[styles.vennStimulus, { backgroundColor: t.bgCard, borderColor: t.border }]}
             onPress={() => setDiagramExpanded(true)}
             activeOpacity={0.85}
           >
-            <VennDiagramRenderer
-              vennConfig={question.stimulusDiagram}
-              scale={stimulusScale}
-            />
-            <Text style={styles.tapHint}>Tap to expand</Text>
+            <VennDiagramRenderer vennConfig={question.stimulusDiagram} scale={stimulusScale} />
+            <Text style={[styles.tapHint, { color: t.accent }]}>Tap to expand</Text>
           </TouchableOpacity>
 
           <Modal
@@ -119,14 +101,11 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
               onPress={() => setDiagramExpanded(false)}
               activeOpacity={1}
             >
-              <View style={styles.modalCard}>
+              <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
                 <ZoomableView maxZoom={4}>
-                  <VennDiagramRenderer
-                    vennConfig={question.stimulusDiagram}
-                    scale={expandedScale}
-                  />
+                  <VennDiagramRenderer vennConfig={question.stimulusDiagram} scale={expandedScale} />
                 </ZoomableView>
-                <Text style={styles.modalDismiss}>Tap anywhere to close</Text>
+                <Text style={[styles.modalDismiss, { color: t.accent }]}>Tap anywhere to close</Text>
               </View>
             </TouchableOpacity>
           </Modal>
@@ -144,7 +123,6 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         </>
       )}
 
-      {/* ── Standard MCQ ─────────────────────────────────────────────── */}
       {isMCQ && (
         <View style={styles.mcqOptions}>
           {question.options.map((opt) => (
@@ -158,7 +136,6 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         </View>
       )}
 
-      {/* ── Yes / No statements ──────────────────────────────────────── */}
       {isYesNo && (
         <YesNoStatements
           statements={question.statements}
@@ -168,14 +145,16 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         />
       )}
 
-      {/* ── Explanation (shown after submission) ─────────────────────── */}
       {submitted && (
-        <View style={styles.explanation}>
-          <Text style={styles.explanationLabel}>Explanation</Text>
-          <Text style={styles.explanationText}>{question.answeringReason}</Text>
+        <View style={[styles.explanation, { backgroundColor: t.bgCard, borderLeftColor: t.sectionDM }]}>
+          <Text style={[styles.explanationLabel, { color: t.accent }]}>Explanation</Text>
+          <Text style={[styles.explanationText, { color: t.textSecondary }]}>{question.answeringReason}</Text>
           {!isCorrect && questionContext && (
-            <TouchableOpacity style={styles.teachMeBtn} onPress={() => setTutorVisible(true)}>
-              <Text style={styles.teachMeBtnText}>Teach Me</Text>
+            <TouchableOpacity
+              style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
+              onPress={() => setTutorVisible(true)}
+            >
+              <Text style={[styles.teachMeBtnText, { color: t.text }]}>Teach Me</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -196,18 +175,9 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 16,
-  },
-  stem: {
-    color: '#e2e8f0',
-    fontSize: 15,
-    lineHeight: 23,
-    fontWeight: '500',
-  },
-  mcqOptions: {
-    gap: 10,
-  },
+  container: { gap: 16 },
+  stem: { fontSize: 15, lineHeight: 23, fontWeight: '500' },
+  mcqOptions: { gap: 10 },
   vennGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -219,29 +189,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#16213e',
     alignItems: 'center',
   },
-  vennOptionLabel: {
-    color: '#90cdf4',
-    fontSize: 13,
-    fontWeight: '700',
-    marginBottom: 8,
-  },
+  vennOptionLabel: { fontSize: 13, fontWeight: '700', marginBottom: 8 },
   vennStimulus: {
     alignItems: 'center',
     paddingVertical: 16,
-    backgroundColor: '#16213e',
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#2d3748',
   },
-  tapHint: {
-    color: '#4a9eff',
-    fontSize: 11,
-    marginTop: 8,
-    opacity: 0.7,
-  },
+  tapHint: { fontSize: 11, marginTop: 8, opacity: 0.7 },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.82)',
@@ -249,52 +206,32 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalCard: {
-    backgroundColor: '#16213e',
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#2d3748',
     padding: 20,
     alignItems: 'center',
   },
-  modalDismiss: {
-    color: '#4a9eff',
-    fontSize: 12,
-    marginTop: 14,
-    opacity: 0.7,
-  },
+  modalDismiss: { fontSize: 12, marginTop: 14, opacity: 0.7 },
   explanation: {
-    backgroundColor: '#16213e',
     borderRadius: 10,
     borderLeftWidth: 3,
-    borderLeftColor: '#0891b2',
     padding: 14,
   },
   explanationLabel: {
-    color: '#90cdf4',
     fontSize: 11,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.8,
     marginBottom: 6,
   },
-  explanationText: {
-    color: '#a0aec0',
-    fontSize: 14,
-    lineHeight: 21,
-  },
+  explanationText: { fontSize: 14, lineHeight: 21 },
   teachMeBtn: {
     marginTop: 14,
     alignSelf: 'flex-end',
-    backgroundColor: '#1a2535',
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#4a5568',
   },
-  teachMeBtnText: {
-    color: '#e2e8f0',
-    fontSize: 13,
-    fontWeight: '600',
-  },
+  teachMeBtnText: { fontSize: 13, fontWeight: '600' },
 });

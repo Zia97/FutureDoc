@@ -7,18 +7,17 @@ import CalculatorModal from '../../components/CalculatorModal';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
+import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 
 export default function DMQuestionScreen({ route }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
-
-  // answers: { [id]: string (MCQ) | object (Yes/No) }
   const [answers, setAnswers] = useState({});
-  // submitted: { [id]: true }
   const [submitted, setSubmitted] = useState({});
   const [calcVisible, setCalcVisible] = useState(false);
+  const { practiceTheme: t } = useTheme();
 
   const { questions, loading } = useDecisionMakingQuestions();
   const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
@@ -44,8 +43,8 @@ export default function DMQuestionScreen({ route }) {
 
   if (loading || cacheLoading || !question) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
+      <View style={[styles.centered, { backgroundColor: t.bg }]}>
+        <ActivityIndicator size="large" color={t.accent} />
       </View>
     );
   }
@@ -77,8 +76,8 @@ export default function DMQuestionScreen({ route }) {
     question.statements.every((_, i) => currentAnswer[i] !== undefined);
 
   return (
-    <SafeAreaView style={styles.container} {...panHandlers}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
+    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
+      <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
 
       <ScreenNavBar
         title={question.title}
@@ -87,7 +86,7 @@ export default function DMQuestionScreen({ route }) {
         onNext={goNext}
         isFirst={isFirst}
         isLast={isLast}
-        color="#0891b2"
+        color={t.sectionDM}
         onCalculator={() => setCalcVisible(true)}
       />
 
@@ -123,7 +122,11 @@ export default function DMQuestionScreen({ route }) {
 
         {isYesNo && !isSubmitted && (
           <TouchableOpacity
-            style={[styles.checkButton, !allStatementsAnswered && styles.checkButtonDisabled]}
+            style={[
+              styles.checkButton,
+              { backgroundColor: t.sectionDM },
+              !allStatementsAnswered && { backgroundColor: t.borderStrong, opacity: 0.5 },
+            ]}
             onPress={handleCheckAnswers}
             disabled={!allStatementsAnswered}
           >
@@ -140,11 +143,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1a1a2e',
   },
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
   },
   scroll: {
     flex: 1,
@@ -156,14 +157,9 @@ const styles = StyleSheet.create({
   },
   checkButton: {
     marginTop: 20,
-    backgroundColor: '#0891b2',
     borderRadius: 12,
     paddingVertical: 15,
     alignItems: 'center',
-  },
-  checkButtonDisabled: {
-    backgroundColor: '#2d3748',
-    opacity: 0.5,
   },
   checkButtonText: {
     color: '#ffffff',

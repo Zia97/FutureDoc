@@ -15,23 +15,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useItemNavigation } from '../hooks/useItemNavigation';
 import { useAnswers } from '../hooks/useAnswers';
 import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import { useTheme } from '../context/ThemeContext';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
-
-// Props:
-//   items              — array of passage/scenario objects
-//   initialIndex       — starting item index
-//   itemLabel          — "Passage" | "Scenario"
-//   getTitle           — (item, index) => string  — text shown in the nav bar
-//   getId              — (item) => string|number  — unique item identifier for answer tracking
-//   renderOptions      — ({ item, question, getOptionState, onAnswer }) => ReactNode
-//   getQuestionOptions — (item, question) => string[]  — flat string list of options for AI context
-//   alwaysShowReason   — bool — show answeringReason even on correct answer (default false)
-//   section            — 'vr' | 'sj' — used to build AI tutor context
 
 export default function PassageLayout({
   items,
@@ -46,6 +36,8 @@ export default function PassageLayout({
   initialAnswers = {},
   section = 'vr',
 }) {
+  const { practiceTheme: t } = useTheme();
+
   const {
     itemIndex,
     questionIndex,
@@ -92,9 +84,12 @@ export default function PassageLayout({
     setPanelExpanded((v) => !v);
   }
 
+  // Section accent color for the resource panel border
+  const sectionColor = section === 'sj' ? t.sectionSJ : t.sectionVR;
+
   return (
-    <SafeAreaView style={styles.container} {...panHandlers}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
+    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
+      <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
 
       <ScreenNavBar
         title={getTitle(item, itemIndex)}
@@ -103,24 +98,22 @@ export default function PassageLayout({
         onNext={() => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
         isLast={isLastItem}
-        color="#7c3aed"
+        color={sectionColor}
       />
 
-      {/* Resource text */}
-      <View style={styles.resourceContainer}>
-        <Text style={styles.resourceLabel}>{itemLabel.toUpperCase()}</Text>
+      <View style={[styles.resourceContainer, { backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
+        <Text style={[styles.resourceLabel, { color: sectionColor }]}>{itemLabel.toUpperCase()}</Text>
         <ScrollView key={itemIndex} showsVerticalScrollIndicator>
-          <Text style={styles.resourceText}>{item.resource}</Text>
+          <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
         </ScrollView>
       </View>
 
-      {/* Collapsible question panel */}
-      <View style={styles.questionPanel}>
+      <View style={[styles.questionPanel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
         <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-          <Text style={styles.panelCounter}>
+          <Text style={[styles.panelCounter, { color: t.textSecondary }]}>
             Question {questionIndex + 1} of {item.questions.length}
           </Text>
-          <Text style={styles.panelChevron}>{panelExpanded ? '▾' : '▴'}</Text>
+          <Text style={[styles.panelChevron, { color: sectionColor }]}>{panelExpanded ? '▾' : '▴'}</Text>
         </TouchableOpacity>
 
         {panelExpanded && (
@@ -129,7 +122,7 @@ export default function PassageLayout({
             contentContainerStyle={styles.panelContentInner}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.questionText}>{question.questionText}</Text>
+            <Text style={[styles.questionText, { color: t.text }]}>{question.questionText}</Text>
 
             <View style={styles.optionsContainer}>
               {renderOptions({ item, question, getOptionState, onAnswer })}
@@ -156,19 +149,27 @@ export default function PassageLayout({
 
             <View style={styles.questionNav}>
               <TouchableOpacity
-                style={[styles.questionNavButton, isFirstQuestion && styles.questionNavButtonDisabled]}
+                style={[
+                  styles.questionNavButton,
+                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
+                  isFirstQuestion && styles.questionNavButtonDisabled,
+                ]}
                 onPress={goToPrevQuestion}
                 disabled={isFirstQuestion}
               >
-                <Text style={styles.questionNavText}>← Previous</Text>
+                <Text style={[styles.questionNavText, { color: t.text }]}>← Previous</Text>
               </TouchableOpacity>
 
               <TouchableOpacity
-                style={[styles.questionNavButton, isLastQuestion && styles.questionNavButtonDisabled]}
+                style={[
+                  styles.questionNavButton,
+                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
+                  isLastQuestion && styles.questionNavButtonDisabled,
+                ]}
                 onPress={goToNextQuestion}
                 disabled={isLastQuestion}
               >
-                <Text style={styles.questionNavText}>Next →</Text>
+                <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -181,40 +182,30 @@ export default function PassageLayout({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
   },
-
-  // Resource text area
   resourceContainer: {
     flex: 1,
     marginHorizontal: 20,
     marginTop: 12,
-    backgroundColor: '#16213e',
     borderRadius: 14,
     padding: 16,
     borderLeftWidth: 3,
-    borderLeftColor: '#7c3aed',
+    borderWidth: 1,
   },
   resourceLabel: {
-    color: '#7c3aed',
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1.2,
     marginBottom: 10,
   },
   resourceText: {
-    color: '#cbd5e0',
     fontSize: 14,
     lineHeight: 22,
   },
-
-  // Collapsible question panel
   questionPanel: {
-    backgroundColor: '#16213e',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     borderTopWidth: 1.5,
-    borderColor: '#2d3748',
     marginTop: 8,
   },
   panelHeader: {
@@ -225,12 +216,10 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
   },
   panelCounter: {
-    color: '#a0aec0',
     fontSize: 13,
     fontWeight: '600',
   },
   panelChevron: {
-    color: '#7c3aed',
     fontSize: 18,
   },
   panelContent: {
@@ -240,22 +229,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 24,
   },
-
-  // Question
   questionText: {
-    color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 24,
     marginBottom: 16,
   },
-
-  // Options
   optionsContainer: {
     gap: 10,
   },
-
-  // Question prev/next
   questionNav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -264,18 +246,15 @@ const styles = StyleSheet.create({
   },
   questionNavButton: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     paddingVertical: 13,
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: '#2d3748',
   },
   questionNavButtonDisabled: {
     opacity: 0.3,
   },
   questionNavText: {
-    color: '#ffffff',
     fontSize: 14,
     fontWeight: '600',
   },

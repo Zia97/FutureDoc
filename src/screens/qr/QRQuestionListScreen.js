@@ -4,6 +4,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningProgress } from '../../hooks/queries/useQuantitativeReasoningProgress';
+import { useTheme } from '../../context/ThemeContext';
 
 const FILTERS = [
   { label: 'All',         value: 'all' },
@@ -12,18 +13,19 @@ const FILTERS = [
   { label: 'Completed',   value: 'completed' },
 ];
 
-function StatusIndicator({ value }) {
+function StatusIndicator({ value, color }) {
   const char = value === 'completed' ? '●' : value === 'in_progress' ? '◑' : value === 'not_started' ? '○' : null;
-  return <Text style={indicator.circle}>{char}</Text>;
+  return <Text style={[indicator.circle, { color }]}>{char}</Text>;
 }
 
 const indicator = StyleSheet.create({
-  circle: { color: '#7c3aed', fontSize: 22, marginRight: 10, width: 26 },
+  circle: { fontSize: 22, marginRight: 10, width: 26 },
 });
 
 export default function QRQuestionListScreen({ navigation }) {
   const { sets, loading, error } = useQuantitativeReasoningSets();
   const { progressMap, reload } = useQuantitativeReasoningProgress();
+  const { theme: t } = useTheme();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -41,42 +43,42 @@ export default function QRQuestionListScreen({ navigation }) {
 
   if (loading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
+      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
+        <ActivityIndicator size="large" color={t.accent} />
       </View>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
+      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
         <Text style={styles.errorText}>{JSON.stringify(error)}</Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: t.bgInput }]}>
       <View style={styles.filterWrapper}>
         <TouchableOpacity
-          style={[styles.filterButton, activeFilter !== 'all' && styles.filterButtonActive]}
+          style={[styles.filterButton, { backgroundColor: t.bgCard, borderColor: activeFilter !== 'all' ? t.sectionQR : t.border }]}
           onPress={() => setDropdownOpen((o) => !o)}
           activeOpacity={0.8}
         >
-          <Text style={styles.filterIcon}>≡</Text>
+          <Text style={[styles.filterIcon, { color: t.sectionQR }]}>≡</Text>
         </TouchableOpacity>
 
         {dropdownOpen && (
-          <View style={styles.dropdownMenu}>
+          <View style={[styles.dropdownMenu, { backgroundColor: t.bgCard, borderColor: t.sectionQR }]}>
             {FILTERS.map((f) => (
               <TouchableOpacity
                 key={f.value}
-                style={[styles.dropdownItem, f.value === activeFilter && styles.dropdownItemActive]}
+                style={[styles.dropdownItem, { borderBottomColor: t.border }, f.value === activeFilter && { backgroundColor: t.accentDim }]}
                 onPress={() => { setActiveFilter(f.value); setDropdownOpen(false); }}
                 activeOpacity={0.75}
               >
-                <StatusIndicator value={f.value} />
-                <Text style={[styles.dropdownItemText, f.value === activeFilter && styles.dropdownItemTextActive]}>
+                <StatusIndicator value={f.value} color={t.sectionQR} />
+                <Text style={[styles.dropdownItemText, { color: t.textSecondary }, f.value === activeFilter && { color: t.text, fontWeight: '600' }]}>
                   {f.label}
                 </Text>
               </TouchableOpacity>
@@ -98,28 +100,23 @@ export default function QRQuestionListScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container:   { flex: 1, backgroundColor: '#1a1a2e' },
-  centered:    { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1a1a2e' },
-  errorText:   { color: 'red', textAlign: 'center' },
+  container: { flex: 1 },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { color: 'red', textAlign: 'center' },
   filterWrapper: { alignItems: 'flex-end', paddingHorizontal: 24, paddingTop: 12, zIndex: 10 },
   filterButton: {
     width: 34, height: 34, borderRadius: 17,
-    backgroundColor: '#16213e', borderWidth: 1, borderColor: '#333',
-    justifyContent: 'center', alignItems: 'center',
+    borderWidth: 1, justifyContent: 'center', alignItems: 'center',
   },
-  filterButtonActive: { borderColor: '#7c3aed' },
-  filterIcon:  { color: '#7c3aed', fontSize: 20 },
+  filterIcon: { fontSize: 20 },
   dropdownMenu: {
     position: 'absolute', top: 46, right: 0, width: 180,
-    backgroundColor: '#16213e', borderRadius: 8,
-    borderWidth: 1, borderColor: '#7c3aed', overflow: 'hidden',
+    borderRadius: 8, borderWidth: 1, overflow: 'hidden',
   },
   dropdownItem: {
     flexDirection: 'row', alignItems: 'center',
     paddingHorizontal: 14, paddingVertical: 11,
-    borderBottomWidth: 1, borderBottomColor: '#1a1a2e',
+    borderBottomWidth: 1,
   },
-  dropdownItemActive:     { backgroundColor: '#7c3aed22' },
-  dropdownItemText:       { color: '#aaaaaa', fontSize: 14 },
-  dropdownItemTextActive: { color: '#ffffff', fontWeight: '600' },
+  dropdownItemText: { fontSize: 14 },
 });

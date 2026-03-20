@@ -11,9 +11,11 @@ import {
   Platform,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 export default function SignUpScreen({ navigation }) {
   const { signUp } = useAuth();
+  const { theme: t } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -43,31 +45,31 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <KeyboardAvoidingView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: t.bg }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={styles.title}>UCAT PrepAI</Text>
-      <Text style={styles.subtitle}>Create your account</Text>
+      <Text style={[styles.title, { color: t.text }]}>UCAT Genius AI</Text>
+      <Text style={[styles.subtitle, { color: t.textMuted }]}>Create your account</Text>
 
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
         placeholder="Email"
-        placeholderTextColor="#8a8a9a"
+        placeholderTextColor={t.textMuted}
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
       />
       <TextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
         placeholder="Password (min 6 characters)"
-        placeholderTextColor="#8a8a9a"
+        placeholderTextColor={t.textMuted}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp} disabled={loading}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: t.accent }]} onPress={handleSignUp} disabled={loading}>
         {loading ? (
           <ActivityIndicator color="#fff" />
         ) : (
@@ -76,7 +78,7 @@ export default function SignUpScreen({ navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.link}>Already have an account? Sign in</Text>
+        <Text style={[styles.link, { color: t.accent }]}>Already have an account? Sign in</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
@@ -85,7 +87,6 @@ export default function SignUpScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#16213e',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -93,26 +94,22 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#ffffff',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#8a8a9a',
     marginBottom: 40,
   },
   input: {
     width: '100%',
-    backgroundColor: '#1a2950',
-    color: '#ffffff',
     borderRadius: 10,
     padding: 14,
     fontSize: 16,
     marginBottom: 14,
+    borderWidth: 1,
   },
   button: {
     width: '100%',
-    backgroundColor: '#0f3460',
     borderRadius: 10,
     padding: 16,
     alignItems: 'center',
@@ -125,7 +122,6 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   link: {
-    color: '#4a9eff',
     fontSize: 14,
   },
 });
