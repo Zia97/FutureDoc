@@ -31,6 +31,13 @@ export default function HomeScreen({ navigation }) {
         >
           <Text style={styles.practiceButtonText}>Practice</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.aboutButton}
+          onPress={() => navigation.navigate('AboutUCAT')}
+          activeOpacity={0.85}
+        >
+          <Text style={styles.aboutButtonText}>About the UCAT</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -81,6 +88,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     alignItems: 'center',
+    gap: 14,
   },
   practiceButton: {
     backgroundColor: '#4f46e5',
@@ -98,5 +106,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '700',
     letterSpacing: 0.5,
+  },
+  aboutButton: {
+    backgroundColor: 'transparent',
+    paddingVertical: 14,
+    paddingHorizontal: 80,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  aboutButtonText: {
+    color: '#a0aec0',
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.3,
   },
 });

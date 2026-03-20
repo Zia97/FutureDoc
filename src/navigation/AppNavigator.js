@@ -19,6 +19,7 @@ import DMQuestionScreen from '../screens/dm/DMQuestionScreen';
 import QRQuestionListScreen from '../screens/qr/QRQuestionListScreen';
 import QRQuestionScreen from '../screens/qr/QRQuestionScreen';
 import ProfileScreen from '../screens/menus/ProfileScreen';
+import AboutUCATScreen from '../screens/menus/AboutUCATScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -53,6 +54,7 @@ function AppStack() {
       <Stack.Screen name="QRQuestionList" component={QRQuestionListScreen} options={{ title: 'Quantitative Reasoning' }} />
       <Stack.Screen name="QRQuestion" component={QRQuestionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ title: 'About the UCAT' }} />
     </Stack.Navigator>
   );
 }
