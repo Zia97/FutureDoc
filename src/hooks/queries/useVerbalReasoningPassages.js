@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
+import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'verbal_reasoning';
 
@@ -34,6 +35,18 @@ export function useVerbalReasoningPassages() {
 
   useEffect(() => {
     async function load() {
+      if (__DEV__) {
+        const enabled = await isPreviewEnabled('vr');
+        if (enabled) {
+          const data = require('../../dev/preview-vr.json');
+          if (data?.length > 0) {
+            setPassages(mapPassages(data));
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {

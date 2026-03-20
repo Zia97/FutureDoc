@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
+import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'decision_making';
 
@@ -48,6 +49,18 @@ export function useDecisionMakingQuestions() {
 
   useEffect(() => {
     async function load() {
+      if (__DEV__) {
+        const enabled = await isPreviewEnabled('dm');
+        if (enabled) {
+          const data = require('../../dev/preview-dm.json');
+          if (data?.length > 0) {
+            setQuestions(mapQuestions(data));
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {

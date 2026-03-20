@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 
 const SECTIONS = [
   {
@@ -50,6 +51,23 @@ export default function ProfileScreen() {
   const { theme: t, isDark, useUCATScheme, toggleDark, toggleUCATScheme } = useTheme();
   const [deleting, setDeleting] = useState(null);
   const [deletingAll, setDeletingAll] = useState(false);
+  const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
+
+  useEffect(() => {
+    if (!__DEV__) return;
+    async function loadToggles() {
+      const entries = await Promise.all(
+        SECTIONS.map(async (s) => [s.id, await isPreviewEnabled(s.id)])
+      );
+      setPreviewToggles(Object.fromEntries(entries));
+    }
+    loadToggles();
+  }, []);
+
+  const handlePreviewToggle = async (sectionId, value) => {
+    await setPreviewEnabled(sectionId, value);
+    setPreviewToggles((prev) => ({ ...prev, [sectionId]: value }));
+  };
 
   const handleDeleteProgress = (section) => {
     Alert.alert(
@@ -214,6 +232,36 @@ export default function ProfileScreen() {
           <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Progress</Text>
         )}
       </TouchableOpacity>
+
+      {__DEV__ && (
+        <>
+          <Text style={[styles.sectionHeading, { color: '#f59e0b' }]}>Content Preview</Text>
+          <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
+            Load questions from a local JSON file instead of the database. Reload the app after placing content in src/dev/.
+          </Text>
+          <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+            {SECTIONS.map((section, index) => (
+              <React.Fragment key={section.id}>
+                {index > 0 && <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />}
+                <View style={styles.toggleRow}>
+                  <View style={styles.toggleLabel}>
+                    <Text style={[styles.toggleTitle, { color: t.text }]}>{section.label}</Text>
+                    <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
+                      preview-{section.id}.json
+                    </Text>
+                  </View>
+                  <Switch
+                    value={previewToggles[section.id] ?? false}
+                    onValueChange={(val) => handlePreviewToggle(section.id, val)}
+                    trackColor={{ false: t.border, true: '#f59e0b' }}
+                    thumbColor="#ffffff"
+                  />
+                </View>
+              </React.Fragment>
+            ))}
+          </View>
+        </>
+      )}
 
       <TouchableOpacity
         style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}

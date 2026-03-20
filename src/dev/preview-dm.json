@@ -1,0 +1,26 @@
+[
+  {
+    "id": "d4e5f6a7-0004-0004-0001-000000000007",
+    "title": "Night Shift Registrars",
+    "type": "syllogism",
+    "stem": "All registrars on the night shift have completed advanced life support (ALS) training. No doctor who has completed ALS training is unfamiliar with defibrillator protocols. Some doctors who are familiar with defibrillator protocols work in the emergency department.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "Statement 1 follows with certainty: all night shift registrars completed ALS (premise 1), and no ALS-trained doctor is unfamiliar with defibrillator protocols (premise 2), so all night shift registrars must be familiar with defibrillator protocols. Statement 2 does not follow: although some defibrillator-familiar doctors work in ED, we cannot conclude that any night shift registrars are among them — the overlap is not established by the premises.",
+    "order_index": 0,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "All registrars on the night shift are familiar with defibrillator protocols.",
+        "correct_answer": "Yes",
+        "order_index": 0
+      },
+      {
+        "statement_text": "Some registrars on the night shift work in the emergency department.",
+        "correct_answer": "No",
+        "order_index": 1
+      }
+    ]
+  }
+]

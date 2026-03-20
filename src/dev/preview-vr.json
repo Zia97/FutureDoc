@@ -1,0 +1,17 @@
+[
+  {
+    "id": "a1b2c3d4-0001-0001-0001-000000000001",
+    "title": "NHS Workforce and Burnout",
+    "body": "The NHS Long Term Workforce Plan, published in 2023, outlined commitments to expanding the medical workforce through increased domestic training places and a stated aim to reduce reliance on international recruitment. The plan projected that by 2036, approximately half of all new doctors entering the workforce would be UK-trained graduates, compared with around one third at the time of publication. However, workforce analysts have noted that the projections assume retention rates will improve substantially, a condition that has not consistently been met in previous workforce strategies.\n\nIn 2022, the NHS experienced its highest recorded levels of staff vacancies, with over 100,000 posts unfilled across England alone. Burnout was cited as the primary reason for early departure in a survey of junior doctors conducted by the British Medical Association, with 43% of respondents reporting that they had considered leaving clinical practice within the next five years. The BMA survey did not include dentists or allied health professionals.",
+    "verbal_reasoning_questions": [
+      {
+        "id": "a1b2c3d4-0001-0001-0002-000000000002",
+        "question_text": "Burnout was the most commonly cited reason for junior doctors considering leaving clinical practice.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "True",
+        "answer_reason": "The passage states that burnout was 'cited as the primary reason for early departure', confirming it was the leading factor among survey respondents.",
+        "order_index": 0
+      }
+    ]
+  }
+]

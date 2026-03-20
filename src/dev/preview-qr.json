@@ -1,0 +1,33 @@
+[
+  {
+    "id": "b2c3d4e5-0002-0002-0001-000000000003",
+    "title": "A&E Average Waiting Times",
+    "stimulus": {
+      "type": "table",
+      "data": {
+        "headers": ["Hospital", "Q1 (mins)", "Q2 (mins)", "Q3 (mins)"],
+        "rows": [
+          ["Northfield General", "84", "97", "112"],
+          ["St. Clare's", "76", "82", "79"],
+          ["Moorfield Royal", "103", "98", "91"],
+          ["Eastbrook Community", "68", "71", "88"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "b2c3d4e5-0002-0002-0002-000000000004",
+        "question_text": "What was the percentage increase in average A&E waiting time at Northfield General between Q1 and Q3?",
+        "options": [
+          { "label": "A", "text": "25.0%" },
+          { "label": "B", "text": "28.0%" },
+          { "label": "C", "text": "33.3%" },
+          { "label": "D", "text": "36.4%" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Percentage increase = (112 − 84) ÷ 84 × 100 = 28 ÷ 84 × 100 ≈ 33.3%. Option A (25%) results from incorrectly dividing by the Q3 value. Option B (28%) treats the raw difference as a percentage directly.",
+        "order_index": 0
+      }
+    ]
+  }
+]

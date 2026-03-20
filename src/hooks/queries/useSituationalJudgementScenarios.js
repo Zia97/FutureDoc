@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
+import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'situational_judgement';
 
@@ -34,6 +35,18 @@ export function useSituationalJudgementScenarios() {
 
   useEffect(() => {
     async function load() {
+      if (__DEV__) {
+        const enabled = await isPreviewEnabled('sj');
+        if (enabled) {
+          const data = require('../../dev/preview-sj.json');
+          if (data?.length > 0) {
+            setScenarios(mapScenarios(data));
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
+import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'quantitative_reasoning';
 
@@ -35,6 +36,18 @@ export function useQuantitativeReasoningSets() {
 
   useEffect(() => {
     async function load() {
+      if (__DEV__) {
+        const enabled = await isPreviewEnabled('qr');
+        if (enabled) {
+          const data = require('../../dev/preview-qr.json');
+          if (data?.length > 0) {
+            setSets(mapSets(data));
+            setLoading(false);
+            return;
+          }
+        }
+      }
+
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {
