@@ -31,15 +31,33 @@ export function useDecisionMakingAttempts() {
   async function loadCache() {
     try {
       const raw = await AsyncStorage.getItem(ATTEMPTS_KEY);
-      if (!raw) return;
+      if (raw) {
+        const attempts = JSON.parse(raw);
+        const answers   = {};
+        const submitted = {};
+        for (const [questionId, { answer }] of Object.entries(attempts)) {
+          answers[questionId]   = answer;
+          submitted[questionId] = true;
+        }
+        setLocalAnswers(answers);
+        setLocalSubmitted(submitted);
+        return;
+      }
 
-      const attempts = JSON.parse(raw);
+      // No local data — hydrate from DB if logged in
+      if (!user) return;
+      const rows = await db.fetchDMAttempts(user.id);
+      if (!rows || rows.length === 0) return;
+
+      const attempts = {};
       const answers   = {};
       const submitted = {};
-      for (const [questionId, { answer }] of Object.entries(attempts)) {
-        answers[questionId]   = answer;
-        submitted[questionId] = true;
+      for (const { question_id, answer } of rows) {
+        attempts[question_id]  = { answer, attemptedAt: new Date().toISOString() };
+        answers[question_id]   = answer;
+        submitted[question_id] = true;
       }
+      await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
       setLocalAnswers(answers);
       setLocalSubmitted(submitted);
     } catch (err) {

@@ -28,14 +28,30 @@ export function useVerbalReasoningAttempts() {
   async function loadCache() {
     try {
       const raw = await AsyncStorage.getItem(ATTEMPTS_KEY);
-      if (!raw) return;
-
-      const attempts = JSON.parse(raw);
-      const mapped = {};
-      for (const [questionId, { passageId, selectedAnswer }] of Object.entries(attempts)) {
-        if (!mapped[passageId]) mapped[passageId] = {};
-        mapped[passageId][questionId] = selectedAnswer;
+      if (raw) {
+        const attempts = JSON.parse(raw);
+        const mapped = {};
+        for (const [questionId, { passageId, selectedAnswer }] of Object.entries(attempts)) {
+          if (!mapped[passageId]) mapped[passageId] = {};
+          mapped[passageId][questionId] = selectedAnswer;
+        }
+        setLocalAnswers(mapped);
+        return;
       }
+
+      // No local data — hydrate from DB if logged in
+      if (!user) return;
+      const rows = await db.fetchVRAttempts(user.id);
+      if (!rows || rows.length === 0) return;
+
+      const attempts = {};
+      const mapped = {};
+      for (const { question_id, passage_id, selected_answer } of rows) {
+        attempts[question_id] = { passageId: passage_id, selectedAnswer: selected_answer, answeredAt: new Date().toISOString() };
+        if (!mapped[passage_id]) mapped[passage_id] = {};
+        mapped[passage_id][question_id] = selected_answer;
+      }
+      await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
       setLocalAnswers(mapped);
     } catch (err) {
       console.error('[useVerbalReasoningAttempts] loadCache failed:', err);

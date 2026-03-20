@@ -25,14 +25,30 @@ export function useSituationalJudgementAttempts() {
   async function loadCache() {
     try {
       const raw = await AsyncStorage.getItem(ATTEMPTS_KEY);
-      if (!raw) return;
-
-      const attempts = JSON.parse(raw);
-      const mapped = {};
-      for (const [questionId, { scenarioId, selectedAnswer }] of Object.entries(attempts)) {
-        if (!mapped[scenarioId]) mapped[scenarioId] = {};
-        mapped[scenarioId][questionId] = selectedAnswer;
+      if (raw) {
+        const attempts = JSON.parse(raw);
+        const mapped = {};
+        for (const [questionId, { scenarioId, selectedAnswer }] of Object.entries(attempts)) {
+          if (!mapped[scenarioId]) mapped[scenarioId] = {};
+          mapped[scenarioId][questionId] = selectedAnswer;
+        }
+        setLocalAnswers(mapped);
+        return;
       }
+
+      // No local data — hydrate from DB if logged in
+      if (!user) return;
+      const rows = await db.fetchSJAttempts(user.id);
+      if (!rows || rows.length === 0) return;
+
+      const attempts = {};
+      const mapped = {};
+      for (const { question_id, scenario_id, selected_answer } of rows) {
+        attempts[question_id] = { scenarioId: scenario_id, selectedAnswer: selected_answer, answeredAt: new Date().toISOString() };
+        if (!mapped[scenario_id]) mapped[scenario_id] = {};
+        mapped[scenario_id][question_id] = selected_answer;
+      }
+      await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
       setLocalAnswers(mapped);
     } catch (err) {
       console.error('[useSituationalJudgementAttempts] loadCache failed:', err);

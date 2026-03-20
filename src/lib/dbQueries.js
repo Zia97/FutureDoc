@@ -55,6 +55,20 @@ class DatabaseService {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /**
+   * Fetches all VR question attempts for a user.
+   * Used to hydrate local storage when device cache is missing.
+   * @param {string} userId
+   */
+  async fetchVRAttempts(userId) {
+    const { data, error } = await supabase
+      .from('verbal_reasoning_question_attempts')
+      .select('question_id, passage_id, selected_answer')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data;
+  }
+
+  /**
    * Fetches the passage-level progress rows for a user.
    * Returns passage_id and status ('in_progress' | 'completed') for each attempted passage.
    * @param {string} userId
@@ -175,6 +189,20 @@ class DatabaseService {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /**
+   * Fetches all DM question attempts for a user.
+   * Used to hydrate local storage when device cache is missing.
+   * @param {string} userId
+   */
+  async fetchDMAttempts(userId) {
+    const { data, error } = await supabase
+      .from('decision_making_question_attempts')
+      .select('question_id, answer')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data;
+  }
+
+  /**
    * Inserts a single DM question attempt. Answer is stored as JSONB to support
    * both MCQ (string) and Yes/No statement (object) answer types.
    * Ignores duplicate key errors so retries are safe.
@@ -231,6 +259,20 @@ class DatabaseService {
   // ─────────────────────────────────────────────────────────────────────────────
   // Quantitative Reasoning — Progress
   // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all QR question attempts for a user.
+   * Used to hydrate local storage when device cache is missing.
+   * @param {string} userId
+   */
+  async fetchQRAttempts(userId) {
+    const { data, error } = await supabase
+      .from('quantitative_reasoning_question_attempts')
+      .select('question_id, set_id, selected_answer')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data;
+  }
 
   /**
    * Fetches the set-level progress rows for a user.
@@ -339,6 +381,20 @@ class DatabaseService {
   // ─────────────────────────────────────────────────────────────────────────────
   // Situational Judgement — Progress
   // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all SJ question attempts for a user.
+   * Used to hydrate local storage when device cache is missing.
+   * @param {string} userId
+   */
+  async fetchSJAttempts(userId) {
+    const { data, error } = await supabase
+      .from('situational_judgement_question_attempts')
+      .select('question_id, scenario_id, selected_answer')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data;
+  }
 
   /**
    * Fetches the scenario-level progress rows for a user.

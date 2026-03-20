@@ -25,14 +25,30 @@ export function useQuantitativeReasoningAttempts() {
   async function loadCache() {
     try {
       const raw = await AsyncStorage.getItem(ATTEMPTS_KEY);
-      if (!raw) return;
-
-      const attempts = JSON.parse(raw);
-      const mapped = {};
-      for (const [questionId, { setId, selectedAnswer }] of Object.entries(attempts)) {
-        if (!mapped[setId]) mapped[setId] = {};
-        mapped[setId][questionId] = selectedAnswer;
+      if (raw) {
+        const attempts = JSON.parse(raw);
+        const mapped = {};
+        for (const [questionId, { setId, selectedAnswer }] of Object.entries(attempts)) {
+          if (!mapped[setId]) mapped[setId] = {};
+          mapped[setId][questionId] = selectedAnswer;
+        }
+        setLocalAnswers(mapped);
+        return;
       }
+
+      // No local data — hydrate from DB if logged in
+      if (!user) return;
+      const rows = await db.fetchQRAttempts(user.id);
+      if (!rows || rows.length === 0) return;
+
+      const attempts = {};
+      const mapped = {};
+      for (const { question_id, set_id, selected_answer } of rows) {
+        attempts[question_id] = { setId: set_id, selectedAnswer: selected_answer, answeredAt: new Date().toISOString() };
+        if (!mapped[set_id]) mapped[set_id] = {};
+        mapped[set_id][question_id] = selected_answer;
+      }
+      await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
       setLocalAnswers(mapped);
     } catch (err) {
       console.error('[useQuantitativeReasoningAttempts] loadCache failed:', err);
