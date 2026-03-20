@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text, View, Activi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
+import CalculatorModal from '../../components/CalculatorModal';
 import { useSwipeGesture } from '../../hooks/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
@@ -17,6 +18,7 @@ export default function DMQuestionScreen({ route }) {
   const [answers, setAnswers] = useState({});
   // submitted: { [id]: true }
   const [submitted, setSubmitted] = useState({});
+  const [calcVisible, setCalcVisible] = useState(false);
 
   const { questions, loading } = useDecisionMakingQuestions();
   const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
@@ -86,7 +88,10 @@ export default function DMQuestionScreen({ route }) {
         isFirst={isFirst}
         isLast={isLast}
         color="#0891b2"
+        onCalculator={() => setCalcVisible(true)}
       />
+
+      <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
       <ScrollView
         style={styles.scroll}

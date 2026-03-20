@@ -22,6 +22,7 @@ import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import FeedbackBox from '../../components/FeedbackBox';
+import CalculatorModal from '../../components/CalculatorModal';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -48,6 +49,7 @@ export default function QRQuestionScreen({ route }) {
 
   const { handleAnswer, getAnswer, resetAnswers } = useAnswers();
   const [panelExpanded, setPanelExpanded] = useState(true);
+  const [calcVisible, setCalcVisible] = useState(false);
 
   useEffect(() => {
     if (!cacheLoading) resetAnswers(localAnswers);
@@ -104,7 +106,10 @@ export default function QRQuestionScreen({ route }) {
         isFirst={isFirstItem}
         isLast={isLastItem}
         color="#059669"
+        onCalculator={() => setCalcVisible(true)}
       />
+
+      <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
       <ScrollView
         key={itemIndex}
