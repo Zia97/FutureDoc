@@ -60,7 +60,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
       <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardAvoidingView
         style={containerStyle}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <GestureDetector gesture={panGesture}>
           <View style={styles.swipeLayer}>
@@ -72,7 +72,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
             {/* Header */}
             <View style={styles.header}>
               <View style={styles.headerCenter}>
-                <Text style={styles.headerTitle}>AI Tutor</Text>
+                <Text style={styles.headerTitle}>AI Genius Chat</Text>
                 <Text style={styles.headerSub}>Ask me anything about this question</Text>
               </View>
               <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
@@ -188,12 +188,27 @@ function WelcomePrompt() {
   );
 }
 
+function renderFormattedText(text, baseStyle) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <Text key={i} style={[baseStyle, { fontWeight: '700' }]}>
+          {part.slice(2, -2)}
+        </Text>
+      );
+    }
+    return <Text key={i} style={baseStyle}>{part}</Text>;
+  });
+}
+
 function MessageBubble({ message }) {
   const isUser = message.role === 'user';
+  const baseStyle = [styles.bubbleText, isUser ? styles.userText : styles.aiText];
   return (
     <View style={[styles.bubble, isUser ? styles.userBubble : styles.aiBubble]}>
-      <Text style={[styles.bubbleText, isUser ? styles.userText : styles.aiText]}>
-        {message.content}
+      <Text style={baseStyle}>
+        {renderFormattedText(message.content, baseStyle)}
         {message.streaming && <Text style={styles.cursor}>▌</Text>}
       </Text>
     </View>
