@@ -10,8 +10,8 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { useRef, useEffect } from 'react';
-import { PanResponder } from 'react-native';
+import { useRef } from 'react';
+import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TUTOR_ERROR } from '../hooks/useAITutor';
 
@@ -20,19 +20,17 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
 
   const flatListRef = useRef(null);
   const insets = useSafeAreaInsets();
-  const scrollOffsetRef = useRef(0);
-  const onCloseRef = useRef(onClose);
-  useEffect(() => { onCloseRef.current = onClose; }, [onClose]);
 
-  const swipePan = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponderCapture: (_, gs) =>
-        scrollOffsetRef.current <= 0 && gs.dy > 8 && gs.dy > Math.abs(gs.dx),
-      onPanResponderRelease: (_, gs) => {
-        if (gs.dy > 60) onCloseRef.current();
-      },
-    })
-  ).current;
+  const scrollGesture = Gesture.Native();
+
+  const panGesture = Gesture.Pan()
+    .runOnJS(true)
+    .simultaneousWithExternalGesture(scrollGesture)
+    .onEnd((e) => {
+      if (e.translationY > 80 && e.velocityY > 0) {
+        onClose();
+      }
+    });
 
   function handleSend() {
     const text = inputText.trim();
@@ -61,70 +59,74 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
       statusBarTranslucent
       onRequestClose={onClose}
     >
+      <GestureHandlerRootView style={{ flex: 1 }}>
       <Wrapper style={containerStyle} {...wrapperProps}>
-        <View style={styles.swipeLayer} {...swipePan.panHandlers}>
-        {/* Drag handle */}
-        <View style={[styles.handleWrap, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
-          <View style={styles.handle} />
-        </View>
+        <GestureDetector gesture={panGesture}>
+          <View style={styles.swipeLayer}>
+            {/* Drag handle */}
+            <View style={[styles.handleWrap, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
+              <View style={styles.handle} />
+            </View>
 
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.headerCenter}>
-            <Text style={styles.headerTitle}>AI Tutor</Text>
-            <Text style={styles.headerSub}>Ask me anything about this question</Text>
+            {/* Header */}
+            <View style={styles.header}>
+              <View style={styles.headerCenter}>
+                <Text style={styles.headerTitle}>AI Tutor</Text>
+                <Text style={styles.headerSub}>Ask me anything about this question</Text>
+              </View>
+              <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
+                <Text style={styles.closeBtnText}>✕</Text>
+              </TouchableOpacity>
+            </View>
+
+            {/* Messages */}
+            <GestureDetector gesture={scrollGesture}>
+              <FlatList
+                ref={flatListRef}
+                data={displayMessages}
+                keyExtractor={(_, i) => String(i)}
+                contentContainerStyle={styles.messageList}
+                onContentSizeChange={scrollToBottom}
+                ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
+                ListEmptyComponent={<WelcomePrompt />}
+                renderItem={({ item }) => <MessageBubble message={item} />}
+              />
+            </GestureDetector>
+
+            {/* Error banner */}
+            {error && <ErrorBanner error={error} />}
+
+            {/* Input */}
+            {!error && (
+              <View style={styles.inputRow}>
+                <TextInput
+                  style={styles.input}
+                  value={inputText}
+                  onChangeText={setInputText}
+                  placeholder="Ask a question..."
+                  placeholderTextColor="#718096"
+                  multiline
+                  maxLength={500}
+                  onSubmitEditing={handleSend}
+                  submitBehavior="blurAndSubmit"
+                />
+                <TouchableOpacity
+                  style={[styles.sendBtn, (!inputText.trim() || isStreaming) && styles.sendBtnDisabled]}
+                  onPress={handleSend}
+                  disabled={!inputText.trim() || isStreaming}
+                >
+                  {isStreaming ? (
+                    <ActivityIndicator size="small" color="#fff" />
+                  ) : (
+                    <Text style={styles.sendBtnText}>Send</Text>
+                  )}
+                </TouchableOpacity>
+              </View>
+            )}
           </View>
-          <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
-            <Text style={styles.closeBtnText}>✕</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Messages */}
-        <FlatList
-          ref={flatListRef}
-          data={displayMessages}
-          keyExtractor={(_, i) => String(i)}
-          contentContainerStyle={styles.messageList}
-          onContentSizeChange={scrollToBottom}
-          onScroll={(e) => { scrollOffsetRef.current = e.nativeEvent.contentOffset.y; }}
-          scrollEventThrottle={16}
-          ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
-          ListEmptyComponent={<WelcomePrompt />}
-          renderItem={({ item }) => <MessageBubble message={item} />}
-        />
-
-        {/* Error banner */}
-        {error && <ErrorBanner error={error} />}
-
-        {/* Input */}
-        {!error && (
-          <View style={styles.inputRow}>
-            <TextInput
-              style={styles.input}
-              value={inputText}
-              onChangeText={setInputText}
-              placeholder="Ask a question..."
-              placeholderTextColor="#718096"
-              multiline
-              maxLength={500}
-              onSubmitEditing={handleSend}
-              submitBehavior="blurAndSubmit"
-            />
-            <TouchableOpacity
-              style={[styles.sendBtn, (!inputText.trim() || isStreaming) && styles.sendBtnDisabled]}
-              onPress={handleSend}
-              disabled={!inputText.trim() || isStreaming}
-            >
-              {isStreaming ? (
-                <ActivityIndicator size="small" color="#fff" />
-              ) : (
-                <Text style={styles.sendBtnText}>Send</Text>
-              )}
-            </TouchableOpacity>
-          </View>
-        )}
-        </View>
+        </GestureDetector>
       </Wrapper>
+      </GestureHandlerRootView>
     </Modal>
   );
 }

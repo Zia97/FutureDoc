@@ -13,6 +13,7 @@ import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
 import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
 import AITutorModal from '../AITutorModal';
+import { useAITutor } from '../../hooks/useAITutor';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic'];
@@ -34,6 +35,8 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   const [diagramExpanded, setDiagramExpanded] = useState(false);
 
   const [tutorVisible, setTutorVisible] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const tutorState = useAITutor(questionContext);
 
   const isYesNo      = YES_NO_TYPES.includes(question.type);
   const isMCQ        = MCQ_TYPES.includes(question.type);
@@ -183,6 +186,9 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
           visible={tutorVisible}
           onClose={() => setTutorVisible(false)}
           questionContext={questionContext}
+          tutorState={tutorState}
+          inputText={inputText}
+          setInputText={setInputText}
         />
       )}
     </View>
@@ -278,7 +284,7 @@ const styles = StyleSheet.create({
   },
   teachMeBtn: {
     marginTop: 14,
-    alignSelf: 'flex-start',
+    alignSelf: 'flex-end',
     backgroundColor: '#1a2535',
     borderRadius: 8,
     paddingVertical: 8,

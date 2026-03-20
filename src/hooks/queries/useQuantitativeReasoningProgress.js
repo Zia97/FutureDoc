@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { db } from '../../lib/dbQueries';
+import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { QR_PROGRESS_CACHE_KEY } from '../attempts/useQuantitativeReasoningAttempts';
