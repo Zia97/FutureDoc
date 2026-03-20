@@ -47,8 +47,6 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
     ? [...messages, { role: 'assistant', content: streamingContent, streaming: true }]
     : messages;
 
-  const Wrapper = Platform.OS === 'ios' ? KeyboardAvoidingView : View;
-  const wrapperProps = Platform.OS === 'ios' ? { behavior: 'padding' } : {};
   const containerStyle = [styles.container, { paddingBottom: insets.bottom }];
 
   return (
@@ -60,7 +58,10 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
       onRequestClose={onClose}
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
-      <Wrapper style={containerStyle} {...wrapperProps}>
+      <KeyboardAvoidingView
+        style={containerStyle}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
         <GestureDetector gesture={panGesture}>
           <View style={styles.swipeLayer}>
             {/* Drag handle */}
@@ -87,6 +88,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
                 keyExtractor={(_, i) => String(i)}
                 contentContainerStyle={styles.messageList}
                 onContentSizeChange={scrollToBottom}
+                keyboardShouldPersistTaps="handled"
                 ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
                 ListEmptyComponent={<WelcomePrompt />}
                 renderItem={({ item }) => <MessageBubble message={item} />}
@@ -125,7 +127,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
             )}
           </View>
         </GestureDetector>
-      </Wrapper>
+      </KeyboardAvoidingView>
       </GestureHandlerRootView>
     </Modal>
   );
