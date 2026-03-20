@@ -67,6 +67,7 @@ export function buildQuestionContext({
   correctAnswer,
   explanation,
   stimulusData,
+  vennDiagrams,
   topStruggles,
 }: {
   section: string;
@@ -75,6 +76,7 @@ export function buildQuestionContext({
   correctAnswer: string;
   explanation: string;
   stimulusData?: unknown;
+  vennDiagrams?: string;
   topStruggles: string[];
 }): string {
   const sectionNames: Record<string, string> = {
@@ -90,6 +92,10 @@ export function buildQuestionContext({
     ? `\n\n--- Data / Chart ---\n${JSON.stringify(stimulusData, null, 2)}\n---`
     : '';
 
+  const vennNote = vennDiagrams
+    ? `\n\n--- Venn Diagram(s) ---\n${vennDiagrams}\n---`
+    : '';
+
   const struggleNote = topStruggles.length > 0
     ? `\n\nStudent profile: This student has previously needed help with ${topStruggles.join(', ')}. \
 Bear this in mind but do not reference it explicitly unless relevant.`
@@ -100,7 +106,7 @@ Bear this in mind but do not reference it explicitly unless relevant.`
 Question: ${question}
 Student's answer: ${userAnswer}
 Correct answer: ${correctAnswer}
-Official explanation: ${explanation}${stimulusNote}
+Official explanation: ${explanation}${stimulusNote}${vennNote}
 ---${struggleNote}
 
 The student has opened the "Teach Me" chat because the explanation alone was not enough. \

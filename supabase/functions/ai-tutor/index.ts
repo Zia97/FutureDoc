@@ -63,6 +63,7 @@ Deno.serve(async (req) => {
     userAnswer,
     explanation,
     stimulusData,
+    vennDiagrams,
     messages,
   }: {
     question: string;
@@ -72,6 +73,7 @@ Deno.serve(async (req) => {
     userAnswer: string;
     explanation: string;
     stimulusData?: unknown;
+    vennDiagrams?: string;
     messages: ChatMessage[];
   } = await req.json();
 
@@ -155,6 +157,7 @@ Deno.serve(async (req) => {
     correctAnswer,
     explanation,
     stimulusData,
+    vennDiagrams,
     topStruggles,
   });
 

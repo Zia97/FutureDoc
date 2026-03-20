@@ -11,6 +11,31 @@ import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 
+// ── Venn description helpers ──────────────────────────────────────────────────
+
+function describeRegionKey(key, setLabels) {
+  if (key === 'outside') return 'outside all sets';
+  if (key === 'all_three') return 'all three sets overlap';
+  const parts = key.split('_');
+  if (parts[parts.length - 1] === 'only') {
+    const setId = parts.slice(0, -1).join('_');
+    return `only ${setLabels[setId] || setId}`;
+  }
+  return parts.map((id) => setLabels[id] || id).join(' ∩ ');
+}
+
+function describeVennConfig(vennConfig) {
+  if (!vennConfig) return '';
+  const { diagramLayout, sets = [], regions = {} } = vennConfig;
+  const setLabels = {};
+  sets.forEach((s) => { setLabels[s.id] = s.label || s.id; });
+  const setsDesc = sets.map((s) => `${s.label || s.id} (${s.shape || 'circle'})`).join(', ');
+  const regionLines = Object.entries(regions)
+    .map(([key, value]) => `  ${describeRegionKey(key, setLabels)}: ${value}`)
+    .join('\n');
+  return `layout: ${diagramLayout}\nsets: ${setsDesc}\nregion counts:\n${regionLines}`;
+}
+
 export default function DMQuestionScreen({ route }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
@@ -108,6 +133,8 @@ export default function DMQuestionScreen({ route }) {
             section: 'dm',
             options: isYesNo
               ? question.statements?.map((s, i) => `${i + 1}. ${s}`)
+              : question.subtype === 'select_diagram'
+              ? undefined
               : question.options?.map((o) => `${o.label}. ${o.text}`),
             correctAnswer: typeof question.answer === 'object'
               ? JSON.stringify(question.answer)
@@ -116,7 +143,12 @@ export default function DMQuestionScreen({ route }) {
               ? JSON.stringify(currentAnswer)
               : (currentAnswer ?? ''),
             explanation: question.answeringReason,
-            stimulusData: question.tableData ?? question.stimulusDiagram ?? undefined,
+            stimulusData: question.tableData ?? undefined,
+            vennDiagrams: question.type === 'venn_diagram'
+              ? question.subtype === 'select_diagram'
+                ? question.options?.map((o) => `Option ${o.label}:\n${describeVennConfig(o.vennConfig)}`).join('\n\n')
+                : describeVennConfig(question.stimulusDiagram)
+              : undefined,
           } : undefined}
         />
 
