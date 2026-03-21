@@ -13,7 +13,7 @@ import {
 import { useRef } from 'react';
 import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { TUTOR_ERROR } from '../hooks/useAITutor';
+import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
 
 export default function AITutorModal({ visible, onClose, questionContext, tutorState, inputText, setInputText }) {
   const { messages, streamingContent, isStreaming, error, sendMessage } = tutorState;

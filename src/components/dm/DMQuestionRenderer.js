@@ -13,7 +13,7 @@ import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
 import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
 import AITutorModal from '../AITutorModal';
-import { useAITutor } from '../../hooks/useAITutor';
+import { useAITutor } from '../../hooks/ai/useAITutor';
 import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];

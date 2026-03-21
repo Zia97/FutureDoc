@@ -9,10 +9,12 @@ import { useTheme } from '../context/ThemeContext';
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 
-import HomeScreen from '../screens/menus/HomeScreen';
-import PracticeModeScreen from '../screens/menus/PracticeModeScreen';
-import PracticeSectionsScreen from '../screens/menus/PracticeSectionsScreen';
-import TimedPracticeSectionsScreen from '../screens/menus/TimedPracticeSectionsScreen';
+import HomeScreen from '../screens/home/HomeScreen';
+import ProfileScreen from '../screens/home/ProfileScreen';
+import AboutUCATScreen from '../screens/home/AboutUCATScreen';
+import PracticeModeScreen from '../screens/practice/PracticeModeScreen';
+import PracticeSectionsScreen from '../screens/practice/PracticeSectionsScreen';
+import TimedPracticeSectionsScreen from '../screens/practice/TimedPracticeSectionsScreen';
 import TimedTestListScreen from '../screens/timed/TimedTestListScreen';
 import VRInstructionScreen from '../screens/timed/VRInstructionScreen';
 import DMInstructionScreen from '../screens/timed/DMInstructionScreen';
@@ -26,8 +28,6 @@ import DMQuestionListScreen from '../screens/dm/DMQuestionListScreen';
 import DMQuestionScreen from '../screens/dm/DMQuestionScreen';
 import QRQuestionListScreen from '../screens/qr/QRQuestionListScreen';
 import QRQuestionScreen from '../screens/qr/QRQuestionScreen';
-import ProfileScreen from '../screens/menus/ProfileScreen';
-import AboutUCATScreen from '../screens/menus/AboutUCATScreen';
 
 const Stack = createNativeStackNavigator();
 

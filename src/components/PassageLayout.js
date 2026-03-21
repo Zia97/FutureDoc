@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useItemNavigation } from '../hooks/useItemNavigation';
-import { useAnswers } from '../hooks/useAnswers';
-import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import { useItemNavigation } from '../hooks/ui/useItemNavigation';
+import { useAnswers } from '../hooks/ui/useAnswers';
+import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { useTheme } from '../context/ThemeContext';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';

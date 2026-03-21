@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { streamAITutor } from '../services/aiTutor';
+import { streamAITutor } from '../../services/aiTutor';
 
 export const TUTOR_ERROR = {
   DAILY_LIMIT: 'daily_limit_reached',

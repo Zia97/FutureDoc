@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState, useEffect } from 'react';
 import AITutorModal from './AITutorModal';
-import { useAITutor } from '../hooks/useAITutor';
+import { useAITutor } from '../hooks/ai/useAITutor';
 import { useTheme } from '../context/ThemeContext';
 
 export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
