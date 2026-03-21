@@ -2,45 +2,392 @@
   {
     "id": "timed-qr-test-001",
     "title": "QR Timed Test 1",
-    "question_count": 36,
-    "time_minutes": 26,
-    "questions": [
-      { "id": "tqr-q01", "stem": "A train travels 240 km in 3 hours. What is its average speed in km/h?", "options": [{"label": "A", "text": "60"}, {"label": "B", "text": "70"}, {"label": "C", "text": "80"}, {"label": "D", "text": "90"}, {"label": "E", "text": "100"}], "correct_answer": "C", "answer_reason": "Speed = distance ÷ time = 240 ÷ 3 = 80 km/h.", "order_index": 0 },
-      { "id": "tqr-q02", "stem": "A shop sells a jacket for £84 after applying a 30% discount. What was the original price?", "options": [{"label": "A", "text": "£100"}, {"label": "B", "text": "£110"}, {"label": "C", "text": "£115"}, {"label": "D", "text": "£120"}, {"label": "E", "text": "£126"}], "correct_answer": "D", "answer_reason": "Original price × 0.70 = £84, so original = 84 ÷ 0.70 = £120.", "order_index": 1 },
-      { "id": "tqr-q03", "stem": "A recipe for 6 people requires 450 g of flour. How much flour is needed for 10 people?", "options": [{"label": "A", "text": "650 g"}, {"label": "B", "text": "700 g"}, {"label": "C", "text": "720 g"}, {"label": "D", "text": "750 g"}, {"label": "E", "text": "800 g"}], "correct_answer": "D", "answer_reason": "Per person: 450 ÷ 6 = 75 g. For 10: 75 × 10 = 750 g.", "order_index": 2 },
-      { "id": "tqr-q04", "stem": "A car uses 8 litres of fuel per 100 km. How many litres are needed for a 375 km journey?", "options": [{"label": "A", "text": "28"}, {"label": "B", "text": "30"}, {"label": "C", "text": "32"}, {"label": "D", "text": "36"}, {"label": "E", "text": "40"}], "correct_answer": "B", "answer_reason": "Fuel = (375 ÷ 100) × 8 = 3.75 × 8 = 30 litres.", "order_index": 3 },
-      { "id": "tqr-q05", "stem": "A rectangle has a length of 14 cm and a width of 9 cm. What is its area?", "options": [{"label": "A", "text": "113 cm²"}, {"label": "B", "text": "116 cm²"}, {"label": "C", "text": "122 cm²"}, {"label": "D", "text": "126 cm²"}, {"label": "E", "text": "130 cm²"}], "correct_answer": "D", "answer_reason": "Area = 14 × 9 = 126 cm².", "order_index": 4 },
-      { "id": "tqr-q06", "stem": "A bank account earns 4% simple interest per year. If £2,500 is deposited, how much interest is earned after 3 years?", "options": [{"label": "A", "text": "£200"}, {"label": "B", "text": "£250"}, {"label": "C", "text": "£300"}, {"label": "D", "text": "£312.50"}, {"label": "E", "text": "£325"}], "correct_answer": "C", "answer_reason": "Interest = 2500 × 0.04 × 3 = £300.", "order_index": 5 },
-      { "id": "tqr-q07", "stem": "Three colleagues share a £960 bonus in the ratio 3:4:5. How much does the person with the largest share receive?", "options": [{"label": "A", "text": "£240"}, {"label": "B", "text": "£280"}, {"label": "C", "text": "£320"}, {"label": "D", "text": "£380"}, {"label": "E", "text": "£400"}], "correct_answer": "E", "answer_reason": "Total parts = 12. Largest share = (5 ÷ 12) × 960 = £400.", "order_index": 6 },
-      { "id": "tqr-q08", "stem": "A tank holds 1,200 litres and is currently 35% full. How many litres are needed to fill it completely?", "options": [{"label": "A", "text": "420"}, {"label": "B", "text": "680"}, {"label": "C", "text": "720"}, {"label": "D", "text": "780"}, {"label": "E", "text": "860"}], "correct_answer": "D", "answer_reason": "Current = 35% × 1200 = 420 L. Needed = 1200 − 420 = 780 L.", "order_index": 7 },
-      { "id": "tqr-q09", "stem": "A worker is paid £13.50 per hour and works 37.5 hours per week. What is their weekly pay?", "options": [{"label": "A", "text": "£487.50"}, {"label": "B", "text": "£500.00"}, {"label": "C", "text": "£506.25"}, {"label": "D", "text": "£513.75"}, {"label": "E", "text": "£520.00"}], "correct_answer": "C", "answer_reason": "Pay = 13.50 × 37.5 = £506.25.", "order_index": 8 },
-      { "id": "tqr-q10", "stem": "A circular field has a radius of 7 m. What is its area? (Use π ≈ 3.14)", "options": [{"label": "A", "text": "143.98 m²"}, {"label": "B", "text": "150.72 m²"}, {"label": "C", "text": "153.86 m²"}, {"label": "D", "text": "158.42 m²"}, {"label": "E", "text": "163.28 m²"}], "correct_answer": "C", "answer_reason": "Area = π × r² = 3.14 × 49 = 153.86 m².", "order_index": 9 },
-      { "id": "tqr-q11", "stem": "A phone costs £648 including 20% VAT. What is the pre-VAT price?", "options": [{"label": "A", "text": "£520"}, {"label": "B", "text": "£524"}, {"label": "C", "text": "£530"}, {"label": "D", "text": "£540"}, {"label": "E", "text": "£560"}], "correct_answer": "D", "answer_reason": "Pre-VAT = 648 ÷ 1.20 = £540.", "order_index": 10 },
-      { "id": "tqr-q12", "stem": "A runner completes a 10 km race in 48 minutes. What is their speed in km/h?", "options": [{"label": "A", "text": "10.5"}, {"label": "B", "text": "11.5"}, {"label": "C", "text": "12.5"}, {"label": "D", "text": "13.5"}, {"label": "E", "text": "14.5"}], "correct_answer": "C", "answer_reason": "Speed = 10 ÷ (48/60) = 10 ÷ 0.8 = 12.5 km/h.", "order_index": 11 },
-      { "id": "tqr-q13", "stem": "A house is valued at £320,000. It increases in value by 7.5%. What is the new value?", "options": [{"label": "A", "text": "£340,000"}, {"label": "B", "text": "£342,000"}, {"label": "C", "text": "£344,000"}, {"label": "D", "text": "£346,000"}, {"label": "E", "text": "£348,000"}], "correct_answer": "C", "answer_reason": "Increase = 320,000 × 0.075 = £24,000. New value = £344,000.", "order_index": 12 },
-      { "id": "tqr-q14", "stem": "If 5 items cost £37.25 in total, what is the cost of 8 items?", "options": [{"label": "A", "text": "£55.60"}, {"label": "B", "text": "£57.20"}, {"label": "C", "text": "£59.60"}, {"label": "D", "text": "£61.00"}, {"label": "E", "text": "£62.80"}], "correct_answer": "C", "answer_reason": "Cost per item = 37.25 ÷ 5 = £7.45. For 8 items = 7.45 × 8 = £59.60.", "order_index": 13 },
-      { "id": "tqr-q15", "stem": "A rectangle has perimeter 64 cm and length 20 cm. What is its area?", "options": [{"label": "A", "text": "220 cm²"}, {"label": "B", "text": "240 cm²"}, {"label": "C", "text": "260 cm²"}, {"label": "D", "text": "280 cm²"}, {"label": "E", "text": "300 cm²"}], "correct_answer": "B", "answer_reason": "Width = (64 ÷ 2) − 20 = 12 cm. Area = 20 × 12 = 240 cm².", "order_index": 14 },
-      { "id": "tqr-q16", "stem": "A population of bacteria doubles every 3 hours. If there are 500 at noon, how many are there at 9 pm?", "options": [{"label": "A", "text": "4,000"}, {"label": "B", "text": "8,000"}, {"label": "C", "text": "16,000"}, {"label": "D", "text": "32,000"}, {"label": "E", "text": "64,000"}], "correct_answer": "C", "answer_reason": "9 hours = 3 doubling periods. 500 × 2³ = 500 × 8 = 4,000. Wait: 3 hours = ×2, 6 hours = ×4, 9 hours = ×8. 500 × 8 = 4,000. Selecting A. Actually answer is A: 4,000.", "correct_answer": "A", "answer_reason": "9 hours = 3 doublings. 500 × 2 × 2 × 2 = 4,000.", "order_index": 15 },
-      { "id": "tqr-q17", "stem": "A map has a scale of 1:50,000. Two towns are 6 cm apart on the map. What is the real distance in km?", "options": [{"label": "A", "text": "2 km"}, {"label": "B", "text": "3 km"}, {"label": "C", "text": "4 km"}, {"label": "D", "text": "5 km"}, {"label": "E", "text": "6 km"}], "correct_answer": "B", "answer_reason": "Real distance = 6 × 50,000 = 300,000 cm = 3 km.", "order_index": 16 },
-      { "id": "tqr-q18", "stem": "A mixture contains salt and water in the ratio 2:9. If there are 180 ml of water, how much salt is there?", "options": [{"label": "A", "text": "20 ml"}, {"label": "B", "text": "30 ml"}, {"label": "C", "text": "36 ml"}, {"label": "D", "text": "40 ml"}, {"label": "E", "text": "45 ml"}], "correct_answer": "D", "answer_reason": "Salt : Water = 2:9. If water = 180 ml, salt = (2/9) × 180 = 40 ml.", "order_index": 17 },
-      { "id": "tqr-q19", "stem": "A flight departs at 14:45 and arrives at 17:10 on the same day. How long is the flight?", "options": [{"label": "A", "text": "2 h 15 min"}, {"label": "B", "text": "2 h 25 min"}, {"label": "C", "text": "2 h 35 min"}, {"label": "D", "text": "2 h 45 min"}, {"label": "E", "text": "3 h 05 min"}], "correct_answer": "B", "answer_reason": "From 14:45 to 17:10 = 2 hours 25 minutes.", "order_index": 18 },
-      { "id": "tqr-q20", "stem": "A company's profit increased from £80,000 to £92,000. What is the percentage increase?", "options": [{"label": "A", "text": "12%"}, {"label": "B", "text": "13%"}, {"label": "C", "text": "14%"}, {"label": "D", "text": "15%"}, {"label": "E", "text": "16%"}], "correct_answer": "D", "answer_reason": "Increase = £12,000. Percentage = (12,000 ÷ 80,000) × 100 = 15%.", "order_index": 19 },
-      { "id": "tqr-q21", "stem": "A cube has a side length of 5 cm. What is its total surface area?", "options": [{"label": "A", "text": "100 cm²"}, {"label": "B", "text": "125 cm²"}, {"label": "C", "text": "150 cm²"}, {"label": "D", "text": "175 cm²"}, {"label": "E", "text": "200 cm²"}], "correct_answer": "C", "answer_reason": "Surface area = 6 × (5²) = 6 × 25 = 150 cm².", "order_index": 20 },
-      { "id": "tqr-q22", "stem": "A student scores 68% on a test with 75 questions. How many questions did they answer correctly?", "options": [{"label": "A", "text": "48"}, {"label": "B", "text": "50"}, {"label": "C", "text": "51"}, {"label": "D", "text": "53"}, {"label": "E", "text": "55"}], "correct_answer": "C", "answer_reason": "0.68 × 75 = 51 questions.", "order_index": 21 },
-      { "id": "tqr-q23", "stem": "£1,200 is shared between A and B so that A receives £200 more than B. How much does B receive?", "options": [{"label": "A", "text": "£450"}, {"label": "B", "text": "£480"}, {"label": "C", "text": "£500"}, {"label": "D", "text": "£520"}, {"label": "E", "text": "£550"}], "correct_answer": "C", "answer_reason": "B + (B + 200) = 1200 → 2B = 1000 → B = £500.", "order_index": 22 },
-      { "id": "tqr-q24", "stem": "A cylinder has radius 4 cm and height 10 cm. What is its volume? (Use π ≈ 3.14)", "options": [{"label": "A", "text": "452.16 cm³"}, {"label": "B", "text": "480.00 cm³"}, {"label": "C", "text": "502.40 cm³"}, {"label": "D", "text": "510.32 cm³"}, {"label": "E", "text": "528.00 cm³"}], "correct_answer": "C", "answer_reason": "Volume = π × r² × h = 3.14 × 16 × 10 = 502.4 cm³.", "order_index": 23 },
-      { "id": "tqr-q25", "stem": "A class of 30 students has a mean test score of 72. If 5 new students join with a mean of 60, what is the new class mean?", "options": [{"label": "A", "text": "68"}, {"label": "B", "text": "69"}, {"label": "C", "text": "69.7"}, {"label": "D", "text": "70"}, {"label": "E", "text": "71"}], "correct_answer": "C", "answer_reason": "Total = (30 × 72) + (5 × 60) = 2160 + 300 = 2460. New mean = 2460 ÷ 35 ≈ 70.3. Closest answer is C (69.7 is not exact — recalculate: 2460/35 = 70.29). Answer is D.", "correct_answer": "D", "answer_reason": "Total = (30 × 72) + (5 × 60) = 2,460. New mean = 2,460 ÷ 35 ≈ 70.", "order_index": 24 },
-      { "id": "tqr-q26", "stem": "A shop buys a watch for £85 and sells it for £119. What is the percentage profit?", "options": [{"label": "A", "text": "36%"}, {"label": "B", "text": "38%"}, {"label": "C", "text": "40%"}, {"label": "D", "text": "42%"}, {"label": "E", "text": "44%"}], "correct_answer": "C", "answer_reason": "Profit = £34. Percentage = (34 ÷ 85) × 100 = 40%.", "order_index": 25 },
-      { "id": "tqr-q27", "stem": "A tap fills a 360-litre tank at 12 litres per minute. Another tap drains it at 4 litres per minute. How long to fill the tank from empty with both taps open?", "options": [{"label": "A", "text": "30 min"}, {"label": "B", "text": "40 min"}, {"label": "C", "text": "45 min"}, {"label": "D", "text": "50 min"}, {"label": "E", "text": "60 min"}], "correct_answer": "C", "answer_reason": "Net fill rate = 12 − 4 = 8 L/min. Time = 360 ÷ 8 = 45 minutes.", "order_index": 26 },
-      { "id": "tqr-q28", "stem": "The exchange rate is £1 = €1.18. How many pounds is €531?", "options": [{"label": "A", "text": "£420"}, {"label": "B", "text": "£430"}, {"label": "C", "text": "£440"}, {"label": "D", "text": "£450"}, {"label": "E", "text": "£460"}], "correct_answer": "D", "answer_reason": "Pounds = 531 ÷ 1.18 = £450.", "order_index": 27 },
-      { "id": "tqr-q29", "stem": "A box contains 4 red, 6 blue, and 2 yellow balls. One is picked at random. What is the probability it is blue?", "options": [{"label": "A", "text": "1/4"}, {"label": "B", "text": "1/3"}, {"label": "C", "text": "1/2"}, {"label": "D", "text": "2/3"}, {"label": "E", "text": "3/4"}], "correct_answer": "C", "answer_reason": "Total = 12 balls. Blue = 6. Probability = 6/12 = 1/2.", "order_index": 28 },
-      { "id": "tqr-q30", "stem": "A car's fuel tank holds 50 litres. It currently has 14 litres. Petrol costs £1.62 per litre. How much does it cost to fill the tank?", "options": [{"label": "A", "text": "£54.00"}, {"label": "B", "text": "£56.16"}, {"label": "C", "text": "£58.32"}, {"label": "D", "text": "£60.48"}, {"label": "E", "text": "£62.64"}], "correct_answer": "C", "answer_reason": "Litres needed = 50 − 14 = 36. Cost = 36 × £1.62 = £58.32.", "order_index": 29 },
-      { "id": "tqr-q31", "stem": "A triangle has a base of 18 cm and a height of 11 cm. What is its area?", "options": [{"label": "A", "text": "88 cm²"}, {"label": "B", "text": "90 cm²"}, {"label": "C", "text": "96 cm²"}, {"label": "D", "text": "99 cm²"}, {"label": "E", "text": "108 cm²"}], "correct_answer": "D", "answer_reason": "Area = ½ × base × height = ½ × 18 × 11 = 99 cm².", "order_index": 30 },
-      { "id": "tqr-q32", "stem": "A nurse works 4 days on, 2 days off. She starts her cycle on a Monday. What day does her 3rd day off fall?", "options": [{"label": "A", "text": "Sunday"}, {"label": "B", "text": "Monday"}, {"label": "C", "text": "Tuesday"}, {"label": "D", "text": "Wednesday"}, {"label": "E", "text": "Thursday"}], "correct_answer": "A", "answer_reason": "Cycle: Mon–Thu work, Fri–Sat off (days off 1–2). Second cycle: Sun–Wed work, Thu–Fri off (days off 3–4). 3rd day off = Thursday. Answer: E.", "correct_answer": "E", "answer_reason": "Days off: Fri (1st), Sat (2nd), Thu (3rd). 3rd day off = Thursday.", "order_index": 31 },
-      { "id": "tqr-q33", "stem": "Two numbers are in the ratio 7:3. Their sum is 120. What is the larger number?", "options": [{"label": "A", "text": "72"}, {"label": "B", "text": "78"}, {"label": "C", "text": "80"}, {"label": "D", "text": "84"}, {"label": "E", "text": "90"}], "correct_answer": "D", "answer_reason": "Larger = (7/10) × 120 = 84.", "order_index": 32 },
-      { "id": "tqr-q34", "stem": "A project is 40% complete after 12 days. At the same rate, how many more days are needed to finish?", "options": [{"label": "A", "text": "14"}, {"label": "B", "text": "16"}, {"label": "C", "text": "18"}, {"label": "D", "text": "20"}, {"label": "E", "text": "22"}], "correct_answer": "C", "answer_reason": "Rate = 40% in 12 days. Remaining 60% at same rate = (60/40) × 12 = 18 days.", "order_index": 33 },
-      { "id": "tqr-q35", "stem": "A car depreciates by 15% per year. If it is worth £18,000 now, what will it be worth in 2 years?", "options": [{"label": "A", "text": "£12,600"}, {"label": "B", "text": "£12,870"}, {"label": "C", "text": "£13,005"}, {"label": "D", "text": "£13,230"}, {"label": "E", "text": "£13,500"}], "correct_answer": "C", "answer_reason": "After 1 year: 18,000 × 0.85 = £15,300. After 2 years: 15,300 × 0.85 = £13,005.", "order_index": 34 },
-      { "id": "tqr-q36", "stem": "The mean of five numbers is 14. Four of them are 10, 12, 16, and 18. What is the fifth number?", "options": [{"label": "A", "text": "12"}, {"label": "B", "text": "13"}, {"label": "C", "text": "14"}, {"label": "D", "text": "15"}, {"label": "E", "text": "16"}], "correct_answer": "C", "answer_reason": "Sum = 5 × 14 = 70. Known sum = 10 + 12 + 16 + 18 = 56. Fifth = 70 − 56 = 14.", "order_index": 35 }
+    "question_count": 20,
+    "time_minutes": 15,
+    "sets": [
+      {
+        "set_id": "66bdeb38-13de-4f2d-9ba8-e591b889e7c7",
+        "title": "NHS Outpatient Waiting Times",
+        "stimulus": {
+          "type": "bar_chart",
+          "data": {
+            "title": "NHS Outpatient Waiting Times by Department (weeks)",
+            "labels": ["Q1", "Q2", "Q3", "Q4"],
+            "series": [
+              { "name": "Cardiology", "values": [8, 10, 9, 11] },
+              { "name": "Orthopaedics", "values": [14, 12, 15, 13] },
+              { "name": "Neurology", "values": [11, 13, 10, 12] }
+            ],
+            "yAxisLabel": "Weeks"
+          }
+        },
+        "questions": [
+          {
+            "id": "b9e373d8-15f3-49e5-9d71-93944d667659",
+            "stem": "What was the mean waiting time for Cardiology across all four quarters?",
+            "options": [
+              { "label": "A", "text": "8.5 weeks" },
+              { "label": "B", "text": "9.0 weeks" },
+              { "label": "C", "text": "9.5 weeks" },
+              { "label": "D", "text": "10.0 weeks" },
+              { "label": "E", "text": "10.5 weeks" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Cardiology: 8 + 10 + 9 + 11 = 38 weeks. Mean = 38 ÷ 4 = 9.5 weeks.",
+            "order_index": 0
+          },
+          {
+            "id": "9dbf98be-0f47-483d-8409-d85045a3f73d",
+            "stem": "What was the total waiting time across all three departments in Q2?",
+            "options": [
+              { "label": "A", "text": "32 weeks" },
+              { "label": "B", "text": "33 weeks" },
+              { "label": "C", "text": "34 weeks" },
+              { "label": "D", "text": "35 weeks" },
+              { "label": "E", "text": "36 weeks" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Q2: Cardiology 10 + Orthopaedics 12 + Neurology 13 = 35 weeks.",
+            "order_index": 1
+          },
+          {
+            "id": "ae57895d-9903-4a0a-a28e-988436a87356",
+            "stem": "By how many weeks did the Orthopaedics waiting time change from Q1 to Q3?",
+            "options": [
+              { "label": "A", "text": "Decreased by 2 weeks" },
+              { "label": "B", "text": "Decreased by 1 week" },
+              { "label": "C", "text": "No change" },
+              { "label": "D", "text": "Increased by 1 week" },
+              { "label": "E", "text": "Increased by 2 weeks" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Orthopaedics: Q1 = 14 weeks, Q3 = 15 weeks. Change = 15 – 14 = +1 week (increased).",
+            "order_index": 2
+          },
+          {
+            "id": "84540379-3a77-405a-8c4a-d0874b76a1d1",
+            "stem": "In which quarter was the combined waiting time across all three departments the lowest?",
+            "options": [
+              { "label": "A", "text": "Q1" },
+              { "label": "B", "text": "Q2" },
+              { "label": "C", "text": "Q3" },
+              { "label": "D", "text": "Q4" },
+              { "label": "E", "text": "Q1 and Q3 were equal" }
+            ],
+            "correct_answer": "A",
+            "answer_reason": "Totals – Q1: 8+14+11=33, Q2: 10+12+13=35, Q3: 9+15+10=34, Q4: 11+13+12=36. Q1 is lowest at 33 weeks.",
+            "order_index": 3
+          }
+        ]
+      },
+      {
+        "set_id": "19b74a5e-01b4-407c-a751-7b2380ca1adb",
+        "title": "Monthly Household Energy Bills",
+        "stimulus": {
+          "type": "line_graph",
+          "data": {
+            "title": "Monthly Energy Bills – Households A & B (£)",
+            "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            "series": [
+              { "name": "Household A", "values": [120, 108, 90, 80, 70, 65] },
+              { "name": "Household B", "values": [90, 95, 85, 75, 72, 65] }
+            ],
+            "yAxisLabel": "£"
+          }
+        },
+        "questions": [
+          {
+            "id": "cce57821-faa1-4ef2-b7d1-a4fe004feb2d",
+            "stem": "By how much did Household A's energy bill decrease from January to June?",
+            "options": [
+              { "label": "A", "text": "£45" },
+              { "label": "B", "text": "£50" },
+              { "label": "C", "text": "£55" },
+              { "label": "D", "text": "£60" },
+              { "label": "E", "text": "£65" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Household A: January £120 – June £65 = £55 decrease.",
+            "order_index": 0
+          },
+          {
+            "id": "cb52dce8-cdc7-48bd-bcf9-c504c237b133",
+            "stem": "In which month were both households' energy bills the same?",
+            "options": [
+              { "label": "A", "text": "March" },
+              { "label": "B", "text": "April" },
+              { "label": "C", "text": "May" },
+              { "label": "D", "text": "June" },
+              { "label": "E", "text": "They were never equal" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "June: Household A = £65, Household B = £65. Both bills are equal in June.",
+            "order_index": 1
+          },
+          {
+            "id": "5109f528-f9d5-4ce7-b90d-7e8a7b1ec860",
+            "stem": "What was Household B's total energy bill across all six months?",
+            "options": [
+              { "label": "A", "text": "£462" },
+              { "label": "B", "text": "£472" },
+              { "label": "C", "text": "£478" },
+              { "label": "D", "text": "£482" },
+              { "label": "E", "text": "£490" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Household B: 90 + 95 + 85 + 75 + 72 + 65 = £482.",
+            "order_index": 2
+          },
+          {
+            "id": "00724028-8400-4c3d-9f8b-fa94a39a45c4",
+            "stem": "Between which two consecutive months did Household A's bill decrease by the greatest amount?",
+            "options": [
+              { "label": "A", "text": "January to February" },
+              { "label": "B", "text": "February to March" },
+              { "label": "C", "text": "March to April" },
+              { "label": "D", "text": "April to May" },
+              { "label": "E", "text": "May to June" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Changes: Jan–Feb: £12, Feb–Mar: £18, Mar–Apr: £10, Apr–May: £10, May–Jun: £5. Largest is February to March at £18.",
+            "order_index": 3
+          }
+        ]
+      },
+      {
+        "set_id": "d7b61713-9bb9-4a21-bdf2-4acff7ad32f9",
+        "title": "City Council Annual Budget",
+        "stimulus": {
+          "type": "pie_chart",
+          "data": {
+            "unit": "£",
+            "title": "City Council Annual Budget Allocation (£ millions, Total: £240m)",
+            "total": 240,
+            "segments": [
+              { "label": "Housing", "value": 72 },
+              { "label": "Transport", "value": 60 },
+              { "label": "Education", "value": 48 },
+              { "label": "Health", "value": 36 },
+              { "label": "Other", "value": 24 }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "8ecfe895-57f7-4957-9c1d-2940a4ec6afe",
+            "stem": "How much more is allocated to Housing than to Health? (£ millions)",
+            "options": [
+              { "label": "A", "text": "£24m" },
+              { "label": "B", "text": "£30m" },
+              { "label": "C", "text": "£36m" },
+              { "label": "D", "text": "£42m" },
+              { "label": "E", "text": "£48m" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Housing = £72m, Health = £36m. Difference = 72 – 36 = £36m.",
+            "order_index": 0
+          },
+          {
+            "id": "12459361-baa8-4f8f-93f5-da63ab39cd18",
+            "stem": "What percentage of the total budget is allocated to Transport and Education combined?",
+            "options": [
+              { "label": "A", "text": "35%" },
+              { "label": "B", "text": "40%" },
+              { "label": "C", "text": "42%" },
+              { "label": "D", "text": "45%" },
+              { "label": "E", "text": "50%" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Transport £60m + Education £48m = £108m. (108 ÷ 240) × 100 = 45%.",
+            "order_index": 1
+          },
+          {
+            "id": "f535c781-77e9-44a0-9a59-cfeeeea1563b",
+            "stem": "If the total budget increases by 25% next year and percentage allocations remain unchanged, what will the Health allocation be?",
+            "options": [
+              { "label": "A", "text": "£40m" },
+              { "label": "B", "text": "£42m" },
+              { "label": "C", "text": "£44m" },
+              { "label": "D", "text": "£45m" },
+              { "label": "E", "text": "£48m" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Health = 36/240 = 15% of budget. New total = £240m × 1.25 = £300m. New Health = 15% × £300m = £45m.",
+            "order_index": 2
+          },
+          {
+            "id": "2de39107-c5f6-46c7-83b5-781b6f47d7b6",
+            "stem": "If the Housing allocation is increased by £12m while the total budget remains £240m, what percentage will Housing then represent?",
+            "options": [
+              { "label": "A", "text": "30%" },
+              { "label": "B", "text": "32%" },
+              { "label": "C", "text": "33%" },
+              { "label": "D", "text": "34%" },
+              { "label": "E", "text": "35%" }
+            ],
+            "correct_answer": "E",
+            "answer_reason": "New Housing = £72m + £12m = £84m. (84 ÷ 240) × 100 = 35%.",
+            "order_index": 3
+          }
+        ]
+      },
+      {
+        "set_id": "a27f2e75-8ea0-41eb-9d5f-4d092c35326f",
+        "title": "UK Train Fares from London",
+        "stimulus": {
+          "type": "table",
+          "data": {
+            "headers": ["Route (from London)", "Standard (£)", "First Class (£)", "Duration (min)"],
+            "rows": [
+              ["Birmingham", "32", "58", "85"],
+              ["Manchester", "56", "98", "127"],
+              ["Edinburgh", "80", "140", "252"],
+              ["Bristol", "28", "52", "95"],
+              ["Leeds", "48", "86", "132"]
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "1f77d080-742d-45fd-a517-cc3e81faacad",
+            "stem": "What is the ratio of the standard fare to first class fare for Edinburgh, expressed in its simplest form?",
+            "options": [
+              { "label": "A", "text": "3:5" },
+              { "label": "B", "text": "4:7" },
+              { "label": "C", "text": "5:9" },
+              { "label": "D", "text": "8:15" },
+              { "label": "E", "text": "1:2" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Edinburgh: standard £80, first class £140. Ratio = 80:140. HCF = 20. Simplified: 4:7.",
+            "order_index": 0
+          },
+          {
+            "id": "2fc784c7-1463-4cc4-a13e-43bd0709db75",
+            "stem": "A commuter travels to Manchester and back (standard class) 5 days a week for 4 weeks. What is the total cost?",
+            "options": [
+              { "label": "A", "text": "£1,960" },
+              { "label": "B", "text": "£2,000" },
+              { "label": "C", "text": "£2,100" },
+              { "label": "D", "text": "£2,240" },
+              { "label": "E", "text": "£2,520" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Return = £56 × 2 = £112. Days = 5 × 4 = 20. Total = £112 × 20 = £2,240.",
+            "order_index": 1
+          },
+          {
+            "id": "1afbcf1a-dc75-4fc6-8d1b-b6d9739235b8",
+            "stem": "Which route has the lowest standard fare per minute of journey time?",
+            "options": [
+              { "label": "A", "text": "Birmingham" },
+              { "label": "B", "text": "Manchester" },
+              { "label": "C", "text": "Edinburgh" },
+              { "label": "D", "text": "Bristol" },
+              { "label": "E", "text": "Leeds" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "£/min – Birmingham: 32÷85≈0.376, Manchester: 56÷127≈0.441, Edinburgh: 80÷252≈0.317, Bristol: 28÷95≈0.295, Leeds: 48÷132≈0.364. Bristol is the lowest.",
+            "order_index": 2
+          },
+          {
+            "id": "6808797b-f0d4-46ae-addc-f1a7e1fd74ad",
+            "stem": "If a 10% discount is applied to all first class fares, what is the new first class price for Leeds?",
+            "options": [
+              { "label": "A", "text": "£75.40" },
+              { "label": "B", "text": "£76.40" },
+              { "label": "C", "text": "£77.40" },
+              { "label": "D", "text": "£78.00" },
+              { "label": "E", "text": "£79.40" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Leeds first class = £86. Discount = 10% × £86 = £8.60. New price = £86 – £8.60 = £77.40.",
+            "order_index": 3
+          }
+        ]
+      },
+      {
+        "set_id": "0bf5ac86-6286-4188-87d6-b5f2a23670ee",
+        "title": "TechGadget Ltd – Product Revenue",
+        "stimulus": {
+          "type": "multi",
+          "items": [
+            {
+              "type": "text",
+              "text": "TechGadget Ltd sells three products: Alpha, Beta, and Gamma. The table below shows quarterly revenue (£000s) for the first half of the financial year."
+            },
+            {
+              "type": "table",
+              "data": {
+                "headers": ["Product", "Q1 Revenue (£000s)", "Q2 Revenue (£000s)"],
+                "rows": [
+                  ["Alpha", "200", "220"],
+                  ["Beta", "250", "230"],
+                  ["Gamma", "150", "195"]
+                ]
+              }
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "ad1ceab1-beaf-4a7a-a6c2-ac92f7559a20",
+            "stem": "By what percentage did Gamma's revenue increase from Q1 to Q2?",
+            "options": [
+              { "label": "A", "text": "20%" },
+              { "label": "B", "text": "25%" },
+              { "label": "C", "text": "28%" },
+              { "label": "D", "text": "30%" },
+              { "label": "E", "text": "35%" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Gamma: Q1 = £150k, Q2 = £195k. Increase = £45k. Percentage = (45 ÷ 150) × 100 = 30%.",
+            "order_index": 0
+          },
+          {
+            "id": "0fb5269e-c5a8-4c5f-8fdd-1f6c61952174",
+            "stem": "What was TechGadget Ltd's total revenue across both quarters combined?",
+            "options": [
+              { "label": "A", "text": "£1,150,000" },
+              { "label": "B", "text": "£1,200,000" },
+              { "label": "C", "text": "£1,225,000" },
+              { "label": "D", "text": "£1,245,000" },
+              { "label": "E", "text": "£1,300,000" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Q1 total: 200+250+150=600. Q2 total: 220+230+195=645. Grand total = 1,245 (£000s) = £1,245,000.",
+            "order_index": 1
+          },
+          {
+            "id": "f824786d-6e3e-4449-8a39-409b1c647e6f",
+            "stem": "What fraction of Q1 total revenue did Beta represent?",
+            "options": [
+              { "label": "A", "text": "2/5" },
+              { "label": "B", "text": "5/12" },
+              { "label": "C", "text": "7/20" },
+              { "label": "D", "text": "1/2" },
+              { "label": "E", "text": "5/11" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Q1 total = 200+250+150 = 600. Beta = 250. Fraction = 250/600 = 5/12.",
+            "order_index": 2
+          },
+          {
+            "id": "f1775565-57c8-4a2e-adaf-7929c9ff73bf",
+            "stem": "Which product had the greatest absolute change in revenue between Q1 and Q2?",
+            "options": [
+              { "label": "A", "text": "Alpha" },
+              { "label": "B", "text": "Beta" },
+              { "label": "C", "text": "Gamma" },
+              { "label": "D", "text": "Alpha and Beta were equal" },
+              { "label": "E", "text": "Beta and Gamma were equal" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Alpha: |220–200|=20, Beta: |230–250|=20, Gamma: |195–150|=45. Gamma had the greatest absolute change at £45,000.",
+            "order_index": 3
+          }
+        ]
+      }
     ]
   }
 ]

@@ -5,18 +5,22 @@ function mapTests(data) {
   return data.map((test) => ({
     id: test.id,
     title: test.title,
-    passageCount: 0,
     questionCount: test.question_count,
     timeMinutes: test.time_minutes,
-    questions: [...test.questions]
-      .sort((a, b) => a.order_index - b.order_index)
-      .map((q) => ({
-        questionId: q.id,
-        stem: q.stem,
-        options: q.options ?? [],
-        answer: q.correct_answer,
-        answeringReason: q.answer_reason,
-      })),
+    sets: test.sets.map((s) => ({
+      setId: s.set_id,
+      title: s.title,
+      stimulus: s.stimulus,
+      questions: [...s.questions]
+        .sort((a, b) => a.order_index - b.order_index)
+        .map((q) => ({
+          questionId: q.id,
+          stem: q.stem,
+          options: q.options ?? [],
+          answer: q.correct_answer,
+          answeringReason: q.answer_reason,
+        })),
+    })),
   }));
 }
 
