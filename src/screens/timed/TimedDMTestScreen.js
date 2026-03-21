@@ -16,6 +16,7 @@ import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
+import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 
 export default function TimedDMTestScreen({ route }) {
   const { test } = route.params;
@@ -28,6 +29,7 @@ export default function TimedDMTestScreen({ route }) {
   const [flags, setFlags] = useState(new Set());
   const [calcVisible, setCalcVisible] = useState(false);
   const [navigatorVisible, setNavigatorVisible] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
 
@@ -88,6 +90,22 @@ export default function TimedDMTestScreen({ route }) {
     return 'Unseen';
   }
 
+  if (showReview) {
+    return (
+      <SJTestReviewScreen
+        questions={flatQuestions}
+        getStatus={getQuestionStatus}
+        flags={flags}
+        onNavigateTo={(_, idx) => { setCurrentIndex(idx); setShowReview(false); }}
+        onEndTest={() => {}}
+        timerDisplay={timerDisplay}
+        isUrgent={isUrgent}
+        title="Decision Making"
+        groupLabel="Question"
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
@@ -105,9 +123,9 @@ export default function TimedDMTestScreen({ route }) {
         title={question.title ?? `Question ${currentIndex + 1}`}
         meta={`Question ${currentIndex + 1} of ${test.questions.length}`}
         onPrev={() => setCurrentIndex((i) => i - 1)}
-        onNext={() => setCurrentIndex((i) => i + 1)}
+        onNext={isLast ? () => setShowReview(true) : () => setCurrentIndex((i) => i + 1)}
         isFirst={isFirst}
-        isLast={isLast}
+        isLast={false}
         color={t.sectionDM}
         onCalculator={() => setCalcVisible(true)}
       />

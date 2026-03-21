@@ -20,6 +20,8 @@ export default function SJTestReviewScreen({
   onEndTest,
   timerDisplay,
   isUrgent,
+  title = 'Situational Judgement',
+  groupLabel = 'Scenario',
 }) {
   const { practiceTheme: t } = useTheme();
   const insets = useSafeAreaInsets();
@@ -71,7 +73,7 @@ export default function SJTestReviewScreen({
   }, [questions, activeTab, sortKey, sortAsc, flags, getStatus]);
 
   function getScenarioTitle(q) {
-    return `Scenario ${q.passageIndex + 1}`;
+    return `${groupLabel} ${q.passageIndex + 1}`;
   }
 
   return (
@@ -80,7 +82,7 @@ export default function SJTestReviewScreen({
 
       {/* Header */}
       <View style={[styles.header, { backgroundColor: t.headerBg }]}>
-        <Text style={styles.headerTitle}>Situational Judgement — Review</Text>
+        <Text style={styles.headerTitle}>{title} — Review</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? t.danger : t.accent }]}>
           <Text style={styles.timerText}>{timerDisplay}</Text>
         </View>

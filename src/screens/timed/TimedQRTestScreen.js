@@ -17,6 +17,7 @@ import CalculatorModal from '../../components/CalculatorModal';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
+import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 
 export default function TimedQRTestScreen({ route }) {
   const { test } = route.params;
@@ -30,6 +31,7 @@ export default function TimedQRTestScreen({ route }) {
   const [flags, setFlags] = useState(new Set());
   const [calcVisible, setCalcVisible] = useState(false);
   const [navigatorVisible, setNavigatorVisible] = useState(false);
+  const [showReview, setShowReview] = useState(false);
 
   const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
 
@@ -100,6 +102,22 @@ export default function TimedQRTestScreen({ route }) {
     return 'Unseen';
   }
 
+  if (showReview) {
+    return (
+      <SJTestReviewScreen
+        questions={flatQuestions}
+        getStatus={getQuestionStatus}
+        flags={flags}
+        onNavigateTo={(sIdx, qIdx) => { goToSet(sIdx); setQuestionIndex(qIdx); setShowReview(false); }}
+        onEndTest={() => {}}
+        timerDisplay={timerDisplay}
+        isUrgent={isUrgent}
+        title="Quantitative Reasoning"
+        groupLabel="Set"
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
@@ -117,9 +135,9 @@ export default function TimedQRTestScreen({ route }) {
         title={currentSet.title}
         meta={`Data Set ${setIndex + 1} of ${test.sets.length}`}
         onPrev={() => goToSet(setIndex - 1)}
-        onNext={() => goToSet(setIndex + 1)}
+        onNext={isLastSet ? () => setShowReview(true) : () => goToSet(setIndex + 1)}
         isFirst={isFirstSet}
-        isLast={isLastSet}
+        isLast={false}
         color={t.sectionQR}
         onCalculator={() => setCalcVisible(true)}
       />
@@ -179,13 +197,22 @@ export default function TimedQRTestScreen({ route }) {
               >
                 <Text style={[styles.qNavText, { color: t.text }]}>← Previous</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.qNavBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isLastQuestion && styles.qNavBtnDisabled]}
-                onPress={() => setQuestionIndex((i) => i + 1)}
-                disabled={isLastQuestion}
-              >
-                <Text style={[styles.qNavText, { color: t.text }]}>Next →</Text>
-              </TouchableOpacity>
+              {isLastSet && isLastQuestion ? (
+                <TouchableOpacity
+                  style={[styles.qNavBtn, { backgroundColor: t.headerBg, borderColor: t.headerBg }]}
+                  onPress={() => setShowReview(true)}
+                >
+                  <Text style={[styles.qNavText, { color: '#ffffff' }]}>Review →</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.qNavBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isLastQuestion && styles.qNavBtnDisabled]}
+                  onPress={() => setQuestionIndex((i) => i + 1)}
+                  disabled={isLastQuestion}
+                >
+                  <Text style={[styles.qNavText, { color: t.text }]}>Next →</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </View>
         </View>

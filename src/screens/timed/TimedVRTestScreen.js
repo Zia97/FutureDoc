@@ -20,6 +20,7 @@ import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
+import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -31,6 +32,7 @@ export default function TimedVRTestScreen({ route }) {
   const insets = useSafeAreaInsets();
 
   const [navigatorVisible, setNavigatorVisible] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [panelExpanded, setPanelExpanded] = useState(true);
@@ -125,6 +127,22 @@ export default function TimedVRTestScreen({ route }) {
     return 'Unseen';
   }
 
+  if (showReview) {
+    return (
+      <SJTestReviewScreen
+        questions={flatQuestions}
+        getStatus={getQuestionStatus}
+        flags={flags}
+        onNavigateTo={(pIdx, qIdx) => { goToItemAndQuestion(pIdx, qIdx); setShowReview(false); }}
+        onEndTest={() => {}}
+        timerDisplay={timerDisplay}
+        isUrgent={isUrgent}
+        title="Verbal Reasoning"
+        groupLabel="Passage"
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
@@ -142,9 +160,9 @@ export default function TimedVRTestScreen({ route }) {
         title={item.title}
         meta={`Passage ${itemIndex + 1} of ${test.passages.length}`}
         onPrev={() => goToItem(itemIndex - 1)}
-        onNext={() => goToItem(itemIndex + 1)}
+        onNext={isLastItem ? () => setShowReview(true) : () => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
-        isLast={isLastItem}
+        isLast={false}
         color={sectionColor}
       />
 
@@ -211,17 +229,22 @@ export default function TimedVRTestScreen({ route }) {
                 <Text style={[styles.questionNavText, { color: t.text }]}>← Previous</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[
-                  styles.questionNavButton,
-                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                  isLastQuestion && styles.questionNavButtonDisabled,
-                ]}
-                onPress={goToNextQuestion}
-                disabled={isLastQuestion}
-              >
-                <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
-              </TouchableOpacity>
+              {isLastItem && isLastQuestion ? (
+                <TouchableOpacity
+                  style={[styles.questionNavButton, { backgroundColor: t.headerBg, borderColor: t.headerBg }]}
+                  onPress={() => setShowReview(true)}
+                >
+                  <Text style={[styles.questionNavText, { color: '#ffffff' }]}>Review →</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.questionNavButton, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isLastQuestion && styles.questionNavButtonDisabled]}
+                  onPress={goToNextQuestion}
+                  disabled={isLastQuestion}
+                >
+                  <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
         )}
