@@ -17,6 +17,11 @@ export function useItemNavigation(items, initialIndex = 0) {
     setQuestionIndex(0);
   }
 
+  function goToItemAndQuestion(iIdx, qIdx) {
+    setItemIndex(iIdx);
+    setQuestionIndex(qIdx);
+  }
+
   function goToNextQuestion() {
     if (!isLastQuestion) setQuestionIndex((i) => i + 1);
   }
@@ -35,6 +40,7 @@ export function useItemNavigation(items, initialIndex = 0) {
     isFirstQuestion,
     isLastQuestion,
     goToItem,
+    goToItemAndQuestion,
     goToNextQuestion,
     goToPrevQuestion,
   };

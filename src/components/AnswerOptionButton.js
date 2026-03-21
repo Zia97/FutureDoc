@@ -10,6 +10,7 @@ export default function AnswerOptionButton({ label, state, onPress }) {
     { backgroundColor: t.bgInput, borderColor: t.borderStrong },
     state === 'correct' && { borderColor: t.correct, backgroundColor: t.correctBg },
     state === 'incorrect' && { borderColor: t.incorrect, backgroundColor: t.incorrectBg },
+    state === 'selected' && { borderColor: '#3b5bdb', backgroundColor: '#eff3ff' },
   ];
 
   const textStyle = [
@@ -17,6 +18,7 @@ export default function AnswerOptionButton({ label, state, onPress }) {
     { color: t.text },
     state === 'correct' && { color: t.correctText, fontWeight: '700' },
     state === 'incorrect' && { color: t.incorrectText, fontWeight: '700' },
+    state === 'selected' && { color: '#3b5bdb', fontWeight: '700' },
   ];
 
   return (
