@@ -2,74 +2,251 @@
   {
     "id": "timed-dm-test-001",
     "title": "DM Timed Test 1",
-    "question_count": 35,
+    "question_count": 10,
     "time_minutes": 37,
     "questions": [
-      { "id": "tdm-q01", "type": "select_one", "stem": "A company must choose between three projects. Project A yields £50k profit, Project B yields £40k with a bonus clause, and Project C yields £60k but carries high risk. Which project maximises expected value?", "options": [{"label": "A", "text": "Project A"}, {"label": "B", "text": "Project B"}, {"label": "C", "text": "Project C"}, {"label": "D", "text": "Cannot be determined"}], "correct_answer": "D", "answer_reason": "Without knowing the probability and cost of the risk in Project C, or the value of the bonus clause in Project B, expected value cannot be determined.", "order_index": 0 },
-      { "id": "tdm-q02", "type": "select_one", "stem": "All doctors are graduates. Some graduates are researchers. Which conclusion follows?", "options": [{"label": "A", "text": "All researchers are doctors"}, {"label": "B", "text": "Some doctors may be researchers"}, {"label": "C", "text": "No researchers are doctors"}, {"label": "D", "text": "All graduates are doctors"}], "correct_answer": "B", "answer_reason": "Since all doctors are graduates and some graduates are researchers, it is possible that some doctors are also researchers.", "order_index": 1 },
-      { "id": "tdm-q03", "type": "select_one", "stem": "A town has 200 residents. 120 own a car, 80 own a bicycle, and 40 own both. How many own neither?", "options": [{"label": "A", "text": "20"}, {"label": "B", "text": "40"}, {"label": "C", "text": "60"}, {"label": "D", "text": "80"}], "correct_answer": "B", "answer_reason": "Car or bicycle = 120 + 80 - 40 = 160. Neither = 200 - 160 = 40.", "order_index": 2 },
-      { "id": "tdm-q04", "type": "select_one", "stem": "If it rains, the match is cancelled. The match was not cancelled. What can be concluded?", "options": [{"label": "A", "text": "It did not rain"}, {"label": "B", "text": "It rained"}, {"label": "C", "text": "The match was postponed"}, {"label": "D", "text": "Nothing can be concluded"}], "correct_answer": "A", "answer_reason": "By contrapositive: if the match was not cancelled, it did not rain.", "order_index": 3 },
-      { "id": "tdm-q05", "type": "select_one", "stem": "A bag contains 5 red, 3 blue, and 2 green balls. One ball is picked at random. What is the probability it is not red?", "options": [{"label": "A", "text": "1/2"}, {"label": "B", "text": "3/10"}, {"label": "C", "text": "2/5"}, {"label": "D", "text": "1/5"}], "correct_answer": "A", "answer_reason": "Not red = 3 + 2 = 5 balls out of 10. Probability = 5/10 = 1/2.", "order_index": 4 },
-      { "id": "tdm-q06", "type": "select_one", "stem": "All nurses work shifts. No shift workers have fixed weekends off. Which of the following must be true?", "options": [{"label": "A", "text": "No nurses have fixed weekends off"}, {"label": "B", "text": "Some nurses have fixed weekends off"}, {"label": "C", "text": "All shift workers are nurses"}, {"label": "D", "text": "Some nurses do not work shifts"}], "correct_answer": "A", "answer_reason": "All nurses are shift workers, and no shift workers have fixed weekends off, so no nurses have fixed weekends off.", "order_index": 5 },
-      { "id": "tdm-q07", "type": "select_one", "stem": "A car travels 180 km in 2.5 hours. What is its average speed?", "options": [{"label": "A", "text": "60 km/h"}, {"label": "B", "text": "72 km/h"}, {"label": "C", "text": "75 km/h"}, {"label": "D", "text": "80 km/h"}], "correct_answer": "B", "answer_reason": "Speed = distance / time = 180 / 2.5 = 72 km/h.", "order_index": 6 },
-      { "id": "tdm-q08", "type": "select_one", "stem": "Either the heating is broken or the thermostat is faulty. The heating is not broken. What follows?", "options": [{"label": "A", "text": "The thermostat is faulty"}, {"label": "B", "text": "The thermostat is not faulty"}, {"label": "C", "text": "Both are broken"}, {"label": "D", "text": "Neither is broken"}], "correct_answer": "A", "answer_reason": "Either/or with one option false means the other must be true.", "order_index": 7 },
-      { "id": "tdm-q09", "type": "select_one", "stem": "A hospital survey shows 60% of patients recovered with Drug X and 55% with Drug Y. Which drug is more effective?", "options": [{"label": "A", "text": "Drug X"}, {"label": "B", "text": "Drug Y"}, {"label": "C", "text": "They are equally effective"}, {"label": "D", "text": "Cannot be determined without more data"}], "correct_answer": "D", "answer_reason": "Without knowing sample sizes, patient demographics, and severity, a direct comparison cannot be made.", "order_index": 8 },
-      { "id": "tdm-q10", "type": "select_one", "stem": "A rectangle has a perimeter of 36 cm and a width of 7 cm. What is its area?", "options": [{"label": "A", "text": "77 cm²"}, {"label": "B", "text": "88 cm²"}, {"label": "C", "text": "91 cm²"}, {"label": "D", "text": "98 cm²"}], "correct_answer": "A", "answer_reason": "Length = (36/2) - 7 = 11 cm. Area = 11 × 7 = 77 cm².", "order_index": 9 },
-      { "id": "tdm-q11", "type": "syllogism", "stem": "Assess whether each conclusion follows logically from the two statements given.", "premise_1": "All mammals are warm-blooded.", "premise_2": "Some warm-blooded animals can fly.", "decision_making_question_statements": [
-        {"statement_text": "Some mammals can fly.", "correct_answer": "No", "order_index": 0},
-        {"statement_text": "All warm-blooded animals are mammals.", "correct_answer": "No", "order_index": 1},
-        {"statement_text": "Some warm-blooded animals are mammals.", "correct_answer": "Yes", "order_index": 2},
-        {"statement_text": "No mammals can fly.", "correct_answer": "No", "order_index": 3},
-        {"statement_text": "It is possible that some warm-blooded flyers are mammals.", "correct_answer": "Yes", "order_index": 4}
-      ], "correct_answer": {"0": "No", "1": "No", "2": "Yes", "3": "No", "4": "Yes"}, "answer_reason": "Only conclusions that follow strictly from the premises are correct.", "order_index": 10 },
-      { "id": "tdm-q12", "type": "select_one", "stem": "In a group of 50 students, 30 study Biology and 25 study Chemistry. 10 study both. How many study neither?", "options": [{"label": "A", "text": "5"}, {"label": "B", "text": "10"}, {"label": "C", "text": "15"}, {"label": "D", "text": "20"}], "correct_answer": "A", "answer_reason": "Bio or Chem = 30 + 25 - 10 = 45. Neither = 50 - 45 = 5.", "order_index": 11 },
-      { "id": "tdm-q13", "type": "select_one", "stem": "A train departs at 09:45 and arrives at 12:10. How long is the journey?", "options": [{"label": "A", "text": "2 hours 15 minutes"}, {"label": "B", "text": "2 hours 25 minutes"}, {"label": "C", "text": "2 hours 35 minutes"}, {"label": "D", "text": "2 hours 45 minutes"}], "correct_answer": "B", "answer_reason": "From 09:45 to 12:10 is 2 hours and 25 minutes.", "order_index": 12 },
-      { "id": "tdm-q14", "type": "select_one", "stem": "No politicians are truthful. Some truthful people are popular. Which of the following must be true?", "options": [{"label": "A", "text": "Some politicians are popular"}, {"label": "B", "text": "No politicians are popular"}, {"label": "C", "text": "Some popular people are not politicians"}, {"label": "D", "text": "All popular people are truthful"}], "correct_answer": "C", "answer_reason": "Since some truthful people are popular and no politicians are truthful, those popular truthful people are not politicians.", "order_index": 13 },
-      { "id": "tdm-q15", "type": "select_one", "stem": "A shop reduces a £240 item by 15%. What is the sale price?", "options": [{"label": "A", "text": "£196"}, {"label": "B", "text": "£200"}, {"label": "C", "text": "£204"}, {"label": "D", "text": "£208"}], "correct_answer": "C", "answer_reason": "15% of £240 = £36. Sale price = £240 - £36 = £204.", "order_index": 14 },
-      { "id": "tdm-q16", "type": "interpreting_info", "stem": "A clinical trial reports the following results. Evaluate each statement.", "table_data": {"headers": ["Treatment", "Recovered", "Did Not Recover"], "rows": [["Drug A", "45", "5"], ["Placebo", "20", "30"]]}, "decision_making_question_statements": [
-        {"statement_text": "Drug A has a 90% recovery rate.", "correct_answer": "Yes", "order_index": 0},
-        {"statement_text": "The placebo recovery rate is 40%.", "correct_answer": "Yes", "order_index": 1},
-        {"statement_text": "Drug A is definitely more effective than the placebo.", "correct_answer": "No", "order_index": 2},
-        {"statement_text": "More patients recovered with Drug A than with the placebo.", "correct_answer": "Yes", "order_index": 3},
-        {"statement_text": "The total number of patients in the trial is 100.", "correct_answer": "Yes", "order_index": 4}
-      ], "correct_answer": {"0": "Yes", "1": "Yes", "2": "No", "3": "Yes", "4": "Yes"}, "answer_reason": "Read directly from the table. Statement 3 requires caution — correlation does not prove causation without ruling out confounders.", "order_index": 15 },
-      { "id": "tdm-q17", "type": "select_one", "stem": "John is taller than Sarah. Sarah is taller than Mike. Tom is shorter than Mike. Who is the tallest?", "options": [{"label": "A", "text": "Sarah"}, {"label": "B", "text": "Mike"}, {"label": "C", "text": "John"}, {"label": "D", "text": "Tom"}], "correct_answer": "C", "answer_reason": "Order: John > Sarah > Mike > Tom. John is tallest.", "order_index": 16 },
-      { "id": "tdm-q18", "type": "select_one", "stem": "A restaurant earns £8,400 in a week. Staff costs are 35% of earnings. What are the weekly staff costs?", "options": [{"label": "A", "text": "£2,800"}, {"label": "B", "text": "£2,940"}, {"label": "C", "text": "£3,080"}, {"label": "D", "text": "£3,360"}], "correct_answer": "B", "answer_reason": "35% of £8,400 = 0.35 × 8,400 = £2,940.", "order_index": 17 },
-      { "id": "tdm-q19", "type": "select_one", "stem": "If smoking causes cancer and cancer reduces life expectancy, what can we conclude?", "options": [{"label": "A", "text": "All smokers will die of cancer"}, {"label": "B", "text": "Smoking may reduce life expectancy"}, {"label": "C", "text": "Non-smokers do not get cancer"}, {"label": "D", "text": "Cancer is only caused by smoking"}], "correct_answer": "B", "answer_reason": "The logical chain implies smoking may reduce life expectancy, but does not guarantee all smokers get cancer or die from it.", "order_index": 18 },
-      { "id": "tdm-q20", "type": "select_one", "stem": "A patient needs 0.5 mg/kg of a drug. They weigh 68 kg. The drug comes in 4 mg/ml solution. How many ml should be given?", "options": [{"label": "A", "text": "6.5 ml"}, {"label": "B", "text": "7.0 ml"}, {"label": "C", "text": "8.5 ml"}, {"label": "D", "text": "9.0 ml"}], "correct_answer": "C", "answer_reason": "Dose = 0.5 × 68 = 34 mg. Volume = 34 / 4 = 8.5 ml.", "order_index": 19 },
-      { "id": "tdm-q21", "type": "syllogism", "stem": "Assess whether each conclusion follows logically from the two statements given.", "premise_1": "All antibiotics kill bacteria.", "premise_2": "Penicillin is an antibiotic.", "decision_making_question_statements": [
-        {"statement_text": "Penicillin kills bacteria.", "correct_answer": "Yes", "order_index": 0},
-        {"statement_text": "All bacteria killers are antibiotics.", "correct_answer": "No", "order_index": 1},
-        {"statement_text": "Penicillin may be used to treat bacterial infections.", "correct_answer": "Yes", "order_index": 2},
-        {"statement_text": "Some antibiotics do not kill bacteria.", "correct_answer": "No", "order_index": 3},
-        {"statement_text": "Penicillin is the only antibiotic.", "correct_answer": "No", "order_index": 4}
-      ], "correct_answer": {"0": "Yes", "1": "No", "2": "Yes", "3": "No", "4": "No"}, "answer_reason": "Conclusions must follow strictly from the stated premises only.", "order_index": 20 },
-      { "id": "tdm-q22", "type": "select_one", "stem": "A flight departs London at 14:30 and takes 9 hours 45 minutes. What is the local arrival time if the destination is 5 hours ahead?", "options": [{"label": "A", "text": "04:15"}, {"label": "B", "text": "05:00"}, {"label": "C", "text": "05:15"}, {"label": "D", "text": "06:00"}], "correct_answer": "C", "answer_reason": "14:30 + 9h 45m = 00:15 next day (London). Add 5h = 05:15 local time.", "order_index": 21 },
-      { "id": "tdm-q23", "type": "select_one", "stem": "Only experienced surgeons perform complex operations. Dr Lee performs complex operations. What can we conclude?", "options": [{"label": "A", "text": "Dr Lee is an experienced surgeon"}, {"label": "B", "text": "Dr Lee is a new surgeon"}, {"label": "C", "text": "All surgeons are experienced"}, {"label": "D", "text": "Complex operations are rare"}], "correct_answer": "A", "answer_reason": "If only experienced surgeons perform complex operations, and Dr Lee performs complex operations, then Dr Lee must be an experienced surgeon.", "order_index": 22 },
-      { "id": "tdm-q24", "type": "select_one", "stem": "A hospital has 400 beds. 60% are occupied by women. 25% of the women are under 40. How many women under 40 are in the hospital?", "options": [{"label": "A", "text": "50"}, {"label": "B", "text": "60"}, {"label": "C", "text": "75"}, {"label": "D", "text": "90"}], "correct_answer": "B", "answer_reason": "Women = 60% × 400 = 240. Under 40 = 25% × 240 = 60.", "order_index": 23 },
-      { "id": "tdm-q25", "type": "select_one", "stem": "Maria reads 40 pages per hour. A book has 340 pages. She has already read 60 pages. How long will it take her to finish the book?", "options": [{"label": "A", "text": "6 hours"}, {"label": "B", "text": "6 hours 30 minutes"}, {"label": "C", "text": "7 hours"}, {"label": "D", "text": "7 hours 30 minutes"}], "correct_answer": "C", "answer_reason": "Remaining = 340 - 60 = 280 pages. Time = 280 / 40 = 7 hours.", "order_index": 24 },
-      { "id": "tdm-q26", "type": "interpreting_info", "stem": "A logistics company tracks delivery times. Evaluate each statement based on the data.", "table_data": {"headers": ["Route", "Avg Time (hrs)", "On-Time Rate"], "rows": [["Route A", "3.2", "88%"], ["Route B", "4.1", "92%"], ["Route C", "2.8", "79%"]]}, "decision_making_question_statements": [
-        {"statement_text": "Route C is the fastest on average.", "correct_answer": "Yes", "order_index": 0},
-        {"statement_text": "Route B has the highest on-time rate.", "correct_answer": "Yes", "order_index": 1},
-        {"statement_text": "Route A is always on time.", "correct_answer": "No", "order_index": 2},
-        {"statement_text": "A faster route guarantees a better on-time rate.", "correct_answer": "No", "order_index": 3},
-        {"statement_text": "Route B takes longer on average than Route A.", "correct_answer": "Yes", "order_index": 4}
-      ], "correct_answer": {"0": "Yes", "1": "Yes", "2": "No", "3": "No", "4": "Yes"}, "answer_reason": "Read directly from the table and apply logical reasoning. Route C is fastest but has the lowest on-time rate.", "order_index": 25 },
-      { "id": "tdm-q27", "type": "select_one", "stem": "All volunteers are unpaid. Some volunteers are students. Which must be true?", "options": [{"label": "A", "text": "All students are unpaid"}, {"label": "B", "text": "Some students are unpaid"}, {"label": "C", "text": "No students are paid"}, {"label": "D", "text": "All unpaid workers are volunteers"}], "correct_answer": "B", "answer_reason": "Some students are volunteers, and all volunteers are unpaid, so some students are unpaid.", "order_index": 26 },
-      { "id": "tdm-q28", "type": "select_one", "stem": "A factory produces 1,200 units per day. 5% are defective. What is the weekly output of non-defective units (5-day week)?", "options": [{"label": "A", "text": "5,500"}, {"label": "B", "text": "5,700"}, {"label": "C", "text": "5,800"}, {"label": "D", "text": "6,000"}], "correct_answer": "B", "answer_reason": "Non-defective per day = 95% × 1,200 = 1,140. Weekly = 1,140 × 5 = 5,700.", "order_index": 27 },
-      { "id": "tdm-q29", "type": "select_one", "stem": "If a patient is allergic to penicillin, they should not receive amoxicillin. The patient received amoxicillin without a reaction. What follows?", "options": [{"label": "A", "text": "The patient is definitely not allergic to penicillin"}, {"label": "B", "text": "The patient may not be allergic to penicillin"}, {"label": "C", "text": "The patient is allergic to penicillin"}, {"label": "D", "text": "Amoxicillin is safe for all patients"}], "correct_answer": "B", "answer_reason": "No reaction suggests the patient may not be allergic, but this cannot be confirmed without allergy testing.", "order_index": 28 },
-      { "id": "tdm-q30", "type": "select_one", "stem": "A ward has 12 nurses. Each nurse works a 7.5-hour shift. The ward runs for 24 hours covered by rotating shifts. How many nurses are needed per shift if there are 3 shifts per day?", "options": [{"label": "A", "text": "3"}, {"label": "B", "text": "4"}, {"label": "C", "text": "5"}, {"label": "D", "text": "6"}], "correct_answer": "B", "answer_reason": "12 nurses ÷ 3 shifts = 4 nurses per shift.", "order_index": 29 },
-      { "id": "tdm-q31", "type": "syllogism", "stem": "Assess whether each conclusion follows logically from the two statements given.", "premise_1": "No patient under 18 may consent independently.", "premise_2": "Alex is 16 years old.", "decision_making_question_statements": [
-        {"statement_text": "Alex cannot consent independently.", "correct_answer": "Yes", "order_index": 0},
-        {"statement_text": "Alex is a patient.", "correct_answer": "No", "order_index": 1},
-        {"statement_text": "Alex may consent with parental support.", "correct_answer": "No", "order_index": 2},
-        {"statement_text": "All patients aged 17 cannot consent independently.", "correct_answer": "Yes", "order_index": 3},
-        {"statement_text": "No one under 18 is a patient.", "correct_answer": "No", "order_index": 4}
-      ], "correct_answer": {"0": "Yes", "1": "No", "2": "No", "3": "Yes", "4": "No"}, "answer_reason": "Only conclusions strictly derivable from the premises are valid. Parental consent is not mentioned in the premises.", "order_index": 30 },
-      { "id": "tdm-q32", "type": "select_one", "stem": "A car uses 8 litres per 100 km. Fuel costs £1.50 per litre. What is the fuel cost for a 350 km journey?", "options": [{"label": "A", "text": "£38.00"}, {"label": "B", "text": "£40.00"}, {"label": "C", "text": "£42.00"}, {"label": "D", "text": "£44.00"}], "correct_answer": "C", "answer_reason": "Fuel used = 8 × 3.5 = 28 litres. Cost = 28 × £1.50 = £42.00.", "order_index": 31 },
-      { "id": "tdm-q33", "type": "select_one", "stem": "Some doctors are also academics. All academics publish research. Which must be true?", "options": [{"label": "A", "text": "All doctors publish research"}, {"label": "B", "text": "Some doctors publish research"}, {"label": "C", "text": "No doctors publish research"}, {"label": "D", "text": "All researchers are doctors"}], "correct_answer": "B", "answer_reason": "Those doctors who are also academics publish research. So some doctors publish research.", "order_index": 32 },
-      { "id": "tdm-q34", "type": "select_one", "stem": "A manager must allocate 5 tasks among 3 employees. Each task goes to exactly one employee. How many ways can the tasks be distributed if each employee must receive at least one task?", "options": [{"label": "A", "text": "150"}, {"label": "B", "text": "180"}, {"label": "C", "text": "210"}, {"label": "D", "text": "240"}], "correct_answer": "A", "answer_reason": "Surjective functions from 5 tasks to 3 employees = 3^5 - 3×2^5 + 3×1^5 = 243 - 96 + 3 = 150.", "order_index": 33 },
-      { "id": "tdm-q35", "type": "select_one", "stem": "A clinical guideline states: prescribe medication X only if the patient has condition Y and no contraindications. A patient has condition Y and no contraindications. What should be done?", "options": [{"label": "A", "text": "Prescribe medication X"}, {"label": "B", "text": "Do not prescribe medication X"}, {"label": "C", "text": "Seek a second opinion first"}, {"label": "D", "text": "Cannot be determined"}], "correct_answer": "A", "answer_reason": "The guideline's conditions are met: condition Y is present and there are no contraindications, so medication X should be prescribed.", "order_index": 34 }
+      {
+        "id": "d1000000-0000-0000-0000-000000000001",
+        "title": "Surgeons and Doctors",
+        "type": "syllogism",
+        "stem": "All surgeons are doctors. Some doctors work in hospitals. No doctors are pharmacists.",
+        "decision_making_question_statements": [
+          { "statement_text": "Some surgeons work in hospitals.", "correct_answer": "No", "order_index": 1 },
+          { "statement_text": "No surgeons are pharmacists.", "correct_answer": "Yes", "order_index": 2 },
+          { "statement_text": "All doctors are surgeons.", "correct_answer": "No", "order_index": 3 },
+          { "statement_text": "Some hospital workers are doctors.", "correct_answer": "Yes", "order_index": 4 },
+          { "statement_text": "It is possible that some pharmacists are surgeons.", "correct_answer": "No", "order_index": 5 }
+        ],
+        "correct_answer": { "0": "No", "1": "Yes", "2": "No", "3": "Yes", "4": "No" },
+        "answer_reason": "From 'all surgeons are doctors' and 'no doctors are pharmacists', no surgeon can be a pharmacist (Yes). 'Some doctors work in hospitals' does not guarantee those doctors are surgeons – so we cannot conclude some surgeons work in hospitals (No). 'All doctors are surgeons' reverses the stated relationship (No). 'Some doctors work in hospitals' means some hospital workers are doctors (Yes). Since all surgeons are doctors and no doctors are pharmacists, it is impossible for any pharmacist to be a surgeon (No).",
+        "order_index": 1
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000002",
+        "title": "Students in a Row",
+        "type": "logic_puzzle",
+        "stem": "Five students – Alice, Bob, Carol, Dave, and Eve – sit in a row of five seats numbered 1 to 5 from left to right.\n\n• Alice sits next to Bob.\n• Carol sits at one end of the row.\n• Dave sits as far from Carol as possible.\n• Eve sits between Alice and Dave.\n\nWho sits in seat 5 (far right)?",
+        "options": [
+          { "label": "A", "text": "Alice" },
+          { "label": "B", "text": "Bob" },
+          { "label": "C", "text": "Carol" },
+          { "label": "D", "text": "Dave" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Place Carol at seat 1 (one end). Dave must be at seat 5 (as far as possible from Carol). Eve sits between Alice and Dave, so Eve is at seat 4. Alice must be adjacent to both Eve (seat 4) and Bob, placing Alice at seat 3 and Bob at seat 2. Final order: Carol(1) Bob(2) Alice(3) Eve(4) Dave(5). Dave sits at the far right.",
+        "order_index": 2
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000003",
+        "title": "Banning Junk Food",
+        "type": "strongest_argument",
+        "stem": "A government should ban the sale of junk food to children under 16.",
+        "options": [
+          { "label": "A", "text": "Yes; rates of childhood obesity have risen sharply, and junk food is a significant contributing factor to this health crisis." },
+          { "label": "B", "text": "No; parents, not governments, are ultimately responsible for their children's diets and food choices." },
+          { "label": "C", "text": "Yes; a ban would be very difficult to enforce because children could still obtain junk food through adults." },
+          { "label": "D", "text": "No; junk food manufacturers employ thousands of workers, and a ban could trigger significant job losses." }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Option A is strongest – it directly addresses the core health issue with a relevant, substantiated reason. Option B shifts responsibility without addressing the health problem. Option C argues 'Yes' but immediately undermines itself with a reason the ban would fail, making it weak. Option D raises an economic concern unrelated to the central question of children's health.",
+        "order_index": 3
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000004",
+        "title": "Hospital Travel Times",
+        "type": "interpreting_info",
+        "stem": "A study recorded average travel times (in minutes) to hospital by transport type and time of day.",
+        "table_data": {
+          "headers": ["Transport", "Morning", "Afternoon", "Evening"],
+          "rows": [
+            ["Bus", "45", "38", "52"],
+            ["Car", "22", "18", "30"],
+            ["Train", "35", "28", "40"],
+            ["Taxi", "25", "20", "32"]
+          ]
+        },
+        "decision_making_question_statements": [
+          { "statement_text": "Car is the fastest transport type at all times of day.", "correct_answer": "Yes", "order_index": 1 },
+          { "statement_text": "The difference in morning travel times between Bus and Train is greater than 5 minutes.", "correct_answer": "Yes", "order_index": 2 },
+          { "statement_text": "A patient travelling by taxi in the afternoon arrives before one travelling by train in the morning.", "correct_answer": "Yes", "order_index": 3 },
+          { "statement_text": "Evening travel times are shorter than morning travel times for all transport types.", "correct_answer": "No", "order_index": 4 },
+          { "statement_text": "Taking the bus in the afternoon is faster than taking a train in the evening.", "correct_answer": "Yes", "order_index": 5 }
+        ],
+        "correct_answer": { "0": "Yes", "1": "Yes", "2": "Yes", "3": "No", "4": "Yes" },
+        "answer_reason": "Car has the lowest travel times across all columns (22/18/30 – Yes). Bus morning minus train morning = 45–35 = 10, which is greater than 5 (Yes). Taxi afternoon (20 min) < Train morning (35 min) – Yes. Evening times are consistently higher than morning times for all transport types (e.g. car: 30 > 22) – so statement 4 is No. Bus afternoon (38) < Train evening (40) – Yes.",
+        "order_index": 4
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000005",
+        "title": "Birds in an Aviary",
+        "type": "venn_diagram",
+        "stem": "There are nine birds in an aviary. Two are yellow and green. Two are red only, and one is red and yellow.\n\nThe square represents green birds, the circle represents yellow birds, and the triangle represents red birds.\n\nWhich of the following diagrams best represents the above data?",
+        "options": [
+          {
+            "label": "A",
+            "option_data": {
+              "sets": [
+                { "id": "set1", "label": "Green", "shape": "square" },
+                { "id": "set2", "label": "Yellow", "shape": "circle" },
+                { "id": "set3", "label": "Red", "shape": "triangle" }
+              ],
+              "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 0, "set2_set3": 0, "set3_only": 2 },
+              "diagramLayout": "three_linear"
+            }
+          },
+          {
+            "label": "B",
+            "option_data": {
+              "sets": [
+                { "id": "set1", "label": "Green", "shape": "square" },
+                { "id": "set2", "label": "Yellow", "shape": "circle" },
+                { "id": "set3", "label": "Red", "shape": "triangle" }
+              ],
+              "regions": { "set1_only": 3, "set1_set2": 2, "set2_only": 1, "set2_set3": 1, "set3_only": 2 },
+              "diagramLayout": "three_linear"
+            }
+          },
+          {
+            "label": "C",
+            "option_data": {
+              "sets": [
+                { "id": "set1", "label": "Green", "shape": "square" },
+                { "id": "set2", "label": "Yellow", "shape": "circle" },
+                { "id": "set3", "label": "Red", "shape": "triangle" }
+              ],
+              "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 0, "set2_set3": 1, "set3_only": 2 },
+              "diagramLayout": "three_linear"
+            }
+          },
+          {
+            "label": "D",
+            "option_data": {
+              "sets": [
+                { "id": "set1", "label": "Green", "shape": "square" },
+                { "id": "set2", "label": "Yellow", "shape": "circle" },
+                { "id": "set3", "label": "Red", "shape": "triangle" }
+              ],
+              "regions": { "set1_only": 2, "set1_set2": 2, "set2_only": 2, "set2_set3": 1, "set3_only": 2 },
+              "diagramLayout": "three_linear"
+            }
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Yellow+green birds = 2 (set1_set2 = 2). Red only = 2 (set3_only = 2). Red+yellow = 1 (set2_set3 = 1). Total = 9, so green only = 9–2–2–1 = 4 (set1_only = 4) and yellow only = 0 (set2_only = 0). Only option C has all five values correct.",
+        "order_index": 5
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000006",
+        "title": "Drug Clinical Trial",
+        "type": "probabilistic",
+        "stem": "In a clinical trial, 200 patients were randomly assigned to receive either a new drug (100 patients) or a placebo (100 patients). After 6 months, 40 patients in the drug group showed improvement compared to 25 in the placebo group. The results were statistically significant (p < 0.05).",
+        "options": [
+          { "label": "A", "text": "The new drug is likely to be beneficial for at least some patients." },
+          { "label": "B", "text": "The new drug will improve outcomes in exactly 40% of all patients." },
+          { "label": "C", "text": "Patients in the placebo group cannot improve without medication." },
+          { "label": "D", "text": "This trial proves the new drug is more effective than all existing treatments." }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The drug group showed significantly more improvement than placebo (40% vs 25%), confirmed as statistically significant – supporting that the drug benefits at least some patients (A). Option B incorrectly claims the exact trial rate generalises to all patients. Option C is directly contradicted by the 25 placebo patients who did improve. Option D goes beyond the trial's scope, which made no comparison to existing treatments.",
+        "order_index": 6
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000007",
+        "title": "Biology and Chemistry Students",
+        "type": "venn_diagram",
+        "stem": "The diagram shows students categorised by the subjects they study. The square represents Biology students and the circle represents Chemistry students. Each letter marks a different region of the diagram.\n\nWhich letter represents a student who studies Biology but not Chemistry?",
+        "stimulus_diagram": {
+          "sets": [
+            { "id": "set1", "label": "Biology", "shape": "square" },
+            { "id": "set2", "label": "Chemistry", "shape": "circle" }
+          ],
+          "regions": { "outside": "S", "set1_only": "P", "set1_set2": "R", "set2_only": "Q" },
+          "diagramLayout": "two_overlap"
+        },
+        "options": [
+          { "label": "A", "text": "Letter P" },
+          { "label": "B", "text": "Letter Q" },
+          { "label": "C", "text": "Letter R" },
+          { "label": "D", "text": "Letter S" }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The square represents Biology and the circle represents Chemistry. Region P is inside the square but outside the circle – Biology only. Region Q is Chemistry only. Region R is the overlap (both subjects). Region S is outside both shapes (neither subject). A student studying Biology but not Chemistry is in region P – Answer A.",
+        "order_index": 7
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000008",
+        "title": "Sports Club Members",
+        "type": "venn_diagram",
+        "stem": "The diagram shows members of a sports club. The circle represents Football players, the square represents Tennis players, and the triangle represents Swimming players. Each letter marks a different region.\n\nWhich letter represents members who play Tennis and Swimming but not Football?",
+        "stimulus_diagram": {
+          "sets": [
+            { "id": "set1", "label": "Football", "shape": "circle" },
+            { "id": "set2", "label": "Tennis", "shape": "square" },
+            { "id": "set3", "label": "Swimming", "shape": "triangle" }
+          ],
+          "regions": { "all_three": "G", "set1_only": "A", "set1_set2": "D", "set1_set3": "E", "set2_only": "B", "set2_set3": "F", "set3_only": "C" },
+          "diagramLayout": "three_all_overlap"
+        },
+        "options": [
+          { "label": "A", "text": "Letter D" },
+          { "label": "B", "text": "Letter E" },
+          { "label": "C", "text": "Letter F" },
+          { "label": "D", "text": "Letter G" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The overlap between Tennis (square) and Swimming (triangle) but outside Football (circle) is region F – set2_set3. Region D is Football ∩ Tennis. Region E is Football ∩ Swimming. Region G is all three sports. Members playing Tennis and Swimming but not Football are in region F – Answer C.",
+        "order_index": 8
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000009",
+        "title": "Café Dietary Preferences",
+        "type": "venn_diagram",
+        "stem": "The diagram shows café customers categorised by dietary preference. The circle represents Vegetarian customers, the pentagon represents Gluten-free customers, and the diamond represents Dairy-free customers. Each letter marks a different region.\n\nWhich letter represents a customer who is Vegetarian and Dairy-free but not Gluten-free?",
+        "stimulus_diagram": {
+          "sets": [
+            { "id": "set1", "label": "Vegetarian", "shape": "circle" },
+            { "id": "set2", "label": "Gluten-free", "shape": "pentagon" },
+            { "id": "set3", "label": "Dairy-free", "shape": "diamond" }
+          ],
+          "regions": { "all_three": "P", "set1_only": "J", "set1_set2": "M", "set1_set3": "N", "set2_only": "K", "set2_set3": "O", "set3_only": "L" },
+          "diagramLayout": "three_all_overlap"
+        },
+        "options": [
+          { "label": "A", "text": "Letter M" },
+          { "label": "B", "text": "Letter N" },
+          { "label": "C", "text": "Letter O" },
+          { "label": "D", "text": "Letter P" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "The overlap between Vegetarian (circle) and Dairy-free (diamond) but outside Gluten-free (pentagon) is region N – set1_set3. Region M is Vegetarian ∩ Gluten-free. Region O is Gluten-free ∩ Dairy-free. Region P is all three preferences. A customer who is Vegetarian and Dairy-free but not Gluten-free is in region N – Answer B.",
+        "order_index": 9
+      },
+      {
+        "id": "d1000000-0000-0000-0000-000000000010",
+        "title": "School Club Membership",
+        "type": "venn_diagram",
+        "stem": "The diagram shows pupils categorised by school club membership.\n\nKey:\n  Rectangle = Art Club\n  Square = Science Club\n  Triangle = Sports Club\n  Circle = Music Club\n  Diamond = Drama Club\n\nEach letter marks a distinct region. A pupil's letter indicates which clubs they belong to.\n\nWhich letter represents pupils who are members of both Music Club and Drama Club but not Sports Club?",
+        "stimulus_diagram": {
+          "sets": [
+            { "id": "set1", "label": "Art Club", "shape": "rectangle" },
+            { "id": "set2", "label": "Science Club", "shape": "square" },
+            { "id": "set3", "label": "Sports Club", "shape": "triangle" },
+            { "id": "set4", "label": "Music Club", "shape": "circle" },
+            { "id": "set5", "label": "Drama Club", "shape": "diamond" }
+          ],
+          "regions": { "set1_only": "C", "set1_set2": "B", "set1_set4": "D", "set2_only": "A", "set3_only": "G", "set1_set3_set5": "F", "set1_set4_set5": "E" },
+          "diagramLayout": "five_complex"
+        },
+        "options": [
+          { "label": "A", "text": "Letter D" },
+          { "label": "B", "text": "Letter E" },
+          { "label": "C", "text": "Letter F" },
+          { "label": "D", "text": "Letter G" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Music Club = circle (set4), Drama Club = diamond (set5), Sports Club = triangle (set3). Region E sits inside the Art rectangle, inside the Music circle, and inside the Drama diamond – but outside the Sports triangle. This is the only region representing Music ∩ Drama without Sports. Letter D is Music only (not Drama), Letter F is Drama ∩ Sports (not Music), Letter G is Sports only. Answer: B (Letter E).",
+        "order_index": 10
+      }
     ]
   }
 ]

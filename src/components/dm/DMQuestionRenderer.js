@@ -19,7 +19,7 @@ import { useTheme } from '../../context/ThemeContext';
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic'];
 
-export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext }) {
+export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
   const { width: screenWidth } = useWindowDimensions();
   const { practiceTheme: t } = useTheme();
   const [diagramExpanded, setDiagramExpanded] = useState(false);
@@ -30,19 +30,21 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   const isYesNo      = YES_NO_TYPES.includes(question.type);
   const isMCQ        = MCQ_TYPES.includes(question.type);
   const isVenn       = question.type === 'venn_diagram';
-  const isSelectVenn = isVenn && question.subtype === 'select_diagram';
-  const isInterpVenn = isVenn && question.subtype === 'interpret_diagram';
+  const stimDiagram  = question.stimulusDiagram ?? question.stimulus_diagram;
+  const isSelectVenn = isVenn && (question.subtype === 'select_diagram' || question.options?.[0]?.option_data != null);
+  const isInterpVenn = isVenn && (question.subtype === 'interpret_diagram' || stimDiagram != null);
 
   const isCorrect = isYesNo
     ? JSON.stringify(answer) === JSON.stringify(question.answer)
     : answer === question.answer;
 
   const contentWidth = screenWidth - 40;
-  const stimulusCanvas = getCanvasSize(question.stimulusDiagram?.diagramLayout, question.stimulusDiagram);
+  const stimulusCanvas = getCanvasSize(stimDiagram?.diagramLayout, stimDiagram);
   const stimulusScale  = Math.min(1.2, contentWidth / stimulusCanvas.width);
   const expandedScale  = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
 
   function mcqOptionState(label) {
+    if (timedMode) return label === answer ? 'selected' : 'idle';
     if (!submitted) return 'idle';
     if (label === question.answer) return 'correct';
     if (label === answer) return 'incorrect';
@@ -51,17 +53,17 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 
   return (
     <View style={styles.container}>
-      {question.tableData && <DataTable tableData={question.tableData} />}
-
       <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
+
+      {question.tableData && <DataTable tableData={question.tableData} />}
 
       {isSelectVenn && (
         <View style={styles.vennGrid}>
           {question.options.map((opt) => {
             let borderColor = t.borderStrong;
-            if (submitted && opt.label === question.answer) borderColor = t.correct;
-            else if (submitted && opt.label === answer)     borderColor = t.incorrect;
-            else if (!submitted && opt.label === answer)    borderColor = t.accent;
+            if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
+            else if (!timedMode && submitted && opt.label === answer)     borderColor = t.incorrect;
+            else if (opt.label === answer)                                borderColor = t.accent;
 
             return (
               <TouchableOpacity
@@ -72,7 +74,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
                 disabled={submitted}
               >
                 <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
-                <VennDiagramRenderer vennConfig={opt.vennConfig} scale={0.864} />
+                <VennDiagramRenderer vennConfig={opt.vennConfig ?? opt.option_data} scale={0.864} />
               </TouchableOpacity>
             );
           })}
@@ -86,7 +88,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
             onPress={() => setDiagramExpanded(true)}
             activeOpacity={0.85}
           >
-            <VennDiagramRenderer vennConfig={question.stimulusDiagram} scale={stimulusScale} />
+            <VennDiagramRenderer vennConfig={stimDiagram} scale={stimulusScale} />
             <Text style={[styles.tapHint, { color: t.accent }]}>Tap to expand</Text>
           </TouchableOpacity>
 
@@ -103,7 +105,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
             >
               <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
                 <ZoomableView maxZoom={4}>
-                  <VennDiagramRenderer vennConfig={question.stimulusDiagram} scale={expandedScale} />
+                  <VennDiagramRenderer vennConfig={stimDiagram} scale={expandedScale} />
                 </ZoomableView>
                 <Text style={[styles.modalDismiss, { color: t.accent }]}>Tap anywhere to close</Text>
               </View>
@@ -142,10 +144,11 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
           answers={answer}
           onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
           submitted={submitted}
+          timedMode={timedMode}
         />
       )}
 
-      {submitted && (
+      {submitted && !timedMode && (
         <View style={[styles.explanation, { backgroundColor: t.bgCard, borderLeftColor: t.sectionDM }]}>
           <Text style={[styles.explanationLabel, { color: t.accent }]}>Explanation</Text>
           <Text style={[styles.explanationText, { color: t.textSecondary }]}>{question.answeringReason}</Text>
@@ -160,7 +163,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         </View>
       )}
 
-      {questionContext && (
+      {questionContext && !timedMode && (
         <AITutorModal
           visible={tutorVisible}
           onClose={() => setTutorVisible(false)}

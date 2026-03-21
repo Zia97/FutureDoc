@@ -12,6 +12,7 @@ function mapTests(data) {
       .sort((a, b) => a.order_index - b.order_index)
       .map((q) => ({
         questionId: q.id,
+        title: q.title,
         type: q.type,
         stem: q.stem,
         options: q.options ?? [],
@@ -20,6 +21,8 @@ function mapTests(data) {
               .sort((a, b) => a.order_index - b.order_index)
               .map((s) => ({ text: s.statement_text, answer: s.correct_answer }))
           : [],
+        tableData: q.table_data,
+        stimulusDiagram: q.stimulus_diagram,
         answer: q.correct_answer,
         answeringReason: q.answer_reason,
       })),

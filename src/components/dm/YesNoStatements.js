@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 
-export default function YesNoStatements({ statements, answers = {}, onAnswer, submitted }) {
+export default function YesNoStatements({ statements, answers = {}, onAnswer, submitted, timedMode = false }) {
   const { practiceTheme: t } = useTheme();
 
   return (
@@ -27,9 +27,9 @@ export default function YesNoStatements({ statements, answers = {}, onAnswer, su
                       styles.button,
                       { borderColor: t.borderStrong, backgroundColor: t.bgInput },
                       isSelected && { borderColor: t.accent, backgroundColor: t.accentDim },
-                      submitted && isSelected && isCorrect && { borderColor: t.correct, backgroundColor: t.correctBg },
-                      submitted && isSelected && !isCorrect && { borderColor: t.incorrect, backgroundColor: t.incorrectBg },
-                      isReveal && { borderColor: t.correct, backgroundColor: t.correctBg, opacity: 0.7 },
+                      !timedMode && submitted && isSelected && isCorrect && { borderColor: t.correct, backgroundColor: t.correctBg },
+                      !timedMode && submitted && isSelected && !isCorrect && { borderColor: t.incorrect, backgroundColor: t.incorrectBg },
+                      !timedMode && isReveal && { borderColor: t.correct, backgroundColor: t.correctBg, opacity: 0.7 },
                     ]}
                     onPress={() => !submitted && onAnswer(index, opt)}
                     activeOpacity={0.75}
@@ -40,9 +40,9 @@ export default function YesNoStatements({ statements, answers = {}, onAnswer, su
                         styles.buttonText,
                         { color: t.textMuted },
                         isSelected && { color: t.text },
-                        submitted && isSelected && isCorrect && { color: t.correctText },
-                        submitted && isSelected && !isCorrect && { color: t.incorrectText },
-                        isReveal && { color: t.correctText },
+                        !timedMode && submitted && isSelected && isCorrect && { color: t.correctText },
+                        !timedMode && submitted && isSelected && !isCorrect && { color: t.incorrectText },
+                        !timedMode && isReveal && { color: t.correctText },
                       ]}
                     >
                       {opt}
