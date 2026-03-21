@@ -85,7 +85,7 @@ export default function HomeScreen({ navigation }) {
       <Animated.View style={[styles.actions, actionsAnim]}>
         <TouchableOpacity
           style={[styles.primaryButton, { backgroundColor: t.accent }]}
-          onPress={() => navigation.navigate('PracticeSections')}
+          onPress={() => navigation.navigate('PracticeMode')}
           activeOpacity={0.85}
         >
           <Text style={styles.primaryButtonText}>Start Practising</Text>

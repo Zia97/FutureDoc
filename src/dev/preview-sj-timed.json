@@ -1,0 +1,120 @@
+[
+  {
+    "id": "timed-sj-test-001",
+    "title": "SJ Timed Test 1",
+    "question_count": 69,
+    "time_minutes": 26,
+    "scenarios": [
+      {
+        "id": "tsj-s01",
+        "order_index": 0,
+        "stem": "Dr Patel is a foundation doctor on a busy medical ward. A nurse informs him that a patient, Mr Hughes, is requesting stronger pain relief. Dr Patel has not yet reviewed Mr Hughes today and is currently in the middle of writing discharge notes for another patient.",
+        "items": [
+          { "id": "tsj-s01-i01", "order_index": 0, "type": "appropriateness", "text": "Finish the discharge notes first, then go to review Mr Hughes.", "correct_answer": "Appropriate, but not ideal", "answer_reason": "Finishing an important task before reviewing is reasonable, but pain should be assessed promptly." },
+          { "id": "tsj-s01-i02", "order_index": 1, "type": "appropriateness", "text": "Ask the nurse to give Mr Hughes the maximum dose of analgesia from the existing prescription while you finish the notes.", "correct_answer": "Inappropriate, but not awful", "answer_reason": "Delegating analgesic administration without a review is not ideal — you have not assessed the patient's current condition." },
+          { "id": "tsj-s01-i03", "order_index": 2, "type": "appropriateness", "text": "Stop writing the discharge notes and go to assess Mr Hughes' pain immediately.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Pain is a clinical priority. Stopping a non-urgent administrative task to assess a patient in discomfort is appropriate." },
+          { "id": "tsj-s01-i04", "order_index": 3, "type": "appropriateness", "text": "Tell the nurse that Mr Hughes will have to wait until the ward round tomorrow.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "Ignoring a patient's reported pain for an extended period without assessment is unacceptable." }
+        ]
+      },
+      {
+        "id": "tsj-s02",
+        "order_index": 1,
+        "stem": "You are a foundation doctor. A colleague, Dr Singh, confides that he has been making medication errors recently due to extreme fatigue from working excessive hours. He asks you not to tell anyone.",
+        "items": [
+          { "id": "tsj-s02-i01", "order_index": 0, "type": "appropriateness", "text": "Respect Dr Singh's wishes and keep the information confidential.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "Patient safety overrides colleague confidentiality. Medication errors from fatigue pose a direct risk." },
+          { "id": "tsj-s02-i02", "order_index": 1, "type": "appropriateness", "text": "Encourage Dr Singh to self-refer to occupational health and speak to his supervisor.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Encouraging the colleague to seek help addresses the issue supportively while prioritising patient safety." },
+          { "id": "tsj-s02-i03", "order_index": 2, "type": "appropriateness", "text": "Offer to check Dr Singh's prescriptions before they are dispensed for the rest of the week.", "correct_answer": "Appropriate, but not ideal", "answer_reason": "Peer checking is a short-term safety measure, but does not resolve the underlying issue of fatigue and workload." },
+          { "id": "tsj-s02-i04", "order_index": 3, "type": "appropriateness", "text": "Immediately report Dr Singh to the General Medical Council without speaking to him further.", "correct_answer": "Inappropriate, but not awful", "answer_reason": "Escalating to the GMC without first attempting local resolution or supporting the colleague is disproportionate at this stage." }
+        ]
+      },
+      {
+        "id": "tsj-s03",
+        "order_index": 2,
+        "stem": "A patient, Mrs Okafor, tells you she does not want her family to be informed of her cancer diagnosis. Her son later approaches you in the corridor and asks directly whether his mother has cancer.",
+        "items": [
+          { "id": "tsj-s03-i01", "order_index": 0, "type": "appropriateness", "text": "Tell the son that his mother does not have cancer to avoid upsetting him.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "Lying to the family is dishonest and a serious breach of professional standards." },
+          { "id": "tsj-s03-i02", "order_index": 1, "type": "appropriateness", "text": "Explain that you cannot discuss another patient's medical information and direct him to speak with his mother.", "correct_answer": "A very appropriate thing to do", "answer_reason": "This preserves patient confidentiality without deception and empowers the family to communicate directly with the patient." },
+          { "id": "tsj-s03-i03", "order_index": 2, "type": "appropriateness", "text": "Confirm the diagnosis to the son because he seems very distressed.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "The patient explicitly withheld consent. Disclosing due to emotional pressure breaches patient confidentiality." },
+          { "id": "tsj-s03-i04", "order_index": 3, "type": "appropriateness", "text": "Speak with Mrs Okafor to explore whether she would be willing to share information with her family, and offer to facilitate that conversation.", "correct_answer": "A very appropriate thing to do", "answer_reason": "This respects the patient's autonomy while proactively supporting family communication in a sensitive and constructive way." }
+        ]
+      },
+      {
+        "id": "tsj-s04",
+        "order_index": 3,
+        "stem": "You are about to perform a minor procedure on a patient. You realise the consent form is missing from the notes. The patient is present and awake.",
+        "items": [
+          { "id": "tsj-s04-i01", "order_index": 0, "type": "importance", "text": "Proceeding with the procedure as the patient is already prepared.", "correct_answer": "Not important at all", "answer_reason": "Proceeding without documented consent is unlawful and unsafe, regardless of patient preparation." },
+          { "id": "tsj-s04-i02", "order_index": 1, "type": "importance", "text": "Obtaining verbal consent from the patient and documenting it in the notes before proceeding.", "correct_answer": "Very important", "answer_reason": "Valid consent must be documented before any procedure. Verbal consent with clear documentation is acceptable when the form is missing." },
+          { "id": "tsj-s04-i03", "order_index": 2, "type": "importance", "text": "Informing a senior colleague of the missing form.", "correct_answer": "Important", "answer_reason": "Keeping a senior informed of a consent documentation issue is good practice, though obtaining consent directly is the immediate priority." },
+          { "id": "tsj-s04-i04", "order_index": 3, "type": "importance", "text": "Locating the original consent form before proceeding.", "correct_answer": "Important", "answer_reason": "Finding the original form is preferable, but should not delay the procedure unnecessarily if consent can be re-obtained and documented." }
+        ]
+      },
+      {
+        "id": "tsj-s05",
+        "order_index": 4,
+        "stem": "You overhear two senior nurses making discriminatory comments about a patient's ethnicity while in the break room. The patient is not present.",
+        "items": [
+          { "id": "tsj-s05-i01", "order_index": 0, "type": "appropriateness", "text": "Ignore the comments as they were made in private and the patient was not harmed.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "Discriminatory behaviour must be challenged regardless of whether the patient was present. Ignoring it condones the conduct." },
+          { "id": "tsj-s05-i02", "order_index": 1, "type": "appropriateness", "text": "Speak to the nurses directly in the moment to let them know the comments were inappropriate.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Challenging discriminatory behaviour immediately and professionally is the correct response." },
+          { "id": "tsj-s05-i03", "order_index": 2, "type": "appropriateness", "text": "Report the incident to the ward manager.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Escalating to a senior ensures the issue is formally addressed and does not recur." },
+          { "id": "tsj-s05-i04", "order_index": 3, "type": "appropriateness", "text": "Make a note of what you heard in case it is needed for a formal complaint later.", "correct_answer": "Appropriate, but not ideal", "answer_reason": "Documenting the incident is sensible, but should accompany action rather than replace it." }
+        ]
+      },
+      {
+        "id": "tsj-s06",
+        "order_index": 5,
+        "stem": "A patient tells you they have been self-medicating with herbal supplements alongside their prescribed medication. They ask you not to document this as they feel embarrassed.",
+        "items": [
+          { "id": "tsj-s06-i01", "order_index": 0, "type": "importance", "text": "Documenting the supplements in the patient's records.", "correct_answer": "Very important", "answer_reason": "Some herbal supplements interact dangerously with prescribed medication. Accurate records are essential for safe care." },
+          { "id": "tsj-s06-i02", "order_index": 1, "type": "importance", "text": "Reassuring the patient that disclosing this information was the right thing to do.", "correct_answer": "Important", "answer_reason": "Positive reinforcement encourages patients to be open about their health behaviours, supporting better care." },
+          { "id": "tsj-s06-i03", "order_index": 2, "type": "importance", "text": "Checking for potential interactions between the supplements and prescribed medication.", "correct_answer": "Very important", "answer_reason": "Identifying drug interactions is a direct patient safety priority." },
+          { "id": "tsj-s06-i04", "order_index": 3, "type": "importance", "text": "Advising the patient to stop taking all herbal supplements immediately.", "correct_answer": "Of minor importance", "answer_reason": "Blanket advice to stop all supplements is not evidence-based. The priority is checking for interactions and advising accordingly." }
+        ]
+      },
+      {
+        "id": "tsj-s07",
+        "order_index": 6,
+        "stem": "You are a foundation doctor. A nurse asks you to countersign a drug chart entry that you did not witness being administered.",
+        "items": [
+          { "id": "tsj-s07-i01", "order_index": 0, "type": "appropriateness", "text": "Countersign the entry as the nurse is experienced and you trust them.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "Countersigning something you did not witness is fraudulent and a serious breach of professional standards." },
+          { "id": "tsj-s07-i02", "order_index": 1, "type": "appropriateness", "text": "Explain to the nurse that you cannot countersign something you did not witness.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Politely declining and explaining the reason upholds professional integrity without unnecessarily damaging the working relationship." },
+          { "id": "tsj-s07-i03", "order_index": 2, "type": "appropriateness", "text": "Speak to the ward manager about the request.", "correct_answer": "Appropriate, but not ideal", "answer_reason": "Escalation is reasonable, but directly explaining to the nurse is the more proportionate first step." },
+          { "id": "tsj-s07-i04", "order_index": 3, "type": "appropriateness", "text": "Ask a senior colleague to countersign it instead.", "correct_answer": "Inappropriate, but not awful", "answer_reason": "This does not resolve the issue — no doctor should countersign something they did not witness." }
+        ]
+      },
+      {
+        "id": "tsj-s08",
+        "order_index": 7,
+        "stem": "During a busy night shift, you make an error prescribing the wrong dose of a medication. The nurse catches the error before the drug is given and the patient is unharmed.",
+        "items": [
+          { "id": "tsj-s08-i01", "order_index": 0, "type": "importance", "text": "Thanking the nurse for catching the error.", "correct_answer": "Important", "answer_reason": "Acknowledging the nurse's role reinforces a safety culture and maintains a positive working relationship." },
+          { "id": "tsj-s08-i02", "order_index": 1, "type": "importance", "text": "Completing a clinical incident report.", "correct_answer": "Very important", "answer_reason": "All prescribing errors, including near-misses, must be reported to support learning and system improvement." },
+          { "id": "tsj-s08-i03", "order_index": 2, "type": "importance", "text": "Informing the patient that an error occurred.", "correct_answer": "Important", "answer_reason": "Duty of candour requires honesty with patients about errors, even when no harm resulted." },
+          { "id": "tsj-s08-i04", "order_index": 3, "type": "importance", "text": "Telling no one as no harm was caused.", "correct_answer": "Not important at all", "answer_reason": "Concealing errors, even near-misses, is a serious breach of professional conduct and undermines patient safety." }
+        ]
+      },
+      {
+        "id": "tsj-s09",
+        "order_index": 8,
+        "stem": "A patient with capacity refuses a blood transfusion on religious grounds. Their condition is deteriorating and the medical team believes the transfusion is necessary to save their life.",
+        "items": [
+          { "id": "tsj-s09-i01", "order_index": 0, "type": "appropriateness", "text": "Administer the transfusion anyway as the patient's life is at risk.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "A competent adult has an absolute right to refuse treatment, even life-saving treatment. Overriding this is unlawful." },
+          { "id": "tsj-s09-i02", "order_index": 1, "type": "appropriateness", "text": "Ensure the patient's refusal is clearly documented and that they understand the consequences.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Documenting an informed refusal is both legally required and ethically essential." },
+          { "id": "tsj-s09-i03", "order_index": 2, "type": "appropriateness", "text": "Explore all alternative treatments that respect the patient's wishes.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Offering alternatives demonstrates continued commitment to the patient's care within their stated boundaries." },
+          { "id": "tsj-s09-i04", "order_index": 3, "type": "appropriateness", "text": "Seek urgent legal advice or a court order to override the refusal.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "A capacitous refusal cannot be overridden by a court. Legal intervention is only appropriate when capacity is in doubt." }
+        ]
+      },
+      {
+        "id": "tsj-s10",
+        "order_index": 9,
+        "stem": "You are a foundation doctor. Your consultant asks you to complete a form certifying that you reviewed a patient, but you were not the reviewing doctor on that occasion.",
+        "items": [
+          { "id": "tsj-s10-i01", "order_index": 0, "type": "appropriateness", "text": "Complete the form as your consultant has asked you to.", "correct_answer": "A very inappropriate thing to do", "answer_reason": "Falsifying medical records is fraud. Instructions from a senior do not make dishonest documentation acceptable." },
+          { "id": "tsj-s10-i02", "order_index": 1, "type": "appropriateness", "text": "Politely decline and explain that you cannot certify a review you did not perform.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Professional integrity must be maintained regardless of seniority. A clear, respectful refusal is appropriate." },
+          { "id": "tsj-s10-i03", "order_index": 2, "type": "appropriateness", "text": "Seek advice from your educational supervisor or a senior colleague you trust.", "correct_answer": "A very appropriate thing to do", "answer_reason": "Escalating an ethically difficult situation involving a senior is appropriate and protects the junior doctor." },
+          { "id": "tsj-s10-i04", "order_index": 3, "type": "appropriateness", "text": "Complete the form but note in the records that you were not the reviewing doctor.", "correct_answer": "Inappropriate, but not awful", "answer_reason": "Adding a clarifying note is better than no caveat, but completing a misleading form remains professionally problematic." }
+        ]
+      }
+    ]
+  }
+]

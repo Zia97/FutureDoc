@@ -10,7 +10,14 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 
 import HomeScreen from '../screens/menus/HomeScreen';
+import PracticeModeScreen from '../screens/menus/PracticeModeScreen';
 import PracticeSectionsScreen from '../screens/menus/PracticeSectionsScreen';
+import TimedPracticeSectionsScreen from '../screens/menus/TimedPracticeSectionsScreen';
+import TimedTestListScreen from '../screens/timed/TimedTestListScreen';
+import VRInstructionScreen from '../screens/timed/VRInstructionScreen';
+import DMInstructionScreen from '../screens/timed/DMInstructionScreen';
+import QRInstructionScreen from '../screens/timed/QRInstructionScreen';
+import SJInstructionScreen from '../screens/timed/SJInstructionScreen';
 import VRQuestionListScreen from '../screens/vr/VRQuestionListScreen';
 import VRPassageScreen from '../screens/vr/VRPassageScreen';
 import SJScenarioListScreen from '../screens/sj/SJScenarioListScreen';
@@ -47,7 +54,14 @@ function AppStack() {
   return (
     <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="PracticeSections" component={PracticeSectionsScreen} options={{ title: 'Practice' }} />
+      <Stack.Screen name="PracticeMode" component={PracticeModeScreen} options={{ title: 'Practice' }} />
+      <Stack.Screen name="PracticeSections" component={PracticeSectionsScreen} options={{ title: 'Normal Practice' }} />
+      <Stack.Screen name="TimedPracticeSections" component={TimedPracticeSectionsScreen} options={{ title: 'Timed Practice' }} />
+      <Stack.Screen name="TimedTestList" component={TimedTestListScreen} options={({ route }) => ({ title: route.params?.title ?? 'Timed Tests' })} />
+      <Stack.Screen name="VRInstruction" component={VRInstructionScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="DMInstruction" component={DMInstructionScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="QRInstruction" component={QRInstructionScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="SJInstruction" component={SJInstructionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="VRQuestionList" component={VRQuestionListScreen} options={{ title: 'Verbal Reasoning' }} />
       <Stack.Screen name="VRPassage" component={VRPassageScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SJScenarioList" component={SJScenarioListScreen} options={{ title: 'Situational Judgement' }} />
