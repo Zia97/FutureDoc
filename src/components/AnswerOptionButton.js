@@ -26,7 +26,7 @@ export default function AnswerOptionButton({ label, state, onPress }) {
       style={buttonStyle}
       onPress={onPress}
       activeOpacity={0.75}
-      disabled={state !== 'idle'}
+      disabled={state === 'correct' || state === 'incorrect'}
     >
       <Text style={textStyle}>{label}</Text>
     </TouchableOpacity>

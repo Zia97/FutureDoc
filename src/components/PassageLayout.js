@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -54,6 +54,7 @@ export default function PassageLayout({
 
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [panelExpanded, setPanelExpanded] = useState(true);
+  const [pendingAnswer, setPendingAnswer] = useState(null);
 
   const itemId = getId(item);
   const qid = question.questionId ?? question.id;
@@ -61,13 +62,15 @@ export default function PassageLayout({
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === question.answer;
 
+  useEffect(() => { setPendingAnswer(null); }, [qid]);
+
   const panHandlers = useSwipeGesture(
     isFirstItem ? null : () => goToItem(itemIndex - 1),
     isLastItem ? null : () => goToItem(itemIndex + 1),
   );
 
   function getOptionState(option) {
-    if (!hasAnswered) return 'idle';
+    if (!hasAnswered) return option === pendingAnswer ? 'selected' : 'idle';
     if (option === question.answer) return 'correct';
     if (option === selectedAnswer) return 'incorrect';
     return 'idle';
@@ -75,8 +78,13 @@ export default function PassageLayout({
 
   function onAnswer(option) {
     if (hasAnswered) return;
-    handleAnswer(itemId, qid, option);
-    onAnswerCommit?.(itemId, qid, option);
+    setPendingAnswer(option);
+  }
+
+  function handleCheckAnswer() {
+    if (!pendingAnswer || hasAnswered) return;
+    handleAnswer(itemId, qid, pendingAnswer);
+    onAnswerCommit?.(itemId, qid, pendingAnswer);
   }
 
   function togglePanel() {
@@ -127,6 +135,15 @@ export default function PassageLayout({
             <View style={styles.optionsContainer}>
               {renderOptions({ item, question, getOptionState, onAnswer })}
             </View>
+
+            {pendingAnswer && !hasAnswered && (
+              <TouchableOpacity
+                style={[styles.checkButton, { backgroundColor: sectionColor }]}
+                onPress={handleCheckAnswer}
+              >
+                <Text style={styles.checkButtonText}>Check Answer</Text>
+              </TouchableOpacity>
+            )}
 
             {hasAnswered && (
               <FeedbackBox
@@ -257,5 +274,16 @@ const styles = StyleSheet.create({
   questionNavText: {
     fontSize: 14,
     fontWeight: '600',
+  },
+  checkButton: {
+    marginTop: 14,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  checkButtonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '700',
   },
 });

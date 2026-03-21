@@ -45,7 +45,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 
   function mcqOptionState(label) {
     if (timedMode) return label === answer ? 'selected' : 'idle';
-    if (!submitted) return 'idle';
+    if (!submitted) return label === answer ? 'selected' : 'idle';
     if (label === question.answer) return 'correct';
     if (label === answer) return 'incorrect';
     return 'idle';

@@ -52,10 +52,13 @@ export default function QRQuestionScreen({ route }) {
   const { handleAnswer, getAnswer, resetAnswers } = useAnswers();
   const [panelExpanded, setPanelExpanded] = useState(true);
   const [calcVisible, setCalcVisible] = useState(false);
+  const [pendingAnswer, setPendingAnswer] = useState(null);
 
   useEffect(() => {
     if (!cacheLoading) resetAnswers(localAnswers);
   }, [cacheLoading]);
+
+  useEffect(() => { setPendingAnswer(null); }, [question?.questionId]);
 
   const panHandlers = useSwipeGesture(
     isFirstItem ? null : () => goToItem(itemIndex - 1),
@@ -76,17 +79,22 @@ export default function QRQuestionScreen({ route }) {
 
   function onAnswer(option) {
     if (hasAnswered) return;
-    handleAnswer(item.setId, question.questionId, option);
+    setPendingAnswer(option);
+  }
+
+  function handleCheckAnswer() {
+    if (!pendingAnswer || hasAnswered) return;
+    handleAnswer(item.setId, question.questionId, pendingAnswer);
     submitAttempt({
       questionId: question.questionId,
       setId: item.setId,
-      selectedAnswer: option,
+      selectedAnswer: pendingAnswer,
       totalQuestions: item.questions.length,
     });
   }
 
   function getOptionState(option) {
-    if (!hasAnswered) return 'idle';
+    if (!hasAnswered) return option === pendingAnswer ? 'selected' : 'idle';
     if (option === question.answer) return 'correct';
     if (option === selectedAnswer) return 'incorrect';
     return 'idle';
@@ -147,6 +155,15 @@ export default function QRQuestionScreen({ route }) {
                   />
                 ))}
               </View>
+
+              {pendingAnswer && !hasAnswered && (
+                <TouchableOpacity
+                  style={[styles.checkButton, { backgroundColor: t.sectionQR }]}
+                  onPress={handleCheckAnswer}
+                >
+                  <Text style={styles.checkButtonText}>Check Answer</Text>
+                </TouchableOpacity>
+              )}
 
               {hasAnswered && (
                 <FeedbackBox
@@ -241,6 +258,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   options: { gap: 10 },
+  checkButton: {
+    marginTop: 14,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  checkButtonText: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: '700',
+  },
   questionNav: {
     flexDirection: 'row',
     justifyContent: 'space-between',

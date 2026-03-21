@@ -80,16 +80,11 @@ export default function DMQuestionScreen({ route }) {
 
   function handleAnswer(val) {
     if (isSubmitted) return;
-    if (!isYesNo) {
-      setAnswers((prev) => ({ ...prev, [question.id]: val }));
-      setSubmitted((prev) => ({ ...prev, [question.id]: true }));
-      submitAttempt({ questionId: question.id, answer: val });
-    } else {
-      setAnswers((prev) => ({ ...prev, [question.id]: val }));
-    }
+    setAnswers((prev) => ({ ...prev, [question.id]: val }));
   }
 
   function handleCheckAnswers() {
+    if (!currentAnswer) return;
     setSubmitted((prev) => ({ ...prev, [question.id]: true }));
     submitAttempt({ questionId: question.id, answer: currentAnswer });
   }
@@ -152,17 +147,17 @@ export default function DMQuestionScreen({ route }) {
           } : undefined}
         />
 
-        {isYesNo && !isSubmitted && (
+        {!isSubmitted && currentAnswer !== undefined && currentAnswer !== null && (
           <TouchableOpacity
             style={[
               styles.checkButton,
               { backgroundColor: t.sectionDM },
-              !allStatementsAnswered && { backgroundColor: t.borderStrong, opacity: 0.5 },
+              (isYesNo && !allStatementsAnswered) && { backgroundColor: t.borderStrong, opacity: 0.5 },
             ]}
             onPress={handleCheckAnswers}
-            disabled={!allStatementsAnswered}
+            disabled={isYesNo && !allStatementsAnswered}
           >
-            <Text style={styles.checkButtonText}>Check Answers</Text>
+            <Text style={styles.checkButtonText}>Check Answer</Text>
           </TouchableOpacity>
         )}
       </ScrollView>

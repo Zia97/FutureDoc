@@ -146,7 +146,7 @@ export default function TimedDMTestScreen({ route }) {
       </ScrollView>
 
       {/* Bottom toolbar — Navigator */}
-      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 8 }]}>
+      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 4 }]}>
         <TouchableOpacity
           style={[styles.navigatorButton, { borderColor: t.sectionDM }]}
           onPress={() => setNavigatorVisible(true)}
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 32,
+    paddingBottom: 8,
   },
   checkButton: {
     marginTop: 20,
@@ -241,18 +241,18 @@ const styles = StyleSheet.create({
   },
   bottomBar: {
     paddingHorizontal: 16,
-    paddingTop: 10,
+    paddingTop: 4,
     borderTopWidth: 1,
     alignItems: 'flex-end',
   },
   navigatorButton: {
-    borderWidth: 1.5,
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 3,
   },
   navigatorButtonText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
   },
 });

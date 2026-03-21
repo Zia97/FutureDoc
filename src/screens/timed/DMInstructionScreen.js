@@ -29,7 +29,6 @@ export default function DMInstructionScreen({ navigation, route }) {
       setSecondsLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timerRef.current);
-          navigation.replace('TimedDMTest', { test, section, title });
           return 0;
         }
         return prev - 1;
@@ -38,6 +37,12 @@ export default function DMInstructionScreen({ navigation, route }) {
 
     return () => clearInterval(timerRef.current);
   }, []);
+
+  useEffect(() => {
+    if (secondsLeft === 0) {
+      navigation.replace('TimedDMTest', { test, section, title });
+    }
+  }, [secondsLeft]);
 
   const mins = Math.floor(secondsLeft / 60);
   const secs = secondsLeft % 60;
@@ -124,7 +129,7 @@ export default function DMInstructionScreen({ navigation, route }) {
       </ScrollView>
 
       {/* Bottom bar */}
-      <View style={[styles.footer, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 16 }]}>
+      <View style={[styles.footer, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 8 }]}>
         <TouchableOpacity
           style={[styles.startButton, { backgroundColor: t.accent }]}
           onPress={startTest}
@@ -227,12 +232,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   footer: {
-    padding: 16,
+    paddingHorizontal: 16,
+    paddingTop: 8,
     borderTopWidth: 1,
   },
   startButton: {
     borderRadius: 12,
-    paddingVertical: 14,
+    paddingVertical: 10,
     alignItems: 'center',
   },
   startButtonText: {
