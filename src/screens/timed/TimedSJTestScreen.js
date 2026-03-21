@@ -21,6 +21,7 @@ import { LABEL_SETS } from '../../constants/sjLabelSets';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
+import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
@@ -33,6 +34,7 @@ export default function TimedSJTestScreen({ route }) {
 
   const panelScrollRef = useRef(null);
   const [navigatorVisible, setNavigatorVisible] = useState(false);
+  const [showReview, setShowReview] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenItems, setSeenItems] = useState(new Set());
   const [panelExpanded, setPanelExpanded] = useState(true);
@@ -124,6 +126,25 @@ export default function TimedSJTestScreen({ route }) {
     return 'Unseen';
   }
 
+  if (showReview) {
+    return (
+      <SJTestReviewScreen
+        questions={flatQuestions}
+        getStatus={getQuestionStatus}
+        flags={flags}
+        onNavigateTo={(passageIndex, questionIndex) => {
+          goToItemAndQuestion(passageIndex, questionIndex);
+          setShowReview(false);
+        }}
+        onEndTest={() => {
+          // TODO: wire up end-test logic (results screen)
+        }}
+        timerDisplay={timerDisplay}
+        isUrgent={isUrgent}
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
@@ -141,9 +162,9 @@ export default function TimedSJTestScreen({ route }) {
         title={`Scenario ${itemIndex + 1}`}
         meta={`Scenario ${itemIndex + 1} of ${scenarios.length}`}
         onPrev={() => goToItem(itemIndex - 1)}
-        onNext={() => goToItem(itemIndex + 1)}
+        onNext={isLastItem ? () => setShowReview(true) : () => goToItem(itemIndex + 1)}
         isFirst={isFirstItem}
-        isLast={isLastItem}
+        isLast={false}
         color={sectionColor}
       />
 
@@ -210,17 +231,26 @@ export default function TimedSJTestScreen({ route }) {
                 <Text style={[styles.questionNavText, { color: t.text }]}>← Previous</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={[
-                  styles.questionNavButton,
-                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                  isLastQuestion && styles.questionNavButtonDisabled,
-                ]}
-                onPress={() => { goToNextQuestion(); panelScrollRef.current?.scrollTo({ y: 0, animated: false }); }}
-                disabled={isLastQuestion}
-              >
-                <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
-              </TouchableOpacity>
+              {isLastItem && isLastQuestion ? (
+                <TouchableOpacity
+                  style={[styles.questionNavButton, { backgroundColor: '#1e3a8a', borderColor: '#1e3a8a' }]}
+                  onPress={() => setShowReview(true)}
+                >
+                  <Text style={[styles.questionNavText, { color: '#ffffff' }]}>Review →</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[
+                    styles.questionNavButton,
+                    { backgroundColor: t.bgInput, borderColor: t.borderStrong },
+                    isLastQuestion && styles.questionNavButtonDisabled,
+                  ]}
+                  onPress={() => { goToNextQuestion(); panelScrollRef.current?.scrollTo({ y: 0, animated: false }); }}
+                  disabled={isLastQuestion}
+                >
+                  <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </ScrollView>
         )}
