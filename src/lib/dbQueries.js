@@ -21,6 +21,14 @@ class DatabaseService {
     return data;
   }
 
+  async getAllContentVersions() {
+    const { data, error } = await supabase
+      .from('content_versions')
+      .select('section, version');
+    if (error) throw error;
+    return data; // [{ section, version }, ...]
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Verbal Reasoning — Content
   // ─────────────────────────────────────────────────────────────────────────────

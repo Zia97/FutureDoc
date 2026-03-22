@@ -287,7 +287,7 @@ export default function ProfileScreen() {
       {/* Check for Updates */}
       <Text style={[styles.sectionHeading, { color: t.text }]}>Content</Text>
       <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
-        Check if new questions or updates are available. Your existing answers are always preserved.
+        Check if new questions or updates are available.
       </Text>
       <TouchableOpacity
         style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}

@@ -29,17 +29,24 @@ async function checkAndInvalidateStaleContent() {
   if (now - lastCheckedAt < MIN_CHECK_INTERVAL_MS) return;
   lastCheckedAt = now;
 
+  let dbVersions;
+  try {
+    dbVersions = await db.getAllContentVersions();
+  } catch {
+    return; // Non-fatal — try again next interval.
+  }
+
+  const dbVersionMap = Object.fromEntries(dbVersions.map((r) => [r.section, r.version]));
+
   for (const section of ALL_SECTIONS) {
     try {
       const cached = await getCached(section);
-      if (!cached) continue; // nothing cached — nothing to invalidate
-
-      const versionRow = await db.getContentVersion(section);
-      if (versionRow.version !== cached.version) {
+      if (!cached) continue;
+      if (dbVersionMap[section] !== cached.version) {
         await clearCache(section);
       }
     } catch {
-      // Version check failure is non-fatal — skip this section silently.
+      // ignore
     }
   }
 }
@@ -49,14 +56,21 @@ async function checkAndInvalidateStaleContent() {
  * Returns the number of sections whose caches were cleared.
  */
 export async function forceContentVersionCheck() {
+  let dbVersions;
+  try {
+    dbVersions = await db.getAllContentVersions();
+  } catch {
+    return 0;
+  }
+
+  const dbVersionMap = Object.fromEntries(dbVersions.map((r) => [r.section, r.version]));
   let staleCount = 0;
+
   for (const section of ALL_SECTIONS) {
     try {
       const cached = await getCached(section);
       if (!cached) continue;
-
-      const versionRow = await db.getContentVersion(section);
-      if (versionRow.version !== cached.version) {
+      if (dbVersionMap[section] !== cached.version) {
         await clearCache(section);
         staleCount++;
       }
@@ -64,7 +78,7 @@ export async function forceContentVersionCheck() {
       // ignore
     }
   }
-  // Reset cooldown so the next background check runs fresh.
+
   lastCheckedAt = Date.now();
   return staleCount;
 }

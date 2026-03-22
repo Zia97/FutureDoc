@@ -170,8 +170,8 @@
             "order_index": 0,
             "type": "importance",
             "text": "How important is it to address Dr. Turner's offensive joke rather than simply letting it pass?",
-            "correct_answer": "Important",
-            "answer_reason": "This is important because discriminatory or offensive behaviour should not be normalised, even in social settings."
+            "correct_answer": "Very important",
+            "answer_reason": "This is very important because discriminatory behaviour should be challenged rather than normalised, and addressing it in the moment — even if briefly or imperfectly — sets a clear boundary and signals that such remarks are unacceptable. GMC Good Medical Practice requires doctors to treat colleagues with respect and to challenge behaviour that falls below this standard. Failing to respond at all risks endorsing the behaviour by omission."
           },
           {
             "id": "tsj-s06-i02",
@@ -341,8 +341,8 @@
             "order_index": 2,
             "type": "appropriateness",
             "text": "Alex Johnson confronts Dr. Davis publicly in the middle of the workplace to make it clear that the comments are unacceptable.",
-            "correct_answer": "Appropriate, but not ideal",
-            "answer_reason": "This is appropriate, but not ideal because challenging the behaviour may be justified, but doing so publicly may be less effective and more disruptive than seeking support or addressing it through appropriate channels."
+            "correct_answer": "Inappropriate, but not awful",
+            "answer_reason": "This is inappropriate, but not awful because, while the impulse to challenge the behaviour is understandable, doing so publicly in a workplace setting during a power-imbalance situation is likely to be counterproductive. It risks embarrassing both parties, triggering retaliation, and undermining any formal process that may follow. It is better than doing nothing, which is why it does not reach 'A very inappropriate thing to do', but it falls short of any threshold of appropriateness when more effective and safer channels are available."
           }
         ]
       },
@@ -457,8 +457,8 @@
             "order_index": 1,
             "type": "importance",
             "text": "How important is it to notify the patient's family before the patient has been assessed?",
-            "correct_answer": "Not important at all",
-            "answer_reason": "This is not important at all at this stage because the immediate priority is to assess the patient, start appropriate management, and seek senior help if needed."
+            "correct_answer": "Of minor importance",
+            "answer_reason": "This is of minor importance at this stage because the immediate priority is to assess the patient, initiate appropriate management, and seek senior help if needed. Family notification is not the first concern and should not divert attention from the patient's urgent needs. It is not completely without relevance in every circumstance — for example, if family are already present or there is a welfare arrangement in place — but it remains a very low priority compared to the clinical response required."
           },
           {
             "id": "tsj-s15-i03",
@@ -526,9 +526,9 @@
             "id": "tsj-s17-i03",
             "order_index": 2,
             "type": "appropriateness",
-            "text": "Pausing the prescription and asking Dr. Sarah Rodriguez or another appropriate senior clinician to review it before it is written up.",
+            "text": "Pausing the prescription and asking a senior clinician to review it before it is written up.",
             "correct_answer": "A very appropriate thing to do",
-            "answer_reason": "This is a very appropriate thing to do because it escalates the concern appropriately and helps prevent a possible medication error."
+            "answer_reason": "This is a very appropriate thing to do because it escalates the concern appropriately and helps prevent a possible medication error before the patient is exposed to any risk. Pausing rather than proceeding shows sound professional judgement, and involving a senior clinician ensures the decision is made safely."
           }
         ]
       },
@@ -573,8 +573,8 @@
             "order_index": 0,
             "type": "appropriateness",
             "text": "Confront Dr. Patel directly and ask for an explanation before deciding what further action is needed.",
-            "correct_answer": "A very appropriate thing to do",
-            "answer_reason": "This is a very appropriate thing to do because it addresses the concern fairly and allows clarification before further escalation."
+            "correct_answer": "Appropriate, but not ideal",
+            "answer_reason": "This is appropriate, but not ideal because seeking clarification directly before escalating is a fair and reasonable first step, and may resolve the situation more efficiently. However, it is not the best possible response because direct confrontation about suspected dishonesty carries risks — the colleague may deny it, delete the post, or feel intimidated — and there may be good reason to involve a senior early. It is better than ignoring the situation, but falls short of the fully considered response that a more structured escalation would provide."
           },
           {
             "id": "tsj-s19-i02",
@@ -682,8 +682,8 @@
             "order_index": 2,
             "type": "appropriateness",
             "text": "Ask the patient whether they know about the medication error and proceed depending on what they say.",
-            "correct_answer": "A very inappropriate thing to do",
-            "answer_reason": "This is a very inappropriate thing to do because resolving a medication error is the clinician's responsibility and should not be left to the patient."
+            "correct_answer": "Inappropriate, but not awful",
+            "answer_reason": "This is inappropriate, but not awful because asking the patient about a medication error places an inappropriate burden on them and is the wrong process — resolving a prescribing error is the clinician's responsibility, not the patient's. It may also cause unnecessary distress. However, it is not as serious as knowingly ignoring the error and proceeding regardless, because there is at least an attempt to acknowledge the problem. That distinguishes it from 'A very inappropriate thing to do' while still making clear it falls short of acceptable practice."
           }
         ]
       },
