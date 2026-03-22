@@ -294,7 +294,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
             <Text style={styles.pauseIcon}>⏸</Text>
             <Text style={styles.pauseTitle}>Test Paused</Text>
             <Text style={styles.pauseSubtitle}>Timer has stopped. Resume when you're ready.</Text>
-            <Text style={styles.pauseReminder}>[Note: pausing is not available in the real UCAT exam]</Text>
+            <Text style={styles.pauseReminder}>[Reminder: You will not be able to pause in the real UCAT exam!]</Text>
             <TouchableOpacity style={styles.resumeButton} onPress={resume} activeOpacity={0.85}>
               <Text style={styles.resumeButtonText}>▶  Resume Test</Text>
             </TouchableOpacity>
