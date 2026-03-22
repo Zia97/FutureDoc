@@ -2,7 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { OpenAIProvider } from './providers/openai.ts';
 import { AnthropicProvider } from './providers/anthropic.ts';
 import { ChatMessage } from './providers/types.ts';
-import { BASE_PROMPT, buildQuestionContext } from './prompt.ts';
+import { getSectionPrompt, buildQuestionContext } from './prompt.ts';
 
 // ── Limits ────────────────────────────────────────────────────────────────────
 const FREE_LIFETIME_LIMIT = 3;
@@ -150,7 +150,7 @@ Deno.serve(async (req) => {
   });
 
   // 7. Build system prompt
-  const systemPrompt = BASE_PROMPT + '\n\n' + buildQuestionContext({
+  const systemPrompt = getSectionPrompt(section) + '\n\n' + buildQuestionContext({
     section,
     question,
     userAnswer,
