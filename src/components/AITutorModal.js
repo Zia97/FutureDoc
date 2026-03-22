@@ -5,12 +5,12 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  KeyboardAvoidingView,
+  Keyboard,
   Platform,
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
@@ -20,6 +20,25 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
 
   const flatListRef = useRef(null);
   const insets = useSafeAreaInsets();
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
+    const hideEvent = Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide';
+
+    const showSub = Keyboard.addListener(showEvent, (e) => {
+      setKeyboardHeight(e.endCoordinates.height + (Platform.OS === 'android' ? 32 : 0));
+      setTimeout(() => flatListRef.current?.scrollToEnd({ animated: true }), 100);
+    });
+    const hideSub = Keyboard.addListener(hideEvent, () => {
+      setKeyboardHeight(0);
+    });
+
+    return () => {
+      showSub.remove();
+      hideSub.remove();
+    };
+  }, []);
 
   const scrollGesture = Gesture.Native();
 
@@ -47,7 +66,8 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
     ? [...messages, { role: 'assistant', content: streamingContent, streaming: true }]
     : messages;
 
-  const containerStyle = [styles.container, { paddingBottom: insets.bottom }];
+  const bottomPad = keyboardHeight > 0 ? keyboardHeight : insets.bottom;
+  const containerStyle = [styles.container, { paddingBottom: bottomPad }];
 
   return (
     <Modal
@@ -58,10 +78,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
       onRequestClose={onClose}
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        style={containerStyle}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
+      <View style={containerStyle}>
         <GestureDetector gesture={panGesture}>
           <View style={styles.swipeLayer}>
             {/* Drag handle */}
@@ -83,6 +100,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
             {/* Messages */}
             <GestureDetector gesture={scrollGesture}>
               <FlatList
+                style={{ flex: 1 }}
                 ref={flatListRef}
                 data={displayMessages}
                 keyExtractor={(_, i) => String(i)}
@@ -127,7 +145,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
             )}
           </View>
         </GestureDetector>
-      </KeyboardAvoidingView>
+      </View>
       </GestureHandlerRootView>
     </Modal>
   );
