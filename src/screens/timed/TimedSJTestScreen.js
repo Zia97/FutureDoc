@@ -9,6 +9,7 @@ import {
   LayoutAnimation,
   Platform,
   UIManager,
+  Modal,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -41,7 +42,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const [seenItems, setSeenItems] = useState(new Set());
   const [panelExpanded, setPanelExpanded] = useState(true);
 
-  const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
+  const { display: timerDisplay, isUrgent, isPaused, pause, resume } = useTestTimer(test.timeMinutes);
 
   // Adapt scenarios so useItemNavigation can work with item.questions
   const scenarios = useMemo(
@@ -268,8 +269,15 @@ export default function TimedSJTestScreen({ route, navigation }) {
         )}
       </View>
 
-      {/* Bottom toolbar — Navigator */}
+      {/* Bottom toolbar — Pause + Navigator */}
       <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 4 }]}>
+        <TouchableOpacity
+          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
+          onPress={pause}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={[styles.navigatorButton, { borderColor: sectionColor }]}
           onPress={() => setNavigatorVisible(true)}
@@ -278,6 +286,21 @@ export default function TimedSJTestScreen({ route, navigation }) {
           <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Pause overlay */}
+      <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
+        <View style={styles.pauseOverlay}>
+          <View style={styles.pauseCard}>
+            <Text style={styles.pauseIcon}>⏸</Text>
+            <Text style={styles.pauseTitle}>Test Paused</Text>
+            <Text style={styles.pauseSubtitle}>Timer has stopped. Resume when you're ready.</Text>
+            <Text style={styles.pauseReminder}>[Note: pausing is not available in the real UCAT exam]</Text>
+            <TouchableOpacity style={styles.resumeButton} onPress={resume} activeOpacity={0.85}>
+              <Text style={styles.resumeButtonText}>▶  Resume Test</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <TestNavigatorModal
         visible={navigatorVisible}
@@ -414,7 +437,74 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 4,
     borderTopWidth: 1,
-    alignItems: 'flex-end',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  pauseButton: {
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 3,
+  },
+  pauseButtonText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  pauseOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(10, 15, 30, 0.92)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+  pauseCard: {
+    backgroundColor: '#1e2a4a',
+    borderRadius: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 340,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  pauseIcon: {
+    fontSize: 48,
+    marginBottom: 16,
+  },
+  pauseTitle: {
+    color: '#ffffff',
+    fontSize: 22,
+    fontWeight: '800',
+    marginBottom: 10,
+  },
+  pauseSubtitle: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  pauseReminder: {
+    color: 'rgba(255,255,255,0.35)',
+    fontSize: 12,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: 28,
+  },
+  resumeButton: {
+    backgroundColor: '#1d4ed8',
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    width: '100%',
+    alignItems: 'center',
+  },
+  resumeButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '700',
   },
   navigatorButton: {
     borderWidth: 1,
