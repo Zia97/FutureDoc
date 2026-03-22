@@ -14,6 +14,7 @@ import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
+import { forceContentVersionCheck } from '../../services/contentUpdateService';
 
 const SECTIONS = [
   {
@@ -51,6 +52,7 @@ export default function ProfileScreen() {
   const { theme: t, isDark, useUCATScheme, toggleDark, toggleUCATScheme } = useTheme();
   const [deleting, setDeleting] = useState(null);
   const [deletingAll, setDeletingAll] = useState(false);
+  const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
 
   useEffect(() => {
@@ -131,6 +133,25 @@ export default function ProfileScreen() {
       Alert.alert('Error', 'Something went wrong. Please try again.');
     } finally {
       setDeletingAll(false);
+    }
+  };
+
+  const handleCheckForUpdates = async () => {
+    setCheckingUpdates(true);
+    try {
+      const staleCount = await forceContentVersionCheck();
+      if (staleCount > 0) {
+        Alert.alert(
+          'Content Updated',
+          `${staleCount} section${staleCount > 1 ? 's have' : ' has'} new content. Navigate to any section to load the latest questions.`,
+        );
+      } else {
+        Alert.alert('Up to Date', 'All content is already up to date.');
+      }
+    } catch {
+      Alert.alert('Error', 'Could not check for updates. Please try again.');
+    } finally {
+      setCheckingUpdates(false);
     }
   };
 
@@ -263,6 +284,24 @@ export default function ProfileScreen() {
         </>
       )}
 
+      {/* Check for Updates */}
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Content</Text>
+      <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
+        Check if new questions or updates are available. Your existing answers are always preserved.
+      </Text>
+      <TouchableOpacity
+        style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}
+        onPress={handleCheckForUpdates}
+        disabled={checkingUpdates}
+        activeOpacity={0.8}
+      >
+        {checkingUpdates ? (
+          <ActivityIndicator size="small" color={t.accent} />
+        ) : (
+          <Text style={[styles.updateButtonText, { color: t.accent }]}>Check for Updates</Text>
+        )}
+      </TouchableOpacity>
+
       <TouchableOpacity
         style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
         onPress={handleSignOut}
@@ -386,6 +425,17 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   deleteAllText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  updateButton: {
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    marginBottom: 32,
+  },
+  updateButtonText: {
     fontSize: 16,
     fontWeight: '600',
   },

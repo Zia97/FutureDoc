@@ -18,3 +18,25 @@ export async function saveCache(section, version, data) {
     // Silent fail — next launch will retry
   }
 }
+
+export async function clearCache(section) {
+  try {
+    await AsyncStorage.removeItem(cacheKey(section));
+  } catch {
+    // Silent fail
+  }
+}
+
+export async function clearAllContentCaches() {
+  const sections = [
+    'verbal_reasoning',
+    'decision_making',
+    'quantitative_reasoning',
+    'situational_judgement',
+    'timed_verbal_reasoning',
+    'timed_decision_making',
+    'timed_quantitative_reasoning',
+    'timed_situational_judgement',
+  ];
+  await Promise.all(sections.map(clearCache));
+}

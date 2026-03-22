@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
+import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+
+const SECTION = 'timed_situational_judgement';
 
 // Maps dev JSON format (preview-sj-timed.json) into the app data shape.
 function mapDevTests(data) {
@@ -88,15 +91,41 @@ export function useTimedSJTests() {
         }
       }
 
+      const cached = await getCached(SECTION);
+      const hasValidCache = cached?.data?.length > 0;
+      if (hasValidCache) {
+        setTests(cached.data);
+        setLoading(false);
+      }
+
+      let versionRow;
+      try {
+        versionRow = await withRetry(() => db.getContentVersion(SECTION));
+      } catch (versionError) {
+        if (!hasValidCache) {
+          setError(versionError);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (hasValidCache && cached.version === versionRow.version) {
+        return;
+      }
+
       try {
         const rows = await withRetry(() => db.fetchTimedSJTests(), {
           shouldRetry: (result) => result.length === 0,
         });
-        setTests(mapDBTests(rows));
+        const mapped = mapDBTests(rows);
+        setTests(mapped);
+        await saveCache(SECTION, versionRow.version, mapped);
       } catch (err) {
-        setError(err);
+        if (!hasValidCache) {
+          setError(err);
+        }
       } finally {
-        setLoading(false);
+        if (!hasValidCache) setLoading(false);
       }
     }
 

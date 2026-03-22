@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
+import { db } from '../../lib/dbQueries';
+import { getCached } from '../../services/contentCache';
+import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+
+const SECTION = 'timed_verbal_reasoning';
 
 function mapTests(data) {
   return data.map((test) => ({
@@ -28,7 +33,7 @@ function mapTests(data) {
 export function useTimedVRTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -44,9 +49,27 @@ export function useTimedVRTests() {
         }
       }
 
-      // TODO: fetch from DB
-      setTests([]);
-      setLoading(false);
+      const cached = await getCached(SECTION);
+      const hasValidCache = cached?.data?.length > 0;
+      if (hasValidCache) {
+        setTests(cached.data);
+        setLoading(false);
+      }
+
+      let versionRow;
+      try {
+        versionRow = await withRetry(() => db.getContentVersion(SECTION));
+      } catch {
+        if (!hasValidCache) setLoading(false);
+        return;
+      }
+
+      if (hasValidCache && cached.version === versionRow.version) {
+        return;
+      }
+
+      // TODO: fetch timed VR tests from DB once schema is designed.
+      if (!hasValidCache) setLoading(false);
     }
 
     load();
