@@ -75,6 +75,18 @@ export function useTimedSJExamProgress() {
       getAnswer,
     );
 
+    // Build answer map for review: { [scenarioId]: { [itemId]: selectedAnswer } }
+    const answerMap = {};
+    for (const scenario of test.scenarios) {
+      for (const item of scenario.items) {
+        const ans = getAnswer(scenario.scenarioId, item.itemId);
+        if (ans) {
+          if (!answerMap[scenario.scenarioId]) answerMap[scenario.scenarioId] = {};
+          answerMap[scenario.scenarioId][item.itemId] = ans;
+        }
+      }
+    }
+
     // ── 1. Save to local storage (fast, device-first) ───────────────────────
     const attemptData = {
       scorePercent,
@@ -82,6 +94,7 @@ export function useTimedSJExamProgress() {
       totalQuestions,
       submittedAt: new Date().toISOString(),
       timeTakenSeconds,
+      answerMap,
     };
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
@@ -104,7 +117,7 @@ export function useTimedSJExamProgress() {
         totalQuestions,
         scorePercent,
       );
-      await db.insertTimedSJQuestionAnswers(examAttemptId, user.id, answers);
+      await db.insertTimedSJQuestionAnswers(examAttemptId, user.id, answers, timeTakenSeconds);
     } catch (dbErr) {
       console.error('[useTimedSJExamProgress] DB save failed:', dbErr);
       // Local data is already saved — DB write can be retried manually if needed

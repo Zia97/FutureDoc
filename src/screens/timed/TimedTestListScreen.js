@@ -12,6 +12,7 @@ import { useTimedVRTests } from '../../hooks/queries/useTimedVRTests';
 import { useTimedDMTests } from '../../hooks/queries/useTimedDMTests';
 import { useTimedQRTests } from '../../hooks/queries/useTimedQRTests';
 import { useTimedSJTests } from '../../hooks/queries/useTimedSJTests';
+import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 
 const INSTRUCTION_ROUTE = {
   VR: 'VRInstruction',
@@ -36,6 +37,7 @@ export default function TimedTestListScreen({ navigation, route }) {
   const dm = useTimedDMTests();
   const qr = useTimedQRTests();
   const sj = useTimedSJTests();
+  const { completedAttempts } = useTimedSJExamProgress();
   const { tests, loading, error } =
     section === 'DM' ? dm :
     section === 'QR' ? qr :
@@ -72,29 +74,44 @@ export default function TimedTestListScreen({ navigation, route }) {
         data={tests}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity
-            style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: color }]}
-            activeOpacity={0.8}
-            onPress={() =>
-              navigation.navigate(INSTRUCTION_ROUTE[section] ?? 'VRInstruction', { test: item, section, title })
-            }
-          >
-            <View style={[styles.numberBadge, { backgroundColor: color }]}>
-              <Text style={styles.numberText}>{index + 1}</Text>
-            </View>
-            <View style={styles.cardBody}>
-              <Text style={[styles.cardTitle, { color: t.text }]}>{item.title}</Text>
-              <Text style={[styles.cardMeta, { color: t.textSecondary }]}>
-                {section === 'VR'
-                  ? `${item.passageCount} passages · ${item.questionCount} questions · ${item.timeMinutes} min`
-                  : section === 'SJ'
-                  ? `${item.scenarioCount} scenarios · ${item.questionCount} questions · ${item.timeMinutes} min`
-                  : `${item.questionCount} questions · ${item.timeMinutes} min`}
-              </Text>
-            </View>
-          </TouchableOpacity>
-        )}
+        renderItem={({ item, index }) => {
+          const isCompleted = section === 'SJ' && !!completedAttempts[item.id];
+          const attempt = isCompleted ? completedAttempts[item.id] : null;
+          return (
+            <TouchableOpacity
+              style={[
+                styles.card,
+                { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: color },
+                isCompleted && { borderLeftColor: '#16a34a' },
+              ]}
+              activeOpacity={0.8}
+              onPress={() => {
+                if (isCompleted) {
+                  navigation.navigate('TimedSJTestReview', { test: item });
+                } else {
+                  navigation.navigate(INSTRUCTION_ROUTE[section] ?? 'VRInstruction', { test: item, section, title });
+                }
+              }}
+            >
+              <View style={[styles.numberBadge, { backgroundColor: isCompleted ? '#16a34a' : color }]}>
+                <Text style={styles.numberText}>{isCompleted ? '✓' : index + 1}</Text>
+              </View>
+              <View style={styles.cardBody}>
+                <Text style={[styles.cardTitle, { color: t.text }]}>{item.title}</Text>
+                <Text style={[styles.cardMeta, { color: t.textSecondary }]}>
+                  {section === 'VR'
+                    ? `${item.passageCount} passages · ${item.questionCount} questions · ${item.timeMinutes} min`
+                    : section === 'SJ'
+                    ? `${item.scenarioCount} scenarios · ${item.questionCount} questions · ${item.timeMinutes} min`
+                    : `${item.questionCount} questions · ${item.timeMinutes} min`}
+                </Text>
+                {isCompleted && (
+                  <Text style={styles.completedScore}>{attempt.scorePercent}% · Tap to review</Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          );
+        }}
       />
     </View>
   );
@@ -132,4 +149,5 @@ const styles = StyleSheet.create({
   cardBody: { flex: 1 },
   cardTitle: { fontSize: 16, fontWeight: '700' },
   cardMeta: { fontSize: 13, marginTop: 4 },
+  completedScore: { fontSize: 13, marginTop: 4, color: '#16a34a', fontWeight: '700' },
 });

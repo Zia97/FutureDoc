@@ -543,7 +543,7 @@ class DatabaseService {
    * @param {string} userId
    * @param {{ questionId, scenarioId, selectedAnswer, isCorrect }[]} answers
    */
-  async insertTimedSJQuestionAnswers(examAttemptId, userId, answers) {
+  async insertTimedSJQuestionAnswers(examAttemptId, userId, answers, timeTakenSeconds) {
     const rows = answers.map(({ questionId, scenarioId, selectedAnswer, isCorrect }) => ({
       exam_attempt_id: examAttemptId,
       user_id: userId,
@@ -551,6 +551,7 @@ class DatabaseService {
       scenario_id: scenarioId,
       selected_answer: selectedAnswer,
       is_correct: isCorrect,
+      time_taken_seconds: timeTakenSeconds,
     }));
     const { error } = await supabase
       .from('timed_situational_judgement_question_answers')

@@ -8,6 +8,9 @@ import {
   ScrollView,
   ActivityIndicator,
   Switch,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../../lib/supabase';
@@ -16,7 +19,11 @@ import { useTheme } from '../../context/ThemeContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
 
-const SECTIONS = [
+if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const PRACTICE_SECTIONS = [
   {
     id: 'vr',
     label: 'Verbal Reasoning',
@@ -47,11 +54,59 @@ const SECTIONS = [
   },
 ];
 
+const TIMED_SECTIONS = [
+  {
+    id: 'sj',
+    label: 'Situational Judgement',
+    color: '#d97706',
+    cacheKeys: ['timed_sj_completed_attempts'],
+    dbTables: ['timed_situational_judgement_exam_attempts'],
+  },
+];
+
+function CollapsibleSection({ title, subtitle, defaultOpen = false, accentColor, t, children }) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  const toggle = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    setOpen((v) => !v);
+  };
+
+  return (
+    <View style={styles.collapsibleWrapper}>
+      <TouchableOpacity
+        style={[styles.collapsibleHeader, { backgroundColor: t.bgCard, borderColor: t.border }]}
+        onPress={toggle}
+        activeOpacity={0.8}
+      >
+        <View style={styles.collapsibleHeaderLeft}>
+          <Text style={[styles.collapsibleTitle, { color: accentColor ?? t.text }]}>{title}</Text>
+          {subtitle && !open && (
+            <Text style={[styles.collapsibleSubtitle, { color: t.textMuted }]} numberOfLines={1}>
+              {subtitle}
+            </Text>
+          )}
+        </View>
+        <Text style={[styles.chevron, { color: t.textMuted }]}>{open ? '▲' : '▼'}</Text>
+      </TouchableOpacity>
+
+      {open && (
+        <View style={[styles.collapsibleBody, { borderColor: t.border }]}>
+          {subtitle && (
+            <Text style={[styles.bodySubtitle, { color: t.textMuted }]}>{subtitle}</Text>
+          )}
+          {children}
+        </View>
+      )}
+    </View>
+  );
+}
+
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const { theme: t, isDark, useUCATScheme, toggleDark, toggleUCATScheme } = useTheme();
   const [deleting, setDeleting] = useState(null);
-  const [deletingAll, setDeletingAll] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(null);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
 
@@ -59,7 +114,7 @@ export default function ProfileScreen() {
     if (!__DEV__) return;
     async function loadToggles() {
       const entries = await Promise.all(
-        SECTIONS.map(async (s) => [s.id, await isPreviewEnabled(s.id)])
+        PRACTICE_SECTIONS.map(async (s) => [s.id, await isPreviewEnabled(s.id)])
       );
       setPreviewToggles(Object.fromEntries(entries));
     }
@@ -71,32 +126,27 @@ export default function ProfileScreen() {
     setPreviewToggles((prev) => ({ ...prev, [sectionId]: value }));
   };
 
-  const handleDeleteProgress = (section) => {
+  const handleDeleteProgress = (section, type) => {
+    const label = type === 'timed' ? `${section.label} Timed Tests` : `${section.label} Practice`;
     Alert.alert(
-      `Reset ${section.label}`,
-      'This will permanently delete all your answers and progress for this section. This cannot be undone.',
+      `Reset ${label}`,
+      'This will permanently delete all progress for this section. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => deleteProgress(section),
-        },
+        { text: 'Delete', style: 'destructive', onPress: () => deleteProgress(section, type) },
       ],
     );
   };
 
-  const deleteProgress = async (section) => {
-    setDeleting(section.id);
+  const deleteProgress = async (section, type) => {
+    setDeleting(`${type}-${section.id}`);
     try {
       await Promise.all(section.cacheKeys.map((key) => AsyncStorage.removeItem(key)));
-
       for (const table of section.dbTables) {
         const { error } = await supabase.from(table).delete().eq('user_id', user.id);
         if (error) throw error;
       }
-
-      Alert.alert('Done', `${section.label} progress has been reset.`);
+      Alert.alert('Done', 'Progress has been reset.');
     } catch {
       Alert.alert('Error', 'Something went wrong. Please try again.');
     } finally {
@@ -104,35 +154,44 @@ export default function ProfileScreen() {
     }
   };
 
-  const handleDeleteAll = () => {
+  const handleDeleteAllPractice = () => {
     Alert.alert(
-      'Reset All Progress',
-      'This will permanently delete all your answers and progress across every section. This cannot be undone.',
+      'Reset All Practice Progress',
+      'This will permanently delete all practice answers and progress across every section. This cannot be undone.',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete All', style: 'destructive', onPress: deleteAllProgress },
+        { text: 'Delete All', style: 'destructive', onPress: () => deleteAllForGroup(PRACTICE_SECTIONS, 'practice') },
       ],
     );
   };
 
-  const deleteAllProgress = async () => {
-    setDeletingAll(true);
-    try {
-      const allCacheKeys = SECTIONS.flatMap((s) => s.cacheKeys);
-      await Promise.all(allCacheKeys.map((key) => AsyncStorage.removeItem(key)));
+  const handleDeleteAllTimed = () => {
+    Alert.alert(
+      'Reset All Timed Progress',
+      'This will permanently delete all timed test results. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete All', style: 'destructive', onPress: () => deleteAllForGroup(TIMED_SECTIONS, 'timed') },
+      ],
+    );
+  };
 
-      for (const section of SECTIONS) {
+  const deleteAllForGroup = async (sections, type) => {
+    setDeletingAll(type);
+    try {
+      const allCacheKeys = sections.flatMap((s) => s.cacheKeys);
+      await Promise.all(allCacheKeys.map((key) => AsyncStorage.removeItem(key)));
+      for (const section of sections) {
         for (const table of section.dbTables) {
           const { error } = await supabase.from(table).delete().eq('user_id', user.id);
           if (error) throw error;
         }
       }
-
-      Alert.alert('Done', 'All progress has been reset.');
+      Alert.alert('Done', 'Progress has been reset.');
     } catch {
       Alert.alert('Error', 'Something went wrong. Please try again.');
     } finally {
-      setDeletingAll(false);
+      setDeletingAll(null);
     }
   };
 
@@ -178,90 +237,163 @@ export default function ProfileScreen() {
       </View>
 
       {/* Appearance */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Appearance</Text>
-
-      <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <View style={styles.toggleRow}>
-          <View style={styles.toggleLabel}>
-            <Text style={[styles.toggleTitle, { color: t.text }]}>Dark Mode</Text>
-            <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
-              Switch between light and dark theme
-            </Text>
+      <CollapsibleSection title="Appearance" subtitle="Theme and display options" defaultOpen t={t}>
+        <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+          <View style={styles.toggleRow}>
+            <View style={styles.toggleLabel}>
+              <Text style={[styles.toggleTitle, { color: t.text }]}>Dark Mode</Text>
+              <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
+                Switch between light and dark theme
+              </Text>
+            </View>
+            <Switch
+              value={isDark}
+              onValueChange={toggleDark}
+              trackColor={{ false: t.border, true: t.accent }}
+              thumbColor="#ffffff"
+            />
           </View>
-          <Switch
-            value={isDark}
-            onValueChange={toggleDark}
-            trackColor={{ false: t.border, true: t.accent }}
-            thumbColor="#ffffff"
-          />
-        </View>
 
-        <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />
+          <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />
 
-        <View style={styles.toggleRow}>
-          <View style={styles.toggleLabel}>
-            <Text style={[styles.toggleTitle, { color: t.text }]}>Use UCAT Colour Scheme in Questions</Text>
-            <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
-              Practice screens match the real UCAT interface
-            </Text>
+          <View style={styles.toggleRow}>
+            <View style={styles.toggleLabel}>
+              <Text style={[styles.toggleTitle, { color: t.text }]}>Use UCAT Colour Scheme in Questions</Text>
+              <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
+                Practice screens match the real UCAT interface
+              </Text>
+            </View>
+            <Switch
+              value={useUCATScheme}
+              onValueChange={toggleUCATScheme}
+              trackColor={{ false: t.border, true: t.accent }}
+              thumbColor="#ffffff"
+            />
           </View>
-          <Switch
-            value={useUCATScheme}
-            onValueChange={toggleUCATScheme}
-            trackColor={{ false: t.border, true: t.accent }}
-            thumbColor="#ffffff"
-          />
         </View>
-      </View>
+      </CollapsibleSection>
 
-      {/* Reset Progress */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Reset Progress</Text>
-      <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
-        Delete your answers and progress for a section. This cannot be undone.
-      </Text>
-
-      {SECTIONS.map((section) => (
-        <View
-          key={section.id}
-          style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
-        >
-          <Text style={[styles.cardLabel, { color: t.text }]}>{section.label}</Text>
-          <TouchableOpacity
-            style={[styles.deleteButton, { borderColor: t.danger }]}
-            onPress={() => handleDeleteProgress(section)}
-            disabled={deleting === section.id}
-            activeOpacity={0.75}
-          >
-            {deleting === section.id ? (
-              <ActivityIndicator size="small" color={t.danger} />
-            ) : (
-              <Text style={[styles.deleteButtonText, { color: t.danger }]}>Delete Progress</Text>
-            )}
-          </TouchableOpacity>
-        </View>
-      ))}
-
-      <TouchableOpacity
-        style={[styles.deleteAllButton, { backgroundColor: t.bgCard, borderColor: t.danger }]}
-        onPress={handleDeleteAll}
-        disabled={deletingAll}
-        activeOpacity={0.8}
+      {/* Reset Practice Progress */}
+      <CollapsibleSection
+        title="Reset Practice Progress"
+        subtitle="Delete practice answers per section"
+        t={t}
       >
-        {deletingAll ? (
-          <ActivityIndicator size="small" color={t.danger} />
-        ) : (
-          <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Progress</Text>
-        )}
-      </TouchableOpacity>
+        <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
+          This cannot be undone.
+        </Text>
+        {PRACTICE_SECTIONS.map((section) => (
+          <View
+            key={section.id}
+            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
+          >
+            <Text style={[styles.cardLabel, { color: t.text }]}>{section.label}</Text>
+            <TouchableOpacity
+              style={[styles.deleteButton, { borderColor: t.danger }]}
+              onPress={() => handleDeleteProgress(section, 'practice')}
+              disabled={deleting === `practice-${section.id}`}
+              activeOpacity={0.75}
+            >
+              {deleting === `practice-${section.id}` ? (
+                <ActivityIndicator size="small" color={t.danger} />
+              ) : (
+                <Text style={[styles.deleteButtonText, { color: t.danger }]}>Delete</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        ))}
 
+        <TouchableOpacity
+          style={[styles.deleteAllButton, { backgroundColor: t.bgCard, borderColor: t.danger }]}
+          onPress={handleDeleteAllPractice}
+          disabled={deletingAll === 'practice'}
+          activeOpacity={0.8}
+        >
+          {deletingAll === 'practice' ? (
+            <ActivityIndicator size="small" color={t.danger} />
+          ) : (
+            <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Practice Progress</Text>
+          )}
+        </TouchableOpacity>
+      </CollapsibleSection>
+
+      {/* Reset Timed Progress */}
+      <CollapsibleSection
+        title="Reset Timed Progress"
+        subtitle="Delete timed test results"
+        t={t}
+      >
+        <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
+          This cannot be undone.
+        </Text>
+        {TIMED_SECTIONS.map((section) => (
+          <View
+            key={section.id}
+            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
+          >
+            <Text style={[styles.cardLabel, { color: t.text }]}>{section.label}</Text>
+            <TouchableOpacity
+              style={[styles.deleteButton, { borderColor: t.danger }]}
+              onPress={() => handleDeleteProgress(section, 'timed')}
+              disabled={deleting === `timed-${section.id}`}
+              activeOpacity={0.75}
+            >
+              {deleting === `timed-${section.id}` ? (
+                <ActivityIndicator size="small" color={t.danger} />
+              ) : (
+                <Text style={[styles.deleteButtonText, { color: t.danger }]}>Delete</Text>
+              )}
+            </TouchableOpacity>
+          </View>
+        ))}
+
+        <TouchableOpacity
+          style={[styles.deleteAllButton, { backgroundColor: t.bgCard, borderColor: t.danger }]}
+          onPress={handleDeleteAllTimed}
+          disabled={deletingAll === 'timed'}
+          activeOpacity={0.8}
+        >
+          {deletingAll === 'timed' ? (
+            <ActivityIndicator size="small" color={t.danger} />
+          ) : (
+            <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Timed Progress</Text>
+          )}
+        </TouchableOpacity>
+      </CollapsibleSection>
+
+      {/* Content */}
+      <CollapsibleSection
+        title="Content"
+        subtitle="Check for new questions or updates"
+        t={t}
+      >
+        <TouchableOpacity
+          style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}
+          onPress={handleCheckForUpdates}
+          disabled={checkingUpdates}
+          activeOpacity={0.8}
+        >
+          {checkingUpdates ? (
+            <ActivityIndicator size="small" color={t.accent} />
+          ) : (
+            <Text style={[styles.updateButtonText, { color: t.accent }]}>Check for Updates</Text>
+          )}
+        </TouchableOpacity>
+      </CollapsibleSection>
+
+      {/* Developer (DEV only) */}
       {__DEV__ && (
-        <>
-          <Text style={[styles.sectionHeading, { color: '#f59e0b' }]}>Content Preview</Text>
-          <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
+        <CollapsibleSection
+          title="Developer"
+          subtitle="Preview local JSON content"
+          accentColor="#f59e0b"
+          t={t}
+        >
+          <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
             Load questions from a local JSON file instead of the database. Reload the app after placing content in src/dev/.
           </Text>
           <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            {SECTIONS.map((section, index) => (
+            {PRACTICE_SECTIONS.map((section, index) => (
               <React.Fragment key={section.id}>
                 {index > 0 && <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />}
                 <View style={styles.toggleRow}>
@@ -281,26 +413,8 @@ export default function ProfileScreen() {
               </React.Fragment>
             ))}
           </View>
-        </>
+        </CollapsibleSection>
       )}
-
-      {/* Check for Updates */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Content</Text>
-      <Text style={[styles.sectionSubheading, { color: t.textMuted }]}>
-        Check if new questions or updates are available.
-      </Text>
-      <TouchableOpacity
-        style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}
-        onPress={handleCheckForUpdates}
-        disabled={checkingUpdates}
-        activeOpacity={0.8}
-      >
-        {checkingUpdates ? (
-          <ActivityIndicator size="small" color={t.accent} />
-        ) : (
-          <Text style={[styles.updateButtonText, { color: t.accent }]}>Check for Updates</Text>
-        )}
-      </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
@@ -325,7 +439,7 @@ const styles = StyleSheet.create({
   avatarRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 36,
+    marginBottom: 28,
   },
   avatar: {
     width: 52,
@@ -344,14 +458,56 @@ const styles = StyleSheet.create({
     fontSize: 15,
     flex: 1,
   },
-  sectionHeading: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 6,
+
+  // Collapsible section
+  collapsibleWrapper: {
+    marginBottom: 12,
   },
-  sectionSubheading: {
+  collapsibleHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  collapsibleHeaderLeft: {
+    flex: 1,
+    marginRight: 12,
+  },
+  collapsibleTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  collapsibleSubtitle: {
+    fontSize: 12,
+    marginTop: 2,
+  },
+  chevron: {
+    fontSize: 11,
+    fontWeight: '600',
+  },
+  collapsibleBody: {
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+    paddingHorizontal: 18,
+    paddingTop: 16,
+    paddingBottom: 16,
+    marginTop: -8,
+    paddingTop: 20,
+  },
+  bodySubtitle: {
     fontSize: 13,
-    marginBottom: 20,
+    marginBottom: 16,
+    lineHeight: 18,
+  },
+  bodyWarning: {
+    fontSize: 13,
+    marginBottom: 16,
     lineHeight: 18,
   },
 
@@ -359,7 +515,7 @@ const styles = StyleSheet.create({
   toggleCard: {
     borderRadius: 12,
     borderWidth: 1,
-    marginBottom: 32,
+    marginBottom: 4,
     overflow: 'hidden',
   },
   toggleRow: {
@@ -394,7 +550,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingVertical: 16,
     paddingHorizontal: 18,
-    marginBottom: 12,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -418,7 +574,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   deleteAllButton: {
-    marginTop: 24,
+    marginTop: 8,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -433,7 +589,6 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     borderWidth: 1,
-    marginBottom: 32,
   },
   updateButtonText: {
     fontSize: 16,
