@@ -7,7 +7,7 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
@@ -22,7 +22,6 @@ import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 export default function TimedQRTestScreen({ route }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
-  const insets = useSafeAreaInsets();
 
   const [setIndex, setSetIndex] = useState(0);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -216,18 +215,17 @@ export default function TimedQRTestScreen({ route }) {
             </View>
           </View>
         </View>
-      </ScrollView>
 
-      {/* Bottom toolbar — Navigator */}
-      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 4 }]}>
-        <TouchableOpacity
-          style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
-          onPress={() => setNavigatorVisible(true)}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
-        </TouchableOpacity>
-      </View>
+        <View style={styles.bottomButtons}>
+          <TouchableOpacity
+            style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
+            onPress={() => setNavigatorVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
 
       <TestNavigatorModal
         visible={navigatorVisible}
@@ -348,11 +346,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  bottomBar: {
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    borderTopWidth: 1,
-    alignItems: 'flex-end',
+  bottomButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    marginTop: 16,
+    marginHorizontal: 20,
+    marginBottom: 8,
   },
   navigatorButton: {
     borderWidth: 1,

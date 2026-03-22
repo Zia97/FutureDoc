@@ -265,26 +265,25 @@ export default function TimedSJTestScreen({ route, navigation }) {
                 </TouchableOpacity>
               )}
             </View>
+
+            <View style={styles.bottomButtons}>
+              <TouchableOpacity
+                style={[styles.pauseButton, { borderColor: t.borderStrong }]}
+                onPress={pause}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.navigatorButton, { borderColor: sectionColor }]}
+                onPress={() => setNavigatorVisible(true)}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         )}
-      </View>
-
-      {/* Bottom toolbar — Pause + Navigator */}
-      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 4 }]}>
-        <TouchableOpacity
-          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
-          onPress={pause}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navigatorButton, { borderColor: sectionColor }]}
-          onPress={() => setNavigatorVisible(true)}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Pause overlay */}
@@ -398,7 +397,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   panelContent: {
-    maxHeight: 340,
+    maxHeight: 380,
   },
   panelContentInner: {
     paddingHorizontal: 20,
@@ -433,13 +432,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
-  bottomBar: {
-    paddingHorizontal: 16,
-    paddingTop: 4,
-    borderTopWidth: 1,
+  bottomButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 16,
   },
   pauseButton: {
     borderWidth: 1,
