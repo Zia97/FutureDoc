@@ -18,6 +18,7 @@ import { useItemNavigation } from '../../hooks/ui/useItemNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
@@ -35,6 +36,10 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const insets = useSafeAreaInsets();
 
   const panelScrollRef = useRef(null);
+  const onExpireRef = useRef(null);
+  const secondsLeftRef = useRef(test.timeMinutes * 60);
+  const endExamCalledRef = useRef(false);
+
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [examEnded, setExamEnded] = useState(false);
@@ -42,7 +47,13 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const [seenItems, setSeenItems] = useState(new Set());
   const [panelExpanded, setPanelExpanded] = useState(true);
 
-  const { display: timerDisplay, isUrgent, isPaused, pause, resume } = useTestTimer(test.timeMinutes);
+  const { submitExam } = useTimedSJExamProgress();
+
+  const { secondsLeft, display: timerDisplay, isUrgent, isPaused, pause, resume } = useTestTimer(
+    test.timeMinutes,
+    () => onExpireRef.current?.(),
+  );
+  secondsLeftRef.current = secondsLeft;
 
   // Adapt scenarios so useItemNavigation can work with item.questions
   const scenarios = useMemo(
@@ -66,6 +77,15 @@ export default function TimedSJTestScreen({ route, navigation }) {
   } = useItemNavigation(scenarios, 0);
 
   const { handleAnswer, getAnswer } = useAnswers({});
+
+  function endExam() {
+    if (endExamCalledRef.current) return;
+    endExamCalledRef.current = true;
+    setExamEnded(true);
+    submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current });
+  }
+
+  onExpireRef.current = endExam;
 
   const scenarioId = item.scenarioId;
   const itemId = question.itemId;
@@ -151,7 +171,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
           goToItemAndQuestion(passageIndex, questionIndex);
           setShowReview(false);
         }}
-        onEndTest={() => setExamEnded(true)}
+        onEndTest={endExam}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
       />

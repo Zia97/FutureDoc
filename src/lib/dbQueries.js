@@ -510,6 +510,82 @@ class DatabaseService {
     const { error: e2 } = await supabase.from('situational_judgement_scenario_progress').delete().eq('user_id', userId);
     if (e2) throw e2;
   }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Situational Judgement — Progress
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Inserts the exam attempt row. Returns the new attempt UUID.
+   * Called once when the student ends the exam.
+   */
+  async insertTimedSJExamAttempt(userId, testId, timeTakenSeconds, correctCount, totalQuestions, scorePercent) {
+    const { data, error } = await supabase
+      .from('timed_situational_judgement_exam_attempts')
+      .insert({
+        user_id: userId,
+        test_id: testId,
+        time_taken_seconds: timeTakenSeconds,
+        correct_count: correctCount,
+        total_questions: totalQuestions,
+        score_percent: scorePercent,
+      })
+      .select('id')
+      .single();
+    if (error) throw error;
+    return data.id;
+  }
+
+  /**
+   * Bulk-inserts all question answers for an exam attempt.
+   * Called immediately after insertTimedSJExamAttempt.
+   * @param {string} examAttemptId
+   * @param {string} userId
+   * @param {{ questionId, scenarioId, selectedAnswer, isCorrect }[]} answers
+   */
+  async insertTimedSJQuestionAnswers(examAttemptId, userId, answers) {
+    const rows = answers.map(({ questionId, scenarioId, selectedAnswer, isCorrect }) => ({
+      exam_attempt_id: examAttemptId,
+      user_id: userId,
+      question_id: questionId,
+      scenario_id: scenarioId,
+      selected_answer: selectedAnswer,
+      is_correct: isCorrect,
+    }));
+    const { error } = await supabase
+      .from('timed_situational_judgement_question_answers')
+      .insert(rows);
+    if (error) throw error;
+  }
+
+  /**
+   * Fetches all completed exam attempts for a user.
+   * Used by the test list screen to show scores.
+   * @param {string} userId
+   */
+  async fetchTimedSJExamAttempts(userId) {
+    const { data, error } = await supabase
+      .from('timed_situational_judgement_exam_attempts')
+      .select('test_id, score_percent, correct_count, total_questions, submitted_at, time_taken_seconds')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Deletes a user's exam attempt for a specific test.
+   * Cascades to delete all question answers for that attempt.
+   * @param {string} userId
+   * @param {number} testId
+   */
+  async deleteTimedSJExamAttempt(userId, testId) {
+    const { error } = await supabase
+      .from('timed_situational_judgement_exam_attempts')
+      .delete()
+      .eq('user_id', userId)
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
 }
 
 export const db = new DatabaseService();
