@@ -22,12 +22,13 @@ import ScreenNavBar from '../../components/ScreenNavBar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedSJResultsScreen from '../../components/TimedSJResultsScreen';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
 
-export default function TimedSJTestScreen({ route }) {
+export default function TimedSJTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
   const insets = useSafeAreaInsets();
@@ -35,6 +36,7 @@ export default function TimedSJTestScreen({ route }) {
   const panelScrollRef = useRef(null);
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [examEnded, setExamEnded] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenItems, setSeenItems] = useState(new Set());
   const [panelExpanded, setPanelExpanded] = useState(true);
@@ -126,6 +128,18 @@ export default function TimedSJTestScreen({ route }) {
     return 'Unseen';
   }
 
+  if (examEnded) {
+    return (
+      <TimedSJResultsScreen
+        scenarios={scenarios}
+        getAnswer={getAnswer}
+        flags={flags}
+        test={test}
+        onDone={() => navigation.navigate('TimedTestList', { section: 'SJ', title: 'Situational Judgement' })}
+      />
+    );
+  }
+
   if (showReview) {
     return (
       <SJTestReviewScreen
@@ -136,9 +150,7 @@ export default function TimedSJTestScreen({ route }) {
           goToItemAndQuestion(passageIndex, questionIndex);
           setShowReview(false);
         }}
-        onEndTest={() => {
-          // TODO: wire up end-test logic (results screen)
-        }}
+        onEndTest={() => setExamEnded(true)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
       />

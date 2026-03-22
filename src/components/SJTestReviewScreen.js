@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
+  Alert,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
@@ -167,7 +168,16 @@ export default function SJTestReviewScreen({
         </Text>
         <TouchableOpacity
           style={[styles.endButton, { backgroundColor: t.danger }]}
-          onPress={onEndTest}
+          onPress={() =>
+            Alert.alert(
+              'End Exam',
+              'Are you sure you want to end the exam? You will not be able to change your answers.',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                { text: 'End Exam', style: 'destructive', onPress: onEndTest },
+              ],
+            )
+          }
           activeOpacity={0.85}
         >
           <Text style={styles.endButtonText}>End Test</Text>

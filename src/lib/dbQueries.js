@@ -379,6 +379,37 @@ class DatabaseService {
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Situational Judgement — Content
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all timed SJ scenarios with their nested questions, grouped by test_id.
+   * label_set on each question determines which fixed answer options are shown (1=importance, 2=appropriateness).
+   */
+  async fetchTimedSJTests() {
+    const { data, error } = await supabase
+      .from('timed_situational_judgement_scenarios')
+      .select(`
+        id,
+        test_id,
+        label_set,
+        body,
+        timed_situational_judgement_questions (
+          id,
+          question_text,
+          correct_answer,
+          answer_reason,
+          order_index,
+          label_set
+        )
+      `)
+      .order('test_id', { ascending: true })
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    return data;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
   // Situational Judgement — Progress
   // ─────────────────────────────────────────────────────────────────────────────
 

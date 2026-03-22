@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { db } from '../../lib/dbQueries';
+import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 
-function mapTests(data) {
+// Maps dev JSON format (preview-sj-timed.json) into the app data shape.
+function mapDevTests(data) {
   return data.map((test) => ({
     id: test.id,
     title: test.title,
@@ -26,6 +29,46 @@ function mapTests(data) {
   }));
 }
 
+// Maps DB rows (grouped by test_id) into the app data shape.
+function mapDBTests(rows) {
+  const grouped = {};
+
+  for (const scenario of rows) {
+    const testId = scenario.test_id;
+    if (!grouped[testId]) grouped[testId] = [];
+    grouped[testId].push(scenario);
+  }
+
+  return Object.entries(grouped)
+    .sort(([a], [b]) => Number(a) - Number(b))
+    .map(([testId, scenarios]) => {
+      const mappedScenarios = scenarios.map((s) => ({
+        scenarioId: s.id,
+        stem: s.body,
+        items: [...s.timed_situational_judgement_questions]
+          .sort((a, b) => a.order_index - b.order_index)
+          .map((q) => ({
+            itemId: q.id,
+            type: q.label_set === 1 ? 'importance' : 'appropriateness',
+            text: q.question_text,
+            answer: q.correct_answer,
+            answeringReason: q.answer_reason,
+          })),
+      }));
+
+      const questionCount = mappedScenarios.reduce((sum, s) => sum + s.items.length, 0);
+
+      return {
+        id: `timed-sj-test-${testId}`,
+        title: `SJ Timed Test ${testId}`,
+        scenarioCount: mappedScenarios.length,
+        questionCount,
+        timeMinutes: 26,
+        scenarios: mappedScenarios,
+      };
+    });
+}
+
 export function useTimedSJTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -38,16 +81,23 @@ export function useTimedSJTests() {
         if (enabled) {
           const data = require('../../dev/preview-sj-timed.json');
           if (data?.length > 0) {
-            setTests(mapTests(data));
+            setTests(mapDevTests(data));
             setLoading(false);
             return;
           }
         }
       }
 
-      // TODO: fetch from DB
-      setTests([]);
-      setLoading(false);
+      try {
+        const rows = await withRetry(() => db.fetchTimedSJTests(), {
+          shouldRetry: (result) => result.length === 0,
+        });
+        setTests(mapDBTests(rows));
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
     }
 
     load();
