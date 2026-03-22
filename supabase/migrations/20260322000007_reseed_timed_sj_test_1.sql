@@ -2,9 +2,12 @@
 -- Clears all existing SJ timed content and re-inserts Test 1 from the updated source.
 -- label_set: 1 = importance scale, 2 = appropriateness scale
 
--- Clear existing data (questions first due to FK, then scenarios)
-DELETE FROM timed_situational_judgement_questions;
-DELETE FROM timed_situational_judgement_scenarios;
+-- Clear existing Test 1 data only (questions first due to FK, then scenarios)
+DELETE FROM timed_situational_judgement_questions
+WHERE scenario_id IN (
+  SELECT id FROM timed_situational_judgement_scenarios WHERE test_id = 1
+);
+DELETE FROM timed_situational_judgement_scenarios WHERE test_id = 1;
 
 DO $$
 DECLARE
