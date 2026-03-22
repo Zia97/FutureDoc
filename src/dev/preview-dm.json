@@ -1,26 +1,277 @@
 [
   {
-    "id": "d4e5f6a7-0004-0004-0001-000000000007",
-    "title": "Night Shift Registrars",
+    "id": "d1000000-0000-0000-0000-000000000001",
+    "title": "Surgeons and Doctors",
     "type": "syllogism",
-    "stem": "All registrars on the night shift have completed advanced life support (ALS) training. No doctor who has completed ALS training is unfamiliar with defibrillator protocols. Some doctors who are familiar with defibrillator protocols work in the emergency department.",
+    "stem": "All surgeons are doctors. Some doctors work in hospitals. No doctors are pharmacists.",
     "table_data": null,
     "stimulus_diagram": null,
     "correct_answer": null,
-    "answer_reason": "Statement 1 follows with certainty: all night shift registrars completed ALS (premise 1), and no ALS-trained doctor is unfamiliar with defibrillator protocols (premise 2), so all night shift registrars must be familiar with defibrillator protocols. Statement 2 does not follow: although some defibrillator-familiar doctors work in ED, we cannot conclude that any night shift registrars are among them — the overlap is not established by the premises.",
-    "order_index": 0,
+    "answer_reason": "From 'all surgeons are doctors' and 'no doctors are pharmacists', no surgeon can be a pharmacist (Yes). 'Some doctors work in hospitals' does not guarantee those doctors are surgeons – so we cannot conclude some surgeons work in hospitals (No). 'All doctors are surgeons' reverses the stated relationship (No). 'Some doctors work in hospitals' means some hospital workers are doctors (Yes). Since all surgeons are doctors and no doctors are pharmacists, it is impossible for any pharmacist to be a surgeon (No).",
+    "order_index": 1,
     "decision_making_question_options": [],
     "decision_making_question_statements": [
+      { "statement_text": "Some surgeons work in hospitals.", "correct_answer": "No", "order_index": 1 },
+      { "statement_text": "No surgeons are pharmacists.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "All doctors are surgeons.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "Some hospital workers are doctors.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "It is possible that some pharmacists are surgeons.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000002",
+    "title": "Students in a Row",
+    "type": "logic_puzzle",
+    "stem": "Five students – Alice, Bob, Carol, Dave, and Eve – sit in a row of five seats numbered 1 to 5 from left to right.\n\n• Alice sits next to Bob.\n• Carol sits at one end of the row.\n• Dave sits as far from Carol as possible.\n• Eve sits between Alice and Dave.\n\nWho sits in seat 5 (far right)?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "D",
+    "answer_reason": "Place Carol at seat 1 (one end). Dave must be at seat 5 (as far as possible from Carol). Eve sits between Alice and Dave, so Eve is at seat 4. Alice must be adjacent to both Eve (seat 4) and Bob, placing Alice at seat 3 and Bob at seat 2. Final order: Carol(1) Bob(2) Alice(3) Eve(4) Dave(5). Dave sits at the far right.",
+    "order_index": 2,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Alice", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Bob", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Carol", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Dave", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000003",
+    "title": "Banning Junk Food",
+    "type": "strongest_argument",
+    "stem": "A government should ban the sale of junk food to children under 16.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "A",
+    "answer_reason": "Option A is strongest – it directly addresses the core health issue with a relevant, substantiated reason. Option B shifts responsibility without addressing the health problem. Option C argues 'Yes' but immediately undermines itself with a reason the ban would fail, making it weak. Option D raises an economic concern unrelated to the central question of children's health.",
+    "order_index": 3,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Yes; rates of childhood obesity have risen sharply, and junk food is a significant contributing factor to this health crisis.", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "No; parents, not governments, are ultimately responsible for their children's diets and food choices.", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Yes; a ban would be very difficult to enforce because children could still obtain junk food through adults.", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "No; junk food manufacturers employ thousands of workers, and a ban could trigger significant job losses.", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000004",
+    "title": "Hospital Travel Times",
+    "type": "interpreting_info",
+    "stem": "A study recorded average travel times (in minutes) to hospital by transport type and time of day.",
+    "table_data": {
+      "headers": ["Transport", "Morning", "Afternoon", "Evening"],
+      "rows": [
+        ["Bus", "45", "38", "52"],
+        ["Car", "22", "18", "30"],
+        ["Train", "35", "28", "40"],
+        ["Taxi", "25", "20", "32"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "Car has the lowest travel times across all columns (22/18/30 – Yes). Bus morning minus train morning = 45–35 = 10, which is greater than 5 (Yes). Taxi afternoon (20 min) < Train morning (35 min) – Yes. Evening times are consistently higher than morning times for all transport types (e.g. car: 30 > 22) – so statement 4 is No. Bus afternoon (38) < Train evening (40) – Yes.",
+    "order_index": 4,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Car is the fastest transport type at all times of day.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "The difference in morning travel times between Bus and Train is greater than 5 minutes.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "A patient travelling by taxi in the afternoon arrives before one travelling by train in the morning.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "Evening travel times are shorter than morning travel times for all transport types.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "Taking the bus in the afternoon is faster than taking a train in the evening.", "correct_answer": "Yes", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000005",
+    "title": "Birds in an Aviary",
+    "type": "venn_diagram",
+    "stem": "There are nine birds in an aviary. Two are yellow and green. Two are red only, and one is red and yellow.\n\nThe square represents green birds, the circle represents yellow birds, and the triangle represents red birds.\n\nWhich of the following diagrams best represents the above data?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "C",
+    "answer_reason": "Yellow+green birds = 2 (set1_set2 = 2). Red only = 2 (set3_only = 2). Red+yellow = 1 (set2_set3 = 1). Total = 9, so green only = 9–2–2–1 = 4 (set1_only = 4) and yellow only = 0 (set2_only = 0). Only option C has all five values correct.",
+    "order_index": 5,
+    "decision_making_question_options": [
       {
-        "statement_text": "All registrars on the night shift are familiar with defibrillator protocols.",
-        "correct_answer": "Yes",
-        "order_index": 0
+        "label": "A",
+        "option_text": null,
+        "option_data": {
+          "sets": [
+            { "id": "set1", "label": "Green", "shape": "square" },
+            { "id": "set2", "label": "Yellow", "shape": "circle" },
+            { "id": "set3", "label": "Red", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 0, "set2_set3": 0, "set3_only": 2 },
+          "diagramLayout": "three_linear"
+        },
+        "order_index": 1
       },
       {
-        "statement_text": "Some registrars on the night shift work in the emergency department.",
-        "correct_answer": "No",
-        "order_index": 1
+        "label": "B",
+        "option_text": null,
+        "option_data": {
+          "sets": [
+            { "id": "set1", "label": "Green", "shape": "square" },
+            { "id": "set2", "label": "Yellow", "shape": "circle" },
+            { "id": "set3", "label": "Red", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 3, "set1_set2": 2, "set2_only": 1, "set2_set3": 1, "set3_only": 2 },
+          "diagramLayout": "three_linear"
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": null,
+        "option_data": {
+          "sets": [
+            { "id": "set1", "label": "Green", "shape": "square" },
+            { "id": "set2", "label": "Yellow", "shape": "circle" },
+            { "id": "set3", "label": "Red", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 0, "set2_set3": 1, "set3_only": 2 },
+          "diagramLayout": "three_linear"
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": null,
+        "option_data": {
+          "sets": [
+            { "id": "set1", "label": "Green", "shape": "square" },
+            { "id": "set2", "label": "Yellow", "shape": "circle" },
+            { "id": "set3", "label": "Red", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 2, "set1_set2": 2, "set2_only": 2, "set2_set3": 1, "set3_only": 2 },
+          "diagramLayout": "three_linear"
+        },
+        "order_index": 4
       }
-    ]
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000006",
+    "title": "Drug Clinical Trial",
+    "type": "probabilistic",
+    "stem": "In a clinical trial, 200 patients were randomly assigned to receive either a new drug (100 patients) or a placebo (100 patients). After 6 months, 40 patients in the drug group showed improvement compared to 25 in the placebo group. The results were statistically significant (p < 0.05).",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "A",
+    "answer_reason": "The drug group showed significantly more improvement than placebo (40% vs 25%), confirmed as statistically significant – supporting that the drug benefits at least some patients (A). Option B incorrectly claims the exact trial rate generalises to all patients. Option C is directly contradicted by the 25 placebo patients who did improve. Option D goes beyond the trial's scope, which made no comparison to existing treatments.",
+    "order_index": 6,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "The new drug is likely to be beneficial for at least some patients.", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "The new drug will improve outcomes in exactly 40% of all patients.", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Patients in the placebo group cannot improve without medication.", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "This trial proves the new drug is more effective than all existing treatments.", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000007",
+    "title": "Biology and Chemistry Students",
+    "type": "venn_diagram",
+    "stem": "The diagram shows students categorised by the subjects they study. The square represents Biology students and the circle represents Chemistry students. Each letter marks a different region of the diagram.\n\nWhich letter represents a student who studies Biology but not Chemistry?",
+    "table_data": null,
+    "stimulus_diagram": {
+      "sets": [
+        { "id": "set1", "label": "Biology", "shape": "square" },
+        { "id": "set2", "label": "Chemistry", "shape": "circle" }
+      ],
+      "regions": { "outside": "S", "set1_only": "P", "set1_set2": "R", "set2_only": "Q" },
+      "diagramLayout": "two_overlap"
+    },
+    "correct_answer": "A",
+    "answer_reason": "The square represents Biology and the circle represents Chemistry. Region P is inside the square but outside the circle – Biology only. Region Q is Chemistry only. Region R is the overlap (both subjects). Region S is outside both shapes (neither subject). A student studying Biology but not Chemistry is in region P – Answer A.",
+    "order_index": 7,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter P", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter Q", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter R", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter S", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000008",
+    "title": "Sports Club Members",
+    "type": "venn_diagram",
+    "stem": "The diagram shows members of a sports club. The circle represents Football players, the square represents Tennis players, and the triangle represents Swimming players. Each letter marks a different region.\n\nWhich letter represents members who play Tennis and Swimming but not Football?",
+    "table_data": null,
+    "stimulus_diagram": {
+      "sets": [
+        { "id": "set1", "label": "Football", "shape": "circle" },
+        { "id": "set2", "label": "Tennis", "shape": "square" },
+        { "id": "set3", "label": "Swimming", "shape": "triangle" }
+      ],
+      "regions": { "all_three": "G", "set1_only": "A", "set1_set2": "D", "set1_set3": "E", "set2_only": "B", "set2_set3": "F", "set3_only": "C" },
+      "diagramLayout": "three_all_overlap"
+    },
+    "correct_answer": "C",
+    "answer_reason": "The overlap between Tennis (square) and Swimming (triangle) but outside Football (circle) is region F – set2_set3. Region D is Football ∩ Tennis. Region E is Football ∩ Swimming. Region G is all three sports. Members playing Tennis and Swimming but not Football are in region F – Answer C.",
+    "order_index": 8,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter D", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter E", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter F", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter G", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000009",
+    "title": "Café Dietary Preferences",
+    "type": "venn_diagram",
+    "stem": "The diagram shows café customers categorised by dietary preference. The circle represents Vegetarian customers, the pentagon represents Gluten-free customers, and the diamond represents Dairy-free customers. Each letter marks a different region.\n\nWhich letter represents a customer who is Vegetarian and Dairy-free but not Gluten-free?",
+    "table_data": null,
+    "stimulus_diagram": {
+      "sets": [
+        { "id": "set1", "label": "Vegetarian", "shape": "circle" },
+        { "id": "set2", "label": "Gluten-free", "shape": "pentagon" },
+        { "id": "set3", "label": "Dairy-free", "shape": "diamond" }
+      ],
+      "regions": { "all_three": "P", "set1_only": "J", "set1_set2": "M", "set1_set3": "N", "set2_only": "K", "set2_set3": "O", "set3_only": "L" },
+      "diagramLayout": "three_all_overlap"
+    },
+    "correct_answer": "B",
+    "answer_reason": "The overlap between Vegetarian (circle) and Dairy-free (diamond) but outside Gluten-free (pentagon) is region N – set1_set3. Region M is Vegetarian ∩ Gluten-free. Region O is Gluten-free ∩ Dairy-free. Region P is all three preferences. A customer who is Vegetarian and Dairy-free but not Gluten-free is in region N – Answer B.",
+    "order_index": 9,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter M", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter N", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter O", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter P", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d1000000-0000-0000-0000-000000000010",
+    "title": "School Club Membership",
+    "type": "venn_diagram",
+    "stem": "The diagram shows pupils categorised by school club membership.\n\nKey:\n  Rectangle = Art Club\n  Square = Science Club\n  Triangle = Sports Club\n  Circle = Music Club\n  Diamond = Drama Club\n\nEach letter marks a distinct region. A pupil's letter indicates which clubs they belong to.\n\nWhich letter represents pupils who are members of both Music Club and Drama Club but not Sports Club?",
+    "table_data": null,
+    "stimulus_diagram": {
+      "sets": [
+        { "id": "set1", "label": "Art Club", "shape": "rectangle" },
+        { "id": "set2", "label": "Science Club", "shape": "square" },
+        { "id": "set3", "label": "Sports Club", "shape": "triangle" },
+        { "id": "set4", "label": "Music Club", "shape": "circle" },
+        { "id": "set5", "label": "Drama Club", "shape": "diamond" }
+      ],
+      "regions": { "set1_only": "C", "set1_set2": "B", "set1_set4": "D", "set2_only": "A", "set3_only": "G", "set1_set3_set5": "F", "set1_set4_set5": "E" },
+      "diagramLayout": "five_complex"
+    },
+    "correct_answer": "B",
+    "answer_reason": "Music Club = circle (set4), Drama Club = diamond (set5), Sports Club = triangle (set3). Region E sits inside the Art rectangle, inside the Music circle, and inside the Drama diamond – but outside the Sports triangle. This is the only region representing Music ∩ Drama without Sports. Letter D is Music only (not Drama), Letter F is Drama ∩ Sports (not Music), Letter G is Sports only. Answer: B (Letter E).",
+    "order_index": 10,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter D", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter E", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter F", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter G", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
   }
 ]
