@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  LayoutAnimation,
   Platform,
   UIManager,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
-import { useItemNavigation } from '../../hooks/ui/useItemNavigation';
+import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
@@ -34,35 +33,18 @@ export default function TimedVRTestScreen({ route }) {
   const [showReview, setShowReview] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
-  const [panelExpanded, setPanelExpanded] = useState(true);
 
   const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
-
-  const {
-    itemIndex,
-    questionIndex,
-    item,
-    question,
-    isFirstItem,
-    isLastItem,
-    isFirstQuestion,
-    isLastQuestion,
-    goToItem,
-    goToItemAndQuestion,
-    goToNextQuestion,
-    goToPrevQuestion,
-  } = useItemNavigation(test.passages, 0);
-
+  const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
+    useFlatNavigation(test.flatQuestions, 0);
   const { handleAnswer, getAnswer } = useAnswers({});
 
-  const itemId = item.id;
-  const qid = question.questionId ?? question.id;
-  const selectedAnswer = getAnswer(itemId, qid);
+  const qid = item.question.questionId;
+  const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
   const sectionColor = t.sectionVR;
   const isFlagged = flags.has(qid);
 
-  // Mark question as seen whenever we land on it
   useEffect(() => {
     setSeenQuestions((prev) => {
       if (prev.has(qid)) return prev;
@@ -72,41 +54,14 @@ export default function TimedVRTestScreen({ route }) {
     });
   }, [qid]);
 
-  // Flat list of all questions for the navigator
-  const flatQuestions = useMemo(() => {
-    const list = [];
-    test.passages.forEach((passage, pIdx) => {
-      passage.questions.forEach((q, qIdx) => {
-        list.push({
-          globalIndex: list.length,
-          passageIndex: pIdx,
-          questionIndex: qIdx,
-          questionId: q.questionId,
-        });
-      });
-    });
-    return list;
-  }, [test]);
-
   const panHandlers = useSwipeGesture(
-    isFirstItem ? null : () => goToItem(itemIndex - 1),
-    isLastItem ? null : () => goToItem(itemIndex + 1),
+    isFirst ? null : goPrev,
+    isLast ? null : goNext,
   );
-
-  function getOptionState(option) {
-    if (!hasAnswered) return 'idle';
-    if (option === selectedAnswer) return 'selected';
-    return 'idle';
-  }
 
   function onAnswer(option) {
     if (hasAnswered) return;
-    handleAnswer(itemId, qid, option);
-  }
-
-  function togglePanel() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setPanelExpanded((v) => !v);
+    handleAnswer(item.stemId, qid, option);
   }
 
   function toggleFlag(questionId) {
@@ -118,26 +73,30 @@ export default function TimedVRTestScreen({ route }) {
     });
   }
 
+  function getOptionState(option) {
+    if (!hasAnswered) return 'idle';
+    if (option === selectedAnswer) return 'selected';
+    return 'idle';
+  }
+
   function getQuestionStatus(fq) {
-    const passage = test.passages[fq.passageIndex];
-    const answered = getAnswer(passage.id, fq.questionId);
+    const answered = getAnswer(fq.stemId, fq.question.questionId);
     if (answered) return 'Answered';
-    if (seenQuestions.has(fq.questionId)) return 'Incomplete';
+    if (seenQuestions.has(fq.question.questionId)) return 'Incomplete';
     return 'Unseen';
   }
 
   if (showReview) {
     return (
       <SJTestReviewScreen
-        questions={flatQuestions}
+        questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={(pIdx, qIdx) => { goToItemAndQuestion(pIdx, qIdx); setShowReview(false); }}
+        onNavigateTo={(flatIndex) => { goTo(flatIndex); setShowReview(false); }}
         onEndTest={() => {}}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
         title="Verbal Reasoning"
-        groupLabel="Passage"
       />
     );
   }
@@ -146,7 +105,6 @@ export default function TimedVRTestScreen({ route }) {
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
 
-      {/* Timed test header — title + timer */}
       <View style={styles.timedHeader}>
         <Text style={styles.timedHeaderTitle}>Verbal Reasoning</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
@@ -154,117 +112,69 @@ export default function TimedVRTestScreen({ route }) {
         </View>
       </View>
 
-      {/* Passage navigation bar */}
       <ScreenNavBar
-        title={item.title}
-        meta={`Passage ${itemIndex + 1} of ${test.passages.length}`}
-        onPrev={() => goToItem(itemIndex - 1)}
-        onNext={isLastItem ? () => setShowReview(true) : () => goToItem(itemIndex + 1)}
-        isFirst={isFirstItem}
+        title={item.stemTitle}
+        meta={`Question ${index + 1} of ${test.flatQuestions.length}`}
+        onPrev={goPrev}
+        onNext={isLast ? () => setShowReview(true) : goNext}
+        isFirst={isFirst}
         isLast={false}
         color={sectionColor}
       />
 
-      {/* Passage resource panel */}
       <View style={[styles.resourceContainer, { backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
         <Text style={[styles.resourceLabel, { color: sectionColor }]}>PASSAGE</Text>
-        <ScrollView key={itemIndex} showsVerticalScrollIndicator>
+        <ScrollView key={item.stemId} showsVerticalScrollIndicator>
           <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
         </ScrollView>
       </View>
 
-      {/* Question panel */}
-      <View style={[styles.questionPanel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-          <Text style={[styles.panelCounter, { color: t.textSecondary }]}>
-            Question {questionIndex + 1} of {item.questions.length}
-          </Text>
-          <View style={styles.panelHeaderRight}>
-            {/* Flag button */}
-            <TouchableOpacity
-              style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
-              onPress={() => toggleFlag(qid)}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
-                {isFlagged ? '⚑' : '⚐'}
-              </Text>
-            </TouchableOpacity>
-            <Text style={[styles.panelChevron, { color: sectionColor }]}>
-              {panelExpanded ? '▾' : '▴'}
-            </Text>
-          </View>
-        </TouchableOpacity>
-
-        {panelExpanded && (
-          <ScrollView
-            style={styles.panelContent}
-            contentContainerStyle={styles.panelContentInner}
-            showsVerticalScrollIndicator={false}
+      <ScrollView
+        style={styles.questionPanel}
+        contentContainerStyle={styles.questionPanelInner}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.questionHeader}>
+          <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+          <TouchableOpacity
+            style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
+            onPress={() => toggleFlag(qid)}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           >
-            <Text style={[styles.questionText, { color: t.text }]}>{question.questionText}</Text>
+            <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
+              {isFlagged ? '⚑' : '⚐'}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
-            <View style={styles.optionsContainer}>
-              {question.options.map((opt) => (
-                <AnswerOptionButton
-                  key={opt}
-                  label={opt}
-                  state={getOptionState(opt)}
-                  onPress={() => onAnswer(opt)}
-                />
-              ))}
-            </View>
+        <View style={styles.optionsContainer}>
+          {item.question.options.map((opt) => (
+            <AnswerOptionButton
+              key={opt}
+              label={opt}
+              state={getOptionState(opt)}
+              onPress={() => onAnswer(opt)}
+            />
+          ))}
+        </View>
 
-            <View style={styles.questionNav}>
-              <TouchableOpacity
-                style={[
-                  styles.questionNavButton,
-                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                  isFirstQuestion && styles.questionNavButtonDisabled,
-                ]}
-                onPress={goToPrevQuestion}
-                disabled={isFirstQuestion}
-              >
-                <Text style={[styles.questionNavText, { color: t.text }]}>← Previous</Text>
-              </TouchableOpacity>
-
-              {isLastItem && isLastQuestion ? (
-                <TouchableOpacity
-                  style={[styles.questionNavButton, { backgroundColor: t.headerBg, borderColor: t.headerBg }]}
-                  onPress={() => setShowReview(true)}
-                >
-                  <Text style={[styles.questionNavText, { color: '#ffffff' }]}>Review →</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={[styles.questionNavButton, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isLastQuestion && styles.questionNavButtonDisabled]}
-                  onPress={goToNextQuestion}
-                  disabled={isLastQuestion}
-                >
-                  <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
-                </TouchableOpacity>
-              )}
-            </View>
-
-            <View style={styles.bottomButtons}>
-              <TouchableOpacity
-                style={[styles.navigatorButton, { borderColor: sectionColor }]}
-                onPress={() => setNavigatorVisible(true)}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        )}
-      </View>
+        <View style={styles.bottomButtons}>
+          <TouchableOpacity
+            style={[styles.navigatorButton, { borderColor: sectionColor }]}
+            onPress={() => setNavigatorVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
 
       <TestNavigatorModal
         visible={navigatorVisible}
-        questions={flatQuestions}
+        questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={goToItemAndQuestion}
+        onNavigateTo={(flatIndex) => { goTo(flatIndex); setNavigatorVisible(false); }}
         onClose={() => setNavigatorVisible(false)}
       />
     </SafeAreaView>
@@ -272,9 +182,7 @@ export default function TimedVRTestScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   timedHeader: {
     backgroundColor: '#1e3a8a',
     flexDirection: 'row',
@@ -283,22 +191,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
-  timedHeaderTitle: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  timerBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  timerText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: 14,
-    fontVariant: ['tabular-nums'],
-  },
+  timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
+  timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
+  timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
   resourceContainer: {
     flex: 1,
     marginHorizontal: 20,
@@ -308,98 +203,29 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     borderWidth: 1,
   },
-  resourceLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  resourceText: {
-    fontSize: 14,
-    lineHeight: 22,
-  },
+  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 10 },
+  resourceText: { fontSize: 14, lineHeight: 22 },
   questionPanel: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    borderTopWidth: 1.5,
     marginTop: 8,
   },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  questionPanelInner: {
     paddingHorizontal: 20,
-    paddingVertical: 14,
+    paddingTop: 20,
+    paddingBottom: 24,
   },
-  panelHeaderRight: {
+  questionHeader: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: 12,
-  },
-  flagButton: {
-    borderRadius: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  flagIcon: {
-    fontSize: 20,
-  },
-  panelCounter: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  panelChevron: {
-    fontSize: 18,
-  },
-  panelContent: {
-    maxHeight: 340,
-  },
-  panelContentInner: {
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-  },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
     marginBottom: 16,
   },
-  optionsContainer: {
-    gap: 10,
-  },
-  questionNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    gap: 12,
-  },
-  questionNavButton: {
-    flex: 1,
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    borderWidth: 1.5,
-  },
-  questionNavButtonDisabled: {
-    opacity: 0.3,
-  },
-  questionNavText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  bottomButtons: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 16,
-  },
-  navigatorButton: {
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-  },
-  navigatorButtonText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, flex: 1 },
+  flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
+  flagIcon: { fontSize: 20 },
+  optionsContainer: { gap: 10 },
+  bottomButtons: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 },
+  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  navigatorButtonText: { fontSize: 12, fontWeight: '700' },
 });

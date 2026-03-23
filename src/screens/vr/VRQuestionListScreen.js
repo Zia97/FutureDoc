@@ -4,6 +4,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 import { useVerbalReasoningProgress } from '../../hooks/queries/useVerbalReasoningProgress';
+import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReasoningAttempts';
+import { getTargetFlatIndex } from '../../lib/flattenQuestions';
 import { useTheme } from '../../context/ThemeContext';
 
 const FILTERS = [
@@ -23,8 +25,9 @@ const indicator = StyleSheet.create({
 });
 
 export default function VRQuestionListScreen({ navigation }) {
-  const { passages, loading, error } = useVerbalReasoningPassages();
+  const { passages, flatQuestions, loading, error } = useVerbalReasoningPassages();
   const { progressMap, reload } = useVerbalReasoningProgress();
+  const { localAnswers } = useVerbalReasoningAttempts();
   const { theme: t } = useTheme();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -33,7 +36,6 @@ export default function VRQuestionListScreen({ navigation }) {
   useFocusEffect(useCallback(() => { reload(); }, [reload]));
 
   const filteredPassages = passages
-    .map((p, i) => ({ ...p, _originalIndex: i }))
     .filter((p) => {
       if (activeFilter === 'all') return true;
       const status = progressMap[p.id] ?? null;
@@ -92,7 +94,7 @@ export default function VRQuestionListScreen({ navigation }) {
         items={filteredPassages}
         getTitle={(item) => item.title}
         getStatus={(item) => progressMap[item.id] ?? null}
-        getIndex={(item) => item._originalIndex}
+        getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
         routeName="VRPassage"
         navigation={navigation}
       />

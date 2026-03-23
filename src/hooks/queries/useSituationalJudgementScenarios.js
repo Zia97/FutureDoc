@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+import { flattenSJScenarios } from '../../lib/flattenQuestions';
 
 const SECTION = 'situational_judgement';
 
@@ -87,5 +88,7 @@ export function useSituationalJudgementScenarios() {
     load();
   }, []);
 
-  return { scenarios, loading, error };
+  const flatQuestions = useMemo(() => flattenSJScenarios(scenarios), [scenarios]);
+
+  return { scenarios, flatQuestions, loading, error };
 }

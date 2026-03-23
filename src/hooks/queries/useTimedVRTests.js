@@ -3,17 +3,13 @@ import { db } from '../../lib/dbQueries';
 import { getCached } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+import { flattenTimedVRPassages } from '../../lib/flattenQuestions';
 
 const SECTION = 'timed_verbal_reasoning';
 
 function mapTests(data) {
-  return data.map((test) => ({
-    id: test.id,
-    title: test.title,
-    passageCount: test.passage_count,
-    questionCount: test.question_count,
-    timeMinutes: test.time_minutes,
-    passages: test.passages.map((p) => ({
+  return data.map((test) => {
+    const passages = test.passages.map((p) => ({
       id: p.id,
       title: p.title,
       resource: p.body,
@@ -26,8 +22,17 @@ function mapTests(data) {
           answer: q.correct_answer,
           answeringReason: q.answer_reason,
         })),
-    })),
-  }));
+    }));
+    return {
+      id: test.id,
+      title: test.title,
+      passageCount: test.passage_count,
+      questionCount: test.question_count,
+      timeMinutes: test.time_minutes,
+      passages,
+      flatQuestions: flattenTimedVRPassages(passages),
+    };
+  });
 }
 
 export function useTimedVRTests() {
@@ -52,7 +57,7 @@ export function useTimedVRTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {
-        setTests(cached.data);
+        setTests(cached.data.map((t) => t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) }));
         setLoading(false);
       }
 

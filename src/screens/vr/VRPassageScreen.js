@@ -6,7 +6,7 @@ import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReason
 
 export default function VRPassageScreen({ route }) {
   const { index } = route.params;
-  const { passages, loading } = useVerbalReasoningPassages();
+  const { flatQuestions, loading } = useVerbalReasoningPassages();
   const { submitAttempt, localAnswers, cacheLoading } = useVerbalReasoningAttempts();
 
   if (loading || cacheLoading) {
@@ -17,28 +17,25 @@ export default function VRPassageScreen({ route }) {
     );
   }
 
-  function handleAnswerCommit(passageId, questionId, selectedAnswer) {
-    const passage = passages.find((p) => p.id === passageId);
-    if (!passage) return;
+  function handleAnswerCommit(item, selectedAnswer) {
     submitAttempt({
-      questionId,
-      passageId,
+      questionId: item.question.questionId,
+      passageId: item.stemId,
       selectedAnswer,
-      totalQuestions: passage.questions.length,
+      totalQuestions: item.stemQuestionCount,
     });
   }
 
   return (
     <PassageLayout
-      items={passages}
+      flatQuestions={flatQuestions}
       initialIndex={index}
       itemLabel="Passage"
-      getTitle={(item) => item.title}
-      getId={(item) => item.id}
+      getTitle={(item) => item.stemTitle}
       initialAnswers={localAnswers}
       onAnswerCommit={handleAnswerCommit}
       section="vr"
-      getQuestionOptions={(_, question) => question.options}
+      getQuestionOptions={(item, question) => question.options}
       renderOptions={({ question, getOptionState, onAnswer }) =>
         question.options.map((opt) => (
           <AnswerOptionButton

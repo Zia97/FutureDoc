@@ -51,11 +51,13 @@ export default function TestNavigatorModal({
     copy.sort((a, b) => {
       let result = 0;
       if (sortKey === 'number') {
-        result = a.globalIndex - b.globalIndex;
+        result = a.flatIndex - b.flatIndex;
       } else if (sortKey === 'status') {
         result = STATUS_ORDER[getStatus(a)] - STATUS_ORDER[getStatus(b)];
       } else if (sortKey === 'flagged') {
-        result = (flags.has(b.questionId) ? 1 : 0) - (flags.has(a.questionId) ? 1 : 0);
+        const aId = a.question?.questionId ?? a.question?.itemId ?? a.questionId;
+        const bId = b.question?.questionId ?? b.question?.itemId ?? b.questionId;
+        result = (flags.has(bId) ? 1 : 0) - (flags.has(aId) ? 1 : 0);
       }
       return sortAsc ? result : -result;
     });
@@ -96,21 +98,22 @@ export default function TestNavigatorModal({
           <ScrollView style={styles.list} showsVerticalScrollIndicator>
             {sortedQuestions.map((q, idx) => {
               const status = getStatus(q);
-              const flagged = flags.has(q.questionId);
+              const qid = q.question?.questionId ?? q.question?.itemId ?? q.questionId;
+              const flagged = flags.has(qid);
               const rowBg = idx % 2 === 0 ? t.bgCard : t.bgSecondary;
 
               return (
                 <TouchableOpacity
-                  key={q.questionId}
+                  key={q.flatIndex}
                   style={[styles.row, { backgroundColor: rowBg, borderBottomColor: t.border }]}
                   onPress={() => {
-                    onNavigateTo(q.passageIndex, q.questionIndex);
+                    onNavigateTo(q.flatIndex);
                     onClose();
                   }}
                   activeOpacity={0.7}
                 >
                   <Text style={[styles.cell, styles.colNum, { color: t.text }]}>
-                    Question {q.globalIndex + 1}
+                    Question {q.flatIndex + 1}
                   </Text>
                   <Text style={[styles.cell, styles.colStatus, { color: STATUS_COLOR[status] ?? t.text }]}>
                     {status}

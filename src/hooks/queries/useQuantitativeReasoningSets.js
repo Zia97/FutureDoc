@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+import { flattenQRSets } from '../../lib/flattenQuestions';
 
 const SECTION = 'quantitative_reasoning';
 
@@ -88,5 +89,7 @@ export function useQuantitativeReasoningSets() {
     load();
   }, []);
 
-  return { sets, loading, error };
+  const flatQuestions = useMemo(() => flattenQRSets(sets), [sets]);
+
+  return { sets, flatQuestions, loading, error };
 }

@@ -3,16 +3,13 @@ import { db } from '../../lib/dbQueries';
 import { getCached } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+import { flattenTimedQRSets } from '../../lib/flattenQuestions';
 
 const SECTION = 'timed_quantitative_reasoning';
 
 function mapTests(data) {
-  return data.map((test) => ({
-    id: test.id,
-    title: test.title,
-    questionCount: test.question_count,
-    timeMinutes: test.time_minutes,
-    sets: test.sets.map((s) => ({
+  return data.map((test) => {
+    const sets = test.sets.map((s) => ({
       setId: s.set_id,
       title: s.title,
       stimulus: s.stimulus,
@@ -25,8 +22,16 @@ function mapTests(data) {
           answer: q.correct_answer,
           answeringReason: q.answer_reason,
         })),
-    })),
-  }));
+    }));
+    return {
+      id: test.id,
+      title: test.title,
+      questionCount: test.question_count,
+      timeMinutes: test.time_minutes,
+      sets,
+      flatQuestions: flattenTimedQRSets(sets),
+    };
+  });
 }
 
 export function useTimedQRTests() {
@@ -51,7 +56,7 @@ export function useTimedQRTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {
-        setTests(cached.data);
+        setTests(cached.data.map((t) => t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedQRSets(t.sets) }));
         setLoading(false);
       }
 

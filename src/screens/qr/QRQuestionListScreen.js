@@ -4,6 +4,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningProgress } from '../../hooks/queries/useQuantitativeReasoningProgress';
+import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
+import { getTargetFlatIndex } from '../../lib/flattenQuestions';
 import { useTheme } from '../../context/ThemeContext';
 
 const FILTERS = [
@@ -23,8 +25,9 @@ const indicator = StyleSheet.create({
 });
 
 export default function QRQuestionListScreen({ navigation }) {
-  const { sets, loading, error } = useQuantitativeReasoningSets();
+  const { sets, flatQuestions, loading, error } = useQuantitativeReasoningSets();
   const { progressMap, reload } = useQuantitativeReasoningProgress();
+  const { localAnswers } = useQuantitativeReasoningAttempts();
   const { theme: t } = useTheme();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,14 +35,12 @@ export default function QRQuestionListScreen({ navigation }) {
 
   useFocusEffect(useCallback(() => { reload(); }, [reload]));
 
-  const filteredSets = sets
-    .map((s, i) => ({ ...s, _originalIndex: i }))
-    .filter((s) => {
-      if (activeFilter === 'all') return true;
-      const status = progressMap[s.setId] ?? null;
-      if (activeFilter === 'not_started') return status === null;
-      return status === activeFilter;
-    });
+  const filteredSets = sets.filter((s) => {
+    if (activeFilter === 'all') return true;
+    const status = progressMap[s.setId] ?? null;
+    if (activeFilter === 'not_started') return status === null;
+    return status === activeFilter;
+  });
 
   if (loading) {
     return (
@@ -91,7 +92,7 @@ export default function QRQuestionListScreen({ navigation }) {
         items={filteredSets}
         getTitle={(item) => item.title}
         getStatus={(item) => progressMap[item.setId] ?? null}
-        getIndex={(item) => item._originalIndex}
+        getIndex={(item) => getTargetFlatIndex(item.setId, flatQuestions, localAnswers)}
         routeName="QRQuestion"
         navigation={navigation}
       />

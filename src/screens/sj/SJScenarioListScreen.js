@@ -4,6 +4,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 import { useSituationalJudgementProgress } from '../../hooks/queries/useSituationalJudgementProgress';
+import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
+import { getTargetFlatIndex } from '../../lib/flattenQuestions';
 import { useTheme } from '../../context/ThemeContext';
 
 const FILTERS = [
@@ -23,8 +25,9 @@ const indicator = StyleSheet.create({
 });
 
 export default function SJScenarioListScreen({ navigation }) {
-  const { scenarios, loading, error } = useSituationalJudgementScenarios();
+  const { scenarios, flatQuestions, loading, error } = useSituationalJudgementScenarios();
   const { progressMap, reload } = useSituationalJudgementProgress();
+  const { localAnswers } = useSituationalJudgementAttempts();
   const { theme: t } = useTheme();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -32,14 +35,12 @@ export default function SJScenarioListScreen({ navigation }) {
 
   useFocusEffect(useCallback(() => { reload(); }, [reload]));
 
-  const filteredScenarios = scenarios
-    .map((s, i) => ({ ...s, _originalIndex: i }))
-    .filter((s) => {
-      if (activeFilter === 'all') return true;
-      const status = progressMap[s.id] ?? null;
-      if (activeFilter === 'not_started') return status === null;
-      return status === activeFilter;
-    });
+  const filteredScenarios = scenarios.filter((s) => {
+    if (activeFilter === 'all') return true;
+    const status = progressMap[s.id] ?? null;
+    if (activeFilter === 'not_started') return status === null;
+    return status === activeFilter;
+  });
 
   if (loading) {
     return (
@@ -92,7 +93,7 @@ export default function SJScenarioListScreen({ navigation }) {
         items={filteredScenarios}
         getTitle={(_, index) => `Scenario ${index + 1}`}
         getStatus={(item) => progressMap[item.id] ?? null}
-        getIndex={(item) => item._originalIndex}
+        getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
         routeName="SJScenario"
         navigation={navigation}
       />

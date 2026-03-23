@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  LayoutAnimation,
   Platform,
   UIManager,
   Modal,
+  LayoutAnimation,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
-import { useItemNavigation } from '../../hooks/ui/useItemNavigation';
+import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
@@ -33,7 +33,6 @@ if (Platform.OS === 'android') {
 export default function TimedSJTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
-  const insets = useSafeAreaInsets();
 
   const panelScrollRef = useRef(null);
   const onExpireRef = useRef(null);
@@ -55,27 +54,8 @@ export default function TimedSJTestScreen({ route, navigation }) {
   );
   secondsLeftRef.current = secondsLeft;
 
-  // Adapt scenarios so useItemNavigation can work with item.questions
-  const scenarios = useMemo(
-    () => test.scenarios.map((s) => ({ ...s, questions: s.items })),
-    [test],
-  );
-
-  const {
-    itemIndex,
-    questionIndex,
-    item,
-    question,
-    isFirstItem,
-    isLastItem,
-    isFirstQuestion,
-    isLastQuestion,
-    goToItem,
-    goToItemAndQuestion,
-    goToNextQuestion,
-    goToPrevQuestion,
-  } = useItemNavigation(scenarios, 0);
-
+  const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
+    useFlatNavigation(test.flatQuestions, 0);
   const { handleAnswer, getAnswer } = useAnswers({});
 
   function endExam() {
@@ -87,12 +67,11 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
   onExpireRef.current = endExam;
 
-  const scenarioId = item.scenarioId;
-  const itemId = question.itemId;
-  const selectedAnswer = getAnswer(scenarioId, itemId);
+  const itemId = item.question.itemId;
+  const selectedAnswer = getAnswer(item.stemId, itemId);
   const sectionColor = t.sectionSJ;
   const isFlagged = flags.has(itemId);
-  const labelSet = question.type === 'importance' ? LABEL_SETS[1] : LABEL_SETS[2];
+  const labelSet = LABEL_SETS[item.labelSet];
 
   useEffect(() => {
     setSeenItems((prev) => {
@@ -103,28 +82,13 @@ export default function TimedSJTestScreen({ route, navigation }) {
     });
   }, [itemId]);
 
-  const flatQuestions = useMemo(() => {
-    const list = [];
-    scenarios.forEach((s, sIdx) => {
-      s.items.forEach((it, iIdx) => {
-        list.push({
-          globalIndex: list.length,
-          passageIndex: sIdx,
-          questionIndex: iIdx,
-          questionId: it.itemId,
-        });
-      });
-    });
-    return list;
-  }, [scenarios]);
-
   const panHandlers = useSwipeGesture(
-    isFirstItem ? null : () => goToItem(itemIndex - 1),
-    isLastItem ? null : () => goToItem(itemIndex + 1),
+    isFirst ? null : goPrev,
+    isLast ? null : goNext,
   );
 
   function onAnswer(option) {
-    handleAnswer(scenarioId, itemId, option);
+    handleAnswer(item.stemId, itemId, option);
   }
 
   function togglePanel() {
@@ -142,17 +106,16 @@ export default function TimedSJTestScreen({ route, navigation }) {
   }
 
   function getQuestionStatus(fq) {
-    const scenario = scenarios[fq.passageIndex];
-    const answered = getAnswer(scenario.scenarioId, fq.questionId);
+    const answered = getAnswer(fq.stemId, fq.question.itemId);
     if (answered) return 'Answered';
-    if (seenItems.has(fq.questionId)) return 'Incomplete';
+    if (seenItems.has(fq.question.itemId)) return 'Incomplete';
     return 'Unseen';
   }
 
   if (examEnded) {
     return (
       <TimedSJResultsScreen
-        scenarios={scenarios}
+        scenarios={test.scenarios}
         getAnswer={getAnswer}
         flags={flags}
         test={test}
@@ -164,13 +127,10 @@ export default function TimedSJTestScreen({ route, navigation }) {
   if (showReview) {
     return (
       <SJTestReviewScreen
-        questions={flatQuestions}
+        questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={(passageIndex, questionIndex) => {
-          goToItemAndQuestion(passageIndex, questionIndex);
-          setShowReview(false);
-        }}
+        onNavigateTo={(flatIndex) => { goTo(flatIndex); setShowReview(false); }}
         onEndTest={endExam}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
@@ -182,7 +142,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
 
-      {/* Timed header — title + timer */}
       <View style={styles.timedHeader}>
         <Text style={styles.timedHeaderTitle}>Situational Judgement</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
@@ -190,31 +149,26 @@ export default function TimedSJTestScreen({ route, navigation }) {
         </View>
       </View>
 
-      {/* Scenario nav bar */}
       <ScreenNavBar
-        title={`Scenario ${itemIndex + 1}`}
-        meta={`Scenario ${itemIndex + 1} of ${scenarios.length}`}
-        onPrev={() => goToItem(itemIndex - 1)}
-        onNext={isLastItem ? () => setShowReview(true) : () => goToItem(itemIndex + 1)}
-        isFirst={isFirstItem}
+        title={`Scenario ${item.stemIndex + 1}`}
+        meta={`Question ${index + 1} of ${test.flatQuestions.length}`}
+        onPrev={goPrev}
+        onNext={isLast ? () => setShowReview(true) : goNext}
+        isFirst={isFirst}
         isLast={false}
         color={sectionColor}
       />
 
-      {/* Scenario stem */}
       <View style={[styles.resourceContainer, { backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
         <Text style={[styles.resourceLabel, { color: sectionColor }]}>SCENARIO</Text>
-        <ScrollView key={itemIndex} showsVerticalScrollIndicator>
+        <ScrollView key={item.stemId} showsVerticalScrollIndicator>
           <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.stem}</Text>
         </ScrollView>
       </View>
 
-      {/* Question panel */}
       <View style={[styles.questionPanel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
         <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-          <Text style={[styles.panelCounter, { color: t.textSecondary }]}>
-            Item {questionIndex + 1} of {item.questions.length}
-          </Text>
+          <Text style={[styles.panelCounter, { color: t.textSecondary }]}>Question</Text>
           <View style={styles.panelHeaderRight}>
             <TouchableOpacity
               style={[styles.flagButton, isFlagged && styles.flagButtonActive]}
@@ -238,7 +192,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
             contentContainerStyle={styles.panelContentInner}
             showsVerticalScrollIndicator={false}
           >
-            <Text style={[styles.questionText, { color: t.text }]}>{question.text}</Text>
+            <Text style={[styles.questionText, { color: t.text }]}>{item.question.text}</Text>
 
             <View style={styles.optionsContainer}>
               {labelSet.map((opt) => (
@@ -249,41 +203,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
                   onPress={() => onAnswer(opt)}
                 />
               ))}
-            </View>
-
-            <View style={styles.questionNav}>
-              <TouchableOpacity
-                style={[
-                  styles.questionNavButton,
-                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                  isFirstQuestion && styles.questionNavButtonDisabled,
-                ]}
-                onPress={() => { goToPrevQuestion(); panelScrollRef.current?.scrollTo({ y: 0, animated: false }); }}
-                disabled={isFirstQuestion}
-              >
-                <Text style={[styles.questionNavText, { color: t.text }]}>← Previous</Text>
-              </TouchableOpacity>
-
-              {isLastItem && isLastQuestion ? (
-                <TouchableOpacity
-                  style={[styles.questionNavButton, { backgroundColor: '#1e3a8a', borderColor: '#1e3a8a' }]}
-                  onPress={() => setShowReview(true)}
-                >
-                  <Text style={[styles.questionNavText, { color: '#ffffff' }]}>Review →</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={[
-                    styles.questionNavButton,
-                    { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                    isLastQuestion && styles.questionNavButtonDisabled,
-                  ]}
-                  onPress={() => { goToNextQuestion(); panelScrollRef.current?.scrollTo({ y: 0, animated: false }); }}
-                  disabled={isLastQuestion}
-                >
-                  <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
-                </TouchableOpacity>
-              )}
             </View>
 
             <View style={styles.bottomButtons}>
@@ -306,7 +225,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
         )}
       </View>
 
-      {/* Pause overlay */}
       <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
         <View style={styles.pauseOverlay}>
           <View style={styles.pauseCard}>
@@ -323,10 +241,10 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
       <TestNavigatorModal
         visible={navigatorVisible}
-        questions={flatQuestions}
+        questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={goToItemAndQuestion}
+        onNavigateTo={(flatIndex) => { goTo(flatIndex); setNavigatorVisible(false); }}
         onClose={() => setNavigatorVisible(false)}
       />
     </SafeAreaView>
@@ -334,9 +252,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   timedHeader: {
     backgroundColor: '#1e3a8a',
     flexDirection: 'row',
@@ -345,22 +261,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
-  timedHeaderTitle: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  timerBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  timerText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: 14,
-    fontVariant: ['tabular-nums'],
-  },
+  timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
+  timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
+  timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
   resourceContainer: {
     flex: 1,
     marginHorizontal: 20,
@@ -370,16 +273,8 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     borderWidth: 1,
   },
-  resourceLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  resourceText: {
-    fontSize: 14,
-    lineHeight: 22,
-  },
+  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 10 },
+  resourceText: { fontSize: 14, lineHeight: 22 },
   questionPanel: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -393,80 +288,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
   },
-  panelHeaderRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  flagButton: {
-    borderRadius: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  flagButtonActive: {
-    backgroundColor: '#fef3c7',
-  },
-  flagIcon: {
-    fontSize: 20,
-  },
-  panelCounter: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  panelChevron: {
-    fontSize: 18,
-  },
-  panelContent: {
-    maxHeight: 380,
-  },
-  panelContentInner: {
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-  },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  optionsContainer: {
-    gap: 10,
-  },
-  questionNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    gap: 12,
-  },
-  questionNavButton: {
-    flex: 1,
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    borderWidth: 1.5,
-  },
-  questionNavButtonDisabled: {
-    opacity: 0.3,
-  },
-  questionNavText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  bottomButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 16,
-  },
-  pauseButton: {
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-  },
-  pauseButtonText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
+  panelHeaderRight: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
+  flagButtonActive: { backgroundColor: '#fef3c7' },
+  flagIcon: { fontSize: 20 },
+  panelCounter: { fontSize: 13, fontWeight: '600' },
+  panelChevron: { fontSize: 18 },
+  panelContent: { maxHeight: 380 },
+  panelContentInner: { paddingHorizontal: 20, paddingBottom: 16 },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, marginBottom: 16 },
+  optionsContainer: { gap: 10 },
+  bottomButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 },
+  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  pauseButtonText: { fontSize: 12, fontWeight: '700' },
   pauseOverlay: {
     flex: 1,
     backgroundColor: 'rgba(10, 15, 30, 0.92)',
@@ -485,16 +319,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.1)',
   },
-  pauseIcon: {
-    fontSize: 48,
-    marginBottom: 16,
-  },
-  pauseTitle: {
-    color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '800',
-    marginBottom: 10,
-  },
+  pauseIcon: { fontSize: 48, marginBottom: 16 },
+  pauseTitle: { color: '#ffffff', fontSize: 22, fontWeight: '800', marginBottom: 10 },
   pauseSubtitle: {
     color: 'rgba(255,255,255,0.55)',
     fontSize: 14,
@@ -517,19 +343,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
   },
-  resumeButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  navigatorButton: {
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-  },
-  navigatorButtonText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
+  resumeButtonText: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
+  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  navigatorButtonText: { fontSize: 12, fontWeight: '700' },
 });

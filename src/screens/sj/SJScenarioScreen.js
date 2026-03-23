@@ -7,7 +7,7 @@ import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituati
 
 export default function SJScenarioScreen({ route }) {
   const { index } = route.params;
-  const { scenarios, loading } = useSituationalJudgementScenarios();
+  const { flatQuestions, loading } = useSituationalJudgementScenarios();
   const { submitAttempt, localAnswers, cacheLoading } = useSituationalJudgementAttempts();
 
   if (loading || cacheLoading) {
@@ -18,24 +18,21 @@ export default function SJScenarioScreen({ route }) {
     );
   }
 
-  function handleAnswerCommit(scenarioId, questionId, selectedAnswer) {
-    const scenario = scenarios.find((s) => s.id === scenarioId);
-    if (!scenario) return;
+  function handleAnswerCommit(item, selectedAnswer) {
     submitAttempt({
-      questionId,
-      scenarioId,
+      questionId: item.question.questionId,
+      scenarioId: item.stemId,
       selectedAnswer,
-      totalQuestions: scenario.questions.length,
+      totalQuestions: item.stemQuestionCount,
     });
   }
 
   return (
     <PassageLayout
-      items={scenarios}
+      flatQuestions={flatQuestions}
       initialIndex={index}
       itemLabel="Scenario"
-      getTitle={(_, i) => `Scenario ${i + 1}`}
-      getId={(item) => item.id}
+      getTitle={(item) => `Scenario ${item.stemIndex + 1}`}
       alwaysShowReason
       initialAnswers={localAnswers}
       onAnswerCommit={handleAnswerCommit}

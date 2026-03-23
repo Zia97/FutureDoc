@@ -62,11 +62,13 @@ export default function SJTestReviewScreen({
     list.sort((a, b) => {
       let result = 0;
       if (sortKey === 'number') {
-        result = a.globalIndex - b.globalIndex;
+        result = a.flatIndex - b.flatIndex;
       } else if (sortKey === 'status') {
         result = STATUS_ORDER[getStatus(a)] - STATUS_ORDER[getStatus(b)];
       } else if (sortKey === 'flagged') {
-        result = (flags.has(b.questionId) ? 1 : 0) - (flags.has(a.questionId) ? 1 : 0);
+        const aId = a.question?.questionId ?? a.question?.itemId ?? a.questionId;
+        const bId = b.question?.questionId ?? b.question?.itemId ?? b.questionId;
+        result = (flags.has(bId) ? 1 : 0) - (flags.has(aId) ? 1 : 0);
       }
       return sortAsc ? result : -result;
     });
@@ -74,7 +76,7 @@ export default function SJTestReviewScreen({
   }, [questions, activeTab, sortKey, sortAsc, flags, getStatus]);
 
   function getScenarioTitle(q) {
-    return `${groupLabel} ${q.passageIndex + 1}`;
+    return `${groupLabel} ${q.stemIndex + 1}`;
   }
 
   return (
@@ -134,18 +136,19 @@ export default function SJTestReviewScreen({
       <ScrollView style={styles.list} showsVerticalScrollIndicator={false}>
         {filteredQuestions.map((q, idx) => {
           const status = getStatus(q);
-          const flagged = flags.has(q.questionId);
+          const qid = q.question?.questionId ?? q.question?.itemId ?? q.questionId;
+          const flagged = flags.has(qid);
           const rowBg = idx % 2 === 0 ? t.bgCard : t.bgSecondary ?? t.bg;
 
           return (
             <TouchableOpacity
-              key={q.questionId}
+              key={q.flatIndex}
               style={[styles.row, { backgroundColor: rowBg, borderBottomColor: t.border }]}
-              onPress={() => onNavigateTo(q.passageIndex, q.questionIndex)}
+              onPress={() => onNavigateTo(q.flatIndex)}
               activeOpacity={0.7}
             >
               <Text style={[styles.cell, styles.colQ, { color: t.text }]}>
-                {q.globalIndex + 1}
+                {q.flatIndex + 1}
               </Text>
               <Text style={[styles.cell, styles.colTitle, { color: t.textSecondary }]} numberOfLines={1}>
                 {getScenarioTitle(q)}

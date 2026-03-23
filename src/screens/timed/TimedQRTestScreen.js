@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
+import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -23,8 +24,6 @@ export default function TimedQRTestScreen({ route }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
 
-  const [setIndex, setSetIndex] = useState(0);
-  const [questionIndex, setQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [flags, setFlags] = useState(new Set());
@@ -33,28 +32,16 @@ export default function TimedQRTestScreen({ route }) {
   const [showReview, setShowReview] = useState(false);
 
   const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
+  const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
+    useFlatNavigation(test.flatQuestions, 0);
 
-  const currentSet = test.sets[setIndex];
-  const question = currentSet.questions[questionIndex];
-  const qid = question.questionId;
-
-  const isFirstSet = setIndex === 0;
-  const isLastSet = setIndex === test.sets.length - 1;
-  const isFirstQuestion = questionIndex === 0;
-  const isLastQuestion = questionIndex === currentSet.questions.length - 1;
-
+  const qid = item.question.questionId;
   const currentAnswer = answers[qid];
   const isFlagged = flags.has(qid);
 
-  // Reset question index when navigating to a new set
-  function goToSet(idx) {
-    setSetIndex(idx);
-    setQuestionIndex(0);
-  }
-
   const panHandlers = useSwipeGesture(
-    isFirstSet ? null : () => goToSet(setIndex - 1),
-    isLastSet ? null : () => goToSet(setIndex + 1),
+    isFirst ? null : goPrev,
+    isLast ? null : goNext,
   );
 
   useEffect(() => {
@@ -65,22 +52,6 @@ export default function TimedQRTestScreen({ route }) {
       return next;
     });
   }, [qid]);
-
-  // Flat list of all questions for the navigator (one row per question, like VR)
-  const flatQuestions = useMemo(() => {
-    const list = [];
-    test.sets.forEach((s, sIdx) => {
-      s.questions.forEach((q, qIdx) => {
-        list.push({
-          globalIndex: list.length,
-          passageIndex: sIdx,
-          questionIndex: qIdx,
-          questionId: q.questionId,
-        });
-      });
-    });
-    return list;
-  }, [test]);
 
   function handleAnswer(val) {
     setAnswers((prev) => ({ ...prev, [qid]: val }));
@@ -96,23 +67,22 @@ export default function TimedQRTestScreen({ route }) {
   }
 
   function getQuestionStatus(fq) {
-    if (answers[fq.questionId] != null) return 'Answered';
-    if (seenQuestions.has(fq.questionId)) return 'Incomplete';
+    if (answers[fq.question.questionId] != null) return 'Answered';
+    if (seenQuestions.has(fq.question.questionId)) return 'Incomplete';
     return 'Unseen';
   }
 
   if (showReview) {
     return (
       <SJTestReviewScreen
-        questions={flatQuestions}
+        questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={(sIdx, qIdx) => { goToSet(sIdx); setQuestionIndex(qIdx); setShowReview(false); }}
+        onNavigateTo={(flatIndex) => { goTo(flatIndex); setShowReview(false); }}
         onEndTest={() => {}}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
         title="Quantitative Reasoning"
-        groupLabel="Set"
       />
     );
   }
@@ -121,7 +91,6 @@ export default function TimedQRTestScreen({ route }) {
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
 
-      {/* Timed header — title + timer */}
       <View style={styles.timedHeader}>
         <Text style={styles.timedHeaderTitle}>Quantitative Reasoning</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
@@ -129,13 +98,12 @@ export default function TimedQRTestScreen({ route }) {
         </View>
       </View>
 
-      {/* Set nav bar */}
       <ScreenNavBar
-        title={currentSet.title}
-        meta={`Data Set ${setIndex + 1} of ${test.sets.length}`}
-        onPrev={() => goToSet(setIndex - 1)}
-        onNext={isLastSet ? () => setShowReview(true) : () => goToSet(setIndex + 1)}
-        isFirst={isFirstSet}
+        title={item.stemTitle}
+        meta={`Question ${index + 1} of ${test.flatQuestions.length}`}
+        onPrev={goPrev}
+        onNext={isLast ? () => setShowReview(true) : goNext}
+        isFirst={isFirst}
         isLast={false}
         color={t.sectionQR}
         onCalculator={() => setCalcVisible(true)}
@@ -143,25 +111,20 @@ export default function TimedQRTestScreen({ route }) {
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
-
       <ScrollView
-        key={setIndex}
+        key={item.stemId}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Stimulus — shared across all questions in this set */}
         <View style={[styles.stimulusContainer, { backgroundColor: t.bgCard, borderLeftColor: t.sectionQR, borderColor: t.border }]}>
           <Text style={[styles.dataLabel, { color: t.sectionQR }]}>DATA</Text>
-          <QRStimulusRenderer stimulus={currentSet.stimulus} />
+          <QRStimulusRenderer stimulus={item.stimulus} />
         </View>
 
-        {/* Question + options */}
-        <View style={[styles.panel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={styles.panelHeader}>
-            <Text style={[styles.questionCounter, { color: t.textSecondary }]}>
-              Question {questionIndex + 1} of {currentSet.questions.length}
-            </Text>
+        <View style={[styles.questionCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+          <View style={styles.questionHeader}>
+            <Text style={[styles.questionText, { color: t.text }]}>{item.question.stem}</Text>
             <TouchableOpacity
               style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
               onPress={() => toggleFlag(qid)}
@@ -173,66 +136,35 @@ export default function TimedQRTestScreen({ route }) {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.panelContent}>
-            <Text style={[styles.questionText, { color: t.text }]}>{question.stem}</Text>
-
-            <View style={styles.options}>
-              {question.options.map((opt) => (
-                <AnswerOptionButton
-                  key={opt.label}
-                  label={`${opt.label}.  ${opt.text}`}
-                  state={currentAnswer === opt.label ? 'selected' : 'idle'}
-                  onPress={() => handleAnswer(opt.label)}
-                />
-              ))}
-            </View>
-
-            {/* Question prev/next within the set */}
-            <View style={styles.questionNav}>
-              <TouchableOpacity
-                style={[styles.qNavBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isFirstQuestion && styles.qNavBtnDisabled]}
-                onPress={() => setQuestionIndex((i) => i - 1)}
-                disabled={isFirstQuestion}
-              >
-                <Text style={[styles.qNavText, { color: t.text }]}>← Previous</Text>
-              </TouchableOpacity>
-              {isLastSet && isLastQuestion ? (
-                <TouchableOpacity
-                  style={[styles.qNavBtn, { backgroundColor: t.headerBg, borderColor: t.headerBg }]}
-                  onPress={() => setShowReview(true)}
-                >
-                  <Text style={[styles.qNavText, { color: '#ffffff' }]}>Review →</Text>
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={[styles.qNavBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }, isLastQuestion && styles.qNavBtnDisabled]}
-                  onPress={() => setQuestionIndex((i) => i + 1)}
-                  disabled={isLastQuestion}
-                >
-                  <Text style={[styles.qNavText, { color: t.text }]}>Next →</Text>
-                </TouchableOpacity>
-              )}
-            </View>
+          <View style={styles.options}>
+            {item.question.options.map((opt) => (
+              <AnswerOptionButton
+                key={opt.label}
+                label={`${opt.label}.  ${opt.text}`}
+                state={currentAnswer === opt.label ? 'selected' : 'idle'}
+                onPress={() => handleAnswer(opt.label)}
+              />
+            ))}
           </View>
-        </View>
 
-        <View style={styles.bottomButtons}>
-          <TouchableOpacity
-            style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
-            onPress={() => setNavigatorVisible(true)}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
-          </TouchableOpacity>
+          <View style={styles.bottomButtons}>
+            <TouchableOpacity
+              style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
+              onPress={() => setNavigatorVisible(true)}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
 
       <TestNavigatorModal
         visible={navigatorVisible}
-        questions={flatQuestions}
+        questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={(sIdx, qIdx) => { goToSet(sIdx); setQuestionIndex(qIdx); setNavigatorVisible(false); }}
+        onNavigateTo={(flatIndex) => { goTo(flatIndex); setNavigatorVisible(false); }}
         onClose={() => setNavigatorVisible(false)}
       />
     </SafeAreaView>
@@ -240,9 +172,7 @@ export default function TimedQRTestScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: { flex: 1 },
   timedHeader: {
     backgroundColor: '#1e3a8a',
     flexDirection: 'row',
@@ -251,36 +181,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
-  timedHeaderTitle: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  timerBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
-  },
-  timerText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: 14,
-    fontVariant: ['tabular-nums'],
-  },
-  flagButton: {
-    borderRadius: 6,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  flagIcon: {
-    fontSize: 20,
-  },
-  scroll: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingBottom: 32,
-  },
+  timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
+  timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
+  timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
+  flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
+  flagIcon: { fontSize: 20 },
+  scroll: { flex: 1 },
+  scrollContent: { paddingBottom: 32 },
   stimulusContainer: {
     marginHorizontal: 20,
     marginTop: 12,
@@ -290,77 +197,24 @@ const styles = StyleSheet.create({
     borderLeftWidth: 3,
     borderWidth: 1,
   },
-  dataLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 12,
-  },
-  panel: {
+  dataLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 12 },
+  questionCard: {
     marginHorizontal: 20,
-    marginTop: 12,
+    marginTop: 4,
     borderRadius: 14,
     borderWidth: 1,
-  },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 14,
-    paddingBottom: 4,
-  },
-  questionCounter: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  panelContent: {
     padding: 20,
-    paddingTop: 8,
     paddingBottom: 28,
   },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
+  questionHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
     marginBottom: 16,
   },
-  options: {
-    gap: 10,
-  },
-  questionNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    gap: 12,
-  },
-  qNavBtn: {
-    flex: 1,
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    borderWidth: 1.5,
-  },
-  qNavBtnDisabled: { opacity: 0.3 },
-  qNavText: {
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  bottomButtons: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginTop: 16,
-    marginHorizontal: 20,
-    marginBottom: 8,
-  },
-  navigatorButton: {
-    borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 3,
-  },
-  navigatorButtonText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, flex: 1 },
+  options: { gap: 10 },
+  bottomButtons: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 },
+  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  navigatorButtonText: { fontSize: 12, fontWeight: '700' },
 });

@@ -6,29 +6,21 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  LayoutAnimation,
-  Platform,
-  UIManager,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useItemNavigation } from '../hooks/ui/useItemNavigation';
+import { useFlatNavigation } from '../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { useTheme } from '../context/ThemeContext';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
 
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
-
 export default function PassageLayout({
-  items,
-  initialIndex,
+  flatQuestions,
+  initialIndex = 0,
   itemLabel,
   getTitle,
-  getId,
   renderOptions,
   getQuestionOptions = null,
   alwaysShowReason = false,
@@ -38,40 +30,27 @@ export default function PassageLayout({
 }) {
   const { practiceTheme: t } = useTheme();
 
-  const {
-    itemIndex,
-    questionIndex,
-    item,
-    question,
-    isFirstItem,
-    isLastItem,
-    isFirstQuestion,
-    isLastQuestion,
-    goToItem,
-    goToNextQuestion,
-    goToPrevQuestion,
-  } = useItemNavigation(items, initialIndex);
+  const { index, item, isFirst, isLast, goNext, goPrev } =
+    useFlatNavigation(flatQuestions, initialIndex);
 
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
-  const [panelExpanded, setPanelExpanded] = useState(true);
   const [pendingAnswer, setPendingAnswer] = useState(null);
 
-  const itemId = getId(item);
-  const qid = question.questionId ?? question.id;
-  const selectedAnswer = getAnswer(itemId, qid);
+  const qid = item.question.questionId ?? item.question.id;
+  const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
-  const isCorrect = selectedAnswer === question.answer;
+  const isCorrect = selectedAnswer === item.question.answer;
 
   useEffect(() => { setPendingAnswer(null); }, [qid]);
 
   const panHandlers = useSwipeGesture(
-    isFirstItem ? null : () => goToItem(itemIndex - 1),
-    isLastItem ? null : () => goToItem(itemIndex + 1),
+    isFirst ? null : goPrev,
+    isLast ? null : goNext,
   );
 
   function getOptionState(option) {
     if (!hasAnswered) return option === pendingAnswer ? 'selected' : 'idle';
-    if (option === question.answer) return 'correct';
+    if (option === item.question.answer) return 'correct';
     if (option === selectedAnswer) return 'incorrect';
     return 'idle';
   }
@@ -83,16 +62,10 @@ export default function PassageLayout({
 
   function handleCheckAnswer() {
     if (!pendingAnswer || hasAnswered) return;
-    handleAnswer(itemId, qid, pendingAnswer);
-    onAnswerCommit?.(itemId, qid, pendingAnswer);
+    handleAnswer(item.stemId, qid, pendingAnswer);
+    onAnswerCommit?.(item, pendingAnswer);
   }
 
-  function togglePanel() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setPanelExpanded((v) => !v);
-  }
-
-  // Section accent color for the resource panel border
   const sectionColor = section === 'sj' ? t.sectionSJ : t.sectionVR;
 
   return (
@@ -100,98 +73,61 @@ export default function PassageLayout({
       <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
 
       <ScreenNavBar
-        title={getTitle(item, itemIndex)}
-        meta={`Question ${itemIndex + 1} of ${items.length}`}
-        onPrev={() => goToItem(itemIndex - 1)}
-        onNext={() => goToItem(itemIndex + 1)}
-        isFirst={isFirstItem}
-        isLast={isLastItem}
+        title={getTitle(item)}
+        meta={`Question ${index + 1} of ${flatQuestions.length}`}
+        onPrev={goPrev}
+        onNext={goNext}
+        isFirst={isFirst}
+        isLast={isLast}
         color={sectionColor}
       />
 
       <View style={[styles.resourceContainer, { backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
         <Text style={[styles.resourceLabel, { color: sectionColor }]}>{itemLabel.toUpperCase()}</Text>
-        <ScrollView key={itemIndex} showsVerticalScrollIndicator>
+        <ScrollView key={item.stemId} showsVerticalScrollIndicator>
           <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
         </ScrollView>
       </View>
 
-      <View style={[styles.questionPanel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-          <Text style={[styles.panelCounter, { color: t.textSecondary }]}>
-            Question {questionIndex + 1} of {item.questions.length}
-          </Text>
-          <Text style={[styles.panelChevron, { color: sectionColor }]}>{panelExpanded ? '▾' : '▴'}</Text>
-        </TouchableOpacity>
+      <ScrollView
+        style={styles.questionPanel}
+        contentContainerStyle={styles.questionPanelInner}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
 
-        {panelExpanded && (
-          <ScrollView
-            style={styles.panelContent}
-            contentContainerStyle={styles.panelContentInner}
-            showsVerticalScrollIndicator={false}
+        <View style={styles.optionsContainer}>
+          {renderOptions({ item, question: item.question, getOptionState, onAnswer })}
+        </View>
+
+        {pendingAnswer && !hasAnswered && (
+          <TouchableOpacity
+            style={[styles.checkButton, { backgroundColor: sectionColor }]}
+            onPress={handleCheckAnswer}
           >
-            <Text style={[styles.questionText, { color: t.text }]}>{question.questionText}</Text>
-
-            <View style={styles.optionsContainer}>
-              {renderOptions({ item, question, getOptionState, onAnswer })}
-            </View>
-
-            {pendingAnswer && !hasAnswered && (
-              <TouchableOpacity
-                style={[styles.checkButton, { backgroundColor: sectionColor }]}
-                onPress={handleCheckAnswer}
-              >
-                <Text style={styles.checkButtonText}>Check Answer</Text>
-              </TouchableOpacity>
-            )}
-
-            {hasAnswered && (
-              <FeedbackBox
-                isCorrect={isCorrect}
-                correctAnswer={question.answer}
-                reason={question.answeringReason}
-                showReason={!isCorrect || alwaysShowReason}
-                questionContext={!isCorrect ? {
-                  question: question.questionText,
-                  questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
-                  section,
-                  passage: item.resource ?? undefined,
-                  options: getQuestionOptions ? getQuestionOptions(item, question) : undefined,
-                  correctAnswer: question.answer,
-                  userAnswer: selectedAnswer,
-                  explanation: question.answeringReason,
-                } : undefined}
-              />
-            )}
-
-            <View style={styles.questionNav}>
-              <TouchableOpacity
-                style={[
-                  styles.questionNavButton,
-                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                  isFirstQuestion && styles.questionNavButtonDisabled,
-                ]}
-                onPress={goToPrevQuestion}
-                disabled={isFirstQuestion}
-              >
-                <Text style={[styles.questionNavText, { color: t.text }]}>← Previous</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.questionNavButton,
-                  { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-                  isLastQuestion && styles.questionNavButtonDisabled,
-                ]}
-                onPress={goToNextQuestion}
-                disabled={isLastQuestion}
-              >
-                <Text style={[styles.questionNavText, { color: t.text }]}>Next →</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+            <Text style={styles.checkButtonText}>Check Answer</Text>
+          </TouchableOpacity>
         )}
-      </View>
+
+        {hasAnswered && (
+          <FeedbackBox
+            isCorrect={isCorrect}
+            correctAnswer={item.question.answer}
+            reason={item.question.answeringReason}
+            showReason={!isCorrect || alwaysShowReason}
+            questionContext={!isCorrect ? {
+              question: item.question.questionText,
+              questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
+              section,
+              passage: item.resource ?? undefined,
+              options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,
+              correctAnswer: item.question.answer,
+              userAnswer: selectedAnswer,
+              explanation: item.question.answeringReason,
+            } : undefined}
+          />
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -222,29 +158,12 @@ const styles = StyleSheet.create({
   questionPanel: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    borderTopWidth: 1.5,
     marginTop: 8,
   },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  questionPanelInner: {
     paddingHorizontal: 20,
-    paddingVertical: 14,
-  },
-  panelCounter: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  panelChevron: {
-    fontSize: 18,
-  },
-  panelContent: {
-    maxHeight: 380,
-  },
-  panelContentInner: {
-    paddingHorizontal: 20,
-    paddingBottom: 24,
+    paddingTop: 20,
+    paddingBottom: 32,
   },
   questionText: {
     fontSize: 16,
@@ -254,26 +173,6 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     gap: 10,
-  },
-  questionNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    gap: 12,
-  },
-  questionNavButton: {
-    flex: 1,
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    borderWidth: 1.5,
-  },
-  questionNavButtonDisabled: {
-    opacity: 0.3,
-  },
-  questionNavText: {
-    fontSize: 14,
-    fontWeight: '600',
   },
   checkButton: {
     marginTop: 14,

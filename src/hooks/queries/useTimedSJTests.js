@@ -3,18 +3,18 @@ import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+import { flattenTimedSJScenarios } from '../../lib/flattenQuestions';
 
 const SECTION = 'timed_situational_judgement';
 
+function addFlatQuestions(test) {
+  return { ...test, flatQuestions: flattenTimedSJScenarios(test.scenarios) };
+}
+
 // Maps dev JSON format (preview-sj-timed.json) into the app data shape.
 function mapDevTests(data) {
-  return data.map((test) => ({
-    id: test.id,
-    title: test.title,
-    scenarioCount: test.scenarios.length,
-    questionCount: test.question_count,
-    timeMinutes: test.time_minutes,
-    scenarios: [...test.scenarios]
+  return data.map((test) => {
+    const scenarios = [...test.scenarios]
       .sort((a, b) => a.order_index - b.order_index)
       .map((s) => ({
         scenarioId: s.id,
@@ -28,8 +28,16 @@ function mapDevTests(data) {
             answer: i.correct_answer,
             answeringReason: i.answer_reason,
           })),
-      })),
-  }));
+      }));
+    return addFlatQuestions({
+      id: test.id,
+      title: test.title,
+      scenarioCount: scenarios.length,
+      questionCount: test.question_count,
+      timeMinutes: test.time_minutes,
+      scenarios,
+    });
+  });
 }
 
 // Maps DB rows (grouped by test_id) into the app data shape.
@@ -61,14 +69,14 @@ function mapDBTests(rows) {
 
       const questionCount = mappedScenarios.reduce((sum, s) => sum + s.items.length, 0);
 
-      return {
+      return addFlatQuestions({
         id: `timed-sj-test-${testId}`,
         title: `SJ Timed Test ${testId}`,
         scenarioCount: mappedScenarios.length,
         questionCount,
         timeMinutes: 26,
         scenarios: mappedScenarios,
-      };
+      });
     });
 }
 
@@ -94,7 +102,7 @@ export function useTimedSJTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {
-        setTests(cached.data);
+        setTests(cached.data.map(addFlatQuestions));
         setLoading(false);
       }
 
