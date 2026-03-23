@@ -56,6 +56,13 @@ const PRACTICE_SECTIONS = [
 
 const TIMED_SECTIONS = [
   {
+    id: 'vr',
+    label: 'Verbal Reasoning',
+    color: '#7c3aed',
+    cacheKeys: ['timed_vr_completed_attempts'],
+    dbTables: ['timed_verbal_reasoning_exam_attempts'],
+  },
+  {
     id: 'sj',
     label: 'Situational Judgement',
     color: '#d97706',

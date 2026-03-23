@@ -125,5 +125,5 @@ export function useTimedVRExamProgress() {
     }
   }
 
-  return { completedAttempts, submitExam, deleteAttempt };
+  return { completedAttempts, submitExam, deleteAttempt, reload: loadLocalAttempts };
 }

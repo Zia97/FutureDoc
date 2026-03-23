@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import { useTimedVRTests } from '../../hooks/queries/useTimedVRTests';
 import { useTimedDMTests } from '../../hooks/queries/useTimedDMTests';
@@ -14,6 +15,12 @@ import { useTimedQRTests } from '../../hooks/queries/useTimedQRTests';
 import { useTimedSJTests } from '../../hooks/queries/useTimedSJTests';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
+
+function scoreColor(pct) {
+  if (pct >= 70) return '#16a34a';
+  if (pct >= 50) return '#d97706';
+  return '#dc2626';
+}
 
 const INSTRUCTION_ROUTE = {
   VR: 'VRInstruction',
@@ -38,8 +45,15 @@ export default function TimedTestListScreen({ navigation, route }) {
   const dm = useTimedDMTests();
   const qr = useTimedQRTests();
   const sj = useTimedSJTests();
-  const { completedAttempts: sjAttempts } = useTimedSJExamProgress();
-  const { completedAttempts: vrAttempts } = useTimedVRExamProgress();
+  const { completedAttempts: sjAttempts, reload: reloadSJ } = useTimedSJExamProgress();
+  const { completedAttempts: vrAttempts, reload: reloadVR } = useTimedVRExamProgress();
+
+  useFocusEffect(
+    useCallback(() => {
+      reloadSJ();
+      reloadVR();
+    }, []),
+  );
   const completedAttempts = section === 'VR' ? vrAttempts : sjAttempts;
   const { tests, loading, error } =
     section === 'DM' ? dm :
@@ -80,6 +94,7 @@ export default function TimedTestListScreen({ navigation, route }) {
         renderItem={({ item, index }) => {
           const isCompleted = (section === 'SJ' || section === 'VR') && !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
+          const sc = isCompleted ? scoreColor(attempt.scorePercent) : color;
           return (
             <TouchableOpacity
               style={[
@@ -110,7 +125,7 @@ export default function TimedTestListScreen({ navigation, route }) {
                     : `${item.questionCount} questions · ${item.timeMinutes} min`}
                 </Text>
                 {isCompleted && (
-                  <Text style={styles.completedScore}>{attempt.scorePercent}% · Tap to review</Text>
+                  <Text style={[styles.completedScore, { color: sc }]}>{attempt.scorePercent}% · Tap to review</Text>
                 )}
               </View>
             </TouchableOpacity>
@@ -153,5 +168,5 @@ const styles = StyleSheet.create({
   cardBody: { flex: 1 },
   cardTitle: { fontSize: 16, fontWeight: '700' },
   cardMeta: { fontSize: 13, marginTop: 4 },
-  completedScore: { fontSize: 13, marginTop: 4, color: '#16a34a', fontWeight: '700' },
+  completedScore: { fontSize: 13, marginTop: 4, fontWeight: '700' },
 });

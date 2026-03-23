@@ -140,5 +140,5 @@ export function useTimedSJExamProgress() {
     }
   }
 
-  return { completedAttempts, submitExam, deleteAttempt };
+  return { completedAttempts, submitExam, deleteAttempt, reload: loadLocalAttempts };
 }
