@@ -59,6 +59,8 @@ export default function TimedDMTestScreen({ route }) {
       globalIndex: idx,
       passageIndex: idx,
       questionIndex: idx,
+      flatIndex: idx,
+      stemIndex: idx,
       questionId: q.questionId,
     })),
   [test]);
