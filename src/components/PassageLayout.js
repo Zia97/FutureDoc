@@ -35,6 +35,7 @@ export default function PassageLayout({
 
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [pendingAnswer, setPendingAnswer] = useState(null);
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
 
   const qid = item.question.questionId ?? item.question.id;
   const selectedAnswer = getAnswer(item.stemId, qid);
@@ -89,45 +90,51 @@ export default function PassageLayout({
         </ScrollView>
       </View>
 
-      <ScrollView
-        style={styles.questionPanel}
-        contentContainerStyle={styles.questionPanelInner}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+      <View style={[styles.questionPanel, { backgroundColor: t.bgCard }, panelCollapsed ? styles.questionPanelCollapsed : styles.questionPanelExpanded]}>
+        <TouchableOpacity style={styles.panelHandle} onPress={() => setPanelCollapsed(c => !c)} activeOpacity={0.7}>
+          <View style={[styles.handleBar, { backgroundColor: t.border }]} />
+          <Text style={[styles.chevron, { color: t.textSecondary }]}>{panelCollapsed ? '▲' : '▼'}</Text>
+        </TouchableOpacity>
 
-        <View style={styles.optionsContainer}>
-          {renderOptions({ item, question: item.question, getOptionState, onAnswer })}
-        </View>
+        {!panelCollapsed && (
+          <ScrollView contentContainerStyle={styles.questionPanelInner} showsVerticalScrollIndicator={false}>
+            <Text style={[styles.questionLabel, { color: sectionColor }]}>QUESTION</Text>
+            <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
 
-        {pendingAnswer && !hasAnswered && (
-          <TouchableOpacity
-            style={[styles.checkButton, { backgroundColor: sectionColor }]}
-            onPress={handleCheckAnswer}
-          >
-            <Text style={styles.checkButtonText}>Check Answer</Text>
-          </TouchableOpacity>
+            <View style={styles.optionsContainer}>
+              {renderOptions({ item, question: item.question, getOptionState, onAnswer })}
+            </View>
+
+            {pendingAnswer && !hasAnswered && (
+              <TouchableOpacity
+                style={[styles.checkButton, { backgroundColor: sectionColor }]}
+                onPress={handleCheckAnswer}
+              >
+                <Text style={styles.checkButtonText}>Check Answer</Text>
+              </TouchableOpacity>
+            )}
+
+            {hasAnswered && (
+              <FeedbackBox
+                isCorrect={isCorrect}
+                correctAnswer={item.question.answer}
+                reason={item.question.answeringReason}
+                showReason={!isCorrect || alwaysShowReason}
+                questionContext={!isCorrect ? {
+                  question: item.question.questionText,
+                  questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
+                  section,
+                  passage: item.resource ?? undefined,
+                  options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,
+                  correctAnswer: item.question.answer,
+                  userAnswer: selectedAnswer,
+                  explanation: item.question.answeringReason,
+                } : undefined}
+              />
+            )}
+          </ScrollView>
         )}
-
-        {hasAnswered && (
-          <FeedbackBox
-            isCorrect={isCorrect}
-            correctAnswer={item.question.answer}
-            reason={item.question.answeringReason}
-            showReason={!isCorrect || alwaysShowReason}
-            questionContext={!isCorrect ? {
-              question: item.question.questionText,
-              questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
-              section,
-              passage: item.resource ?? undefined,
-              options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,
-              correctAnswer: item.question.answer,
-              userAnswer: selectedAnswer,
-              explanation: item.question.answeringReason,
-            } : undefined}
-          />
-        )}
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 }
@@ -160,10 +167,37 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     marginTop: 8,
   },
+  questionPanelExpanded: {
+    maxHeight: 320,
+  },
+  questionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    marginBottom: 10,
+  },
+  questionPanelCollapsed: {
+    // shrinks to handle height only
+  },
+  panelHandle: {
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 4,
+    gap: 2,
+  },
+  handleBar: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+  },
+  chevron: {
+    fontSize: 10,
+    marginTop: 2,
+  },
   questionPanelInner: {
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 32,
+    paddingTop: 12,
+    paddingBottom: 16,
   },
   questionText: {
     fontSize: 16,

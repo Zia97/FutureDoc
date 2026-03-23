@@ -33,6 +33,7 @@ export default function TimedVRTestScreen({ route }) {
   const [showReview, setShowReview] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
 
   const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
   const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
@@ -129,45 +130,51 @@ export default function TimedVRTestScreen({ route }) {
         </ScrollView>
       </View>
 
-      <ScrollView
-        style={styles.questionPanel}
-        contentContainerStyle={styles.questionPanelInner}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.questionHeader}>
-          <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
-          <TouchableOpacity
-            style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
-            onPress={() => toggleFlag(qid)}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
-              {isFlagged ? '⚑' : '⚐'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+      <View style={[styles.questionPanel, { backgroundColor: t.bgCard }, panelCollapsed ? styles.questionPanelCollapsed : styles.questionPanelExpanded]}>
+        <TouchableOpacity style={styles.panelHandle} onPress={() => setPanelCollapsed(c => !c)} activeOpacity={0.7}>
+          <View style={[styles.handleBar, { backgroundColor: t.border }]} />
+          <Text style={[styles.chevron, { color: t.textSecondary }]}>{panelCollapsed ? '▲' : '▼'}</Text>
+        </TouchableOpacity>
 
-        <View style={styles.optionsContainer}>
-          {item.question.options.map((opt) => (
-            <AnswerOptionButton
-              key={opt}
-              label={opt}
-              state={getOptionState(opt)}
-              onPress={() => onAnswer(opt)}
-            />
-          ))}
-        </View>
+        {!panelCollapsed && (
+          <ScrollView contentContainerStyle={styles.questionPanelInner} showsVerticalScrollIndicator={false}>
+            <Text style={[styles.questionLabel, { color: sectionColor }]}>QUESTION</Text>
+            <View style={styles.questionHeader}>
+              <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+              <TouchableOpacity
+                style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
+                onPress={() => toggleFlag(qid)}
+                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+              >
+                <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
+                  {isFlagged ? '⚑' : '⚐'}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-        <View style={styles.bottomButtons}>
-          <TouchableOpacity
-            style={[styles.navigatorButton, { borderColor: sectionColor }]}
-            onPress={() => setNavigatorVisible(true)}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            <View style={styles.optionsContainer}>
+              {item.question.options.map((opt) => (
+                <AnswerOptionButton
+                  key={opt}
+                  label={opt}
+                  state={getOptionState(opt)}
+                  onPress={() => onAnswer(opt)}
+                />
+              ))}
+            </View>
+
+            <View style={styles.bottomButtons}>
+              <TouchableOpacity
+                style={[styles.navigatorButton, { borderColor: sectionColor }]}
+                onPress={() => setNavigatorVisible(true)}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        )}
+      </View>
 
       <TestNavigatorModal
         visible={navigatorVisible}
@@ -210,10 +217,37 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 20,
     marginTop: 8,
   },
+  questionPanelExpanded: {
+    maxHeight: 300,
+  },
+  questionPanelCollapsed: {
+    // shrinks to handle height only
+  },
+  panelHandle: {
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 4,
+    gap: 2,
+  },
+  handleBar: {
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+  },
+  chevron: {
+    fontSize: 10,
+    marginTop: 2,
+  },
+  questionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    marginBottom: 10,
+  },
   questionPanelInner: {
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 24,
+    paddingTop: 12,
+    paddingBottom: 16,
   },
   questionHeader: {
     flexDirection: 'row',
