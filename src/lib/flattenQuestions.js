@@ -48,7 +48,7 @@ export function flattenQRSets(sets) {
   return flat;
 }
 
-// SJ scenarios: [{ id, scenarioId, labelSet, resource, questions: [{ questionId, questionText, answer, answeringReason }] }]
+// SJ scenarios: [{ id, scenarioId, resource, questions: [{ questionId, questionText, answer, answeringReason, labelSet }] }]
 export function flattenSJScenarios(scenarios) {
   const flat = [];
   scenarios.forEach((scenario, stemIndex) => {
@@ -60,7 +60,7 @@ export function flattenSJScenarios(scenarios) {
         flatIndex: flat.length,
         stemIndex,
         stemId,
-        labelSet: scenario.labelSet,
+        labelSet: q.labelSet,
         resource: scenario.resource,
         stemFirstFlatIndex,
         stemQuestionCount,

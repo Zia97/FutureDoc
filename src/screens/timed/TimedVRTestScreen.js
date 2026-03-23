@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -16,26 +16,41 @@ import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedVRResultsScreen from '../../components/TimedVRResultsScreen';
 
 if (Platform.OS === 'android') {
   UIManager.setLayoutAnimationEnabledExperimental?.(true);
 }
 
-export default function TimedVRTestScreen({ route }) {
+export default function TimedVRTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
+  const { submitExam } = useTimedVRExamProgress();
 
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [panelCollapsed, setPanelCollapsed] = useState(false);
 
-  const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
+  const secondsLeftRef = useRef(null);
+
+  const { display: timerDisplay, isUrgent, secondsLeft } = useTestTimer(
+    test.timeMinutes,
+    () => handleExamEnd(true),
+  );
+
+  // Keep a ref to secondsLeft so handleExamEnd can read it without stale closure
+  useEffect(() => {
+    secondsLeftRef.current = secondsLeft;
+  }, [secondsLeft]);
+
   const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
     useFlatNavigation(test.flatQuestions, 0);
   const { handleAnswer, getAnswer } = useAnswers({});
@@ -59,6 +74,15 @@ export default function TimedVRTestScreen({ route }) {
     isFirst ? null : goPrev,
     isLast ? null : goNext,
   );
+
+  async function handleExamEnd(timerExpired = false) {
+    await submitExam({
+      test,
+      getAnswer,
+      secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
+    });
+    setShowResults(true);
+  }
 
   function onAnswer(option) {
     if (hasAnswered) return;
@@ -87,6 +111,29 @@ export default function TimedVRTestScreen({ route }) {
     return 'Unseen';
   }
 
+  // Normalised passages for results screen
+  const passages = test.passages.map((p) => ({
+    ...p,
+    id: p.id,
+    resource: p.resource ?? p.body,
+    questions: p.questions.map((q) => ({
+      ...q,
+      questionId: q.questionId ?? q.id,
+    })),
+  }));
+
+  if (showResults) {
+    return (
+      <TimedVRResultsScreen
+        passages={passages}
+        getAnswer={getAnswer}
+        flags={flags}
+        test={test}
+        onDone={() => navigation.navigate('TimedTestList', { section: 'VR', title: 'Verbal Reasoning' })}
+      />
+    );
+  }
+
   if (showReview) {
     return (
       <SJTestReviewScreen
@@ -94,7 +141,7 @@ export default function TimedVRTestScreen({ route }) {
         getStatus={getQuestionStatus}
         flags={flags}
         onNavigateTo={(flatIndex) => { goTo(flatIndex); setShowReview(false); }}
-        onEndTest={() => {}}
+        onEndTest={() => handleExamEnd(false)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
         title="Verbal Reasoning"
@@ -171,6 +218,13 @@ export default function TimedVRTestScreen({ route }) {
               >
                 <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.endButton, { borderColor: t.danger }]}
+                onPress={() => handleExamEnd(false)}
+                activeOpacity={0.8}
+              >
+                <Text style={[styles.endButtonText, { color: t.danger }]}>End Exam</Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         )}
@@ -220,9 +274,7 @@ const styles = StyleSheet.create({
   questionPanelExpanded: {
     maxHeight: 300,
   },
-  questionPanelCollapsed: {
-    // shrinks to handle height only
-  },
+  questionPanelCollapsed: {},
   panelHandle: {
     alignItems: 'center',
     paddingTop: 8,
@@ -259,7 +311,9 @@ const styles = StyleSheet.create({
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 20 },
   optionsContainer: { gap: 10 },
-  bottomButtons: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 },
+  bottomButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
   navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
   navigatorButtonText: { fontSize: 12, fontWeight: '700' },
+  endButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  endButtonText: { fontSize: 12, fontWeight: '700' },
 });

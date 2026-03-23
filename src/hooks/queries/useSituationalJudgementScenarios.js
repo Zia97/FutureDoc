@@ -11,7 +11,6 @@ function mapScenarios(data) {
   return data.map((s) => ({
     id: s.id,
     scenarioId: s.id,
-    labelSet: s.label_set,
     resource: s.body,
     questions: [...s.situational_judgement_questions]
       .sort((a, b) => a.order_index - b.order_index)
@@ -20,6 +19,7 @@ function mapScenarios(data) {
         questionText: q.question_text,
         answer: q.correct_answer,
         answeringReason: q.answer_reason,
+        labelSet: q.label_set ?? s.label_set,
       })),
   }));
 }

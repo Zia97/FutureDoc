@@ -13,6 +13,7 @@ import { useTimedDMTests } from '../../hooks/queries/useTimedDMTests';
 import { useTimedQRTests } from '../../hooks/queries/useTimedQRTests';
 import { useTimedSJTests } from '../../hooks/queries/useTimedSJTests';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
+import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
 
 const INSTRUCTION_ROUTE = {
   VR: 'VRInstruction',
@@ -37,7 +38,9 @@ export default function TimedTestListScreen({ navigation, route }) {
   const dm = useTimedDMTests();
   const qr = useTimedQRTests();
   const sj = useTimedSJTests();
-  const { completedAttempts } = useTimedSJExamProgress();
+  const { completedAttempts: sjAttempts } = useTimedSJExamProgress();
+  const { completedAttempts: vrAttempts } = useTimedVRExamProgress();
+  const completedAttempts = section === 'VR' ? vrAttempts : sjAttempts;
   const { tests, loading, error } =
     section === 'DM' ? dm :
     section === 'QR' ? qr :
@@ -75,7 +78,7 @@ export default function TimedTestListScreen({ navigation, route }) {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         renderItem={({ item, index }) => {
-          const isCompleted = section === 'SJ' && !!completedAttempts[item.id];
+          const isCompleted = (section === 'SJ' || section === 'VR') && !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
           return (
             <TouchableOpacity
@@ -87,7 +90,8 @@ export default function TimedTestListScreen({ navigation, route }) {
               activeOpacity={0.8}
               onPress={() => {
                 if (isCompleted) {
-                  navigation.navigate('TimedSJTestReview', { test: item });
+                  const reviewRoute = section === 'VR' ? 'TimedVRTestReview' : 'TimedSJTestReview';
+                  navigation.navigate(reviewRoute, { test: item });
                 } else {
                   navigation.navigate(INSTRUCTION_ROUTE[section] ?? 'VRInstruction', { test: item, section, title });
                 }

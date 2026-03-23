@@ -371,19 +371,19 @@ class DatabaseService {
       .from('situational_judgement_scenarios')
       .select(`
         id,
-        label_set,
         body,
         situational_judgement_questions (
           id,
           question_text,
           correct_answer,
           answer_reason,
-          order_index
+          order_index,
+          label_set
         )
       `)
       .order('created_at', { ascending: true });
     if (error) throw error;
-    return data;
+    return data ?? [];
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -400,7 +400,6 @@ class DatabaseService {
       .select(`
         id,
         test_id,
-        label_set,
         body,
         timed_situational_judgement_questions (
           id,
@@ -519,7 +518,7 @@ class DatabaseService {
    * Inserts the exam attempt row. Returns the new attempt UUID.
    * Called once when the student ends the exam.
    */
-  async insertTimedSJExamAttempt(userId, testId, timeTakenSeconds, correctCount, totalQuestions, scorePercent) {
+  async insertTimedSJExamAttempt(userId, testId, timeTakenSeconds, correctCount, scorePercent) {
     const { data, error } = await supabase
       .from('timed_situational_judgement_exam_attempts')
       .insert({
@@ -527,7 +526,6 @@ class DatabaseService {
         test_id: testId,
         time_taken_seconds: timeTakenSeconds,
         correct_count: correctCount,
-        total_questions: totalQuestions,
         score_percent: scorePercent,
       })
       .select('id')
@@ -543,15 +541,13 @@ class DatabaseService {
    * @param {string} userId
    * @param {{ questionId, scenarioId, selectedAnswer, isCorrect }[]} answers
    */
-  async insertTimedSJQuestionAnswers(examAttemptId, userId, answers, timeTakenSeconds) {
-    const rows = answers.map(({ questionId, scenarioId, selectedAnswer, isCorrect }) => ({
+  async insertTimedSJQuestionAnswers(examAttemptId, userId, answers) {
+    const rows = answers.map(({ questionId, scenarioId, selectedAnswer }) => ({
       exam_attempt_id: examAttemptId,
       user_id: userId,
       question_id: questionId,
       scenario_id: scenarioId,
       selected_answer: selectedAnswer,
-      is_correct: isCorrect,
-      time_taken_seconds: timeTakenSeconds,
     }));
     const { error } = await supabase
       .from('timed_situational_judgement_question_answers')
@@ -582,6 +578,91 @@ class DatabaseService {
   async deleteTimedSJExamAttempt(userId, testId) {
     const { error } = await supabase
       .from('timed_situational_judgement_exam_attempts')
+      .delete()
+      .eq('user_id', userId)
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Verbal Reasoning — Content
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all timed VR tests with passages and nested questions.
+   */
+  async fetchTimedVRTests() {
+    const { data, error } = await supabase
+      .from('timed_verbal_reasoning_passages')
+      .select(`
+        id,
+        test_id,
+        title,
+        body,
+        order_index,
+        timed_verbal_reasoning_questions (
+          id,
+          question_text,
+          options,
+          correct_answer,
+          answer_reason,
+          order_index
+        )
+      `)
+      .order('test_id', { ascending: true })
+      .order('order_index', { ascending: true });
+    if (error) throw error;
+    return data;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Verbal Reasoning — Progress
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Inserts the exam attempt row. Returns the new attempt UUID.
+   */
+  async insertTimedVRExamAttempt(userId, testId, timeTakenSeconds, correctCount, scorePercent) {
+    const { data, error } = await supabase
+      .from('timed_verbal_reasoning_exam_attempts')
+      .insert({
+        user_id: userId,
+        test_id: testId,
+        time_taken_seconds: timeTakenSeconds,
+        correct_count: correctCount,
+        score_percent: scorePercent,
+      })
+      .select('id')
+      .single();
+    if (error) throw error;
+    return data.id;
+  }
+
+  /**
+   * Bulk-inserts all question answers for a VR exam attempt.
+   * @param {string} examAttemptId
+   * @param {string} userId
+   * @param {{ questionId, passageId, selectedAnswer, isCorrect }[]} answers
+   */
+  async insertTimedVRQuestionAnswers(examAttemptId, userId, answers) {
+    const rows = answers.map(({ questionId, passageId, selectedAnswer }) => ({
+      exam_attempt_id: examAttemptId,
+      user_id: userId,
+      question_id: questionId,
+      passage_id: passageId,
+      selected_answer: selectedAnswer,
+    }));
+    const { error } = await supabase
+      .from('timed_verbal_reasoning_question_answers')
+      .insert(rows);
+    if (error) throw error;
+  }
+
+  /**
+   * Deletes a user's VR exam attempt for a specific test. Cascades to delete all answers.
+   */
+  async deleteTimedVRExamAttempt(userId, testId) {
+    const { error } = await supabase
+      .from('timed_verbal_reasoning_exam_attempts')
       .delete()
       .eq('user_id', userId)
       .eq('test_id', testId);
