@@ -20,62 +20,30 @@ import { useTheme } from '../../context/ThemeContext';
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic', 'probabilistic_reasoning'];
 
-export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
-  const { width: screenWidth } = useWindowDimensions();
-  const { practiceTheme: t } = useTheme();
-  const [diagramExpanded, setDiagramExpanded] = useState(false);
-  const [tutorVisible, setTutorVisible] = useState(false);
-  const [inputText, setInputText] = useState('');
-  const [activeTutorContext, setActiveTutorContext] = useState(null);
-  const tutorState = useAITutor(activeTutorContext);
-
-  function handleStatementTeachMe(index) {
-    const statement = question.statements[index];
-    setActiveTutorContext({
-      question: `${question.stem}\n\nStatement ${index + 1}: "${statement.text}"`,
-      questionType: question.type,
-      section: questionContext?.section ?? 'dm',
-      correctAnswer: statement.answer,
-      userAnswer: answer?.[index] ?? '',
-      explanation: statement.reason ?? '',
-    });
-    setInputText('');
-    setTutorVisible(true);
-  }
-
-  function handleMCQTeachMe() {
-    setActiveTutorContext(questionContext);
-    setInputText('');
-    setTutorVisible(true);
-  }
-
+// Derived question type flags — shared between stem and options renders
+function useQuestionMeta(question, screenWidth) {
   const isYesNo      = YES_NO_TYPES.includes(question.type);
   const isMCQ        = MCQ_TYPES.includes(question.type);
   const isVenn       = question.type === 'venn_diagram';
   const stimDiagram  = question.stimulusDiagram ?? question.stimulus_diagram;
   const isSelectVenn = isVenn && (question.subtype === 'select_diagram' || question.options?.[0]?.option_data != null);
   const isInterpVenn = isVenn && (question.subtype === 'interpret_diagram' || stimDiagram != null);
-
-  const vennKeySets = isVenn
+  const vennKeySets  = isVenn
     ? (stimDiagram?.sets ?? question.options?.[0]?.vennConfig?.sets ?? question.options?.[0]?.option_data?.sets ?? null)
     : null;
+  const contentWidth    = screenWidth - 40;
+  const stimulusCanvas  = getCanvasSize(stimDiagram?.diagramLayout, stimDiagram);
+  const stimulusScale   = Math.min(1.2, contentWidth / stimulusCanvas.width);
+  const expandedScale   = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
+  return { isYesNo, isMCQ, isVenn, isSelectVenn, isInterpVenn, vennKeySets, stimDiagram, contentWidth, stimulusScale, expandedScale };
+}
 
-  const isCorrect = isYesNo
-    ? JSON.stringify(answer) === JSON.stringify(question.answer)
-    : answer === question.answer;
-
-  const contentWidth = screenWidth - 40;
-  const stimulusCanvas = getCanvasSize(stimDiagram?.diagramLayout, stimDiagram);
-  const stimulusScale  = Math.min(1.2, contentWidth / stimulusCanvas.width);
-  const expandedScale  = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
-
-  function mcqOptionState(label) {
-    if (timedMode) return label === answer ? 'selected' : 'idle';
-    if (!submitted) return label === answer ? 'selected' : 'idle';
-    if (label === question.answer) return 'correct';
-    if (label === answer) return 'incorrect';
-    return 'idle';
-  }
+// Renders the stem, data table, diagram stimulus — everything except the answer inputs
+export function DMStemContent({ question }) {
+  const { width: screenWidth } = useWindowDimensions();
+  const { practiceTheme: t } = useTheme();
+  const [diagramExpanded, setDiagramExpanded] = useState(false);
+  const { isInterpVenn, vennKeySets, stimDiagram, stimulusScale, expandedScale } = useQuestionMeta(question, screenWidth);
 
   return (
     <View style={styles.container}>
@@ -84,41 +52,6 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
       {vennKeySets && <VennDiagramKey sets={vennKeySets} />}
 
       {question.tableData && <DataTable tableData={question.tableData} />}
-
-      {isSelectVenn && (() => {
-        const OPTION_PADDING_H = 24;
-        const maxCvW = Math.max(...question.options.map(opt => {
-          const cfg = opt.vennConfig ?? opt.option_data;
-          return getCanvasSize(cfg?.diagramLayout, cfg).width;
-        }));
-        const optionScale = Math.min(1.8, (contentWidth - OPTION_PADDING_H) / maxCvW);
-
-        return (
-          <View style={styles.vennGrid}>
-            {question.options.map((opt) => {
-              let borderColor = t.borderStrong;
-              if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
-              else if (!timedMode && submitted && opt.label === answer)     borderColor = t.incorrect;
-              else if (opt.label === answer)                                borderColor = t.accent;
-
-              const cfg = opt.vennConfig ?? opt.option_data;
-
-              return (
-                <TouchableOpacity
-                  key={opt.label}
-                  style={[styles.vennOption, { backgroundColor: t.bgCard, borderColor }]}
-                  onPress={() => !submitted && onAnswer(opt.label)}
-                  activeOpacity={0.8}
-                  disabled={submitted}
-                >
-                  <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
-                  <VennDiagramRenderer vennConfig={cfg} scale={optionScale} />
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        );
-      })()}
 
       {isInterpVenn && (
         <>
@@ -150,43 +83,135 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
               </View>
             </TouchableOpacity>
           </Modal>
-
-          <View style={styles.mcqOptions}>
-            {question.options.map((opt) => (
-              <AnswerOptionButton
-                key={opt.label}
-                label={`${opt.label}.  ${opt.text}`}
-                state={mcqOptionState(opt.label)}
-                onPress={() => onAnswer(opt.label)}
-              />
-            ))}
-          </View>
         </>
       )}
+    </View>
+  );
+}
 
-      {isMCQ && (
-        <View style={styles.mcqOptions}>
-          {question.options.map((opt) => (
-            <AnswerOptionButton
+// Renders only the answer inputs (MCQ options, yes/no statements, venn option grid)
+export function DMOptionsContent({ question, answer, onAnswer, submitted, timedMode = false, onTeachMe }) {
+  const { width: screenWidth } = useWindowDimensions();
+  const { practiceTheme: t } = useTheme();
+  const { isYesNo, isMCQ, isSelectVenn, isInterpVenn, contentWidth } = useQuestionMeta(question, screenWidth);
+
+  function mcqOptionState(label) {
+    if (timedMode) return label === answer ? 'selected' : 'idle';
+    if (!submitted) return label === answer ? 'selected' : 'idle';
+    if (label === question.answer) return 'correct';
+    if (label === answer) return 'incorrect';
+    return 'idle';
+  }
+
+  if (isSelectVenn) {
+    const OPTION_PADDING_H = 24;
+    const maxCvW = Math.max(...question.options.map(opt => {
+      const cfg = opt.vennConfig ?? opt.option_data;
+      return getCanvasSize(cfg?.diagramLayout, cfg).width;
+    }));
+    const optionScale = Math.min(1.8, (contentWidth - OPTION_PADDING_H) / maxCvW);
+
+    return (
+      <View style={styles.vennGrid}>
+        {question.options.map((opt) => {
+          let borderColor = t.borderStrong;
+          if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
+          else if (!timedMode && submitted && opt.label === answer)     borderColor = t.incorrect;
+          else if (opt.label === answer)                                borderColor = t.accent;
+          const cfg = opt.vennConfig ?? opt.option_data;
+          return (
+            <TouchableOpacity
               key={opt.label}
-              label={`${opt.label}.  ${opt.text}`}
-              state={mcqOptionState(opt.label)}
-              onPress={() => onAnswer(opt.label)}
-            />
-          ))}
-        </View>
-      )}
+              style={[styles.vennOption, { backgroundColor: t.bgCard, borderColor }]}
+              onPress={() => !submitted && onAnswer(opt.label)}
+              activeOpacity={0.8}
+              disabled={submitted}
+            >
+              <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
+              <VennDiagramRenderer vennConfig={cfg} scale={optionScale} />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  }
 
-      {isYesNo && (
-        <YesNoStatements
-          statements={question.statements}
-          answers={answer}
-          onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
-          submitted={submitted}
-          timedMode={timedMode}
-          onTeachMe={questionContext ? handleStatementTeachMe : undefined}
-        />
-      )}
+  if (isInterpVenn || isMCQ) {
+    return (
+      <View style={styles.mcqOptions}>
+        {question.options.map((opt) => (
+          <AnswerOptionButton
+            key={opt.label}
+            label={`${opt.label}.  ${opt.text}`}
+            state={mcqOptionState(opt.label)}
+            onPress={() => onAnswer(opt.label)}
+          />
+        ))}
+      </View>
+    );
+  }
+
+  if (isYesNo) {
+    return (
+      <YesNoStatements
+        statements={question.statements}
+        answers={answer}
+        onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
+        submitted={submitted}
+        timedMode={timedMode}
+        onTeachMe={onTeachMe}
+      />
+    );
+  }
+
+  return null;
+}
+
+export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
+  const { practiceTheme: t } = useTheme();
+  const [tutorVisible, setTutorVisible] = useState(false);
+  const [inputText, setInputText] = useState('');
+  const [activeTutorContext, setActiveTutorContext] = useState(null);
+  const tutorState = useAITutor(activeTutorContext);
+
+  const isYesNo  = YES_NO_TYPES.includes(question.type);
+  const isCorrect = isYesNo
+    ? JSON.stringify(answer) === JSON.stringify(question.answer)
+    : answer === question.answer;
+
+  function handleStatementTeachMe(index) {
+    const statement = question.statements[index];
+    setActiveTutorContext({
+      question: `${question.stem}\n\nStatement ${index + 1}: "${statement.text}"`,
+      questionType: question.type,
+      section: questionContext?.section ?? 'dm',
+      correctAnswer: statement.answer,
+      userAnswer: answer?.[index] ?? '',
+      explanation: statement.reason ?? '',
+    });
+    setInputText('');
+    setTutorVisible(true);
+  }
+
+  function handleMCQTeachMe() {
+    setActiveTutorContext(questionContext);
+    setInputText('');
+    setTutorVisible(true);
+  }
+
+  return (
+    <View style={styles.container}>
+      <DMStemContent question={question} />
+
+      <DMOptionsContent
+        question={question}
+        answer={answer}
+        onAnswer={onAnswer}
+        submitted={submitted}
+        timedMode={timedMode}
+        questionContext={questionContext}
+        onTeachMe={questionContext ? handleStatementTeachMe : undefined}
+      />
 
       {submitted && !timedMode && !isYesNo && (
         <View style={[styles.explanation, { backgroundColor: t.bgCard, borderLeftColor: t.sectionDM }]}>

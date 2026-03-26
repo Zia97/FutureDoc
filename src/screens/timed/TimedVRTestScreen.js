@@ -6,8 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  Platform,
-  UIManager,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -23,10 +22,6 @@ import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 import TimedVRResultsScreen from '../../components/TimedVRResultsScreen';
 
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
-
 export default function TimedVRTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
@@ -37,11 +32,10 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const [showResults, setShowResults] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
-  const [panelCollapsed, setPanelCollapsed] = useState(false);
 
   const secondsLeftRef = useRef(null);
 
-  const { display: timerDisplay, isUrgent, secondsLeft } = useTestTimer(
+  const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume } = useTestTimer(
     test.timeMinutes,
     () => handleExamEnd(true),
   );
@@ -161,7 +155,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
       </View>
 
       <ScreenNavBar
-        title={item.stemTitle}
+        title={item.stemTitle?.replace(/^Passage\s+\d+[\s:–\-]*/i, '') || item.stemTitle}
         meta={`Question ${index + 1} of ${test.flatQuestions.length}`}
         onPrev={goPrev}
         onNext={isLast ? () => setShowReview(true) : goNext}
@@ -170,35 +164,30 @@ export default function TimedVRTestScreen({ route, navigation }) {
         color={sectionColor}
       />
 
-      <View style={[styles.resourceContainer, { backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
-        <Text style={[styles.resourceLabel, { color: sectionColor }]}>PASSAGE</Text>
-        <ScrollView key={item.stemId} showsVerticalScrollIndicator>
-          <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
-        </ScrollView>
-      </View>
+      <View style={styles.panelsContainer}>
+        <View style={[styles.resourceContainer, { flex: 3, backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
+          <Text style={[styles.resourceLabel, { color: sectionColor }]}>PASSAGE</Text>
+          <ScrollView key={item.stemId} showsVerticalScrollIndicator={false}>
+            <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
+          </ScrollView>
+        </View>
 
-      <View style={[styles.questionPanel, { backgroundColor: t.bgCard }, panelCollapsed ? styles.questionPanelCollapsed : styles.questionPanelExpanded]}>
-        <TouchableOpacity style={styles.panelHandle} onPress={() => setPanelCollapsed(c => !c)} activeOpacity={0.7}>
-          <View style={[styles.handleBar, { backgroundColor: t.border }]} />
-          <Text style={[styles.chevron, { color: t.textSecondary }]}>{panelCollapsed ? '▲' : '▼'}</Text>
-        </TouchableOpacity>
-
-        {!panelCollapsed && (
-          <ScrollView contentContainerStyle={styles.questionPanelInner} showsVerticalScrollIndicator={false}>
+        <View style={[styles.questionPanel, { flex: 2, backgroundColor: t.bgCard, borderColor: t.border }]}>
+          <View style={styles.panelHeader}>
             <Text style={[styles.questionLabel, { color: sectionColor }]}>QUESTION</Text>
-            <View style={styles.questionHeader}>
-              <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
-              <TouchableOpacity
-                style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
-                onPress={() => toggleFlag(qid)}
-                hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-              >
-                <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
-                  {isFlagged ? '⚑' : '⚐'}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
+              onPress={() => toggleFlag(qid)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
+                {isFlagged ? '⚑' : '⚐'}
+              </Text>
+            </TouchableOpacity>
+          </View>
 
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
             <View style={styles.optionsContainer}>
               {item.question.options.map((opt) => (
                 <AnswerOptionButton
@@ -209,26 +198,40 @@ export default function TimedVRTestScreen({ route, navigation }) {
                 />
               ))}
             </View>
-
-            <View style={styles.bottomButtons}>
-              <TouchableOpacity
-                style={[styles.navigatorButton, { borderColor: sectionColor }]}
-                onPress={() => setNavigatorVisible(true)}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.endButton, { borderColor: t.danger }]}
-                onPress={() => handleExamEnd(false)}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.endButtonText, { color: t.danger }]}>End Exam</Text>
-              </TouchableOpacity>
-            </View>
           </ScrollView>
-        )}
+        </View>
       </View>
+
+      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <TouchableOpacity
+          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
+          onPress={pause}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navigatorButton, { borderColor: sectionColor }]}
+          onPress={() => setNavigatorVisible(true)}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
+        <View style={styles.pauseOverlay}>
+          <View style={styles.pauseCard}>
+            <Text style={styles.pauseIcon}>⏸</Text>
+            <Text style={styles.pauseTitle}>Test Paused</Text>
+            <Text style={styles.pauseSubtitle}>Timer has stopped. Resume when you're ready.</Text>
+            <Text style={styles.pauseReminder}>[Reminder: You will not be able to pause in the real UCAT exam!]</Text>
+            <TouchableOpacity style={styles.resumeButton} onPress={resume} activeOpacity={0.85}>
+              <Text style={styles.resumeButtonText}>▶  Resume Test</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <TestNavigatorModal
         visible={navigatorVisible}
@@ -255,65 +258,84 @@ const styles = StyleSheet.create({
   timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
   timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
+  panelsContainer: { flex: 1, padding: 12, gap: 10 },
   resourceContainer: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginTop: 12,
     borderRadius: 14,
-    padding: 16,
+    padding: 14,
     borderLeftWidth: 3,
     borderWidth: 1,
   },
-  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 10 },
+  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 8 },
   resourceText: { fontSize: 14, lineHeight: 22 },
   questionPanel: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    marginTop: 8,
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
   },
-  questionPanelExpanded: {
-    maxHeight: 300,
-  },
-  questionPanelCollapsed: {},
-  panelHandle: {
+  panelHeader: {
+    flexDirection: 'row',
     alignItems: 'center',
-    paddingTop: 8,
-    paddingBottom: 4,
-    gap: 2,
-  },
-  handleBar: {
-    width: 36,
-    height: 4,
-    borderRadius: 2,
-  },
-  chevron: {
-    fontSize: 10,
-    marginTop: 2,
-  },
-  questionLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
+    justifyContent: 'space-between',
     marginBottom: 10,
   },
-  questionPanelInner: {
-    paddingHorizontal: 20,
-    paddingTop: 12,
-    paddingBottom: 16,
-  },
-  questionHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-    marginBottom: 16,
-  },
-  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, flex: 1 },
+  questionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, marginBottom: 14 },
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 20 },
   optionsContainer: { gap: 10 },
-  bottomButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 20 },
-  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+  },
+  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
+  pauseButtonText: { fontSize: 12, fontWeight: '700' },
+  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
   navigatorButtonText: { fontSize: 12, fontWeight: '700' },
-  endButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
-  endButtonText: { fontSize: 12, fontWeight: '700' },
+  pauseOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(10, 15, 30, 0.92)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+  pauseCard: {
+    backgroundColor: '#1e2a4a',
+    borderRadius: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 340,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  pauseIcon: { fontSize: 48, marginBottom: 16 },
+  pauseTitle: { color: '#ffffff', fontSize: 22, fontWeight: '800', marginBottom: 10 },
+  pauseSubtitle: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  pauseReminder: {
+    color: 'rgba(255,255,255,0.35)',
+    fontSize: 12,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: 28,
+  },
+  resumeButton: {
+    backgroundColor: '#1d4ed8',
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    width: '100%',
+    alignItems: 'center',
+  },
+  resumeButtonText: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
 });

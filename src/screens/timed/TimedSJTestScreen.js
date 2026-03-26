@@ -6,10 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  Platform,
-  UIManager,
   Modal,
-  LayoutAnimation,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -26,10 +23,6 @@ import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
 import TimedSJResultsScreen from '../../components/TimedSJResultsScreen';
 
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
-
 export default function TimedSJTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
@@ -44,7 +37,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const [examEnded, setExamEnded] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenItems, setSeenItems] = useState(new Set());
-  const [panelExpanded, setPanelExpanded] = useState(true);
 
   const { submitExam } = useTimedSJExamProgress();
 
@@ -89,11 +81,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
   function onAnswer(option) {
     handleAnswer(item.stemId, itemId, option);
-  }
-
-  function togglePanel() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setPanelExpanded((v) => !v);
   }
 
   function toggleFlag(qId) {
@@ -159,17 +146,17 @@ export default function TimedSJTestScreen({ route, navigation }) {
         color={sectionColor}
       />
 
-      <View style={[styles.resourceContainer, { backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
-        <Text style={[styles.resourceLabel, { color: sectionColor }]}>SCENARIO</Text>
-        <ScrollView key={item.stemId} showsVerticalScrollIndicator>
-          <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.stem}</Text>
-        </ScrollView>
-      </View>
+      <View style={styles.panelsContainer}>
+        <View style={[styles.resourceContainer, { flex: 1, backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
+          <Text style={[styles.resourceLabel, { color: sectionColor }]}>SCENARIO</Text>
+          <ScrollView key={item.stemId} showsVerticalScrollIndicator={false}>
+            <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.stem}</Text>
+          </ScrollView>
+        </View>
 
-      <View style={[styles.questionPanel, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-          <Text style={[styles.panelCounter, { color: t.textSecondary }]}>Question</Text>
-          <View style={styles.panelHeaderRight}>
+        <View style={[styles.questionPanel, { flex: 2, backgroundColor: t.bgCard, borderColor: t.border }]}>
+          <View style={styles.panelHeader}>
+            <Text style={[styles.panelCounter, { color: t.textSecondary }]}>Question</Text>
             <TouchableOpacity
               style={[styles.flagButton, isFlagged && styles.flagButtonActive]}
               onPress={() => toggleFlag(itemId)}
@@ -179,19 +166,9 @@ export default function TimedSJTestScreen({ route, navigation }) {
                 {isFlagged ? '⚑' : '⚐'}
               </Text>
             </TouchableOpacity>
-            <Text style={[styles.panelChevron, { color: sectionColor }]}>
-              {panelExpanded ? '▾' : '▴'}
-            </Text>
           </View>
-        </TouchableOpacity>
 
-        {panelExpanded && (
-          <ScrollView
-            ref={panelScrollRef}
-            style={styles.panelContent}
-            contentContainerStyle={styles.panelContentInner}
-            showsVerticalScrollIndicator={false}
-          >
+          <ScrollView ref={panelScrollRef} showsVerticalScrollIndicator={false}>
             <Text style={[styles.questionText, { color: t.text }]}>{item.question.text}</Text>
 
             <View style={styles.optionsContainer}>
@@ -204,25 +181,25 @@ export default function TimedSJTestScreen({ route, navigation }) {
                 />
               ))}
             </View>
-
-            <View style={styles.bottomButtons}>
-              <TouchableOpacity
-                style={[styles.pauseButton, { borderColor: t.borderStrong }]}
-                onPress={pause}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.navigatorButton, { borderColor: sectionColor }]}
-                onPress={() => setNavigatorVisible(true)}
-                activeOpacity={0.8}
-              >
-                <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
-              </TouchableOpacity>
-            </View>
           </ScrollView>
-        )}
+        </View>
+      </View>
+
+      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <TouchableOpacity
+          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
+          onPress={pause}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navigatorButton, { borderColor: sectionColor }]}
+          onPress={() => setNavigatorVisible(true)}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
+        </TouchableOpacity>
       </View>
 
       <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
@@ -264,42 +241,41 @@ const styles = StyleSheet.create({
   timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
   timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
+  panelsContainer: { flex: 1, padding: 12, gap: 10 },
   resourceContainer: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginTop: 12,
     borderRadius: 14,
-    padding: 16,
+    padding: 14,
     borderLeftWidth: 3,
     borderWidth: 1,
   },
-  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 10 },
+  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 8 },
   resourceText: { fontSize: 14, lineHeight: 22 },
   questionPanel: {
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopWidth: 1.5,
-    marginTop: 8,
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 14,
   },
   panelHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
+    marginBottom: 10,
   },
-  panelHeaderRight: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagButtonActive: { backgroundColor: '#fef3c7' },
   flagIcon: { fontSize: 20 },
   panelCounter: { fontSize: 13, fontWeight: '600' },
-  panelChevron: { fontSize: 18 },
-  panelContent: { maxHeight: 380 },
-  panelContentInner: { paddingHorizontal: 20, paddingBottom: 16 },
-  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, marginBottom: 16 },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, marginBottom: 14 },
   optionsContainer: { gap: 10 },
-  bottomButtons: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 },
-  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+  },
+  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
   pauseButtonText: { fontSize: 12, fontWeight: '700' },
   pauseOverlay: {
     flex: 1,
