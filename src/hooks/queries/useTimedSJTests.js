@@ -40,20 +40,12 @@ function mapDevTests(data) {
   });
 }
 
-// Maps DB rows (grouped by test_id) into the app data shape.
+// Maps DB rows (from timed_situational_judgement_tests with nested scenarios) into the app data shape.
 function mapDBTests(rows) {
-  const grouped = {};
-
-  for (const scenario of rows) {
-    const testId = scenario.test_id;
-    if (!grouped[testId]) grouped[testId] = [];
-    grouped[testId].push(scenario);
-  }
-
-  return Object.entries(grouped)
-    .sort(([a], [b]) => Number(a) - Number(b))
-    .map(([testId, scenarios]) => {
-      const mappedScenarios = scenarios.map((s) => ({
+  return rows.map((test) => {
+    const scenarios = [...test.timed_situational_judgement_scenarios]
+      .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+      .map((s) => ({
         scenarioId: s.id,
         stem: s.body,
         items: [...s.timed_situational_judgement_questions]
@@ -67,17 +59,17 @@ function mapDBTests(rows) {
           })),
       }));
 
-      const questionCount = mappedScenarios.reduce((sum, s) => sum + s.items.length, 0);
+    const questionCount = scenarios.reduce((sum, s) => sum + s.items.length, 0);
 
-      return addFlatQuestions({
-        id: `timed-sj-test-${testId}`,
-        title: `SJ Timed Test ${testId}`,
-        scenarioCount: mappedScenarios.length,
-        questionCount,
-        timeMinutes: 26,
-        scenarios: mappedScenarios,
-      });
+    return addFlatQuestions({
+      id: `timed-sj-test-${test.id}`,
+      title: test.title,
+      scenarioCount: scenarios.length,
+      questionCount,
+      timeMinutes: test.time_minutes,
+      scenarios,
     });
+  });
 }
 
 export function useTimedSJTests() {

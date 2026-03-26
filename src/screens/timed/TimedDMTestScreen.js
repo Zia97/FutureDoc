@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -12,15 +12,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedDMResultsScreen from '../../components/TimedDMResultsScreen';
 
-export default function TimedDMTestScreen({ route }) {
+export default function TimedDMTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
+  const { submitExam } = useTimedDMExamProgress();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -29,8 +32,19 @@ export default function TimedDMTestScreen({ route }) {
   const [calcVisible, setCalcVisible] = useState(false);
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
-  const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
+  const endExamCalledRef = useRef(false);
+  const secondsLeftRef = useRef(null);
+
+  const { display: timerDisplay, isUrgent, secondsLeft } = useTestTimer(
+    test.timeMinutes,
+    () => endExam(true),
+  );
+
+  useEffect(() => {
+    secondsLeftRef.current = secondsLeft;
+  }, [secondsLeft]);
 
   const question = test.questions[currentIndex];
   const qid = question.questionId;
@@ -44,7 +58,6 @@ export default function TimedDMTestScreen({ route }) {
     isLast ? null : () => setCurrentIndex((i) => i + 1),
   );
 
-  // Mark question as seen when landed on
   useEffect(() => {
     setSeenQuestions((prev) => {
       if (prev.has(qid)) return prev;
@@ -64,6 +77,17 @@ export default function TimedDMTestScreen({ route }) {
       questionId: q.questionId,
     })),
   [test]);
+
+  async function endExam(timerExpired = false) {
+    if (endExamCalledRef.current) return;
+    endExamCalledRef.current = true;
+    await submitExam({
+      test,
+      answers,
+      secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
+    });
+    setShowResults(true);
+  }
 
   function handleAnswer(val) {
     setAnswers((prev) => ({ ...prev, [qid]: val }));
@@ -91,6 +115,17 @@ export default function TimedDMTestScreen({ route }) {
     return 'Unseen';
   }
 
+  if (showResults) {
+    return (
+      <TimedDMResultsScreen
+        questions={test.questions}
+        answers={answers}
+        test={test}
+        onDone={() => navigation.navigate('TimedTestList', { section: 'DM', title: 'Decision Making' })}
+      />
+    );
+  }
+
   if (showReview) {
     return (
       <SJTestReviewScreen
@@ -98,7 +133,7 @@ export default function TimedDMTestScreen({ route }) {
         getStatus={getQuestionStatus}
         flags={flags}
         onNavigateTo={(_, idx) => { setCurrentIndex(idx); setShowReview(false); }}
-        onEndTest={() => {}}
+        onEndTest={() => endExam(false)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
         title="Decision Making"
@@ -170,6 +205,13 @@ export default function TimedDMTestScreen({ route }) {
           >
             <Text style={[styles.navigatorButtonText, { color: t.sectionDM }]}>☰ Navigator</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.endButton, { borderColor: t.danger }]}
+            onPress={() => endExam(false)}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.endButtonText, { color: t.danger }]}>End Exam</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
@@ -178,7 +220,7 @@ export default function TimedDMTestScreen({ route }) {
         questions={flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={(_, idx) => setCurrentIndex(idx)}
+        onNavigateTo={(idx) => setCurrentIndex(idx)}
         onClose={() => setNavigatorVisible(false)}
       />
     </SafeAreaView>
@@ -242,23 +284,9 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 8,
   },
-  checkButton: {
-    marginTop: 20,
-    borderRadius: 12,
-    paddingVertical: 15,
-    alignItems: 'center',
-  },
-  checkButtonDisabled: {
-    opacity: 0.4,
-  },
-  checkButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
   bottomButtons: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     marginTop: 16,
     marginBottom: 8,
   },
@@ -269,6 +297,16 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   navigatorButtonText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  endButton: {
+    borderWidth: 1,
+    borderRadius: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 3,
+  },
+  endButtonText: {
     fontSize: 12,
     fontWeight: '700',
   },

@@ -15,6 +15,7 @@ import { useTimedQRTests } from '../../hooks/queries/useTimedQRTests';
 import { useTimedSJTests } from '../../hooks/queries/useTimedSJTests';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
+import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 
 function scoreColor(pct) {
   if (pct >= 70) return '#16a34a';
@@ -47,14 +48,16 @@ export default function TimedTestListScreen({ navigation, route }) {
   const sj = useTimedSJTests();
   const { completedAttempts: sjAttempts, reload: reloadSJ } = useTimedSJExamProgress();
   const { completedAttempts: vrAttempts, reload: reloadVR } = useTimedVRExamProgress();
+  const { completedAttempts: dmAttempts, reload: reloadDM } = useTimedDMExamProgress();
 
   useFocusEffect(
     useCallback(() => {
       reloadSJ();
       reloadVR();
+      reloadDM();
     }, []),
   );
-  const completedAttempts = section === 'VR' ? vrAttempts : sjAttempts;
+  const completedAttempts = section === 'VR' ? vrAttempts : section === 'DM' ? dmAttempts : sjAttempts;
   const { tests, loading, error } =
     section === 'DM' ? dm :
     section === 'QR' ? qr :
@@ -92,7 +95,7 @@ export default function TimedTestListScreen({ navigation, route }) {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         renderItem={({ item, index }) => {
-          const isCompleted = (section === 'SJ' || section === 'VR') && !!completedAttempts[item.id];
+          const isCompleted = (section === 'SJ' || section === 'VR' || section === 'DM') && !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
           const sc = isCompleted ? scoreColor(attempt.scorePercent) : color;
           return (
@@ -105,7 +108,7 @@ export default function TimedTestListScreen({ navigation, route }) {
               activeOpacity={0.8}
               onPress={() => {
                 if (isCompleted) {
-                  const reviewRoute = section === 'VR' ? 'TimedVRTestReview' : 'TimedSJTestReview';
+                  const reviewRoute = section === 'VR' ? 'TimedVRTestReview' : section === 'DM' ? 'TimedDMTestReview' : 'TimedSJTestReview';
                   navigation.navigate(reviewRoute, { test: item });
                 } else {
                   navigation.navigate(INSTRUCTION_ROUTE[section] ?? 'VRInstruction', { test: item, section, title });

@@ -391,27 +391,31 @@ class DatabaseService {
   // ─────────────────────────────────────────────────────────────────────────────
 
   /**
-   * Fetches all timed SJ scenarios with their nested questions, grouped by test_id.
+   * Fetches all timed SJ tests with nested scenarios and questions.
    * label_set on each question determines which fixed answer options are shown (1=importance, 2=appropriateness).
    */
   async fetchTimedSJTests() {
     const { data, error } = await supabase
-      .from('timed_situational_judgement_scenarios')
+      .from('timed_situational_judgement_tests')
       .select(`
         id,
-        test_id,
-        body,
-        timed_situational_judgement_questions (
+        title,
+        time_minutes,
+        timed_situational_judgement_scenarios (
           id,
-          question_text,
-          correct_answer,
-          answer_reason,
-          order_index,
-          label_set
+          body,
+          created_at,
+          timed_situational_judgement_questions (
+            id,
+            question_text,
+            correct_answer,
+            answer_reason,
+            order_index,
+            label_set
+          )
         )
       `)
-      .order('test_id', { ascending: true })
-      .order('created_at', { ascending: true });
+      .order('id', { ascending: true });
     if (error) throw error;
     return data;
   }
@@ -677,41 +681,59 @@ class DatabaseService {
    * Fetches all timed DM tests with nested questions, options, and statements.
    */
   async fetchTimedDMTests() {
-    const { data, error } = await supabase
+    const { data: tests, error: testsError } = await supabase
       .from('timed_decision_making_tests')
-      .select(`
-        id,
-        title,
-        time_minutes,
-        timed_decision_making_questions (
-          id,
-          title,
-          type,
-          stem,
-          table_data,
-          stimulus_diagram,
-          correct_answer,
-          answer_reason,
-          order_index,
-          timed_decision_making_question_options (
-            id,
-            label,
-            option_text,
-            option_data,
-            order_index
-          ),
-          timed_decision_making_question_statements (
-            id,
-            statement_text,
-            correct_answer,
-            answer_reason,
-            order_index
-          )
-        )
-      `)
+      .select('id, title, time_minutes')
       .order('id', { ascending: true });
-    if (error) throw error;
-    return data;
+    if (testsError) throw testsError;
+
+    const testIds = tests.map((t) => t.id);
+
+    const { data: questions, error: questionsError } = await supabase
+      .from('timed_decision_making_questions')
+      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, correct_answer, answer_reason, order_index')
+      .in('test_id', testIds)
+      .order('order_index', { ascending: true });
+    if (questionsError) throw questionsError;
+
+    const questionIds = questions.map((q) => q.id);
+
+    const { data: options, error: optionsError } = await supabase
+      .from('timed_decision_making_question_options')
+      .select('id, question_id, label, option_text, option_data, order_index')
+      .in('question_id', questionIds)
+      .order('order_index', { ascending: true });
+    if (optionsError) throw optionsError;
+
+    const { data: statements, error: statementsError } = await supabase
+      .from('timed_decision_making_question_statements')
+      .select('id, question_id, statement_text, correct_answer, answer_reason, order_index')
+      .in('question_id', questionIds)
+      .order('order_index', { ascending: true });
+    if (statementsError) throw statementsError;
+
+    const optionsByQuestion = options.reduce((acc, o) => {
+      (acc[o.question_id] ??= []).push(o);
+      return acc;
+    }, {});
+    const statementsByQuestion = statements.reduce((acc, s) => {
+      (acc[s.question_id] ??= []).push(s);
+      return acc;
+    }, {});
+
+    const questionsByTest = questions.reduce((acc, q) => {
+      (acc[q.test_id] ??= []).push({
+        ...q,
+        timed_decision_making_question_options: optionsByQuestion[q.id] ?? [],
+        timed_decision_making_question_statements: statementsByQuestion[q.id] ?? [],
+      });
+      return acc;
+    }, {});
+
+    return tests.map((t) => ({
+      ...t,
+      timed_decision_making_questions: questionsByTest[t.id] ?? [],
+    }));
   }
 
   // ─────────────────────────────────────────────────────────────────────────────

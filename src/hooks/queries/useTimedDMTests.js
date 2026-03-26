@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
-import { getCached } from '../../services/contentCache';
+import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 
@@ -78,7 +78,8 @@ export function useTimedDMTests() {
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
-      } catch {
+      } catch (e) {
+        console.error('[DM] getContentVersion failed:', e);
         if (!hasValidCache) setLoading(false);
         return;
       }
@@ -90,12 +91,14 @@ export function useTimedDMTests() {
       let fresh;
       try {
         fresh = await withRetry(() => db.fetchTimedDMTests());
-      } catch {
+      } catch (e) {
+        console.error('[DM] fetchTimedDMTests failed:', e);
         if (!hasValidCache) setLoading(false);
         return;
       }
 
       const mapped = mapTests(fresh);
+      await saveCache(SECTION, versionRow.version, mapped);
       setTests(mapped);
       setLoading(false);
     }
