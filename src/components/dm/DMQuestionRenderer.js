@@ -12,6 +12,7 @@ import ZoomableView from '../ZoomableView';
 import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
 import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
+import VennDiagramKey from './VennDiagramKey';
 import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/ai/useAITutor';
 import { useTheme } from '../../context/ThemeContext';
@@ -55,6 +56,10 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   const isSelectVenn = isVenn && (question.subtype === 'select_diagram' || question.options?.[0]?.option_data != null);
   const isInterpVenn = isVenn && (question.subtype === 'interpret_diagram' || stimDiagram != null);
 
+  const vennKeySets = isVenn
+    ? (stimDiagram?.sets ?? question.options?.[0]?.vennConfig?.sets ?? question.options?.[0]?.option_data?.sets ?? null)
+    : null;
+
   const isCorrect = isYesNo
     ? JSON.stringify(answer) === JSON.stringify(question.answer)
     : answer === question.answer;
@@ -75,6 +80,8 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   return (
     <View style={styles.container}>
       <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
+
+      {vennKeySets && <VennDiagramKey sets={vennKeySets} />}
 
       {question.tableData && <DataTable tableData={question.tableData} />}
 

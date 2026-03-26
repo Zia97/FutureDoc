@@ -6,32 +6,47 @@ import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'timed_decision_making';
 
-function mapTests(data) {
-  return data.map((test) => ({
-    id: test.id,
-    title: test.title,
-    passageCount: 0,
-    questionCount: test.question_count,
-    timeMinutes: test.time_minutes,
-    questions: [...test.questions]
-      .sort((a, b) => a.order_index - b.order_index)
-      .map((q) => ({
-        questionId: q.id,
-        title: q.title,
-        type: q.type,
-        stem: q.stem,
-        options: q.options ?? [],
-        statements: q.decision_making_question_statements
+function mapQuestion(q) {
+  return {
+    questionId: q.id,
+    title: q.title,
+    type: q.type,
+    stem: q.stem,
+    options: q.timed_decision_making_question_options
+      ? [...q.timed_decision_making_question_options]
+          .sort((a, b) => a.order_index - b.order_index)
+          .map((o) => ({ label: o.label, text: o.option_text, data: o.option_data ?? null }))
+      : (q.options ?? []),
+    statements: q.timed_decision_making_question_statements
+      ? [...q.timed_decision_making_question_statements]
+          .sort((a, b) => a.order_index - b.order_index)
+          .map((s) => ({ text: s.statement_text, answer: s.correct_answer, reason: s.answer_reason ?? null }))
+      : (q.decision_making_question_statements
           ? [...q.decision_making_question_statements]
               .sort((a, b) => a.order_index - b.order_index)
               .map((s) => ({ text: s.statement_text, answer: s.correct_answer, reason: s.answer_reason ?? null }))
-          : [],
-        tableData: q.table_data,
-        stimulusDiagram: q.stimulus_diagram,
-        answer: q.correct_answer,
-        answeringReason: q.answer_reason,
-      })),
-  }));
+          : []),
+    tableData: q.table_data,
+    stimulusDiagram: q.stimulus_diagram,
+    answer: q.correct_answer,
+    answeringReason: q.answer_reason,
+  };
+}
+
+function mapTests(data) {
+  return data.map((test) => {
+    const questions = test.timed_decision_making_questions ?? test.questions ?? [];
+    return {
+      id: test.id,
+      title: test.title,
+      passageCount: 0,
+      questionCount: test.question_count ?? questions.length,
+      timeMinutes: test.time_minutes,
+      questions: [...questions]
+        .sort((a, b) => a.order_index - b.order_index)
+        .map(mapQuestion),
+    };
+  });
 }
 
 export function useTimedDMTests() {
@@ -72,8 +87,17 @@ export function useTimedDMTests() {
         return;
       }
 
-      // TODO: fetch timed DM tests from DB once schema is designed.
-      if (!hasValidCache) setLoading(false);
+      let fresh;
+      try {
+        fresh = await withRetry(() => db.fetchTimedDMTests());
+      } catch {
+        if (!hasValidCache) setLoading(false);
+        return;
+      }
+
+      const mapped = mapTests(fresh);
+      setTests(mapped);
+      setLoading(false);
     }
 
     load();

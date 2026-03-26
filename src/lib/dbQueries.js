@@ -668,6 +668,119 @@ class DatabaseService {
       .eq('test_id', testId);
     if (error) throw error;
   }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Decision Making — Content
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all timed DM tests with nested questions, options, and statements.
+   */
+  async fetchTimedDMTests() {
+    const { data, error } = await supabase
+      .from('timed_decision_making_tests')
+      .select(`
+        id,
+        title,
+        time_minutes,
+        timed_decision_making_questions (
+          id,
+          title,
+          type,
+          stem,
+          table_data,
+          stimulus_diagram,
+          correct_answer,
+          answer_reason,
+          order_index,
+          timed_decision_making_question_options (
+            id,
+            label,
+            option_text,
+            option_data,
+            order_index
+          ),
+          timed_decision_making_question_statements (
+            id,
+            statement_text,
+            correct_answer,
+            answer_reason,
+            order_index
+          )
+        )
+      `)
+      .order('id', { ascending: true });
+    if (error) throw error;
+    return data;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Decision Making — Progress
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all completed exam attempts for a user.
+   * @param {string} userId
+   */
+  async fetchTimedDMExamAttempts(userId) {
+    const { data, error } = await supabase
+      .from('timed_decision_making_exam_attempts')
+      .select('test_id, score_percent, correct_count, submitted_at, time_taken_seconds')
+      .eq('user_id', userId);
+    if (error) throw error;
+    return data;
+  }
+
+  /**
+   * Inserts the exam attempt row. Returns the new attempt UUID.
+   */
+  async insertTimedDMExamAttempt(userId, testId, timeTakenSeconds, correctCount, scorePercent) {
+    const { data, error } = await supabase
+      .from('timed_decision_making_exam_attempts')
+      .insert({
+        user_id: userId,
+        test_id: testId,
+        time_taken_seconds: timeTakenSeconds,
+        correct_count: correctCount,
+        score_percent: scorePercent,
+      })
+      .select('id')
+      .single();
+    if (error) throw error;
+    return data.id;
+  }
+
+  /**
+   * Bulk-inserts all question answers for a DM exam attempt.
+   * @param {string} examAttemptId
+   * @param {string} userId
+   * @param {{ questionId: string, selectedAnswer: string|object, isCorrect: boolean }[]} answers
+   */
+  async insertTimedDMQuestionAnswers(examAttemptId, userId, answers) {
+    const rows = answers.map(({ questionId, selectedAnswer, isCorrect }) => ({
+      exam_attempt_id: examAttemptId,
+      user_id: userId,
+      question_id: questionId,
+      selected_answer: selectedAnswer,
+      is_correct: isCorrect,
+    }));
+    const { error } = await supabase
+      .from('timed_decision_making_question_answers')
+      .insert(rows);
+    if (error) throw error;
+  }
+
+  /**
+   * Deletes a user's DM exam attempt for a specific test. Cascades to delete all answers.
+   */
+  async deleteTimedDMExamAttempt(userId, testId) {
+    const { error } = await supabase
+      .from('timed_decision_making_exam_attempts')
+      .delete()
+      .eq('user_id', userId)
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
 }
 
 export const db = new DatabaseService();

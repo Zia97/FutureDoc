@@ -11,29 +11,65 @@ import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
 
-// ── Venn description helpers ──────────────────────────────────────────────────
+// ── Venn AI context builder ───────────────────────────────────────────────────
 
-function describeRegionKey(key, setLabels) {
-  if (key === 'outside') return 'outside all sets';
-  if (key === 'all_three') return 'all three sets overlap';
+function regionKeyToHuman(key, setLabels) {
+  if (key === 'outside') return 'outside all shapes';
+  if (key === 'all_three') return 'inside all three shapes';
   const parts = key.split('_');
   if (parts[parts.length - 1] === 'only') {
-    const setId = parts.slice(0, -1).join('_');
-    return `only ${setLabels[setId] || setId}`;
+    const id = parts.slice(0, -1).join('_');
+    return `inside ${setLabels[id] || id} only`;
   }
-  return parts.map((id) => setLabels[id] || id).join(' ∩ ');
+  const labels = parts.map((id) => setLabels[id] || id);
+  return labels.length === 2
+    ? `inside both ${labels[0]} and ${labels[1]}`
+    : `inside ${labels.slice(0, -1).join(', ')} and ${labels[labels.length - 1]}`;
 }
 
-function describeVennConfig(vennConfig) {
-  if (!vennConfig) return '';
-  const { diagramLayout, sets = [], regions = {} } = vennConfig;
-  const setLabels = {};
-  sets.forEach((s) => { setLabels[s.id] = s.label || s.id; });
-  const setsDesc = sets.map((s) => `${s.label || s.id} (${s.shape || 'circle'})`).join(', ');
-  const regionLines = Object.entries(regions)
-    .map(([key, value]) => `  ${describeRegionKey(key, setLabels)}: ${value}`)
-    .join('\n');
-  return `layout: ${diagramLayout}\nsets: ${setsDesc}\nregion counts:\n${regionLines}`;
+function buildVennAIContext(question) {
+  const stimDiagram = question.stimulusDiagram ?? question.stimulus_diagram;
+  const hasOptionDiagrams = question.options?.some((o) => o.vennConfig ?? o.option_data);
+
+  if (hasOptionDiagrams) {
+    // select_diagram: student picks the correct diagram from options
+    const lines = [
+      '[Select-diagram question: the student must choose which option diagram correctly represents the data in the question stem]\n',
+    ];
+    question.options?.forEach((opt) => {
+      const cfg = opt.vennConfig ?? opt.option_data;
+      if (!cfg) return;
+      const { diagramLayout, sets = [], regions = {} } = cfg;
+      const setLabels = {};
+      sets.forEach((s) => { setLabels[s.id] = s.label || s.id; });
+      const shapesDesc = sets.map((s) => `${s.label || s.id} (${s.shape || 'circle'})`).join(', ');
+      lines.push(`Option ${opt.label} — layout: ${diagramLayout}, shapes: ${shapesDesc}`);
+      Object.entries(regions).forEach(([key, value]) => {
+        lines.push(`  • ${regionKeyToHuman(key, setLabels)}: ${value}`);
+      });
+      lines.push('');
+    });
+    return lines.join('\n');
+  }
+
+  if (stimDiagram) {
+    // interpret_diagram: student reads a labelled diagram and picks an answer
+    const { diagramLayout, sets = [], regions = {} } = stimDiagram;
+    const setLabels = {};
+    sets.forEach((s) => { setLabels[s.id] = s.label || s.id; });
+    const lines = [
+      '[Interpret-diagram question: the student is shown a diagram with labelled regions and must identify which region matches the description]\n',
+      `Diagram layout: ${diagramLayout}`,
+      `Shapes: ${sets.map((s) => `${s.label || s.id} (${s.shape || 'circle'})`).join(', ')}\n`,
+      'Region labels placed on the diagram:',
+    ];
+    Object.entries(regions).forEach(([key, value]) => {
+      lines.push(`  • Label "${value}" = ${regionKeyToHuman(key, setLabels)}`);
+    });
+    return lines.join('\n');
+  }
+
+  return '';
 }
 
 export default function DMQuestionScreen({ route }) {
@@ -144,9 +180,7 @@ export default function DMQuestionScreen({ route }) {
             explanation: isYesNo ? undefined : question.answeringReason,
             stimulusData: question.tableData ?? undefined,
             vennDiagrams: question.type === 'venn_diagram'
-              ? question.subtype === 'select_diagram'
-                ? question.options?.map((o) => `Option ${o.label}:\n${describeVennConfig(o.vennConfig)}`).join('\n\n')
-                : describeVennConfig(question.stimulusDiagram)
+              ? buildVennAIContext(question)
               : undefined,
           } : undefined}
         />
