@@ -127,17 +127,21 @@ export default function DMQuestionScreen({ route }) {
             questionType: question.type,
             section: 'dm',
             options: isYesNo
-              ? question.statements?.map((s, i) => `${i + 1}. ${s}`)
+              ? question.statements?.map((s, i) => `${i + 1}. ${s.text}`)
               : question.subtype === 'select_diagram'
               ? undefined
               : question.options?.map((o) => `${o.label}. ${o.text}`),
-            correctAnswer: typeof question.answer === 'object'
+            correctAnswer: isYesNo
+              ? undefined
+              : typeof question.answer === 'object'
               ? JSON.stringify(question.answer)
               : question.answer,
-            userAnswer: typeof currentAnswer === 'object'
+            userAnswer: isYesNo
+              ? undefined
+              : typeof currentAnswer === 'object'
               ? JSON.stringify(currentAnswer)
               : (currentAnswer ?? ''),
-            explanation: question.answeringReason,
+            explanation: isYesNo ? undefined : question.answeringReason,
             stimulusData: question.tableData ?? undefined,
             vennDiagrams: question.type === 'venn_diagram'
               ? question.subtype === 'select_diagram'

@@ -11,14 +11,14 @@
         "type": "syllogism",
         "stem": "All surgeons are doctors. Some doctors work in hospitals. No doctors are pharmacists.",
         "decision_making_question_statements": [
-          { "statement_text": "Some surgeons work in hospitals.", "correct_answer": "No", "order_index": 1 },
-          { "statement_text": "No surgeons are pharmacists.", "correct_answer": "Yes", "order_index": 2 },
-          { "statement_text": "All doctors are surgeons.", "correct_answer": "No", "order_index": 3 },
-          { "statement_text": "Some hospital workers are doctors.", "correct_answer": "Yes", "order_index": 4 },
-          { "statement_text": "It is possible that some pharmacists are surgeons.", "correct_answer": "No", "order_index": 5 }
+          { "statement_text": "Some surgeons work in hospitals.", "correct_answer": "No", "answer_reason": "'Some doctors work in hospitals' does not mean those doctors are surgeons. The premises establish all surgeons are doctors, but the reverse is not stated — so you cannot conclude any surgeons work in hospitals.", "order_index": 1 },
+          { "statement_text": "No surgeons are pharmacists.", "correct_answer": "Yes", "answer_reason": "All surgeons are doctors. No doctors are pharmacists. Applying both premises: no surgeon can be a pharmacist — this follows directly by substitution.", "order_index": 2 },
+          { "statement_text": "All doctors are surgeons.", "correct_answer": "No", "answer_reason": "The premise states all surgeons are doctors — not the reverse. There may be doctors who are not surgeons. Reversing a universal statement is a logical error.", "order_index": 3 },
+          { "statement_text": "Some hospital workers are doctors.", "correct_answer": "Yes", "answer_reason": "Some doctors work in hospitals — those doctors are, by definition, hospital workers. Therefore at least some hospital workers are doctors.", "order_index": 4 },
+          { "statement_text": "It is possible that some pharmacists are surgeons.", "correct_answer": "No", "answer_reason": "All surgeons are doctors. No doctors are pharmacists. Therefore, no surgeon can be a pharmacist and no pharmacist can be a surgeon. It is logically impossible, not merely unlikely.", "order_index": 5 }
         ],
         "correct_answer": { "0": "No", "1": "Yes", "2": "No", "3": "Yes", "4": "No" },
-        "answer_reason": "From 'all surgeons are doctors' and 'no doctors are pharmacists', no surgeon can be a pharmacist (Yes). 'Some doctors work in hospitals' does not guarantee those doctors are surgeons – so we cannot conclude some surgeons work in hospitals (No). 'All doctors are surgeons' reverses the stated relationship (No). 'Some doctors work in hospitals' means some hospital workers are doctors (Yes). Since all surgeons are doctors and no doctors are pharmacists, it is impossible for any pharmacist to be a surgeon (No).",
+        "answer_reason": null,
         "order_index": 1
       },
       {
@@ -66,14 +66,14 @@
           ]
         },
         "decision_making_question_statements": [
-          { "statement_text": "Car is the fastest transport type at all times of day.", "correct_answer": "Yes", "order_index": 1 },
-          { "statement_text": "The difference in morning travel times between Bus and Train is greater than 5 minutes.", "correct_answer": "Yes", "order_index": 2 },
-          { "statement_text": "A patient travelling by taxi in the afternoon arrives before one travelling by train in the morning.", "correct_answer": "Yes", "order_index": 3 },
-          { "statement_text": "Evening travel times are shorter than morning travel times for all transport types.", "correct_answer": "No", "order_index": 4 },
-          { "statement_text": "Taking the bus in the afternoon is faster than taking a train in the evening.", "correct_answer": "Yes", "order_index": 5 }
+          { "statement_text": "Car is the fastest transport type at all times of day.", "correct_answer": "Yes", "answer_reason": "Checking each column: Morning — Car (22) is lowest. Afternoon — Car (18) is lowest. Evening — Car (30) is lowest. Car has the shortest time in every column.", "order_index": 1 },
+          { "statement_text": "The difference in morning travel times between Bus and Train is greater than 5 minutes.", "correct_answer": "Yes", "answer_reason": "Bus morning = 45 minutes, Train morning = 35 minutes. Difference = 45 − 35 = 10 minutes. 10 > 5.", "order_index": 2 },
+          { "statement_text": "A patient travelling by taxi in the afternoon arrives before one travelling by train in the morning.", "correct_answer": "Yes", "answer_reason": "Taxi afternoon = 20 minutes. Train morning = 35 minutes. 20 < 35, so the taxi patient in the afternoon arrives sooner.", "order_index": 3 },
+          { "statement_text": "Evening travel times are shorter than morning travel times for all transport types.", "correct_answer": "No", "answer_reason": "For every transport type, evening times are higher than morning times: Bus 52 > 45, Car 30 > 22, Train 40 > 35, Taxi 32 > 25. Evening is consistently longer, not shorter.", "order_index": 4 },
+          { "statement_text": "Taking the bus in the afternoon is faster than taking a train in the evening.", "correct_answer": "Yes", "answer_reason": "Bus afternoon = 38 minutes. Train evening = 40 minutes. 38 < 40, so the bus in the afternoon is faster.", "order_index": 5 }
         ],
         "correct_answer": { "0": "Yes", "1": "Yes", "2": "Yes", "3": "No", "4": "Yes" },
-        "answer_reason": "Car has the lowest travel times across all columns (22/18/30 – Yes). Bus morning minus train morning = 45–35 = 10, which is greater than 5 (Yes). Taxi afternoon (20 min) < Train morning (35 min) – Yes. Evening times are consistently higher than morning times for all transport types (e.g. car: 30 > 22) – so statement 4 is No. Bus afternoon (38) < Train evening (40) – Yes.",
+        "answer_reason": null,
         "order_index": 4
       },
       {

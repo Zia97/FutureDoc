@@ -33,6 +33,7 @@ function mapQuestions(data) {
       .map((s) => ({
         text: s.statement_text,
         answer: s.correct_answer,
+        reason: s.answer_reason ?? null,
       })),
   }));
 }

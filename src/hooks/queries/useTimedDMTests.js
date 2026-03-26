@@ -24,7 +24,7 @@ function mapTests(data) {
         statements: q.decision_making_question_statements
           ? [...q.decision_making_question_statements]
               .sort((a, b) => a.order_index - b.order_index)
-              .map((s) => ({ text: s.statement_text, answer: s.correct_answer }))
+              .map((s) => ({ text: s.statement_text, answer: s.correct_answer, reason: s.answer_reason ?? null }))
           : [],
         tableData: q.table_data,
         stimulusDiagram: q.stimulus_diagram,

@@ -25,7 +25,28 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   const [diagramExpanded, setDiagramExpanded] = useState(false);
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
-  const tutorState = useAITutor(questionContext);
+  const [activeTutorContext, setActiveTutorContext] = useState(null);
+  const tutorState = useAITutor(activeTutorContext);
+
+  function handleStatementTeachMe(index) {
+    const statement = question.statements[index];
+    setActiveTutorContext({
+      question: `${question.stem}\n\nStatement ${index + 1}: "${statement.text}"`,
+      questionType: question.type,
+      section: questionContext?.section ?? 'dm',
+      correctAnswer: statement.answer,
+      userAnswer: answer?.[index] ?? '',
+      explanation: statement.reason ?? '',
+    });
+    setInputText('');
+    setTutorVisible(true);
+  }
+
+  function handleMCQTeachMe() {
+    setActiveTutorContext(questionContext);
+    setInputText('');
+    setTutorVisible(true);
+  }
 
   const isYesNo      = YES_NO_TYPES.includes(question.type);
   const isMCQ        = MCQ_TYPES.includes(question.type);
@@ -156,17 +177,18 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
           onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
           submitted={submitted}
           timedMode={timedMode}
+          onTeachMe={questionContext ? handleStatementTeachMe : undefined}
         />
       )}
 
-      {submitted && !timedMode && (
+      {submitted && !timedMode && !isYesNo && (
         <View style={[styles.explanation, { backgroundColor: t.bgCard, borderLeftColor: t.sectionDM }]}>
           <Text style={[styles.explanationLabel, { color: t.accent }]}>Explanation</Text>
           <Text style={[styles.explanationText, { color: t.textSecondary }]}>{question.answeringReason}</Text>
           {!isCorrect && questionContext && (
             <TouchableOpacity
               style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
-              onPress={() => setTutorVisible(true)}
+              onPress={handleMCQTeachMe}
             >
               <Text style={[styles.teachMeBtnText, { color: t.text }]}>Teach Me</Text>
             </TouchableOpacity>
@@ -174,11 +196,11 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         </View>
       )}
 
-      {questionContext && !timedMode && (
+      {activeTutorContext && !timedMode && (
         <AITutorModal
           visible={tutorVisible}
           onClose={() => setTutorVisible(false)}
-          questionContext={questionContext}
+          questionContext={activeTutorContext}
           tutorState={tutorState}
           inputText={inputText}
           setInputText={setInputText}
