@@ -1,108 +1,581 @@
 [
   {
-    "id": "d1000000-0000-0000-0000-000000000001",
-    "title": "Surgeons and Doctors",
+    "id": "550e8400-e29b-41d4-a716-446655440001",
+    "title": "Mammal Classification",
     "type": "syllogism",
-    "stem": "All surgeons are doctors. Some doctors work in hospitals. No doctors are pharmacists.",
+    "stem": "All mammals are warm-blooded. All dolphins are mammals. No reptile is warm-blooded.",
     "table_data": null,
     "stimulus_diagram": null,
     "correct_answer": null,
-    "answer_reason": "From 'all surgeons are doctors' and 'no doctors are pharmacists', no surgeon can be a pharmacist (Yes). 'Some doctors work in hospitals' does not guarantee those doctors are surgeons – so we cannot conclude some surgeons work in hospitals (No). 'All doctors are surgeons' reverses the stated relationship (No). 'Some doctors work in hospitals' means some hospital workers are doctors (Yes). Since all surgeons are doctors and no doctors are pharmacists, it is impossible for any pharmacist to be a surgeon (No).",
+    "answer_reason": "1-Yes: Dolphins are mammals and all mammals are warm-blooded, so all dolphins are warm-blooded. 2-No: All mammals are warm-blooded; no reptile is warm-blooded; therefore no reptile can be a mammal — the conclusion that some reptiles are mammals is false. 3-Yes: Dolphins are warm-blooded; no reptile is warm-blooded; therefore dolphins cannot be reptiles. 4-No: The premises state all mammals are warm-blooded but do not restrict warm-bloodedness to dolphins alone; other mammals also qualify. 5-Yes: All mammals are warm-blooded; no reptile is warm-blooded; therefore no mammal can be a reptile.",
     "order_index": 1,
     "decision_making_question_options": [],
     "decision_making_question_statements": [
-      { "statement_text": "Some surgeons work in hospitals.", "correct_answer": "No", "order_index": 1 },
-      { "statement_text": "No surgeons are pharmacists.", "correct_answer": "Yes", "order_index": 2 },
-      { "statement_text": "All doctors are surgeons.", "correct_answer": "No", "order_index": 3 },
-      { "statement_text": "Some hospital workers are doctors.", "correct_answer": "Yes", "order_index": 4 },
-      { "statement_text": "It is possible that some pharmacists are surgeons.", "correct_answer": "No", "order_index": 5 }
+      { "statement_text": "All dolphins are warm-blooded.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "Some reptiles are mammals.", "correct_answer": "No", "order_index": 2 },
+      { "statement_text": "Dolphins are not reptiles.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "All warm-blooded animals are dolphins.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "No mammal is a reptile.", "correct_answer": "Yes", "order_index": 5 }
     ]
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000002",
-    "title": "Students in a Row",
-    "type": "logic_puzzle",
-    "stem": "Five students – Alice, Bob, Carol, Dave, and Eve – sit in a row of five seats numbered 1 to 5 from left to right.\n\n• Alice sits next to Bob.\n• Carol sits at one end of the row.\n• Dave sits as far from Carol as possible.\n• Eve sits between Alice and Dave.\n\nWho sits in seat 5 (far right)?",
+    "id": "550e8400-e29b-41d4-a716-446655440002",
+    "title": "Engineers and Artists",
+    "type": "syllogism",
+    "stem": "All engineers study mathematics. Some engineers specialise in structural design. No artist studies mathematics.",
     "table_data": null,
     "stimulus_diagram": null,
-    "correct_answer": "D",
-    "answer_reason": "Place Carol at seat 1 (one end). Dave must be at seat 5 (as far as possible from Carol). Eve sits between Alice and Dave, so Eve is at seat 4. Alice must be adjacent to both Eve (seat 4) and Bob, placing Alice at seat 3 and Bob at seat 2. Final order: Carol(1) Bob(2) Alice(3) Eve(4) Dave(5). Dave sits at the far right.",
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Structural design specialists are engineers; all engineers study mathematics. 2-Yes: All engineers study mathematics; no artist studies mathematics; therefore no artist can be an engineer. 3-Yes: All engineers study mathematics, and engineers exist, so at least some mathematics students are engineers. 4-No: The premises do not state that only engineers study mathematics — other people could also study it. 5-No: 'Some engineers specialise in structural design' does not exclude the possibility that all do; the conclusion that some do not cannot be drawn.",
     "order_index": 2,
-    "decision_making_question_options": [
-      { "label": "A", "option_text": "Alice", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Bob", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Carol", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Dave", "option_data": null, "order_index": 4 }
-    ],
-    "decision_making_question_statements": []
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "All structural design specialists study mathematics.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "No artist is an engineer.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "Some people who study mathematics are engineers.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "All people who study mathematics are engineers.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "Some engineers do not specialise in structural design.", "correct_answer": "No", "order_index": 5 }
+    ]
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000003",
-    "title": "Banning Junk Food",
-    "type": "strongest_argument",
-    "stem": "A government should ban the sale of junk food to children under 16.",
+    "id": "550e8400-e29b-41d4-a716-446655440003",
+    "title": "Olympic Swimmers",
+    "type": "syllogism",
+    "stem": "All Olympic athletes train for at least four hours a day. Some swimmers are Olympic athletes. No recreational swimmer trains for four hours a day.",
     "table_data": null,
     "stimulus_diagram": null,
-    "correct_answer": "A",
-    "answer_reason": "Option A is strongest – it directly addresses the core health issue with a relevant, substantiated reason. Option B shifts responsibility without addressing the health problem. Option C argues 'Yes' but immediately undermines itself with a reason the ban would fail, making it weak. Option D raises an economic concern unrelated to the central question of children's health.",
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Those swimmers who are Olympic athletes must train at least four hours a day, so some swimmers do train that much. 2-No: Recreational swimmers do not train four hours a day; Olympic athletes must — therefore no recreational swimmer is an Olympic athlete, not all of them. 3-Yes: Recreational swimmers do not train four hours a day; Olympic athletes must; so no recreational swimmer can be an Olympic athlete. 4-No: We only know some swimmers are Olympic athletes; we cannot conclude that some Olympic athletes are not swimmers, as all could be. 5-Yes: Those swimmers who are Olympic athletes train 4+ hours; no recreational swimmer does; therefore those Olympic swimmers are not recreational swimmers, meaning some swimmers are not recreational.",
     "order_index": 3,
-    "decision_making_question_options": [
-      { "label": "A", "option_text": "Yes; rates of childhood obesity have risen sharply, and junk food is a significant contributing factor to this health crisis.", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "No; parents, not governments, are ultimately responsible for their children's diets and food choices.", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Yes; a ban would be very difficult to enforce because children could still obtain junk food through adults.", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "No; junk food manufacturers employ thousands of workers, and a ban could trigger significant job losses.", "option_data": null, "order_index": 4 }
-    ],
-    "decision_making_question_statements": []
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Some swimmers train for at least four hours a day.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "All recreational swimmers are Olympic athletes.", "correct_answer": "No", "order_index": 2 },
+      { "statement_text": "No recreational swimmer is an Olympic athlete.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "Some Olympic athletes are not swimmers.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "Some swimmers are not recreational swimmers.", "correct_answer": "Yes", "order_index": 5 }
+    ]
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000004",
-    "title": "Hospital Travel Times",
+    "id": "550e8400-e29b-41d4-a716-446655440004",
+    "title": "Solar System Orbits",
+    "type": "syllogism",
+    "stem": "All planets orbit the Sun. No moon is a planet. Some moons orbit planets.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Directly stated in premise one. 2-Yes: Some moons orbit planets; those planets therefore exist and have at least one moon each. 3-No: The premises only state that planets orbit the Sun; other objects may also orbit the Sun — this cannot be excluded. 4-Yes: Moons orbit planets (premise three); no moon is a planet (premise two); therefore objects that orbit planets are not themselves planets. 5-No: Only some moons are stated to orbit planets; we cannot conclude that all moons orbit the Sun from these premises.",
+    "order_index": 4,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "All planets orbit the Sun.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "Some planets have moons.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "All objects that orbit the Sun are planets.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "Some objects that orbit planets are not planets themselves.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "All moons orbit the Sun.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440005",
+    "title": "Vitamin C Foods",
+    "type": "syllogism",
+    "stem": "All foods containing vitamin C are healthy. Some fruits contain vitamin C. All oranges are fruits.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Some fruits contain vitamin C; all vitamin C foods are healthy; therefore some fruits are healthy. 2-No: All oranges are fruits and some fruits contain vitamin C, but the premises do not confirm that oranges specifically contain vitamin C; the conclusion cannot be drawn. 3-Yes: The same fruits that contain vitamin C are both healthy and fruits, so some healthy foods are fruits. 4-Yes: Some fruits contain vitamin C; those fruits are both healthy and contain vitamin C; so some healthy foods contain vitamin C. 5-No: The premises only state some fruits contain vitamin C and those are healthy; they do not exclude other non-fruit foods from being healthy.",
+    "order_index": 5,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Some fruits are healthy.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "All oranges are healthy.", "correct_answer": "No", "order_index": 2 },
+      { "statement_text": "Some healthy foods are fruits.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "Some healthy foods contain vitamin C.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "No non-fruit food is healthy.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440006",
+    "title": "Viral Replication",
+    "type": "syllogism",
+    "stem": "All viruses require a host cell to replicate. Bacteria do not require a host cell to replicate. SARS-CoV-2 is a virus.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: SARS-CoV-2 is a virus; all viruses require a host cell; therefore SARS-CoV-2 requires a host cell. 2-Yes: All viruses require a host cell; bacteria do not; therefore bacteria cannot be viruses. 3-No: The premise states all viruses require a host cell — no virus can replicate without one. 4-Yes: SARS-CoV-2 requires a host cell to replicate; bacteria do not; therefore SARS-CoV-2 is not a bacterium. 5-No: The premises do not state that only viruses require host cells; other organisms could also require them.",
+    "order_index": 6,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "SARS-CoV-2 requires a host cell to replicate.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "Bacteria are not viruses.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "Some viruses can replicate without a host cell.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "SARS-CoV-2 is not a bacterium.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "All organisms that require a host cell to replicate are viruses.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440007",
+    "title": "Electric Vehicle Emissions",
+    "type": "syllogism",
+    "stem": "All electric vehicles produce zero direct emissions. Some cars are electric vehicles. No steam train produces zero direct emissions.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Some cars are EVs; all EVs produce zero direct emissions; therefore some cars produce zero direct emissions. 2-Yes: Steam trains do not produce zero direct emissions; all EVs do; therefore no steam train is an electric vehicle. 3-No: The premises do not restrict zero-emission vehicles to cars only; other vehicle types could also be electric. 4-Yes: Some cars are EVs and EVs produce zero direct emissions; therefore those cars are zero-emission vehicles, meaning some zero-emission vehicles are cars. 5-No: Only some cars are stated to be EVs; the premises do not say all cars are electric vehicles.",
+    "order_index": 7,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Some cars produce zero direct emissions.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "No steam train is an electric vehicle.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "All zero-emission vehicles are cars.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "Some zero-emission vehicles are cars.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "All cars are electric vehicles.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440008",
+    "title": "Rainforest Carnivores",
+    "type": "syllogism",
+    "stem": "All carnivores eat meat. No herbivore eats meat. Some animals in the rainforest are carnivores.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Some rainforest animals are carnivores; all carnivores eat meat; therefore some rainforest animals eat meat. 2-Yes: No herbivore eats meat; all carnivores do; therefore no herbivore can be a carnivore. 3-No: The premises establish that carnivores eat meat, but do not state that only carnivores eat meat; omnivores also eat meat. 4-Yes: Some rainforest animals are carnivores; no herbivore is a carnivore; therefore those carnivores are not herbivores, meaning some rainforest animals are not herbivores. 5-No: Only some rainforest animals are carnivores; the premises do not state that all rainforest animals eat meat.",
+    "order_index": 8,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Some animals in the rainforest eat meat.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "No herbivore is a carnivore.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "All animals that eat meat are carnivores.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "Some rainforest animals are not herbivores.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "All rainforest animals eat meat.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440009",
+    "title": "Hospital Department Data",
     "type": "interpreting_info",
-    "stem": "A study recorded average travel times (in minutes) to hospital by transport type and time of day.",
+    "stem": "The table below shows data from five hospital departments for January and February.",
     "table_data": {
-      "headers": ["Transport", "Morning", "Afternoon", "Evening"],
+      "headers": ["Department", "Jan Patients", "Feb Patients", "Staff", "Avg Wait (mins)"],
       "rows": [
-        ["Bus", "45", "38", "52"],
-        ["Car", "22", "18", "30"],
-        ["Train", "35", "28", "40"],
-        ["Taxi", "25", "20", "32"]
+        ["Cardiology", "45", "52", "8", "34"],
+        ["Neurology", "38", "41", "6", "45"],
+        ["Orthopaedics", "63", "59", "10", "28"],
+        ["A&E", "210", "198", "25", "18"],
+        ["Dermatology", "27", "31", "4", "52"]
       ]
     },
     "stimulus_diagram": null,
     "correct_answer": null,
-    "answer_reason": "Car has the lowest travel times across all columns (22/18/30 – Yes). Bus morning minus train morning = 45–35 = 10, which is greater than 5 (Yes). Taxi afternoon (20 min) < Train morning (35 min) – Yes. Evening times are consistently higher than morning times for all transport types (e.g. car: 30 > 22) – so statement 4 is No. Bus afternoon (38) < Train evening (40) – Yes.",
-    "order_index": 4,
+    "answer_reason": "1-Yes: Cardiology patients rose from 45 (January) to 52 (February). 2-Yes: Dermatology has both the fewest staff (4) and the longest average wait (52 minutes). 3-Yes: A&E January = 210; Neurology January = 38; 5 × 38 = 190 < 210. 4-No: January total = 45+38+63+210+27 = 383; February total = 52+41+59+198+31 = 381; the total decreased, not increased. 5-Yes: Orthopaedics % decrease = 4/63 × 100 ≈ 6.3%; A&E % decrease = 12/210 × 100 ≈ 5.7%; Orthopaedics had the larger percentage decrease.",
+    "order_index": 9,
     "decision_making_question_options": [],
     "decision_making_question_statements": [
-      { "statement_text": "Car is the fastest transport type at all times of day.", "correct_answer": "Yes", "order_index": 1 },
-      { "statement_text": "The difference in morning travel times between Bus and Train is greater than 5 minutes.", "correct_answer": "Yes", "order_index": 2 },
-      { "statement_text": "A patient travelling by taxi in the afternoon arrives before one travelling by train in the morning.", "correct_answer": "Yes", "order_index": 3 },
-      { "statement_text": "Evening travel times are shorter than morning travel times for all transport types.", "correct_answer": "No", "order_index": 4 },
-      { "statement_text": "Taking the bus in the afternoon is faster than taking a train in the evening.", "correct_answer": "Yes", "order_index": 5 }
+      { "statement_text": "Cardiology saw an increase in patients from January to February.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "The department with the longest average wait time also has the fewest staff.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "A&E had more than five times the number of January patients compared to Neurology.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "The total patient count across all departments was higher in February than in January.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "Orthopaedics had a higher percentage decrease in patients than A&E between January and February.", "correct_answer": "Yes", "order_index": 5 }
     ]
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000005",
-    "title": "Birds in an Aviary",
-    "type": "venn_diagram",
-    "stem": "There are nine birds in an aviary. Two are yellow and green. Two are red only, and one is red and yellow.\n\nThe square represents green birds, the circle represents yellow birds, and the triangle represents red birds.\n\nWhich of the following diagrams best represents the above data?",
+    "id": "550e8400-e29b-41d4-a716-446655440010",
+    "title": "City Population Statistics",
+    "type": "interpreting_info",
+    "stem": "The table below shows population and area data for five cities in 2020 and 2023. Density figures are based on 2023 population.",
+    "table_data": {
+      "headers": ["City", "2020 Pop (000s)", "2023 Pop (000s)", "Area (km²)", "Density (per km²)"],
+      "rows": [
+        ["Ashford", "74", "78", "22", "3545"],
+        ["Barton", "123", "119", "35", "3400"],
+        ["Caldwell", "56", "61", "18", "3389"],
+        ["Dunmore", "210", "216", "65", "3323"],
+        ["Elston", "88", "92", "28", "3286"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Barton's population fell from 123,000 (2020) to 119,000 (2023). 2-No: Ashford has the highest population density at 3,545 per km², not Caldwell (3,389). 3-Yes: Dunmore grew by 6,000 (210→216), which is the largest absolute increase of any city. 4-No: Ashford + Elston = 78+92 = 170,000; Barton + Caldwell = 119+61 = 180,000; the combined total is lower, not higher. 5-Yes: Elston has a density of 3,286 per km², the lowest of all five cities.",
+    "order_index": 10,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Barton's population decreased between 2020 and 2023.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "Caldwell has the highest population density in 2023.", "correct_answer": "No", "order_index": 2 },
+      { "statement_text": "Dunmore had the largest absolute population increase between 2020 and 2023.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "The combined 2023 population of Ashford and Elston exceeds that of Barton and Caldwell combined.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "Elston has the lowest population density in 2023.", "correct_answer": "Yes", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440011",
+    "title": "Football League Table",
+    "type": "interpreting_info",
+    "stem": "The table below shows the standings of five teams in a football league after 12 matches each. Teams receive 3 points for a win and 1 point for a draw.",
+    "table_data": {
+      "headers": ["Team", "Played", "Won", "Drawn", "Lost", "Points"],
+      "rows": [
+        ["United", "12", "8", "2", "2", "26"],
+        ["City", "12", "7", "3", "2", "24"],
+        ["Rovers", "12", "5", "4", "3", "19"],
+        ["Town", "12", "4", "2", "6", "14"],
+        ["Athletic", "12", "2", "1", "9", "7"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: United won 8 matches, more than any other team. 2-No: Rovers have recorded 4 draws, which is more than City's 3 draws. 3-Yes: Rovers won 5 out of 12 (41.7%); Town won 4 out of 12 (33.3%); Rovers have the better win rate. 4-Yes: Sum of draws across all teams = 2+3+4+2+1 = 12. 5-No: United minus Rovers = 26−19 = 7 points; City minus Town = 24−14 = 10 points; 7 < 10, so the gap is smaller.",
+    "order_index": 11,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "United have won more games than any other team.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "City have drawn more games than any other team.", "correct_answer": "No", "order_index": 2 },
+      { "statement_text": "Rovers have a better win rate than Town.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "The combined total of drawn results recorded across all five teams is 12.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "The points difference between United and Rovers is greater than the points difference between City and Town.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440012",
+    "title": "Monthly Weather Records",
+    "type": "interpreting_info",
+    "stem": "The table below shows weather data recorded at a UK weather station across five months of the year.",
+    "table_data": {
+      "headers": ["Month", "Avg Temp (°C)", "Rainfall (mm)", "Sunshine Hours", "Frost Days"],
+      "rows": [
+        ["January", "4", "68", "62", "12"],
+        ["March", "7", "52", "108", "5"],
+        ["June", "18", "45", "195", "0"],
+        ["September", "15", "58", "155", "0"],
+        ["December", "5", "72", "52", "10"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: June has 195 sunshine hours, the highest of all five months shown. 2-Yes: December average temperature = 5°C; January = 4°C; December is warmer. 3-Yes: December has the highest rainfall (72mm) and also the fewest sunshine hours (52). 4-No: Total rainfall = 68+52+45+58+72 = 295mm, which is less than 300mm. 5-No: January has 12 frost days; the other four months combined = 5+0+0+10 = 15 frost days; January does not exceed the combined total.",
+    "order_index": 12,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "June had the most sunshine hours of the five months shown.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "December had a higher average temperature than January.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "The month with the highest rainfall also had the fewest sunshine hours.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "The total rainfall across the five months shown exceeded 300mm.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "January had more frost days than all other months combined.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440013",
+    "title": "Employee Training Review",
+    "type": "interpreting_info",
+    "stem": "The table below shows training and retention data for five departments at a company.",
+    "table_data": {
+      "headers": ["Department", "Employees", "Avg Training Days", "Pass Rate (%)", "Turnover (%)"],
+      "rows": [
+        ["Sales", "45", "3.2", "78", "22"],
+        ["HR", "12", "4.1", "85", "15"],
+        ["Finance", "28", "5.0", "92", "8"],
+        ["IT", "34", "4.8", "88", "11"],
+        ["Operations", "67", "2.9", "71", "28"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Finance has both the highest pass rate (92%) and the highest average training days (5.0). 2-Yes: Operations has the most employees (67) and the fewest average training days (2.9). 3-No: HR turnover = 15%; IT turnover = 11%; HR has a higher turnover rate than IT, not lower. 4-Yes: Sales + HR + Finance = 45+12+28 = 85; IT + Operations = 34+67 = 101; 85 < 101. 5-No: Sales pass rate = 78%; IT = 88%; the difference is exactly 10 percentage points, which is not more than 10.",
+    "order_index": 13,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Finance has both the highest pass rate and the highest average training days.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "The department with the most employees also has the lowest average training days.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "HR has a lower employee turnover rate than IT.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "The total number of employees in Sales, HR, and Finance is less than the combined total of IT and Operations.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "The pass rate in Sales is more than 10 percentage points below the pass rate in IT.", "correct_answer": "No", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440014",
+    "title": "Renewable Energy Capacity",
+    "type": "interpreting_info",
+    "stem": "The table below shows renewable energy capacity (in gigawatts) for five fictional countries.",
+    "table_data": {
+      "headers": ["Country", "Solar (GW)", "Wind (GW)", "Hydro (GW)", "Total Renewable (GW)"],
+      "rows": [
+        ["Alvoria", "12.4", "8.3", "3.1", "23.8"],
+        ["Brendal", "5.2", "15.6", "7.4", "28.2"],
+        ["Corveth", "18.7", "4.1", "0.8", "23.6"],
+        ["Drestan", "3.6", "22.4", "9.2", "35.2"],
+        ["Elwick", "9.1", "11.8", "5.5", "26.4"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Drestan has a total of 35.2 GW, the highest of all five countries. 2-Yes: Corveth solar = 18.7 GW; wind + hydro = 4.1+0.8 = 4.9 GW; 18.7 > 4.9. 3-No: 3 × 5.2 = 15.6, which equals Brendal's wind capacity exactly — it is not more than three times. 4-No: The country with the highest solar is Corveth (18.7 GW), which also has the lowest total (23.6 GW), not the second-lowest. 5-Yes: Alvoria + Elwick solar = 12.4+9.1 = 21.5 GW; Corveth solar = 18.7 GW; 21.5 > 18.7.",
+    "order_index": 14,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Drestan has the highest total renewable energy capacity.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "Corveth generates more from solar than from wind and hydro combined.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "Brendal's wind capacity is more than three times its solar capacity.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "The country with the highest solar capacity has the second-lowest total renewable capacity.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "The combined solar capacity of Alvoria and Elwick exceeds that of Corveth.", "correct_answer": "Yes", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440015",
+    "title": "Clinical Drug Trial Results",
+    "type": "interpreting_info",
+    "stem": "The table below shows results from a clinical trial comparing four treatments and a placebo group.",
+    "table_data": {
+      "headers": ["Treatment", "Patients (n)", "Response Rate (%)", "Adverse Events (%)", "Dropout Rate (%)"],
+      "rows": [
+        ["Drug A", "120", "68", "12", "8"],
+        ["Drug B", "95", "74", "18", "11"],
+        ["Placebo", "115", "23", "4", "6"],
+        ["Drug C", "108", "81", "22", "14"],
+        ["Combined AB", "87", "85", "28", "19"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Drug C response rate = 81%; Drug B = 74%; Drug C is higher. 2-Yes: Placebo adverse events = 4%, the lowest of all groups. 3-Yes: Placebo n = 115; Drug B n = 95; 115 > 95. 4-No: The highest response rate is Combined AB (85%), but the lowest dropout rate belongs to Placebo (6%) — these are different treatment groups. 5-Yes: Drug A: 120 patients × 12% = 14.4 adverse events, which is fewer than 100.",
+    "order_index": 15,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Drug C had a higher response rate than Drug B.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "The placebo group had the lowest adverse event rate.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "More patients were enrolled in the placebo group than in the Drug B group.", "correct_answer": "Yes", "order_index": 3 },
+      { "statement_text": "The treatment with the highest response rate also had the lowest dropout rate.", "correct_answer": "No", "order_index": 4 },
+      { "statement_text": "Drug A experienced fewer than 100 adverse events in absolute terms.", "correct_answer": "Yes", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440016",
+    "title": "Online Retail Sales",
+    "type": "interpreting_info",
+    "stem": "The table below shows sales data for five products sold by an online retailer in January and February.",
+    "table_data": {
+      "headers": ["Product", "Jan Units Sold", "Feb Units Sold", "Return Rate (%)", "Avg Price (£)"],
+      "rows": [
+        ["Headphones", "342", "298", "8.2", "45.99"],
+        ["Laptop Stand", "156", "187", "2.1", "29.99"],
+        ["Phone Case", "891", "924", "1.4", "8.99"],
+        ["USB Hub", "234", "219", "3.8", "19.99"],
+        ["Webcam", "178", "203", "5.6", "67.49"]
+      ]
+    },
+    "stimulus_diagram": null,
+    "correct_answer": null,
+    "answer_reason": "1-Yes: Phone Case February = 924 units, the highest February figure across all products. 2-Yes: Webcam average price = £67.49, the highest of all five products. 3-No: Laptop Stand increase = (187−156)/156 × 100 ≈ 19.9%, which is less than 20%. 4-Yes: USB Hub return rate = 3.8%; Laptop Stand = 2.1%; 3.8 > 2.1. 5-Yes: January total = 342+156+891+234+178 = 1,801; February total = 298+187+924+219+203 = 1,831; February was higher.",
+    "order_index": 16,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      { "statement_text": "Phone cases had more units sold in February than any other product.", "correct_answer": "Yes", "order_index": 1 },
+      { "statement_text": "The webcam has the highest average price.", "correct_answer": "Yes", "order_index": 2 },
+      { "statement_text": "Sales of the laptop stand increased by more than 20% from January to February.", "correct_answer": "No", "order_index": 3 },
+      { "statement_text": "The USB hub had a higher return rate than the laptop stand.", "correct_answer": "Yes", "order_index": 4 },
+      { "statement_text": "Total units sold across all products was higher in February than in January.", "correct_answer": "Yes", "order_index": 5 }
+    ]
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440017",
+    "title": "Patient Appointment Scheduling",
+    "type": "logic_puzzle",
+    "stem": "Five patients — Asif, Beth, Cora, Dan, and Eve — are scheduled in appointment slots 1 to 5 (slot 1 is earliest, slot 5 is latest). The following constraints apply:\n• Dan is seen in slot 3.\n• Cora is not seen first or last.\n• Eve must be seen in the slot immediately before or immediately after Cora.\n• Asif is seen before Beth.\n• Beth is not seen in slot 4.\n• Eve is not seen last.\n\nWhich slot is Beth seen in?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "D",
+    "answer_reason": "Dan is fixed in slot 3. Cora cannot be in slot 1 or 5, so Cora is in slot 2 or 4. Eve must be adjacent to Cora. If Cora = slot 2, Eve must be in slot 1 or 3; slot 3 is taken by Dan, so Eve = slot 1. Remaining slots 4 and 5 go to Asif and Beth; Asif must be before Beth, so Asif = 4, Beth = 5; Beth ≠ slot 4 is satisfied. If Cora = slot 4, Eve must be in slot 3 or 5; slot 3 is Dan, so Eve = slot 5 — but Eve cannot be last, eliminating this case. The only valid solution is Beth in slot 5.",
+    "order_index": 17,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Slot 2", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Slot 3", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Slot 4", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Slot 5", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440018",
+    "title": "Volunteer Team Selection",
+    "type": "logic_puzzle",
+    "stem": "A charity is selecting a team of exactly 4 volunteers from seven candidates: A, B, C, D, E, F, and G. The following rules apply:\n• A and B cannot both be selected.\n• If C is selected, D must also be selected.\n• E must be selected.\n• At least one of F or G must be selected.\n• B must be selected if A is not.\n\nWhich of the following is a valid team?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "B",
+    "answer_reason": "Option A {E, A, C, D}: A is selected and E is present, C→D holds — but neither F nor G is included, violating rule 4. Option B {E, B, F, G}: A is absent so B must be selected (rule 5 satisfied); A and B are not both selected (rule 1 satisfied); C is absent so rule 2 is not triggered; E is present (rule 3); both F and G are present satisfying rule 4. All rules pass — this is the valid team. Option C {E, A, B, D}: A and B are both selected, violating rule 1. Option D {E, C, F, A}: C is selected but D is not, violating rule 2.",
+    "order_index": 18,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "E, A, C, D", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "E, B, F, G", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "E, A, B, D", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "E, C, F, A", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440019",
+    "title": "Wildlife Population Ranking",
+    "type": "logic_puzzle",
+    "stem": "Five animals in a wildlife survey are ranked by population size from 1st (largest) to 5th (smallest): red deer, grey squirrel, badger, red fox, and otter. The following is known:\n• Red deer has a larger population than grey squirrel.\n• Badger is ranked 3rd.\n• Red fox is not ranked 1st or 5th.\n• Otter has the smallest population.\n• Grey squirrel is ranked lower than badger but higher than otter.\n\nWhat is the rank of the red fox?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "B",
+    "answer_reason": "Otter is ranked 5th (smallest). Badger is ranked 3rd. Grey squirrel is ranked lower than badger (3rd) but higher than otter (5th), so grey squirrel is ranked 4th. Red deer has a larger population than grey squirrel (4th), so red deer is ranked 1st or 2nd. The only remaining ranks for red deer and red fox are 1st and 2nd. Red fox cannot be 1st, so red fox is 2nd and red deer is 1st. Final order: 1st red deer, 2nd red fox, 3rd badger, 4th grey squirrel, 5th otter.",
+    "order_index": 19,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "1st", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "2nd", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "3rd", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "4th", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440020",
+    "title": "Conference Room Booking",
+    "type": "logic_puzzle",
+    "stem": "A company has four meeting rooms: Alpha, Beta, Gamma, and Delta. The finance team needs a room available on both Tuesday and Wednesday for a two-day booking. The following is known:\n• Alpha is already booked on Monday and Wednesday.\n• Beta is unavailable on Tuesday.\n• Gamma is only available on Monday, Wednesday, and Friday.\n• Delta is booked on Thursday only.\n\nWhich room can the finance team use?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "D",
+    "answer_reason": "The finance team needs a room free on both Tuesday and Wednesday. Alpha is booked on Wednesday — unavailable. Beta is unavailable on Tuesday — cannot be used. Gamma is only available on Monday, Wednesday, and Friday — not available on Tuesday. Delta is booked only on Thursday, meaning it is free on both Tuesday and Wednesday. Delta is the only room that satisfies the two-day requirement.",
+    "order_index": 20,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Alpha", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Beta", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Gamma", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Delta", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440021",
+    "title": "Train Departure Times",
+    "type": "logic_puzzle",
+    "stem": "Five trains depart from Millfield Station at the following times: 07:00, 08:30, 10:00, 11:30, and 13:00. Each train serves a different destination: Northport, Southgate, Westham, Eastville, and Midbourne. The following is known:\n• The train to Westham departs at 07:00.\n• The train to Northport departs at either 08:30 or 10:00, but not at 08:30.\n• The train to Southgate departs exactly one hour and thirty minutes before the train to Eastville.\n• The train to Eastville departs after 11:00.\n\nWhat time does the train to Northport depart?",
     "table_data": null,
     "stimulus_diagram": null,
     "correct_answer": "C",
-    "answer_reason": "Yellow+green birds = 2 (set1_set2 = 2). Red only = 2 (set3_only = 2). Red+yellow = 1 (set2_set3 = 1). Total = 9, so green only = 9–2–2–1 = 4 (set1_only = 4) and yellow only = 0 (set2_only = 0). Only option C has all five values correct.",
-    "order_index": 5,
+    "answer_reason": "Westham = 07:00. Northport is either 08:30 or 10:00, but not 08:30, so Northport = 10:00. Eastville departs after 11:00, so Eastville is 11:30 or 13:00. Southgate departs 1h30m before Eastville: if Eastville = 11:30, Southgate = 10:00 — but that slot is already assigned to Northport, creating a conflict. Therefore Eastville = 13:00 and Southgate = 11:30. The remaining slot (08:30) goes to Midbourne. The train to Northport departs at 10:00.",
+    "order_index": 21,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "07:00", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "08:30", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "10:00", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "11:30", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440022",
+    "title": "Hospital Ward Assignments",
+    "type": "logic_puzzle",
+    "stem": "Four nurses — Alice, Ben, Carlos, and Diana — are each assigned to one of four wards for a night shift: Cardiac, Geriatric, Paediatric, and Surgical. Each nurse covers exactly one ward. The following is known:\n• Alice is not assigned to Paediatric or Surgical.\n• Ben is assigned to Cardiac.\n• Carlos is not assigned to Geriatric.\n• Diana is not assigned to Cardiac.\n\nWhich ward is Alice assigned to?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "B",
+    "answer_reason": "Ben is assigned to Cardiac, so that ward is taken. Alice cannot be assigned to Paediatric or Surgical, and Cardiac is already taken by Ben — therefore Alice must be assigned to Geriatric. Carlos cannot be assigned to Geriatric (now taken by Alice), so Carlos covers Paediatric or Surgical. Diana cannot be assigned to Cardiac (taken by Ben), so Diana takes whichever of Paediatric or Surgical Carlos does not. Alice is assigned to the Geriatric ward.",
+    "order_index": 22,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Cardiac", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Geriatric", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Paediatric", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Surgical", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440023",
+    "title": "Foreign Language Requirements",
+    "type": "strongest_argument",
+    "stem": "All university students should be required to study a foreign language as part of their degree.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "A",
+    "answer_reason": "Option A is the strongest argument: it is specific, directly relevant to the proposition, and cites a concrete practical benefit — improved graduate employability in a global economy. This directly supports the policy's purpose. Option B is weak — the absence of an immediate subject-specific need is not a compelling reason to exclude all students, especially given broader career benefits. Option C is factually incorrect; compulsory study abroad is not universal across all degree programmes. Option D is paternalistic and vague — asserting that language learning is too difficult for some students is not a strong policy argument.",
+    "order_index": 23,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Yes; communicating in a second language directly improves graduate employability in an increasingly global job market.", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "No; many degree subjects have no direct practical need for foreign language skills.", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Yes; studying abroad is already compulsory for all university degree programmes.", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "No; language learning is too difficult for students who did not study a language at school.", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440024",
+    "title": "School Vending Machine Policy",
+    "type": "strongest_argument",
+    "stem": "Sugar-sweetened beverages should be banned from all school vending machines.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "A",
+    "answer_reason": "Option A is the strongest argument: it identifies a specific, evidence-grounded harm (elevated risk of obesity and type 2 diabetes) and directly invokes the school's duty of care, which is central to the proposition. Option B raises the displacement concern that students can buy drinks outside school, but this does not negate the school's responsibility to model a healthy environment and does not outweigh A. Option C overstates and distorts evidence by claiming sugary drinks are the primary cause of all childhood obesity, making it factually weak and therefore a poor argument. Option D is irrelevant to student health; economic impact on the vending industry is not a compelling reason to retain access to harmful products in schools.",
+    "order_index": 24,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Yes; children who consume high amounts of added sugar face significantly greater risk of obesity and type 2 diabetes, and schools have a duty of care to promote student health.", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "No; students can purchase sugary drinks outside school, so a ban within school premises would have no meaningful impact.", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Yes; sugary drinks are the primary cause of all childhood obesity.", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "No; banning drinks from vending machines would harm the vending machine industry.", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440025",
+    "title": "GP Minimum Appointment Time",
+    "type": "strongest_argument",
+    "stem": "GPs should be required by law to spend a minimum of 15 minutes with each patient.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "B",
+    "answer_reason": "Option B is the strongest argument: it directly challenges the proposition by identifying a concrete negative consequence — a mandatory minimum would reduce the total number of appointments available each day, preventing patients from accessing care. This is a measurable policy-relevant trade-off that directly addresses the impact of the proposed law. Option A raises valid concerns about rushed consultations but does not constitute a strong argument for a blanket 15-minute minimum when some consultations genuinely require less time. Option C is a vague aspiration rather than a reasoned argument. Option D notes that waiting times are already long but does not logically connect this to the specific proposal being evaluated.",
+    "order_index": 25,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Yes; many patients have complex needs that cannot be addressed in shorter appointments, and rushed consultations increase the risk of diagnostic error.", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "No; some consultations require only a few minutes, and a mandatory minimum would significantly reduce the number of patients seen each day, denying access to care.", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Yes; doctors should always spend as much time as possible with every patient.", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "No; waiting times in the NHS are already too long.", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440026",
+    "title": "Medical Placement Requirements",
+    "type": "strongest_argument",
+    "stem": "Medical students should be required to complete six months of clinical work in a rural or deprived area before they can qualify as a doctor.",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "A",
+    "answer_reason": "Option A is the strongest argument: it identifies two specific, concrete educational benefits — clinical resilience and a breadth of diagnostic experience — that are directly relevant to the purpose of the requirement and cannot easily be replicated in well-resourced urban hospitals. This directly justifies the proposal. Option B acknowledges a real cost (delayed graduation) but does not engage with the educational value of the training itself, making it a weaker counterargument. Option C is a vague assertion of professional obligation rather than a substantive argument for this specific policy. Option D refers to individual personal circumstances which, while genuine, is a weak policy-level argument that does not address the broader educational rationale.",
+    "order_index": 26,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Yes; exposure to under-resourced settings builds clinical resilience and broadens diagnostic experience in ways that well-equipped city hospitals cannot replicate.", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "No; rural placements would delay graduation for all students regardless of their intended specialty.", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Yes; doctors should always be willing to work wherever they are needed.", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "No; some students have family commitments that make six-month placements away from home impractical.", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440027",
+    "title": "Language Study Survey",
+    "type": "venn_diagram",
+    "stem": "In a school of 30 students, 18 study French, 14 study Spanish, and 7 study both languages. The remaining students study neither language.\n\nThe circle represents French students and the square represents Spanish students.\n\nWhich of the following diagrams correctly represents this data?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "C",
+    "answer_reason": "French only = 18 − 7 = 11. Spanish only = 14 − 7 = 7. Both = 7. Neither = 30 − (11+7+7) = 5. Option C correctly shows set1_only=11, set2_only=7, set1_set2=7, outside=5. Option A has an incorrect overlap (6) and outside value (6). Option B inflates French-only to 12 and reduces Spanish-only to 6. Option D reduces French-only to 10 and inflates Spanish-only to 8.",
+    "order_index": 27,
     "decision_making_question_options": [
       {
         "label": "A",
         "option_text": null,
         "option_data": {
+          "diagramLayout": "two_overlap",
           "sets": [
-            { "id": "set1", "label": "Green", "shape": "square" },
-            { "id": "set2", "label": "Yellow", "shape": "circle" },
-            { "id": "set3", "label": "Red", "shape": "triangle" }
+            { "id": "set1", "label": "French", "shape": "circle" },
+            { "id": "set2", "label": "Spanish", "shape": "square" }
           ],
-          "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 0, "set2_set3": 0, "set3_only": 2 },
-          "diagramLayout": "three_linear"
+          "regions": { "set1_only": 11, "set2_only": 7, "set1_set2": 6, "outside": 6 }
         },
         "order_index": 1
       },
@@ -110,13 +583,12 @@
         "label": "B",
         "option_text": null,
         "option_data": {
+          "diagramLayout": "two_overlap",
           "sets": [
-            { "id": "set1", "label": "Green", "shape": "square" },
-            { "id": "set2", "label": "Yellow", "shape": "circle" },
-            { "id": "set3", "label": "Red", "shape": "triangle" }
+            { "id": "set1", "label": "French", "shape": "circle" },
+            { "id": "set2", "label": "Spanish", "shape": "square" }
           ],
-          "regions": { "set1_only": 3, "set1_set2": 2, "set2_only": 1, "set2_set3": 1, "set3_only": 2 },
-          "diagramLayout": "three_linear"
+          "regions": { "set1_only": 12, "set2_only": 6, "set1_set2": 7, "outside": 5 }
         },
         "order_index": 2
       },
@@ -124,13 +596,12 @@
         "label": "C",
         "option_text": null,
         "option_data": {
+          "diagramLayout": "two_overlap",
           "sets": [
-            { "id": "set1", "label": "Green", "shape": "square" },
-            { "id": "set2", "label": "Yellow", "shape": "circle" },
-            { "id": "set3", "label": "Red", "shape": "triangle" }
+            { "id": "set1", "label": "French", "shape": "circle" },
+            { "id": "set2", "label": "Spanish", "shape": "square" }
           ],
-          "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 0, "set2_set3": 1, "set3_only": 2 },
-          "diagramLayout": "three_linear"
+          "regions": { "set1_only": 11, "set2_only": 7, "set1_set2": 7, "outside": 5 }
         },
         "order_index": 3
       },
@@ -138,13 +609,12 @@
         "label": "D",
         "option_text": null,
         "option_data": {
+          "diagramLayout": "two_overlap_staggered",
           "sets": [
-            { "id": "set1", "label": "Green", "shape": "square" },
-            { "id": "set2", "label": "Yellow", "shape": "circle" },
-            { "id": "set3", "label": "Red", "shape": "triangle" }
+            { "id": "set1", "label": "French", "shape": "circle" },
+            { "id": "set2", "label": "Spanish", "shape": "square" }
           ],
-          "regions": { "set1_only": 2, "set1_set2": 2, "set2_only": 2, "set2_set3": 1, "set3_only": 2 },
-          "diagramLayout": "three_linear"
+          "regions": { "set1_only": 10, "set2_only": 8, "set1_set2": 7, "outside": 5 }
         },
         "order_index": 4
       }
@@ -152,40 +622,128 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000006",
-    "title": "Drug Clinical Trial",
-    "type": "probabilistic",
-    "stem": "In a clinical trial, 200 patients were randomly assigned to receive either a new drug (100 patients) or a placebo (100 patients). After 6 months, 40 patients in the drug group showed improvement compared to 25 in the placebo group. The results were statistically significant (p < 0.05).",
+    "id": "550e8400-e29b-41d4-a716-446655440028",
+    "title": "Athletic Activities",
+    "type": "venn_diagram",
+    "stem": "The diagram below categorises athletes by the sports they participate in. The pentagon represents athletes who swim and the diamond represents athletes who run. Each letter marks a different region of the diagram.\n\nWhich letter represents an athlete who swims but does not run?",
     "table_data": null,
-    "stimulus_diagram": null,
+    "stimulus_diagram": {
+      "diagramLayout": "two_overlap",
+      "sets": [
+        { "id": "set1", "label": "Swimming", "shape": "pentagon" },
+        { "id": "set2", "label": "Running", "shape": "diamond" }
+      ],
+      "regions": {
+        "outside": "P",
+        "set1_only": "Q",
+        "set1_set2": "R",
+        "set2_only": "S"
+      }
+    },
     "correct_answer": "A",
-    "answer_reason": "The drug group showed significantly more improvement than placebo (40% vs 25%), confirmed as statistically significant – supporting that the drug benefits at least some patients (A). Option B incorrectly claims the exact trial rate generalises to all patients. Option C is directly contradicted by the 25 placebo patients who did improve. Option D goes beyond the trial's scope, which made no comparison to existing treatments.",
-    "order_index": 6,
+    "answer_reason": "The pentagon represents Swimming (set1) and the diamond represents Running (set2). Region Q is set1_only — inside the pentagon but outside the diamond — which represents athletes who swim but do not run. Region R is the overlap (both swim and run). Region S is set2_only (run only, not swimming). Region P is outside both shapes (neither activity).",
+    "order_index": 28,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "The new drug is likely to be beneficial for at least some patients.", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "The new drug will improve outcomes in exactly 40% of all patients.", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Patients in the placebo group cannot improve without medication.", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "This trial proves the new drug is more effective than all existing treatments.", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter Q", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter R", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter S", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter P", "option_data": null, "order_index": 4 }
     ],
     "decision_making_question_statements": []
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000007",
-    "title": "Biology and Chemistry Students",
+    "id": "550e8400-e29b-41d4-a716-446655440029",
+    "title": "Nature Reserve Animals",
     "type": "venn_diagram",
-    "stem": "The diagram shows students categorised by the subjects they study. The square represents Biology students and the circle represents Chemistry students. Each letter marks a different region of the diagram.\n\nWhich letter represents a student who studies Biology but not Chemistry?",
+    "stem": "A nature reserve contains 50 animals. 15 are mammals only, 12 are birds only, and 8 are reptiles only. 6 animals are classified as both mammals and birds. 4 animals are classified as both birds and reptiles. 5 animals belong to none of these three categories.\n\nThe rectangle represents mammals, the circle represents birds, and the triangle represents reptiles.\n\nWhich of the following diagrams correctly represents this data?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "B",
+    "answer_reason": "Mammals only=15, Mammals+Birds=6, Birds only=12, Birds+Reptiles=4, Reptiles only=8, outside=5. Total = 15+6+12+4+8+5 = 50. Option B correctly represents all six values. Option A uses an incorrect layout showing all three sets overlapping (including a mammals-reptiles overlap that does not exist in the data) and has a wrong mammals+birds value of 5. Option C reduces mammals-only to 14 and increases birds+reptiles to 5. Option D reduces birds-only to 11 and increases reptiles-only to 9.",
+    "order_index": 29,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "three_all_overlap",
+          "sets": [
+            { "id": "set1", "label": "Mammals", "shape": "rectangle" },
+            { "id": "set2", "label": "Birds", "shape": "circle" },
+            { "id": "set3", "label": "Reptiles", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 15, "set2_only": 12, "set3_only": 8, "set1_set2": 5, "set2_set3": 4, "set1_set3": 1, "outside": 5 }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "three_linear",
+          "sets": [
+            { "id": "set1", "label": "Mammals", "shape": "rectangle" },
+            { "id": "set2", "label": "Birds", "shape": "circle" },
+            { "id": "set3", "label": "Reptiles", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 15, "set1_set2": 6, "set2_only": 12, "set2_set3": 4, "set3_only": 8, "outside": 5 }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "three_linear",
+          "sets": [
+            { "id": "set1", "label": "Mammals", "shape": "rectangle" },
+            { "id": "set2", "label": "Birds", "shape": "circle" },
+            { "id": "set3", "label": "Reptiles", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 14, "set1_set2": 6, "set2_only": 12, "set2_set3": 5, "set3_only": 8, "outside": 5 }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "three_linear",
+          "sets": [
+            { "id": "set1", "label": "Mammals", "shape": "rectangle" },
+            { "id": "set2", "label": "Birds", "shape": "circle" },
+            { "id": "set3", "label": "Reptiles", "shape": "triangle" }
+          ],
+          "regions": { "set1_only": 15, "set1_set2": 6, "set2_only": 11, "set2_set3": 4, "set3_only": 9, "outside": 5 }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440030",
+    "title": "Science Subject Students",
+    "type": "venn_diagram",
+    "stem": "The diagram below categorises sixth-form students by the science subjects they study. The circle represents Physics students, the diamond represents Chemistry students, and the rectangle represents Biology students. Physics and Chemistry overlap; Biology is completely separate from both. Each letter marks a different region.\n\nWhich letter represents a student who studies Chemistry but not Physics or Biology?",
     "table_data": null,
     "stimulus_diagram": {
+      "diagramLayout": "three_one_separate",
       "sets": [
-        { "id": "set1", "label": "Biology", "shape": "square" },
-        { "id": "set2", "label": "Chemistry", "shape": "circle" }
+        { "id": "set1", "label": "Physics", "shape": "circle" },
+        { "id": "set2", "label": "Chemistry", "shape": "diamond" },
+        { "id": "set3", "label": "Biology", "shape": "rectangle" }
       ],
-      "regions": { "outside": "S", "set1_only": "P", "set1_set2": "R", "set2_only": "Q" },
-      "diagramLayout": "two_overlap"
+      "regions": {
+        "set1_only": "P",
+        "set1_set2": "Q",
+        "set2_only": "R",
+        "set3_only": "S"
+      }
     },
-    "correct_answer": "A",
-    "answer_reason": "The square represents Biology and the circle represents Chemistry. Region P is inside the square but outside the circle – Biology only. Region Q is Chemistry only. Region R is the overlap (both subjects). Region S is outside both shapes (neither subject). A student studying Biology but not Chemistry is in region P – Answer A.",
-    "order_index": 7,
+    "correct_answer": "C",
+    "answer_reason": "The diamond represents Chemistry (set2). A student who studies Chemistry but not Physics or Biology is in set2_only, labelled R. Region P is Physics-only (circle only, not Chemistry or Biology). Region Q is the overlap between Physics and Chemistry (studies both). Region S is Biology-only (the separate rectangle). The answer is C — Letter R.",
+    "order_index": 30,
     "decision_making_question_options": [
       { "label": "A", "option_text": "Letter P", "option_data": null, "order_index": 1 },
       { "label": "B", "option_text": "Letter Q", "option_data": null, "order_index": 2 },
@@ -195,82 +753,140 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000008",
-    "title": "Sports Club Members",
+    "id": "550e8400-e29b-41d4-a716-446655440031",
+    "title": "Pet Ownership Survey",
     "type": "venn_diagram",
-    "stem": "The diagram shows members of a sports club. The circle represents Football players, the square represents Tennis players, and the triangle represents Swimming players. Each letter marks a different region.\n\nWhich letter represents members who play Tennis and Swimming but not Football?",
+    "stem": "A survey of 40 pet owners found that 18 own dogs only, 15 own cats only, and 7 own neither dogs nor cats. No owner in the survey owns both a dog and a cat.\n\nThe pentagon represents dog owners and the circle represents cat owners.\n\nWhich of the following diagrams correctly represents this data?",
     "table_data": null,
-    "stimulus_diagram": {
-      "sets": [
-        { "id": "set1", "label": "Football", "shape": "circle" },
-        { "id": "set2", "label": "Tennis", "shape": "square" },
-        { "id": "set3", "label": "Swimming", "shape": "triangle" }
-      ],
-      "regions": { "all_three": "G", "set1_only": "A", "set1_set2": "D", "set1_set3": "E", "set2_only": "B", "set2_set3": "F", "set3_only": "C" },
-      "diagramLayout": "three_all_overlap"
-    },
+    "stimulus_diagram": null,
     "correct_answer": "C",
-    "answer_reason": "The overlap between Tennis (square) and Swimming (triangle) but outside Football (circle) is region F – set2_set3. Region D is Football ∩ Tennis. Region E is Football ∩ Swimming. Region G is all three sports. Members playing Tennis and Swimming but not Football are in region F – Answer C.",
-    "order_index": 8,
+    "answer_reason": "Dogs only=18, Cats only=15, neither=7. Total = 18+15+7 = 40. Since no one owns both, this is a two_separate layout with no overlap region. Option C correctly shows set1_only=18, set2_only=15, outside=7. Option A has an incorrect cats-only count (14) and wrong outside value (8). Option B reduces dog owners to 17 and increases outside to 8. Option D inflates dog owners to 19 and reduces outside to 6.",
+    "order_index": 31,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter D", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter E", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter F", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter G", "option_data": null, "order_index": 4 }
+      {
+        "label": "A",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "two_separate",
+          "sets": [
+            { "id": "set1", "label": "Dogs", "shape": "pentagon" },
+            { "id": "set2", "label": "Cats", "shape": "circle" }
+          ],
+          "regions": { "set1_only": 18, "set2_only": 14, "outside": 8 }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "two_separate_staggered",
+          "sets": [
+            { "id": "set1", "label": "Dogs", "shape": "pentagon" },
+            { "id": "set2", "label": "Cats", "shape": "circle" }
+          ],
+          "regions": { "set1_only": 17, "set2_only": 15, "outside": 8 }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "two_separate",
+          "sets": [
+            { "id": "set1", "label": "Dogs", "shape": "pentagon" },
+            { "id": "set2", "label": "Cats", "shape": "circle" }
+          ],
+          "regions": { "set1_only": 18, "set2_only": 15, "outside": 7 }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": null,
+        "option_data": {
+          "diagramLayout": "two_separate",
+          "sets": [
+            { "id": "set1", "label": "Dogs", "shape": "pentagon" },
+            { "id": "set2", "label": "Cats", "shape": "circle" }
+          ],
+          "regions": { "set1_only": 19, "set2_only": 15, "outside": 6 }
+        },
+        "order_index": 4
+      }
     ],
     "decision_making_question_statements": []
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000009",
-    "title": "Café Dietary Preferences",
-    "type": "venn_diagram",
-    "stem": "The diagram shows café customers categorised by dietary preference. The circle represents Vegetarian customers, the pentagon represents Gluten-free customers, and the diamond represents Dairy-free customers. Each letter marks a different region.\n\nWhich letter represents a customer who is Vegetarian and Dairy-free but not Gluten-free?",
+    "id": "550e8400-e29b-41d4-a716-446655440032",
+    "title": "Marble Selection",
+    "type": "probabilistic_reasoning",
+    "stem": "A bag contains 5 red marbles, 3 blue marbles, and 2 green marbles. Two marbles are drawn one at a time without replacement. What is the probability that both marbles drawn are red?",
     "table_data": null,
-    "stimulus_diagram": {
-      "sets": [
-        { "id": "set1", "label": "Vegetarian", "shape": "circle" },
-        { "id": "set2", "label": "Gluten-free", "shape": "pentagon" },
-        { "id": "set3", "label": "Dairy-free", "shape": "diamond" }
-      ],
-      "regions": { "all_three": "P", "set1_only": "J", "set1_set2": "M", "set1_set3": "N", "set2_only": "K", "set2_set3": "O", "set3_only": "L" },
-      "diagramLayout": "three_all_overlap"
-    },
-    "correct_answer": "B",
-    "answer_reason": "The overlap between Vegetarian (circle) and Dairy-free (diamond) but outside Gluten-free (pentagon) is region N – set1_set3. Region M is Vegetarian ∩ Gluten-free. Region O is Gluten-free ∩ Dairy-free. Region P is all three preferences. A customer who is Vegetarian and Dairy-free but not Gluten-free is in region N – Answer B.",
-    "order_index": 9,
+    "stimulus_diagram": null,
+    "correct_answer": "C",
+    "answer_reason": "P(1st red) = 5/10 = 1/2. After removing one red marble, 4 red remain from 9 total. P(2nd red | 1st red) = 4/9. P(both red) = 1/2 × 4/9 = 4/18 = 2/9. Option A (1/5) incorrectly treats the two draws as fully independent. Option B (1/4) corresponds to sampling with replacement (5/10 × 5/10 = 1/4), which does not apply here. Option D (1/2) is only the probability that the first marble is red, ignoring the second draw.",
+    "order_index": 32,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter M", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter N", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter O", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter P", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "1/5", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "1/4", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "2/9", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "1/2", "option_data": null, "order_index": 4 }
     ],
     "decision_making_question_statements": []
   },
   {
-    "id": "d1000000-0000-0000-0000-000000000010",
-    "title": "School Club Membership",
-    "type": "venn_diagram",
-    "stem": "The diagram shows pupils categorised by school club membership.\n\nKey:\n  Rectangle = Art Club\n  Square = Science Club\n  Triangle = Sports Club\n  Circle = Music Club\n  Diamond = Drama Club\n\nEach letter marks a distinct region. A pupil's letter indicates which clubs they belong to.\n\nWhich letter represents pupils who are members of both Music Club and Drama Club but not Sports Club?",
+    "id": "550e8400-e29b-41d4-a716-446655440033",
+    "title": "Medical Diagnostic Test",
+    "type": "probabilistic_reasoning",
+    "stem": "A diagnostic test for a disease has a sensitivity of 90% (it correctly identifies 90% of people who have the disease) and a specificity of 85% (it correctly identifies 85% of people who do not have the disease). In a population where 10% of people have the disease, a person is selected at random and tests positive. What is the probability that this person actually has the disease?",
     "table_data": null,
-    "stimulus_diagram": {
-      "sets": [
-        { "id": "set1", "label": "Art Club", "shape": "rectangle" },
-        { "id": "set2", "label": "Science Club", "shape": "square" },
-        { "id": "set3", "label": "Sports Club", "shape": "triangle" },
-        { "id": "set4", "label": "Music Club", "shape": "circle" },
-        { "id": "set5", "label": "Drama Club", "shape": "diamond" }
-      ],
-      "regions": { "set1_only": "C", "set1_set2": "B", "set1_set4": "D", "set2_only": "A", "set3_only": "G", "set1_set3_set5": "F", "set1_set4_set5": "E" },
-      "diagramLayout": "five_complex"
-    },
-    "correct_answer": "B",
-    "answer_reason": "Music Club = circle (set4), Drama Club = diamond (set5), Sports Club = triangle (set3). Region E sits inside the Art rectangle, inside the Music circle, and inside the Drama diamond – but outside the Sports triangle. This is the only region representing Music ∩ Drama without Sports. Letter D is Music only (not Drama), Letter F is Drama ∩ Sports (not Music), Letter G is Sports only. Answer: B (Letter E).",
-    "order_index": 10,
+    "stimulus_diagram": null,
+    "correct_answer": "C",
+    "answer_reason": "Using Bayes' theorem: P(positive | disease) = 0.90; P(disease) = 0.10; P(positive | no disease) = 1 − 0.85 = 0.15; P(no disease) = 0.90. P(positive) = (0.90 × 0.10) + (0.15 × 0.90) = 0.09 + 0.135 = 0.225. P(disease | positive) = 0.09 / 0.225 = 0.40 = 40%. Option A (10%) is the prior prevalence, ignoring the test result entirely. Option B (25%) does not correctly apply Bayes' theorem. Option D (90%) is the sensitivity — the probability of a positive test given disease — not the positive predictive value.",
+    "order_index": 33,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter D", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter E", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter F", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter G", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "10%", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "25%", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "40%", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "90%", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440034",
+    "title": "Playing Card Probability",
+    "type": "probabilistic_reasoning",
+    "stem": "A single card is drawn at random from a standard shuffled deck of 52 cards. What is the probability that the card drawn is either a heart or a king?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "B",
+    "answer_reason": "P(heart) = 13/52. P(king) = 4/52. P(heart AND king) = 1/52 (the king of hearts). By the addition rule: P(heart OR king) = 13/52 + 4/52 − 1/52 = 16/52 = 4/13. Option A (3/13 = 12/52) undercounts by one card. Option C (5/13 = 20/52) overcounts. Option D (1/4 = 13/52) only accounts for the 13 hearts without adding the three remaining kings.",
+    "order_index": 34,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "3/13", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "4/13", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "5/13", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "1/4", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "550e8400-e29b-41d4-a716-446655440035",
+    "title": "Drug Side Effect Probability",
+    "type": "probabilistic_reasoning",
+    "stem": "In a clinical study, 60% of patients respond to Drug X. Among patients who respond, there is a 30% chance of experiencing a particular side effect. Among patients who do not respond, there is a 10% chance of the same side effect. What is the probability that a randomly selected patient from the study experiences the side effect?",
+    "table_data": null,
+    "stimulus_diagram": null,
+    "correct_answer": "C",
+    "answer_reason": "P(side effect) = P(responds) × P(SE | responds) + P(no response) × P(SE | no response) = (0.60 × 0.30) + (0.40 × 0.10) = 0.18 + 0.04 = 0.22 = 22%. Option A (18%) only accounts for the side effect rate among responders, ignoring non-responders entirely. Option B (20%) is an unweighted average of 30% and 10%, failing to account for the different proportions of responders and non-responders. Option D (30%) is solely the side effect rate among responders, not the overall probability.",
+    "order_index": 35,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "18%", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "20%", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "22%", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "30%", "option_data": null, "order_index": 4 }
     ],
     "decision_making_question_statements": []
   }

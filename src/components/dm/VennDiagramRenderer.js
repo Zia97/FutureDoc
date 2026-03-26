@@ -9,8 +9,8 @@ import Svg, {
 import { useTheme } from '../../context/ThemeContext';
 
 const STROKE_WIDTH = 2;
-const FONT_SIZE = 13;
-const MIN_OUTLINE_CLEARANCE = 10; // minimum px from label centre to any shape outline
+const FONT_SIZE = 14;
+const MIN_FONT_SIZE = 9;
 
 // --- Label safety helpers ---
 
@@ -80,50 +80,69 @@ function isPointInsideShape(px, py, geom) {
 }
 
 /**
- * Returns a string representing which shapes contain the point, e.g. "10110".
- * Used to ensure a nudged label stays in the same logical region.
+ * Parses a region key to derive which sets the label must be inside vs outside.
+ * This is the source of truth for region membership — NOT the hint position.
+ * Handles keys like 'set1_only', 'set1_set2', 'all_three', 'outside', etc.
  */
-function regionMembership(px, py, geoms) {
-  return geoms.map(g => (isPointInsideShape(px, py, g) ? '1' : '0')).join('');
+function parseRegionKey(regionKey, allSetIds) {
+  if (regionKey === 'outside') return { insideIds: [], outsideIds: allSetIds };
+  const mentioned = allSetIds.filter(id => {
+    const re = new RegExp(`(?:^|_)${id}(?:_|$)`);
+    return re.test(regionKey);
+  });
+  if (mentioned.length === 0) return { insideIds: allSetIds, outsideIds: [] };
+  return { insideIds: mentioned, outsideIds: allSetIds.filter(id => !mentioned.includes(id)) };
 }
 
 /**
  * Given a preferred label position, return a position that is:
- *   1. at least `clearance` px from every shape outline, AND
- *   2. in the same logical region (same set of containing shapes) as the original.
+ *   1. inside the correct logical region (determined by regionCheck), AND
+ *   2. at least `clearance` px from every shape outline.
  *
- * IMPORTANT: `x` and `y` must be the visual centre of the text (i.e. the SVG
- * element should use dominantBaseline="central"), so the clearance check is
- * geometrically accurate — not offset by the SVG text baseline.
- *
- * If no candidate satisfies both constraints within the search radius, returns
- * the candidate with the best (maximum) clearance that is still in the correct
- * region, rather than falling back to the original position.
+ * regionCheck is a function (px, py) => boolean that encodes which shapes
+ * must contain / must not contain the label. This is derived from the region
+ * key, NOT from sampling the hint position, so it works correctly for all
+ * shape types (circles, triangles, rectangles, etc.).
  */
-function safeLabelPos(x, y, geoms, clearance) {
-  if (minDistToAllOutlines(x, y, geoms) >= clearance) return { x, y };
-
-  const targetRegion = regionMembership(x, y, geoms);
+function safeLabelPos(x, y, geoms, clearance, regionCheck) {
   const DIRS = 16;
   const angles = Array.from({ length: DIRS }, (_, i) => (i * 2 * Math.PI) / DIRS);
+
+  if (regionCheck(x, y) && minDistToAllOutlines(x, y, geoms) >= clearance) return { x, y };
 
   let bestPos = null;
   let bestDist = -1;
 
-  for (let step = 3; step <= 60; step += 3) {
+  for (let step = 3; step <= 80; step += 3) {
     for (const angle of angles) {
       const cx = x + Math.cos(angle) * step;
       const cy = y + Math.sin(angle) * step;
-      if (regionMembership(cx, cy, geoms) !== targetRegion) continue;
+      if (!regionCheck(cx, cy)) continue;
       const d = minDistToAllOutlines(cx, cy, geoms);
       if (d >= clearance) return { x: cx, y: cy };
       if (d > bestDist) { bestDist = d; bestPos = { x: cx, y: cy }; }
     }
   }
 
-  // Full clearance unachievable in this region (narrow sliver) — use the
-  // best position found rather than the original.
   return bestPos ?? { x, y };
+}
+
+/**
+ * Finds the best label position AND font size for a given hint point.
+ * Tries progressively smaller font sizes until the label fits cleanly.
+ * regionCheck guarantees the label stays in the correct logical region
+ * regardless of shape types.
+ */
+function findLabelPlacement(x, y, geoms, regionCheck) {
+  const sizes = [FONT_SIZE, FONT_SIZE - 2, FONT_SIZE - 4, MIN_FONT_SIZE];
+  for (const fs of sizes) {
+    const clearance = Math.max(MIN_FONT_SIZE / 2 + 2, fs / 2 + 3);
+    const pos = safeLabelPos(x, y, geoms, clearance, regionCheck);
+    const achieved = minDistToAllOutlines(pos.x, pos.y, geoms);
+    if (achieved >= clearance - 1) return { ...pos, fontSize: fs };
+  }
+  const pos = safeLabelPos(x, y, geoms, 5, regionCheck);
+  return { ...pos, fontSize: MIN_FONT_SIZE };
 }
 
 // ---------------------------------------------------------------------------
@@ -156,12 +175,11 @@ function shapeExtentAtCenter(shape, r) {
  * always the same size; shapes are centred within that canvas.
  */
 function computeThreeLinearLayout(shapeTypes, regionCounts) {
-  const r          = 44;
-  const cy         = 57;
-  const CANVAS_W   = 320;
-  const CANVAS_H   = 115;
-  const OVERLAP_PX = 18; // visible overlap depth
-  const GAP_PX     = 14; // visible gap between non-overlapping shapes
+  const r          = 65;
+  const cy         = 80;
+  const CANVAS_H   = 162;
+  const OVERLAP_PX = 35; // deeper overlaps give more label space
+  const GAP_PX     = 18;
 
   const [s1, s2, s3] = shapeTypes;
   const ext1 = shapeExtentAtCenter(s1, r);
@@ -174,11 +192,14 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
   const dist12 = overlap12 ? (ext1 + ext2 - OVERLAP_PX) : (ext1 + ext2 + GAP_PX);
   const dist23 = overlap23 ? (ext2 + ext3 - OVERLAP_PX) : (ext2 + ext3 + GAP_PX);
 
-  // Centre the arrangement horizontally within the fixed canvas.
+  // Canvas width is derived from actual content + margins rather than a fixed
+  // value, so diagrams fill the screen more effectively.
   const totalWidth = dist12 + dist23 + 2 * r;
-  const cx1 = Math.round((CANVAS_W - totalWidth) / 2 + r);
-  const cx2 = cx1 + dist12;
-  const cx3 = cx2 + dist23;
+  const MARGIN     = 20;
+  const CANVAS_W   = totalWidth + MARGIN * 2;
+  const cx1        = MARGIN + r;
+  const cx2        = cx1 + dist12;
+  const cx3        = cx2 + dist23;
 
   const sets = [
     { id: 'set1', cx: cx1, cy, w: r * 2, h: r * 2 },
@@ -191,7 +212,7 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
     set1_only: { x: overlap12 ? cx1 - ext1 * 0.35 : cx1,        y: cy },
     set2_only: { x: cx2,                                          y: cy - r * 0.55 },
     set3_only: { x: overlap23 ? cx3 + ext3 * 0.35 : cx3,         y: cy },
-    outside:   { x: 8,                                            y: 8  },
+    outside:   { x: 8,                                            y: 16 },
   };
 
   if (overlap12) {
@@ -205,6 +226,149 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
   }
 
   return { sets, regions, canvasWidth: CANVAS_W, canvasHeight: CANVAS_H };
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic three_all_overlap / three_all_overlap_v2 layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Casts a ray from the centre of a shape (treated as centred at the origin)
+ * in the direction `angle` (radians, SVG coords: 0=right, π/2=down) and
+ * returns the distance from the centre to the boundary.
+ * Used so we can calculate the exact overlap depth for any shape type.
+ */
+function rayExtentFromCenter(shape, r, angle) {
+  if (shape === 'circle') return r;
+
+  const cosA = Math.cos(angle);
+  const sinA = Math.sin(angle);
+
+  let pts;
+  if (shape === 'triangle') {
+    pts = [[0, -r], [-r, r], [r, r]];
+  } else if (shape === 'diamond') {
+    pts = [[0, -r], [r, 0], [0, r], [-r, 0]];
+  } else if (shape === 'pentagon') {
+    pts = Array.from({ length: 5 }, (_, i) => {
+      const a = (i * 2 * Math.PI) / 5 - Math.PI / 2;
+      return [r * Math.cos(a), r * Math.sin(a)];
+    });
+  } else {
+    // square / rectangle
+    pts = [[-r, -r], [r, -r], [r, r], [-r, r]];
+  }
+
+  let minT = Infinity;
+  const n = pts.length;
+  for (let i = 0; i < n; i++) {
+    const [ax, ay] = pts[i];
+    const [bx, by] = pts[(i + 1) % n];
+    const edx = bx - ax;
+    const edy = by - ay;
+    // Solve: t*(cosA, sinA) = (ax, ay) + s*(edx, edy)
+    // det = sinA*edx - cosA*edy
+    // t   = (ay*edx - ax*edy) / det
+    // s   = (ay*cosA - ax*sinA) / det
+    const det = sinA * edx - cosA * edy;
+    if (Math.abs(det) < 1e-9) continue;
+    const t = (ay * edx - ax * edy) / det;
+    const s = (ay * cosA - ax * sinA) / det;
+    if (t > 1e-9 && s >= -1e-6 && s <= 1 + 1e-6) {
+      minT = Math.min(minT, t);
+    }
+  }
+  return minT === Infinity ? r : minT;
+}
+
+/**
+ * Builds a three_all_overlap (or _v2) layout at runtime based on the actual
+ * shape types, guaranteeing a visible overlap for every pair.
+ *
+ * Strategy:
+ *  - For each of the three overlapping pairs, cast rays from each shape centre
+ *    in the direction toward the partner to find the combined "span".
+ *  - Place centres at (span - OVERLAP_PX) apart so each pair has exactly
+ *    OVERLAP_PX of geometric overlap regardless of shape type.
+ *  - Use trilateration (not equilateral assumption) so all three distances are
+ *    satisfied simultaneously.
+ *
+ * inverted=false → set1 top, set2 bottom-left, set3 bottom-right  (three_all_overlap)
+ * inverted=true  → set1 bottom, set2 top-left,  set3 top-right    (three_all_overlap_v2)
+ */
+function computeThreeAllOverlapLayout(shapeTypes, inverted = false) {
+  const r          = 65;
+  const OVERLAP_PX = 30;
+  const MARGIN     = 20;
+
+  const [s1, s2, s3] = shapeTypes;
+
+  // Pair directions in SVG coords (0=right, π/2=down).
+  // For equilateral arrangement:
+  //   non-inverted: set1→set2 = 120°, set1→set3 = 60°
+  //   inverted    : set1→set2 = 240°, set1→set3 = 300°
+  //   set2→set3   = 0° in both variants
+  const toRad = deg => (deg * Math.PI) / 180;
+  const a12 = inverted ? toRad(240) : toRad(120);
+  const a21 = inverted ? toRad(60)  : toRad(300);
+  const a13 = inverted ? toRad(300) : toRad(60);
+  const a31 = inverted ? toRad(120) : toRad(240);
+
+  const span12 = rayExtentFromCenter(s1, r, a12) + rayExtentFromCenter(s2, r, a21);
+  const span13 = rayExtentFromCenter(s1, r, a13) + rayExtentFromCenter(s3, r, a31);
+  const span23 = rayExtentFromCenter(s2, r, toRad(0)) + rayExtentFromCenter(s3, r, toRad(180));
+
+  const d12 = Math.max(span12 - OVERLAP_PX, r * 0.4);
+  const d13 = Math.max(span13 - OVERLAP_PX, r * 0.4);
+  const d23 = Math.max(span23 - OVERLAP_PX, r * 0.4);
+
+  // Trilaterate: fix set2 at origin, set3 at (d23, 0), solve for set1.
+  //   d12² = x1² + y1²
+  //   d13² = (x1 - d23)² + y1²
+  //   → x1 = (d12² - d13² + d23²) / (2·d23)
+  //   → y1 = sqrt(d12² - x1²)
+  const x1loc = (d12 * d12 - d13 * d13 + d23 * d23) / (2 * d23);
+  const y1abs = Math.sqrt(Math.max(0, d12 * d12 - x1loc * x1loc));
+
+  // Convert to absolute SVG positions.
+  // non-inverted: set2/set3 are at the BOTTOM (larger y), set1 is above.
+  // inverted    : set2/set3 are at the TOP    (smaller y), set1 is below.
+  const cx2 = MARGIN + r;
+  const cy23 = inverted ? MARGIN + r : MARGIN + r + y1abs;
+
+  const cx_2 = cx2;
+  const cy_2 = cy23;
+  const cx_3 = cx2 + d23;
+  const cy_3 = cy23;
+  const cx_1 = cx2 + x1loc;
+  const cy_1 = inverted ? cy23 + y1abs : cy23 - y1abs;
+
+  const canvasW = Math.ceil(Math.max(cx_1, cx_2, cx_3) + r + MARGIN);
+  const canvasH = Math.ceil(Math.max(cy_1, cy_2, cy_3) + r + MARGIN);
+
+  const sets = [
+    { id: 'set1', cx: cx_1, cy: cy_1, w: r * 2, h: r * 2 },
+    { id: 'set2', cx: cx_2, cy: cy_2, w: r * 2, h: r * 2 },
+    { id: 'set3', cx: cx_3, cy: cy_3, w: r * 2, h: r * 2 },
+  ];
+
+  // Region hint positions: push each "only" hint away from the centroid so it
+  // lands clearly inside one shape and outside the other two.
+  const mx = (cx_1 + cx_2 + cx_3) / 3;
+  const my = (cy_1 + cy_2 + cy_3) / 3;
+
+  const regions = {
+    set1_only: { x: cx_1 + (cx_1 - mx) * 0.5, y: cy_1 + (cy_1 - my) * 0.5 },
+    set2_only: { x: cx_2 + (cx_2 - mx) * 0.5, y: cy_2 + (cy_2 - my) * 0.5 },
+    set3_only: { x: cx_3 + (cx_3 - mx) * 0.5, y: cy_3 + (cy_3 - my) * 0.5 },
+    set1_set2: { x: (cx_1 + cx_2) / 2,         y: (cy_1 + cy_2) / 2         },
+    set1_set3: { x: (cx_1 + cx_3) / 2,         y: (cy_1 + cy_3) / 2         },
+    set2_set3: { x: (cx_2 + cx_3) / 2,         y: (cy_2 + cy_3) / 2         },
+    all_three: { x: mx,                         y: my                         },
+    outside:   { x: 8,                          y: 16                         },
+  };
+
+  return { sets, regions, canvasWidth: canvasW, canvasHeight: canvasH };
 }
 
 // ---------------------------------------------------------------------------
@@ -230,57 +394,57 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
  */
 const LAYOUTS = {
   two_overlap: {
-    canvasWidth: 210,
-    canvasHeight: 110,
+    // r=65, overlap depth ~40px, centre-to-centre=90
+    canvasWidth: 280,
+    canvasHeight: 155,
     sets: [
-      { id: 'set1', cx: 72,  cy: 55, w: 90, h: 90 },
-      { id: 'set2', cx: 138, cy: 55, w: 90, h: 90 },
+      { id: 'set1', cx: 95,  cy: 77, w: 130, h: 130 },
+      { id: 'set2', cx: 185, cy: 77, w: 130, h: 130 },
     ],
     regions: {
-      set1_only: { x: 42,  y: 55 },
-      set2_only: { x: 168, y: 55 },
-      set1_set2: { x: 105, y: 55 },
-      outside:   { x: 8,   y: 10 },
+      set1_only: { x: 48,  y: 77 },
+      set2_only: { x: 232, y: 77 },
+      set1_set2: { x: 140, y: 77 },
+      outside:   { x: 8,   y: 16 },
     },
   },
 
   two_separate: {
-    canvasWidth: 230,
-    canvasHeight: 110,
+    // r=60, gap ~20px between shapes
+    canvasWidth: 300,
+    canvasHeight: 155,
     sets: [
-      { id: 'set1', cx: 65,  cy: 55, w: 90, h: 90 },
-      { id: 'set2', cx: 165, cy: 55, w: 90, h: 90 },
+      { id: 'set1', cx: 80,  cy: 77, w: 120, h: 120 },
+      { id: 'set2', cx: 220, cy: 77, w: 120, h: 120 },
     ],
     regions: {
-      set1_only: { x: 65,  y: 55 },
-      set2_only: { x: 165, y: 55 },
-      outside:   { x: 8,   y: 10 },
+      set1_only: { x: 80,  y: 77 },
+      set2_only: { x: 220, y: 77 },
+      outside:   { x: 8,   y: 16 },
     },
   },
 
   three_all_overlap: {
-    // Large shapes (r=100), close centres (side≈80) so every region is spacious.
-    // set1 (top): cx=160 cy=110
-    // set2 (BL):  cx=120 cy=179   dist to set1 ≈ 80
-    // set3 (BR):  cx=200 cy=179   dist to set2 = 80
-    // Centroid ≈ (160,156) — dist to each centre ≈46px, giving 37–54px margin
-    // inside even the tightest shape (diamond inscribed-r ≈71px). Verified geometrically.
-    canvasWidth: 310,
-    canvasHeight: 300,
+    // r=60 shapes in equilateral triangle (side≈90) — compact 240×220 canvas.
+    // set1 (top): cx=117 cy=65
+    // set2 (BL):  cx=72  cy=143   dist to set1 ≈ 90, overlap ≈30px
+    // set3 (BR):  cx=162 cy=143   dist to set2 = 90, overlap ≈30px
+    canvasWidth: 240,
+    canvasHeight: 220,
     sets: [
-      { id: 'set1', cx: 160, cy: 110, w: 200, h: 200 },
-      { id: 'set2', cx: 120, cy: 179, w: 200, h: 200 },
-      { id: 'set3', cx: 200, cy: 179, w: 200, h: 200 },
+      { id: 'set1', cx: 117, cy: 65,  w: 120, h: 120 },
+      { id: 'set2', cx: 72,  cy: 143, w: 120, h: 120 },
+      { id: 'set3', cx: 162, cy: 143, w: 120, h: 120 },
     ],
     regions: {
-      set1_only: { x: 160, y: 50  },
-      set2_only: { x: 75,  y: 212 },
-      set3_only: { x: 245, y: 212 },
-      set1_set2: { x: 110, y: 130 },
-      set1_set3: { x: 230, y: 145 },
-      set2_set3: { x: 160, y: 228 },
-      all_three: { x: 175, y: 156 },
-      outside:   { x: 10,  y: 12  },
+      set1_only: { x: 117, y: 28  },
+      set2_only: { x: 42,  y: 185 },
+      set3_only: { x: 192, y: 185 },
+      set1_set2: { x: 83,  y: 104 },
+      set1_set3: { x: 151, y: 104 },
+      set2_set3: { x: 117, y: 172 },
+      all_three: { x: 117, y: 117 },
+      outside:   { x: 10,  y: 16  },
     },
   },
 
@@ -320,24 +484,82 @@ const LAYOUTS = {
       set1_set4_set5:  { x: 231, y: 120 },
       set1_set3_set5:  { x: 330, y: 120 },
       set3_only:       { x: 395, y: 150 },
-      outside:         { x: 12,  y: 12  },
+      outside:         { x: 12,  y: 16  },
     },
   },
 
   three_one_separate: {
-    canvasWidth: 280,
-    canvasHeight: 110,
+    // r=60: set1-set2 overlap ~30px, set2-set3 gap ~15px
+    canvasWidth: 390,
+    canvasHeight: 155,
     sets: [
-      { id: 'set1', cx: 65,  cy: 55, w: 88, h: 88 },
-      { id: 'set2', cx: 135, cy: 55, w: 88, h: 88 },
-      { id: 'set3', cx: 218, cy: 55, w: 88, h: 88 },
+      { id: 'set1', cx: 80,  cy: 77, w: 120, h: 120 },
+      { id: 'set2', cx: 170, cy: 77, w: 120, h: 120 },
+      { id: 'set3', cx: 310, cy: 77, w: 120, h: 120 },
     ],
     regions: {
-      set1_only: { x: 42,  y: 55 },
-      set1_set2: { x: 100, y: 47 },
-      set2_only: { x: 158, y: 55 },
-      set3_only: { x: 218, y: 55 },
-      outside:   { x: 8,   y: 8  },
+      set1_only: { x: 46,  y: 77 },
+      set1_set2: { x: 125, y: 77 },
+      set2_only: { x: 205, y: 57 },
+      set3_only: { x: 310, y: 77 },
+      outside:   { x: 8,   y: 16 },
+    },
+  },
+
+  // — Staggered two-set variants (shapes at different heights) —————————————
+
+  two_overlap_staggered: {
+    // set1 upper-left, set2 lower-right; r=62, overlap ~30px
+    canvasWidth: 290,
+    canvasHeight: 195,
+    sets: [
+      { id: 'set1', cx: 105, cy: 72,  w: 124, h: 124 },
+      { id: 'set2', cx: 193, cy: 122, w: 124, h: 124 },
+    ],
+    regions: {
+      set1_only: { x: 65,  y: 52  },
+      set2_only: { x: 233, y: 142 },
+      set1_set2: { x: 149, y: 97  },
+      outside:   { x: 8,   y: 16  },
+    },
+  },
+
+  two_separate_staggered: {
+    // set1 upper-left, set2 lower-right; no overlap, r=58
+    canvasWidth: 295,
+    canvasHeight: 185,
+    sets: [
+      { id: 'set1', cx: 88,  cy: 62,  w: 116, h: 116 },
+      { id: 'set2', cx: 210, cy: 118, w: 116, h: 116 },
+    ],
+    regions: {
+      set1_only: { x: 88,  y: 62  },
+      set2_only: { x: 210, y: 118 },
+      outside:   { x: 8,   y: 16  },
+    },
+  },
+
+  // — three_all_overlap variant: set1 at bottom, set2/set3 at top —————————
+
+  three_all_overlap_v2: {
+    // Inverted triangle — set1 bottom-centre, set2 top-left, set3 top-right.
+    // r=60, side≈90, compact 240×220 canvas (mirrors three_all_overlap).
+    canvasWidth: 240,
+    canvasHeight: 220,
+    sets: [
+      { id: 'set1', cx: 117, cy: 155, w: 120, h: 120 },
+      { id: 'set2', cx: 72,  cy: 77,  w: 120, h: 120 },
+      { id: 'set3', cx: 162, cy: 77,  w: 120, h: 120 },
+    ],
+    regions: {
+      set1_only: { x: 117, y: 198 },
+      set2_only: { x: 42,  y: 47  },
+      set3_only: { x: 192, y: 47  },
+      set1_set2: { x: 83,  y: 120 },
+      set1_set3: { x: 151, y: 120 },
+      set2_set3: { x: 117, y: 58  },
+      all_three: { x: 117, y: 103 },
+      outside:   { x: 10,  y: 16  },
     },
   },
 };
@@ -393,22 +615,34 @@ function renderShape(shape, cx, cy, w, h, stroke) {
 
 function resolveLayout(vennConfig) {
   if (!vennConfig) return null;
+  const shapeTypes = (vennConfig.sets || []).map(s => s.shape || 'circle');
   if (vennConfig.diagramLayout === 'three_linear') {
-    const shapeTypes = (vennConfig.sets || []).map(s => s.shape || 'circle');
     return computeThreeLinearLayout(shapeTypes, vennConfig.regions || {});
+  }
+  if (vennConfig.diagramLayout === 'three_all_overlap') {
+    return computeThreeAllOverlapLayout(shapeTypes, false);
+  }
+  if (vennConfig.diagramLayout === 'three_all_overlap_v2') {
+    return computeThreeAllOverlapLayout(shapeTypes, true);
   }
   return LAYOUTS[vennConfig.diagramLayout] ?? null;
 }
 
+const DYNAMIC_LAYOUTS = new Set([
+  'three_linear',
+  'three_all_overlap',
+  'three_all_overlap_v2',
+]);
+
 export function getCanvasSize(diagramLayout, vennConfig) {
-  if (diagramLayout === 'three_linear') {
-    // Use the dynamic layout if a full config is available; otherwise return
-    // the fixed canvas size that all three_linear variants share.
+  if (DYNAMIC_LAYOUTS.has(diagramLayout)) {
     if (vennConfig) {
       const layout = resolveLayout(vennConfig);
       return { width: layout.canvasWidth, height: layout.canvasHeight };
     }
-    return { width: 320, height: 115 };
+    // Fallback sizes when no config is available
+    if (diagramLayout === 'three_linear') return { width: 420, height: 155 };
+    return { width: 240, height: 220 };
   }
   const layout = LAYOUTS[diagramLayout];
   return layout
@@ -450,6 +684,11 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
     shapeToGeometry(shapeById[pos.id] || 'circle', pos.cx, pos.cy, pos.w, pos.h),
   );
 
+  // Build a lookup from set ID → geometry index so region checks can reference
+  // specific shapes by ID rather than position.
+  const allSetIds = layout.sets.map(s => s.id);
+  const setIndexById = Object.fromEntries(layout.sets.map((s, i) => [s.id, i]));
+
   return (
     <View>
       <Svg
@@ -463,14 +702,25 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
         })}
 
         {Object.entries(vennConfig.regions || {}).map(([regionKey, value]) => {
-          if (value === undefined || value === null) return null;
+          if (value === undefined || value === null || value === 0) return null;
           const rawPos = layout.regions[regionKey];
           if (!rawPos) return null;
-          const pos = safeLabelPos(rawPos.x, rawPos.y, shapeGeoms, MIN_OUTLINE_CLEARANCE);
+
+          // Derive required membership from the region key — NOT from sampling
+          // the hint position. This ensures labels for non-circular shapes
+          // (triangles, rectangles) are never placed in the wrong region.
+          const { insideIds, outsideIds } = parseRegionKey(regionKey, allSetIds);
+          const insideGeoms  = insideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
+          const outsideGeoms = outsideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
+          const regionCheck  = (px, py) =>
+            insideGeoms.every(g => isPointInsideShape(px, py, g)) &&
+            outsideGeoms.every(g => !isPointInsideShape(px, py, g));
+
+          const placement = findLabelPlacement(rawPos.x, rawPos.y, shapeGeoms, regionCheck);
           const sharedProps = {
-            x: pos.x,
-            y: pos.y,
-            fontSize: FONT_SIZE,
+            x: placement.x,
+            y: placement.y,
+            fontSize: placement.fontSize,
             textAnchor: 'middle',
             dominantBaseline: 'central',
             fontWeight: '600',

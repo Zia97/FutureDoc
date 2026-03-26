@@ -11,7 +11,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useRef, useEffect, useState } from 'react';
-import { GestureHandlerRootView, GestureDetector, Gesture } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
 
@@ -40,17 +39,6 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
     };
   }, []);
 
-  const scrollGesture = Gesture.Native();
-
-  const panGesture = Gesture.Pan()
-    .runOnJS(true)
-    .simultaneousWithExternalGesture(scrollGesture)
-    .onEnd((e) => {
-      if (e.translationY > 80 && e.velocityY > 0) {
-        onClose();
-      }
-    });
-
   function handleSend() {
     const text = inputText.trim();
     if (!text || isStreaming) return;
@@ -77,76 +65,63 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
       statusBarTranslucent
       onRequestClose={onClose}
     >
-      <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={containerStyle}>
-        <GestureDetector gesture={panGesture}>
-          <View style={styles.swipeLayer}>
-            {/* Drag handle */}
-            <View style={[styles.handleWrap, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
-              <View style={styles.handle} />
+          {/* Header */}
+          <View style={[styles.header, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
+            <View style={styles.headerCenter}>
+              <Text style={styles.headerTitle}>AI Genius Chat</Text>
+              <Text style={styles.headerSub}>Ask me anything about this question</Text>
             </View>
+            <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
+              <Text style={styles.closeBtnText}>✕</Text>
+            </TouchableOpacity>
+          </View>
 
-            {/* Header */}
-            <View style={styles.header}>
-              <View style={styles.headerCenter}>
-                <Text style={styles.headerTitle}>AI Genius Chat</Text>
-                <Text style={styles.headerSub}>Ask me anything about this question</Text>
-              </View>
-              <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
-                <Text style={styles.closeBtnText}>✕</Text>
+          {/* Messages */}
+          <FlatList
+            style={{ flex: 1 }}
+            ref={flatListRef}
+            data={displayMessages}
+            keyExtractor={(_, i) => String(i)}
+            contentContainerStyle={styles.messageList}
+            onContentSizeChange={scrollToBottom}
+            keyboardShouldPersistTaps="handled"
+            ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
+            ListEmptyComponent={<WelcomePrompt />}
+            renderItem={({ item }) => <MessageBubble message={item} />}
+          />
+
+          {/* Error banner */}
+          {error && <ErrorBanner error={error} />}
+
+          {/* Input */}
+          {!error && (
+            <View style={styles.inputRow}>
+              <TextInput
+                style={styles.input}
+                value={inputText}
+                onChangeText={setInputText}
+                placeholder="Ask a question..."
+                placeholderTextColor="#718096"
+                multiline
+                maxLength={500}
+                onSubmitEditing={handleSend}
+                submitBehavior="blurAndSubmit"
+              />
+              <TouchableOpacity
+                style={[styles.sendBtn, (!inputText.trim() || isStreaming) && styles.sendBtnDisabled]}
+                onPress={handleSend}
+                disabled={!inputText.trim() || isStreaming}
+              >
+                {isStreaming ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.sendBtnText}>Send</Text>
+                )}
               </TouchableOpacity>
             </View>
-
-            {/* Messages */}
-            <GestureDetector gesture={scrollGesture}>
-              <FlatList
-                style={{ flex: 1 }}
-                ref={flatListRef}
-                data={displayMessages}
-                keyExtractor={(_, i) => String(i)}
-                contentContainerStyle={styles.messageList}
-                onContentSizeChange={scrollToBottom}
-                keyboardShouldPersistTaps="handled"
-                ListHeaderComponent={questionContext ? <QuestionContextCard context={questionContext} /> : null}
-                ListEmptyComponent={<WelcomePrompt />}
-                renderItem={({ item }) => <MessageBubble message={item} />}
-              />
-            </GestureDetector>
-
-            {/* Error banner */}
-            {error && <ErrorBanner error={error} />}
-
-            {/* Input */}
-            {!error && (
-              <View style={styles.inputRow}>
-                <TextInput
-                  style={styles.input}
-                  value={inputText}
-                  onChangeText={setInputText}
-                  placeholder="Ask a question..."
-                  placeholderTextColor="#718096"
-                  multiline
-                  maxLength={500}
-                  onSubmitEditing={handleSend}
-                  submitBehavior="blurAndSubmit"
-                />
-                <TouchableOpacity
-                  style={[styles.sendBtn, (!inputText.trim() || isStreaming) && styles.sendBtnDisabled]}
-                  onPress={handleSend}
-                  disabled={!inputText.trim() || isStreaming}
-                >
-                  {isStreaming ? (
-                    <ActivityIndicator size="small" color="#fff" />
-                  ) : (
-                    <Text style={styles.sendBtnText}>Send</Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        </GestureDetector>
+          )}
       </View>
-      </GestureHandlerRootView>
     </Modal>
   );
 }
@@ -255,19 +230,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0f1117',
-  },
-  swipeLayer: {
-    flex: 1,
-  },
-  handleWrap: {
-    alignItems: 'center',
-    paddingBottom: 8,
-  },
-  handle: {
-    width: 36,
-    height: 4,
-    borderRadius: 2,
-    backgroundColor: '#2a2f45',
   },
   header: {
     flexDirection: 'row',

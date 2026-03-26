@@ -17,7 +17,7 @@ import { useAITutor } from '../../hooks/ai/useAITutor';
 import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
-const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic'];
+const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic', 'probabilistic_reasoning'];
 
 export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
   const { width: screenWidth } = useWindowDimensions();
@@ -57,29 +57,40 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 
       {question.tableData && <DataTable tableData={question.tableData} />}
 
-      {isSelectVenn && (
-        <View style={styles.vennGrid}>
-          {question.options.map((opt) => {
-            let borderColor = t.borderStrong;
-            if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
-            else if (!timedMode && submitted && opt.label === answer)     borderColor = t.incorrect;
-            else if (opt.label === answer)                                borderColor = t.accent;
+      {isSelectVenn && (() => {
+        const OPTION_PADDING_H = 24;
+        const maxCvW = Math.max(...question.options.map(opt => {
+          const cfg = opt.vennConfig ?? opt.option_data;
+          return getCanvasSize(cfg?.diagramLayout, cfg).width;
+        }));
+        const optionScale = Math.min(1.8, (contentWidth - OPTION_PADDING_H) / maxCvW);
 
-            return (
-              <TouchableOpacity
-                key={opt.label}
-                style={[styles.vennOption, { backgroundColor: t.bgCard, borderColor }]}
-                onPress={() => !submitted && onAnswer(opt.label)}
-                activeOpacity={0.8}
-                disabled={submitted}
-              >
-                <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
-                <VennDiagramRenderer vennConfig={opt.vennConfig ?? opt.option_data} scale={0.864} />
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      )}
+        return (
+          <View style={styles.vennGrid}>
+            {question.options.map((opt) => {
+              let borderColor = t.borderStrong;
+              if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
+              else if (!timedMode && submitted && opt.label === answer)     borderColor = t.incorrect;
+              else if (opt.label === answer)                                borderColor = t.accent;
+
+              const cfg = opt.vennConfig ?? opt.option_data;
+
+              return (
+                <TouchableOpacity
+                  key={opt.label}
+                  style={[styles.vennOption, { backgroundColor: t.bgCard, borderColor }]}
+                  onPress={() => !submitted && onAnswer(opt.label)}
+                  activeOpacity={0.8}
+                  disabled={submitted}
+                >
+                  <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
+                  <VennDiagramRenderer vennConfig={cfg} scale={optionScale} />
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        );
+      })()}
 
       {isInterpVenn && (
         <>
@@ -182,10 +193,7 @@ const styles = StyleSheet.create({
   stem: { fontSize: 15, lineHeight: 23, fontWeight: '500' },
   mcqOptions: { gap: 10 },
   vennGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: 12,
-    justifyContent: 'center',
   },
   vennOption: {
     borderWidth: 2,
