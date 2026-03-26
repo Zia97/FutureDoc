@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
@@ -7,6 +8,11 @@ import { useSituationalJudgementProgress } from '../../hooks/queries/useSituatio
 import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
 import { getTargetFlatIndex } from '../../lib/flattenQuestions';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
+import { supabase } from '../../lib/supabase';
+
+const CACHE_KEYS = ['sj_attempts', 'sj_pending_sync', 'sj_scenario_progress'];
+const DB_TABLES = ['situational_judgement_question_attempts', 'situational_judgement_scenario_progress'];
 
 const FILTERS = [
   { label: 'All',         value: 'all' },
@@ -29,11 +35,40 @@ export default function SJScenarioListScreen({ navigation }) {
   const { progressMap, reload } = useSituationalJudgementProgress();
   const { localAnswers } = useSituationalJudgementAttempts();
   const { theme: t } = useTheme();
+  const { user } = useAuth();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [deleting, setDeleting] = useState(false);
 
   useFocusEffect(useCallback(() => { reload(); }, [reload]));
+
+  const handleDeleteProgress = () => {
+    Alert.alert(
+      'Delete Progress',
+      'This will permanently delete all your Situational Judgement progress and answers. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: deleteProgress },
+      ],
+    );
+  };
+
+  const deleteProgress = async () => {
+    setDeleting(true);
+    try {
+      await Promise.all(CACHE_KEYS.map((key) => AsyncStorage.removeItem(key)));
+      for (const table of DB_TABLES) {
+        const { error: dbError } = await supabase.from(table).delete().eq('user_id', user.id);
+        if (dbError) throw dbError;
+      }
+      reload();
+    } catch {
+      Alert.alert('Error', 'Something went wrong. Please try again.');
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const filteredScenarios = scenarios.filter((s) => {
     if (activeFilter === 'all') return true;
@@ -96,6 +131,25 @@ export default function SJScenarioListScreen({ navigation }) {
         getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
         routeName="SJScenario"
         navigation={navigation}
+        listFooter={
+          <View style={[styles.deleteBanner, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+            <View style={styles.deleteBannerInfo}>
+              <Text style={[styles.deleteBannerTitle, { color: t.text }]}>Reset Progress</Text>
+              <Text style={[styles.deleteBannerSub, { color: t.textMuted }]}>Delete all answers for this section</Text>
+            </View>
+            <TouchableOpacity
+              style={[styles.deleteBtn, { borderColor: t.danger }]}
+              onPress={handleDeleteProgress}
+              disabled={deleting}
+              activeOpacity={0.8}
+            >
+              {deleting
+                ? <ActivityIndicator size="small" color={t.danger} />
+                : <Text style={[styles.deleteBtnText, { color: t.danger }]}>Reset</Text>
+              }
+            </TouchableOpacity>
+          </View>
+        }
       />
     </View>
   );
@@ -122,4 +176,27 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   dropdownItemText: { fontSize: 14 },
+  deleteBanner: {
+    marginTop: 32,
+    marginHorizontal: 4,
+    marginBottom: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  deleteBannerInfo: { flex: 1, marginRight: 12 },
+  deleteBannerTitle: { fontSize: 15, fontWeight: '600', marginBottom: 2 },
+  deleteBannerSub: { fontSize: 12 },
+  deleteBtn: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    alignItems: 'center',
+  },
+  deleteBtnText: { fontSize: 13, fontWeight: '600' },
 });

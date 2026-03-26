@@ -9,7 +9,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 
-export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, routeName, navigation }) {
+export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, routeName, navigation, listFooter }) {
   const { theme: t } = useTheme();
 
   return (
@@ -19,6 +19,7 @@ export default function SectionQuestionList({ items, getTitle, getStatus, getInd
         data={items}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
+        ListFooterComponent={listFooter ?? null}
         renderItem={({ item, index }) => {
           const status = getStatus ? getStatus(item) : null;
           const navIndex = getIndex ? getIndex(item, index) : index;

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   FlatList,
+  Alert,
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
@@ -46,9 +47,9 @@ export default function TimedTestListScreen({ navigation, route }) {
   const dm = useTimedDMTests();
   const qr = useTimedQRTests();
   const sj = useTimedSJTests();
-  const { completedAttempts: sjAttempts, reload: reloadSJ } = useTimedSJExamProgress();
-  const { completedAttempts: vrAttempts, reload: reloadVR } = useTimedVRExamProgress();
-  const { completedAttempts: dmAttempts, reload: reloadDM } = useTimedDMExamProgress();
+  const { completedAttempts: sjAttempts, reload: reloadSJ, deleteAttempt: deleteSJAttempt } = useTimedSJExamProgress();
+  const { completedAttempts: vrAttempts, reload: reloadVR, deleteAttempt: deleteVRAttempt } = useTimedVRExamProgress();
+  const { completedAttempts: dmAttempts, reload: reloadDM, deleteAttempt: deleteDMAttempt } = useTimedDMExamProgress();
 
   useFocusEffect(
     useCallback(() => {
@@ -58,10 +59,22 @@ export default function TimedTestListScreen({ navigation, route }) {
     }, []),
   );
   const completedAttempts = section === 'VR' ? vrAttempts : section === 'DM' ? dmAttempts : sjAttempts;
+  const deleteAttempt = section === 'VR' ? deleteVRAttempt : section === 'DM' ? deleteDMAttempt : deleteSJAttempt;
   const { tests, loading, error } =
     section === 'DM' ? dm :
     section === 'QR' ? qr :
     section === 'SJ' ? sj : vr;
+
+  const handleResetAttempt = (testId, testTitle) => {
+    Alert.alert(
+      'Reset Test',
+      `This will delete your result for "${testTitle}" and allow you to retake it. This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Reset', style: 'destructive', onPress: () => deleteAttempt(testId) },
+      ],
+    );
+  };
 
   if (loading) {
     return (
@@ -131,6 +144,15 @@ export default function TimedTestListScreen({ navigation, route }) {
                   <Text style={[styles.completedScore, { color: sc }]}>{attempt.scorePercent}% · Tap to review</Text>
                 )}
               </View>
+              {isCompleted && (
+                <TouchableOpacity
+                  style={[styles.resetButton, { borderColor: t.border }]}
+                  onPress={() => handleResetAttempt(item.id, item.title)}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[styles.resetText, { color: t.textMuted }]}>↺</Text>
+                </TouchableOpacity>
+              )}
             </TouchableOpacity>
           );
         }}
@@ -172,4 +194,14 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: 16, fontWeight: '700' },
   cardMeta: { fontSize: 13, marginTop: 4 },
   completedScore: { fontSize: 13, marginTop: 4, fontWeight: '700' },
+  resetButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+  resetText: { fontSize: 20, fontWeight: '600' },
 });

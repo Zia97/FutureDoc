@@ -12,8 +12,6 @@ import {
   Platform,
   UIManager,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase } from '../../lib/supabase';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
@@ -24,51 +22,10 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
 }
 
 const PRACTICE_SECTIONS = [
-  {
-    id: 'vr',
-    label: 'Verbal Reasoning',
-    color: '#7c3aed',
-    cacheKeys: ['vr_attempts', 'vr_pending_sync', 'vr_passage_progress'],
-    dbTables: ['verbal_reasoning_question_attempts', 'verbal_reasoning_passage_progress'],
-  },
-  {
-    id: 'dm',
-    label: 'Decision Making',
-    color: '#0891b2',
-    cacheKeys: ['dm_attempts', 'dm_pending_sync'],
-    dbTables: ['decision_making_question_attempts'],
-  },
-  {
-    id: 'qr',
-    label: 'Quantitative Reasoning',
-    color: '#059669',
-    cacheKeys: ['qr_attempts', 'qr_pending_sync', 'qr_set_progress'],
-    dbTables: ['quantitative_reasoning_question_attempts', 'quantitative_reasoning_set_progress'],
-  },
-  {
-    id: 'sj',
-    label: 'Situational Judgement',
-    color: '#d97706',
-    cacheKeys: ['sj_attempts', 'sj_pending_sync', 'sj_scenario_progress'],
-    dbTables: ['situational_judgement_question_attempts', 'situational_judgement_scenario_progress'],
-  },
-];
-
-const TIMED_SECTIONS = [
-  {
-    id: 'vr',
-    label: 'Verbal Reasoning',
-    color: '#7c3aed',
-    cacheKeys: ['timed_vr_completed_attempts'],
-    dbTables: ['timed_verbal_reasoning_exam_attempts'],
-  },
-  {
-    id: 'sj',
-    label: 'Situational Judgement',
-    color: '#d97706',
-    cacheKeys: ['timed_sj_completed_attempts'],
-    dbTables: ['timed_situational_judgement_exam_attempts'],
-  },
+  { id: 'vr', label: 'Verbal Reasoning' },
+  { id: 'dm', label: 'Decision Making' },
+  { id: 'qr', label: 'Quantitative Reasoning' },
+  { id: 'sj', label: 'Situational Judgement' },
 ];
 
 function CollapsibleSection({ title, subtitle, defaultOpen = false, accentColor, t, children }) {
@@ -112,8 +69,6 @@ function CollapsibleSection({ title, subtitle, defaultOpen = false, accentColor,
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const { theme: t, isDark, useUCATScheme, toggleDark, toggleUCATScheme } = useTheme();
-  const [deleting, setDeleting] = useState(null);
-  const [deletingAll, setDeletingAll] = useState(null);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
 
@@ -131,75 +86,6 @@ export default function ProfileScreen() {
   const handlePreviewToggle = async (sectionId, value) => {
     await setPreviewEnabled(sectionId, value);
     setPreviewToggles((prev) => ({ ...prev, [sectionId]: value }));
-  };
-
-  const handleDeleteProgress = (section, type) => {
-    const label = type === 'timed' ? `${section.label} Timed Tests` : `${section.label} Practice`;
-    Alert.alert(
-      `Reset ${label}`,
-      'This will permanently delete all progress for this section. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => deleteProgress(section, type) },
-      ],
-    );
-  };
-
-  const deleteProgress = async (section, type) => {
-    setDeleting(`${type}-${section.id}`);
-    try {
-      await Promise.all(section.cacheKeys.map((key) => AsyncStorage.removeItem(key)));
-      for (const table of section.dbTables) {
-        const { error } = await supabase.from(table).delete().eq('user_id', user.id);
-        if (error) throw error;
-      }
-      Alert.alert('Done', 'Progress has been reset.');
-    } catch {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
-    } finally {
-      setDeleting(null);
-    }
-  };
-
-  const handleDeleteAllPractice = () => {
-    Alert.alert(
-      'Reset All Practice Progress',
-      'This will permanently delete all practice answers and progress across every section. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete All', style: 'destructive', onPress: () => deleteAllForGroup(PRACTICE_SECTIONS, 'practice') },
-      ],
-    );
-  };
-
-  const handleDeleteAllTimed = () => {
-    Alert.alert(
-      'Reset All Timed Progress',
-      'This will permanently delete all timed test results. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete All', style: 'destructive', onPress: () => deleteAllForGroup(TIMED_SECTIONS, 'timed') },
-      ],
-    );
-  };
-
-  const deleteAllForGroup = async (sections, type) => {
-    setDeletingAll(type);
-    try {
-      const allCacheKeys = sections.flatMap((s) => s.cacheKeys);
-      await Promise.all(allCacheKeys.map((key) => AsyncStorage.removeItem(key)));
-      for (const section of sections) {
-        for (const table of section.dbTables) {
-          const { error } = await supabase.from(table).delete().eq('user_id', user.id);
-          if (error) throw error;
-        }
-      }
-      Alert.alert('Done', 'Progress has been reset.');
-    } catch {
-      Alert.alert('Error', 'Something went wrong. Please try again.');
-    } finally {
-      setDeletingAll(null);
-    }
   };
 
   const handleCheckForUpdates = async () => {
@@ -278,94 +164,6 @@ export default function ProfileScreen() {
             />
           </View>
         </View>
-      </CollapsibleSection>
-
-      {/* Reset Practice Progress */}
-      <CollapsibleSection
-        title="Reset Practice Progress"
-        subtitle="Delete practice answers per section"
-        t={t}
-      >
-        <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
-          This cannot be undone.
-        </Text>
-        {PRACTICE_SECTIONS.map((section) => (
-          <View
-            key={section.id}
-            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
-          >
-            <Text style={[styles.cardLabel, { color: t.text }]}>{section.label}</Text>
-            <TouchableOpacity
-              style={[styles.deleteButton, { borderColor: t.danger }]}
-              onPress={() => handleDeleteProgress(section, 'practice')}
-              disabled={deleting === `practice-${section.id}`}
-              activeOpacity={0.75}
-            >
-              {deleting === `practice-${section.id}` ? (
-                <ActivityIndicator size="small" color={t.danger} />
-              ) : (
-                <Text style={[styles.deleteButtonText, { color: t.danger }]}>Delete</Text>
-              )}
-            </TouchableOpacity>
-          </View>
-        ))}
-
-        <TouchableOpacity
-          style={[styles.deleteAllButton, { backgroundColor: t.bgCard, borderColor: t.danger }]}
-          onPress={handleDeleteAllPractice}
-          disabled={deletingAll === 'practice'}
-          activeOpacity={0.8}
-        >
-          {deletingAll === 'practice' ? (
-            <ActivityIndicator size="small" color={t.danger} />
-          ) : (
-            <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Practice Progress</Text>
-          )}
-        </TouchableOpacity>
-      </CollapsibleSection>
-
-      {/* Reset Timed Progress */}
-      <CollapsibleSection
-        title="Reset Timed Progress"
-        subtitle="Delete timed test results"
-        t={t}
-      >
-        <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
-          This cannot be undone.
-        </Text>
-        {TIMED_SECTIONS.map((section) => (
-          <View
-            key={section.id}
-            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
-          >
-            <Text style={[styles.cardLabel, { color: t.text }]}>{section.label}</Text>
-            <TouchableOpacity
-              style={[styles.deleteButton, { borderColor: t.danger }]}
-              onPress={() => handleDeleteProgress(section, 'timed')}
-              disabled={deleting === `timed-${section.id}`}
-              activeOpacity={0.75}
-            >
-              {deleting === `timed-${section.id}` ? (
-                <ActivityIndicator size="small" color={t.danger} />
-              ) : (
-                <Text style={[styles.deleteButtonText, { color: t.danger }]}>Delete</Text>
-              )}
-            </TouchableOpacity>
-          </View>
-        ))}
-
-        <TouchableOpacity
-          style={[styles.deleteAllButton, { backgroundColor: t.bgCard, borderColor: t.danger }]}
-          onPress={handleDeleteAllTimed}
-          disabled={deletingAll === 'timed'}
-          activeOpacity={0.8}
-        >
-          {deletingAll === 'timed' ? (
-            <ActivityIndicator size="small" color={t.danger} />
-          ) : (
-            <Text style={[styles.deleteAllText, { color: t.danger }]}>Delete All Timed Progress</Text>
-          )}
-        </TouchableOpacity>
       </CollapsibleSection>
 
       {/* Content */}
@@ -550,47 +348,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 18,
   },
 
-  // Progress reset cards
-  card: {
-    borderRadius: 12,
-    borderLeftWidth: 4,
-    borderWidth: 1,
-    paddingVertical: 16,
-    paddingHorizontal: 18,
-    marginBottom: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  cardLabel: {
-    fontSize: 15,
-    fontWeight: '600',
-    flex: 1,
-    marginRight: 12,
-  },
-  deleteButton: {
-    paddingVertical: 7,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    borderWidth: 1,
-    minWidth: 44,
-    alignItems: 'center',
-  },
-  deleteButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  deleteAllButton: {
-    marginTop: 8,
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    borderWidth: 1,
-  },
-  deleteAllText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
   updateButton: {
     borderRadius: 12,
     paddingVertical: 16,
