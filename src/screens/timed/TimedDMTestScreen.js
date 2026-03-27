@@ -133,7 +133,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
         questions={flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
-        onNavigateTo={(_, idx) => { setCurrentIndex(idx); setShowReview(false); }}
+        onNavigateTo={(flatIndex) => { setCurrentIndex(flatIndex); setShowReview(false); }}
         onEndTest={() => endExam(false)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}

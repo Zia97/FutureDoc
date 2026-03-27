@@ -32,6 +32,20 @@ function KeyShape({ shape, stroke }) {
       }).join(' ');
       return <Polygon points={pts} {...props} />;
     }
+    case 'hexagon': {
+      const pts = Array.from({ length: 6 }, (_, i) => {
+        const angle = (i * 2 * Math.PI) / 6 - Math.PI / 2;
+        return `${MID + R * Math.cos(angle)},${MID + R * Math.sin(angle)}`;
+      }).join(' ');
+      return <Polygon points={pts} {...props} />;
+    }
+    case 'octagon': {
+      const pts = Array.from({ length: 8 }, (_, i) => {
+        const angle = (i * 2 * Math.PI) / 8 - Math.PI / 2;
+        return `${MID + R * Math.cos(angle)},${MID + R * Math.sin(angle)}`;
+      }).join(' ');
+      return <Polygon points={pts} {...props} />;
+    }
     default:
       return <Circle cx={MID} cy={MID} r={R} {...props} />;
   }
