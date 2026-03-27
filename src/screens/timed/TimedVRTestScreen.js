@@ -164,43 +164,42 @@ export default function TimedVRTestScreen({ route, navigation }) {
         color={sectionColor}
       />
 
-      <View style={styles.panelsContainer}>
-        <View style={[styles.resourceContainer, { flex: 3, backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
-          <Text style={[styles.resourceLabel, { color: sectionColor }]}>PASSAGE</Text>
-          <ScrollView key={item.stemId} showsVerticalScrollIndicator={false}>
-            <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
-          </ScrollView>
+      <ScrollView
+        key={item.stemId + qid}
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={[styles.sectionLabel, { color: sectionColor }]}>PASSAGE</Text>
+        <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
+
+        <View style={[styles.divider, { backgroundColor: t.border }]} />
+
+        <View style={styles.questionHeader}>
+          <Text style={[styles.sectionLabel, { color: sectionColor }]}>QUESTION</Text>
+          <TouchableOpacity
+            style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
+            onPress={() => toggleFlag(qid)}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
+              {isFlagged ? '⚑' : '⚐'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={[styles.questionPanel, { flex: 2, backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={styles.panelHeader}>
-            <Text style={[styles.questionLabel, { color: sectionColor }]}>QUESTION</Text>
-            <TouchableOpacity
-              style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
-              onPress={() => toggleFlag(qid)}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
-                {isFlagged ? '⚑' : '⚐'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
-            <View style={styles.optionsContainer}>
-              {item.question.options.map((opt) => (
-                <AnswerOptionButton
-                  key={opt}
-                  label={opt}
-                  state={getOptionState(opt)}
-                  onPress={() => onAnswer(opt)}
-                />
-              ))}
-            </View>
-          </ScrollView>
+        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+        <View style={styles.optionsContainer}>
+          {item.question.options.map((opt) => (
+            <AnswerOptionButton
+              key={opt}
+              label={opt}
+              state={getOptionState(opt)}
+              onPress={() => onAnswer(opt)}
+            />
+          ))}
         </View>
-      </View>
+      </ScrollView>
 
       <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
         <TouchableOpacity
@@ -258,28 +257,13 @@ const styles = StyleSheet.create({
   timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
   timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
-  panelsContainer: { flex: 1, padding: 12, gap: 10 },
-  resourceContainer: {
-    borderRadius: 14,
-    padding: 14,
-    borderLeftWidth: 3,
-    borderWidth: 1,
-  },
-  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 8 },
+  scroll: { flex: 1 },
+  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
+  sectionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
   resourceText: { fontSize: 14, lineHeight: 22 },
-  questionPanel: {
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 14,
-  },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  questionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
-  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, marginBottom: 14 },
+  divider: { height: 1, marginVertical: 4 },
+  questionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24 },
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 20 },
   optionsContainer: { gap: 10 },

@@ -47,8 +47,8 @@ export default function TimedDMTestScreen({ route, navigation }) {
     secondsLeftRef.current = secondsLeft;
   }, [secondsLeft]);
 
-  const question = test.questions[currentIndex];
-  const qid = question.questionId;
+  const question = test.questions[currentIndex] ?? test.questions[0];
+  const qid = question?.questionId;
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === test.questions.length - 1;
   const currentAnswer = answers[qid];
@@ -169,38 +169,39 @@ export default function TimedDMTestScreen({ route, navigation }) {
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
-      <View style={styles.panelsContainer}>
-        <View style={[styles.stemPanel, { flex: 2, backgroundColor: t.bgCard, borderLeftColor: t.sectionDM, borderColor: t.border }]}>
-          <View style={styles.panelHeader}>
-            <Text style={[styles.panelLabel, { color: t.sectionDM }]}>STEM</Text>
-            <TouchableOpacity
-              style={[styles.flagButton, isFlagged && { backgroundColor: t.accentDim }]}
-              onPress={() => toggleFlag(qid)}
-              activeOpacity={0.7}
-            >
-              <Text style={[styles.flagIcon, { color: isFlagged ? '#f59e0b' : t.textMuted }]}>
-                {isFlagged ? '⚑' : '⚐'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <DMStemContent question={question} />
-          </ScrollView>
-        </View>
+      <ScrollView
+        key={qid}
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>STEM</Text>
 
-        <View style={[styles.optionsPanel, { flex: 3, backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <Text style={[styles.panelLabel, { color: t.sectionDM, marginBottom: 10 }]}>OPTIONS</Text>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <DMOptionsContent
-              question={question}
-              answer={currentAnswer}
-              onAnswer={handleAnswer}
-              submitted={false}
-              timedMode
-            />
-          </ScrollView>
+        <DMStemContent question={question} showLabel={false} />
+
+        <View style={[styles.divider, { backgroundColor: t.border }]} />
+
+        <View style={styles.optionsHeader}>
+          <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>OPTIONS</Text>
+          <TouchableOpacity
+            style={[styles.flagButton, isFlagged && { backgroundColor: t.accentDim }]}
+            onPress={() => toggleFlag(qid)}
+            activeOpacity={0.7}
+          >
+            <Text style={[styles.flagIcon, { color: isFlagged ? '#f59e0b' : t.textMuted }]}>
+              {isFlagged ? '⚑' : '⚐'}
+            </Text>
+          </TouchableOpacity>
         </View>
-      </View>
+        <DMOptionsContent
+          question={question}
+          answer={currentAnswer}
+          onAnswer={handleAnswer}
+          submitted={false}
+          timedMode
+          showLabel={false}
+        />
+      </ScrollView>
 
       <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
         <TouchableOpacity
@@ -258,30 +259,12 @@ const styles = StyleSheet.create({
   timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
   timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
-  panelsContainer: { flex: 1, padding: 12, gap: 10 },
-  stemPanel: {
-    borderRadius: 14,
-    padding: 14,
-    borderLeftWidth: 3,
-    borderWidth: 1,
-  },
-  optionsPanel: {
-    borderRadius: 14,
-    padding: 14,
-    borderWidth: 1,
-  },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
-  panelLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
-  flagButton: {
-    borderRadius: 8,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
+  scroll: { flex: 1 },
+  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
+  sectionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
+  optionsHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  divider: { height: 1, marginVertical: 4 },
+  flagButton: { borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 18 },
   bottomBar: {
     flexDirection: 'row',

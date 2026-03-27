@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
+  Modal,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -31,7 +32,7 @@ export default function TimedQRTestScreen({ route }) {
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
 
-  const { display: timerDisplay, isUrgent } = useTestTimer(test.timeMinutes);
+  const { display: timerDisplay, isUrgent, isPaused, pause, resume } = useTestTimer(test.timeMinutes);
   const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
     useFlatNavigation(test.flatQuestions, 0);
 
@@ -112,52 +113,74 @@ export default function TimedQRTestScreen({ route }) {
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
       <ScrollView
-        key={item.stemId}
+        key={item.stemId + qid}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={[styles.stimulusContainer, { backgroundColor: t.bgCard, borderLeftColor: t.sectionQR, borderColor: t.border }]}>
-          <Text style={[styles.dataLabel, { color: t.sectionQR }]}>DATA</Text>
-          <QRStimulusRenderer stimulus={item.stimulus} />
+        <Text style={[styles.sectionLabel, { color: t.sectionQR }]}>STEM</Text>
+        <QRStimulusRenderer stimulus={item.stimulus} />
+
+        <View style={[styles.divider, { backgroundColor: t.border }]} />
+
+        <Text style={[styles.sectionLabel, { color: t.sectionQR }]}>QUESTION</Text>
+
+        <View style={styles.questionHeader}>
+          <Text style={[styles.questionText, { color: t.text }]}>{item.question.stem}</Text>
+          <TouchableOpacity
+            style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
+            onPress={() => toggleFlag(qid)}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
+              {isFlagged ? '⚑' : '⚐'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={[styles.questionCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={styles.questionHeader}>
-            <Text style={[styles.questionText, { color: t.text }]}>{item.question.stem}</Text>
-            <TouchableOpacity
-              style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
-              onPress={() => toggleFlag(qid)}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
-                {isFlagged ? '⚑' : '⚐'}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.options}>
-            {item.question.options.map((opt) => (
-              <AnswerOptionButton
-                key={opt.label}
-                label={`${opt.label}.  ${opt.text}`}
-                state={currentAnswer === opt.label ? 'selected' : 'idle'}
-                onPress={() => handleAnswer(opt.label)}
-              />
-            ))}
-          </View>
-
-          <View style={styles.bottomButtons}>
-            <TouchableOpacity
-              style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
-              onPress={() => setNavigatorVisible(true)}
-              activeOpacity={0.8}
-            >
-              <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
-            </TouchableOpacity>
-          </View>
+        <View style={styles.options}>
+          {item.question.options.map((opt) => (
+            <AnswerOptionButton
+              key={opt.label}
+              label={`${opt.label}.  ${opt.text}`}
+              state={currentAnswer === opt.label ? 'selected' : 'idle'}
+              onPress={() => handleAnswer(opt.label)}
+            />
+          ))}
         </View>
+
       </ScrollView>
+
+      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <TouchableOpacity
+          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
+          onPress={pause}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
+          onPress={() => setNavigatorVisible(true)}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
+        <View style={styles.pauseOverlay}>
+          <View style={styles.pauseCard}>
+            <Text style={styles.pauseIcon}>⏸</Text>
+            <Text style={styles.pauseTitle}>Test Paused</Text>
+            <Text style={styles.pauseSubtitle}>Timer has stopped. Resume when you're ready.</Text>
+            <Text style={styles.pauseReminder}>[Reminder: You will not be able to pause in the real UCAT exam!]</Text>
+            <TouchableOpacity style={styles.resumeButton} onPress={resume} activeOpacity={0.85}>
+              <Text style={styles.resumeButtonText}>▶  Resume Test</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       <TestNavigatorModal
         visible={navigatorVisible}
@@ -184,37 +207,68 @@ const styles = StyleSheet.create({
   timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
   timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
+  scroll: { flex: 1 },
+  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
+  sectionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
+  divider: { height: 1, marginVertical: 4 },
+  questionHeader: { flexDirection: 'row', alignItems: 'flex-start', gap: 12 },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, flex: 1 },
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 20 },
-  scroll: { flex: 1 },
-  scrollContent: { paddingBottom: 32 },
-  stimulusContainer: {
-    marginHorizontal: 20,
-    marginTop: 12,
-    marginBottom: 8,
-    borderRadius: 14,
-    padding: 16,
-    borderLeftWidth: 3,
-    borderWidth: 1,
-  },
-  dataLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 12 },
-  questionCard: {
-    marginHorizontal: 20,
-    marginTop: 4,
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 20,
-    paddingBottom: 28,
-  },
-  questionHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-    marginBottom: 16,
-  },
-  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, flex: 1 },
   options: { gap: 10 },
-  bottomButtons: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 20 },
-  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
+  bottomBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+  },
+  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
+  pauseButtonText: { fontSize: 12, fontWeight: '700' },
+  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
   navigatorButtonText: { fontSize: 12, fontWeight: '700' },
+  pauseOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(10, 15, 30, 0.92)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+  },
+  pauseCard: {
+    backgroundColor: '#1e2a4a',
+    borderRadius: 20,
+    paddingVertical: 40,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+    width: '100%',
+    maxWidth: 340,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.1)',
+  },
+  pauseIcon: { fontSize: 48, marginBottom: 16 },
+  pauseTitle: { color: '#ffffff', fontSize: 22, fontWeight: '800', marginBottom: 10 },
+  pauseSubtitle: {
+    color: 'rgba(255,255,255,0.55)',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginBottom: 12,
+  },
+  pauseReminder: {
+    color: 'rgba(255,255,255,0.35)',
+    fontSize: 12,
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: 28,
+  },
+  resumeButton: {
+    backgroundColor: '#1d4ed8',
+    borderRadius: 14,
+    paddingVertical: 16,
+    paddingHorizontal: 40,
+    width: '100%',
+    alignItems: 'center',
+  },
+  resumeButtonText: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
 });

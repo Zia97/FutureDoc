@@ -5,17 +5,19 @@ import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'timed_decision_making';
+const CACHE_KEY = 'timed_decision_making_v2'; // bump this string whenever the mapping schema changes
 
 function mapQuestion(q) {
   return {
     questionId: q.id,
     title: q.title,
     type: q.type,
+    subtype: q.subtype ?? null,
     stem: q.stem,
     options: q.timed_decision_making_question_options
       ? [...q.timed_decision_making_question_options]
           .sort((a, b) => a.order_index - b.order_index)
-          .map((o) => ({ label: o.label, text: o.option_text, data: o.option_data ?? null }))
+          .map((o) => ({ label: o.label, text: o.option_text, option_data: o.option_data ?? null }))
       : (q.options ?? []),
     statements: q.timed_decision_making_question_statements
       ? [...q.timed_decision_making_question_statements]
@@ -68,7 +70,7 @@ export function useTimedDMTests() {
         }
       }
 
-      const cached = await getCached(SECTION);
+      const cached = await getCached(CACHE_KEY);
       const hasValidCache = cached?.data?.length > 0;
       if (hasValidCache) {
         setTests(cached.data);
@@ -98,7 +100,7 @@ export function useTimedDMTests() {
       }
 
       const mapped = mapTests(fresh);
-      await saveCache(SECTION, versionRow.version, mapped);
+      await saveCache(CACHE_KEY, versionRow.version, mapped);
       setTests(mapped);
       setLoading(false);
     }

@@ -39,7 +39,7 @@ function useQuestionMeta(question, screenWidth) {
 }
 
 // Renders the stem, data table, diagram stimulus — everything except the answer inputs
-export function DMStemContent({ question }) {
+export function DMStemContent({ question, showLabel = true }) {
   const { width: screenWidth } = useWindowDimensions();
   const { practiceTheme: t } = useTheme();
   const [diagramExpanded, setDiagramExpanded] = useState(false);
@@ -47,7 +47,7 @@ export function DMStemContent({ question }) {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>STEM</Text>
+      {showLabel && <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>STEM</Text>}
       <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
 
       {vennKeySets && <VennDiagramKey sets={vennKeySets} />}
@@ -91,7 +91,7 @@ export function DMStemContent({ question }) {
 }
 
 // Renders only the answer inputs (MCQ options, yes/no statements, venn option grid)
-export function DMOptionsContent({ question, answer, onAnswer, submitted, timedMode = false, onTeachMe }) {
+export function DMOptionsContent({ question, answer, onAnswer, submitted, timedMode = false, onTeachMe, showLabel = true }) {
   const { width: screenWidth } = useWindowDimensions();
   const { practiceTheme: t } = useTheme();
   const { isYesNo, isMCQ, isSelectVenn, isInterpVenn, contentWidth } = useQuestionMeta(question, screenWidth);
@@ -104,7 +104,7 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
     return 'idle';
   }
 
-  const optionsLabel = <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>OPTIONS</Text>;
+  const optionsLabel = showLabel ? <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>{isYesNo ? 'QUESTIONS' : 'OPTIONS'}</Text> : null;
 
   if (isSelectVenn) {
     const OPTION_PADDING_H = 24;

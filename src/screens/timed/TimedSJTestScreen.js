@@ -27,7 +27,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
 
-  const panelScrollRef = useRef(null);
   const onExpireRef = useRef(null);
   const secondsLeftRef = useRef(test.timeMinutes * 60);
   const endExamCalledRef = useRef(false);
@@ -146,44 +145,43 @@ export default function TimedSJTestScreen({ route, navigation }) {
         color={sectionColor}
       />
 
-      <View style={styles.panelsContainer}>
-        <View style={[styles.resourceContainer, { flex: 1, backgroundColor: t.bgCard, borderLeftColor: sectionColor, borderColor: t.border }]}>
-          <Text style={[styles.resourceLabel, { color: sectionColor }]}>SCENARIO</Text>
-          <ScrollView key={item.stemId} showsVerticalScrollIndicator={false}>
-            <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.stem}</Text>
-          </ScrollView>
+      <ScrollView
+        key={item.stemId + itemId}
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={[styles.sectionLabel, { color: sectionColor }]}>SCENARIO</Text>
+        <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.stem}</Text>
+
+        <View style={[styles.divider, { backgroundColor: t.border }]} />
+
+        <View style={styles.questionHeader}>
+          <Text style={[styles.sectionLabel, { color: sectionColor }]}>QUESTION</Text>
+          <TouchableOpacity
+            style={[styles.flagButton, isFlagged && styles.flagButtonActive]}
+            onPress={() => toggleFlag(itemId)}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Text style={[styles.flagIcon, { color: isFlagged ? '#d97706' : t.textSecondary }]}>
+              {isFlagged ? '⚑' : '⚐'}
+            </Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={[styles.questionPanel, { flex: 2, backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={styles.panelHeader}>
-            <Text style={[styles.panelCounter, { color: t.textSecondary }]}>Question</Text>
-            <TouchableOpacity
-              style={[styles.flagButton, isFlagged && styles.flagButtonActive]}
-              onPress={() => toggleFlag(itemId)}
-              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-            >
-              <Text style={[styles.flagIcon, { color: isFlagged ? '#d97706' : t.textSecondary }]}>
-                {isFlagged ? '⚑' : '⚐'}
-              </Text>
-            </TouchableOpacity>
-          </View>
+        <Text style={[styles.questionText, { color: t.text }]}>{item.question.text}</Text>
 
-          <ScrollView ref={panelScrollRef} showsVerticalScrollIndicator={false}>
-            <Text style={[styles.questionText, { color: t.text }]}>{item.question.text}</Text>
-
-            <View style={styles.optionsContainer}>
-              {labelSet.map((opt) => (
-                <AnswerOptionButton
-                  key={opt}
-                  label={opt}
-                  state={selectedAnswer === opt ? 'selected' : 'idle'}
-                  onPress={() => onAnswer(opt)}
-                />
-              ))}
-            </View>
-          </ScrollView>
+        <View style={styles.optionsContainer}>
+          {labelSet.map((opt) => (
+            <AnswerOptionButton
+              key={opt}
+              label={opt}
+              state={selectedAnswer === opt ? 'selected' : 'idle'}
+              onPress={() => onAnswer(opt)}
+            />
+          ))}
         </View>
-      </View>
+      </ScrollView>
 
       <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
         <TouchableOpacity
@@ -241,31 +239,16 @@ const styles = StyleSheet.create({
   timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
   timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
   timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
-  panelsContainer: { flex: 1, padding: 12, gap: 10 },
-  resourceContainer: {
-    borderRadius: 14,
-    padding: 14,
-    borderLeftWidth: 3,
-    borderWidth: 1,
-  },
-  resourceLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2, marginBottom: 8 },
+  scroll: { flex: 1 },
+  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
+  sectionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
   resourceText: { fontSize: 14, lineHeight: 22 },
-  questionPanel: {
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 14,
-  },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
+  divider: { height: 1, marginVertical: 4 },
+  questionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagButtonActive: { backgroundColor: '#fef3c7' },
   flagIcon: { fontSize: 20 },
-  panelCounter: { fontSize: 13, fontWeight: '600' },
-  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24, marginBottom: 14 },
+  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24 },
   optionsContainer: { gap: 10 },
   bottomBar: {
     flexDirection: 'row',
