@@ -47,6 +47,7 @@ export function DMStemContent({ question }) {
 
   return (
     <View style={styles.container}>
+      <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>STEM</Text>
       <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
 
       {vennKeySets && <VennDiagramKey sets={vennKeySets} />}
@@ -103,6 +104,8 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
     return 'idle';
   }
 
+  const optionsLabel = <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>OPTIONS</Text>;
+
   if (isSelectVenn) {
     const OPTION_PADDING_H = 24;
     const maxCvW = Math.max(...question.options.map(opt => {
@@ -113,6 +116,7 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
 
     return (
       <View style={styles.vennGrid}>
+        {optionsLabel}
         {question.options.map((opt) => {
           let borderColor = t.borderStrong;
           if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
@@ -139,6 +143,7 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
   if (isInterpVenn || isMCQ) {
     return (
       <View style={styles.mcqOptions}>
+        {optionsLabel}
         {question.options.map((opt) => (
           <AnswerOptionButton
             key={opt.label}
@@ -153,14 +158,17 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
 
   if (isYesNo) {
     return (
-      <YesNoStatements
-        statements={question.statements}
-        answers={answer}
-        onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
-        submitted={submitted}
-        timedMode={timedMode}
-        onTeachMe={onTeachMe}
-      />
+      <View style={styles.yesNoContainer}>
+        {optionsLabel}
+        <YesNoStatements
+          statements={question.statements}
+          answers={answer}
+          onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
+          submitted={submitted}
+          timedMode={timedMode}
+          onTeachMe={onTeachMe}
+        />
+      </View>
     );
   }
 
@@ -244,6 +252,13 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
 
 const styles = StyleSheet.create({
   container: { gap: 16 },
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 1.2,
+    marginBottom: 8,
+  },
+  yesNoContainer: { gap: 8 },
   stem: { fontSize: 15, lineHeight: 23, fontWeight: '500' },
   mcqOptions: { gap: 10 },
   vennGrid: {

@@ -100,58 +100,56 @@ export default function QRQuestionScreen({ route }) {
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
       <ScrollView
-        key={item.stemId}
+        key={item.stemId + qid}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={[styles.stimulusContainer, { backgroundColor: t.bgCard, borderLeftColor: t.sectionQR, borderColor: t.border }]}>
-          <Text style={[styles.dataLabel, { color: t.sectionQR }]}>DATA</Text>
-          <QRStimulusRenderer stimulus={item.stimulus} />
-        </View>
+        <Text style={[styles.sectionLabel, { color: t.sectionQR }]}>STEM</Text>
+        <QRStimulusRenderer stimulus={item.stimulus} />
 
-        <View style={[styles.questionCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+        <View style={[styles.divider, { backgroundColor: t.border }]} />
 
-          <View style={styles.options}>
-            {item.question.options.map((opt) => (
-              <AnswerOptionButton
-                key={opt.label}
-                label={`${opt.label}.  ${opt.text}`}
-                state={getOptionState(opt.label)}
-                onPress={() => onAnswer(opt.label)}
-              />
-            ))}
-          </View>
-
-          {pendingAnswer && !hasAnswered && (
-            <TouchableOpacity
-              style={[styles.checkButton, { backgroundColor: t.sectionQR }]}
-              onPress={handleCheckAnswer}
-            >
-              <Text style={styles.checkButtonText}>Check Answer</Text>
-            </TouchableOpacity>
-          )}
-
-          {hasAnswered && (
-            <FeedbackBox
-              isCorrect={isCorrect}
-              correctAnswer={item.question.answer}
-              reason={item.question.answeringReason}
-              showReason
-              questionContext={!isCorrect ? {
-                question: item.question.questionText,
-                questionType: item.stimulus?.type ?? 'quantitative_reasoning',
-                section: 'qr',
-                options: item.question.options.map((o) => `${o.label}. ${o.text}`),
-                correctAnswer: item.question.answer,
-                userAnswer: selectedAnswer,
-                explanation: item.question.answeringReason,
-                stimulusData: item.stimulus,
-              } : undefined}
+        <Text style={[styles.sectionLabel, { color: t.sectionQR }]}>QUESTION</Text>
+        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+        <View style={styles.options}>
+          {item.question.options.map((opt) => (
+            <AnswerOptionButton
+              key={opt.label}
+              label={`${opt.label}.  ${opt.text}`}
+              state={getOptionState(opt.label)}
+              onPress={() => onAnswer(opt.label)}
             />
-          )}
+          ))}
         </View>
+
+        {pendingAnswer && !hasAnswered && (
+          <TouchableOpacity
+            style={[styles.checkButton, { backgroundColor: t.sectionQR }]}
+            onPress={handleCheckAnswer}
+          >
+            <Text style={styles.checkButtonText}>Check Answer</Text>
+          </TouchableOpacity>
+        )}
+
+        {hasAnswered && (
+          <FeedbackBox
+            isCorrect={isCorrect}
+            correctAnswer={item.question.answer}
+            reason={item.question.answeringReason}
+            showReason
+            questionContext={!isCorrect ? {
+              question: item.question.questionText,
+              questionType: item.stimulus?.type ?? 'quantitative_reasoning',
+              section: 'qr',
+              options: item.question.options.map((o) => `${o.label}. ${o.text}`),
+              correctAnswer: item.question.answer,
+              userAnswer: selectedAnswer,
+              explanation: item.question.answeringReason,
+              stimulusData: item.stimulus,
+            } : undefined}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );
@@ -161,29 +159,15 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   container: { flex: 1 },
   scroll: { flex: 1 },
-  scrollContent: { paddingBottom: 32 },
-  stimulusContainer: {
-    marginHorizontal: 20,
-    marginTop: 12,
-    marginBottom: 8,
-    borderRadius: 14,
-    padding: 16,
-    borderLeftWidth: 3,
-    borderWidth: 1,
-  },
-  dataLabel: {
+  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
+  sectionLabel: {
     fontSize: 11,
     fontWeight: '700',
     letterSpacing: 1.2,
-    marginBottom: 12,
   },
-  questionCard: {
-    marginHorizontal: 20,
-    marginTop: 4,
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 20,
-    paddingBottom: 28,
+  divider: {
+    height: 1,
+    marginVertical: 4,
   },
   questionText: {
     fontSize: 16,
