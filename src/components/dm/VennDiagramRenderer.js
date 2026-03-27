@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import Svg, {
   Circle,
   Rect,
   Polygon,
+  Ellipse,
   Text as SvgText,
 } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
@@ -51,6 +52,28 @@ function shapeToGeometry(shapeType, cx, cy, w, h) {
       const a = (i * 2 * Math.PI) / 8 - Math.PI / 2;
       return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
     });
+  } else if (shapeType === 'oval') {
+    const rx = r, ry = r * 0.65;
+    pts = Array.from({ length: 16 }, (_, i) => {
+      const a = (i * 2 * Math.PI) / 16;
+      return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)];
+    });
+  } else if (shapeType === 'isosceles_triangle') {
+    pts = [[cx, cy - r], [cx - r * 0.5, cy + r], [cx + r * 0.5, cy + r]];
+  } else if (shapeType === 'parallelogram') {
+    const sk = r * 0.25;
+    pts = [[cx - r * 0.85 + sk, cy - r * 0.6], [cx + r * 0.85 + sk, cy - r * 0.6],
+           [cx + r * 0.85 - sk, cy + r * 0.6], [cx - r * 0.85 - sk, cy + r * 0.6]];
+  } else if (shapeType === 'star') {
+    const innerR = r * 0.4;
+    pts = Array.from({ length: 10 }, (_, i) => {
+      const a = (i * Math.PI) / 5 - Math.PI / 2;
+      const rad = i % 2 === 0 ? r : innerR;
+      return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)];
+    });
+  } else if (shapeType === 'trapezoid') {
+    pts = [[cx - r * 0.55, cy - r], [cx + r * 0.55, cy - r],
+           [cx + r, cy + r], [cx - r, cy + r]];
   } else {
     // square / rectangle
     const hw = w / 2, hh = h / 2;
@@ -105,39 +128,79 @@ function parseRegionKey(regionKey, allSetIds) {
 }
 
 /**
- * Searches a spiral around a hint position and returns the point within the
- * correct logical region that has the MAXIMUM distance from all shape outlines.
- * This places every label at the most visually open spot in its region rather
- * than stopping at the first "good enough" position.
+ * Scores a candidate label position. Returns the minimum distance from the
+ * point to any shape outline or canvas edge — i.e. the radius of the largest
+ * circle that fits at this point without crossing any boundary.
+ * Returns -Infinity if the point is not inside the correct region.
  */
-function bestLabelPos(x, y, geoms, regionCheck) {
-  const DIRS = 16;
-  const angles = Array.from({ length: DIRS }, (_, i) => (i * 2 * Math.PI) / DIRS);
-
-  let bestPos = { x, y };
-  let bestDist = regionCheck(x, y) ? minDistToAllOutlines(x, y, geoms) : -1;
-
-  for (let step = 3; step <= 80; step += 3) {
-    for (const angle of angles) {
-      const cx = x + Math.cos(angle) * step;
-      const cy = y + Math.sin(angle) * step;
-      if (!regionCheck(cx, cy)) continue;
-      const d = minDistToAllOutlines(cx, cy, geoms);
-      if (d > bestDist) { bestDist = d; bestPos = { x: cx, y: cy }; }
-    }
-  }
-
-  return bestPos;
+function scoreCandidate(px, py, geoms, regionCheck, canvasW, canvasH) {
+  if (px < 0 || py < 0 || px > canvasW || py > canvasH) return -Infinity;
+  if (!regionCheck(px, py)) return -Infinity;
+  const outlineDist = minDistToAllOutlines(px, py, geoms);
+  const edgeDist = Math.min(px, py, canvasW - px, canvasH - py);
+  return Math.min(outlineDist, edgeDist);
 }
 
 /**
- * Finds the best label position AND font size for a given hint point.
- * Picks the position with maximum outline distance, then selects the
- * largest font size that fits the available clearance.
+ * Finds the "pole of inaccessibility" for a region — the point that is
+ * maximally distant from all shape outlines and canvas edges while remaining
+ * inside the correct logical region.
+ *
+ * Uses a two-phase grid search:
+ *  1. Coarse pass (STEP px) across the full canvas to find the global best area
+ *  2. Fine pass (1 px) around the coarse winner to pinpoint the exact optimum
+ *
+ * The hint position (from the layout) is always evaluated as a candidate so
+ * that well-placed hints are never made worse.
  */
-function findLabelPlacement(x, y, geoms, regionCheck) {
-  const pos = bestLabelPos(x, y, geoms, regionCheck);
-  const dist = minDistToAllOutlines(pos.x, pos.y, geoms);
+function findPoleOfInaccessibility(hintX, hintY, geoms, regionCheck, canvasW, canvasH) {
+  const STEP = 5;
+
+  let bestX = hintX;
+  let bestY = hintY;
+  let bestDist = scoreCandidate(hintX, hintY, geoms, regionCheck, canvasW, canvasH);
+
+  // Phase 1: coarse grid
+  for (let gx = 0; gx <= canvasW; gx += STEP) {
+    for (let gy = 0; gy <= canvasH; gy += STEP) {
+      const d = scoreCandidate(gx, gy, geoms, regionCheck, canvasW, canvasH);
+      if (d > bestDist) { bestDist = d; bestX = gx; bestY = gy; }
+    }
+  }
+
+  // Phase 2: refine around the best coarse point at 1px resolution
+  const rx0 = Math.max(0, bestX - STEP);
+  const rx1 = Math.min(canvasW, bestX + STEP);
+  const ry0 = Math.max(0, bestY - STEP);
+  const ry1 = Math.min(canvasH, bestY + STEP);
+  for (let gx = rx0; gx <= rx1; gx++) {
+    for (let gy = ry0; gy <= ry1; gy++) {
+      const d = scoreCandidate(gx, gy, geoms, regionCheck, canvasW, canvasH);
+      if (d > bestDist) { bestDist = d; bestX = gx; bestY = gy; }
+    }
+  }
+
+  return { x: bestX, y: bestY, clearance: bestDist };
+}
+
+/**
+ * Finds the best label position AND font size for a region.
+ * For "outside" regions, uses the hint directly (convention: top-left corner).
+ * For all other regions, runs the pole-of-inaccessibility grid search.
+ */
+function findLabelPlacement(hintX, hintY, geoms, regionCheck, canvasW, canvasH, regionKey) {
+  let pos, dist;
+
+  if (regionKey === 'outside') {
+    // "Outside" labels sit in the top-left corner by UCAT convention.
+    // Use a small safety search around the hint instead of a full grid scan.
+    pos = { x: hintX, y: hintY };
+    dist = minDistToAllOutlines(hintX, hintY, geoms);
+  } else {
+    const result = findPoleOfInaccessibility(hintX, hintY, geoms, regionCheck, canvasW, canvasH);
+    pos = { x: result.x, y: result.y };
+    dist = result.clearance;
+  }
 
   const sizes = [FONT_SIZE, FONT_SIZE - 2, FONT_SIZE - 4, MIN_FONT_SIZE];
   for (const fs of sizes) {
@@ -159,11 +222,16 @@ function findLabelPlacement(x, y, geoms, regionCheck) {
  */
 function shapeExtentAtCenter(shape, r) {
   switch (shape) {
-    case 'triangle': return r * 0.5;                  // pointed top; cx±r/2 at cy
-    case 'pentagon': return r * Math.cos(Math.PI / 5); // ≈ 0.81r
-    case 'hexagon':  return r * Math.cos(Math.PI / 6); // ≈ 0.87r (pointed top)
-    case 'octagon':  return r;                         // vertex at 0° gives full r
-    default:         return r;                         // circle, square, rectangle, diamond
+    case 'triangle':           return r * 0.5;
+    case 'pentagon':           return r * Math.cos(Math.PI / 5); // ≈ 0.81r
+    case 'hexagon':            return r * Math.cos(Math.PI / 6); // ≈ 0.87r
+    case 'octagon':            return r;
+    case 'oval':               return r;        // full width at centre
+    case 'isosceles_triangle': return r * 0.25;  // narrow at centre
+    case 'parallelogram':      return r * 1.1;   // slightly wider due to skew
+    case 'star':               return r * 0.95;
+    case 'trapezoid':          return r * 0.78;  // midpoint width
+    default:                   return r;         // circle, square, rectangle, diamond
   }
 }
 
@@ -182,7 +250,7 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
   const r          = 65;
   const cy         = 80;
   const CANVAS_H   = 162;
-  const OVERLAP_PX = 35; // deeper overlaps give more label space
+  const OVERLAP_PX = 45; // deeper overlaps give more label space
   const GAP_PX     = 18;
 
   const [s1, s2, s3] = shapeTypes;
@@ -190,8 +258,8 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
   const ext2 = shapeExtentAtCenter(s2, r);
   const ext3 = shapeExtentAtCenter(s3, r);
 
-  const overlap12 = (regionCounts['set1_set2'] ?? 0) > 0;
-  const overlap23 = (regionCounts['set2_set3'] ?? 0) > 0;
+  const overlap12 = regionCounts['set1_set2'] != null;
+  const overlap23 = regionCounts['set2_set3'] != null;
 
   const dist12 = overlap12 ? (ext1 + ext2 - OVERLAP_PX) : (ext1 + ext2 + GAP_PX);
   const dist23 = overlap23 ? (ext2 + ext3 - OVERLAP_PX) : (ext2 + ext3 + GAP_PX);
@@ -268,6 +336,27 @@ function rayExtentFromCenter(shape, r, angle) {
       const a = (i * 2 * Math.PI) / 8 - Math.PI / 2;
       return [r * Math.cos(a), r * Math.sin(a)];
     });
+  } else if (shape === 'oval') {
+    const rx = r, ry = r * 0.65;
+    pts = Array.from({ length: 16 }, (_, i) => {
+      const a = (i * 2 * Math.PI) / 16;
+      return [rx * Math.cos(a), ry * Math.sin(a)];
+    });
+  } else if (shape === 'isosceles_triangle') {
+    pts = [[0, -r], [-r * 0.5, r], [r * 0.5, r]];
+  } else if (shape === 'parallelogram') {
+    const sk = r * 0.25;
+    pts = [[-r * 0.85 + sk, -r * 0.6], [r * 0.85 + sk, -r * 0.6],
+           [r * 0.85 - sk, r * 0.6], [-r * 0.85 - sk, r * 0.6]];
+  } else if (shape === 'star') {
+    const innerR = r * 0.4;
+    pts = Array.from({ length: 10 }, (_, i) => {
+      const a = (i * Math.PI) / 5 - Math.PI / 2;
+      const rad = i % 2 === 0 ? r : innerR;
+      return [rad * Math.cos(a), rad * Math.sin(a)];
+    });
+  } else if (shape === 'trapezoid') {
+    pts = [[-r * 0.55, -r], [r * 0.55, -r], [r, r], [-r, r]];
   } else {
     // square / rectangle
     pts = [[-r, -r], [r, -r], [r, r], [-r, r]];
@@ -312,7 +401,7 @@ function rayExtentFromCenter(shape, r, angle) {
  */
 function computeThreeAllOverlapLayout(shapeTypes, inverted = false) {
   const r          = 75;
-  const OVERLAP_PX = 48;
+  const OVERLAP_PX = 58;
   const MARGIN     = 20;
 
   const [s1, s2, s3] = shapeTypes;
@@ -403,7 +492,7 @@ function computeThreeAllOverlapLayout(shapeTypes, inverted = false) {
  */
 function computeTwoOverlapLayout(shapeTypes, staggered = false) {
   const r          = 75;
-  const OVERLAP_PX = 45;
+  const OVERLAP_PX = 55;
   const MARGIN     = 20;
 
   const [s1, s2] = shapeTypes;
@@ -438,6 +527,114 @@ function computeTwoOverlapLayout(shapeTypes, staggered = false) {
     sets: [
       { id: 'set1', cx: cx1, cy: cy1, w: r * 2, h: r * 2 },
       { id: 'set2', cx: cx2, cy: cy2, w: r * 2, h: r * 2 },
+    ],
+    regions,
+    canvasWidth: canvasW,
+    canvasHeight: canvasH,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic two_vertical_overlap layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a two_vertical_overlap layout: two shapes stacked vertically with
+ * overlap. Taller than wide — good for mobile screens.
+ */
+function computeTwoVerticalOverlapLayout(shapeTypes) {
+  const r          = 75;
+  const OVERLAP_PX = 55;
+  const MARGIN     = 20;
+
+  const [s1, s2] = shapeTypes;
+
+  const ext1 = rayExtentFromCenter(s1, r, Math.PI / 2);
+  const ext2 = rayExtentFromCenter(s2, r, -Math.PI / 2);
+  const span = ext1 + ext2;
+  const dist = Math.max(span - OVERLAP_PX, r * 0.5);
+
+  const cx  = MARGIN + r;
+  const cy1 = MARGIN + r;
+  const cy2 = cy1 + dist;
+
+  const canvasW = Math.ceil(cx + r + MARGIN);
+  const canvasH = Math.ceil(cy2 + r + MARGIN);
+
+  const my = (cy1 + cy2) / 2;
+
+  const regions = {
+    set1_only: { x: cx, y: cy1 - (my - cy1) * 0.4 },
+    set2_only: { x: cx, y: cy2 + (cy2 - my) * 0.4 },
+    set1_set2: { x: cx, y: my },
+    outside:   { x: 8,  y: 16 },
+  };
+
+  return {
+    sets: [
+      { id: 'set1', cx, cy: cy1, w: r * 2, h: r * 2 },
+      { id: 'set2', cx, cy: cy2, w: r * 2, h: r * 2 },
+    ],
+    regions,
+    canvasWidth: canvasW,
+    canvasHeight: canvasH,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic three_vertical_chain layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a three_vertical_chain layout: three shapes stacked vertically.
+ * Adjacent pairs overlap if their intersection region has a non-zero count;
+ * otherwise a gap is drawn. Tall and narrow.
+ *
+ * Region keys: set1_only, set2_only, set3_only, set1_set2*, set2_set3*, outside
+ * (* = only if overlapping)
+ */
+function computeThreeVerticalChainLayout(shapeTypes, regionCounts) {
+  const r          = 60;
+  const OVERLAP_PX = 45;
+  const GAP_PX     = 15;
+  const MARGIN     = 20;
+
+  const [s1, s2, s3] = shapeTypes;
+
+  const overlap12 = regionCounts['set1_set2'] != null;
+  const overlap23 = regionCounts['set2_set3'] != null;
+
+  const ext1d = rayExtentFromCenter(s1, r, Math.PI / 2);
+  const ext2u = rayExtentFromCenter(s2, r, -Math.PI / 2);
+  const ext2d = rayExtentFromCenter(s2, r, Math.PI / 2);
+  const ext3u = rayExtentFromCenter(s3, r, -Math.PI / 2);
+
+  const dist12 = overlap12 ? (ext1d + ext2u - OVERLAP_PX) : (ext1d + ext2u + GAP_PX);
+  const dist23 = overlap23 ? (ext2d + ext3u - OVERLAP_PX) : (ext2d + ext3u + GAP_PX);
+
+  const cx  = MARGIN + r;
+  const cy1 = MARGIN + r;
+  const cy2 = cy1 + dist12;
+  const cy3 = cy2 + dist23;
+
+  const canvasW = Math.ceil(cx + r + MARGIN);
+  const canvasH = Math.ceil(cy3 + r + MARGIN);
+
+  const regions = {
+    set1_only: { x: cx, y: cy1 - r * 0.4 },
+    set2_only: { x: cx + r * 0.5, y: cy2 },
+    set3_only: { x: cx, y: cy3 + r * 0.4 },
+    outside:   { x: 8,  y: 16 },
+  };
+
+  if (overlap12) regions.set1_set2 = { x: cx, y: (cy1 + cy2) / 2 };
+  if (overlap23) regions.set2_set3 = { x: cx, y: (cy2 + cy3) / 2 };
+
+  return {
+    sets: [
+      { id: 'set1', cx, cy: cy1, w: r * 2, h: r * 2 },
+      { id: 'set2', cx, cy: cy2, w: r * 2, h: r * 2 },
+      { id: 'set3', cx, cy: cy3, w: r * 2, h: r * 2 },
     ],
     regions,
     canvasWidth: canvasW,
@@ -537,19 +734,19 @@ const LAYOUTS = {
   },
 
   three_one_separate: {
-    // r=60: set1-set2 overlap ~30px, set2-set3 gap ~15px
-    canvasWidth: 390,
+    // r=60: set1-set2 overlap ~50px, set3 separate
+    canvasWidth: 380,
     canvasHeight: 155,
     sets: [
-      { id: 'set1', cx: 80,  cy: 77, w: 120, h: 120 },
-      { id: 'set2', cx: 170, cy: 77, w: 120, h: 120 },
-      { id: 'set3', cx: 310, cy: 77, w: 120, h: 120 },
+      { id: 'set1', cx: 75,  cy: 77, w: 120, h: 120 },
+      { id: 'set2', cx: 155, cy: 77, w: 120, h: 120 },
+      { id: 'set3', cx: 300, cy: 77, w: 120, h: 120 },
     ],
     regions: {
-      set1_only: { x: 46,  y: 77 },
-      set1_set2: { x: 125, y: 77 },
-      set2_only: { x: 205, y: 57 },
-      set3_only: { x: 310, y: 77 },
+      set1_only: { x: 42,  y: 77 },
+      set1_set2: { x: 115, y: 77 },
+      set2_only: { x: 195, y: 57 },
+      set3_only: { x: 300, y: 77 },
       outside:   { x: 8,   y: 16 },
     },
   },
@@ -631,6 +828,35 @@ function renderShape(id, shape, cx, cy, w, h, stroke) {
       return <Polygon key={id} points={pts} {...strokeProps} />;
     }
 
+    case 'oval':
+      return <Ellipse key={id} cx={cx} cy={cy} rx={r} ry={r * 0.65} {...strokeProps} />;
+
+    case 'isosceles_triangle': {
+      const pts = `${cx},${cy - r} ${cx - r * 0.5},${cy + r} ${cx + r * 0.5},${cy + r}`;
+      return <Polygon key={id} points={pts} {...strokeProps} />;
+    }
+
+    case 'parallelogram': {
+      const sk = r * 0.25;
+      const pts = `${cx - r * 0.85 + sk},${cy - r * 0.6} ${cx + r * 0.85 + sk},${cy - r * 0.6} ${cx + r * 0.85 - sk},${cy + r * 0.6} ${cx - r * 0.85 - sk},${cy + r * 0.6}`;
+      return <Polygon key={id} points={pts} {...strokeProps} />;
+    }
+
+    case 'star': {
+      const innerR = r * 0.4;
+      const pts = Array.from({ length: 10 }, (_, i) => {
+        const angle = (i * Math.PI) / 5 - Math.PI / 2;
+        const rad = i % 2 === 0 ? r : innerR;
+        return `${cx + rad * Math.cos(angle)},${cy + rad * Math.sin(angle)}`;
+      }).join(' ');
+      return <Polygon key={id} points={pts} {...strokeProps} />;
+    }
+
+    case 'trapezoid': {
+      const pts = `${cx - r * 0.55},${cy - r} ${cx + r * 0.55},${cy - r} ${cx + r},${cy + r} ${cx - r},${cy + r}`;
+      return <Polygon key={id} points={pts} {...strokeProps} />;
+    }
+
     default:
       return <Circle key={id} cx={cx} cy={cy} r={r} {...strokeProps} />;
   }
@@ -654,6 +880,12 @@ function resolveLayout(vennConfig) {
   if (vennConfig.diagramLayout === 'two_overlap_staggered') {
     return computeTwoOverlapLayout(shapeTypes, true);
   }
+  if (vennConfig.diagramLayout === 'two_vertical_overlap') {
+    return computeTwoVerticalOverlapLayout(shapeTypes);
+  }
+  if (vennConfig.diagramLayout === 'three_vertical_chain') {
+    return computeThreeVerticalChainLayout(shapeTypes, vennConfig.regions || {});
+  }
   return LAYOUTS[vennConfig.diagramLayout] ?? null;
 }
 
@@ -663,6 +895,8 @@ const DYNAMIC_LAYOUTS = new Set([
   'three_all_overlap_v2',
   'two_overlap',
   'two_overlap_staggered',
+  'two_vertical_overlap',
+  'three_vertical_chain',
 ]);
 
 export function getCanvasSize(diagramLayout, vennConfig) {
@@ -722,6 +956,26 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
   const allSetIds = layout.sets.map(s => s.id);
   const setIndexById = Object.fromEntries(layout.sets.map((s, i) => [s.id, i]));
 
+  // Cache label placements — the grid search only reruns when the config changes.
+  const labelPlacements = useMemo(() => {
+    const placements = {};
+    for (const [regionKey, value] of Object.entries(vennConfig.regions || {})) {
+      if (value === undefined || value === null || value === 0) continue;
+      const rawPos = layout.regions[regionKey];
+      if (!rawPos) continue;
+
+      const { insideIds, outsideIds } = parseRegionKey(regionKey, allSetIds);
+      const insideGeoms  = insideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
+      const outsideGeoms = outsideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
+      const regionCheck  = (px, py) =>
+        insideGeoms.every(g => isPointInsideShape(px, py, g)) &&
+        outsideGeoms.every(g => !isPointInsideShape(px, py, g));
+
+      placements[regionKey] = findLabelPlacement(rawPos.x, rawPos.y, shapeGeoms, regionCheck, canvasW, canvasH, regionKey);
+    }
+    return placements;
+  }, [vennConfig]);
+
   return (
     <View>
       <Svg
@@ -736,20 +990,9 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
 
         {Object.entries(vennConfig.regions || {}).map(([regionKey, value]) => {
           if (value === undefined || value === null || value === 0) return null;
-          const rawPos = layout.regions[regionKey];
-          if (!rawPos) return null;
+          const placement = labelPlacements[regionKey];
+          if (!placement) return null;
 
-          // Derive required membership from the region key — NOT from sampling
-          // the hint position. This ensures labels for non-circular shapes
-          // (triangles, rectangles) are never placed in the wrong region.
-          const { insideIds, outsideIds } = parseRegionKey(regionKey, allSetIds);
-          const insideGeoms  = insideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
-          const outsideGeoms = outsideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
-          const regionCheck  = (px, py) =>
-            insideGeoms.every(g => isPointInsideShape(px, py, g)) &&
-            outsideGeoms.every(g => !isPointInsideShape(px, py, g));
-
-          const placement = findLabelPlacement(rawPos.x, rawPos.y, shapeGeoms, regionCheck);
           const sharedProps = {
             x: placement.x,
             y: placement.y,

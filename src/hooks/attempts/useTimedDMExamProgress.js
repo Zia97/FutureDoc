@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 
 const COMPLETED_KEY = 'timed_dm_completed_attempts';
 
-const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
+const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
 // Score 1 per correct question.
 // MCQ/Venn: correct if selectedAnswer === question.answer

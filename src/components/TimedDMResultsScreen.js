@@ -11,7 +11,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '../context/ThemeContext';
 import DMQuestionRenderer from './dm/DMQuestionRenderer';
 
-const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
+const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
 function getDMScaledScore(pct) {
   return Math.round(300 + (pct / 100) * 600);

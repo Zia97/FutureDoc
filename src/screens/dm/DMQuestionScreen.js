@@ -9,7 +9,7 @@ import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakin
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
 import { useTheme } from '../../context/ThemeContext';
 
-const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
+const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
 // ── Venn AI context builder ───────────────────────────────────────────────────
 

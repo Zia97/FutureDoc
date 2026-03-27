@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Svg, { Circle, Rect, Polygon } from 'react-native-svg';
+import Svg, { Circle, Rect, Polygon, Ellipse } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 
 const SIZE = 20;
@@ -14,6 +14,8 @@ function KeyShape({ shape, stroke }) {
   switch (shape) {
     case 'circle':
       return <Circle cx={MID} cy={MID} r={R} {...props} />;
+    case 'oval':
+      return <Ellipse cx={MID} cy={MID} rx={R} ry={R * 0.65} {...props} />;
     case 'square':
     case 'rectangle':
       return <Rect x={MID - R} y={MID - R} width={R * 2} height={R * 2} {...props} />;
@@ -21,8 +23,32 @@ function KeyShape({ shape, stroke }) {
       const pts = `${MID},${MID - R} ${MID - R},${MID + R} ${MID + R},${MID + R}`;
       return <Polygon points={pts} {...props} />;
     }
+    case 'isosceles_triangle': {
+      const pts = `${MID},${MID - R} ${MID - R * 0.5},${MID + R} ${MID + R * 0.5},${MID + R}`;
+      return <Polygon points={pts} {...props} />;
+    }
     case 'diamond': {
       const pts = `${MID},${MID - R} ${MID + R},${MID} ${MID},${MID + R} ${MID - R},${MID}`;
+      return <Polygon points={pts} {...props} />;
+    }
+    case 'trapezoid': {
+      const tw = R * 0.55;
+      const bw = R;
+      const pts = `${MID - tw},${MID - R} ${MID + tw},${MID - R} ${MID + bw},${MID + R} ${MID - bw},${MID + R}`;
+      return <Polygon points={pts} {...props} />;
+    }
+    case 'parallelogram': {
+      const sk = R * 0.25;
+      const w = R * 0.85;
+      const pts = `${MID - w + sk},${MID - R} ${MID + w + sk},${MID - R} ${MID + w - sk},${MID + R} ${MID - w - sk},${MID + R}`;
+      return <Polygon points={pts} {...props} />;
+    }
+    case 'star': {
+      const pts = Array.from({ length: 10 }, (_, i) => {
+        const angle = (i * Math.PI) / 5 - Math.PI / 2;
+        const rad = i % 2 === 0 ? R : R * 0.4;
+        return `${MID + rad * Math.cos(angle)},${MID + rad * Math.sin(angle)}`;
+      }).join(' ');
       return <Polygon points={pts} {...props} />;
     }
     case 'pentagon': {

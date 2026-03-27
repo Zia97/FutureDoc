@@ -17,7 +17,7 @@ import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/ai/useAITutor';
 import { useTheme } from '../../context/ThemeContext';
 
-const YES_NO_TYPES = ['syllogism', 'interpreting_info'];
+const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic', 'probabilistic_reasoning'];
 
 // Derived question type flags — shared between stem and options renders
