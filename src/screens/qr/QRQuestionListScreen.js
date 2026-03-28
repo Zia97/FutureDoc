@@ -8,11 +8,8 @@ import { useQuantitativeReasoningProgress } from '../../hooks/queries/useQuantit
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
 import { getTargetFlatIndex } from '../../lib/flattenQuestions';
 import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../lib/supabase';
 
-const CACHE_KEYS = ['qr_attempts', 'qr_pending_sync', 'qr_set_progress'];
-const DB_TABLES = ['quantitative_reasoning_question_attempts', 'quantitative_reasoning_set_progress'];
+const CACHE_KEYS = ['qr_attempts', 'qr_set_progress'];
 
 const FILTERS = [
   { label: 'All',         value: 'all' },
@@ -35,7 +32,6 @@ export default function QRQuestionListScreen({ navigation }) {
   const { progressMap, reload } = useQuantitativeReasoningProgress();
   const { localAnswers } = useQuantitativeReasoningAttempts();
   const { theme: t } = useTheme();
-  const { user } = useAuth();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -58,10 +54,6 @@ export default function QRQuestionListScreen({ navigation }) {
     setDeleting(true);
     try {
       await Promise.all(CACHE_KEYS.map((key) => AsyncStorage.removeItem(key)));
-      for (const table of DB_TABLES) {
-        const { error: dbError } = await supabase.from(table).delete().eq('user_id', user.id);
-        if (dbError) throw dbError;
-      }
       reload();
     } catch {
       Alert.alert('Error', 'Something went wrong. Please try again.');

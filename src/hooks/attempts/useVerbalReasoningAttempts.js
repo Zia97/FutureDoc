@@ -1,10 +1,8 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 
 const ATTEMPTS_KEY  = 'vr_attempts';
-const PENDING_KEY   = 'vr_pending_sync';
 export const VR_PROGRESS_CACHE_KEY = 'vr_passage_progress';
 
 
@@ -20,8 +18,7 @@ export function useVerbalReasoningAttempts() {
 
   useEffect(() => {
     loadCache().finally(() => setCacheLoading(false));
-    if (user) flushPendingQueue();
-  }, [user]);
+  }, []);
 
   // ── Cache helpers ────────────────────────────────────────────────────────────
 
@@ -36,23 +33,7 @@ export function useVerbalReasoningAttempts() {
           mapped[passageId][questionId] = selectedAnswer;
         }
         setLocalAnswers(mapped);
-        return;
       }
-
-      // No local data — hydrate from DB if logged in
-      if (!user) return;
-      const rows = await db.fetchVRAttempts(user.id);
-      if (!rows || rows.length === 0) return;
-
-      const attempts = {};
-      const mapped = {};
-      for (const { question_id, passage_id, selected_answer } of rows) {
-        attempts[question_id] = { passageId: passage_id, selectedAnswer: selected_answer, answeredAt: new Date().toISOString() };
-        if (!mapped[passage_id]) mapped[passage_id] = {};
-        mapped[passage_id][question_id] = selected_answer;
-      }
-      await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
-      setLocalAnswers(mapped);
     } catch (err) {
       console.error('[useVerbalReasoningAttempts] loadCache failed:', err);
     }
@@ -91,53 +72,6 @@ export function useVerbalReasoningAttempts() {
     }
   }
 
-  async function addToPendingQueue(item) {
-    try {
-      const raw = await AsyncStorage.getItem(PENDING_KEY);
-      const queue = raw ? JSON.parse(raw) : [];
-      queue.push(item);
-      await AsyncStorage.setItem(PENDING_KEY, JSON.stringify(queue));
-    } catch (err) {
-      console.error('[useVerbalReasoningAttempts] addToPendingQueue failed:', err);
-    }
-  }
-
-  // ── DB helpers ───────────────────────────────────────────────────────────────
-
-  async function writeAttemptToDB(userId, { questionId, passageId, selectedAnswer, totalQuestions }) {
-    await db.insertVRAttempt(userId, questionId, passageId, selectedAnswer);
-    const answeredCount = await db.countVRAttemptsForPassage(userId, passageId);
-    const status = answeredCount >= totalQuestions ? 'completed' : 'in_progress';
-    await db.upsertVRPassageProgress(userId, passageId, status, answeredCount, totalQuestions);
-  }
-
-  async function flushPendingQueue() {
-    if (!user) return;
-    try {
-      const raw = await AsyncStorage.getItem(PENDING_KEY);
-      if (!raw) return;
-      const queue = JSON.parse(raw);
-      if (queue.length === 0) return;
-
-      const failed = [];
-      for (const item of queue) {
-        try {
-          await writeAttemptToDB(user.id, item);
-        } catch {
-          failed.push(item);
-        }
-      }
-
-      if (failed.length === 0) {
-        await AsyncStorage.removeItem(PENDING_KEY);
-      } else {
-        await AsyncStorage.setItem(PENDING_KEY, JSON.stringify(failed));
-      }
-    } catch (err) {
-      console.error('[useVerbalReasoningAttempts] flushPendingQueue failed:', err);
-    }
-  }
-
   // ── Public API ───────────────────────────────────────────────────────────────
 
   async function submitAttempt({ questionId, passageId, selectedAnswer, totalQuestions }) {
@@ -149,20 +83,8 @@ export function useVerbalReasoningAttempts() {
     submitting.current.add(questionId);
 
     try {
-      // 1. Always persist locally first — works offline
       const attempts = await saveToCache(questionId, passageId, selectedAnswer);
       if (attempts) await updateProgressCache(passageId, totalQuestions, attempts);
-
-      // 2. Attempt DB write
-      try {
-        await writeAttemptToDB(user.id, { questionId, passageId, selectedAnswer, totalQuestions });
-        // 3. DB succeeded — try to clear any previously queued items
-        await flushPendingQueue();
-      } catch (dbErr) {
-        // 4. Offline / DB error — queue for next opportunity
-        console.error('[useVerbalReasoningAttempts] DB write failed, queuing:', dbErr);
-        await addToPendingQueue({ questionId, passageId, selectedAnswer, totalQuestions });
-      }
     } finally {
       submitting.current.delete(questionId);
     }

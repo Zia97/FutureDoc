@@ -1,11 +1,9 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../../lib/dbQueries';
 import { useAuth } from '../../context/AuthContext';
 
 export const DM_ATTEMPTS_KEY = 'dm_attempts';
 const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
-const PENDING_KEY  = 'dm_pending_sync';
 
 // DM has no parent grouping — questions are standalone.
 // answer is either a string (MCQ) or an object (Yes/No statements).
@@ -25,8 +23,7 @@ export function useDecisionMakingAttempts() {
 
   useEffect(() => {
     loadCache().finally(() => setCacheLoading(false));
-    if (user) flushPendingQueue();
-  }, [user]);
+  }, []);
 
   async function loadCache() {
     try {
@@ -41,25 +38,7 @@ export function useDecisionMakingAttempts() {
         }
         setLocalAnswers(answers);
         setLocalSubmitted(submitted);
-        return;
       }
-
-      // No local data — hydrate from DB if logged in
-      if (!user) return;
-      const rows = await db.fetchDMAttempts(user.id);
-      if (!rows || rows.length === 0) return;
-
-      const attempts = {};
-      const answers   = {};
-      const submitted = {};
-      for (const { question_id, answer } of rows) {
-        attempts[question_id]  = { answer, attemptedAt: new Date().toISOString() };
-        answers[question_id]   = answer;
-        submitted[question_id] = true;
-      }
-      await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
-      setLocalAnswers(answers);
-      setLocalSubmitted(submitted);
     } catch (err) {
       console.error('[useDecisionMakingAttempts] loadCache failed:', err);
     }
@@ -79,48 +58,6 @@ export function useDecisionMakingAttempts() {
     }
   }
 
-  async function addToPendingQueue(item) {
-    try {
-      const raw = await AsyncStorage.getItem(PENDING_KEY);
-      const queue = raw ? JSON.parse(raw) : [];
-      queue.push(item);
-      await AsyncStorage.setItem(PENDING_KEY, JSON.stringify(queue));
-    } catch (err) {
-      console.error('[useDecisionMakingAttempts] addToPendingQueue failed:', err);
-    }
-  }
-
-  async function writeAttemptToDB(userId, { questionId, answer }) {
-    await db.insertDMAttempt(userId, questionId, answer);
-  }
-
-  async function flushPendingQueue() {
-    if (!user) return;
-    try {
-      const raw = await AsyncStorage.getItem(PENDING_KEY);
-      if (!raw) return;
-      const queue = JSON.parse(raw);
-      if (queue.length === 0) return;
-
-      const failed = [];
-      for (const item of queue) {
-        try {
-          await writeAttemptToDB(user.id, item);
-        } catch {
-          failed.push(item);
-        }
-      }
-
-      if (failed.length === 0) {
-        await AsyncStorage.removeItem(PENDING_KEY);
-      } else {
-        await AsyncStorage.setItem(PENDING_KEY, JSON.stringify(failed));
-      }
-    } catch (err) {
-      console.error('[useDecisionMakingAttempts] flushPendingQueue failed:', err);
-    }
-  }
-
   async function submitAttempt({ questionId, answer }) {
     if (!user) {
       console.warn('[useDecisionMakingAttempts] submitAttempt called with no logged-in user');
@@ -131,14 +68,6 @@ export function useDecisionMakingAttempts() {
 
     try {
       await saveToCache(questionId, answer);
-
-      try {
-        await writeAttemptToDB(user.id, { questionId, answer });
-        await flushPendingQueue();
-      } catch (dbErr) {
-        console.error('[useDecisionMakingAttempts] DB write failed, queuing:', dbErr);
-        await addToPendingQueue({ questionId, answer });
-      }
     } finally {
       submitting.current.delete(questionId);
     }

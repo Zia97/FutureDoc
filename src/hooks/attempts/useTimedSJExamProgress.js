@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../../lib/dbQueries';
-import { useAuth } from '../../context/AuthContext';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 
 // Local storage key — stores completed exam results keyed by test.id string
@@ -46,7 +44,6 @@ function computeScores(scenarios, getAnswer) {
 }
 
 export function useTimedSJExamProgress() {
-  const { user } = useAuth();
   // { [testId]: { scorePercent, correctCount, totalQuestions, submittedAt, timeTakenSeconds } }
   const [completedAttempts, setCompletedAttempts] = useState({});
 
@@ -103,21 +100,6 @@ export function useTimedSJExamProgress() {
       console.error('[useTimedSJExamProgress] local save failed:', err);
     }
 
-    // ── 2. Write to DB (best-effort, non-blocking) ───────────────────────────
-    if (!user) return;
-    try {
-      const examAttemptId = await db.insertTimedSJExamAttempt(
-        user.id,
-        numericTestId,
-        timeTakenSeconds,
-        correctCount,
-        scorePercent,
-      );
-      await db.insertTimedSJQuestionAnswers(examAttemptId, user.id, answers);
-    } catch (dbErr) {
-      console.error('[useTimedSJExamProgress] DB save failed:', dbErr);
-      // Local data is already saved — DB write can be retried manually if needed
-    }
   }
 
   // Removes a completed attempt from local storage and DB.
@@ -130,13 +112,6 @@ export function useTimedSJExamProgress() {
       setCompletedAttempts({ ...current });
     } catch (err) {
       console.error('[useTimedSJExamProgress] local delete failed:', err);
-    }
-
-    if (!user) return;
-    try {
-      await db.deleteTimedSJExamAttempt(user.id, getNumericTestId(testId));
-    } catch (err) {
-      console.error('[useTimedSJExamProgress] DB delete failed:', err);
     }
   }
 

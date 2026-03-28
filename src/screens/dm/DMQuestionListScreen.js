@@ -6,11 +6,8 @@ import SectionQuestionList from '../../components/SectionQuestionList';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingProgress } from '../../hooks/queries/useDecisionMakingProgress';
 import { useTheme } from '../../context/ThemeContext';
-import { useAuth } from '../../context/AuthContext';
-import { supabase } from '../../lib/supabase';
 
-const CACHE_KEYS = ['dm_attempts', 'dm_pending_sync'];
-const DB_TABLES = ['decision_making_question_attempts'];
+const CACHE_KEYS = ['dm_attempts'];
 
 const FILTERS = [
   { label: 'All',         value: 'all' },
@@ -31,7 +28,6 @@ export default function DMQuestionListScreen({ navigation }) {
   const { questions, loading, error } = useDecisionMakingQuestions();
   const { progressMap, reload } = useDecisionMakingProgress();
   const { theme: t } = useTheme();
-  const { user } = useAuth();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -54,10 +50,6 @@ export default function DMQuestionListScreen({ navigation }) {
     setDeleting(true);
     try {
       await Promise.all(CACHE_KEYS.map((key) => AsyncStorage.removeItem(key)));
-      for (const table of DB_TABLES) {
-        const { error: dbError } = await supabase.from(table).delete().eq('user_id', user.id);
-        if (dbError) throw dbError;
-      }
       reload();
     } catch {
       Alert.alert('Error', 'Something went wrong. Please try again.');

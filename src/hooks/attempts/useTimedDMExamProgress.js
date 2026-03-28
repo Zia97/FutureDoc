@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../../lib/dbQueries';
-import { useAuth } from '../../context/AuthContext';
 
 const COMPLETED_KEY = 'timed_dm_completed_attempts';
 
@@ -42,7 +40,6 @@ function computeScores(questions, answers) {
 }
 
 export function useTimedDMExamProgress() {
-  const { user } = useAuth();
   const [completedAttempts, setCompletedAttempts] = useState({});
 
   useEffect(() => {
@@ -81,20 +78,6 @@ export function useTimedDMExamProgress() {
       console.error('[useTimedDMExamProgress] local save failed:', err);
     }
 
-    // ── 2. Write to DB (best-effort, non-blocking) ───────────────────────────
-    if (!user) return;
-    try {
-      const examAttemptId = await db.insertTimedDMExamAttempt(
-        user.id,
-        test.id,
-        timeTakenSeconds,
-        correctCount,
-        scorePercent,
-      );
-      await db.insertTimedDMQuestionAnswers(examAttemptId, user.id, answerList);
-    } catch (dbErr) {
-      console.error('[useTimedDMExamProgress] DB save failed:', dbErr);
-    }
   }
 
   async function deleteAttempt(testId) {
@@ -106,13 +89,6 @@ export function useTimedDMExamProgress() {
       setCompletedAttempts({ ...current });
     } catch (err) {
       console.error('[useTimedDMExamProgress] local delete failed:', err);
-    }
-
-    if (!user) return;
-    try {
-      await db.deleteTimedDMExamAttempt(user.id, testId);
-    } catch (err) {
-      console.error('[useTimedDMExamProgress] DB delete failed:', err);
     }
   }
 

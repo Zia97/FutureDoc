@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { db } from '../../lib/dbQueries';
-import { useAuth } from '../../context/AuthContext';
 
 const COMPLETED_KEY = 'timed_vr_completed_attempts';
 
@@ -34,7 +32,6 @@ function computeScores(passages, getAnswer) {
 }
 
 export function useTimedVRExamProgress() {
-  const { user } = useAuth();
   const [completedAttempts, setCompletedAttempts] = useState({});
 
   useEffect(() => {
@@ -90,20 +87,6 @@ export function useTimedVRExamProgress() {
       console.error('[useTimedVRExamProgress] local save failed:', err);
     }
 
-    // ── 2. Write to DB (best-effort, non-blocking) ───────────────────────────
-    if (!user) return;
-    try {
-      const examAttemptId = await db.insertTimedVRExamAttempt(
-        user.id,
-        numericTestId,
-        timeTakenSeconds,
-        correctCount,
-        scorePercent,
-      );
-      await db.insertTimedVRQuestionAnswers(examAttemptId, user.id, answers);
-    } catch (dbErr) {
-      console.error('[useTimedVRExamProgress] DB save failed:', dbErr);
-    }
   }
 
   async function deleteAttempt(testId) {
@@ -115,13 +98,6 @@ export function useTimedVRExamProgress() {
       setCompletedAttempts({ ...current });
     } catch (err) {
       console.error('[useTimedVRExamProgress] local delete failed:', err);
-    }
-
-    if (!user) return;
-    try {
-      await db.deleteTimedVRExamAttempt(user.id, getNumericTestId(testId));
-    } catch (err) {
-      console.error('[useTimedVRExamProgress] DB delete failed:', err);
     }
   }
 
