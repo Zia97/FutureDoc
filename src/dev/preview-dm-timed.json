@@ -1,44 +1,44 @@
 [
   {
-    "id": "timed-dm-test-003",
-    "title": "DM Timed Test 3",
+    "id": "timed-dm-test-004",
+    "title": "DM Timed Test 4",
     "question_count": 35,
     "time_minutes": 37,
     "questions": [
       {
-        "id": "dm3-001-syl",
-        "title": "Surgeons and Doctors",
+        "id": "dm4r-001-syl",
+        "title": "Maritime Signal Flags",
         "type": "syllogism",
-        "stem": "All surgeons are doctors. Some doctors work in hospitals. No surgeons are untrained.",
+        "stem": "All maritime signal flags are colour-coded. Some colour-coded items are waterproof. No maritime signal flags are disposable.",
         "decision_making_question_statements": [
           {
-            "statement_text": "Some surgeons work in hospitals.",
+            "statement_text": "Some maritime signal flags are waterproof.",
             "correct_answer": "No",
-            "answer_reason": "Some doctors work in hospitals, but those doctors may not include any surgeons. The premises do not establish which doctors work in hospitals.",
+            "answer_reason": "All maritime signal flags are colour-coded, and some colour-coded items are waterproof. However, the waterproof colour-coded items may not include any maritime signal flags. We cannot conclude this.",
             "order_index": 1
           },
           {
-            "statement_text": "No untrained people are surgeons.",
+            "statement_text": "No disposable items are maritime signal flags.",
             "correct_answer": "Yes",
-            "answer_reason": "No surgeons are untrained. By the symmetry of universal negative statements, no untrained people are surgeons.",
+            "answer_reason": "'No maritime signal flags are disposable' is a universal negative, which converts symmetrically: no disposable items are maritime signal flags.",
             "order_index": 2
           },
           {
-            "statement_text": "All doctors are surgeons.",
+            "statement_text": "All colour-coded items are maritime signal flags.",
             "correct_answer": "No",
-            "answer_reason": "All surgeons are doctors — not the reverse. Many doctors are not surgeons (e.g. GPs, psychiatrists). This reverses the universal statement.",
+            "answer_reason": "All maritime signal flags are colour-coded — not the reverse. Many colour-coded items (traffic cones, wiring) are not maritime signal flags.",
             "order_index": 3
           },
           {
-            "statement_text": "All surgeons are trained.",
+            "statement_text": "All maritime signal flags are colour-coded and not disposable.",
             "correct_answer": "Yes",
-            "answer_reason": "'No surgeons are untrained' is equivalent to saying every surgeon is trained. This follows directly.",
+            "answer_reason": "Premise 1 states all maritime signal flags are colour-coded. Premise 3 states no maritime signal flags are disposable. Both properties hold for all maritime signal flags.",
             "order_index": 4
           },
           {
-            "statement_text": "Some people who work in hospitals are doctors.",
+            "statement_text": "Some waterproof items are colour-coded.",
             "correct_answer": "Yes",
-            "answer_reason": "Some doctors work in hospitals. Those hospital-working doctors are, by definition, both hospital workers and doctors.",
+            "answer_reason": "'Some colour-coded items are waterproof' converts to 'some waterproof items are colour-coded.' This follows directly by conversion of a particular affirmative.",
             "order_index": 5
           }
         ],
@@ -53,54 +53,54 @@
         "order_index": 1
       },
       {
-        "id": "dm3-002-info",
-        "title": "Charity Donations by Region",
+        "id": "dm4r-002-info",
+        "title": "Volcanic Ash Monitoring",
         "type": "interpreting_info",
-        "stem": "A charity recorded the total donations (in thousands of pounds) received from four UK regions over three months.",
+        "stem": "A volcanological observatory recorded the concentration of airborne ash (μg/m³) at four monitoring stations over three days following an eruption.",
         "table_data": {
-          "headers": ["Region", "October", "November", "December"],
+          "headers": ["Station", "Day 1", "Day 2", "Day 3"],
           "rows": [
-            ["South East", "42", "38", "65"],
-            ["North West", "28", "31", "50"],
-            ["Scotland", "15", "20", "35"],
-            ["Wales", "10", "12", "22"]
+            ["Summit", "480", "350", "210"],
+            ["Valley", "120", "180", "260"],
+            ["Coastal", "90", "75", "60"],
+            ["Upwind", "30", "25", "20"]
           ]
         },
         "decision_making_question_statements": [
           {
-            "statement_text": "Donations from every region increased from November to December.",
-            "correct_answer": "Yes",
-            "answer_reason": "SE: 38→65 (up). NW: 31→50 (up). Scotland: 20→35 (up). Wales: 12→22 (up). All increased.",
+            "statement_text": "The Summit station had the highest concentration on every day.",
+            "correct_answer": "No",
+            "answer_reason": "Day 3: Summit = 210, Valley = 260. The Valley station had the highest concentration on Day 3, not the Summit.",
             "order_index": 1
           },
           {
-            "statement_text": "South East donated more than all other regions combined in October.",
-            "correct_answer": "No",
-            "answer_reason": "SE October = 42. Others combined = 28 + 15 + 10 = 53. 42 < 53.",
+            "statement_text": "Ash concentration at the Coastal station decreased each day.",
+            "correct_answer": "Yes",
+            "answer_reason": "Coastal: 90 → 75 → 60. Each day is lower than the previous.",
             "order_index": 2
           },
           {
-            "statement_text": "Scotland's donations more than doubled from October to December.",
+            "statement_text": "The Valley station's concentration increased each day.",
             "correct_answer": "Yes",
-            "answer_reason": "Scotland October = 15, December = 35. Double of 15 = 30. 35 > 30, so yes it more than doubled.",
+            "answer_reason": "Valley: 120 → 180 → 260. Each day is higher than the previous.",
             "order_index": 3
           },
           {
-            "statement_text": "South East donations decreased between October and November.",
+            "statement_text": "The total concentration across all stations was highest on Day 1.",
             "correct_answer": "Yes",
-            "answer_reason": "SE October = 42, November = 38. The donations fell by £4,000.",
+            "answer_reason": "Day 1: 480 + 120 + 90 + 30 = 720. Day 2: 350 + 180 + 75 + 25 = 630. Day 3: 210 + 260 + 60 + 20 = 550. Day 1 (720) is the highest.",
             "order_index": 4
           },
           {
-            "statement_text": "Wales contributed more than 15% of total donations in December.",
+            "statement_text": "The Upwind station's Day 1 concentration was more than double its Day 3 concentration.",
             "correct_answer": "No",
-            "answer_reason": "December total = 65 + 50 + 35 + 22 = 172. Wales = 22. 22/172 ≈ 12.8%. 12.8% is less than 15%, so Wales did not contribute more than 15%.",
+            "answer_reason": "Double of Day 3 (20) is 40. Day 1 is 30, which is less than 40. So Day 1 was not more than double Day 3.",
             "order_index": 5
           }
         ],
         "correct_answer": {
-          "0": "Yes",
-          "1": "No",
+          "0": "No",
+          "1": "Yes",
           "2": "Yes",
           "3": "Yes",
           "4": "No"
@@ -109,365 +109,641 @@
         "order_index": 2
       },
       {
-        "id": "dm3-003-arg",
-        "title": "Mandatory Organ Donation",
-        "type": "strongest_argument",
-        "stem": "All citizens should be automatically registered as organ donors unless they choose to opt out.",
+        "id": "dm4r-003-venn",
+        "title": "Musical Instrument Skills",
+        "type": "venn_diagram",
+        "stem": "A community centre surveyed 50 members about the instruments they can play. 7 play Piano only, 5 play Guitar only, 4 play Drums only, 6 play Piano and Guitar only, 3 play Piano and Drums only, 4 play Guitar and Drums only, 8 play all three instruments, and 13 play none.\n\nThe circle represents Piano, the pentagon represents Guitar, and the star represents Drums.\n\nWhich of the following diagrams best represents the data?",
         "options": [
           {
             "label": "A",
-            "text": "Yes; countries with opt-out systems have significantly higher organ donation rates, which directly reduces the number of patients dying while waiting for transplants."
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_all_overlap",
+              "sets": [
+                { "id": "set1", "label": "Piano", "shape": "circle" },
+                { "id": "set2", "label": "Guitar", "shape": "pentagon" },
+                { "id": "set3", "label": "Drums", "shape": "star" }
+              ],
+              "regions": { "set1_only": 7, "set2_only": 5, "set3_only": 4, "set1_set2": 6, "set1_set3": 3, "set2_set3": 4, "all_three": 8, "outside": 13 }
+            },
+            "order_index": 1
           },
           {
             "label": "B",
-            "text": "No; the government should not make decisions about people's bodies without their explicit written consent."
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_all_overlap",
+              "sets": [
+                { "id": "set1", "label": "Piano", "shape": "circle" },
+                { "id": "set2", "label": "Guitar", "shape": "pentagon" },
+                { "id": "set3", "label": "Drums", "shape": "star" }
+              ],
+              "regions": { "set1_only": 7, "set2_only": 5, "set3_only": 4, "set1_set2": 3, "set1_set3": 6, "set2_set3": 4, "all_three": 8, "outside": 13 }
+            },
+            "order_index": 2
           },
           {
             "label": "C",
-            "text": "Yes; most people intend to donate their organs but simply never get around to registering."
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_all_overlap",
+              "sets": [
+                { "id": "set1", "label": "Piano", "shape": "circle" },
+                { "id": "set2", "label": "Guitar", "shape": "pentagon" },
+                { "id": "set3", "label": "Drums", "shape": "star" }
+              ],
+              "regions": { "set1_only": 5, "set2_only": 7, "set3_only": 4, "set1_set2": 6, "set1_set3": 3, "set2_set3": 4, "all_three": 8, "outside": 13 }
+            },
+            "order_index": 3
           },
           {
             "label": "D",
-            "text": "No; organ transplants are expensive and place a burden on the NHS budget."
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_all_overlap",
+              "sets": [
+                { "id": "set1", "label": "Piano", "shape": "circle" },
+                { "id": "set2", "label": "Guitar", "shape": "pentagon" },
+                { "id": "set3", "label": "Drums", "shape": "star" }
+              ],
+              "regions": { "set1_only": 7, "set2_only": 5, "set3_only": 4, "set1_set2": 6, "set1_set3": 3, "set2_set3": 8, "all_three": 4, "outside": 13 }
+            },
+            "order_index": 4
           }
         ],
         "correct_answer": "A",
-        "answer_reason": "Option A is the strongest argument because it provides concrete, evidence-based reasoning — opt-out systems demonstrably save lives by increasing available organs. Option B raises a valid ethical concern but does not address the life-saving benefit. Option C is speculative about people's intentions. Option D is irrelevant to the opt-out registration question and makes a weak cost argument.",
+        "answer_reason": "From the stem: Piano only = 7, Guitar only = 5, Drums only = 4, Piano + Guitar = 6, Piano + Drums = 3, Guitar + Drums = 4, all three = 8, none = 13. Total = 50. Only option A places every value correctly. Option B swaps the Piano–Guitar and Piano–Drums overlaps. Option C swaps the Piano-only and Guitar-only counts. Option D swaps the Guitar–Drums overlap with the all-three centre.",
         "order_index": 3
       },
       {
-        "id": "dm3-004-logic",
-        "title": "Hotel Room Allocation",
+        "id": "dm4r-004-logic",
+        "title": "Telescope Observation Schedule",
         "type": "logic_puzzle",
-        "stem": "Four guests – Priya, Quinn, Ravi, and Suki – are each assigned a different room on floors 1 to 4 of a hotel.\n\n• Ravi is on a higher floor than Priya.\n• Suki is on floor 3.\n• Quinn is not on a floor adjacent to Suki's floor.\n\nWhich floor is Ravi on?",
+        "stem": "Five astronomers — Clarke, Diaz, Frost, Gupta, and Holt — each have one observation slot on a telescope across five consecutive nights (Monday to Friday).\n\n• Clarke observes on Monday.\n• Gupta observes the night immediately before Holt.\n• Frost does not observe on a night adjacent to Clarke's.\n• Diaz observes later in the week than Frost.\n\nOn which night does Frost observe?",
         "options": [
-          { "label": "A", "text": "Floor 1" },
-          { "label": "B", "text": "Floor 2" },
-          { "label": "C", "text": "Floor 3" },
-          { "label": "D", "text": "Floor 4" }
+          { "label": "A", "text": "Tuesday" },
+          { "label": "B", "text": "Wednesday" },
+          { "label": "C", "text": "Thursday" },
+          { "label": "D", "text": "Friday" }
         ],
-        "correct_answer": "D",
-        "answer_reason": "Suki is on floor 3. Quinn cannot be adjacent to Suki (not floor 2 or 4), so Quinn = floor 1. Remaining floors for Priya and Ravi: 2 and 4. Ravi is higher than Priya, so Priya = 2, Ravi = 4.",
+        "correct_answer": "C",
+        "answer_reason": "Clarke = Monday. Frost ≠ Tuesday (adjacent to Monday). Gupta–Holt consecutive (Gupta then Holt). Diaz > Frost. Remaining: Diaz, Frost, Gupta, Holt in {Tue, Wed, Thu, Fri}. Frost ∈ {Wed, Thu, Fri}. If Frost = Wed: Diaz ∈ {Thu, Fri}. Gupta–Holt pair from remaining must be consecutive. Only pair is (Thu, Fri), so Gupta = Thu, Holt = Fri, Diaz = Tue. But Diaz > Frost requires Diaz > Wed; Tue < Wed. ✗ If Frost = Thu: Diaz = Fri. Gupta, Holt ∈ {Tue, Wed}. Gupta = Tue, Holt = Wed. Consecutive ✓. All constraints satisfied. ✓ If Frost = Fri: Diaz > Fri is impossible. ✗ Only valid: Clarke(Mon), Gupta(Tue), Holt(Wed), Frost(Thu), Diaz(Fri).",
         "order_index": 4
       },
       {
-        "id": "dm3-005-venn",
-        "title": "Gym Membership Types",
-        "type": "venn_diagram",
-        "stem": "A gym has 30 members. 10 have pool access only, 8 have gym-floor access only, and 12 have both pool and gym-floor access.\n\nWhich of the following diagrams best represents the data?",
+        "id": "dm4r-005-arg",
+        "title": "Congestion Pricing in UK Cities",
+        "type": "strongest_argument",
+        "stem": "All UK cities with populations exceeding 100,000 should introduce congestion charging zones.",
         "options": [
           {
             "label": "A",
-            "option_data": {
-              "diagramLayout": "two_vertical_overlap",
-              "sets": [
-                { "id": "set1", "label": "Pool", "shape": "oval" },
-                { "id": "set2", "label": "Gym Floor", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 10, "set1_set2": 12, "set2_only": 8 }
-            }
+            "text": "Yes; Transport for London's congestion charge reduced traffic volumes by 30% in the central zone within its first year and generated over £230 million annually that was reinvested in public transport improvements."
           },
           {
             "label": "B",
-            "option_data": {
-              "diagramLayout": "two_vertical_overlap",
-              "sets": [
-                { "id": "set1", "label": "Pool", "shape": "oval" },
-                { "id": "set2", "label": "Gym Floor", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 8, "set1_set2": 12, "set2_only": 10 }
-            }
+            "text": "No; some elderly drivers may find it confusing to navigate the payment systems required for congestion zones."
           },
           {
             "label": "C",
-            "option_data": {
-              "diagramLayout": "two_vertical_overlap",
-              "sets": [
-                { "id": "set1", "label": "Pool", "shape": "oval" },
-                { "id": "set2", "label": "Gym Floor", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 12, "set1_set2": 10, "set2_only": 8 }
-            }
+            "text": "Yes; reducing traffic would mean fewer cars on the road, which most people would agree is a positive change."
           },
           {
             "label": "D",
-            "option_data": {
-              "diagramLayout": "two_vertical_overlap",
-              "sets": [
-                { "id": "set1", "label": "Pool", "shape": "oval" },
-                { "id": "set2", "label": "Gym Floor", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 10, "set1_set2": 8, "set2_only": 12 }
-            }
+            "text": "No; congestion charges might discourage people from visiting city centre shops, harming local businesses."
           }
         ],
         "correct_answer": "A",
-        "answer_reason": "Pool only = 10 (set1_only). Both = 12 (set1_set2). Gym floor only = 8 (set2_only). Total = 10 + 12 + 8 = 30. Only option A has all three values correct. B swaps set1_only and set2_only. C puts the overlap as 10 and pool-only as 12. D puts the overlap as 8.",
+        "answer_reason": "Option A is the strongest argument because it cites a specific, real-world example — Transport for London — with quantified outcomes: a 30% traffic reduction and £230 million in revenue reinvested in public transport. This directly and specifically supports the proposal. Option B raises a narrow concern about elderly drivers navigating payment systems, which could be addressed through design improvements rather than abandoning the policy. Option C makes a vague appeal without evidence or specifics. Option D raises a plausible but unquantified concern about retail impact that does not address the core transport and environmental benefits.",
         "order_index": 5
       },
       {
-        "id": "dm3-006-syl",
-        "title": "Vaccines and Immunisation",
-        "type": "syllogism",
-        "stem": "All approved vaccines undergo clinical trials. Some clinical trials are funded by the government. No approved vaccines are untested.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Some approved vaccines are funded by the government.",
-            "correct_answer": "No",
-            "answer_reason": "Some clinical trials are government-funded, but we cannot determine whether the trials for approved vaccines specifically are among those. The overlap is not established.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All approved vaccines have been tested.",
-            "correct_answer": "Yes",
-            "answer_reason": "'No approved vaccines are untested' is logically equivalent to 'all approved vaccines have been tested.'",
-            "order_index": 2
-          },
-          {
-            "statement_text": "All things that undergo clinical trials are approved vaccines.",
-            "correct_answer": "No",
-            "answer_reason": "All approved vaccines undergo trials, but many drugs undergo trials and are never approved. This reverses the premise.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Some government-funded trials involve approved vaccines.",
-            "correct_answer": "No",
-            "answer_reason": "We know some trials are government-funded and all approved vaccines undergo trials, but the government-funded trials could all be for non-vaccine products. The connection is not established.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "No untested products are approved vaccines.",
-            "correct_answer": "Yes",
-            "answer_reason": "No approved vaccines are untested. By symmetry of the universal negative, no untested products are approved vaccines.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "Yes",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 6
-      },
-      {
-        "id": "dm3-007-prob",
-        "title": "Train Delays",
+        "id": "dm4r-006-prob",
+        "title": "Warehouse Inventory Sampling",
         "type": "probabilistic",
-        "stem": "A commuter rail service runs 200 trains per week. Records show that 30 trains are delayed each week. Of the delayed trains, 80% arrive within 10 minutes of the scheduled time. Of the trains that are on time, 5% are recorded as delayed due to a logging error.",
+        "stem": "A warehouse stores 500 electronic components. 60% are Type A and the rest are Type B. Quality testing found that 10% of Type A components are defective and 25% of Type B components are defective.",
         "options": [
           {
             "label": "A",
-            "text": "The probability that a randomly selected train is genuinely delayed by more than 10 minutes is 3%."
+            "text": "More than 20% of all components are defective."
           },
           {
             "label": "B",
-            "text": "More than 40 trains per week are logged as delayed."
+            "text": "There are more defective Type A components than defective Type B components."
           },
           {
             "label": "C",
-            "text": "If a train is logged as delayed, there is approximately a 50% chance it is genuinely delayed."
+            "text": "If a component is defective, it is more likely to be Type B than Type A."
           },
           {
             "label": "D",
-            "text": "More than 15 on-time trains per week are incorrectly logged as delayed."
+            "text": "Fewer than 70 components are defective in total."
           }
         ],
-        "correct_answer": "A",
-        "answer_reason": "30 trains are delayed. 20% of those (6 trains) are delayed by more than 10 min. 6/200 = 3%, so A is correct. On-time = 170. Logging errors: 170 × 0.05 = 8.5. Total logged delayed: 30 + 8.5 = 38.5, not > 40, so B is wrong. P(genuine | logged) = 30/38.5 ≈ 78%, not 50%, so C is wrong. Only 8.5 on-time trains are falsely logged, not >15, so D is wrong.",
-        "order_index": 7
+        "correct_answer": "C",
+        "answer_reason": "Type A: 500 × 0.60 = 300. Defective A: 300 × 0.10 = 30. Type B: 500 × 0.40 = 200. Defective B: 200 × 0.25 = 50. Total defective: 30 + 50 = 80. A is wrong: 80/500 = 16%, not more than 20%. B is wrong: 30 < 50, so more defective Type B. C is correct: P(B | defective) = 50/80 = 62.5%, which exceeds 50%. D is wrong: 80 > 70.",
+        "order_index": 6
       },
       {
-        "id": "dm3-008-venn",
-        "title": "Science Fair Entries",
-        "type": "venn_diagram",
-        "stem": "The diagram shows students categorised by which science subjects they entered projects in at the school fair. Each letter marks a different region.\n\nWhich letter represents students who entered projects in both Physics and Chemistry but not Biology?",
-        "stimulus_diagram": {
-          "diagramLayout": "three_all_overlap",
-          "sets": [
-            { "id": "set1", "label": "Physics", "shape": "parallelogram" },
-            { "id": "set2", "label": "Chemistry", "shape": "star" },
-            { "id": "set3", "label": "Biology", "shape": "oval" }
-          ],
-          "regions": {
-            "set1_only": "J",
-            "set2_only": "K",
-            "set3_only": "L",
-            "set1_set2": "M",
-            "set1_set3": "N",
-            "set2_set3": "P",
-            "all_three": "Q",
-            "outside": "R"
-          }
-        },
-        "options": [
-          { "label": "A", "text": "Letter N" },
-          { "label": "B", "text": "Letter M" },
-          { "label": "C", "text": "Letter P" },
-          { "label": "D", "text": "Letter Q" }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Physics = parallelogram (set1), Chemistry = star (set2), Biology = oval (set3). The region inside Physics AND Chemistry but outside Biology is set1_set2 = M. N is Physics ∩ Biology (no Chemistry). P is Chemistry ∩ Biology (no Physics). Q is all three. Answer: B (Letter M).",
-        "order_index": 8
-      },
-      {
-        "id": "dm3-009-passage-syl",
-        "title": "The Rise of Telemedicine",
+        "id": "dm4r-007-passage",
+        "title": "UK Coastal Erosion",
         "type": "syllogism",
-        "stem": "The adoption of telemedicine accelerated dramatically during the pandemic, with virtual consultations rising by over 300% in the UK. Many patients reported shorter waiting times and greater convenience, particularly those in rural areas who previously faced long journeys to clinics. However, critics noted that physical examinations remained impossible through video calls, and elderly patients often struggled with the required technology. The British Medical Association recommended a hybrid model, where routine follow-ups and minor ailments could be handled remotely, but initial assessments and complex conditions should remain face-to-face.",
+        "stem": "The Environment Agency estimates that approximately 28% of England's coastline is affected by erosion, with over 700 properties at risk of loss to the sea within the next 20 years. In Norfolk, the Happisburgh cliff face has retreated by more than 250 metres since 1600, with an average loss of 2 metres per year in recent decades. The government allocated £5.2 billion in flood and coastal erosion risk management funding for the period 2021 to 2027, the largest investment in England's history. However, local councils reported that only 12% of coastline identified as needing protection has received funded intervention. The Pathfinder programme, launched in 2012, offered support to 15 coastal communities exploring adaptive strategies such as managed retreat. Environmental groups argued that climate change is accelerating erosion rates beyond historical projections, while the National Trust warned that 500 miles of its coastal land is vulnerable.",
         "decision_making_question_statements": [
           {
-            "statement_text": "Virtual consultations became more common during the pandemic.",
+            "statement_text": "More than a quarter of England's coastline is affected by erosion.",
             "correct_answer": "Yes",
-            "answer_reason": "The passage states that virtual consultations rose by over 300% during the pandemic, which directly supports this conclusion.",
+            "answer_reason": "The passage states 'approximately 28%' is affected. 28% exceeds 25% (a quarter).",
             "order_index": 1
           },
           {
-            "statement_text": "All elderly patients were unable to access telemedicine.",
+            "statement_text": "The Happisburgh cliff face has retreated by more than 300 metres since 1600.",
             "correct_answer": "No",
-            "answer_reason": "The passage says elderly patients 'often struggled' with the technology — 'often' does not mean 'all'. Some elderly patients may have managed successfully.",
+            "answer_reason": "The passage states 'more than 250 metres,' not 300. 250 is less than 300.",
             "order_index": 2
           },
           {
-            "statement_text": "The BMA recommended that all medical consultations should be conducted remotely.",
-            "correct_answer": "No",
-            "answer_reason": "The BMA recommended a hybrid model — remote for routine follow-ups and minor ailments, but face-to-face for initial assessments and complex conditions. Not all consultations remotely.",
+            "statement_text": "The government invested more than £5 billion in flood and coastal erosion management.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states '£5.2 billion,' which exceeds £5 billion.",
             "order_index": 3
           },
           {
-            "statement_text": "Patients in rural areas particularly benefited from telemedicine.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states rural patients previously faced long journeys and that they reported shorter waiting times and greater convenience through telemedicine.",
+            "statement_text": "More than half of the coastline needing protection has received funded intervention.",
+            "correct_answer": "No",
+            "answer_reason": "The passage states 'only 12% of coastline identified as needing protection has received funded intervention.' 12% is far less than half.",
             "order_index": 4
           },
           {
-            "statement_text": "Physical examinations can be conducted effectively through video calls.",
+            "statement_text": "The Pathfinder programme supported 20 coastal communities.",
             "correct_answer": "No",
-            "answer_reason": "The passage explicitly states that physical examinations 'remained impossible through video calls.'",
+            "answer_reason": "The passage states the programme 'offered support to 15 coastal communities,' not 20.",
             "order_index": 5
           }
         ],
         "correct_answer": {
           "0": "Yes",
           "1": "No",
+          "2": "Yes",
+          "3": "No",
+          "4": "No"
+        },
+        "answer_reason": null,
+        "order_index": 7
+      },
+      {
+        "id": "dm4r-008-info",
+        "title": "Solar Panel Installation Rates",
+        "type": "interpreting_info",
+        "stem": "A renewable energy agency recorded the number of solar panel installations (in thousands) across four UK regions over four quarters.",
+        "table_data": {
+          "headers": ["Region", "Q1", "Q2", "Q3", "Q4"],
+          "rows": [
+            ["South East", "12.4", "15.8", "18.2", "14.6"],
+            ["Midlands", "8.6", "10.2", "11.5", "9.8"],
+            ["North West", "6.3", "7.8", "9.1", "7.4"],
+            ["Scotland", "4.2", "5.6", "7.3", "5.1"]
+          ]
+        },
+        "decision_making_question_statements": [
+          {
+            "statement_text": "The South East had the most installations in every quarter.",
+            "correct_answer": "Yes",
+            "answer_reason": "South East: Q1 = 12.4, Q2 = 15.8, Q3 = 18.2, Q4 = 14.6. All are the highest in their respective quarters.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Installations in Scotland more than doubled from Q1 to Q3.",
+            "correct_answer": "No",
+            "answer_reason": "Scotland Q1 = 4.2. Double of 4.2 = 8.4. Scotland Q3 = 7.3, which is less than 8.4. Installations did not more than double.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "The total installations across all regions were highest in Q3.",
+            "correct_answer": "Yes",
+            "answer_reason": "Q1: 12.4 + 8.6 + 6.3 + 4.2 = 31.5. Q2: 15.8 + 10.2 + 7.8 + 5.6 = 39.4. Q3: 18.2 + 11.5 + 9.1 + 7.3 = 46.1. Q4: 14.6 + 9.8 + 7.4 + 5.1 = 36.9. Q3 (46.1) is the highest.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "North West installations exceeded Scotland's in every quarter.",
+            "correct_answer": "Yes",
+            "answer_reason": "Q1: 6.3 > 4.2. Q2: 7.8 > 5.6. Q3: 9.1 > 7.3. Q4: 7.4 > 5.1. North West exceeds Scotland every quarter.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "The Midlands had consistently increasing installations throughout the year.",
+            "correct_answer": "No",
+            "answer_reason": "Midlands: Q1 = 8.6, Q2 = 10.2, Q3 = 11.5, Q4 = 9.8. Installations dropped from Q3 to Q4 (11.5 → 9.8), so the increase was not consistent.",
+            "order_index": 5
+          }
+        ],
+        "correct_answer": {
+          "0": "Yes",
+          "1": "No",
+          "2": "Yes",
+          "3": "Yes",
+          "4": "No"
+        },
+        "answer_reason": null,
+        "order_index": 8
+      },
+      {
+        "id": "dm4r-009-venn",
+        "title": "Campus Club Membership",
+        "type": "venn_diagram",
+        "stem": "The diagram shows students categorised by their club membership. The trapezoid represents Debate Club members and the hexagon represents Robotics Club members. Each letter marks a different region.\n\nWhich letter represents a student who is in the Debate Club but not the Robotics Club?",
+        "stimulus_diagram": {
+          "diagramLayout": "two_overlap",
+          "sets": [
+            { "id": "set1", "label": "Debate Club", "shape": "trapezoid" },
+            { "id": "set2", "label": "Robotics Club", "shape": "hexagon" }
+          ],
+          "regions": {
+            "set1_only": "P",
+            "set2_only": "Q",
+            "set1_set2": "R",
+            "outside": "S"
+          }
+        },
+        "options": [
+          { "label": "A", "text": "Letter P", "order_index": 1 },
+          { "label": "B", "text": "Letter Q", "order_index": 2 },
+          { "label": "C", "text": "Letter R", "order_index": 3 },
+          { "label": "D", "text": "Letter S", "order_index": 4 }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The trapezoid represents Debate Club (set1) and the hexagon represents Robotics Club (set2). Region P is inside the trapezoid only — Debate Club but not Robotics Club. Letter Q is Robotics only. Letter R is both clubs. Letter S is outside both. The correct answer is A (Letter P).",
+        "order_index": 9
+      },
+      {
+        "id": "dm4r-010-logic",
+        "title": "Mountain Expedition Team Selection",
+        "type": "logic_puzzle",
+        "stem": "A climbing team must select exactly 3 members from 6 candidates — Anders, Blake, Chen, Drake, Ellis, and Fry — for a mountain expedition.\n\n• If Anders is selected, Chen must also be selected.\n• Blake and Drake cannot both be selected.\n• Ellis must be selected.\n• If Chen is not selected, Fry must be selected.\n\nWhich of the following is a valid team?",
+        "options": [
+          { "label": "A", "text": "Ellis, Anders, Drake" },
+          { "label": "B", "text": "Ellis, Chen, Blake" },
+          { "label": "C", "text": "Ellis, Blake, Drake" },
+          { "label": "D", "text": "Ellis, Anders, Fry" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "A: Anders is selected, so Chen must be selected (constraint 1). Chen is not included. ✗ B: Ellis ✓. Anders not selected, so constraint 1 does not apply. Blake included without Drake, so constraint 2 satisfied. Chen is selected, so constraint 4 does not apply. All constraints met. ✓ C: Blake and Drake are both selected. ✗ (constraint 2) D: Anders is selected, so Chen must be selected (constraint 1). Chen is not included. ✗",
+        "order_index": 10
+      },
+      {
+        "id": "dm4r-011-syl",
+        "title": "Textile Dye Processes",
+        "type": "syllogism",
+        "stem": "All indigo dyes are plant-based. All plant-based dyes are water-soluble. Some water-soluble substances are biodegradable.",
+        "decision_making_question_statements": [
+          {
+            "statement_text": "All indigo dyes are water-soluble.",
+            "correct_answer": "Yes",
+            "answer_reason": "All indigo dyes are plant-based, and all plant-based dyes are water-soluble. By transitive reasoning, all indigo dyes are water-soluble.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Some biodegradable substances are water-soluble.",
+            "correct_answer": "Yes",
+            "answer_reason": "'Some water-soluble substances are biodegradable' can be converted: some biodegradable substances are water-soluble.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "All water-soluble substances are indigo dyes.",
+            "correct_answer": "No",
+            "answer_reason": "All indigo dyes are water-soluble — not the reverse. Honey and table salt are water-soluble but are not indigo dyes.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Some indigo dyes are biodegradable.",
+            "correct_answer": "No",
+            "answer_reason": "Some water-soluble substances are biodegradable, but those biodegradable water-soluble substances may not include any indigo dyes. The premises do not establish which water-soluble substances are biodegradable.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "All plant-based dyes are indigo dyes.",
+            "correct_answer": "No",
+            "answer_reason": "All indigo dyes are plant-based — not the reverse. Turmeric and beetroot are plant-based dyes but are not indigo.",
+            "order_index": 5
+          }
+        ],
+        "correct_answer": {
+          "0": "Yes",
+          "1": "Yes",
+          "2": "No",
+          "3": "No",
+          "4": "No"
+        },
+        "answer_reason": null,
+        "order_index": 11
+      },
+      {
+        "id": "dm4r-012-info",
+        "title": "Tidal Energy Output",
+        "type": "interpreting_info",
+        "stem": "A marine energy agency recorded the electricity output (GWh) from five tidal power stations over four months.",
+        "table_data": {
+          "headers": ["Station", "March", "April", "May", "June"],
+          "rows": [
+            ["Swansea", "4.2", "5.1", "5.8", "6.3"],
+            ["Pentland", "7.8", "8.2", "7.5", "8.0"],
+            ["Severn", "3.6", "4.0", "4.4", "4.8"],
+            ["Mersey", "2.1", "2.5", "2.8", "3.0"],
+            ["Solent", "1.5", "1.8", "2.2", "2.4"]
+          ]
+        },
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Pentland produced the most electricity every month.",
+            "correct_answer": "Yes",
+            "answer_reason": "Pentland: March = 7.8, April = 8.2, May = 7.5, June = 8.0. All are the highest in their respective months.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Swansea's output increased every month.",
+            "correct_answer": "Yes",
+            "answer_reason": "Swansea: 4.2 → 5.1 → 5.8 → 6.3. Each month is higher than the previous.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "Pentland's output increased every month.",
+            "correct_answer": "No",
+            "answer_reason": "Pentland: April = 8.2, May = 7.5. Output decreased from April to May.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "The combined output of Mersey and Solent exceeded Severn's output in June.",
+            "correct_answer": "Yes",
+            "answer_reason": "June: Mersey (3.0) + Solent (2.4) = 5.4. Severn = 4.8. 5.4 > 4.8.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "The total output across all stations was highest in April.",
+            "correct_answer": "No",
+            "answer_reason": "March: 19.2. April: 21.6. May: 22.7. June: 24.5. The highest total was in June (24.5), not April.",
+            "order_index": 5
+          }
+        ],
+        "correct_answer": {
+          "0": "Yes",
+          "1": "Yes",
           "2": "No",
           "3": "Yes",
           "4": "No"
         },
         "answer_reason": null,
-        "order_index": 9
+        "order_index": 12
       },
       {
-        "id": "dm3-010-info",
-        "title": "Hospital Bed Occupancy",
-        "type": "interpreting_info",
-        "stem": "A hospital trust recorded the percentage bed occupancy rate across four wards over three quarters.",
-        "table_data": {
-          "headers": ["Ward", "Q1", "Q2", "Q3"],
-          "rows": [
-            ["A&E", "92", "88", "95"],
-            ["Maternity", "78", "82", "80"],
-            ["Surgical", "85", "90", "88"],
-            ["Paediatric", "70", "65", "72"]
-          ]
-        },
-        "decision_making_question_statements": [
+        "id": "dm4r-013-arg",
+        "title": "Mandatory Salary Transparency",
+        "type": "strongest_argument",
+        "stem": "All employers with more than 50 staff should be legally required to publish the salary ranges for every job role.",
+        "options": [
           {
-            "statement_text": "A&E had the highest occupancy rate in every quarter.",
-            "correct_answer": "No",
-            "answer_reason": "In Q2: A&E = 88%, Surgical = 90%. Surgical was higher in Q2.",
+            "label": "A",
+            "text": "Yes; the UK's Office for National Statistics found that the gender pay gap in 2024 was 14.3% for all employees, and research from countries with transparency laws — including Denmark and Norway — showed the gap narrowed by 7% within five years of implementation."
+          },
+          {
+            "label": "B",
+            "text": "No; publishing salaries could cause resentment among existing staff who discover colleagues in similar roles earn more."
+          },
+          {
+            "label": "C",
+            "text": "Yes; everyone deserves to know what others earn because transparency is always a good thing."
+          },
+          {
+            "label": "D",
+            "text": "No; salary negotiations are a private matter between employer and employee and should remain confidential."
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Option A is the strongest argument because it cites specific data — a 14.3% gender pay gap from the ONS — and provides international evidence from Denmark and Norway showing a measurable 7% reduction following transparency legislation. This directly and specifically supports the proposal. Option B raises a plausible workplace dynamics concern but does not counter the systemic benefits of transparency. Option C makes a vague appeal to transparency as a principle without providing evidence. Option D asserts a preference for confidentiality without engaging with the documented harms of pay secrecy.",
+        "order_index": 13
+      },
+      {
+        "id": "dm4r-014-prob",
+        "title": "Auction Bidding Outcomes",
+        "type": "probabilistic",
+        "stem": "At a vintage car auction, 200 lots were offered. 40% were sold to telephone bidders and the rest to room bidders. Of the telephone bidder purchases, 25% exceeded the pre-auction estimate. Of the room bidder purchases, 50% exceeded the pre-auction estimate.",
+        "options": [
+          {
+            "label": "A",
+            "text": "More than half of all lots exceeded the pre-auction estimate."
+          },
+          {
+            "label": "B",
+            "text": "Room bidders purchased more lots that exceeded the estimate than telephone bidders did."
+          },
+          {
+            "label": "C",
+            "text": "The total number of lots exceeding the estimate was 90."
+          },
+          {
+            "label": "D",
+            "text": "If a lot exceeded the estimate, it was more likely purchased by a telephone bidder."
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Telephone: 200 × 0.40 = 80. Exceeded: 80 × 0.25 = 20. Room: 200 × 0.60 = 120. Exceeded: 120 × 0.50 = 60. Total exceeded: 20 + 60 = 80. A is wrong: 80/200 = 40%, not more than half. B is correct: room bidders had 60 exceeding lots vs 20 for telephone. C is wrong: total exceeded is 80, not 90. D is wrong: P(telephone | exceeded) = 20/80 = 25%, so it was more likely purchased by a room bidder.",
+        "order_index": 14
+      },
+      {
+        "id": "dm4r-015-venn",
+        "title": "Vehicle Classification",
+        "type": "venn_diagram",
+        "stem": "A transport authority categorised 45 vehicles. All Motor Vehicles include Cars as a subset, and all Cars include Electric Cars as a subset. 15 are Motor Vehicles that are not Cars, 18 are Cars that are not Electric, 7 are Electric Cars, and 5 are none of these.\n\nThe rectangle represents Motor Vehicles, the oval represents Cars, and the diamond represents Electric Cars.\n\nWhich of the following diagrams best represents the data?",
+        "options": [
+          {
+            "label": "A",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_nested",
+              "sets": [
+                { "id": "set1", "label": "Motor Vehicles", "shape": "rectangle" },
+                { "id": "set2", "label": "Cars", "shape": "oval" },
+                { "id": "set3", "label": "Electric Cars", "shape": "diamond" }
+              ],
+              "regions": { "set1_only": 15, "set1_set2": 18, "all_three": 7, "outside": 5 }
+            },
             "order_index": 1
           },
           {
-            "statement_text": "Paediatric ward had the lowest occupancy in every quarter.",
-            "correct_answer": "Yes",
-            "answer_reason": "Q1: 70% (lowest). Q2: 65% (lowest). Q3: 72% (lowest). Paediatric is consistently the lowest.",
+            "label": "B",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_nested",
+              "sets": [
+                { "id": "set1", "label": "Motor Vehicles", "shape": "rectangle" },
+                { "id": "set2", "label": "Cars", "shape": "oval" },
+                { "id": "set3", "label": "Electric Cars", "shape": "diamond" }
+              ],
+              "regions": { "set1_only": 18, "set1_set2": 15, "all_three": 7, "outside": 5 }
+            },
             "order_index": 2
           },
           {
-            "statement_text": "Maternity occupancy increased from Q1 to Q3.",
-            "correct_answer": "Yes",
-            "answer_reason": "Maternity Q1 = 78%, Q3 = 80%. 80 > 78, so it increased overall (though it dipped in Q3 from Q2's 82%).",
+            "label": "C",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_nested",
+              "sets": [
+                { "id": "set1", "label": "Motor Vehicles", "shape": "rectangle" },
+                { "id": "set2", "label": "Cars", "shape": "oval" },
+                { "id": "set3", "label": "Electric Cars", "shape": "diamond" }
+              ],
+              "regions": { "set1_only": 15, "set1_set2": 18, "all_three": 5, "outside": 7 }
+            },
             "order_index": 3
           },
           {
-            "statement_text": "The range of occupancy across all wards was smallest in Q2.",
+            "label": "D",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "three_nested",
+              "sets": [
+                { "id": "set1", "label": "Motor Vehicles", "shape": "rectangle" },
+                { "id": "set2", "label": "Cars", "shape": "oval" },
+                { "id": "set3", "label": "Electric Cars", "shape": "diamond" }
+              ],
+              "regions": { "set1_only": 15, "set1_set2": 7, "all_three": 18, "outside": 5 }
+            },
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "From the stem: Motor Vehicles only (not Cars) = 15, Cars only (not Electric) = 18, Electric Cars = 7, none = 5. Total = 45. Only option A places every value correctly. Option B swaps the Motor-Vehicles-only and Cars-only counts. Option C swaps the Electric Cars and none counts. Option D swaps the Cars-only and Electric Cars counts.",
+        "order_index": 15
+      },
+      {
+        "id": "dm4r-016-logic",
+        "title": "Antique Clock Restoration",
+        "type": "logic_puzzle",
+        "stem": "A clockmaker must restore five antique clocks — a Grandfather, a Mantel, a Carriage, a Cuckoo, and a Bracket clock — one at a time in sequence from first (1st) to last (5th).\n\n• The Mantel clock is restored immediately before the Carriage clock.\n• The Grandfather clock is restored first.\n• The Cuckoo clock is not restored in a position adjacent to the Bracket clock.\n• The Bracket clock is restored before the Cuckoo clock.\n\nIn which position is the Bracket clock restored?",
+        "options": [
+          { "label": "A", "text": "2nd" },
+          { "label": "B", "text": "3rd" },
+          { "label": "C", "text": "4th" },
+          { "label": "D", "text": "5th" }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Grandfather = 1st. Mantel–Carriage consecutive (Mantel then Carriage). Remaining: Mantel, Carriage, Bracket, Cuckoo in {2, 3, 4, 5}. Bracket < Cuckoo and not adjacent. If Mantel = 2, Carriage = 3: Bracket, Cuckoo ∈ {4, 5}. Bracket = 4, Cuckoo = 5. Adjacent (differ by 1). ✗ If Mantel = 3, Carriage = 4: Bracket, Cuckoo ∈ {2, 5}. Bracket = 2, Cuckoo = 5. Not adjacent (differ by 3). ✓ If Mantel = 4, Carriage = 5: Bracket, Cuckoo ∈ {2, 3}. Bracket = 2, Cuckoo = 3. Adjacent. ✗ Only valid: Grandfather(1), Bracket(2), Mantel(3), Carriage(4), Cuckoo(5).",
+        "order_index": 16
+      },
+      {
+        "id": "dm4r-017-passage",
+        "title": "UK AI Regulation",
+        "type": "syllogism",
+        "stem": "The UK government published its AI Safety Institute framework in 2024, establishing voluntary codes of practice for companies developing frontier AI models. The Institute, based at Bletchley Park, employs over 100 researchers conducting safety evaluations of advanced AI systems. In contrast to the European Union's AI Act, which imposes mandatory compliance requirements, the UK's approach relies on existing regulators — such as the FCA, Ofcom, and the CMA — to apply AI-specific guidance within their sectors. A cross-party parliamentary report recommended that the government legislate to create a statutory duty for developers of the most powerful AI systems to conduct pre-deployment safety testing. The Alan Turing Institute estimated that the UK AI sector contributes £3.7 billion annually to the economy and employs approximately 50,000 people. Critics warned that a purely voluntary framework risks falling behind international standards, while industry groups argued that heavy regulation would drive AI investment to less regulated jurisdictions.",
+        "decision_making_question_statements": [
+          {
+            "statement_text": "The AI Safety Institute is based at Bletchley Park.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage directly states 'The Institute, based at Bletchley Park.'",
+            "order_index": 1
+          },
+          {
+            "statement_text": "The EU's approach to AI regulation is voluntary, like the UK's.",
             "correct_answer": "No",
-            "answer_reason": "Q1 range: 92 - 70 = 22. Q2 range: 90 - 65 = 25. Q3 range: 95 - 72 = 23. Q2 has the largest range, not the smallest.",
+            "answer_reason": "The passage states the EU's AI Act 'imposes mandatory compliance requirements,' in contrast to the UK's voluntary approach.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "The UK AI sector employs more than 40,000 people.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states the sector 'employs approximately 50,000 people,' which exceeds 40,000.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "The parliamentary report recommended voluntary guidelines for AI developers.",
+            "correct_answer": "No",
+            "answer_reason": "The report recommended the government 'legislate to create a statutory duty' — a legal requirement, not voluntary guidelines.",
             "order_index": 4
           },
           {
-            "statement_text": "Surgical ward occupancy peaked in Q2.",
-            "correct_answer": "Yes",
-            "answer_reason": "Surgical: Q1 = 85, Q2 = 90, Q3 = 88. The highest value is 90 in Q2.",
+            "statement_text": "The AI Safety Institute employs fewer than 50 researchers.",
+            "correct_answer": "No",
+            "answer_reason": "The passage states the Institute 'employs over 100 researchers,' which exceeds 50.",
             "order_index": 5
           }
         ],
         "correct_answer": {
-          "0": "No",
-          "1": "Yes",
+          "0": "Yes",
+          "1": "No",
           "2": "Yes",
           "3": "No",
-          "4": "Yes"
+          "4": "No"
         },
         "answer_reason": null,
-        "order_index": 10
+        "order_index": 17
       },
       {
-        "id": "dm3-011-logic",
-        "title": "Swimming Relay Order",
-        "type": "logic_puzzle",
-        "stem": "A swimming team of four – Anna, Ben, Clara, and Dev – must swim a relay in a set order (1st to 4th).\n\n• Clara swims immediately before Dev.\n• Anna swims 4th.\n• Ben swims before Clara.\n\nWho swims 1st?",
-        "options": [
-          { "label": "A", "text": "Anna" },
-          { "label": "B", "text": "Ben" },
-          { "label": "C", "text": "Clara" },
-          { "label": "D", "text": "Dev" }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Anna = 4th. Clara is immediately before Dev, forming (C, D). Ben swims before Clara. If C=2nd, D=3rd: Ben must be before Clara, so Ben=1st. Order: Ben, Clara, Dev, Anna. If C=1st, D=2nd: Ben must be before Clara(1st) — impossible. If C=3rd, D=4th: but Anna is 4th — conflict. Only valid solution: Ben(1st), Clara(2nd), Dev(3rd), Anna(4th). Ben swims 1st.",
-        "order_index": 11
-      },
-      {
-        "id": "dm3-012-arg",
-        "title": "Single-Use Plastic Ban",
-        "type": "strongest_argument",
-        "stem": "All single-use plastics should be banned immediately.",
-        "options": [
+        "id": "dm4r-018-info",
+        "title": "Concert Ticket Sales",
+        "type": "interpreting_info",
+        "stem": "A concert promoter recorded ticket sales (in hundreds) for four venues across five months.",
+        "table_data": {
+          "headers": ["Venue", "January", "February", "March", "April", "May"],
+          "rows": [
+            ["Arena North", "32", "28", "35", "40", "45"],
+            ["City Hall", "18", "22", "20", "25", "28"],
+            ["Pavilion", "15", "12", "18", "14", "20"],
+            ["Riverside", "8", "10", "12", "15", "18"]
+          ]
+        },
+        "decision_making_question_statements": [
           {
-            "label": "A",
-            "text": "Yes; plastic pollution in oceans is responsible for the deaths of over one million marine animals each year, and a ban would directly reduce this harm."
+            "statement_text": "Arena North sold the most tickets every month.",
+            "correct_answer": "Yes",
+            "answer_reason": "Arena North: 32, 28, 35, 40, 45. In every month these are the highest values across all venues.",
+            "order_index": 1
           },
           {
-            "label": "B",
-            "text": "No; an immediate ban would cause significant disruption to the food packaging industry, leading to job losses and higher food prices."
+            "statement_text": "Riverside ticket sales increased every month.",
+            "correct_answer": "Yes",
+            "answer_reason": "Riverside: 8 → 10 → 12 → 15 → 18. Each month is higher than the previous.",
+            "order_index": 2
           },
           {
-            "label": "C",
-            "text": "Yes; many countries have already banned single-use plastics, so the UK should do the same."
+            "statement_text": "Pavilion ticket sales increased every month.",
+            "correct_answer": "No",
+            "answer_reason": "Pavilion: January = 15, February = 12 (decreased). Also March = 18, April = 14 (decreased). Sales did not consistently increase.",
+            "order_index": 3
           },
           {
-            "label": "D",
-            "text": "No; people can simply recycle plastics instead of banning them."
+            "statement_text": "The combined sales of Pavilion and Riverside exceeded City Hall in May.",
+            "correct_answer": "Yes",
+            "answer_reason": "May: Pavilion (20) + Riverside (18) = 38. City Hall = 28. 38 > 28.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Total sales across all venues were lowest in January.",
+            "correct_answer": "No",
+            "answer_reason": "January: 32 + 18 + 15 + 8 = 73. February: 28 + 22 + 12 + 10 = 72. February (72) is the lowest, not January (73).",
+            "order_index": 5
           }
         ],
-        "correct_answer": "B",
-        "answer_reason": "Option B is the strongest argument because it directly addresses the 'immediately' aspect of the proposal with concrete, serious economic consequences — industry disruption, job losses, and food price increases. Option A provides a compelling environmental reason but does not address the 'immediately' qualifier. Option C is a weak appeal to other countries' actions. Option D oversimplifies — recycling rates for plastics remain very low.",
-        "order_index": 12
+        "correct_answer": {
+          "0": "Yes",
+          "1": "Yes",
+          "2": "No",
+          "3": "Yes",
+          "4": "No"
+        },
+        "answer_reason": null,
+        "order_index": 18
       },
       {
-        "id": "dm3-013-venn",
-        "title": "Tea and Coffee Drinkers",
+        "id": "dm4r-019-venn",
+        "title": "Paint Types",
         "type": "venn_diagram",
-        "stem": "The diagram shows beverage preferences among office workers. Each letter marks a different region.\n\nWhich letter represents workers who drink tea but neither coffee nor hot chocolate?",
+        "stem": "The diagram shows wall paints categorised by their properties. The square represents Matt paints, the triangle represents Washable paints, and the parallelogram represents Quick-Dry paints. The shapes are arranged vertically with Matt at the top and Quick-Dry at the bottom. Each letter marks a different region.\n\nWhich letter represents a paint that is both Washable and Quick-Dry but not Matt?",
         "stimulus_diagram": {
           "diagramLayout": "three_vertical_chain",
           "sets": [
-            { "id": "set1", "label": "Tea", "shape": "isosceles_triangle" },
-            { "id": "set2", "label": "Coffee", "shape": "oval" },
-            { "id": "set3", "label": "Hot Chocolate", "shape": "star" }
+            { "id": "set1", "label": "Matt", "shape": "square" },
+            { "id": "set2", "label": "Washable", "shape": "triangle" },
+            { "id": "set3", "label": "Quick-Dry", "shape": "parallelogram" }
           ],
           "regions": {
             "set1_only": "A",
@@ -479,412 +755,175 @@
           }
         },
         "options": [
-          { "label": "A", "text": "Letter A" },
-          { "label": "B", "text": "Letter B" },
-          { "label": "C", "text": "Letter C" },
-          { "label": "D", "text": "Letter D" }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Tea = isosceles triangle (set1), Coffee = oval (set2), Hot Chocolate = star (set3). Region A (set1_only) is inside Tea but outside Coffee and Hot Chocolate. B is Tea ∩ Coffee. C is Coffee only. D is Coffee ∩ Hot Chocolate. Answer: A.",
-        "order_index": 13
-      },
-      {
-        "id": "dm3-014-prob",
-        "title": "Medical Test Accuracy",
-        "type": "probabilistic",
-        "stem": "A hospital uses a blood test to detect a rare condition. The test has a sensitivity of 98% and a specificity of 92%. In the tested population of 5,000 patients, 50 actually have the condition.",
-        "options": [
-          {
-            "label": "A",
-            "text": "The test will correctly identify all 50 patients with the condition."
-          },
-          {
-            "label": "B",
-            "text": "A patient who tests positive has a greater than 50% chance of having the condition."
-          },
-          {
-            "label": "C",
-            "text": "Approximately 445 patients will test positive in total."
-          },
-          {
-            "label": "D",
-            "text": "The test will produce fewer than 300 false positive results."
-          }
+          { "label": "A", "text": "Letter B", "order_index": 1 },
+          { "label": "B", "text": "Letter C", "order_index": 2 },
+          { "label": "C", "text": "Letter D", "order_index": 3 },
+          { "label": "D", "text": "Letter E", "order_index": 4 }
         ],
         "correct_answer": "C",
-        "answer_reason": "True positives: 50 × 0.98 = 49. False positives: 4,950 × 0.08 = 396. Total positives: 49 + 396 = 445, so C is correct. A is wrong — sensitivity is 98%, so 1 patient will be missed. PPV = 49/445 ≈ 11%, far below 50%, so B is wrong. D is wrong — 396 false positives is more than 300.",
-        "order_index": 14
-      },
-      {
-        "id": "dm3-015-syl",
-        "title": "Mammals and Whales",
-        "type": "syllogism",
-        "stem": "All whales are mammals. All mammals breathe air. Some mammals live on land.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "All whales breathe air.",
-            "correct_answer": "Yes",
-            "answer_reason": "All whales are mammals and all mammals breathe air. By transitive reasoning, all whales breathe air.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Some whales live on land.",
-            "correct_answer": "No",
-            "answer_reason": "Some mammals live on land, but those land-dwelling mammals could all be non-whale species. The premises do not establish that any whales live on land.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "All things that breathe air are mammals.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states all mammals breathe air — not the reverse. Birds and reptiles also breathe air but are not mammals.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "All mammals are whales.",
-            "correct_answer": "No",
-            "answer_reason": "All whales are mammals — not the reverse. Dogs, cats, and humans are mammals but not whales.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Some things that breathe air are whales.",
-            "correct_answer": "Yes",
-            "answer_reason": "All whales breathe air (established above). Since whales exist, some air-breathing things are whales.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 15
-      },
-      {
-        "id": "dm3-016-info",
-        "title": "A-Level Results by Subject",
-        "type": "interpreting_info",
-        "stem": "A sixth form college recorded the percentage of students achieving grades A*–B in four A-Level subjects over three years.",
-        "table_data": {
-          "headers": ["Subject", "2023", "2024", "2025"],
-          "rows": [
-            ["Mathematics", "52", "58", "55"],
-            ["Biology", "48", "50", "54"],
-            ["English", "60", "57", "62"],
-            ["Chemistry", "44", "49", "51"]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Chemistry showed a consistent improvement across all three years.",
-            "correct_answer": "Yes",
-            "answer_reason": "Chemistry: 44 → 49 → 51. Each year is higher than the previous. Consistent improvement.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "English had the highest percentage in every year.",
-            "correct_answer": "No",
-            "answer_reason": "In 2024: English = 57%, Mathematics = 58%. Mathematics was higher in 2024.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Mathematics performance decreased from 2024 to 2025.",
-            "correct_answer": "Yes",
-            "answer_reason": "Mathematics 2024 = 58%, 2025 = 55%. It decreased by 3 percentage points.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Biology improved by more than 10 percentage points from 2023 to 2025.",
-            "correct_answer": "No",
-            "answer_reason": "Biology 2023 = 48%, 2025 = 54%. Improvement = 6 percentage points, which is not more than 10.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "The average percentage across all subjects was higher in 2025 than in 2023.",
-            "correct_answer": "Yes",
-            "answer_reason": "2023 average: (52+48+60+44)/4 = 51. 2025 average: (55+54+62+51)/4 = 55.5. 55.5 > 51.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 16
-      },
-      {
-        "id": "dm3-017-logic",
-        "title": "Science Lab Schedule",
-        "type": "logic_puzzle",
-        "stem": "Four experiments – P, Q, R, and S – must be completed in four consecutive lab slots (9am, 10am, 11am, 12pm).\n\n• Experiment R is completed before experiment Q.\n• Experiment S is at 11am.\n• Experiment P is completed immediately before experiment R.\n\nWhich experiment is at 9am?",
-        "options": [
-          { "label": "A", "text": "Experiment P" },
-          { "label": "B", "text": "Experiment Q" },
-          { "label": "C", "text": "Experiment R" },
-          { "label": "D", "text": "Experiment S" }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "P is immediately before R, forming the consecutive pair (P, R). S is at 11am. R is before Q. If P=9am, R=10am: S=11am, Q=12pm. R(10am) before Q(12pm) ✓. This works. If P=10am, R=11am: but S is at 11am — conflict. If P=11am: S is at 11am — conflict. So P must be at 9am.",
-        "order_index": 17
-      },
-      {
-        "id": "dm3-018-venn",
-        "title": "Student Societies",
-        "type": "venn_diagram",
-        "stem": "In a university of 25 first-year students, 6 joined only the Drama society, 4 joined only the Music society, 3 joined only the Debate society, 5 joined both Drama and Music, 2 joined both Music and Debate, and 5 are not in any society.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "diagramLayout": "three_linear",
-              "sets": [
-                { "id": "set1", "label": "Drama", "shape": "trapezoid" },
-                { "id": "set2", "label": "Music", "shape": "parallelogram" },
-                { "id": "set3", "label": "Debate", "shape": "isosceles_triangle" }
-              ],
-              "regions": { "set1_only": 6, "set1_set2": 5, "set2_only": 4, "set2_set3": 2, "set3_only": 3, "outside": 5 }
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "diagramLayout": "three_linear",
-              "sets": [
-                { "id": "set1", "label": "Drama", "shape": "trapezoid" },
-                { "id": "set2", "label": "Music", "shape": "parallelogram" },
-                { "id": "set3", "label": "Debate", "shape": "isosceles_triangle" }
-              ],
-              "regions": { "set1_only": 5, "set1_set2": 6, "set2_only": 4, "set2_set3": 2, "set3_only": 3, "outside": 5 }
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "diagramLayout": "three_linear",
-              "sets": [
-                { "id": "set1", "label": "Drama", "shape": "trapezoid" },
-                { "id": "set2", "label": "Music", "shape": "parallelogram" },
-                { "id": "set3", "label": "Debate", "shape": "isosceles_triangle" }
-              ],
-              "regions": { "set1_only": 6, "set1_set2": 2, "set2_only": 4, "set2_set3": 5, "set3_only": 3, "outside": 5 }
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "diagramLayout": "three_linear",
-              "sets": [
-                { "id": "set1", "label": "Drama", "shape": "trapezoid" },
-                { "id": "set2", "label": "Music", "shape": "parallelogram" },
-                { "id": "set3", "label": "Debate", "shape": "isosceles_triangle" }
-              ],
-              "regions": { "set1_only": 6, "set1_set2": 5, "set2_only": 3, "set2_set3": 4, "set3_only": 2, "outside": 5 }
-            }
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Drama only = 6, Drama ∩ Music = 5, Music only = 4, Music ∩ Debate = 2, Debate only = 3, outside = 5. Total = 6+5+4+2+3+5 = 25. Only option A has all values correct. B swaps Drama-only and the Drama-Music overlap. C swaps the two overlap regions. D swaps Music-only with Debate-only and the two overlaps.",
-        "order_index": 18
-      },
-      {
-        "id": "dm3-019-passage-syl",
-        "title": "Antibiotic Resistance",
-        "type": "syllogism",
-        "stem": "Antibiotic resistance has been identified by the World Health Organisation as one of the greatest threats to global health. Overuse of antibiotics in both human medicine and agriculture has accelerated the development of resistant bacteria. In hospitals, methicillin-resistant Staphylococcus aureus (MRSA) infections have declined in recent years due to improved hygiene protocols, but resistance to last-resort antibiotics such as carbapenems is rising. Some researchers argue that without new classes of antibiotics, routine surgical procedures could become life-threatening within decades. Pharmaceutical companies have been reluctant to invest in antibiotic research because the drugs are used for short courses, making them less profitable than treatments for chronic conditions.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Antibiotic resistance is caused solely by their use in human medicine.",
-            "correct_answer": "No",
-            "answer_reason": "The passage states overuse occurs 'in both human medicine and agriculture' — it is not solely human medicine.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "MRSA infections in hospitals have increased in recent years.",
-            "correct_answer": "No",
-            "answer_reason": "The passage explicitly states MRSA infections 'have declined in recent years due to improved hygiene protocols.'",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Pharmaceutical companies find antibiotic development less profitable than drugs for chronic conditions.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states companies are reluctant to invest because antibiotics 'are used for short courses, making them less profitable than treatments for chronic conditions.'",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Resistance to all types of antibiotics has declined.",
-            "correct_answer": "No",
-            "answer_reason": "While MRSA declined, resistance to last-resort antibiotics like carbapenems is rising. Not all resistance has declined.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Without new antibiotics, some surgical procedures may become dangerous.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states that 'without new classes of antibiotics, routine surgical procedures could become life-threatening within decades.'",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "No",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
+        "answer_reason": "The triangle is Washable (set2) and the parallelogram is Quick-Dry (set3). The region where these two shapes overlap — but outside the square (Matt) — is marked D. This is where paints that are both Washable and Quick-Dry but not Matt belong. Letter B is the Matt–Washable overlap. Letter C is Washable only. Letter E is Quick-Dry only. The correct answer is C (Letter D).",
         "order_index": 19
       },
       {
-        "id": "dm3-020-arg",
-        "title": "Compulsory Voting",
+        "id": "dm4r-020-arg",
+        "title": "Banning Private Jets for Domestic Flights",
         "type": "strongest_argument",
-        "stem": "Voting in general elections should be made compulsory for all eligible citizens.",
+        "stem": "Private jets should be banned from operating domestic flights within the UK.",
         "options": [
           {
             "label": "A",
-            "text": "Yes; compulsory voting ensures that elected governments reflect the views of the entire population rather than just those motivated enough to vote."
+            "text": "Yes; a study by the Institute for Policy Research found that a single private jet flight from London to Edinburgh emits 4.3 tonnes of CO₂, roughly equivalent to the average UK resident's carbon footprint for an entire year, while train alternatives cover the same route in under five hours."
           },
           {
             "label": "B",
-            "text": "No; forcing people to vote undermines the principle of freedom, as the right to abstain is itself a form of political expression."
+            "text": "No; wealthy individuals contribute significantly to the economy through spending and should be free to travel as they choose."
           },
           {
             "label": "C",
-            "text": "Yes; countries with compulsory voting tend to have more stable governments."
+            "text": "Yes; private jets are a symbol of inequality and banning them would send a positive message about fairness."
           },
           {
             "label": "D",
-            "text": "No; enforcing compulsory voting would be costly and difficult to administer."
+            "text": "No; banning private jets would be an infringement on personal freedom and set a worrying precedent for government overreach."
           }
         ],
         "correct_answer": "A",
-        "answer_reason": "Option A is the strongest argument because it directly addresses the democratic legitimacy problem — governments would more accurately represent the whole population. Option B raises a philosophical concern about freedom but does not counter the democratic benefit. Option C makes a vague, unsupported claim. Option D is a weak practical objection that doesn't address the principle.",
+        "answer_reason": "Option A is the strongest argument because it cites a specific study with quantified environmental impact — 4.3 tonnes of CO₂ per flight equalling one person's annual footprint — and identifies a practical alternative (train in under five hours). This directly and specifically supports the ban. Option B makes a vague economic claim without quantifying the contribution or addressing the environmental cost. Option C is a symbolic argument that does not address practical consequences. Option D invokes a broad principle of personal freedom without engaging with the environmental evidence.",
         "order_index": 20
       },
       {
-        "id": "dm3-021-prob",
-        "title": "Genetic Screening",
+        "id": "dm4r-021-prob",
+        "title": "Textile Dye Batch Consistency",
         "type": "probabilistic",
-        "stem": "A genetic screening test for a hereditary condition has an accuracy of 97% for carriers and 95% for non-carriers. In a population of 2,000 people screened, 60 are carriers of the gene.",
+        "stem": "A textile factory produces 1,000 metres of fabric per day. 60% is dyed blue and the rest is dyed red. Quality inspectors reject 15% of blue fabric and 30% of red fabric for colour inconsistency.",
         "options": [
           {
             "label": "A",
-            "text": "More than 200 people will test positive in total."
+            "text": "More blue fabric is rejected than red fabric."
           },
           {
             "label": "B",
-            "text": "A person who tests positive has approximately a 37% chance of being a carrier."
+            "text": "The total rejected fabric is exactly 210 metres."
           },
           {
             "label": "C",
-            "text": "The test will correctly identify all 60 carriers."
+            "text": "If fabric is rejected, it is more likely to be blue than red."
           },
           {
             "label": "D",
-            "text": "Fewer than 50 non-carriers will receive a false positive result."
+            "text": "More than 25% of all fabric is rejected."
           }
         ],
         "correct_answer": "B",
-        "answer_reason": "True positives: 60 × 0.97 = 58.2. False positives: 1,940 × 0.05 = 97. Total positives: 58.2 + 97 = 155.2. PPV = 58.2/155.2 ≈ 37.5%, so B is correct. A: total positives ≈ 155, not >200, so A is wrong. C: the test misses 3% of carriers (≈ 1.8), so it will not identify all 60, so C is wrong. D: 97 false positives is not fewer than 50, so D is wrong.",
+        "answer_reason": "Blue: 1,000 × 0.60 = 600m. Rejected blue: 600 × 0.15 = 90m. Red: 1,000 × 0.40 = 400m. Rejected red: 400 × 0.30 = 120m. Total rejected: 90 + 120 = 210m. A is wrong: 90 < 120, so more red is rejected. B is correct: total is exactly 210. C is wrong: P(blue | rejected) = 90/210 ≈ 42.9%, so rejected fabric is more likely red. D is wrong: 210/1,000 = 21%, not more than 25%.",
         "order_index": 21
       },
       {
-        "id": "dm3-022-venn",
-        "title": "Holiday Activities",
-        "type": "venn_diagram",
-        "stem": "The diagram shows guests at a resort categorised by activities they participated in. Each letter marks a different region.\n\nWhich letter represents guests who went swimming and hiking but not cycling?",
-        "stimulus_diagram": {
-          "diagramLayout": "three_all_overlap_v2",
-          "sets": [
-            { "id": "set1", "label": "Swimming", "shape": "trapezoid" },
-            { "id": "set2", "label": "Hiking", "shape": "hexagon" },
-            { "id": "set3", "label": "Cycling", "shape": "parallelogram" }
-          ],
-          "regions": {
-            "set1_only": "W",
-            "set2_only": "X",
-            "set3_only": "Y",
-            "set1_set2": "T",
-            "set1_set3": "U",
-            "set2_set3": "V",
-            "all_three": "Z",
-            "outside": "S"
-          }
-        },
+        "id": "dm4r-022-logic",
+        "title": "Research Laboratory Assignment",
+        "type": "logic_puzzle",
+        "stem": "Five researchers — Palmer, Quinn, Russo, Shaw, and Tan — each work in a different laboratory numbered 1 to 5.\n\n• Palmer works in Lab 1.\n• Quinn works in a higher-numbered lab than Russo.\n• Shaw works in Lab 4.\n• Tan does not work in Lab 2.\n• Quinn does not work in Lab 3.\n\nWhat lab does Quinn work in?",
         "options": [
-          { "label": "A", "text": "Letter U" },
-          { "label": "B", "text": "Letter T" },
-          { "label": "C", "text": "Letter V" },
-          { "label": "D", "text": "Letter Z" }
+          { "label": "A", "text": "Lab 2" },
+          { "label": "B", "text": "Lab 3" },
+          { "label": "C", "text": "Lab 4" },
+          { "label": "D", "text": "Lab 5" }
         ],
-        "correct_answer": "B",
-        "answer_reason": "Swimming = trapezoid (set1), Hiking = hexagon (set2), Cycling = parallelogram (set3). Swimming AND Hiking but NOT Cycling = set1_set2 = T. U is Swimming ∩ Cycling. V is Hiking ∩ Cycling. Z is all three. Answer: B (Letter T).",
+        "correct_answer": "D",
+        "answer_reason": "Palmer = Lab 1, Shaw = Lab 4. Remaining: Quinn, Russo, Tan in {2, 3, 5}. Quinn ≠ Lab 3, so Quinn ∈ {2, 5}. Tan ≠ Lab 2, so Tan ∈ {3, 5}. If Quinn = 2: Quinn > Russo requires Russo < 2. No remaining lab below 2 exists. ✗ If Quinn = 5: Remaining for Russo and Tan: {2, 3}. Tan ≠ 2 → Tan = 3, Russo = 2. Quinn (5) > Russo (2). ✓ Only valid: Palmer(1), Russo(2), Tan(3), Shaw(4), Quinn(5).",
         "order_index": 22
       },
       {
-        "id": "dm3-023-logic",
-        "title": "Magazine Shelf Order",
-        "type": "logic_puzzle",
-        "stem": "Five magazines – Art, Business, Cooking, Design, and Engineering – are placed on a shelf from left (position 1) to right (position 5).\n\n• Cooking is immediately to the right of Art.\n• Engineering is in position 5.\n• Business is not next to Cooking.\n• Design is to the left of Business.\n• Art is not in position 1.\n\nWhat is in position 1?",
-        "options": [
-          { "label": "A", "text": "Art" },
-          { "label": "B", "text": "Business" },
-          { "label": "C", "text": "Design" },
-          { "label": "D", "text": "Cooking" }
+        "id": "dm4r-023-syl",
+        "title": "Handmade Clocks",
+        "type": "syllogism",
+        "stem": "No handmade clocks use quartz movements. All tower clocks are handmade clocks. Some items using quartz movements are battery-powered.",
+        "decision_making_question_statements": [
+          {
+            "statement_text": "No tower clocks use quartz movements.",
+            "correct_answer": "Yes",
+            "answer_reason": "All tower clocks are handmade, and no handmade clocks use quartz. By transitive reasoning, no tower clocks use quartz movements.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Some battery-powered items use quartz movements.",
+            "correct_answer": "Yes",
+            "answer_reason": "'Some items using quartz movements are battery-powered' can be converted: some battery-powered items use quartz movements.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "All handmade clocks are tower clocks.",
+            "correct_answer": "No",
+            "answer_reason": "All tower clocks are handmade — not the reverse. A handmade pocket watch is handmade but is not a tower clock.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Some tower clocks are battery-powered.",
+            "correct_answer": "No",
+            "answer_reason": "The premises link battery-powered items to quartz movements, and tower clocks do not use quartz. There is no connection established between tower clocks and being battery-powered.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "All items that use quartz movements are handmade clocks.",
+            "correct_answer": "No",
+            "answer_reason": "No handmade clocks use quartz movements, so quartz-using items cannot be handmade clocks. This directly contradicts the premise.",
+            "order_index": 5
+          }
         ],
-        "correct_answer": "C",
-        "answer_reason": "Engineering = position 5. (Art, Cooking) is a consecutive pair. Art ≠ position 1. If A=2, C=3: Business not next to C(3) → Business ≠ 2 or 4. Business ≠ 2 (Art). So Business ≠ 4 either. Only remaining spot is 1. Design left of Business(1) — impossible. If A=3, C=4: Business ≠ 3 or 5 (not next to C at 4, and 5 is taken). So Business = 1 or 2. Design left of Business: if B=2, D=1; if B=1, no room for D to the left. So D=1, B=2, A=3, C=4, E=5. Check: Business(2) next to Cooking(4)? No ✓. Position 1 = Design.",
+        "correct_answer": {
+          "0": "Yes",
+          "1": "Yes",
+          "2": "No",
+          "3": "No",
+          "4": "No"
+        },
+        "answer_reason": null,
         "order_index": 23
       },
       {
-        "id": "dm3-024-info",
-        "title": "Energy Consumption by Source",
+        "id": "dm4r-024-info",
+        "title": "Harbour Freight Tonnage",
         "type": "interpreting_info",
-        "stem": "A report tracked the percentage of energy generated from different sources in a country over three years.",
+        "stem": "A port authority recorded the monthly freight tonnage (thousands of tonnes) handled at five docks across five months.",
         "table_data": {
-          "headers": ["Source", "2023", "2024", "2025"],
+          "headers": ["Dock", "January", "February", "March", "April", "May"],
           "rows": [
-            ["Wind", "22", "26", "30"],
-            ["Solar", "8", "12", "15"],
-            ["Gas", "45", "40", "35"],
-            ["Nuclear", "20", "18", "17"],
-            ["Other", "5", "4", "3"]
+            ["Alpha", "48", "52", "55", "60", "58"],
+            ["Bravo", "35", "38", "42", "45", "50"],
+            ["Charlie", "22", "25", "20", "28", "30"],
+            ["Delta", "15", "18", "22", "20", "25"],
+            ["Echo", "10", "12", "15", "18", "22"]
           ]
         },
         "decision_making_question_statements": [
           {
-            "statement_text": "Renewable sources (wind and solar combined) exceeded 40% of energy generation in 2025.",
+            "statement_text": "Alpha handled the most freight every month.",
             "correct_answer": "Yes",
-            "answer_reason": "Wind 2025 = 30%, Solar 2025 = 15%. Combined = 45%, which exceeds 40%.",
+            "answer_reason": "Alpha: 48, 52, 55, 60, 58. All are the highest values in their respective months.",
             "order_index": 1
           },
           {
-            "statement_text": "Gas remained the single largest source of energy in every year.",
+            "statement_text": "Bravo's freight tonnage increased every month.",
             "correct_answer": "Yes",
-            "answer_reason": "2023: Gas 45% (highest). 2024: Gas 40% (highest). 2025: Gas 35% — Wind is 30%, so Gas is still highest at 35%.",
+            "answer_reason": "Bravo: 35 → 38 → 42 → 45 → 50. Each month is higher than the previous.",
             "order_index": 2
           },
           {
-            "statement_text": "Nuclear energy increased as a proportion over the three years.",
+            "statement_text": "Charlie's freight tonnage increased every month.",
             "correct_answer": "No",
-            "answer_reason": "Nuclear: 20% → 18% → 17%. It decreased each year.",
+            "answer_reason": "Charlie: February = 25, March = 20. Tonnage decreased from February to March.",
             "order_index": 3
           },
           {
-            "statement_text": "Solar energy's share tripled from 2023 to 2025.",
+            "statement_text": "The total freight across all docks exceeded 150 in every month.",
             "correct_answer": "No",
-            "answer_reason": "Solar 2023 = 8%, 2025 = 15%. Triple of 8% = 24%. 15% is less than 24%, so it did not triple.",
+            "answer_reason": "January: 48 + 35 + 22 + 15 + 10 = 130. This is below 150.",
             "order_index": 4
           },
           {
-            "statement_text": "The combined share of non-renewable sources (gas, nuclear, other) fell below 60% by 2025.",
+            "statement_text": "Echo's May tonnage was more than double its January tonnage.",
             "correct_answer": "Yes",
-            "answer_reason": "Non-renewable 2025: 35 + 17 + 3 = 55%. 55% < 60%.",
+            "answer_reason": "Echo: January = 10, May = 22. Double of 10 = 20. 22 > 20, so May tonnage was more than double January.",
             "order_index": 5
           }
         ],
@@ -899,298 +938,173 @@
         "order_index": 24
       },
       {
-        "id": "dm3-025-passage-syl",
-        "title": "Social Media and Mental Health",
-        "type": "syllogism",
-        "stem": "Research published in the Journal of Adolescent Health found a correlation between heavy social media use and increased rates of anxiety and depression in teenagers. The study followed 3,000 participants aged 13–18 over two years. Those who spent more than three hours daily on social media were twice as likely to report poor mental health outcomes. However, the researchers cautioned that correlation does not imply causation — teenagers already experiencing mental health difficulties may turn to social media for connection. Several schools have introduced phone-free policies during lesson hours, reporting improved concentration but no measurable change in students' overall wellbeing scores.",
-        "decision_making_question_statements": [
+        "id": "dm4r-025-venn",
+        "title": "Gemstone Cuts",
+        "type": "venn_diagram",
+        "stem": "A jewellery workshop categorised 35 gemstones by their cut type. 12 have a Brilliant cut only, 8 have an Emerald cut only, 10 have both Brilliant and Emerald cuts, and 5 have neither cut.\n\nThe isosceles_triangle represents Brilliant cut and the octagon represents Emerald cut.\n\nWhich of the following diagrams best represents the data?",
+        "options": [
           {
-            "statement_text": "The study proved that social media causes anxiety and depression in teenagers.",
-            "correct_answer": "No",
-            "answer_reason": "The passage found a correlation, not causation. The researchers explicitly cautioned that 'correlation does not imply causation.'",
+            "label": "A",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "two_vertical_overlap",
+              "sets": [
+                { "id": "set1", "label": "Brilliant", "shape": "isosceles_triangle" },
+                { "id": "set2", "label": "Emerald", "shape": "octagon" }
+              ],
+              "regions": { "set1_only": 12, "set2_only": 8, "set1_set2": 10, "outside": 5 }
+            },
             "order_index": 1
           },
           {
-            "statement_text": "Teenagers who used social media heavily were more likely to report poor mental health.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states those spending more than three hours daily were 'twice as likely to report poor mental health outcomes.'",
+            "label": "B",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "two_vertical_overlap",
+              "sets": [
+                { "id": "set1", "label": "Brilliant", "shape": "isosceles_triangle" },
+                { "id": "set2", "label": "Emerald", "shape": "octagon" }
+              ],
+              "regions": { "set1_only": 8, "set2_only": 12, "set1_set2": 10, "outside": 5 }
+            },
             "order_index": 2
           },
           {
-            "statement_text": "Phone-free policies in schools improved students' overall wellbeing.",
-            "correct_answer": "No",
-            "answer_reason": "Schools reported 'improved concentration but no measurable change in students' overall wellbeing scores.' Wellbeing did not improve.",
+            "label": "C",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "two_vertical_overlap",
+              "sets": [
+                { "id": "set1", "label": "Brilliant", "shape": "isosceles_triangle" },
+                { "id": "set2", "label": "Emerald", "shape": "octagon" }
+              ],
+              "regions": { "set1_only": 12, "set2_only": 8, "set1_set2": 5, "outside": 10 }
+            },
             "order_index": 3
           },
           {
-            "statement_text": "The study participants were all adults.",
-            "correct_answer": "No",
-            "answer_reason": "The study followed participants 'aged 13–18' — these are teenagers, not adults.",
+            "label": "D",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "two_vertical_overlap",
+              "sets": [
+                { "id": "set1", "label": "Brilliant", "shape": "isosceles_triangle" },
+                { "id": "set2", "label": "Emerald", "shape": "octagon" }
+              ],
+              "regions": { "set1_only": 10, "set2_only": 8, "set1_set2": 12, "outside": 5 }
+            },
             "order_index": 4
-          },
-          {
-            "statement_text": "It is possible that teenagers with existing mental health problems use social media more.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states researchers cautioned that 'teenagers already experiencing mental health difficulties may turn to social media for connection,' which supports this possibility.",
-            "order_index": 5
           }
         ],
-        "correct_answer": {
-          "0": "No",
-          "1": "Yes",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
+        "correct_answer": "A",
+        "answer_reason": "From the stem: Brilliant only = 12, Emerald only = 8, both = 10, neither = 5. Total = 35. Only option A places every value correctly. Option B swaps the Brilliant-only and Emerald-only counts. Option C swaps the overlap count with the neither count. Option D swaps the Brilliant-only and overlap counts.",
         "order_index": 25
       },
       {
-        "id": "dm3-026-venn",
-        "title": "Instrument Players",
-        "type": "venn_diagram",
-        "stem": "In a music school of 18 students, 5 play piano only, 4 play guitar only, 3 play violin only, 2 play both piano and guitar, and 4 play both guitar and violin.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "diagramLayout": "three_vertical_chain",
-              "sets": [
-                { "id": "set1", "label": "Piano", "shape": "star" },
-                { "id": "set2", "label": "Guitar", "shape": "oval" },
-                { "id": "set3", "label": "Violin", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 5, "set1_set2": 4, "set2_only": 4, "set2_set3": 2, "set3_only": 3 }
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "diagramLayout": "three_vertical_chain",
-              "sets": [
-                { "id": "set1", "label": "Piano", "shape": "star" },
-                { "id": "set2", "label": "Guitar", "shape": "oval" },
-                { "id": "set3", "label": "Violin", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 5, "set1_set2": 2, "set2_only": 4, "set2_set3": 4, "set3_only": 3 }
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "diagramLayout": "three_vertical_chain",
-              "sets": [
-                { "id": "set1", "label": "Piano", "shape": "star" },
-                { "id": "set2", "label": "Guitar", "shape": "oval" },
-                { "id": "set3", "label": "Violin", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 4, "set1_set2": 2, "set2_only": 5, "set2_set3": 4, "set3_only": 3 }
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "diagramLayout": "three_vertical_chain",
-              "sets": [
-                { "id": "set1", "label": "Piano", "shape": "star" },
-                { "id": "set2", "label": "Guitar", "shape": "oval" },
-                { "id": "set3", "label": "Violin", "shape": "trapezoid" }
-              ],
-              "regions": { "set1_only": 3, "set1_set2": 2, "set2_only": 4, "set2_set3": 4, "set3_only": 5 }
-            }
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Piano only = 5, Piano ∩ Guitar = 2, Guitar only = 4, Guitar ∩ Violin = 4, Violin only = 3. Total = 5+2+4+4+3 = 18. Only option B has all values correct. A swaps the two overlaps. C swaps piano-only and guitar-only. D swaps piano-only and violin-only.",
-        "order_index": 26
-      },
-      {
-        "id": "dm3-027-arg",
-        "title": "Abolishing Private Schools",
-        "type": "strongest_argument",
-        "stem": "Private schools should be abolished and all children should attend state schools.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Yes; private schools entrench social inequality by giving wealthier children access to better resources, creating an uneven playing field from childhood."
-          },
-          {
-            "label": "B",
-            "text": "No; parents have the right to choose how to spend their money, including on their children's education."
-          },
-          {
-            "label": "C",
-            "text": "Yes; removing private schools would force the government to invest more in state education."
-          },
-          {
-            "label": "D",
-            "text": "No; many private schools have historic buildings and traditions that would be lost."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Option A is the strongest argument because it identifies a specific, measurable harm — entrenched social inequality from childhood — that directly supports the proposal. Option B raises parental rights but doesn't address the inequality concern. Option C is speculative about what the government might do. Option D is irrelevant — buildings and traditions do not justify educational inequality.",
-        "order_index": 27
-      },
-      {
-        "id": "dm3-028-logic",
-        "title": "Bus Arrival Order",
-        "type": "logic_puzzle",
-        "stem": "Four buses – Route 7, Route 12, Route 15, and Route 22 – arrive at a station one after another.\n\n• Route 15 arrives immediately after Route 7.\n• Route 22 does not arrive 1st or 4th.\n• Route 12 arrives after Route 22.\n\nWhich bus arrives 4th?",
-        "options": [
-          { "label": "A", "text": "Route 7" },
-          { "label": "B", "text": "Route 12" },
-          { "label": "C", "text": "Route 15" },
-          { "label": "D", "text": "Route 22" }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Route 15 is immediately after Route 7, so (7, 15) is consecutive. Route 22 is not 1st or 4th. Route 12 is after Route 22. If 7=1st, 15=2nd: Route 22 not 1st (taken) or 4th, so 22=3rd. Route 12 after 22(3rd), so 12=4th ✓. If 7=2nd, 15=3rd: 22 not 1st or 4th, so 22 must be a remaining slot. Remaining: 1st and 4th for 22 and 12. But 22 ≠ 1st or 4th — no valid placement. If 7=3rd, 15=4th: 22 ≠ 1st or 4th. Remaining: 1st and 2nd for 22 and 12. 12 after 22 → 22=1st, but 22 ≠ 1st — contradiction. Only valid solution: 7,15,22,12. Route 12 arrives 4th.",
-        "order_index": 28
-      },
-      {
-        "id": "dm3-029-venn",
-        "title": "Allergy Types",
-        "type": "venn_diagram",
-        "stem": "A survey of 40 patients found: 12 are allergic to peanuts only, 8 are allergic to shellfish only, 6 are allergic to both peanuts and shellfish, and 14 are allergic to neither.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "diagramLayout": "two_overlap",
-              "sets": [
-                { "id": "set1", "label": "Peanuts", "shape": "isosceles_triangle" },
-                { "id": "set2", "label": "Shellfish", "shape": "oval" }
-              ],
-              "regions": { "set1_only": 12, "set1_set2": 6, "set2_only": 8, "outside": 14 }
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "diagramLayout": "two_overlap",
-              "sets": [
-                { "id": "set1", "label": "Peanuts", "shape": "isosceles_triangle" },
-                { "id": "set2", "label": "Shellfish", "shape": "oval" }
-              ],
-              "regions": { "set1_only": 8, "set1_set2": 6, "set2_only": 12, "outside": 14 }
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "diagramLayout": "two_overlap",
-              "sets": [
-                { "id": "set1", "label": "Peanuts", "shape": "isosceles_triangle" },
-                { "id": "set2", "label": "Shellfish", "shape": "oval" }
-              ],
-              "regions": { "set1_only": 12, "set1_set2": 8, "set2_only": 6, "outside": 14 }
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "diagramLayout": "two_overlap",
-              "sets": [
-                { "id": "set1", "label": "Peanuts", "shape": "isosceles_triangle" },
-                { "id": "set2", "label": "Shellfish", "shape": "oval" }
-              ],
-              "regions": { "set1_only": 14, "set1_set2": 6, "set2_only": 8, "outside": 12 }
-            }
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Peanuts only = 12, both = 6, shellfish only = 8, neither = 14. Total = 12+6+8+14 = 40 ✓. Only option A is correct. B swaps peanuts and shellfish counts. C puts 8 in the overlap. D swaps peanuts-only with neither.",
-        "order_index": 29
-      },
-      {
-        "id": "dm3-030-passage-syl",
-        "title": "Renewable Energy Subsidies",
+        "id": "dm4r-026-passage",
+        "title": "UK Rail Nationalisation",
         "type": "syllogism",
-        "stem": "Government subsidies for renewable energy projects have increased steadily over the past decade. Wind farm installations have tripled in number since 2015, while solar panel costs have fallen by 70%. Critics argue that subsidies distort the energy market and discourage private investment by making companies dependent on government support. Proponents counter that subsidies are essential during the early stages of technology adoption and can be phased out once renewables achieve cost parity with fossil fuels. In 2024, several offshore wind projects were completed ahead of schedule and under budget, suggesting the industry is maturing. However, onshore wind planning applications continue to face significant local opposition in many rural areas.",
+        "stem": "Great British Railways (GBR) was formally established in 2024 as a new public sector body to oversee England's rail network, fulfilling a manifesto commitment to bring train operations under public ownership. The first operator to transition was LNER, which had already been government-run since 2018 after the failure of the Virgin Trains East Coast franchise. The Department for Transport estimated that full nationalisation would save approximately £1.5 billion per year in fees previously paid to private operators. However, the Rail Delivery Group argued that private operators had invested £1.1 billion in new rolling stock since 2015 and that service quality had improved by 12% on customer satisfaction metrics. Under the new model, GBR will control timetabling, ticketing, and revenue, while Network Rail continues to manage tracks and infrastructure. Trade unions representing 60,000 rail workers supported nationalisation but demanded binding commitments on staffing levels and pay.",
         "decision_making_question_statements": [
           {
-            "statement_text": "Government subsidies for renewable energy have decreased over the past decade.",
-            "correct_answer": "No",
-            "answer_reason": "The passage states subsidies 'have increased steadily over the past decade,' not decreased.",
+            "statement_text": "LNER was the first operator to transition to public ownership under GBR.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage directly states 'The first operator to transition was LNER.'",
             "order_index": 1
           },
           {
-            "statement_text": "Solar panel costs have fallen significantly.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states solar panel costs 'have fallen by 70%,' which is a significant reduction.",
+            "statement_text": "Full nationalisation is estimated to cost the government £1.5 billion per year.",
+            "correct_answer": "No",
+            "answer_reason": "The passage states nationalisation would 'save approximately £1.5 billion per year,' not cost. This is a precision trap testing save versus cost.",
             "order_index": 2
           },
           {
-            "statement_text": "All wind projects are completed on time and under budget.",
-            "correct_answer": "No",
-            "answer_reason": "The passage says 'several offshore wind projects' were completed ahead of schedule — 'several' does not mean all, and it only refers to offshore projects.",
+            "statement_text": "Private operators invested more than £1 billion in rolling stock since 2015.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states '£1.1 billion in new rolling stock since 2015,' which exceeds £1 billion.",
             "order_index": 3
           },
           {
-            "statement_text": "Critics believe subsidies can create dependency in energy companies.",
-            "correct_answer": "Yes",
-            "answer_reason": "The passage states critics argue subsidies 'discourage private investment by making companies dependent on government support.'",
+            "statement_text": "GBR will manage both train operations and track infrastructure.",
+            "correct_answer": "No",
+            "answer_reason": "GBR will control timetabling, ticketing, and revenue (operations), but Network Rail continues to manage tracks and infrastructure.",
             "order_index": 4
           },
           {
-            "statement_text": "Onshore wind projects face no opposition.",
+            "statement_text": "Trade unions representing rail workers opposed nationalisation.",
             "correct_answer": "No",
-            "answer_reason": "The passage explicitly states 'onshore wind planning applications continue to face significant local opposition in many rural areas.'",
+            "answer_reason": "The passage states unions 'supported nationalisation' — they supported it, not opposed it.",
             "order_index": 5
           }
         ],
         "correct_answer": {
-          "0": "No",
-          "1": "Yes",
-          "2": "No",
-          "3": "Yes",
+          "0": "Yes",
+          "1": "No",
+          "2": "Yes",
+          "3": "No",
           "4": "No"
         },
         "answer_reason": null,
-        "order_index": 30
+        "order_index": 26
       },
       {
-        "id": "dm3-031-info",
-        "title": "GP Surgery Appointments",
+        "id": "dm4r-027-logic",
+        "title": "Ferry Loading Sequence",
+        "type": "logic_puzzle",
+        "stem": "Six vehicles — a Bus, a Caravan, a Delivery van, an Estate car, a Fire engine, and a Go-kart trailer — board a ferry in a single file queue from position 1 (first to board) to position 6 (last).\n\n• The Fire engine boards first.\n• The Bus boards immediately after the Estate car.\n• The Delivery van boards in position 5.\n• The Caravan does not board in a position adjacent to the Delivery van.\n• The Go-kart trailer boards after the Caravan.\n\nIn which position does the Caravan board?",
+        "options": [
+          { "label": "A", "text": "2nd" },
+          { "label": "B", "text": "3rd" },
+          { "label": "C", "text": "4th" },
+          { "label": "D", "text": "5th" }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Fire engine = 1st, Delivery = 5th. Estate–Bus consecutive (Estate then Bus). Caravan not adjacent to Delivery(5), so Caravan ≠ 4 and ≠ 6. Remaining: Bus, Caravan, Estate, Go-kart in {2, 3, 4, 6}. Caravan ∈ {2, 3}. If Caravan = 2: remaining {3, 4, 6} for Estate, Bus, Go-kart. Estate–Bus pair: (3, 4). Go-kart = 6. Caravan(2) < Go-kart(6). ✓ If Caravan = 3: remaining {2, 4, 6}. Estate–Bus pair: (2, 3) — 3 is taken. (4, 5) — 5 is Delivery. (4, 6) — not consecutive. No valid pair. ✗ Only valid: Fire(1), Caravan(2), Estate(3), Bus(4), Delivery(5), Go-kart(6).",
+        "order_index": 27
+      },
+      {
+        "id": "dm4r-028-info",
+        "title": "Timber Mill Output",
         "type": "interpreting_info",
-        "stem": "A GP surgery recorded the number of appointments booked per week across four categories.",
+        "stem": "A timber mill recorded the volume of processed timber (cubic metres) by wood type across four quarters.",
         "table_data": {
-          "headers": ["Category", "Week 1", "Week 2", "Week 3", "Week 4"],
+          "headers": ["Wood Type", "Q1", "Q2", "Q3", "Q4"],
           "rows": [
-            ["Face-to-face", "120", "115", "130", "125"],
-            ["Telephone", "85", "90", "88", "95"],
-            ["Video", "15", "20", "18", "25"],
-            ["Home visit", "10", "8", "12", "9"]
+            ["Oak", "420", "380", "450", "510"],
+            ["Pine", "680", "720", "650", "700"],
+            ["Beech", "250", "280", "310", "290"],
+            ["Ash", "150", "140", "160", "170"]
           ]
         },
         "decision_making_question_statements": [
           {
-            "statement_text": "Face-to-face appointments were the most common type every week.",
+            "statement_text": "Pine had the highest output every quarter.",
             "correct_answer": "Yes",
-            "answer_reason": "Week 1: 120 (highest). Week 2: 115 (highest). Week 3: 130 (highest). Week 4: 125 (highest). Face-to-face leads every week.",
+            "answer_reason": "Pine: Q1 = 680, Q2 = 720, Q3 = 650, Q4 = 700. All are the highest in their respective quarters.",
             "order_index": 1
           },
           {
-            "statement_text": "Video appointments increased every week.",
+            "statement_text": "Oak's output increased every quarter.",
             "correct_answer": "No",
-            "answer_reason": "Video: 15, 20, 18, 25. It decreased from Week 2 (20) to Week 3 (18).",
+            "answer_reason": "Oak: Q1 = 420, Q2 = 380. Output decreased from Q1 to Q2.",
             "order_index": 2
           },
           {
-            "statement_text": "Total appointments in Week 4 exceeded 250.",
+            "statement_text": "Ash had the lowest output every quarter.",
             "correct_answer": "Yes",
-            "answer_reason": "Week 4 total: 125 + 95 + 25 + 9 = 254. 254 > 250.",
+            "answer_reason": "Ash: Q1 = 150, Q2 = 140, Q3 = 160, Q4 = 170. All are the lowest in their respective quarters.",
             "order_index": 3
           },
           {
-            "statement_text": "Home visits were fewer than video appointments in every week.",
+            "statement_text": "The total output of Oak and Ash exceeded Beech in every quarter.",
             "correct_answer": "Yes",
-            "answer_reason": "W1: 10 < 15. W2: 8 < 20. W3: 12 < 18. W4: 9 < 25. Home visits are always fewer.",
+            "answer_reason": "Q1: 420 + 150 = 570 > 250. Q2: 380 + 140 = 520 > 280. Q3: 450 + 160 = 610 > 310. Q4: 510 + 170 = 680 > 290. Oak + Ash exceeds Beech every quarter.",
             "order_index": 4
           },
           {
-            "statement_text": "Telephone appointments decreased from Week 1 to Week 2.",
+            "statement_text": "The range of Pine's quarterly output (highest minus lowest) exceeded 100 cubic metres.",
             "correct_answer": "No",
-            "answer_reason": "Telephone Week 1 = 85, Week 2 = 90. It increased, not decreased.",
+            "answer_reason": "Pine's highest is 720 (Q2) and lowest is 650 (Q3). Range = 720 − 650 = 70, which is less than 100.",
             "order_index": 5
           }
         ],
@@ -1202,99 +1116,72 @@
           "4": "No"
         },
         "answer_reason": null,
-        "order_index": 31
+        "order_index": 28
       },
       {
-        "id": "dm3-032-venn",
-        "title": "Campus Facilities",
+        "id": "dm4r-029-venn",
+        "title": "Transport Modes",
         "type": "venn_diagram",
-        "stem": "The diagram shows students categorised by which campus facilities they use. Each letter marks a different region.\n\nWhich letter represents students who use the Library only?",
+        "stem": "The diagram shows commuters categorised by their regular transport modes. The oval represents Bus users, the square represents Train users, and the hexagon represents Cyclists. The Bus and Train shapes overlap, but the Cycling shape is separate from both. Each letter marks a different region.\n\nWhich letter represents a commuter who uses both Bus and Train?",
         "stimulus_diagram": {
           "diagramLayout": "three_one_separate",
           "sets": [
-            { "id": "set1", "label": "Library", "shape": "hexagon" },
-            { "id": "set2", "label": "Canteen", "shape": "trapezoid" },
-            { "id": "set3", "label": "Sports Hall", "shape": "isosceles_triangle" }
+            { "id": "set1", "label": "Bus", "shape": "oval" },
+            { "id": "set2", "label": "Train", "shape": "square" },
+            { "id": "set3", "label": "Cycling", "shape": "hexagon" }
           ],
           "regions": {
-            "set1_only": "H",
-            "set1_set2": "J",
-            "set2_only": "K",
-            "set3_only": "L",
-            "outside": "M"
+            "set1_only": "J",
+            "set1_set2": "K",
+            "set2_only": "L",
+            "set3_only": "M",
+            "outside": "N"
           }
         },
         "options": [
-          { "label": "A", "text": "Letter J" },
-          { "label": "B", "text": "Letter K" },
-          { "label": "C", "text": "Letter H" },
-          { "label": "D", "text": "Letter M" }
+          { "label": "A", "text": "Letter J", "order_index": 1 },
+          { "label": "B", "text": "Letter K", "order_index": 2 },
+          { "label": "C", "text": "Letter L", "order_index": 3 },
+          { "label": "D", "text": "Letter M", "order_index": 4 }
         ],
-        "correct_answer": "C",
-        "answer_reason": "Library = hexagon (set1), Canteen = trapezoid (set2), Sports Hall = isosceles triangle (set3). Region H (set1_only) is inside the hexagon but outside the trapezoid and triangle — Library only. J is Library ∩ Canteen. K is Canteen only. M is outside all. Answer: C (Letter H).",
-        "order_index": 32
+        "correct_answer": "B",
+        "answer_reason": "The oval represents Bus (set1) and the square represents Train (set2). Their overlap region is marked K. This is where commuters who use both Bus and Train belong. Letter J is Bus only. Letter L is Train only. Letter M is Cycling only (separate shape). The correct answer is B (Letter K).",
+        "order_index": 29
       },
       {
-        "id": "dm3-033-prob",
-        "title": "Card Drawing Probability",
-        "type": "probabilistic",
-        "stem": "A bag contains 8 red cards, 5 blue cards, and 7 green cards. Two cards are drawn at random without replacement.",
-        "options": [
-          {
-            "label": "A",
-            "text": "The probability that both cards are red is approximately 15%."
-          },
-          {
-            "label": "B",
-            "text": "The probability that both cards are the same colour is greater than 40%."
-          },
-          {
-            "label": "C",
-            "text": "The probability of drawing one red and one blue card (in any order) is approximately 10%."
-          },
-          {
-            "label": "D",
-            "text": "The probability that at least one card is green is less than 50%."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Total cards = 20. P(both red) = (8/20)(7/19) = 56/380 ≈ 14.7% ≈ 15%, so A is correct. P(same colour) = 56/380 + 20/380 + 42/380 = 118/380 ≈ 31%, not >40%, so B is wrong. P(one red, one blue) = 2 × (8/20)(5/19) = 80/380 ≈ 21%, not ≈10%, so C is wrong. P(≥1 green) ≈ 59%, not <50%, so D is wrong.",
-        "order_index": 33
-      },
-      {
-        "id": "dm3-034-syl",
-        "title": "Nurses and Healthcare Workers",
+        "id": "dm4r-030-syl",
+        "title": "Cartographic Standards",
         "type": "syllogism",
-        "stem": "All nurses are healthcare workers. All healthcare workers must be registered. Some healthcare workers specialise in mental health.",
+        "stem": "Some nautical charts are hand-drawn. All hand-drawn documents require archival storage. No digital file is hand-drawn.",
         "decision_making_question_statements": [
           {
-            "statement_text": "All nurses must be registered.",
+            "statement_text": "Some nautical charts require archival storage.",
             "correct_answer": "Yes",
-            "answer_reason": "All nurses are healthcare workers, and all healthcare workers must be registered. By transitive reasoning, all nurses must be registered.",
+            "answer_reason": "Some nautical charts are hand-drawn, and all hand-drawn documents require archival storage. Therefore those hand-drawn nautical charts require archival storage.",
             "order_index": 1
           },
           {
-            "statement_text": "Some nurses specialise in mental health.",
+            "statement_text": "All hand-drawn documents are nautical charts.",
             "correct_answer": "No",
-            "answer_reason": "Some healthcare workers specialise in mental health, but those may not include any nurses. The premises do not establish which healthcare workers specialise in mental health.",
+            "answer_reason": "Only 'some' nautical charts are hand-drawn — not the reverse. Sketches and manuscripts are hand-drawn but are not nautical charts.",
             "order_index": 2
           },
           {
-            "statement_text": "All healthcare workers are nurses.",
+            "statement_text": "No digital file requires archival storage.",
             "correct_answer": "No",
-            "answer_reason": "All nurses are healthcare workers — not the reverse. Doctors, paramedics, and therapists are healthcare workers but not nurses.",
+            "answer_reason": "Digital files are not hand-drawn, but the premises only state that hand-drawn documents require archival storage — not that only hand-drawn documents do. Digital files may require archival storage for other reasons.",
             "order_index": 3
           },
           {
-            "statement_text": "Some registered people are healthcare workers.",
+            "statement_text": "Some documents requiring archival storage are hand-drawn.",
             "correct_answer": "Yes",
-            "answer_reason": "All healthcare workers must be registered. Since healthcare workers exist, some registered people must be healthcare workers.",
+            "answer_reason": "All hand-drawn documents require archival storage, and hand-drawn documents exist (some nautical charts are hand-drawn). Therefore some archival documents are hand-drawn.",
             "order_index": 4
           },
           {
-            "statement_text": "All people who must be registered are healthcare workers.",
+            "statement_text": "No digital file is a nautical chart.",
             "correct_answer": "No",
-            "answer_reason": "All healthcare workers must be registered, but other professionals (e.g. lawyers, accountants) may also need registration. The reverse does not hold.",
+            "answer_reason": "Digital files are not hand-drawn, but only some nautical charts are hand-drawn. Other nautical charts may be digital. The premises do not exclude digital nautical charts.",
             "order_index": 5
           }
         ],
@@ -1306,34 +1193,201 @@
           "4": "No"
         },
         "answer_reason": null,
+        "order_index": 30
+      },
+      {
+        "id": "dm4r-031-arg",
+        "title": "Mandatory Four-Day School Week",
+        "type": "strongest_argument",
+        "stem": "All UK primary schools should move to a four-day school week.",
+        "options": [
+          {
+            "label": "A",
+            "text": "Yes; children would have more time for play and relaxation, which many parents believe is important."
+          },
+          {
+            "label": "B",
+            "text": "No; a four-day week would reduce teaching hours by 20%, and the Education Policy Institute estimated that students in schools with shortened weeks scored 0.4 standard deviations lower in reading and maths assessments compared to five-day peers."
+          },
+          {
+            "label": "C",
+            "text": "Yes; teachers deserve a better work-life balance and would be happier working four days."
+          },
+          {
+            "label": "D",
+            "text": "No; it would cause childcare difficulties for working parents."
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Option B is the strongest argument because it quantifies the loss — a 20% reduction in teaching hours — and cites specific research from the Education Policy Institute showing a 0.4 standard deviation decline in academic performance. This directly challenges the core purpose of schooling. Option A makes a vague parental belief claim without evidence. Option C focuses on teacher wellbeing rather than educational outcomes. Option D raises a practical concern but does not address the educational impact of reduced hours.",
+        "order_index": 31
+      },
+      {
+        "id": "dm4r-032-prob",
+        "title": "Traffic Light Signal Patterns",
+        "type": "probabilistic",
+        "stem": "A traffic monitoring system recorded data over 500 junctions. 70% of junctions use adaptive signal timing and the rest use fixed timing. Of the junctions with adaptive timing, 8% experienced congestion during peak hours. Of the junctions with fixed timing, 28% experienced congestion during peak hours.",
+        "options": [
+          {
+            "label": "A",
+            "text": "Fewer than 20 junctions with adaptive timing experienced congestion."
+          },
+          {
+            "label": "B",
+            "text": "If a junction experienced congestion, it was more likely to use fixed timing."
+          },
+          {
+            "label": "C",
+            "text": "More than 20% of all junctions experienced congestion."
+          },
+          {
+            "label": "D",
+            "text": "The number of congested fixed-timing junctions was exactly twice the number of congested adaptive junctions."
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Adaptive: 500 × 0.70 = 350. Congested adaptive: 350 × 0.08 = 28. Fixed: 500 × 0.30 = 150. Congested fixed: 150 × 0.28 = 42. Total congested: 28 + 42 = 70. A is wrong: 28 > 20. B is correct: P(fixed | congested) = 42/70 = 60%, which exceeds 50%. C is wrong: 70/500 = 14%, not more than 20%. D is wrong: 42/28 = 1.5, not exactly twice.",
+        "order_index": 32
+      },
+      {
+        "id": "dm4r-033-passage",
+        "title": "UK Organ Transplant Waiting Lists",
+        "type": "syllogism",
+        "stem": "NHS Blood and Transplant reported that 7,000 patients were on the organ transplant waiting list in England at the start of 2025, a decrease from 7,600 in 2023. Despite improvements, approximately 400 patients die each year while waiting for a suitable organ. The Organ Donation (Deemed Consent) Act 2020 introduced an opt-out system in England, meaning all adults are presumed to consent to donation unless they specifically opt out. Since the law's introduction, the opt-out register has recorded 2.8 million entries. Living donor transplants accounted for approximately 30% of all kidney transplants performed in 2024. The Human Tissue Authority reported that 4,600 transplant operations were carried out in 2024, the highest annual figure on record. Wales, which implemented its own opt-out system in 2015, reported a 36% increase in deceased donor consent rates in the first five years.",
+        "decision_making_question_statements": [
+          {
+            "statement_text": "The transplant waiting list grew between 2023 and 2025.",
+            "correct_answer": "No",
+            "answer_reason": "The passage states the list was 7,600 in 2023 and 7,000 in 2025 — a decrease, not growth.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "More than 300 patients die annually while waiting for a transplant.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states 'approximately 400 patients die each year,' which exceeds 300.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "The opt-out system means all adults must donate their organs.",
+            "correct_answer": "No",
+            "answer_reason": "Adults are 'presumed to consent unless they specifically opt out.' They can refuse — it is not mandatory donation.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "More than 4,000 transplant operations were carried out in 2024.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states '4,600 transplant operations,' which exceeds 4,000.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Wales's opt-out system led to a 36% increase in donor consent rates.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states Wales 'reported a 36% increase in deceased donor consent rates in the first five years.'",
+            "order_index": 5
+          }
+        ],
+        "correct_answer": {
+          "0": "No",
+          "1": "Yes",
+          "2": "No",
+          "3": "Yes",
+          "4": "Yes"
+        },
+        "answer_reason": null,
+        "order_index": 33
+      },
+      {
+        "id": "dm4r-034-syl",
+        "title": "Trade Tariffs",
+        "type": "syllogism",
+        "stem": "All imported goods are subject to customs checks. No domestic products are subject to customs checks. Some luxury items are imported goods.",
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Some luxury items are subject to customs checks.",
+            "correct_answer": "Yes",
+            "answer_reason": "Some luxury items are imported, and all imported goods are subject to customs checks. Therefore those imported luxury items are subject to customs checks.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "No domestic products are imported goods.",
+            "correct_answer": "Yes",
+            "answer_reason": "If a product were both domestic and imported, it would both be subject to customs checks (premise 1) and not subject to customs checks (premise 2) — a contradiction. Therefore no product can be both.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "All goods subject to customs checks are luxury items.",
+            "correct_answer": "No",
+            "answer_reason": "All imported goods have customs checks, but only some luxury items are imported. Many non-luxury imported goods also face customs checks.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "All luxury items are imported goods.",
+            "correct_answer": "No",
+            "answer_reason": "The premise states only 'some' luxury items are imported. Others may be domestically produced.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Some goods subject to customs checks are luxury items.",
+            "correct_answer": "Yes",
+            "answer_reason": "Some luxury items are imported (premise 3), and all imports face customs checks (premise 1). Therefore some customs-checked goods are luxury items.",
+            "order_index": 5
+          }
+        ],
+        "correct_answer": {
+          "0": "Yes",
+          "1": "Yes",
+          "2": "No",
+          "3": "No",
+          "4": "Yes"
+        },
+        "answer_reason": null,
         "order_index": 34
       },
       {
-        "id": "dm3-035-venn",
-        "title": "Student Transport Survey",
-        "type": "venn_diagram",
-        "stem": "The diagram shows how students travel to school. Each letter marks a region.\n\nWhich letter represents students who walk to school but do not cycle?",
-        "stimulus_diagram": {
-          "diagramLayout": "two_vertical_overlap",
-          "sets": [
-            { "id": "set1", "label": "Walk", "shape": "parallelogram" },
-            { "id": "set2", "label": "Cycle", "shape": "star" }
-          ],
-          "regions": {
-            "set1_only": "E",
-            "set1_set2": "F",
-            "set2_only": "G",
-            "outside": "H"
+        "id": "dm4r-035-passage",
+        "title": "UK Childcare Costs",
+        "type": "syllogism",
+        "stem": "The average cost of a full-time nursery place for a child under two in England reached £14,800 per year in 2024, according to the Coram Family and Childcare Survey. This represents more than a third of the median full-time salary after tax. The government expanded its free childcare offer to include 30 hours per week for all children from nine months old, with full rollout beginning in September 2025. Early years providers warned that the government funding rate of £11.22 per hour does not cover their operating costs, which average £13.40 per hour. Ofsted reported that 5,000 childcare providers closed in the year to March 2024. Research from the Institute for Fiscal Studies found that mothers who accessed free childcare hours were 8 percentage points more likely to return to work than those who did not. The Children's Commissioner recommended that the government extend funded hours to cover year-round care, noting that the current term-time model creates gaps that force parents to fund additional provision privately.",
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Average nursery costs for under-twos exceeded £15,000 per year.",
+            "correct_answer": "No",
+            "answer_reason": "The passage states the average cost 'reached £14,800 per year,' which is below £15,000.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "The government funding rate covers providers' average operating costs.",
+            "correct_answer": "No",
+            "answer_reason": "The funding rate is £11.22 per hour, but operating costs average £13.40 per hour. The rate does not cover costs.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "More than 4,000 childcare providers closed in the year to March 2024.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states '5,000 childcare providers closed,' which exceeds 4,000.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Mothers with access to free childcare were more likely to return to work.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage states they were '8 percentage points more likely to return to work.'",
+            "order_index": 4
+          },
+          {
+            "statement_text": "The Children's Commissioner recommended extending funded hours to year-round care.",
+            "correct_answer": "Yes",
+            "answer_reason": "The passage directly states the Commissioner 'recommended that the government extend funded hours to cover year-round care.'",
+            "order_index": 5
           }
-        },
-        "options": [
-          { "label": "A", "text": "Letter F" },
-          { "label": "B", "text": "Letter G" },
-          { "label": "C", "text": "Letter E" },
-          { "label": "D", "text": "Letter H" }
         ],
-        "correct_answer": "C",
-        "answer_reason": "Walk = parallelogram (set1), Cycle = star (set2). Region E (set1_only) is inside the parallelogram but outside the star — students who walk but do not cycle. F is Walk ∩ Cycle. G is Cycle only. H is outside both (neither walk nor cycle). Answer: C (Letter E).",
+        "correct_answer": {
+          "0": "No",
+          "1": "No",
+          "2": "Yes",
+          "3": "Yes",
+          "4": "Yes"
+        },
+        "answer_reason": null,
         "order_index": 35
       }
     ]

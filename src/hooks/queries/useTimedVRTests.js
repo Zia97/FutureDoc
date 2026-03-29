@@ -100,7 +100,26 @@ export function useTimedVRTests() {
 
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
-      if (hasValidCache) {
+
+      let versionRow;
+      try {
+        versionRow = await withRetry(() => db.getContentVersion(SECTION));
+      } catch {
+        // Offline / version check failed — fall back to cache if available
+        if (hasValidCache) {
+          setTests(
+            cached.data.map((t) =>
+              t.flatQuestions
+                ? t
+                : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) },
+            ),
+          );
+        }
+        setLoading(false);
+        return;
+      }
+
+      if (hasValidCache && cached.version === versionRow.version) {
         setTests(
           cached.data.map((t) =>
             t.flatQuestions
@@ -109,17 +128,6 @@ export function useTimedVRTests() {
           ),
         );
         setLoading(false);
-      }
-
-      let versionRow;
-      try {
-        versionRow = await withRetry(() => db.getContentVersion(SECTION));
-      } catch {
-        if (!hasValidCache) setLoading(false);
-        return;
-      }
-
-      if (hasValidCache && cached.version === versionRow.version) {
         return;
       }
 
@@ -130,6 +138,15 @@ export function useTimedVRTests() {
         setTests(mapped);
       } catch (fetchErr) {
         console.error('[useTimedVRTests] fetch failed:', fetchErr);
+        if (hasValidCache) {
+          setTests(
+            cached.data.map((t) =>
+              t.flatQuestions
+                ? t
+                : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) },
+            ),
+          );
+        }
       } finally {
         setLoading(false);
       }

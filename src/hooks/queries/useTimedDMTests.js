@@ -72,37 +72,34 @@ export function useTimedDMTests() {
 
       const cached = await getCached(CACHE_KEY);
       const hasValidCache = cached?.data?.length > 0;
-      if (hasValidCache) {
-        setTests(cached.data);
-        setLoading(false);
-      }
 
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (e) {
         console.error('[DM] getContentVersion failed:', e);
-        if (!hasValidCache) setLoading(false);
+        if (hasValidCache) setTests(cached.data);
+        setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
+        setTests(cached.data);
+        setLoading(false);
         return;
       }
 
-      let fresh;
       try {
-        fresh = await withRetry(() => db.fetchTimedDMTests());
+        const fresh = await withRetry(() => db.fetchTimedDMTests());
+        const mapped = mapTests(fresh);
+        await saveCache(CACHE_KEY, versionRow.version, mapped);
+        setTests(mapped);
       } catch (e) {
         console.error('[DM] fetchTimedDMTests failed:', e);
-        if (!hasValidCache) setLoading(false);
-        return;
+        if (hasValidCache) setTests(cached.data);
+      } finally {
+        setLoading(false);
       }
-
-      const mapped = mapTests(fresh);
-      await saveCache(CACHE_KEY, versionRow.version, mapped);
-      setTests(mapped);
-      setLoading(false);
     }
 
     load();

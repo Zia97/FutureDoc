@@ -58,6 +58,12 @@ function shapeToGeometry(shapeType, cx, cy, w, h) {
       const a = (i * 2 * Math.PI) / 16;
       return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)];
     });
+  } else if (shapeType === 'vertical_oval') {
+    const rx = r * 0.65, ry = r;
+    pts = Array.from({ length: 16 }, (_, i) => {
+      const a = (i * 2 * Math.PI) / 16;
+      return [cx + rx * Math.cos(a), cy + ry * Math.sin(a)];
+    });
   } else if (shapeType === 'isosceles_triangle') {
     pts = [[cx, cy - r], [cx - r * 0.5, cy + r], [cx + r * 0.5, cy + r]];
   } else if (shapeType === 'parallelogram') {
@@ -227,6 +233,7 @@ function shapeExtentAtCenter(shape, r) {
     case 'hexagon':            return r * Math.cos(Math.PI / 6); // ≈ 0.87r
     case 'octagon':            return r;
     case 'oval':               return r;        // full width at centre
+    case 'vertical_oval':      return r * 0.65;  // narrow width at centre
     case 'isosceles_triangle': return r * 0.25;  // narrow at centre
     case 'parallelogram':      return r * 1.1;   // slightly wider due to skew
     case 'star':               return r * 0.95;
@@ -338,6 +345,12 @@ function rayExtentFromCenter(shape, r, angle) {
     });
   } else if (shape === 'oval') {
     const rx = r, ry = r * 0.65;
+    pts = Array.from({ length: 16 }, (_, i) => {
+      const a = (i * 2 * Math.PI) / 16;
+      return [rx * Math.cos(a), ry * Math.sin(a)];
+    });
+  } else if (shape === 'vertical_oval') {
+    const rx = r * 0.65, ry = r;
     pts = Array.from({ length: 16 }, (_, i) => {
       const a = (i * 2 * Math.PI) / 16;
       return [rx * Math.cos(a), ry * Math.sin(a)];
@@ -643,6 +656,251 @@ function computeThreeVerticalChainLayout(shapeTypes, regionCounts) {
 }
 
 // ---------------------------------------------------------------------------
+// Dynamic four_linear layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a four_linear layout: four shapes in a horizontal row.
+ * Adjacent pairs (1-2, 2-3, 3-4) overlap if their intersection region has a
+ * non-zero count; otherwise a gap is drawn. Extension of three_linear.
+ *
+ * Region keys: set1_only, set2_only, set3_only, set4_only,
+ *              set1_set2*, set2_set3*, set3_set4*, outside
+ * (* = only if overlapping)
+ */
+function computeFourLinearLayout(shapeTypes, regionCounts) {
+  const r          = 50;
+  const cy         = 72;
+  const CANVAS_H   = 146;
+  const OVERLAP_PX = 38;
+  const GAP_PX     = 16;
+
+  const [s1, s2, s3, s4] = shapeTypes;
+  const ext1 = shapeExtentAtCenter(s1, r);
+  const ext2 = shapeExtentAtCenter(s2, r);
+  const ext3 = shapeExtentAtCenter(s3, r);
+  const ext4 = shapeExtentAtCenter(s4, r);
+
+  const overlap12 = regionCounts['set1_set2'] != null;
+  const overlap23 = regionCounts['set2_set3'] != null;
+  const overlap34 = regionCounts['set3_set4'] != null;
+
+  const dist12 = overlap12 ? (ext1 + ext2 - OVERLAP_PX) : (ext1 + ext2 + GAP_PX);
+  const dist23 = overlap23 ? (ext2 + ext3 - OVERLAP_PX) : (ext2 + ext3 + GAP_PX);
+  const dist34 = overlap34 ? (ext3 + ext4 - OVERLAP_PX) : (ext3 + ext4 + GAP_PX);
+
+  const MARGIN   = 18;
+  const cx1      = MARGIN + r;
+  const cx2      = cx1 + dist12;
+  const cx3      = cx2 + dist23;
+  const cx4      = cx3 + dist34;
+  const CANVAS_W = Math.ceil(cx4 + r + MARGIN);
+
+  const sets = [
+    { id: 'set1', cx: cx1, cy, w: r * 2, h: r * 2 },
+    { id: 'set2', cx: cx2, cy, w: r * 2, h: r * 2 },
+    { id: 'set3', cx: cx3, cy, w: r * 2, h: r * 2 },
+    { id: 'set4', cx: cx4, cy, w: r * 2, h: r * 2 },
+  ];
+
+  const regions = {
+    set1_only: { x: overlap12 ? cx1 - ext1 * 0.35 : cx1,       y: cy },
+    set2_only: { x: cx2,                                         y: cy - r * 0.55 },
+    set3_only: { x: cx3,                                         y: cy - r * 0.55 },
+    set4_only: { x: overlap34 ? cx4 + ext4 * 0.35 : cx4,        y: cy },
+    outside:   { x: 8,                                           y: 14 },
+  };
+
+  if (overlap12) regions.set1_set2 = { x: (cx1 + cx2) / 2, y: cy };
+  if (overlap23) regions.set2_set3 = { x: (cx2 + cx3) / 2, y: cy };
+  if (overlap34) regions.set3_set4 = { x: (cx3 + cx4) / 2, y: cy };
+
+  return { sets, regions, canvasWidth: CANVAS_W, canvasHeight: CANVAS_H };
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic three_hub layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a three_hub layout: a central shape (set1) flanked by set2 (left)
+ * and set3 (right). set1 overlaps both set2 and set3, but set2 and set3
+ * do NOT overlap each other.
+ *
+ * Region keys: set1_only, set2_only, set3_only, set1_set2, set1_set3, outside
+ */
+function computeThreeHubLayout(shapeTypes) {
+  const r          = 65;
+  const OVERLAP_PX = 48;
+  const MARGIN     = 20;
+
+  const [s1, s2, s3] = shapeTypes;
+
+  const ext1L = rayExtentFromCenter(s1, r, Math.PI);
+  const ext1R = rayExtentFromCenter(s1, r, 0);
+  const ext2R = rayExtentFromCenter(s2, r, 0);
+  const ext3L = rayExtentFromCenter(s3, r, Math.PI);
+
+  const dist12 = Math.max(ext1L + ext2R - OVERLAP_PX, r * 0.4);
+  const dist13 = Math.max(ext1R + ext3L - OVERLAP_PX, r * 0.4);
+
+  const cy  = MARGIN + r;
+  const cx2 = MARGIN + r;
+  const cx1 = cx2 + dist12;
+  const cx3 = cx1 + dist13;
+
+  const canvasW = Math.ceil(cx3 + r + MARGIN);
+  const canvasH = Math.ceil(cy + r + MARGIN);
+
+  const regions = {
+    set1_only: { x: cx1,                          y: cy - r * 0.5 },
+    set2_only: { x: cx2 + (cx2 - cx1) * 0.3,     y: cy },
+    set3_only: { x: cx3 + (cx3 - cx1) * 0.3,     y: cy },
+    set1_set2: { x: (cx1 + cx2) / 2,              y: cy },
+    set1_set3: { x: (cx1 + cx3) / 2,              y: cy },
+    outside:   { x: 8,                            y: 16 },
+  };
+
+  return {
+    sets: [
+      { id: 'set1', cx: cx1, cy, w: r * 2, h: r * 2 },
+      { id: 'set2', cx: cx2, cy, w: r * 2, h: r * 2 },
+      { id: 'set3', cx: cx3, cy, w: r * 2, h: r * 2 },
+    ],
+    regions,
+    canvasWidth: canvasW,
+    canvasHeight: canvasH,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic four_two_pairs layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a four_two_pairs layout: two separate overlapping pairs side by side.
+ * set1-set2 overlap on the left, set3-set4 overlap on the right.
+ * The two pairs have no overlap with each other.
+ *
+ * Region keys: set1_only, set2_only, set1_set2, set3_only, set4_only, set3_set4, outside
+ */
+function computeFourTwoPairsLayout(shapeTypes) {
+  const r          = 55;
+  const OVERLAP_PX = 42;
+  const PAIR_GAP   = 35;
+  const MARGIN     = 18;
+  const cy         = MARGIN + r;
+
+  const [s1, s2, s3, s4] = shapeTypes;
+
+  const ext1R = rayExtentFromCenter(s1, r, 0);
+  const ext2L = rayExtentFromCenter(s2, r, Math.PI);
+  const dist12 = Math.max(ext1R + ext2L - OVERLAP_PX, r * 0.4);
+
+  const ext2R = rayExtentFromCenter(s2, r, 0);
+  const ext3L = rayExtentFromCenter(s3, r, Math.PI);
+  const distPairs = ext2R + ext3L + PAIR_GAP;
+
+  const ext3R = rayExtentFromCenter(s3, r, 0);
+  const ext4L = rayExtentFromCenter(s4, r, Math.PI);
+  const dist34 = Math.max(ext3R + ext4L - OVERLAP_PX, r * 0.4);
+
+  const cx1 = MARGIN + r;
+  const cx2 = cx1 + dist12;
+  const cx3 = cx2 + distPairs;
+  const cx4 = cx3 + dist34;
+
+  const canvasW = Math.ceil(cx4 + r + MARGIN);
+  const canvasH = Math.ceil(cy + r + MARGIN);
+
+  const mid12 = (cx1 + cx2) / 2;
+  const mid34 = (cx3 + cx4) / 2;
+
+  const regions = {
+    set1_only: { x: cx1 - (mid12 - cx1) * 0.4, y: cy },
+    set1_set2: { x: mid12,                      y: cy },
+    set2_only: { x: cx2 + (cx2 - mid12) * 0.4,  y: cy - r * 0.4 },
+    set3_only: { x: cx3 - (mid34 - cx3) * 0.4, y: cy },
+    set3_set4: { x: mid34,                      y: cy },
+    set4_only: { x: cx4 + (cx4 - mid34) * 0.4,  y: cy - r * 0.4 },
+    outside:   { x: 8,                          y: 14 },
+  };
+
+  return {
+    sets: [
+      { id: 'set1', cx: cx1, cy, w: r * 2, h: r * 2 },
+      { id: 'set2', cx: cx2, cy, w: r * 2, h: r * 2 },
+      { id: 'set3', cx: cx3, cy, w: r * 2, h: r * 2 },
+      { id: 'set4', cx: cx4, cy, w: r * 2, h: r * 2 },
+    ],
+    regions,
+    canvasWidth: canvasW,
+    canvasHeight: canvasH,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Dynamic three_v_overlap layout
+// ---------------------------------------------------------------------------
+
+/**
+ * Builds a three_v_overlap layout: V-arrangement.
+ * set1 top-left, set2 top-right (no overlap between them).
+ * set3 bottom-centre, overlapping both set1 and set2.
+ *
+ * Region keys: set1_only, set2_only, set3_only, set1_set3, set2_set3, outside
+ */
+function computeThreeVOverlapLayout(shapeTypes) {
+  const r          = 65;
+  const OVERLAP_PX = 48;
+  const MARGIN     = 20;
+
+  const [s1, s2, s3] = shapeTypes;
+
+  // Horizontal: set1 and set2 side by side with a gap (no overlap)
+  const ext1R = rayExtentFromCenter(s1, r, 0);
+  const ext2L = rayExtentFromCenter(s2, r, Math.PI);
+  const gapDist = ext1R + ext2L + 20;
+
+  const cx1    = MARGIN + r;
+  const cx2    = cx1 + gapDist;
+  const cy_top = MARGIN + r;
+
+  // set3 centred below, overlapping both
+  const cx3 = (cx1 + cx2) / 2;
+  const ext1D = rayExtentFromCenter(s1, r, Math.PI / 2);
+  const ext3U = rayExtentFromCenter(s3, r, -Math.PI / 2);
+  const vertDist = Math.max(ext1D + ext3U - OVERLAP_PX, r * 0.5);
+  const cy3 = cy_top + vertDist;
+
+  const canvasW = Math.ceil(cx2 + r + MARGIN);
+  const canvasH = Math.ceil(cy3 + r + MARGIN);
+
+  const mx = (cx1 + cx2 + cx3) / 3;
+  const my = (cy_top * 2 + cy3) / 3;
+
+  const regions = {
+    set1_only: { x: cx1 + (cx1 - mx) * 0.4, y: cy_top + (cy_top - my) * 0.4 },
+    set2_only: { x: cx2 + (cx2 - mx) * 0.4, y: cy_top + (cy_top - my) * 0.4 },
+    set3_only: { x: cx3,                     y: cy3 + (cy3 - my) * 0.4 },
+    set1_set3: { x: (cx1 + cx3) / 2,        y: (cy_top + cy3) / 2 },
+    set2_set3: { x: (cx2 + cx3) / 2,        y: (cy_top + cy3) / 2 },
+    outside:   { x: 8,                      y: 16 },
+  };
+
+  return {
+    sets: [
+      { id: 'set1', cx: cx1, cy: cy_top, w: r * 2, h: r * 2 },
+      { id: 'set2', cx: cx2, cy: cy_top, w: r * 2, h: r * 2 },
+      { id: 'set3', cx: cx3, cy: cy3,    w: r * 2, h: r * 2 },
+    ],
+    regions,
+    canvasWidth: canvasW,
+    canvasHeight: canvasH,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Static layout templates
 // ---------------------------------------------------------------------------
 
@@ -660,6 +918,7 @@ function computeThreeVerticalChainLayout(shapeTypes, regionCounts) {
  *   three_one_separate  — set1∩set2; set3 separate
  *   two_separate_staggered — two sets, no overlap, diagonal
  *   five_complex        — 5 shapes with fixed arrangement
+ *   three_nested        — 3 concentric shapes (set1 ⊃ set2 ⊃ set3)
  */
 const LAYOUTS = {
   two_nested: {
@@ -766,6 +1025,42 @@ const LAYOUTS = {
     },
   },
 
+  three_nested_one_separate: {
+    // set2 nested inside set1 (subset), set3 completely separate.
+    // Produces 4 regions: outer ring, inner, separate shape, outside.
+    canvasWidth: 380,
+    canvasHeight: 200,
+    sets: [
+      { id: 'set1', cx: 110, cy: 100, w: 160, h: 160 },
+      { id: 'set2', cx: 110, cy: 100, w: 80,  h: 80  },
+      { id: 'set3', cx: 300, cy: 100, w: 120, h: 120 },
+    ],
+    regions: {
+      set1_only:  { x: 45,  y: 100 },
+      set1_set2:  { x: 110, y: 100 },
+      set3_only:  { x: 300, y: 100 },
+      outside:    { x: 8,   y: 16  },
+    },
+  },
+
+  three_nested: {
+    // Three concentric shapes: set1 (outer) ⊃ set2 (middle) ⊃ set3 (inner).
+    // Produces 4 regions: outer ring, middle ring, innermost, outside.
+    canvasWidth: 260,
+    canvasHeight: 220,
+    sets: [
+      { id: 'set1', cx: 130, cy: 110, w: 200, h: 200 },
+      { id: 'set2', cx: 130, cy: 110, w: 130, h: 130 },
+      { id: 'set3', cx: 130, cy: 110, w: 70,  h: 70  },
+    ],
+    regions: {
+      set1_only:  { x: 46,  y: 55  },   // outer ring (set1 minus set2)
+      set1_set2:  { x: 75,  y: 75  },   // middle ring (set2 minus set3)
+      all_three:  { x: 130, y: 110 },   // innermost (inside set3)
+      outside:    { x: 8,   y: 16  },
+    },
+  },
+
 };
 
 function renderShape(id, shape, cx, cy, w, h, stroke) {
@@ -831,6 +1126,9 @@ function renderShape(id, shape, cx, cy, w, h, stroke) {
     case 'oval':
       return <Ellipse key={id} cx={cx} cy={cy} rx={r} ry={r * 0.65} {...strokeProps} />;
 
+    case 'vertical_oval':
+      return <Ellipse key={id} cx={cx} cy={cy} rx={r * 0.65} ry={r} {...strokeProps} />;
+
     case 'isosceles_triangle': {
       const pts = `${cx},${cy - r} ${cx - r * 0.5},${cy + r} ${cx + r * 0.5},${cy + r}`;
       return <Polygon key={id} points={pts} {...strokeProps} />;
@@ -886,6 +1184,18 @@ function resolveLayout(vennConfig) {
   if (vennConfig.diagramLayout === 'three_vertical_chain') {
     return computeThreeVerticalChainLayout(shapeTypes, vennConfig.regions || {});
   }
+  if (vennConfig.diagramLayout === 'four_linear') {
+    return computeFourLinearLayout(shapeTypes, vennConfig.regions || {});
+  }
+  if (vennConfig.diagramLayout === 'three_hub') {
+    return computeThreeHubLayout(shapeTypes);
+  }
+  if (vennConfig.diagramLayout === 'four_two_pairs') {
+    return computeFourTwoPairsLayout(shapeTypes);
+  }
+  if (vennConfig.diagramLayout === 'three_v_overlap') {
+    return computeThreeVOverlapLayout(shapeTypes);
+  }
   return LAYOUTS[vennConfig.diagramLayout] ?? null;
 }
 
@@ -897,6 +1207,10 @@ const DYNAMIC_LAYOUTS = new Set([
   'two_overlap_staggered',
   'two_vertical_overlap',
   'three_vertical_chain',
+  'four_linear',
+  'three_hub',
+  'four_two_pairs',
+  'three_v_overlap',
 ]);
 
 export function getCanvasSize(diagramLayout, vennConfig) {

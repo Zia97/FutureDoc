@@ -51,23 +51,23 @@ export function useQuantitativeReasoningSets() {
 
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
-      if (hasValidCache) {
-        setSets(cached.data);
-        setLoading(false);
-      }
 
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (!hasValidCache) {
+        if (hasValidCache) {
+          setSets(cached.data);
+        } else {
           setError(versionError);
-          setLoading(false);
         }
+        setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
+        setSets(cached.data);
+        setLoading(false);
         return;
       }
 
@@ -78,11 +78,13 @@ export function useQuantitativeReasoningSets() {
         setSets(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
-        if (!hasValidCache) {
+        if (hasValidCache) {
+          setSets(cached.data);
+        } else {
           setError(err);
         }
       } finally {
-        if (!hasValidCache) setLoading(false);
+        setLoading(false);
       }
     }
 

@@ -64,23 +64,23 @@ export function useDecisionMakingQuestions() {
 
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
-      if (hasValidCache) {
-        setQuestions(cached.data);
-        setLoading(false);
-      }
 
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (!hasValidCache) {
+        if (hasValidCache) {
+          setQuestions(cached.data);
+        } else {
           setError(versionError);
-          setLoading(false);
         }
+        setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
+        setQuestions(cached.data);
+        setLoading(false);
         return;
       }
 
@@ -91,11 +91,13 @@ export function useDecisionMakingQuestions() {
         setQuestions(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
-        if (!hasValidCache) {
+        if (hasValidCache) {
+          setQuestions(cached.data);
+        } else {
           setError(err);
         }
       } finally {
-        if (!hasValidCache) setLoading(false);
+        setLoading(false);
       }
     }
 

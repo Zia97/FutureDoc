@@ -55,25 +55,29 @@ export function useTimedQRTests() {
 
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
-      if (hasValidCache) {
-        setTests(cached.data.map((t) => t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedQRSets(t.sets) }));
-        setLoading(false);
-      }
+
+      const ensureFlatQuestions = (t) =>
+        t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedQRSets(t.sets) };
 
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch {
-        if (!hasValidCache) setLoading(false);
+        if (hasValidCache) setTests(cached.data.map(ensureFlatQuestions));
+        setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
+        setTests(cached.data.map(ensureFlatQuestions));
+        setLoading(false);
         return;
       }
 
       // TODO: fetch timed QR tests from DB once schema is designed.
-      if (!hasValidCache) setLoading(false);
+      // For now fall back to cache even if stale.
+      if (hasValidCache) setTests(cached.data.map(ensureFlatQuestions));
+      setLoading(false);
     }
 
     load();

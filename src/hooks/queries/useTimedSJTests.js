@@ -93,23 +93,23 @@ export function useTimedSJTests() {
 
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
-      if (hasValidCache) {
-        setTests(cached.data.map(addFlatQuestions));
-        setLoading(false);
-      }
 
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (!hasValidCache) {
+        if (hasValidCache) {
+          setTests(cached.data.map(addFlatQuestions));
+        } else {
           setError(versionError);
-          setLoading(false);
         }
+        setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
+        setTests(cached.data.map(addFlatQuestions));
+        setLoading(false);
         return;
       }
 
@@ -121,11 +121,13 @@ export function useTimedSJTests() {
         setTests(mapped);
         await saveCache(SECTION, versionRow.version, mapped);
       } catch (err) {
-        if (!hasValidCache) {
+        if (hasValidCache) {
+          setTests(cached.data.map(addFlatQuestions));
+        } else {
           setError(err);
         }
       } finally {
-        if (!hasValidCache) setLoading(false);
+        setLoading(false);
       }
     }
 
