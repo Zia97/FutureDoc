@@ -12,6 +12,10 @@ import { useTheme } from '../../context/ThemeContext';
 const STROKE_WIDTH = 2;
 const FONT_SIZE = 14;
 const MIN_FONT_SIZE = 9;
+const MIN_OVERLAP_DEPTH = 30; // minimum pixels of geometric overlap between any two shapes
+const MIN_LABEL_CLEARANCE = 10; // minimum clearance (px) an overlap region must have for a readable label
+const MAX_RBOOST_ATTEMPTS = 3; // how many times to retry with a larger radius
+const RBOOST_STEP = 8; // px added to base radius on each retry
 
 // --- Label safety helpers ---
 
@@ -87,6 +91,21 @@ function shapeToGeometry(shapeType, cx, cy, w, h) {
   }
   const segs = pts.map((p, i) => [...p, ...pts[(i + 1) % pts.length]]);
   return { type: 'polygon', segs };
+}
+
+/**
+ * Clamp centre-to-centre distance so the geometric overlap between two shapes
+ * is at least MIN_OVERLAP_DEPTH pixels deep.
+ *   ext1 / ext2 = ray extents from each centre toward the other.
+ *   dist        = proposed centre-to-centre distance.
+ *   minFloor    = absolute minimum distance (prevents shapes collapsing).
+ */
+function clampDistForOverlap(dist, ext1, ext2, minFloor) {
+  const maxDist = ext1 + ext2 - MIN_OVERLAP_DEPTH;
+  if (maxDist > minFloor && dist > maxDist) {
+    return Math.max(maxDist, minFloor);
+  }
+  return Math.max(dist, minFloor);
 }
 
 function distToOutline(px, py, geom) {
@@ -253,8 +272,8 @@ function shapeExtentAtCenter(shape, r) {
  * All variants share a fixed canvas width (320 px) so option thumbnails are
  * always the same size; shapes are centred within that canvas.
  */
-function computeThreeLinearLayout(shapeTypes, regionCounts) {
-  const r          = 65;
+function computeThreeLinearLayout(shapeTypes, regionCounts, rBoost = 0) {
+  const r          = 65 + rBoost;
   const cy         = 80;
   const CANVAS_H   = 162;
   const OVERLAP_PX = 45; // deeper overlaps give more label space
@@ -268,8 +287,8 @@ function computeThreeLinearLayout(shapeTypes, regionCounts) {
   const overlap12 = regionCounts['set1_set2'] != null;
   const overlap23 = regionCounts['set2_set3'] != null;
 
-  const dist12 = overlap12 ? (ext1 + ext2 - OVERLAP_PX) : (ext1 + ext2 + GAP_PX);
-  const dist23 = overlap23 ? (ext2 + ext3 - OVERLAP_PX) : (ext2 + ext3 + GAP_PX);
+  const dist12 = overlap12 ? clampDistForOverlap(ext1 + ext2 - OVERLAP_PX, ext1, ext2, r * 0.4) : (ext1 + ext2 + GAP_PX);
+  const dist23 = overlap23 ? clampDistForOverlap(ext2 + ext3 - OVERLAP_PX, ext2, ext3, r * 0.4) : (ext2 + ext3 + GAP_PX);
 
   // Canvas width is derived from actual content + margins rather than a fixed
   // value, so diagrams fill the screen more effectively.
@@ -412,8 +431,8 @@ function rayExtentFromCenter(shape, r, angle) {
  * inverted=false → set1 top, set2 bottom-left, set3 bottom-right  (three_all_overlap)
  * inverted=true  → set1 bottom, set2 top-left,  set3 top-right    (three_all_overlap_v2)
  */
-function computeThreeAllOverlapLayout(shapeTypes, inverted = false) {
-  const r          = 75;
+function computeThreeAllOverlapLayout(shapeTypes, inverted = false, rBoost = 0) {
+  const r          = 75 + rBoost;
   const OVERLAP_PX = 58;
   const MARGIN     = 20;
 
@@ -434,9 +453,9 @@ function computeThreeAllOverlapLayout(shapeTypes, inverted = false) {
   const span13 = rayExtentFromCenter(s1, r, a13) + rayExtentFromCenter(s3, r, a31);
   const span23 = rayExtentFromCenter(s2, r, toRad(0)) + rayExtentFromCenter(s3, r, toRad(180));
 
-  const d12 = Math.max(span12 - OVERLAP_PX, r * 0.4);
-  const d13 = Math.max(span13 - OVERLAP_PX, r * 0.4);
-  const d23 = Math.max(span23 - OVERLAP_PX, r * 0.4);
+  const d12 = clampDistForOverlap(span12 - OVERLAP_PX, rayExtentFromCenter(s1, r, a12), rayExtentFromCenter(s2, r, a21), r * 0.4);
+  const d13 = clampDistForOverlap(span13 - OVERLAP_PX, rayExtentFromCenter(s1, r, a13), rayExtentFromCenter(s3, r, a31), r * 0.4);
+  const d23 = clampDistForOverlap(span23 - OVERLAP_PX, rayExtentFromCenter(s2, r, toRad(0)), rayExtentFromCenter(s3, r, toRad(180)), r * 0.4);
 
   // Trilaterate: fix set2 at origin, set3 at (d23, 0), solve for set1.
   //   d12² = x1² + y1²
@@ -503,8 +522,8 @@ function computeThreeAllOverlapLayout(shapeTypes, inverted = false) {
  * staggered=false → both shapes at the same y (horizontal)
  * staggered=true  → set1 upper-left, set2 lower-right (diagonal)
  */
-function computeTwoOverlapLayout(shapeTypes, staggered = false) {
-  const r          = 75;
+function computeTwoOverlapLayout(shapeTypes, staggered = false, rBoost = 0) {
+  const r          = 75 + rBoost;
   const OVERLAP_PX = 55;
   const MARGIN     = 20;
 
@@ -515,7 +534,7 @@ function computeTwoOverlapLayout(shapeTypes, staggered = false) {
   const ext1 = rayExtentFromCenter(s1, r, angle);
   const ext2 = rayExtentFromCenter(s2, r, angle + Math.PI);
   const span = ext1 + ext2;
-  const dist = Math.max(span - OVERLAP_PX, r * 0.5);
+  const dist = clampDistForOverlap(Math.max(span - OVERLAP_PX, r * 0.5), ext1, ext2, r * 0.4);
 
   const cx1 = MARGIN + r;
   const cy1 = MARGIN + r;
@@ -555,8 +574,8 @@ function computeTwoOverlapLayout(shapeTypes, staggered = false) {
  * Builds a two_vertical_overlap layout: two shapes stacked vertically with
  * overlap. Taller than wide — good for mobile screens.
  */
-function computeTwoVerticalOverlapLayout(shapeTypes) {
-  const r          = 75;
+function computeTwoVerticalOverlapLayout(shapeTypes, rBoost = 0) {
+  const r          = 75 + rBoost;
   const OVERLAP_PX = 55;
   const MARGIN     = 20;
 
@@ -565,7 +584,7 @@ function computeTwoVerticalOverlapLayout(shapeTypes) {
   const ext1 = rayExtentFromCenter(s1, r, Math.PI / 2);
   const ext2 = rayExtentFromCenter(s2, r, -Math.PI / 2);
   const span = ext1 + ext2;
-  const dist = Math.max(span - OVERLAP_PX, r * 0.5);
+  const dist = clampDistForOverlap(Math.max(span - OVERLAP_PX, r * 0.5), ext1, ext2, r * 0.4);
 
   const cx  = MARGIN + r;
   const cy1 = MARGIN + r;
@@ -606,8 +625,8 @@ function computeTwoVerticalOverlapLayout(shapeTypes) {
  * Region keys: set1_only, set2_only, set3_only, set1_set2*, set2_set3*, outside
  * (* = only if overlapping)
  */
-function computeThreeVerticalChainLayout(shapeTypes, regionCounts) {
-  const r          = 60;
+function computeThreeVerticalChainLayout(shapeTypes, regionCounts, rBoost = 0) {
+  const r          = 60 + rBoost;
   const OVERLAP_PX = 45;
   const GAP_PX     = 15;
   const MARGIN     = 20;
@@ -622,8 +641,8 @@ function computeThreeVerticalChainLayout(shapeTypes, regionCounts) {
   const ext2d = rayExtentFromCenter(s2, r, Math.PI / 2);
   const ext3u = rayExtentFromCenter(s3, r, -Math.PI / 2);
 
-  const dist12 = overlap12 ? (ext1d + ext2u - OVERLAP_PX) : (ext1d + ext2u + GAP_PX);
-  const dist23 = overlap23 ? (ext2d + ext3u - OVERLAP_PX) : (ext2d + ext3u + GAP_PX);
+  const dist12 = overlap12 ? clampDistForOverlap(ext1d + ext2u - OVERLAP_PX, ext1d, ext2u, r * 0.3) : (ext1d + ext2u + GAP_PX);
+  const dist23 = overlap23 ? clampDistForOverlap(ext2d + ext3u - OVERLAP_PX, ext2d, ext3u, r * 0.3) : (ext2d + ext3u + GAP_PX);
 
   const cx  = MARGIN + r;
   const cy1 = MARGIN + r;
@@ -668,8 +687,8 @@ function computeThreeVerticalChainLayout(shapeTypes, regionCounts) {
  *              set1_set2*, set2_set3*, set3_set4*, outside
  * (* = only if overlapping)
  */
-function computeFourLinearLayout(shapeTypes, regionCounts) {
-  const r          = 50;
+function computeFourLinearLayout(shapeTypes, regionCounts, rBoost = 0) {
+  const r          = 50 + rBoost;
   const cy         = 72;
   const CANVAS_H   = 146;
   const OVERLAP_PX = 38;
@@ -685,9 +704,9 @@ function computeFourLinearLayout(shapeTypes, regionCounts) {
   const overlap23 = regionCounts['set2_set3'] != null;
   const overlap34 = regionCounts['set3_set4'] != null;
 
-  const dist12 = overlap12 ? (ext1 + ext2 - OVERLAP_PX) : (ext1 + ext2 + GAP_PX);
-  const dist23 = overlap23 ? (ext2 + ext3 - OVERLAP_PX) : (ext2 + ext3 + GAP_PX);
-  const dist34 = overlap34 ? (ext3 + ext4 - OVERLAP_PX) : (ext3 + ext4 + GAP_PX);
+  const dist12 = overlap12 ? clampDistForOverlap(ext1 + ext2 - OVERLAP_PX, ext1, ext2, r * 0.3) : (ext1 + ext2 + GAP_PX);
+  const dist23 = overlap23 ? clampDistForOverlap(ext2 + ext3 - OVERLAP_PX, ext2, ext3, r * 0.3) : (ext2 + ext3 + GAP_PX);
+  const dist34 = overlap34 ? clampDistForOverlap(ext3 + ext4 - OVERLAP_PX, ext3, ext4, r * 0.3) : (ext3 + ext4 + GAP_PX);
 
   const MARGIN   = 18;
   const cx1      = MARGIN + r;
@@ -729,8 +748,8 @@ function computeFourLinearLayout(shapeTypes, regionCounts) {
  *
  * Region keys: set1_only, set2_only, set3_only, set1_set2, set1_set3, outside
  */
-function computeThreeHubLayout(shapeTypes) {
-  const r          = 65;
+function computeThreeHubLayout(shapeTypes, rBoost = 0) {
+  const r          = 65 + rBoost;
   const OVERLAP_PX = 48;
   const MARGIN     = 20;
 
@@ -741,8 +760,8 @@ function computeThreeHubLayout(shapeTypes) {
   const ext2R = rayExtentFromCenter(s2, r, 0);
   const ext3L = rayExtentFromCenter(s3, r, Math.PI);
 
-  const dist12 = Math.max(ext1L + ext2R - OVERLAP_PX, r * 0.4);
-  const dist13 = Math.max(ext1R + ext3L - OVERLAP_PX, r * 0.4);
+  const dist12 = clampDistForOverlap(Math.max(ext1L + ext2R - OVERLAP_PX, r * 0.4), ext1L, ext2R, r * 0.4);
+  const dist13 = clampDistForOverlap(Math.max(ext1R + ext3L - OVERLAP_PX, r * 0.4), ext1R, ext3L, r * 0.4);
 
   const cy  = MARGIN + r;
   const cx2 = MARGIN + r;
@@ -784,8 +803,8 @@ function computeThreeHubLayout(shapeTypes) {
  *
  * Region keys: set1_only, set2_only, set1_set2, set3_only, set4_only, set3_set4, outside
  */
-function computeFourTwoPairsLayout(shapeTypes) {
-  const r          = 55;
+function computeFourTwoPairsLayout(shapeTypes, rBoost = 0) {
+  const r          = 55 + rBoost;
   const OVERLAP_PX = 42;
   const PAIR_GAP   = 35;
   const MARGIN     = 18;
@@ -795,7 +814,7 @@ function computeFourTwoPairsLayout(shapeTypes) {
 
   const ext1R = rayExtentFromCenter(s1, r, 0);
   const ext2L = rayExtentFromCenter(s2, r, Math.PI);
-  const dist12 = Math.max(ext1R + ext2L - OVERLAP_PX, r * 0.4);
+  const dist12 = clampDistForOverlap(Math.max(ext1R + ext2L - OVERLAP_PX, r * 0.4), ext1R, ext2L, r * 0.4);
 
   const ext2R = rayExtentFromCenter(s2, r, 0);
   const ext3L = rayExtentFromCenter(s3, r, Math.PI);
@@ -803,7 +822,7 @@ function computeFourTwoPairsLayout(shapeTypes) {
 
   const ext3R = rayExtentFromCenter(s3, r, 0);
   const ext4L = rayExtentFromCenter(s4, r, Math.PI);
-  const dist34 = Math.max(ext3R + ext4L - OVERLAP_PX, r * 0.4);
+  const dist34 = clampDistForOverlap(Math.max(ext3R + ext4L - OVERLAP_PX, r * 0.4), ext3R, ext4L, r * 0.4);
 
   const cx1 = MARGIN + r;
   const cx2 = cx1 + dist12;
@@ -850,27 +869,59 @@ function computeFourTwoPairsLayout(shapeTypes) {
  *
  * Region keys: set1_only, set2_only, set3_only, set1_set3, set2_set3, outside
  */
-function computeThreeVOverlapLayout(shapeTypes) {
-  const r          = 65;
-  const OVERLAP_PX = 48;
+function computeThreeVOverlapLayout(shapeTypes, rBoost = 0) {
+  const BASE_R     = 65 + rBoost;
+  const GAP_PX     = 10;
   const MARGIN     = 20;
+  const TARGET_DIAG_OVERLAP = 35; // target overlap depth along the actual diagonal
+  const MIN_VERT   = 35;          // vertical floor — below this the layout looks cramped
 
   const [s1, s2, s3] = shapeTypes;
 
-  // Horizontal: set1 and set2 side by side with a gap (no overlap)
-  const ext1R = rayExtentFromCenter(s1, r, 0);
-  const ext2L = rayExtentFromCenter(s2, r, Math.PI);
-  const gapDist = ext1R + ext2L + 20;
+  // Boost the radius if the shape combination produces narrow diagonal extents.
+  // This guarantees adequate overlap area instead of forcing shapes unnaturally close.
+  let r = BASE_R;
+  let cx1, cx2, cx3, cy_top, horizDist, vertDist;
 
-  const cx1    = MARGIN + r;
-  const cx2    = cx1 + gapDist;
-  const cy_top = MARGIN + r;
+  for (let rAttempt = 0; rAttempt < 3; rAttempt++) {
+    const ext1R = rayExtentFromCenter(s1, r, 0);
+    const ext2L = rayExtentFromCenter(s2, r, Math.PI);
+    const gapDist = ext1R + ext2L + GAP_PX;
 
-  // set3 centred below, overlapping both
-  const cx3 = (cx1 + cx2) / 2;
-  const ext1D = rayExtentFromCenter(s1, r, Math.PI / 2);
-  const ext3U = rayExtentFromCenter(s3, r, -Math.PI / 2);
-  const vertDist = Math.max(ext1D + ext3U - OVERLAP_PX, r * 0.5);
+    cx1     = MARGIN + r;
+    cx2     = cx1 + gapDist;
+    cy_top  = MARGIN + r;
+    cx3     = (cx1 + cx2) / 2;
+    horizDist = cx3 - cx1;
+
+    // Iteratively find vertical distance giving TARGET_DIAG_OVERLAP along the diagonal
+    const ext1D = rayExtentFromCenter(s1, r, Math.PI / 2);
+    const ext3U = rayExtentFromCenter(s3, r, -Math.PI / 2);
+    vertDist = ext1D + ext3U - 25;
+
+    for (let iter = 0; iter < 20; iter++) {
+      const diagAngle13 = Math.atan2(vertDist, horizDist);
+      const diagAngle23 = Math.atan2(vertDist, -horizDist);
+
+      const span13 = rayExtentFromCenter(s1, r, diagAngle13)
+                   + rayExtentFromCenter(s3, r, diagAngle13 + Math.PI);
+      const span23 = rayExtentFromCenter(s2, r, diagAngle23)
+                   + rayExtentFromCenter(s3, r, diagAngle23 + Math.PI);
+
+      const diagDist = Math.sqrt(horizDist * horizDist + vertDist * vertDist);
+      const worstOverlap = Math.min(span13 - diagDist, span23 - diagDist);
+
+      if (worstOverlap >= TARGET_DIAG_OVERLAP) break;
+      vertDist -= 3;
+    }
+
+    // If vertDist is acceptable, we're done
+    if (vertDist >= MIN_VERT) break;
+
+    // Otherwise bump the radius and retry (larger shapes = more overlap room)
+    r += 8;
+  }
+  vertDist = Math.max(vertDist, MIN_VERT);
   const cy3 = cy_top + vertDist;
 
   const canvasW = Math.ceil(cx2 + r + MARGIN);
@@ -1061,6 +1112,52 @@ const LAYOUTS = {
     },
   },
 
+  /**
+   * six_complex — 6-shape layout with overlapping groups (500 × 260 canvas).
+   *
+   *  set1 rectangle : cx=230 cy=130 w=400 h=230  → x:30–430   y:15–245  (large container)
+   *  set2 circle    : cx=125 cy=100 w=110 h=110  → r=55, inside set1, upper-left
+   *  set3 pentagon  : cx=205 cy=100 w=110 h=110  → r=55, inside set1, overlaps set2
+   *  set4 hexagon   : cx=340 cy=100 w=110 h=110  → r=55, inside set1, upper-right (separate from set3)
+   *  set5 diamond   : cx=210 cy=165 w=110 h=110  → r=55, inside set1, overlaps set3 from below
+   *  set6 triangle  : cx=420 cy=130 w=130 h=130  → r=65, partly inside set1, partly outside right
+   *
+   *  Labeled regions (all geometrically verified):
+   *    set1_set2        ( 90, 100)  set1 ∩ set2 only
+   *    set1_set2_set3   (165,  90)  set1 ∩ set2 ∩ set3
+   *    set1_set3        (230,  70)  set1 ∩ set3 only (no set2, no set5)
+   *    set1_set3_set5   (205, 135)  set1 ∩ set3 ∩ set5
+   *    set1_set4        (340, 100)  set1 ∩ set4 only
+   *    set1_set5        (210, 195)  set1 ∩ set5 only (no set3)
+   *    set1_only        (275, 200)  set1 only — gap between shapes
+   *    set1_set6        (400, 160)  set1 ∩ set6
+   *    set6_only        (460, 160)  set6 outside set1
+   */
+  six_complex: {
+    canvasWidth: 500,
+    canvasHeight: 260,
+    sets: [
+      { id: 'set1', cx: 230, cy: 130, w: 400, h: 230 },
+      { id: 'set2', cx: 125, cy: 100, w: 110, h: 110 },
+      { id: 'set3', cx: 205, cy: 100, w: 110, h: 110 },
+      { id: 'set4', cx: 340, cy: 100, w: 110, h: 110 },
+      { id: 'set5', cx: 210, cy: 165, w: 110, h: 110 },
+      { id: 'set6', cx: 420, cy: 130, w: 130, h: 130 },
+    ],
+    regions: {
+      set1_set2:        { x: 90,  y: 100 },
+      set1_set2_set3:   { x: 165, y: 90  },
+      set1_set3:        { x: 230, y: 70  },
+      set1_set3_set5:   { x: 205, y: 135 },
+      set1_set4:        { x: 340, y: 100 },
+      set1_set5:        { x: 210, y: 195 },
+      set1_only:        { x: 275, y: 200 },
+      set1_set6:        { x: 400, y: 160 },
+      set6_only:        { x: 460, y: 160 },
+      outside:          { x: 12,  y: 12  },
+    },
+  },
+
 };
 
 function renderShape(id, shape, cx, cy, w, h, stroke) {
@@ -1160,42 +1257,86 @@ function renderShape(id, shape, cx, cy, w, h, stroke) {
   }
 }
 
+/**
+ * Measures the minimum clearance across all overlap regions in a layout.
+ * Overlap regions are those where a label must sit inside multiple shapes
+ * (i.e. not *_only and not outside). Returns Infinity if there are no
+ * overlap regions.
+ */
+function measureMinOverlapClearance(layout, vennConfig) {
+  const allSetIds = layout.sets.map(s => s.id);
+  const shapeById = {};
+  (vennConfig.sets || []).forEach(s => { shapeById[s.id] = s.shape; });
+
+  const shapeGeoms = layout.sets.map(pos =>
+    shapeToGeometry(shapeById[pos.id] || 'circle', pos.cx, pos.cy, pos.w, pos.h),
+  );
+  const setIndexById = Object.fromEntries(layout.sets.map((s, i) => [s.id, i]));
+
+  let minClearance = Infinity;
+
+  for (const [regionKey, value] of Object.entries(vennConfig.regions || {})) {
+    if (value === undefined || value === null) continue;
+    if (regionKey === 'outside' || regionKey.endsWith('_only')) continue;
+
+    const rawPos = layout.regions[regionKey];
+    if (!rawPos) continue;
+
+    const { insideIds, outsideIds } = parseRegionKey(regionKey, allSetIds);
+    const insideGeoms = insideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
+    const outsideGeoms = outsideIds.map(id => shapeGeoms[setIndexById[id]]).filter(Boolean);
+    const regionCheck = (px, py) =>
+      insideGeoms.every(g => isPointInsideShape(px, py, g)) &&
+      outsideGeoms.every(g => !isPointInsideShape(px, py, g));
+
+    const result = findPoleOfInaccessibility(
+      rawPos.x, rawPos.y, shapeGeoms, regionCheck,
+      layout.canvasWidth, layout.canvasHeight,
+    );
+    minClearance = Math.min(minClearance, result.clearance);
+  }
+
+  return minClearance;
+}
+
+/**
+ * Computes a dynamic layout for the given diagram type with an optional
+ * radius boost (extra pixels added to the base shape radius).
+ */
+function computeDynamicLayout(diagramLayout, shapeTypes, vennConfig, rBoost) {
+  switch (diagramLayout) {
+    case 'three_linear':           return computeThreeLinearLayout(shapeTypes, vennConfig.regions || {}, rBoost);
+    case 'three_all_overlap':      return computeThreeAllOverlapLayout(shapeTypes, false, rBoost);
+    case 'three_all_overlap_v2':   return computeThreeAllOverlapLayout(shapeTypes, true, rBoost);
+    case 'two_overlap':            return computeTwoOverlapLayout(shapeTypes, false, rBoost);
+    case 'two_overlap_staggered':  return computeTwoOverlapLayout(shapeTypes, true, rBoost);
+    case 'two_vertical_overlap':   return computeTwoVerticalOverlapLayout(shapeTypes, rBoost);
+    case 'three_vertical_chain':   return computeThreeVerticalChainLayout(shapeTypes, vennConfig.regions || {}, rBoost);
+    case 'four_linear':            return computeFourLinearLayout(shapeTypes, vennConfig.regions || {}, rBoost);
+    case 'three_hub':              return computeThreeHubLayout(shapeTypes, rBoost);
+    case 'four_two_pairs':         return computeFourTwoPairsLayout(shapeTypes, rBoost);
+    case 'three_v_overlap':        return computeThreeVOverlapLayout(shapeTypes, rBoost);
+    default:                       return null;
+  }
+}
+
 function resolveLayout(vennConfig) {
   if (!vennConfig) return null;
   const shapeTypes = (vennConfig.sets || []).map(s => s.shape || 'circle');
-  if (vennConfig.diagramLayout === 'three_linear') {
-    return computeThreeLinearLayout(shapeTypes, vennConfig.regions || {});
+
+  if (DYNAMIC_LAYOUTS.has(vennConfig.diagramLayout)) {
+    let layout = null;
+    for (let attempt = 0; attempt < MAX_RBOOST_ATTEMPTS; attempt++) {
+      const rBoost = attempt * RBOOST_STEP;
+      layout = computeDynamicLayout(vennConfig.diagramLayout, shapeTypes, vennConfig, rBoost);
+      if (!layout) return null;
+
+      const minClear = measureMinOverlapClearance(layout, vennConfig);
+      if (minClear >= MIN_LABEL_CLEARANCE) return layout;
+    }
+    return layout;
   }
-  if (vennConfig.diagramLayout === 'three_all_overlap') {
-    return computeThreeAllOverlapLayout(shapeTypes, false);
-  }
-  if (vennConfig.diagramLayout === 'three_all_overlap_v2') {
-    return computeThreeAllOverlapLayout(shapeTypes, true);
-  }
-  if (vennConfig.diagramLayout === 'two_overlap') {
-    return computeTwoOverlapLayout(shapeTypes, false);
-  }
-  if (vennConfig.diagramLayout === 'two_overlap_staggered') {
-    return computeTwoOverlapLayout(shapeTypes, true);
-  }
-  if (vennConfig.diagramLayout === 'two_vertical_overlap') {
-    return computeTwoVerticalOverlapLayout(shapeTypes);
-  }
-  if (vennConfig.diagramLayout === 'three_vertical_chain') {
-    return computeThreeVerticalChainLayout(shapeTypes, vennConfig.regions || {});
-  }
-  if (vennConfig.diagramLayout === 'four_linear') {
-    return computeFourLinearLayout(shapeTypes, vennConfig.regions || {});
-  }
-  if (vennConfig.diagramLayout === 'three_hub') {
-    return computeThreeHubLayout(shapeTypes);
-  }
-  if (vennConfig.diagramLayout === 'four_two_pairs') {
-    return computeFourTwoPairsLayout(shapeTypes);
-  }
-  if (vennConfig.diagramLayout === 'three_v_overlap') {
-    return computeThreeVOverlapLayout(shapeTypes);
-  }
+
   return LAYOUTS[vennConfig.diagramLayout] ?? null;
 }
 
