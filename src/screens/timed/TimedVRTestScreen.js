@@ -50,6 +50,16 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const { handleAnswer, getAnswer } = useAnswers({});
 
   const qid = item.question.questionId;
+  const scrollRef = useRef(null);
+  const prevStemId = useRef(item.stemId);
+
+  useEffect(() => {
+    if (item.stemId !== prevStemId.current) {
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+      prevStemId.current = item.stemId;
+    }
+  }, [item.stemId, qid]);
+
   const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
   const sectionColor = t.sectionVR;
@@ -165,7 +175,8 @@ export default function TimedVRTestScreen({ route, navigation }) {
       />
 
       <ScrollView
-        key={item.stemId + qid}
+        ref={scrollRef}
+        key={item.stemId}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
