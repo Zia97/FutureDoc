@@ -1,390 +1,669 @@
 [
   {
-    "id": "timed-qr-test-001",
-    "title": "QR Timed Test 1",
-    "question_count": 20,
-    "time_minutes": 15,
-    "sets": [
+    "id": "timed-vr-test-001",
+    "title": "VR Timed Test 1",
+    "passage_count": 11,
+    "question_count": 44,
+    "time_minutes": 22,
+    "passages": [
       {
-        "set_id": "66bdeb38-13de-4f2d-9ba8-e591b889e7c7",
-        "title": "NHS Outpatient Waiting Times",
-        "stimulus": {
-          "type": "bar_chart",
-          "data": {
-            "title": "NHS Outpatient Waiting Times by Department (weeks)",
-            "labels": ["Q1", "Q2", "Q3", "Q4"],
-            "series": [
-              { "name": "Cardiology", "values": [8, 10, 9, 11] },
-              { "name": "Orthopaedics", "values": [14, 12, 15, 13] },
-              { "name": "Neurology", "values": [11, 13, 10, 12] }
-            ],
-            "yAxisLabel": "Weeks"
-          }
-        },
-        "questions": [
+        "id": "53c4cf20-f8db-4032-9670-c27f3b20854c",
+        "title": "Passage 1 — The Hanseatic League",
+        "body": "The Hanseatic League, a commercial and defensive confederation of merchant guilds and market towns in north-western and central Europe, dominated trade across the Baltic and North Sea regions for several centuries. Founded in the mid-thirteenth century, the League eventually encompassed more than 200 cities and towns at its height, with Lübeck serving as its unofficial capital and primary meeting place for the periodic assembly known as the Hansetag.\n\nThe League operated without a formal central government or a standing army of its own, relying instead on collective economic leverage and occasional military coalitions assembled from member cities. Its power derived principally from its control of key commodities: Baltic herring, Finnish furs, Flemish cloth, and English wool all passed through Hanseatic hands. The League secured trading privileges in foreign cities, establishing Kontore — permanent trading outposts — in Bergen, Bruges, London, and Novgorod, which acted as enclaves of Hanseatic commerce within host nations.\n\nThe League's decline began gradually in the late fifteenth century. The discovery of Atlantic trade routes diverted commercial attention westward, diminishing the relative importance of Baltic commerce. The rise of centralised nation-states — particularly England, Denmark, and the Dutch Republic — eroded the League's negotiating advantage, as individual member cities increasingly found it more beneficial to deal bilaterally with powerful sovereigns than to maintain collective discipline. Internal disputes over membership dues and military contributions further weakened cohesion.\n\nThe last formal Hansetag was held in 1669, attended by only three cities: Lübeck, Hamburg, and Bremen. These three cities, sometimes called the Hanseatic cities, retained the designation into the modern era — Hamburg and Bremen remain officially styled as Free and Hanseatic Cities under the German federal constitution to this day, a linguistic survival of an institution that had effectively dissolved centuries earlier.",
+        "verbal_reasoning_questions": [
           {
-            "id": "b9e373d8-15f3-49e5-9d71-93944d667659",
-            "stem": "What was the mean waiting time for Cardiology across all four quarters?",
+            "id": "b8d2e28b-e0f2-4479-bd02-deb653edee7d",
+            "question_text": "The Hanseatic League had a formal elected president who presided over the Hansetag.",
             "options": [
-              { "label": "A", "text": "8.5 weeks" },
-              { "label": "B", "text": "9.0 weeks" },
-              { "label": "C", "text": "9.5 weeks" },
-              { "label": "D", "text": "10.0 weeks" },
-              { "label": "E", "text": "10.5 weeks" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "C",
-            "answer_reason": "Cardiology: 8 + 10 + 9 + 11 = 38 weeks. Mean = 38 ÷ 4 = 9.5 weeks.",
-            "order_index": 0
+            "correct_answer": "False",
+            "answer_reason": "The passage explicitly states the League 'operated without a formal central government.' The Hansetag is described as a periodic assembly, but no elected president or presiding official is mentioned. The statement directly contradicts the passage's description of the League's structure.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "9dbf98be-0f47-483d-8409-d85045a3f73d",
-            "stem": "What was the total waiting time across all three departments in Q2?",
+            "id": "eaf2d2ed-c564-440f-ade1-4eab9368c4a6",
+            "question_text": "At the final Hansetag in 1669, fewer cities were present than at any previous Hansetag.",
             "options": [
-              { "label": "A", "text": "32 weeks" },
-              { "label": "B", "text": "33 weeks" },
-              { "label": "C", "text": "34 weeks" },
-              { "label": "D", "text": "35 weeks" },
-              { "label": "E", "text": "36 weeks" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Q2: Cardiology 10 + Orthopaedics 12 + Neurology 13 = 35 weeks.",
-            "order_index": 1
+            "correct_answer": "Can't tell",
+            "answer_reason": "The passage states that only three cities attended the 1669 Hansetag, but provides no information about attendance figures at previous Hansetag meetings. We cannot confirm whether this was the lowest ever attendance without that comparative data.",
+            "order_index": 1,
+            "difficulty": "hard"
           },
           {
-            "id": "ae57895d-9903-4a0a-a28e-988436a87356",
-            "stem": "By how many weeks did the Orthopaedics waiting time change from Q1 to Q3?",
+            "id": "720ca721-b7ce-4617-b94f-f9bab53b4958",
+            "question_text": "The erosion of the Hanseatic League's influence was partly caused by the growth of powerful centralised states.",
             "options": [
-              { "label": "A", "text": "Decreased by 2 weeks" },
-              { "label": "B", "text": "Decreased by 1 week" },
-              { "label": "C", "text": "No change" },
-              { "label": "D", "text": "Increased by 1 week" },
-              { "label": "E", "text": "Increased by 2 weeks" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Orthopaedics: Q1 = 14 weeks, Q3 = 15 weeks. Change = 15 – 14 = +1 week (increased).",
-            "order_index": 2
+            "correct_answer": "True",
+            "answer_reason": "The passage directly states that 'the rise of centralised nation-states — particularly England, Denmark, and the Dutch Republic — eroded the League's negotiating advantage.' This is a paraphrase of explicit passage content confirming that centralised states contributed to the League's decline.",
+            "order_index": 2,
+            "difficulty": "normal"
           },
           {
-            "id": "84540379-3a77-405a-8c4a-d0874b76a1d1",
-            "stem": "In which quarter was the combined waiting time across all three departments the lowest?",
+            "id": "671604cc-c25f-4d7b-b471-cf7f7fef9c59",
+            "question_text": "Hamburg and Bremen are the only German cities that still bear the Hanseatic designation in their official names.",
             "options": [
-              { "label": "A", "text": "Q1" },
-              { "label": "B", "text": "Q2" },
-              { "label": "C", "text": "Q3" },
-              { "label": "D", "text": "Q4" },
-              { "label": "E", "text": "Q1 and Q3 were equal" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "A",
-            "answer_reason": "Totals – Q1: 8+14+11=33, Q2: 10+12+13=35, Q3: 9+15+10=34, Q4: 11+13+12=36. Q1 is lowest at 33 weeks.",
-            "order_index": 3
+            "correct_answer": "True",
+            "answer_reason": "The passage states that 'Hamburg and Bremen remain officially styled as Free and Hanseatic Cities under the German federal constitution to this day.' Lübeck is mentioned as the third city at the final Hansetag, but is not said to retain the designation today — only Hamburg and Bremen are. The passage provides sufficient information to confirm only these two cities currently bear the title.",
+            "order_index": 3,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "19b74a5e-01b4-407c-a751-7b2380ca1adb",
-        "title": "Monthly Household Energy Bills",
-        "stimulus": {
-          "type": "line_graph",
-          "data": {
-            "title": "Monthly Energy Bills – Households A & B (£)",
-            "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            "series": [
-              { "name": "Household A", "values": [120, 108, 90, 80, 70, 65] },
-              { "name": "Household B", "values": [90, 95, 85, 75, 72, 65] }
-            ],
-            "yAxisLabel": "£"
-          }
-        },
-        "questions": [
+        "id": "58fd1980-58d5-454f-9251-2357f160dcaa",
+        "title": "Passage 2 — The Voynich Manuscript",
+        "body": "The Voynich Manuscript is an illustrated codex hand-written in an unknown script, held at Yale University's Beinecke Rare Book and Manuscript Library. Carbon dating of the vellum places its creation in the early fifteenth century, most likely between 1404 and 1438. The manuscript takes its name from Wilfrid Voynich, a Polish-American antiquarian book dealer who acquired it in 1912 from the Jesuit College at Frascati, near Rome.\n\nThe manuscript's 240 surviving pages — scholars believe some pages are missing — contain illustrations divided into several thematic sections. These include what appear to be botanical drawings of unidentifiable plants, astronomical and cosmological diagrams, figures of nude women bathing in interconnected pools or channels, and what may be a pharmaceutical or herbal section listing recipes. The illustrations, though clearly purposeful, do not correspond to any known botanical, astronomical, or medical tradition.\n\nThe script itself has been subjected to intensive analysis. Statistical properties of the text, including character frequency distributions and word-length patterns, suggest it behaves more like natural language than like a random cipher. Multiple professional cryptanalysts, including teams that successfully decoded wartime German Enigma messages, have failed to decipher it. Proposed explanations have ranged from an elaborate hoax constructed from meaningless symbols, to a constructed language, to an encoded natural language, to a script representing an otherwise unattested historical language.\n\nIn 2019, a researcher at the University of Bristol claimed to have identified the manuscript's language as proto-Romance, a form of early Vulgar Latin. This claim was greeted with considerable scepticism by other scholars, and no consensus has emerged. The manuscript remains undeciphered, making it one of the most studied and most debated documents in the history of cryptography.",
+        "verbal_reasoning_questions": [
           {
-            "id": "cce57821-faa1-4ef2-b7d1-a4fe004feb2d",
-            "stem": "By how much did Household A's energy bill decrease from January to June?",
+            "id": "c6fffcc0-741a-4921-8301-550c0048f58b",
+            "question_text": "According to the passage, what is the most widely accepted explanation for the Voynich Manuscript's content?",
             "options": [
-              { "label": "A", "text": "£45" },
-              { "label": "B", "text": "£50" },
-              { "label": "C", "text": "£55" },
-              { "label": "D", "text": "£60" },
-              { "label": "E", "text": "£65" }
+              "It is an elaborate hoax containing meaningless symbols",
+              "It is written in proto-Romance, an early form of Vulgar Latin",
+              "No consensus explanation has been established among scholars",
+              "It encodes a natural language using a substitution cipher"
             ],
-            "correct_answer": "C",
-            "answer_reason": "Household A: January £120 – June £65 = £55 decrease.",
-            "order_index": 0
+            "correct_answer": "No consensus explanation has been established among scholars",
+            "answer_reason": "The passage explicitly states 'no consensus has emerged' regarding the 2019 proto-Romance claim and lists multiple competing explanations without endorsing any. The other options each represent one proposed theory that the passage presents as unresolved or contested.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "cb52dce8-cdc7-48bd-bcf9-c504c237b133",
-            "stem": "In which month were both households' energy bills the same?",
+            "id": "3f2a6d2e-1912-4302-9fc1-6dbe4362334d",
+            "question_text": "According to the passage, why is the statistical analysis of the Voynich text considered significant?",
             "options": [
-              { "label": "A", "text": "March" },
-              { "label": "B", "text": "April" },
-              { "label": "C", "text": "May" },
-              { "label": "D", "text": "June" },
-              { "label": "E", "text": "They were never equal" }
+              "It proves the manuscript is written in a real language",
+              "It suggests the text behaves similarly to natural language rather than random symbols",
+              "It identified the manuscript as a constructed or artificial language",
+              "It enabled cryptanalysts to partially decode sections of the manuscript"
             ],
-            "correct_answer": "D",
-            "answer_reason": "June: Household A = £65, Household B = £65. Both bills are equal in June.",
-            "order_index": 1
+            "correct_answer": "It suggests the text behaves similarly to natural language rather than random symbols",
+            "answer_reason": "The passage states that 'statistical properties of the text...suggest it behaves more like natural language than like a random cipher.' This is the significance attributed to statistical analysis. The other options overstate or misrepresent what the analysis showed — it suggests natural language behaviour, not proves it, and it did not lead to decipherment.",
+            "order_index": 1,
+            "difficulty": "normal"
           },
           {
-            "id": "5109f528-f9d5-4ce7-b90d-7e8a7b1ec860",
-            "stem": "What was Household B's total energy bill across all six months?",
+            "id": "f09df975-b8c0-4771-87b6-c81cf0e63796",
+            "question_text": "The teams that failed to decipher the Voynich Manuscript had previously been successful in breaking complex wartime codes.",
             "options": [
-              { "label": "A", "text": "£462" },
-              { "label": "B", "text": "£472" },
-              { "label": "C", "text": "£478" },
-              { "label": "D", "text": "£482" },
-              { "label": "E", "text": "£490" }
+              "Teams that decoded Enigma messages were among those that failed to decipher the manuscript",
+              "No professional cryptanalyst has ever attempted to decipher the manuscript",
+              "The manuscript was successfully decoded in 2019 by a University of Bristol researcher",
+              "The statistical properties of the Voynich text are consistent with a random cipher"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Household B: 90 + 95 + 85 + 75 + 72 + 65 = £482.",
-            "order_index": 2
+            "correct_answer": "Teams that decoded Enigma messages were among those that failed to decipher the manuscript",
+            "answer_reason": "The passage states that 'Multiple professional cryptanalysts, including teams that successfully decoded wartime German Enigma messages, have failed to decipher it.' This directly supports the correct answer. The other options contradict or misrepresent the passage: the manuscript has not been decoded, and its text behaves unlike a random cipher.",
+            "order_index": 2,
+            "difficulty": "normal"
           },
           {
-            "id": "00724028-8400-4c3d-9f8b-fa94a39a45c4",
-            "stem": "Between which two consecutive months did Household A's bill decrease by the greatest amount?",
+            "id": "623ab96b-5533-4aab-865a-de8504a0a968",
+            "question_text": "Which of the following best describes the author's attitude toward the 2019 proto-Romance claim?",
             "options": [
-              { "label": "A", "text": "January to February" },
-              { "label": "B", "text": "February to March" },
-              { "label": "C", "text": "March to April" },
-              { "label": "D", "text": "April to May" },
-              { "label": "E", "text": "May to June" }
+              "Enthusiastic endorsement of a promising breakthrough",
+              "Neutral presentation of a claim that received a mixed scholarly reception",
+              "Dismissal of an implausible theory unsupported by any evidence",
+              "Regret that scholarly scepticism prevented a valid discovery from being recognised"
             ],
-            "correct_answer": "B",
-            "answer_reason": "Changes: Jan–Feb: £12, Feb–Mar: £18, Mar–Apr: £10, Apr–May: £10, May–Jun: £5. Largest is February to March at £18.",
-            "order_index": 3
+            "correct_answer": "Neutral presentation of a claim that received a mixed scholarly reception",
+            "answer_reason": "The author presents the 2019 claim factually, notes it 'was greeted with considerable scepticism by other scholars,' and states 'no consensus has emerged.' This is balanced and neutral — neither endorsing nor dismissing the claim. The author does not express enthusiasm, regret, or outright dismissal.",
+            "order_index": 3,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "d7b61713-9bb9-4a21-bdf2-4acff7ad32f9",
-        "title": "City Council Annual Budget",
-        "stimulus": {
-          "type": "pie_chart",
-          "data": {
-            "unit": "£",
-            "title": "City Council Annual Budget Allocation (£ millions, Total: £240m)",
-            "total": 240,
-            "segments": [
-              { "label": "Housing", "value": 72 },
-              { "label": "Transport", "value": 60 },
-              { "label": "Education", "value": 48 },
-              { "label": "Health", "value": 36 },
-              { "label": "Other", "value": 24 }
-            ]
-          }
-        },
-        "questions": [
+        "id": "bfb68b96-f0b5-43d3-a639-5216d199b2b4",
+        "title": "Passage 3 — Trophic Cascades",
+        "body": "A trophic cascade occurs when changes at the top of a food chain produce ripple effects throughout the ecosystem below. The concept gained widespread attention through observations of wolf reintroduction in Yellowstone National Park, where wolves were absent for nearly seventy years before their return in 1995.\n\nPrior to reintroduction, elk populations had grown unchecked and overgrazed riverbanks, stripping them of willows and aspens. Without these plants, beavers — dependent on them for food and dam construction — declined sharply, and the rivers widened and became shallower as stabilising root systems disappeared. The return of wolves did not merely reduce elk numbers. It altered elk behaviour: herds avoided lingering in open valleys and riverside areas where they were vulnerable to predation. This behavioural shift, sometimes called the ecology of fear, allowed vegetation to recover in the areas wolves most frequently patrolled.\n\nThe effects were far-reaching. Recovering willows and aspens attracted beavers, whose dams created ponds that provided habitat for fish, amphibians, and waterfowl. Songbird populations increased as shrubland returned. Stabilised riverbanks changed the physical course of rivers — channels narrowed and deepened, and meandering increased. Ecologists coined the term 'geomorphological cascade' to describe how the wolves ultimately reshaped the rivers themselves.\n\nNot all ecologists accept the Yellowstone account as a straightforward demonstration of trophic cascades. Critics point out that drought, human activity, and natural vegetation cycles may have contributed equally to river changes. Some researchers argue that the effects observed were overstated in popular accounts and that direct evidence of wolf-induced vegetation recovery remains contested. Nevertheless, the Yellowstone case has become the canonical example of how the removal or restoration of apex predators can restructure entire ecosystems.",
+        "verbal_reasoning_questions": [
           {
-            "id": "8ecfe895-57f7-4957-9c1d-2940a4ec6afe",
-            "stem": "How much more is allocated to Housing than to Health? (£ millions)",
+            "id": "e893d0a9-9893-47cd-9662-d3146e6e15ef",
+            "question_text": "Wolves were absent from Yellowstone for approximately seven decades before 1995.",
             "options": [
-              { "label": "A", "text": "£24m" },
-              { "label": "B", "text": "£30m" },
-              { "label": "C", "text": "£36m" },
-              { "label": "D", "text": "£42m" },
-              { "label": "E", "text": "£48m" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "C",
-            "answer_reason": "Housing = £72m, Health = £36m. Difference = 72 – 36 = £36m.",
-            "order_index": 0
+            "correct_answer": "True",
+            "answer_reason": "The passage states wolves 'were absent for nearly seventy years before their return in 1995.' Seventy years is equivalent to approximately seven decades. This is a simple paraphrase of explicit passage content.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "12459361-baa8-4f8f-93f5-da63ab39cd18",
-            "stem": "What percentage of the total budget is allocated to Transport and Education combined?",
+            "id": "f7d3787f-687b-481d-99b1-dc5e410fcc93",
+            "question_text": "The reduction in elk numbers following wolf reintroduction was the primary cause of vegetation recovery in Yellowstone.",
             "options": [
-              { "label": "A", "text": "35%" },
-              { "label": "B", "text": "40%" },
-              { "label": "C", "text": "42%" },
-              { "label": "D", "text": "45%" },
-              { "label": "E", "text": "50%" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Transport £60m + Education £48m = £108m. (108 ÷ 240) × 100 = 45%.",
-            "order_index": 1
+            "correct_answer": "False",
+            "answer_reason": "The passage explicitly states the wolf reintroduction 'did not merely reduce elk numbers' — it also changed elk behaviour, causing herds to avoid riverside areas. The passage presents this behavioural shift as an equal or greater mechanism of vegetation recovery, not just the reduction in elk numbers. Attributing recovery solely or primarily to reduced elk numbers contradicts the passage's argument.",
+            "order_index": 1,
+            "difficulty": "hard"
           },
           {
-            "id": "f535c781-77e9-44a0-9a59-cfeeeea1563b",
-            "stem": "If the total budget increases by 25% next year and percentage allocations remain unchanged, what will the Health allocation be?",
+            "id": "96d39ac9-15d1-4124-91da-e56f446a6ba0",
+            "question_text": "All ecologists agree that the Yellowstone wolf reintroduction demonstrates a clear trophic cascade.",
             "options": [
-              { "label": "A", "text": "£40m" },
-              { "label": "B", "text": "£42m" },
-              { "label": "C", "text": "£44m" },
-              { "label": "D", "text": "£45m" },
-              { "label": "E", "text": "£48m" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Health = 36/240 = 15% of budget. New total = £240m × 1.25 = £300m. New Health = 15% × £300m = £45m.",
-            "order_index": 2
+            "correct_answer": "False",
+            "answer_reason": "The passage directly states 'Not all ecologists accept the Yellowstone account as a straightforward demonstration of trophic cascades,' citing critics who argue other factors contributed and that popular accounts may have overstated the effects. The word 'All' in the statement is directly contradicted by this passage content.",
+            "order_index": 2,
+            "difficulty": "normal"
           },
           {
-            "id": "2de39107-c5f6-46c7-83b5-781b6f47d7b6",
-            "stem": "If the Housing allocation is increased by £12m while the total budget remains £240m, what percentage will Housing then represent?",
+            "id": "91ae3d0a-fc44-4138-9cbd-8ef70c9e1c12",
+            "question_text": "Before wolves were reintroduced, the rivers in Yellowstone were narrower and deeper than they became during the period of wolf absence.",
             "options": [
-              { "label": "A", "text": "30%" },
-              { "label": "B", "text": "32%" },
-              { "label": "C", "text": "33%" },
-              { "label": "D", "text": "34%" },
-              { "label": "E", "text": "35%" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "E",
-            "answer_reason": "New Housing = £72m + £12m = £84m. (84 ÷ 240) × 100 = 35%.",
-            "order_index": 3
+            "correct_answer": "Can't tell",
+            "answer_reason": "The passage describes the rivers widening and becoming shallower during wolf absence, and then narrowing and deepening after wolf reintroduction. However, it does not describe the state of rivers before wolves were first removed, only the changes during the period of absence and after return. We cannot determine how the rivers compared to an original pre-removal state.",
+            "order_index": 3,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "a27f2e75-8ea0-41eb-9d5f-4d092c35326f",
-        "title": "UK Train Fares from London",
-        "stimulus": {
-          "type": "table",
-          "data": {
-            "headers": ["Route (from London)", "Standard (£)", "First Class (£)", "Duration (min)"],
-            "rows": [
-              ["Birmingham", "32", "58", "85"],
-              ["Manchester", "56", "98", "127"],
-              ["Edinburgh", "80", "140", "252"],
-              ["Bristol", "28", "52", "95"],
-              ["Leeds", "48", "86", "132"]
-            ]
-          }
-        },
-        "questions": [
+        "id": "f0ad72be-624e-4ada-bb31-4b6866b6897b",
+        "title": "Passage 4 — The Principality of Sealand",
+        "body": "Sealand is a self-proclaimed micronation occupying HM Fort Roughs, a former Royal Navy sea fort constructed during the Second World War approximately twelve kilometres off the coast of Suffolk, England. The platform, built on a sandbar known as Rough Sands, sits in what was international waters at the time of its construction, though subsequent extensions of the United Kingdom's territorial sea brought the structure within British jurisdiction according to the British government's own interpretation.\n\nIn 1967, Paddy Roy Bates, a British pirate radio operator, seized the abandoned fort and declared it an independent nation. Following a series of incidents involving firearms — Bates's son Michael fired warning shots at a British vessel that approached the platform — a British court ruled in 1968 that it lacked jurisdiction over events occurring beyond British territorial waters, a ruling Bates interpreted as de facto recognition of Sealand's sovereignty. No sovereign nation has formally recognised Sealand as an independent state.\n\nSealand issued its own passports, currency (the Sealand dollar), and stamps, though none have been accepted by other nations as legitimate. In 1978, a German businessman named Alexander Achenbach, who had been appointed Sealand's 'Prime Minister,' attempted a coup during Roy Bates's absence, briefly seizing the platform with the aid of Dutch and German mercenaries. Bates retook the platform by helicopter and held Achenbach and his allies as prisoners of war — a designation he justified by reference to Sealand's claimed national status. Achenbach was eventually released following negotiations involving the German government, though Germany's involvement in securing his release was not, Germany maintained, an act of diplomatic recognition.\n\nRoy Bates died in 2012. Sealand's website continues to describe it as a sovereign nation and reportedly sells noble titles as a revenue source.",
+        "verbal_reasoning_questions": [
           {
-            "id": "1f77d080-742d-45fd-a517-cc3e81faacad",
-            "stem": "What is the ratio of the standard fare to first class fare for Edinburgh, expressed in its simplest form?",
+            "id": "8ba94129-afe5-4d32-8a30-62b7c5c6c7c5",
+            "question_text": "The 1968 British court ruling gave Roy Bates formal legal recognition of Sealand as a sovereign state.",
             "options": [
-              { "label": "A", "text": "3:5" },
-              { "label": "B", "text": "4:7" },
-              { "label": "C", "text": "5:9" },
-              { "label": "D", "text": "8:15" },
-              { "label": "E", "text": "1:2" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "B",
-            "answer_reason": "Edinburgh: standard £80, first class £140. Ratio = 80:140. HCF = 20. Simplified: 4:7.",
-            "order_index": 0
+            "correct_answer": "False",
+            "answer_reason": "The passage states Bates 'interpreted' the ruling as de facto recognition, but the court ruling was about jurisdiction — that it lacked authority over events beyond British territorial waters. No sovereign nation, including the UK, formally recognised Sealand. The statement claims formal legal recognition, which the passage directly contradicts.",
+            "order_index": 0,
+            "difficulty": "hard"
           },
           {
-            "id": "2fc784c7-1463-4cc4-a13e-43bd0709db75",
-            "stem": "A commuter travels to Manchester and back (standard class) 5 days a week for 4 weeks. What is the total cost?",
+            "id": "70ad4994-c8c1-4d63-bbaf-8920da5a73a2",
+            "question_text": "Alexander Achenbach successfully held control of Sealand's platform for an extended period following his 1978 coup.",
             "options": [
-              { "label": "A", "text": "£1,960" },
-              { "label": "B", "text": "£2,000" },
-              { "label": "C", "text": "£2,100" },
-              { "label": "D", "text": "£2,240" },
-              { "label": "E", "text": "£2,520" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Return = £56 × 2 = £112. Days = 5 × 4 = 20. Total = £112 × 20 = £2,240.",
-            "order_index": 1
+            "correct_answer": "False",
+            "answer_reason": "The passage describes Achenbach seizing the platform 'briefly' before Bates retook it by helicopter. 'Briefly' directly contradicts any suggestion of an extended period of control. The passage makes clear the coup was short-lived.",
+            "order_index": 1,
+            "difficulty": "normal"
           },
           {
-            "id": "1afbcf1a-dc75-4fc6-8d1b-b6d9739235b8",
-            "stem": "Which route has the lowest standard fare per minute of journey time?",
+            "id": "5e397b59-d686-462c-a262-b99a4aa806a4",
+            "question_text": "Germany's involvement in negotiating Achenbach's release meant that Germany implicitly recognised Sealand as a sovereign state.",
             "options": [
-              { "label": "A", "text": "Birmingham" },
-              { "label": "B", "text": "Manchester" },
-              { "label": "C", "text": "Edinburgh" },
-              { "label": "D", "text": "Bristol" },
-              { "label": "E", "text": "Leeds" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "£/min – Birmingham: 32÷85≈0.376, Manchester: 56÷127≈0.441, Edinburgh: 80÷252≈0.317, Bristol: 28÷95≈0.295, Leeds: 48÷132≈0.364. Bristol is the lowest.",
-            "order_index": 2
+            "correct_answer": "False",
+            "answer_reason": "The passage explicitly states that Germany's involvement 'was not, Germany maintained, an act of diplomatic recognition.' The passage directly contradicts the statement's claim of implicit recognition, making this False rather than Can't Tell.",
+            "order_index": 2,
+            "difficulty": "hard"
           },
           {
-            "id": "6808797b-f0d4-46ae-addc-f1a7e1fd74ad",
-            "stem": "If a 10% discount is applied to all first class fares, what is the new first class price for Leeds?",
+            "id": "6bde12b2-983e-4b8c-9819-6a20266e0086",
+            "question_text": "Sealand currently generates income from sources other than the sale of its currency and stamps.",
             "options": [
-              { "label": "A", "text": "£75.40" },
-              { "label": "B", "text": "£76.40" },
-              { "label": "C", "text": "£77.40" },
-              { "label": "D", "text": "£78.00" },
-              { "label": "E", "text": "£79.40" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "C",
-            "answer_reason": "Leeds first class = £86. Discount = 10% × £86 = £8.60. New price = £86 – £8.60 = £77.40.",
-            "order_index": 3
+            "correct_answer": "True",
+            "answer_reason": "The passage states that Sealand 'reportedly sells noble titles as a revenue source,' which is distinct from currency or stamps. This confirms Sealand has at least one additional income stream. The word 'reportedly' introduces some qualification, but the passage does state this as a current activity.",
+            "order_index": 3,
+            "difficulty": "normal"
           }
         ]
       },
       {
-        "set_id": "0bf5ac86-6286-4188-87d6-b5f2a23670ee",
-        "title": "TechGadget Ltd – Product Revenue",
-        "stimulus": {
-          "type": "multi",
-          "items": [
-            {
-              "type": "text",
-              "text": "TechGadget Ltd sells three products: Alpha, Beta, and Gamma. The table below shows quarterly revenue (£000s) for the first half of the financial year."
-            },
-            {
-              "type": "table",
-              "data": {
-                "headers": ["Product", "Q1 Revenue (£000s)", "Q2 Revenue (£000s)"],
-                "rows": [
-                  ["Alpha", "200", "220"],
-                  ["Beta", "250", "230"],
-                  ["Gamma", "150", "195"]
-                ]
-              }
-            }
-          ]
-        },
-        "questions": [
+        "id": "c8dd084d-099d-49fb-aa91-c6a45a672dad",
+        "title": "Passage 5 — Mercator's Projection",
+        "body": "The Mercator projection, introduced by the Flemish cartographer Gerardus Mercator in 1569, was designed primarily as a navigational aid. Its central innovation was the preservation of angles: any straight line drawn on a Mercator map represents a line of constant compass bearing, called a rhumb line or loxodrome. For mariners navigating by compass, this was invaluable — a ship could maintain a fixed heading and follow a straight line on the chart to reach its destination.\n\nThis navigational utility came at a significant cost to areal accuracy. To preserve angular relationships, the projection must stretch landmasses increasingly as they approach the poles. The result is a dramatic distortion of relative size: Greenland appears roughly comparable in size to Africa on a standard Mercator map, when in reality Africa is approximately fourteen times larger. Scandinavia appears larger than India, though India is in fact three times the size. The equatorial regions, where most of the world's population lives, are compressed, while sparsely populated polar regions are dramatically inflated.\n\nDespite these well-documented distortions, the Mercator projection remained the dominant world map used in schools and atlases well into the twentieth century. Critics argued this had ideological consequences, inflating the apparent size of Europe and North America — the seats of colonial power — relative to equatorial Africa, Asia, and Latin America. In 1973, the German historian Arno Peters introduced what he called a more equitable projection, which preserved relative area at the expense of shape. The Peters projection (now more properly called the Gall-Peters projection, as James Gall had produced an equivalent projection in 1855) generated considerable controversy and was adopted by several development organisations as a corrective statement.\n\nNeither projection is universally superior. Mercator remains the standard for digital mapping applications such as Google Maps, where its angle-preserving properties facilitate route calculation.",
+        "verbal_reasoning_questions": [
           {
-            "id": "ad1ceab1-beaf-4a7a-a6c2-ac92f7559a20",
-            "stem": "By what percentage did Gamma's revenue increase from Q1 to Q2?",
+            "id": "7e9e5d10-4bad-406a-9702-971d038bef04",
+            "question_text": "Mercator designed his 1569 projection primarily to provide an accurate visual representation of the relative sizes of continents.",
             "options": [
-              { "label": "A", "text": "20%" },
-              { "label": "B", "text": "25%" },
-              { "label": "C", "text": "28%" },
-              { "label": "D", "text": "30%" },
-              { "label": "E", "text": "35%" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Gamma: Q1 = £150k, Q2 = £195k. Increase = £45k. Percentage = (45 ÷ 150) × 100 = 30%.",
-            "order_index": 0
+            "correct_answer": "False",
+            "answer_reason": "The passage states the Mercator projection 'was designed primarily as a navigational aid' and that its central innovation was the preservation of angles for compass navigation. The passage further explains that areal accuracy was sacrificed. The statement directly contradicts the passage's account of Mercator's design intent.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "0fb5269e-c5a8-4c5f-8fdd-1f6c61952174",
-            "stem": "What was TechGadget Ltd's total revenue across both quarters combined?",
+            "id": "fb3be364-7fa9-4629-94f0-d8cb155635a8",
+            "question_text": "The Gall-Peters projection was first developed in the nineteenth century.",
             "options": [
-              { "label": "A", "text": "£1,150,000" },
-              { "label": "B", "text": "£1,200,000" },
-              { "label": "C", "text": "£1,225,000" },
-              { "label": "D", "text": "£1,245,000" },
-              { "label": "E", "text": "£1,300,000" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "D",
-            "answer_reason": "Q1 total: 200+250+150=600. Q2 total: 220+230+195=645. Grand total = 1,245 (£000s) = £1,245,000.",
-            "order_index": 1
+            "correct_answer": "True",
+            "answer_reason": "The passage states the projection is 'more properly called the Gall-Peters projection, as James Gall had produced an equivalent projection in 1855.' 1855 falls within the nineteenth century. This is a necessary inference combining the name attribution and the date given in the passage.",
+            "order_index": 1,
+            "difficulty": "hard"
           },
           {
-            "id": "f824786d-6e3e-4449-8a39-409b1c647e6f",
-            "stem": "What fraction of Q1 total revenue did Beta represent?",
+            "id": "126e3eb4-b490-4f76-afd2-026c4fe4515f",
+            "question_text": "The Mercator projection is used in Google Maps because it is more accurate than alternative projections for showing the true size of countries.",
             "options": [
-              { "label": "A", "text": "2/5" },
-              { "label": "B", "text": "5/12" },
-              { "label": "C", "text": "7/20" },
-              { "label": "D", "text": "1/2" },
-              { "label": "E", "text": "5/11" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "B",
-            "answer_reason": "Q1 total = 200+250+150 = 600. Beta = 250. Fraction = 250/600 = 5/12.",
-            "order_index": 2
+            "correct_answer": "False",
+            "answer_reason": "The passage states Mercator remains standard for digital mapping because 'its angle-preserving properties facilitate route calculation' — not because of size accuracy. In fact, the passage explicitly describes Mercator as having significant areal distortions. The statement misattributes the reason for its use and contradicts the passage.",
+            "order_index": 2,
+            "difficulty": "normal"
           },
           {
-            "id": "f1775565-57c8-4a2e-adaf-7929c9ff73bf",
-            "stem": "Which product had the greatest absolute change in revenue between Q1 and Q2?",
+            "id": "c0c552fd-54c3-4258-a79a-e088acb7e150",
+            "question_text": "Peters's 1973 projection preserves the shape of landmasses more accurately than the Mercator projection.",
             "options": [
-              { "label": "A", "text": "Alpha" },
-              { "label": "B", "text": "Beta" },
-              { "label": "C", "text": "Gamma" },
-              { "label": "D", "text": "Alpha and Beta were equal" },
-              { "label": "E", "text": "Beta and Gamma were equal" }
+              "True",
+              "False",
+              "Can't tell"
             ],
-            "correct_answer": "C",
-            "answer_reason": "Alpha: |220–200|=20, Beta: |230–250|=20, Gamma: |195–150|=45. Gamma had the greatest absolute change at £45,000.",
-            "order_index": 3
+            "correct_answer": "False",
+            "answer_reason": "The passage describes the Peters projection as one that 'preserved relative area at the expense of shape.' This directly states that the Peters projection sacrifices shape accuracy, implying Mercator is better at preserving shape. The statement's claim that Peters is superior for shape is directly contradicted by the passage.",
+            "order_index": 3,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "id": "3b052598-3eb6-47bd-8c65-d4db99a73d0d",
+        "title": "Passage 6 — The Curies and Radioactivity",
+        "body": "Marie Curie, born Maria Skłodowska in Warsaw in 1867, remains the only person to have won Nobel Prizes in two different scientific disciplines: Physics in 1903 and Chemistry in 1911. The 1903 Physics Prize was shared with her husband Pierre Curie and Henri Becquerel, who had discovered uranium radiation in 1896. The Chemistry Prize was awarded solely to Marie Curie for her discovery and isolation of the elements polonium and radium.\n\nThe Curies' research was conducted under extraordinarily difficult conditions. Working in a leaking, unheated shed at the École de Physique et de Chimie Industrielles in Paris, they processed tonnes of pitchblende — uranium ore residue — by hand to isolate minute quantities of radioactive material. Marie Curie personally coined the term 'radioactivity' to describe the property of emitting radiation from atomic nuclei, replacing the more cumbersome phrase 'uranium radiation' that Becquerel had used.\n\nThe health consequences of this work were severe and ultimately fatal. Neither Marie nor Pierre Curie understood the dangers of prolonged radiation exposure. Marie Curie carried test tubes of radioactive isotopes in her coat pockets and stored them in her desk drawer. Her laboratory notebooks from the period remain dangerously radioactive and are stored in lead-lined boxes at the Bibliothèque nationale de France, where researchers who wish to consult them must sign a liability waiver.\n\nMarie Curie died in 1934 of aplastic anaemia, almost certainly caused by her decades of radiation exposure. Pierre Curie had died earlier, in 1906, in a street accident — he slipped on a wet cobblestone and fell beneath a horse-drawn wagon. Their daughter Irène Joliot-Curie and her husband Frédéric also won a Nobel Prize in Chemistry in 1935, making the Curie family the most decorated family in Nobel Prize history.",
+        "verbal_reasoning_questions": [
+          {
+            "id": "6951259d-8da0-4a4f-8f34-45cfd05afb53",
+            "question_text": "Henri Becquerel shared the 1903 Nobel Prize in Chemistry with the Curies.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage states the 1903 prize shared with Becquerel was the Nobel Prize in Physics, not Chemistry. The Chemistry Prize in 1911 was awarded solely to Marie Curie. Attributing the shared prize to Chemistry directly contradicts the passage.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "9f6859f9-fe75-4a4e-840c-500397633bff",
+            "question_text": "Marie Curie's laboratory notebooks can be viewed by any researcher who visits the Bibliothèque nationale de France.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "Can't tell",
+            "answer_reason": "The passage states that researchers who wish to consult the notebooks must sign a liability waiver, but does not indicate that access is refused or limited to particular categories of researcher. A waiver requirement is a condition of access, not a denial of it. The passage provides no information about whether any researcher may consult them — only that a waiver must be signed. We cannot determine from the passage alone whether the statement is true or false.",
+            "order_index": 1,
+            "difficulty": "hard"
+          },
+          {
+            "id": "cb59faff-b95b-4695-990d-1e9dcb354627",
+            "question_text": "Pierre Curie died as a result of a workplace accident related to radioactivity.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage explicitly states Pierre Curie died in 1906 'in a street accident — he slipped on a wet cobblestone and fell beneath a horse-drawn wagon.' This directly contradicts the claim that his death was a workplace accident related to radioactivity. His cause of death was unambiguously described as a street accident.",
+            "order_index": 2,
+            "difficulty": "normal"
+          },
+          {
+            "id": "1d37bcfd-4c3c-4dfa-bea8-491cb37f3c38",
+            "question_text": "The Curie family has won more Nobel Prizes collectively than any other family.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage states the Curie family is 'the most decorated family in Nobel Prize history,' which is equivalent to saying no other family has won more Nobel Prizes. Combining the information about Marie's two prizes, the shared Physics prize with Pierre, and Irène and Frédéric's 1935 Chemistry prize supports this claim as stated in the passage.",
+            "order_index": 3,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "id": "bb23ed83-de96-4fc8-9a9e-c61d04181d4e",
+        "title": "Passage 7 — The Broken Windows Theory",
+        "body": "The broken windows theory, introduced by social scientists James Q. Wilson and George Kelling in a 1982 Atlantic Monthly article, proposed that visible signs of disorder and neglect in urban environments — broken windows, graffiti, litter, abandoned buildings — signal to potential offenders that an area is unwatched and that antisocial behaviour will go unchallenged. The theory suggests that tolerating minor disorder creates conditions that encourage more serious crime, establishing a downward spiral from petty incivility to violent offending.\n\nThe theory gained considerable political traction in New York City during the 1990s, when Mayor Rudolph Giuliani and police commissioner William Bratton implemented policing strategies explicitly modelled on its principles. Officers were directed to address minor violations aggressively — fare evasion, public drinking, graffiti — on the premise that maintaining order at the lowest level would suppress more serious criminal behaviour. New York's crime rates fell sharply during this period, and the broken windows approach was widely credited by politicians and some criminologists.\n\nThe causal claims of the theory have been challenged on several grounds. Crime rates fell in many American cities during the same period that did not adopt broken windows policing, suggesting that broader economic and demographic factors — including the declining crack cocaine epidemic and changing age demographics — may have been more significant drivers. Critics also noted that aggressive enforcement of minor offences disproportionately affected minority communities and generated substantial civil liberties concerns.\n\nAcademic evaluations of the theory's empirical basis have produced mixed results. Some studies have found that addressing environmental disorder does reduce perceptions of crime and certain categories of offending. Others have found no significant effect. The theory remains influential in urban policy debates but is no longer treated as settled science.",
+        "verbal_reasoning_questions": [
+          {
+            "id": "da2b2c5a-fe2c-4939-ba16-59f10d47db44",
+            "question_text": "According to the passage, which of the following best explains why some critics disputed the broken windows theory's role in reducing New York's crime in the 1990s?",
+            "options": [
+              "The policing strategy was implemented inconsistently across different boroughs",
+              "Crime rates also fell in cities that did not use broken windows policing during the same period",
+              "William Bratton admitted the policy had failed to reduce serious crime",
+              "The theory was developed after the period in which it was applied"
+            ],
+            "correct_answer": "Crime rates also fell in cities that did not use broken windows policing during the same period",
+            "answer_reason": "The passage states that 'Crime rates fell in many American cities during the same period that did not adopt broken windows policing,' which critics used to argue other factors were responsible. The other options are not mentioned in the passage and represent fabrications or misreadings.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "a405f20c-6477-4cff-8a91-78a5a04a0fb3",
+            "question_text": "In which publication did Wilson and Kelling first introduce the broken windows theory?",
+            "options": [
+              "A peer-reviewed criminology journal",
+              "A New York City Police Department policy report",
+              "The Atlantic Monthly",
+              "A book co-authored with Mayor Giuliani"
+            ],
+            "correct_answer": "The Atlantic Monthly",
+            "answer_reason": "The passage explicitly states the theory was introduced in 'a 1982 Atlantic Monthly article.' The other options are fabrications — the passage makes no reference to a criminology journal, NYPD report, or co-authored book.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "18b44884-59aa-4bcb-b07b-5e8357288e6d",
+            "question_text": "Which of the following would, if true, most strengthen the argument of the broken windows theory's critics?",
+            "options": [
+              "A study showing that graffiti removal correlated with reduced vandalism in one city",
+              "Evidence that cities with unchanged policing policies experienced crime reductions similar to New York's",
+              "Data showing that New York's crack cocaine epidemic ended before the broken windows policy began",
+              "A survey finding that residents felt safer after minor disorder was addressed"
+            ],
+            "correct_answer": "Evidence that cities with unchanged policing policies experienced crime reductions similar to New York's",
+            "answer_reason": "Critics argued that broader economic and demographic factors — not broken windows policing — drove crime reductions. Evidence that cities without such policies saw similar reductions would directly support this argument by undermining the causal claim. The other options either support the theory or are unrelated to the critics' specific argument as presented in the passage.",
+            "order_index": 2,
+            "difficulty": "hard"
+          },
+          {
+            "id": "1ab77292-c015-4d37-9d90-38bfed60abdf",
+            "question_text": "Which of the following best describes the current academic standing of the broken windows theory?",
+            "options": [
+              "It has been comprehensively refuted and is no longer referenced in urban policy",
+              "It is widely accepted as proven by the success of New York City's 1990s policing",
+              "It remains influential in policy debates but its empirical basis is disputed",
+              "It is regarded as the most important development in twentieth-century criminology"
+            ],
+            "correct_answer": "It remains influential in policy debates but its empirical basis is disputed",
+            "answer_reason": "The passage states the theory 'remains influential in urban policy debates but is no longer treated as settled science,' and that academic evaluations have 'produced mixed results.' This directly matches the correct answer. The other options either overstate its acceptance or overstate its rejection.",
+            "order_index": 3,
+            "difficulty": "normal"
+          }
+        ]
+      },
+      {
+        "id": "7f3860f5-2f65-46db-87a2-4da22555c281",
+        "title": "Passage 8 — The Trebuchet",
+        "body": "The trebuchet was a siege engine that operated on the principle of a counterweight mechanism, using the fall of a heavy counterweight to propel a projectile from a long throwing arm. Distinguished from the earlier traction trebuchet — which relied on teams of men pulling ropes to release the arm — the counterweight trebuchet could deliver consistent, repeatable force independent of the physical state of its crew. This consistency made it particularly valuable for sustained siege operations.\n\nThe counterweight trebuchet appears to have originated in China, with designs involving rotating beams documented as early as the fifth century. By the twelfth century, the technology had reached the Islamic world and subsequently Europe, where it became the most formidable siege weapon of the medieval period. The largest trebuchets, sometimes called 'War Wolves,' were capable of hurling stones weighing over a hundred kilograms distances of several hundred metres.\n\nThe mechanics of the trebuchet were well understood by medieval engineers, who adjusted projectile range and arc through careful calibration of counterweight mass, sling length, and release angle. These adjustments enabled commanders to target specific sections of fortifications with considerable precision for a pre-gunpowder technology. Contemporary accounts describe trebuchets delivering not only stones but also diseased animal carcasses — intended to spread illness within besieged fortifications — and occasionally live prisoners, in acts designed as much for psychological effect as physical damage.\n\nThe trebuchet declined as an effective siege weapon following the widespread adoption of gunpowder artillery in the fifteenth century. However, trebuchets continued to appear in conflict for some time thereafter, valued in situations where gunpowder was scarce or where the noise of cannon fire was strategically undesirable. Modern reconstructions of trebuchets have been built by enthusiasts and researchers, and competitive trebuchet-launching events take place in several countries.",
+        "verbal_reasoning_questions": [
+          {
+            "id": "e6a4d91b-5c17-4c08-9612-d1b8dda526f3",
+            "question_text": "The traction trebuchet was more powerful than the counterweight trebuchet because it relied on human muscle power.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "Can't tell",
+            "answer_reason": "The passage does not directly compare the power or force of traction versus counterweight trebuchets. It states the counterweight version provided 'consistent, repeatable force' independent of crew condition — but says nothing about which generated greater power overall. The comparison of power levels cannot be determined from the passage.",
+            "order_index": 0,
+            "difficulty": "hard"
+          },
+          {
+            "id": "799cfea2-2f46-4c85-9c87-cb041d7a51e6",
+            "question_text": "The use of trebuchets in warfare persisted beyond the fifteenth century in certain circumstances.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage states trebuchets 'continued to appear in conflict for some time thereafter' — after the fifteenth century adoption of gunpowder artillery — specifically when gunpowder was scarce or cannon noise was undesirable. This directly confirms that trebuchet use extended beyond the fifteenth century.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "a0273a95-e267-4a6c-ad04-84a40cd148fa",
+            "question_text": "Medieval commanders used trebuchets to launch biological material intended to make enemy troops ill.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage states trebuchets delivered 'diseased animal carcasses — intended to spread illness within besieged fortifications.' Diseased carcasses intended to spread illness constitute biological material used for making enemies ill. This is a straightforward paraphrase of explicit passage content.",
+            "order_index": 2,
+            "difficulty": "normal"
+          },
+          {
+            "id": "e3e9d907-3b20-4fd3-acb7-db0bec4b7054",
+            "question_text": "The counterweight trebuchet was invented in Europe during the medieval period.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage states the counterweight trebuchet 'appears to have originated in China, with designs involving rotating beams documented as early as the fifth century.' It then reached the Islamic world and 'subsequently Europe.' The invention was in China, not Europe. The statement directly contradicts the passage.",
+            "order_index": 3,
+            "difficulty": "normal"
+          }
+        ]
+      },
+      {
+        "id": "d72b381f-e29e-4bcb-b89d-b77363b00471",
+        "title": "Passage 9 — The Aral Sea",
+        "body": "The Aral Sea, once the fourth-largest lake in the world, has undergone one of the most dramatic environmental catastrophes of the twentieth century. Located between Kazakhstan and Uzbekistan in Central Asia, the sea was fed by two major rivers: the Amu Darya from the south and the Syr Darya from the north. Its surface area once covered approximately 68,000 square kilometres and supported a thriving fishing industry, with port towns dotting its shores.\n\nBeginning in the 1960s, Soviet planners diverted the rivers feeding the Aral Sea to irrigate cotton plantations across the Central Asian steppe — a campaign to make the Soviet Union self-sufficient in cotton production. The diversion was extraordinarily successful as an agricultural programme: the Soviet Union became one of the world's largest cotton producers. The consequences for the Aral Sea were catastrophic. Deprived of its inflows, the sea began to shrink. By the 1980s it had split into a smaller northern portion and a larger southern portion; by 2007 the southern portion had largely disappeared, with its remnants reduced to scattered, highly saline pools.\n\nAs the water receded, the fishing industry collapsed. Former port towns found themselves stranded tens of kilometres from the shoreline. Fishing vessels, beached by the retreating water, became one of the most iconic images of the disaster — rusting hulks of trawlers sitting in desert sand. The exposed seabed, heavily contaminated with pesticide and fertiliser residue from decades of agricultural runoff, became a source of toxic dust storms affecting communities across the region.\n\nKazakhstan, with international assistance, constructed the Kok-Aral dam in 2005 to preserve the northern portion of the sea. Water levels in the northern Aral Sea have since recovered significantly, and fish populations have begun to return. No comparable recovery effort has succeeded for the southern portion, which remains largely dessicated.",
+        "verbal_reasoning_questions": [
+          {
+            "id": "c46a6b36-af6d-4264-97f9-9520ad13fd5e",
+            "question_text": "According to the passage, what was the primary purpose of diverting the rivers feeding the Aral Sea?",
+            "options": [
+              "To generate hydroelectric power for Soviet industrial expansion",
+              "To provide drinking water to growing urban populations in Central Asia",
+              "To irrigate cotton crops and make the Soviet Union self-sufficient in cotton",
+              "To prevent seasonal flooding of agricultural land near the rivers"
+            ],
+            "correct_answer": "To irrigate cotton crops and make the Soviet Union self-sufficient in cotton",
+            "answer_reason": "The passage explicitly states the rivers were diverted 'to irrigate cotton plantations across the Central Asian steppe — a campaign to make the Soviet Union self-sufficient in cotton production.' The other options are not mentioned in the passage and represent fabrications.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "0dbbbb6e-02b4-4b34-a8b9-c82ba5662315",
+            "question_text": "According to the passage, how did the Soviet cotton irrigation programme affect the Soviet Union's position in global cotton production?",
+            "options": [
+              "It had little measurable impact on Soviet cotton output",
+              "It made the Soviet Union one of the world's largest cotton producers",
+              "It enabled the Soviet Union to become the sole global supplier of cotton",
+              "It was abandoned before any significant cotton production was achieved"
+            ],
+            "correct_answer": "It made the Soviet Union one of the world's largest cotton producers",
+            "answer_reason": "The passage states the diversion 'was extraordinarily successful as an agricultural programme' and that 'the Soviet Union became one of the world's largest cotton producers.' The other options contradict this — the programme was successful, not ineffective or abandoned, and the USSR became one of the largest producers, not the sole supplier.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "0ba321a1-95d6-44a6-804c-4baef13800b6",
+            "question_text": "What does the passage identify as a consequence of the Aral Sea's exposed seabed?",
+            "options": [
+              "Increased agricultural productivity in surrounding regions due to mineral-rich soil",
+              "Toxic dust storms affecting communities in the region",
+              "Flooding of former port towns as groundwater levels rose",
+              "A significant increase in fish populations in adjacent rivers"
+            ],
+            "correct_answer": "Toxic dust storms affecting communities in the region",
+            "answer_reason": "The passage explicitly states the exposed seabed 'became a source of toxic dust storms affecting communities across the region.' The other options contradict the passage — the seabed was contaminated (not productive for agriculture), port towns were stranded far from the water (not flooded), and fish populations collapsed (not increased).",
+            "order_index": 2,
+            "difficulty": "normal"
+          },
+          {
+            "id": "51e69d8a-e22e-46ff-8fe0-54594aa3c289",
+            "question_text": "Which of the following best describes the current state of the Aral Sea as presented in the passage?",
+            "options": [
+              "Both the northern and southern portions have been substantially restored through international intervention",
+              "The sea has almost entirely disappeared, with no recovery efforts attempted",
+              "The northern portion has partially recovered while the southern portion remains largely dried out",
+              "The sea's surface area is now approximately half of its original 68,000 square kilometres"
+            ],
+            "correct_answer": "The northern portion has partially recovered while the southern portion remains largely dried out",
+            "answer_reason": "The passage describes Kazakhstan's dam construction in 2005, after which 'water levels in the northern Aral Sea have since recovered significantly,' while 'no comparable recovery effort has succeeded for the southern portion, which remains largely dessicated.' This matches the correct option. The other options contradict or misrepresent passage details.",
+            "order_index": 3,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "id": "0b644d56-8217-4314-bed6-5063c451fb55",
+        "title": "Passage 10 — The Philosophy of Thought Experiments",
+        "body": "A thought experiment is a device of the imagination used to investigate the nature of things by envisioning hypothetical scenarios and reasoning through their implications. Unlike empirical experiments, thought experiments require no physical apparatus — they are conducted entirely in the mind. The technique has a long history: Archimedes reportedly used thought experiments to arrive at principles of mechanics, and Galileo famously argued against Aristotelian physics through an imagined scenario involving objects of different masses dropped simultaneously from a tower.\n\nThought experiments played a central role in the development of modern physics. Einstein's 'riding the beam' thought experiment — in which he imagined chasing a beam of light at the speed of light — led him toward the special theory of relativity. The thought experiment revealed a paradox: Maxwell's equations predicted electromagnetic waves would oscillate at the speed of light, but if an observer were moving at that speed, the waves should appear frozen, which contradicted Maxwell's theory. This irresolvable tension motivated Einstein's subsequent theoretical work.\n\nPhilosophers have used thought experiments to test moral intuitions and probe the limits of ethical theories. Peter Singer's drowning child scenario — in which a passerby can save a drowning child at minimal personal cost — argues by extension that affluent individuals have a strong moral obligation to donate to poverty relief, since distance and anonymity are morally irrelevant. Judith Jarvis Thomson's violinist thought experiment, constructed in 1971, presents a scenario in which a person wakes up connected to a famous musician who requires nine months of their body's support to survive, and uses this to argue about the limits of obligatory bodily assistance.\n\nCritics of thought experiments argue that they can mislead by activating emotional or intuitive responses inappropriate to the abstract principles at stake. Scenarios involving individual identifiable victims, for example, have been shown in psychological research to elicit stronger moral concern than statistically equivalent mass harm — a response that may distort rather than illuminate moral reasoning.",
+        "verbal_reasoning_questions": [
+          {
+            "id": "e4f769d6-11bb-4d23-ac61-a938adc8bb75",
+            "question_text": "Galileo's tower thought experiment was designed to challenge the physics of Aristotle.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage explicitly states Galileo 'famously argued against Aristotelian physics through an imagined scenario involving objects of different masses dropped simultaneously from a tower.' This directly confirms that the thought experiment was directed against Aristotle's physics.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "59af101e-b08a-4b9a-a405-d949f6b7eceb",
+            "question_text": "Einstein's 'riding the beam' thought experiment directly produced the special theory of relativity.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage states the thought experiment 'led him toward the special theory of relativity' and 'motivated Einstein's subsequent theoretical work' — it did not directly produce the theory. The passage is careful to describe it as a motivating factor, not the direct source. Saying it 'directly produced' the theory overstates the passage's claim.",
+            "order_index": 1,
+            "difficulty": "hard"
+          },
+          {
+            "id": "c486c3dc-4ac4-4e16-af54-c43ac368d9d7",
+            "question_text": "Judith Jarvis Thomson constructed her violinist thought experiment to argue about bodily autonomy and the limits of obligatory assistance.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage states Thomson's thought experiment 'uses this to argue about the limits of obligatory bodily assistance.' This is a direct paraphrase of the passage's description of the argument's purpose.",
+            "order_index": 2,
+            "difficulty": "normal"
+          },
+          {
+            "id": "b19aed84-cc53-49c4-ae9c-407415b4ca11",
+            "question_text": "According to critics cited in the passage, thought experiments involving identifiable individuals produce stronger emotional reactions than scenarios involving equivalent large-scale harm.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage states 'Scenarios involving individual identifiable victims...have been shown in psychological research to elicit stronger moral concern than statistically equivalent mass harm.' This directly supports the statement. The passage attributes this finding to psychological research cited by critics of thought experiments.",
+            "order_index": 3,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "id": "841407d7-3ce0-404e-b840-fc2534e91381",
+        "title": "Passage 11 — The Columbian Exchange",
+        "body": "The Columbian Exchange, a term coined by historian Alfred W. Crosby in his 1972 book, refers to the widespread transfer of plants, animals, culture, human populations, technology, diseases, and ideas between the Americas and the Old World following Christopher Columbus's 1492 voyage. The exchange was profoundly asymmetric in its biological consequences: while the Americas contributed many nutritionally valuable crops to the Old World, the Old World transmitted diseases to the Americas against which indigenous populations had no immunity.\n\nAmong the crops that moved from the Americas to Europe, Asia, and Africa, the potato and maize had the most transformative effects. The potato, adopted widely in northern Europe by the eighteenth century, dramatically increased caloric yields per hectare compared with existing grain crops and supported rapid population growth in countries including Ireland, where the crop became a dietary staple. Maize spread across Africa, Asia, and southern Europe, providing a high-yield, drought-tolerant food source that contributed to population increases in multiple regions.\n\nThe disease component of the exchange has been described by some historians as the most consequential single biological event in human history. Old World diseases — including smallpox, measles, influenza, and typhus — swept through the Americas following contact, against which indigenous peoples had no prior immunity. Estimates of indigenous population decline vary substantially among historians, with some scholars suggesting mortality rates as high as ninety percent in certain regions within a century of contact. The exact figures remain contested due to the limited documentary record of pre-contact population sizes.\n\nThe Columbian Exchange also moved animals: horses, cattle, pigs, and sheep were introduced to the Americas, transforming indigenous societies in ways both destructive and adaptive. Several Plains Indian nations, for example, built entire cultures around the reintroduced horse within two centuries of its arrival — the horse had been native to the Americas in prehistoric times but had been extinct on the continent for thousands of years before European reintroduction.",
+        "verbal_reasoning_questions": [
+          {
+            "id": "8681131a-ea6a-4308-8fa3-152bcdf7e694",
+            "question_text": "Alfred Crosby coined the term 'Columbian Exchange' in a publication released before 1980.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "True",
+            "answer_reason": "The passage states the term was coined by Crosby 'in his 1972 book.' 1972 is before 1980. This is a straightforward necessary inference from the date given.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "4024ba3d-e382-4b95-a10e-8149541064b6",
+            "question_text": "The Columbian Exchange was biologically symmetrical, with both the Americas and the Old World suffering equally from introduced diseases.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage explicitly states the exchange 'was profoundly asymmetric in its biological consequences' — Old World diseases devastated American indigenous populations, while the Americas contributed crops, not comparable disease burdens, to the Old World. The statement's claim of symmetry directly contradicts the passage.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "22443dd2-aa23-44c1-a954-6b03f5868965",
+            "question_text": "Horses were unknown in the Americas before European contact.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage states that the horse 'had been native to the Americas in prehistoric times but had been extinct on the continent for thousands of years before European reintroduction.' Horses were therefore not unknown — they had existed in the Americas previously but had gone extinct. The statement is directly contradicted by the passage.",
+            "order_index": 2,
+            "difficulty": "hard"
+          },
+          {
+            "id": "7a4a9726-dafb-4285-a04c-2b8fe9f83d66",
+            "question_text": "Historians have reached a consensus on the percentage of indigenous Americans who died as a result of Old World diseases following contact.",
+            "options": [
+              "True",
+              "False",
+              "Can't tell"
+            ],
+            "correct_answer": "False",
+            "answer_reason": "The passage explicitly states that 'Estimates of indigenous population decline vary substantially among historians' and that 'The exact figures remain contested due to the limited documentary record.' This directly contradicts any claim of historical consensus on mortality percentages.",
+            "order_index": 3,
+            "difficulty": "normal"
           }
         ]
       }

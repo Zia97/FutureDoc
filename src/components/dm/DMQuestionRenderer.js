@@ -50,7 +50,7 @@ export function DMStemContent({ question, showLabel = true }) {
       {showLabel && <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>STEM</Text>}
       <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
 
-      {vennKeySets && <VennDiagramKey sets={vennKeySets} />}
+      {vennKeySets && !question.hideLabels && <VennDiagramKey sets={vennKeySets} />}
 
       {question.tableData && <DataTable tableData={question.tableData} />}
 

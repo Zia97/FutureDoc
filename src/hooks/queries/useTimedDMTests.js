@@ -5,7 +5,6 @@ import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 
 const SECTION = 'timed_decision_making';
-const CACHE_KEY = 'timed_decision_making_v2'; // bump this string whenever the mapping schema changes
 
 function mapQuestion(q) {
   return {
@@ -30,6 +29,7 @@ function mapQuestion(q) {
           : []),
     tableData: q.table_data,
     stimulusDiagram: q.stimulus_diagram,
+    hideLabels: q.hideLabels ?? q.hide_labels ?? false,
     answer: q.correct_answer,
     answeringReason: q.answer_reason,
   };
@@ -70,7 +70,7 @@ export function useTimedDMTests() {
         }
       }
 
-      const cached = await getCached(CACHE_KEY);
+      const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
       let versionRow;
@@ -92,7 +92,7 @@ export function useTimedDMTests() {
       try {
         const fresh = await withRetry(() => db.fetchTimedDMTests());
         const mapped = mapTests(fresh);
-        await saveCache(CACHE_KEY, versionRow.version, mapped);
+        await saveCache(SECTION, versionRow.version, mapped);
         setTests(mapped);
       } catch (e) {
         console.error('[DM] fetchTimedDMTests failed:', e);

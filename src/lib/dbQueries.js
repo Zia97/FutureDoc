@@ -237,7 +237,7 @@ class DatabaseService {
 
     const { data: questions, error: questionsError } = await supabase
       .from('timed_decision_making_questions')
-      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, correct_answer, answer_reason, order_index')
+      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, correct_answer, answer_reason, order_index, hide_labels')
       .in('test_id', testIds)
       .order('order_index', { ascending: true });
     if (questionsError) throw questionsError;
