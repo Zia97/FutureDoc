@@ -14,6 +14,7 @@ function mapQuestions(data) {
     stem: q.stem,
     tableData: q.table_data,
     stimulusDiagram: q.stimulus_diagram,
+    hideLabels: q.hideLabels ?? q.hide_labels ?? false,
     answer: q.correct_answer,
     answeringReason: q.answer_reason,
     subtype: q.stimulus_diagram

@@ -76,6 +76,7 @@ class DatabaseService {
         stem,
         table_data,
         stimulus_diagram,
+        hide_labels,
         correct_answer,
         answer_reason,
         decision_making_question_options (
