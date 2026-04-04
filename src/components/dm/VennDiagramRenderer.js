@@ -17,6 +17,10 @@ const MIN_LABEL_CLEARANCE = 10; // minimum clearance (px) an overlap region must
 const MAX_RBOOST_ATTEMPTS = 3; // how many times to retry with a larger radius
 const RBOOST_STEP = 8; // px added to base radius on each retry
 
+// Module-level layout cache — persists across component unmounts so navigating
+// back to a previously-seen diagram is instant (no re-run of force-directed solver).
+const _layoutCache = new Map();
+
 // --- Label safety helpers ---
 
 function distPointToSegment(px, py, x1, y1, x2, y2) {
@@ -414,7 +418,15 @@ function classifyTopology(topology) {
     const separate = [];
     for (let i = 0; i < nSets; i++) { if (!chainSet.has(i)) separate.push(i); }
     if (separate.length > 0) {
-      return { strategy: 'nested_and_separate', params: { chain: nestChain, separate } };
+      // Only use this strategy if the separate sets have no overlaps of their own.
+      // If they do (e.g. a container diagram where sub-sets overlap each other),
+      // fall through to the container/general strategies instead.
+      const separateHaveOverlaps = separate.some(i =>
+        Array.from({ length: nSets }, (_, j) => j).some(j => j !== i && overlaps[i][j])
+      );
+      if (!separateHaveOverlaps) {
+        return { strategy: 'nested_and_separate', params: { chain: nestChain, separate } };
+      }
     }
   }
 
@@ -1078,29 +1090,36 @@ function scoreCandidate(px, py, geoms, regionCheck, canvasW, canvasH) {
  * that well-placed hints are never made worse.
  */
 function findPoleOfInaccessibility(hintX, hintY, geoms, regionCheck, canvasW, canvasH) {
-  const STEP = 5;
+  const ACCEPT = MIN_LABEL_CLEARANCE; // clearance threshold — stop as soon as this is met
+  const STEP = 12;
 
   let bestX = hintX;
   let bestY = hintY;
   let bestDist = scoreCandidate(hintX, hintY, geoms, regionCheck, canvasW, canvasH);
 
-  // Phase 1: coarse grid
+  // Phase 0: hint is already acceptable — return immediately.
+  if (bestDist >= ACCEPT) return { x: bestX, y: bestY, clearance: bestDist };
+
+  // Phase 1: try a ring of offsets around the hint at increasing radii.
+  // Covers 90 % of cases where the hint is slightly off-centre.
+  const ANGLES = [0, Math.PI / 4, Math.PI / 2, (3 * Math.PI) / 4,
+                  Math.PI, (5 * Math.PI) / 4, (3 * Math.PI) / 2, (7 * Math.PI) / 4];
+  for (const r of [10, 20, 35]) {
+    for (const a of ANGLES) {
+      const cx = hintX + r * Math.cos(a);
+      const cy = hintY + r * Math.sin(a);
+      const d = scoreCandidate(cx, cy, geoms, regionCheck, canvasW, canvasH);
+      if (d > bestDist) { bestDist = d; bestX = cx; bestY = cy; }
+      if (bestDist >= ACCEPT) return { x: bestX, y: bestY, clearance: bestDist };
+    }
+  }
+
+  // Phase 2: coarse grid scan — stop as soon as an acceptable point is found.
   for (let gx = 0; gx <= canvasW; gx += STEP) {
     for (let gy = 0; gy <= canvasH; gy += STEP) {
       const d = scoreCandidate(gx, gy, geoms, regionCheck, canvasW, canvasH);
       if (d > bestDist) { bestDist = d; bestX = gx; bestY = gy; }
-    }
-  }
-
-  // Phase 2: refine around the best coarse point at 1px resolution
-  const rx0 = Math.max(0, bestX - STEP);
-  const rx1 = Math.min(canvasW, bestX + STEP);
-  const ry0 = Math.max(0, bestY - STEP);
-  const ry1 = Math.min(canvasH, bestY + STEP);
-  for (let gx = rx0; gx <= rx1; gx++) {
-    for (let gy = ry0; gy <= ry1; gy++) {
-      const d = scoreCandidate(gx, gy, geoms, regionCheck, canvasW, canvasH);
-      if (d > bestDist) { bestDist = d; bestX = gx; bestY = gy; }
+      if (bestDist >= ACCEPT) return { x: bestX, y: bestY, clearance: bestDist };
     }
   }
 
@@ -2315,11 +2334,15 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
   const STROKE = t.text;
   const TEXT_FILL = t.text;
 
-  // Memoize layout resolution — the auto engine's topology inference, position
-  // solving, and rBoost retry loop are expensive; only recompute when config changes.
   // Use JSON key for stable comparison (vennConfig is often a new object each render).
   const configKey = JSON.stringify(vennConfig);
-  const layout = useMemo(() => resolveLayout(vennConfig), [configKey]);
+  // useMemo covers same-instance re-renders; _layoutCache covers remounts after navigation.
+  const layout = useMemo(() => {
+    if (_layoutCache.has(configKey)) return _layoutCache.get(configKey);
+    const result = resolveLayout(vennConfig);
+    _layoutCache.set(configKey, result);
+    return result;
+  }, [configKey]);
   if (!layout) return null;
 
   const canvasW = layout.canvasWidth;
@@ -2342,7 +2365,9 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
   const setIndexById = Object.fromEntries(layout.sets.map((s, i) => [s.id, i]));
 
   // Cache label placements — the grid search only reruns when the config changes.
+  const labelCacheKey = configKey + ':labels';
   const labelPlacements = useMemo(() => {
+    if (_layoutCache.has(labelCacheKey)) return _layoutCache.get(labelCacheKey);
     const placements = {};
     for (const [regionKey, value] of Object.entries(vennConfig.regions || {})) {
       if (value === undefined || value === null || value === 0) continue;
@@ -2358,6 +2383,7 @@ export default function VennDiagramRenderer({ vennConfig, scale = 1 }) {
 
       placements[regionKey] = findLabelPlacement(rawPos.x, rawPos.y, shapeGeoms, regionCheck, canvasW, canvasH, regionKey);
     }
+    _layoutCache.set(labelCacheKey, placements);
     return placements;
   }, [configKey]);
 
