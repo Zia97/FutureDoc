@@ -1,481 +1,563 @@
 [
   {
-    "id": "timed-qr-test-002",
-    "title": "QR Timed Test 2",
+    "id": "timed-qr-test-003",
+    "title": "QR Timed Test 3",
     "question_count": 36,
     "time_minutes": 26,
     "sets": [
       {
-        "set_id": "qr2-set-01",
-        "title": "Hospital Referral Pathways",
+        "set_id": "qr3-set-01",
+        "title": "Student Exam Performance",
         "stimulus": {
           "type": "table",
-          "context": "The table below is a cross-tabulation showing how patients were referred to each department during the last quarter.",
+          "context": "Exam results for six Year 11 students. The multiplier in brackets shows each subject's weighting in the overall grade calculation. Weighted average = Sum of (score times weight) divided by sum of weights. All scores are out of 100.",
           "data": {
-            "headers": ["Referral \\ Department", "Cardiology", "Dermatology", "Orthopaedics", "Gastroenterology", "Total"],
+            "headers": ["Student", "English (x2)", "Maths (x3)", "Science (x2)", "History (x1)"],
             "rows": [
-              ["GP Referral", "84", "62", "95", "48", "289"],
-              ["Self-Referral", "12", "38", "18", "22", "90"],
-              ["A&E Transfer", "45", "8", "32", "15", "100"],
-              ["Specialist Referral", "28", "14", "?", "18", "80"],
-              ["Department Total", "169", "122", "165", "103", "559"]
+              ["Amira", "78", "64", "72", "86"],
+              ["Ben", "62", "88", "76", "58"],
+              ["Chloe", "84", "72", "68", "92"],
+              ["David", "74", "80", "84", "60"],
+              ["Elena", "90", "56", "78", "88"],
+              ["Faisal", "72", "92", "84", "68"]
             ]
           }
         },
         "questions": [
           {
-            "id": "qr2-s01-q1",
-            "stem": "How many referrals were received by the Dermatology department in total?",
+            "id": "qr3-s01-q1",
+            "stem": "What is Faisal's weighted average score?",
             "options": [
-              { "label": "A", "text": "103" },
-              { "label": "B", "text": "112" },
-              { "label": "C", "text": "122" },
-              { "label": "D", "text": "142" },
-              { "label": "E", "text": "165" }
+              { "label": "A", "text": "78.0" },
+              { "label": "B", "text": "79.0" },
+              { "label": "C", "text": "80.5" },
+              { "label": "D", "text": "82.0" },
+              { "label": "E", "text": "84.0" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Read the Department Total row for Dermatology. Step 2: The value is 122. A common error is reading from an adjacent column such as Gastroenterology (103) or Orthopaedics (165). The answer is 122.",
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Total weight = 2 + 3 + 2 + 1 = 8. Step 2: Faisal's weighted total = (72 x 2) + (92 x 3) + (84 x 2) + (68 x 1) = 144 + 276 + 168 + 68 = 656. Step 3: Weighted average = 656 / 8 = 82.0. A common error is calculating the simple mean of the four scores: (72 + 92 + 84 + 68) / 4 = 79.0, which ignores the weightings. The answer is 82.0.",
             "order_index": 0
           },
           {
-            "id": "qr2-s01-q2",
-            "stem": "How many Specialist Referrals were made to the Orthopaedics department?",
+            "id": "qr3-s01-q2",
+            "stem": "Which student has the highest weighted average score?",
             "options": [
-              { "label": "A", "text": "14" },
-              { "label": "B", "text": "17" },
-              { "label": "C", "text": "20" },
-              { "label": "D", "text": "23" },
-              { "label": "E", "text": "26" }
+              { "label": "A", "text": "Ben" },
+              { "label": "B", "text": "Chloe" },
+              { "label": "C", "text": "David" },
+              { "label": "D", "text": "Elena" },
+              { "label": "E", "text": "Faisal" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: From the Specialist Referral row, the total is 80. The known values are: Cardiology = 28, Dermatology = 14, Gastroenterology = 18. Step 2: Orthopaedics = 80 − 28 − 14 − 18 = 20. A common error is subtracting from the Orthopaedics column total (165) instead of the Specialist Referral row total (80). The answer is 20.",
+            "correct_answer": "E",
+            "answer_reason": "Step 1: Calculate each student's weighted average (total weight = 8). Amira: (156 + 192 + 144 + 86) / 8 = 578 / 8 = 72.25. Ben: (124 + 264 + 152 + 58) / 8 = 598 / 8 = 74.75. Chloe: (168 + 216 + 136 + 92) / 8 = 612 / 8 = 76.5. David: (148 + 240 + 168 + 60) / 8 = 616 / 8 = 77.0. Elena: (180 + 168 + 156 + 88) / 8 = 592 / 8 = 74.0. Faisal: (144 + 276 + 168 + 68) / 8 = 656 / 8 = 82.0. Step 2: Faisal has the highest at 82.0. A common error is picking the student with the highest single subject score (Ben has 88 in Maths, Elena has 90 in English) rather than the highest weighted average. The answer is Faisal.",
             "order_index": 1
           },
           {
-            "id": "qr2-s01-q3",
-            "stem": "What percentage of all GP Referrals were directed to Cardiology? Give your answer to one decimal place.",
+            "id": "qr3-s01-q3",
+            "stem": "How many additional marks would Elena need in Maths to equal David's weighted average?",
             "options": [
-              { "label": "A", "text": "24.3%" },
-              { "label": "B", "text": "26.7%" },
-              { "label": "C", "text": "29.1%" },
-              { "label": "D", "text": "31.5%" },
-              { "label": "E", "text": "33.8%" }
+              { "label": "A", "text": "3" },
+              { "label": "B", "text": "5" },
+              { "label": "C", "text": "6" },
+              { "label": "D", "text": "8" },
+              { "label": "E", "text": "12" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: From the GP Referral row, Cardiology = 84 and the row total = 289. Step 2: Percentage = 84 ÷ 289 × 100 = 29.1%. A common error is dividing by the Cardiology column total (169) instead of the GP Referral row total (289), which gives 49.7%. The answer is 29.1%.",
+            "correct_answer": "D",
+            "answer_reason": "Step 1: David's weighted average = 77.0, so the target weighted total = 77.0 x 8 = 616. Step 2: Elena's current weighted total = (90 x 2) + (56 x 3) + (78 x 2) + (88 x 1) = 180 + 168 + 156 + 88 = 592. Step 3: Shortfall = 616 - 592 = 24 weighted marks. Step 4: Maths has a weighting of 3, so additional raw marks needed = 24 / 3 = 8. A common error is dividing by 2 instead of 3 (giving 12), or not accounting for the weighting at all (giving 24). The answer is 8.",
             "order_index": 2
           },
           {
-            "id": "qr2-s01-q4",
-            "stem": "Which referral source directed the highest proportion of its total referrals to Cardiology?",
+            "id": "qr3-s01-q4",
+            "stem": "What percentage of students achieved a weighted average above 75.0?",
             "options": [
-              { "label": "A", "text": "GP Referral" },
-              { "label": "B", "text": "Self-Referral" },
-              { "label": "C", "text": "A&E Transfer" },
-              { "label": "D", "text": "Specialist Referral" },
-              { "label": "E", "text": "GP Referral and A&E Transfer equally" }
+              { "label": "A", "text": "16.7%" },
+              { "label": "B", "text": "50.0%" },
+              { "label": "C", "text": "66.7%" },
+              { "label": "D", "text": "83.3%" },
+              { "label": "E", "text": "100%" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Calculate the proportion of each source's referrals that went to Cardiology. GP Referral: 84 ÷ 289 = 29.1%. Self-Referral: 12 ÷ 90 = 13.3%. A&E Transfer: 45 ÷ 100 = 45.0%. Specialist Referral: 28 ÷ 80 = 35.0%. Step 2: A&E Transfer has the highest proportion at 45.0%. A common error is comparing the raw Cardiology counts (84 for GP is higher than 45 for A&E) instead of the proportions. The answer is A&E Transfer.",
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Weighted averages are: Amira 72.25, Ben 74.75, Chloe 76.5, David 77.0, Elena 74.0, Faisal 82.0. Step 2: Students above 75.0: Chloe (76.5), David (77.0), and Faisal (82.0) = 3 out of 6 students. Step 3: Percentage = 3 / 6 x 100 = 50.0%. A common error is including Ben (74.75) by rounding up, or miscounting the qualifying students. The answer is 50.0%.",
             "order_index": 3
           }
         ]
       },
       {
-        "set_id": "qr2-set-02",
-        "title": "Artisan Bakery Monthly Revenue and Costs",
+        "set_id": "qr3-set-02",
+        "title": "Community Renewable Energy Balance",
         "stimulus": {
           "type": "bar_chart",
-          "context": "Profit Margin (%) = (Profit ÷ Revenue) × 100. The bakery opened in October the previous year.",
+          "context": "Positive values indicate energy surplus sold back to the grid. Negative values indicate energy purchased from the grid. The grid buyback rate is £85 per MWh and the purchase rate is £120 per MWh.",
           "data": {
-            "title": "Artisan Bakery — Revenue and Costs (£000s)",
+            "title": "Monthly Net Energy Balance (MWh)",
             "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
             "series": [
-              { "name": "Revenue", "values": [18, 22, 24, 20, 28, 32] },
-              { "name": "Costs", "values": [-12, -14, -15, -14, -17, -20] }
+              { "name": "Net Balance", "values": [-45, -30, 15, 40, 55, -10] }
             ],
-            "yAxisLabel": "Amount (£000s)",
-            "unit": "£"
-          }
-        },
-        "questions": [
-          {
-            "id": "qr2-s02-q1",
-            "stem": "What was the bakery's profit in March?",
-            "options": [
-              { "label": "A", "text": "£6,000" },
-              { "label": "B", "text": "£7,000" },
-              { "label": "C", "text": "£8,000" },
-              { "label": "D", "text": "£9,000" },
-              { "label": "E", "text": "£11,000" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: From the chart, March revenue = £24,000 and March costs = £15,000 (shown as −15 on the chart). Step 2: Profit = Revenue − Costs = £24,000 − £15,000 = £9,000. A common error is reading the wrong month's bars or confusing revenue and cost values. The answer is £9,000.",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s02-q2",
-            "stem": "In which month did the bakery achieve the highest profit margin?",
-            "options": [
-              { "label": "A", "text": "February" },
-              { "label": "B", "text": "March" },
-              { "label": "C", "text": "April" },
-              { "label": "D", "text": "May" },
-              { "label": "E", "text": "June" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Calculate profit and profit margin for each month. January: (18 − 12) ÷ 18 = 33.3%. February: (22 − 14) ÷ 22 = 36.4%. March: (24 − 15) ÷ 24 = 37.5%. April: (20 − 14) ÷ 20 = 30.0%. May: (28 − 17) ÷ 28 = 39.3%. June: (32 − 20) ÷ 32 = 37.5%. Step 2: May has the highest profit margin at 39.3%. A common error is selecting the month with the highest absolute profit (June, £12,000) rather than the highest margin percentage. The answer is May.",
-            "order_index": 1
-          },
-          {
-            "id": "qr2-s02-q3",
-            "stem": "The bakery's July–December profit is expected to equal 1.5 times the January–June profit. What is the expected total annual profit?",
-            "options": [
-              { "label": "A", "text": "£78,000" },
-              { "label": "B", "text": "£104,000" },
-              { "label": "C", "text": "£120,000" },
-              { "label": "D", "text": "£130,000" },
-              { "label": "E", "text": "£156,000" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Calculate the January–June profit in £000s: (18−12) + (22−14) + (24−15) + (20−14) + (28−17) + (32−20) = 6 + 8 + 9 + 6 + 11 + 12 = 52, which is £52,000. Step 2: July–December profit = 1.5 × £52,000 = £78,000. Step 3: Total annual profit = £52,000 + £78,000 = £130,000. A common error is giving only the second-half profit (£78,000) or doubling the first half (£104,000) instead of adding 1.5 times the first half to the first half. The answer is £130,000.",
-            "order_index": 2
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-03",
-        "title": "Snow Leopard Population",
-        "stimulus": {
-          "type": "text",
-          "text": "The snow leopard population in Country A is 40% of the population in Country B. The population in Country C is 50% of the population in Country A. There are 520 snow leopards in Country C."
-        },
-        "questions": [
-          {
-            "id": "qr2-s03-q1",
-            "stem": "How many snow leopards are in Country B?",
-            "options": [
-              { "label": "A", "text": "1,040" },
-              { "label": "B", "text": "1,300" },
-              { "label": "C", "text": "2,080" },
-              { "label": "D", "text": "2,600" },
-              { "label": "E", "text": "5,200" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Country C = 50% of Country A, so Country A = 520 ÷ 0.50 = 1,040. Step 2: Country A = 40% of Country B, so Country B = 1,040 ÷ 0.40 = 2,600. A common error is stopping after finding Country A (1,040) or dividing 520 directly by 0.40 (giving 1,300), which skips the chain relationship. The answer is 2,600.",
-            "order_index": 0
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-04",
-        "title": "University Library Monthly Loans",
-        "stimulus": {
-          "type": "line_graph",
-          "context": "January data for the Science faculty was unavailable due to a system error. The total Science loans across all 8 months were 11,580.",
-          "data": {
-            "title": "Monthly Book Loans by Faculty",
-            "labels": ["Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr"],
-            "series": [
-              { "name": "Science", "values": [1200, 1450, 1680, 980, null, 1600, 1750, 1400] },
-              { "name": "Humanities", "values": [850, 1100, 1350, 720, 1050, 1200, 1380, 1420] },
-              { "name": "Engineering", "values": [680, 820, 950, 540, 780, 860, 920, 980] }
-            ],
-            "yAxisLabel": "Number of Loans",
+            "yAxisLabel": "Net Energy (MWh)",
             "unit": ""
           }
         },
         "questions": [
           {
-            "id": "qr2-s04-q1",
-            "stem": "In which month did the Humanities faculty borrow the most books?",
+            "id": "qr3-s02-q1",
+            "stem": "In how many months did the community have an energy surplus?",
             "options": [
-              { "label": "A", "text": "November" },
-              { "label": "B", "text": "January" },
-              { "label": "C", "text": "February" },
-              { "label": "D", "text": "March" },
-              { "label": "E", "text": "April" }
-            ],
-            "correct_answer": "E",
-            "answer_reason": "Step 1: Read the Humanities values from the graph: Sep = 850, Oct = 1,100, Nov = 1,350, Dec = 720, Jan = 1,050, Feb = 1,200, Mar = 1,380, Apr = 1,420. Step 2: The highest value is April at 1,420. A common error is selecting March (1,380) or November (1,350), which are close but not the maximum. The answer is April.",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s04-q2",
-            "stem": "What was the total number of books borrowed by the Engineering faculty across all 8 months?",
-            "options": [
-              { "label": "A", "text": "5,550" },
-              { "label": "B", "text": "5,980" },
-              { "label": "C", "text": "6,230" },
-              { "label": "D", "text": "6,530" },
-              { "label": "E", "text": "6,840" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Read the Engineering values: Sep = 680, Oct = 820, Nov = 950, Dec = 540, Jan = 780, Feb = 860, Mar = 920, Apr = 980. Step 2: Total = 680 + 820 + 950 + 540 + 780 + 860 + 920 + 980 = 6,530. A common error is miscounting the months or accidentally including a value from the Science or Humanities series. The answer is 6,530.",
-            "order_index": 1
-          },
-          {
-            "id": "qr2-s04-q3",
-            "stem": "How many books did the Science faculty lend in January?",
-            "options": [
-              { "label": "A", "text": "1,320" },
-              { "label": "B", "text": "1,420" },
-              { "label": "C", "text": "1,520" },
-              { "label": "D", "text": "1,620" },
-              { "label": "E", "text": "1,720" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: The total Science loans across all 8 months = 11,580. Step 2: Sum of known Science loans (Sep, Oct, Nov, Dec, Feb, Mar, Apr) = 1,200 + 1,450 + 1,680 + 980 + 1,600 + 1,750 + 1,400 = 10,060. Step 3: January = 11,580 − 10,060 = 1,520. A common error is dividing the total by 8 to estimate the mean (1,447.5) instead of subtracting the known months from the stated total. The answer is 1,520.",
-            "order_index": 2
-          },
-          {
-            "id": "qr2-s04-q4",
-            "stem": "In November, what percentage of total loans across all three faculties came from the Science faculty? Give your answer to one decimal place.",
-            "options": [
-              { "label": "A", "text": "38.4%" },
-              { "label": "B", "text": "40.1%" },
-              { "label": "C", "text": "42.2%" },
-              { "label": "D", "text": "44.5%" },
-              { "label": "E", "text": "46.8%" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: In November — Science = 1,680, Humanities = 1,350, Engineering = 950. Step 2: Total November loans = 1,680 + 1,350 + 950 = 3,980. Step 3: Science percentage = 1,680 ÷ 3,980 × 100 = 42.2%. A common error is using the full-year Science total rather than the November-only value. The answer is 42.2%.",
-            "order_index": 3
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-05",
-        "title": "Paint Roller Surface Areas",
-        "stimulus": {
-          "type": "multi",
-          "items": [
-            {
-              "type": "table",
-              "data": {
-                "headers": ["Brand", "Length (cm)", "Diameter (cm)", "Weight (g)"],
-                "rows": [
-                  ["RollEase", "25", "7", "120"],
-                  ["PaintPro", "30", "14", "280"],
-                  ["QuickCoat", "21", "7", "95"],
-                  ["MasterRoll", "35", "14", "340"],
-                  ["MiniRoll", "14", "7", "65"]
-                ]
-              }
-            },
-            {
-              "type": "text",
-              "text": "Curved surface area of a cylinder = πdh, where d is the diameter, h is the length, and π = 22/7."
-            }
-          ]
-        },
-        "questions": [
-          {
-            "id": "qr2-s05-q1",
-            "stem": "What is the curved surface area of the RollEase roller?",
-            "options": [
-              { "label": "A", "text": "462 cm²" },
-              { "label": "B", "text": "508 cm²" },
-              { "label": "C", "text": "550 cm²" },
-              { "label": "D", "text": "616 cm²" },
-              { "label": "E", "text": "700 cm²" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: From the table, RollEase has length = 25 cm and diameter = 7 cm. Step 2: Using the formula, curved surface area = πdh = (22/7) × 7 × 25 = 22 × 25 = 550 cm². A common error is using the radius (3.5 cm) instead of the diameter in the given formula, which would halve the answer. The answer is 550 cm².",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s05-q2",
-            "stem": "Which roller has the largest curved surface area?",
-            "options": [
-              { "label": "A", "text": "RollEase" },
-              { "label": "B", "text": "PaintPro" },
-              { "label": "C", "text": "QuickCoat" },
-              { "label": "D", "text": "MasterRoll" },
-              { "label": "E", "text": "MiniRoll" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Calculate the curved surface area for each roller using πdh with π = 22/7. RollEase: (22/7) × 7 × 25 = 550 cm². PaintPro: (22/7) × 14 × 30 = 44 × 30 = 1,320 cm². QuickCoat: (22/7) × 7 × 21 = 22 × 21 = 462 cm². MasterRoll: (22/7) × 14 × 35 = 44 × 35 = 1,540 cm². MiniRoll: (22/7) × 7 × 14 = 22 × 14 = 308 cm². Step 2: MasterRoll has the largest curved surface area at 1,540 cm². A common error is selecting the roller with the largest single dimension rather than computing the full surface area for each. The answer is MasterRoll.",
-            "order_index": 1
-          },
-          {
-            "id": "qr2-s05-q3",
-            "stem": "A painter needs to cover a wall area of 15,400 cm². Each pass of the roller covers exactly its curved surface area. Using the PaintPro roller, how many complete passes are needed to cover the wall?",
-            "options": [
-              { "label": "A", "text": "10" },
-              { "label": "B", "text": "11" },
-              { "label": "C", "text": "12" },
-              { "label": "D", "text": "13" },
-              { "label": "E", "text": "14" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: PaintPro curved surface area = (22/7) × 14 × 30 = 1,320 cm². Step 2: Number of passes = 15,400 ÷ 1,320 = 11.67. Step 3: Since a partial pass does not fully cover the remaining area, round up to 12 complete passes. A common error is rounding down to 11, which would leave 880 cm² uncovered. The answer is 12.",
-            "order_index": 2
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-06",
-        "title": "Water Tank Capacity",
-        "stimulus": {
-          "type": "text",
-          "text": "A rectangular water tank has external dimensions 1,200 mm × 800 mm × 600 mm. The walls and base are uniformly 100 mm thick and the tank is open at the top. 1 litre = 1,000 cm³."
-        },
-        "questions": [
-          {
-            "id": "qr2-s06-q1",
-            "stem": "What is the internal capacity of the tank in litres?",
-            "options": [
-              { "label": "A", "text": "240 litres" },
-              { "label": "B", "text": "300 litres" },
-              { "label": "C", "text": "385 litres" },
-              { "label": "D", "text": "480 litres" },
-              { "label": "E", "text": "576 litres" }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Step 1: The walls are 100 mm thick on each side and the tank is open at the top. Internal length = 1,200 − (2 × 100) = 1,000 mm = 100 cm. Internal width = 800 − (2 × 100) = 600 mm = 60 cm. Internal height = 600 − 100 = 500 mm = 50 cm (only the base has a wall; the top is open). Step 2: Volume = 100 × 60 × 50 = 300,000 cm³. Step 3: 300,000 ÷ 1,000 = 300 litres. A common error is subtracting wall thickness from both top and bottom of the height (giving 400 mm internal height and 240 litres). The answer is 300 litres.",
-            "order_index": 0
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-07",
-        "title": "Council Tax Bands — Berkshire",
-        "stimulus": {
-          "type": "table",
-          "context": "Council Tax is a single annual charge based on the property's valuation band. A 25% discount applies if only one adult resides in the property.",
-          "data": {
-            "headers": ["Band", "Property Value Range", "Annual Charge"],
-            "rows": [
-              ["A", "Up to £40,000", "£1,248"],
-              ["B", "£40,001 – £52,000", "£1,456"],
-              ["C", "£52,001 – £68,000", "£1,664"],
-              ["D", "£68,001 – £88,000", "£1,872"],
-              ["E", "£88,001 – £120,000", "£2,288"],
-              ["F", "£120,001 – £160,000", "£2,704"]
-            ]
-          }
-        },
-        "questions": [
-          {
-            "id": "qr2-s07-q1",
-            "stem": "A couple lives in a property valued at £75,000. How much Council Tax do they pay annually?",
-            "options": [
-              { "label": "A", "text": "£1,456" },
-              { "label": "B", "text": "£1,664" },
-              { "label": "C", "text": "£1,872" },
-              { "label": "D", "text": "£2,080" },
-              { "label": "E", "text": "£2,288" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: A property valued at £75,000 falls in Band D (£68,001 – £88,000). Step 2: The annual charge for Band D is £1,872. No discount applies as the property has more than one adult. A common error is selecting Band C or Band E by misreading the boundary values. The answer is £1,872.",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s07-q2",
-            "stem": "A single adult lives in a property valued at £55,000. How much Council Tax do they pay annually?",
-            "options": [
-              { "label": "A", "text": "£1,040" },
-              { "label": "B", "text": "£1,152" },
-              { "label": "C", "text": "£1,248" },
-              { "label": "D", "text": "£1,352" },
-              { "label": "E", "text": "£1,456" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: A property valued at £55,000 falls in Band C (£52,001 – £68,000). The standard annual charge is £1,664. Step 2: A single adult receives a 25% discount: £1,664 × 0.75 = £1,248. A common error is forgetting the single-adult discount entirely, giving £1,664. The answer is £1,248.",
-            "order_index": 1
-          },
-          {
-            "id": "qr2-s07-q3",
-            "stem": "Mrs Taylor has a Band C property and lives alone. Mr Ahmed has a Band E property and lives with his family. Over a 3-year period, how much more does Mr Ahmed pay in total than Mrs Taylor?",
-            "options": [
-              { "label": "A", "text": "£1,872" },
-              { "label": "B", "text": "£2,496" },
-              { "label": "C", "text": "£3,120" },
-              { "label": "D", "text": "£3,744" },
-              { "label": "E", "text": "£4,368" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Mrs Taylor has Band C and lives alone: £1,664 × 0.75 = £1,248 per year. Step 2: Mr Ahmed has Band E with no discount: £2,288 per year. Step 3: Annual difference = £2,288 − £1,248 = £1,040. Step 4: Over 3 years = £1,040 × 3 = £3,120. A common error is forgetting Mrs Taylor's single-adult discount, giving an annual difference of £2,288 − £1,664 = £624 and a 3-year total of £1,872. The answer is £3,120.",
-            "order_index": 2
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-08",
-        "title": "Carbon Emissions by Country",
-        "stimulus": {
-          "type": "scatter_plot",
-          "data": {
-            "title": "Annual CO₂ Emissions vs GDP per Capita",
-            "xAxisLabel": "GDP per Capita (£000s)",
-            "yAxisLabel": "CO₂ Emissions (tonnes per person)",
-            "series": [
-              {
-                "name": "Countries",
-                "points": [
-                  { "x": 8, "y": 2.5, "label": "A" },
-                  { "x": 15, "y": 4.8, "label": "B" },
-                  { "x": 22, "y": 6.2, "label": "C" },
-                  { "x": 30, "y": 9.5, "label": "D" },
-                  { "x": 38, "y": 7.1, "label": "E" },
-                  { "x": 45, "y": 12.0, "label": "F" },
-                  { "x": 52, "y": 8.8, "label": "G" }
-                ]
-              }
-            ]
-          }
-        },
-        "questions": [
-          {
-            "id": "qr2-s08-q1",
-            "stem": "Which country has the highest CO₂ emissions per person?",
-            "options": [
-              { "label": "A", "text": "Country C" },
-              { "label": "B", "text": "Country D" },
-              { "label": "C", "text": "Country E" },
-              { "label": "D", "text": "Country F" },
-              { "label": "E", "text": "Country G" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Read the CO₂ emissions (y-axis) for each country: A = 2.5, B = 4.8, C = 6.2, D = 9.5, E = 7.1, F = 12.0, G = 8.8. Step 2: Country F has the highest emissions at 12.0 tonnes per person. A common error is selecting Country D (9.5) or Country G (8.8), which are high but not the highest. The answer is Country F.",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s08-q2",
-            "stem": "How many countries have both a GDP per capita above £20,000 and CO₂ emissions below 10 tonnes per person?",
-            "options": [
-              { "label": "A", "text": "2" },
+              { "label": "A", "text": "1" },
               { "label": "B", "text": "3" },
               { "label": "C", "text": "4" },
               { "label": "D", "text": "5" },
               { "label": "E", "text": "6" }
             ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: A surplus is indicated by a positive net balance. Step 2: Positive months are March (15), April (40), and May (55). Step 3: That is 3 months. A common error is counting months at zero or confusing negative values (deficit) with surplus. The answer is 3.",
+            "order_index": 0
+          },
+          {
+            "id": "qr3-s02-q2",
+            "stem": "What was the total net energy balance over the six months?",
+            "options": [
+              { "label": "A", "text": "-25 MWh" },
+              { "label": "B", "text": "0 MWh" },
+              { "label": "C", "text": "15 MWh" },
+              { "label": "D", "text": "25 MWh" },
+              { "label": "E", "text": "55 MWh" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Sum all monthly balances: -45 + (-30) + 15 + 40 + 55 + (-10). Step 2: Positives: 15 + 40 + 55 = 110. Negatives: -45 + (-30) + (-10) = -85. Step 3: Total = 110 - 85 = 25 MWh. A common error is summing only the positive values (110) or only the absolute values (195). The answer is 25 MWh.",
+            "order_index": 1
+          },
+          {
+            "id": "qr3-s02-q3",
+            "stem": "What was the community's net financial position over the six months? (Surplus energy sold at £85/MWh; deficit energy purchased at £120/MWh.)",
+            "options": [
+              { "label": "A", "text": "-£2,125" },
+              { "label": "B", "text": "-£1,500" },
+              { "label": "C", "text": "-£850" },
+              { "label": "D", "text": "£850" },
+              { "label": "E", "text": "£2,125" }
+            ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: Identify countries with GDP per capita above £20,000 (x > 20): C (22, 6.2), D (30, 9.5), E (38, 7.1), F (45, 12.0), G (52, 8.8). Step 2: Of these, filter for CO₂ emissions below 10: C (6.2) ✓, D (9.5) ✓, E (7.1) ✓, G (8.8) ✓. Country F (12.0) does not qualify. Step 3: Four countries meet both conditions. A common error is including Country F or excluding Country D (whose 9.5 is just below 10). The answer is 4.",
+            "answer_reason": "Step 1: Total surplus sold = (15 + 40 + 55) x £85 = 110 x £85 = £9,350. Step 2: Total deficit purchased = (45 + 30 + 10) x £120 = 85 x £120 = £10,200. Step 3: Net financial position = £9,350 - £10,200 = -£850. A common error is applying the same rate to the net balance (25 x £85 = £2,125), which ignores the different buy and sell rates. The answer is -£850.",
+            "order_index": 2
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-03",
+        "title": "Patient Drug Dosage",
+        "stimulus": {
+          "type": "multi",
+          "items": [
+            {
+              "type": "table",
+              "data": {
+                "headers": ["Patient", "Weight (kg)", "Age"],
+                "rows": [
+                  ["Patient A", "72", "45"],
+                  ["Patient B", "96", "62"],
+                  ["Patient C", "54", "28"],
+                  ["Patient D", "108", "55"],
+                  ["Patient E", "84", "38"]
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "text": "Standard dose = 15 mg per kg of body weight per day, divided into 3 equal doses. Maximum single dose = 450 mg."
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "qr3-s03-q1",
+            "stem": "What is the standard single dose for Patient A?",
+            "options": [
+              { "label": "A", "text": "240 mg" },
+              { "label": "B", "text": "360 mg" },
+              { "label": "C", "text": "420 mg" },
+              { "label": "D", "text": "540 mg" },
+              { "label": "E", "text": "1,080 mg" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Daily dose = 72 kg x 15 mg/kg = 1,080 mg. Step 2: Single dose = 1,080 / 3 = 360 mg. Step 3: 360 mg is below the 450 mg maximum, so no adjustment needed. A common error is forgetting to divide by 3 (giving 1,080 mg) or dividing by 2 instead of 3 (giving 540 mg). The answer is 360 mg.",
+            "order_index": 0
+          },
+          {
+            "id": "qr3-s03-q2",
+            "stem": "What is the correct single dose for Patient D?",
+            "options": [
+              { "label": "A", "text": "270 mg" },
+              { "label": "B", "text": "360 mg" },
+              { "label": "C", "text": "420 mg" },
+              { "label": "D", "text": "450 mg" },
+              { "label": "E", "text": "540 mg" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Daily dose = 108 kg x 15 mg/kg = 1,620 mg. Step 2: Single dose = 1,620 / 3 = 540 mg. Step 3: 540 mg exceeds the maximum single dose of 450 mg, so the dose is capped at 450 mg. A common error is not applying the 450 mg cap, giving the uncapped answer of 540 mg. The answer is 450 mg.",
+            "order_index": 1
+          },
+          {
+            "id": "qr3-s03-q3",
+            "stem": "Patient E takes the standard dose for 7 days. How many grams of medication do they take in total?",
+            "options": [
+              { "label": "A", "text": "2.94 g" },
+              { "label": "B", "text": "5.88 g" },
+              { "label": "C", "text": "8.82 g" },
+              { "label": "D", "text": "12.60 g" },
+              { "label": "E", "text": "26.46 g" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Daily dose = 84 kg x 15 mg/kg = 1,260 mg per day. Step 2: Single dose = 1,260 / 3 = 420 mg, which is below the 450 mg cap. Step 3: Total over 7 days = 1,260 x 7 = 8,820 mg. Step 4: Convert to grams = 8,820 / 1,000 = 8.82 g. A common error is calculating only one dose per day for 7 days (420 x 7 = 2,940 mg = 2.94 g), or two doses per day (5,880 mg = 5.88 g). The answer is 8.82 g.",
+            "order_index": 2
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-04",
+        "title": "Regional House Price Trends",
+        "stimulus": {
+          "type": "line_graph",
+          "data": {
+            "title": "Average House Prices by Region (£000s)",
+            "labels": ["2019", "2020", "2021", "2022", "2023", "2024"],
+            "series": [
+              { "name": "North", "values": [145, 150, 162, 178, 185, 190] },
+              { "name": "South", "values": [280, 290, 310, 340, 355, 365] },
+              { "name": "Midlands", "values": [195, 200, 215, 235, 248, 255] }
+            ],
+            "yAxisLabel": "Average Price (£000s)",
+            "unit": ""
+          }
+        },
+        "questions": [
+          {
+            "id": "qr3-s04-q1",
+            "stem": "What was the average house price in the South in 2022?",
+            "options": [
+              { "label": "A", "text": "£290,000" },
+              { "label": "B", "text": "£310,000" },
+              { "label": "C", "text": "£340,000" },
+              { "label": "D", "text": "£355,000" },
+              { "label": "E", "text": "£365,000" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Read the South series at the 2022 label on the graph. Step 2: The value is 340 (in £000s) = £340,000. A common error is reading from an adjacent year such as 2021 (£310,000) or 2023 (£355,000). The answer is £340,000.",
+            "order_index": 0
+          },
+          {
+            "id": "qr3-s04-q2",
+            "stem": "What was the percentage increase in North house prices from 2019 to 2024? Give your answer to one decimal place.",
+            "options": [
+              { "label": "A", "text": "23.8%" },
+              { "label": "B", "text": "26.4%" },
+              { "label": "C", "text": "31.0%" },
+              { "label": "D", "text": "45.0%" },
+              { "label": "E", "text": "76.3%" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: North price in 2019 = 145 (£000s). North price in 2024 = 190 (£000s). Step 2: Increase = 190 - 145 = 45 (£000s). Step 3: Percentage increase = 45 / 145 x 100 = 31.0%. A common error is dividing by the final value (45 / 190 = 23.7%) or giving the absolute increase as a percentage of a different base. The answer is 31.0%.",
+            "order_index": 1
+          },
+          {
+            "id": "qr3-s04-q3",
+            "stem": "What was the average annual increase in Midlands house prices over the period 2019 to 2024?",
+            "options": [
+              { "label": "A", "text": "£10,000" },
+              { "label": "B", "text": "£12,000" },
+              { "label": "C", "text": "£14,000" },
+              { "label": "D", "text": "£15,000" },
+              { "label": "E", "text": "£60,000" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Total increase = 255 - 195 = 60 (£000s). Step 2: Number of years from 2019 to 2024 = 5. Step 3: Average annual increase = 60 / 5 = 12 (£000s) = £12,000. A common error is dividing by 6 (the number of data points) instead of 5 (the number of intervals), giving £10,000. Another error is giving the total increase of £60,000 rather than the annual average. The answer is £12,000.",
+            "order_index": 2
+          },
+          {
+            "id": "qr3-s04-q4",
+            "stem": "By how much more did the South's average price increase compared to the North's, over the period 2019 to 2024?",
+            "options": [
+              { "label": "A", "text": "£25,000" },
+              { "label": "B", "text": "£30,000" },
+              { "label": "C", "text": "£35,000" },
+              { "label": "D", "text": "£40,000" },
+              { "label": "E", "text": "£45,000" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: South increase = 365 - 280 = 85 (£000s) = £85,000. Step 2: North increase = 190 - 145 = 45 (£000s) = £45,000. Step 3: Difference = £85,000 - £45,000 = £40,000. A common error is comparing the absolute prices rather than the increases, or comparing the 2024 values directly (365 - 190 = 175, not the correct approach). The answer is £40,000.",
+            "order_index": 3
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-05",
+        "title": "Gym Membership Pricing",
+        "stimulus": {
+          "type": "text",
+          "text": "A gym charges £45 per month for a standard membership. Members who sign up for a full year receive a 20% discount on the monthly fee. A joining fee of £75 applies to all new members regardless of membership length."
+        },
+        "questions": [
+          {
+            "id": "qr3-s05-q1",
+            "stem": "What is the total cost of a one-year membership including the joining fee?",
+            "options": [
+              { "label": "A", "text": "£432" },
+              { "label": "B", "text": "£507" },
+              { "label": "C", "text": "£540" },
+              { "label": "D", "text": "£615" },
+              { "label": "E", "text": "£690" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Monthly fee with 20% discount = £45 x 0.80 = £36. Step 2: Annual fee = £36 x 12 = £432. Step 3: Total including joining fee = £432 + £75 = £507. A common error is forgetting the discount (£45 x 12 + £75 = £615) or forgetting the joining fee (£432). The answer is £507.",
+            "order_index": 0
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-06",
+        "title": "App Downloads by Device and Age Group",
+        "stimulus": {
+          "type": "table",
+          "context": "A technology company recorded app downloads over a one-month period, classified by device type and user age group. The number of Android downloads in the 61+ age group was lost during a server migration.",
+          "data": {
+            "headers": ["Device \\ Age Group", "18-25", "26-40", "41-60", "61+", "Total"],
+            "rows": [
+              ["iPhone", "480", "620", "340", "160", "1,600"],
+              ["Android", "550", "480", "390", "?", "1,600"],
+              ["Tablet", "120", "240", "280", "160", "800"],
+              ["Total", "1,150", "1,340", "1,010", "500", "4,000"]
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "qr3-s06-q1",
+            "stem": "How many downloads were there across all devices for the 41-60 age group?",
+            "options": [
+              { "label": "A", "text": "1,010" },
+              { "label": "B", "text": "1,150" },
+              { "label": "C", "text": "1,340" },
+              { "label": "D", "text": "1,600" },
+              { "label": "E", "text": "4,000" }
+            ],
+            "correct_answer": "A",
+            "answer_reason": "Step 1: Read the Total row for the 41-60 column. Step 2: The value is 1,010. A common error is reading from an adjacent column such as 26-40 (1,340) or 18-25 (1,150), or reading a device row total instead of the age group total. The answer is 1,010.",
+            "order_index": 0
+          },
+          {
+            "id": "qr3-s06-q2",
+            "stem": "What percentage of all 26-40 year old downloads were on an Android device? Give your answer to one decimal place.",
+            "options": [
+              { "label": "A", "text": "30.0%" },
+              { "label": "B", "text": "35.8%" },
+              { "label": "C", "text": "40.0%" },
+              { "label": "D", "text": "46.3%" },
+              { "label": "E", "text": "48.0%" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Android downloads in the 26-40 group = 480. Step 2: Total downloads in the 26-40 group = 1,340. Step 3: Percentage = 480 / 1,340 x 100 = 35.8%. A common error is dividing by the Android total (480 / 1,600 = 30.0%) instead of the age group total. The answer is 35.8%.",
+            "order_index": 1
+          },
+          {
+            "id": "qr3-s06-q3",
+            "stem": "What percentage of all 61+ downloads were on an Android device? Give your answer to the nearest whole number.",
+            "options": [
+              { "label": "A", "text": "24%" },
+              { "label": "B", "text": "28%" },
+              { "label": "C", "text": "32%" },
+              { "label": "D", "text": "36%" },
+              { "label": "E", "text": "44%" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Find Android 61+ downloads. From the Android row: Total (1,600) - 18-25 (550) - 26-40 (480) - 41-60 (390) = 180. Step 2: Total 61+ downloads = 500. Step 3: Percentage = 180 / 500 x 100 = 36%. A common error is using the overall total (4,000) as the denominator instead of the 61+ column total, or failing to derive the missing value first. The answer is 36%.",
+            "order_index": 2
+          },
+          {
+            "id": "qr3-s06-q4",
+            "stem": "Which device had the most evenly distributed downloads across the four age groups? (That is, the smallest difference between its highest and lowest age group counts.)",
+            "options": [
+              { "label": "A", "text": "Tablet" },
+              { "label": "B", "text": "Android" },
+              { "label": "C", "text": "iPhone" },
+              { "label": "D", "text": "iPhone and Android equally" },
+              { "label": "E", "text": "Can't Tell" }
+            ],
+            "correct_answer": "A",
+            "answer_reason": "Step 1: Calculate the range (highest minus lowest) for each device. iPhone: highest = 620, lowest = 160, range = 460. Android: highest = 550, lowest = 180 (derived from 1,600 - 550 - 480 - 390), range = 370. Tablet: highest = 280, lowest = 120, range = 160. Step 2: The smallest range is 160 (Tablet), meaning Tablet downloads are most evenly spread across age groups. A common error is comparing total downloads rather than the spread of values. The answer is Tablet.",
+            "order_index": 3
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-07",
+        "title": "T-Shaped Garden Paving",
+        "stimulus": {
+          "type": "geometry_diagram",
+          "context": "A homeowner plans to pave a T-shaped area in their garden. Paving slabs cost £15 per square metre. Edging strip for the border costs £4.50 per metre.",
+          "data": {
+            "title": "T-Shaped Paving Plan",
+            "viewBox": { "width": 360, "height": 310 },
+            "shapes": [
+              {
+                "type": "polygon",
+                "points": [[90, 50], [270, 50], [270, 110], [210, 110], [210, 260], [150, 260], [150, 110], [90, 110]],
+                "fill": "none",
+                "stroke": "#a0aec0"
+              },
+              {
+                "type": "rect",
+                "x": 210,
+                "y": 110,
+                "width": 10,
+                "height": 10,
+                "fill": "none",
+                "stroke": "#a0aec0"
+              }
+            ],
+            "dimensions": [
+              { "from": [90, 35], "to": [270, 35], "label": "6 m", "side": "top" },
+              { "from": [78, 50], "to": [78, 110], "label": "2 m", "side": "left" },
+              { "from": [138, 110], "to": [138, 260], "label": "5 m", "side": "left" },
+              { "from": [150, 275], "to": [210, 275], "label": "2 m", "side": "bottom" }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "qr3-s07-q1",
+            "stem": "What is the total area of the T-shaped paving?",
+            "options": [
+              { "label": "A", "text": "16 m²" },
+              { "label": "B", "text": "18 m²" },
+              { "label": "C", "text": "20 m²" },
+              { "label": "D", "text": "22 m²" },
+              { "label": "E", "text": "30 m²" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Split the T-shape into two rectangles. The top bar is 6 m wide and 2 m deep = 6 x 2 = 12 m². The vertical stem is 2 m wide and 5 m tall = 2 x 5 = 10 m². Step 2: Total area = 12 + 10 = 22 m². A common error is calculating only the top bar (12 m²) or treating the shape as a single rectangle 6 x 5 = 30 m². The answer is 22 m².",
+            "order_index": 0
+          },
+          {
+            "id": "qr3-s07-q2",
+            "stem": "What is the total cost of the edging strip needed for the entire perimeter?",
+            "options": [
+              { "label": "A", "text": "£81.00" },
+              { "label": "B", "text": "£90.00" },
+              { "label": "C", "text": "£99.00" },
+              { "label": "D", "text": "£108.00" },
+              { "label": "E", "text": "£117.00" }
+            ],
+            "correct_answer": "E",
+            "answer_reason": "Step 1: Trace the perimeter of the T-shape. Starting from the top-left corner going clockwise: top = 6, right side of top bar = 2, step right = (6 - 2) / 2 = 2, right side of stem = 5, bottom of stem = 2, left side of stem = 5, step left = 2, left side of top bar = 2. Step 2: Total perimeter = 6 + 2 + 2 + 5 + 2 + 5 + 2 + 2 = 26 m. Step 3: Cost = 26 x £4.50 = £117.00. A common error is using the area (22 m²) instead of the perimeter, giving 22 x £4.50 = £99.00, or missing the two step edges in the perimeter count. The answer is £117.00.",
             "order_index": 1
           }
         ]
       },
       {
-        "set_id": "qr2-set-09",
-        "title": "Local Bus Service — Route 42",
+        "set_id": "qr3-set-08",
+        "title": "Small Business Monthly Expenses",
+        "stimulus": {
+          "type": "pie_chart",
+          "context": "The business owner is reviewing expenses for March.",
+          "data": {
+            "title": "Monthly Expenses by Category",
+            "segments": [
+              { "label": "Rent", "value": 2400 },
+              { "label": "Salaries", "value": 4800 },
+              { "label": "Utilities", "value": 960 },
+              { "label": "Marketing", "value": 1440 },
+              { "label": "Supplies", "value": 1200 },
+              { "label": "Other", "value": 1200 }
+            ],
+            "unit": "£"
+          }
+        },
+        "questions": [
+          {
+            "id": "qr3-s08-q1",
+            "stem": "What percentage of total expenses went to Salaries?",
+            "options": [
+              { "label": "A", "text": "20%" },
+              { "label": "B", "text": "28%" },
+              { "label": "C", "text": "32%" },
+              { "label": "D", "text": "36%" },
+              { "label": "E", "text": "40%" }
+            ],
+            "correct_answer": "E",
+            "answer_reason": "Step 1: Total expenses = £2,400 + £4,800 + £960 + £1,440 + £1,200 + £1,200 = £12,000. Step 2: Salaries percentage = £4,800 / £12,000 x 100 = 40%. A common error is dividing by only some categories rather than the full total. The answer is 40%.",
+            "order_index": 0
+          },
+          {
+            "id": "qr3-s08-q2",
+            "stem": "What is the ratio of Rent to Marketing in its simplest form?",
+            "options": [
+              { "label": "A", "text": "3:2" },
+              { "label": "B", "text": "5:3" },
+              { "label": "C", "text": "2:1" },
+              { "label": "D", "text": "5:2" },
+              { "label": "E", "text": "8:3" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Rent = £2,400. Marketing = £1,440. Step 2: Ratio = 2,400 : 1,440. Divide both by their highest common factor (480): 2,400 / 480 = 5, 1,440 / 480 = 3. Step 3: Simplified ratio = 5 : 3. A common error is not fully simplifying (e.g. stopping at 10:6 or 24:14.4). The answer is 5:3.",
+            "order_index": 1
+          },
+          {
+            "id": "qr3-s08-q3",
+            "stem": "Next month, Rent increases by 15% and Salaries decrease by 5%. All other costs stay the same. What is the new total monthly expense?",
+            "options": [
+              { "label": "A", "text": "£11,640" },
+              { "label": "B", "text": "£11,880" },
+              { "label": "C", "text": "£12,000" },
+              { "label": "D", "text": "£12,120" },
+              { "label": "E", "text": "£12,360" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: New Rent = £2,400 x 1.15 = £2,760. Step 2: New Salaries = £4,800 x 0.95 = £4,560. Step 3: Unchanged costs = £960 + £1,440 + £1,200 + £1,200 = £4,800. Step 4: New total = £2,760 + £4,560 + £4,800 = £12,120. A common error is applying a percentage change to the total rather than to individual categories, or assuming the increases and decreases cancel out. The answer is £12,120.",
+            "order_index": 2
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-09",
+        "title": "Bacterial Culture Growth",
+        "stimulus": {
+          "type": "text",
+          "text": "A bacterial culture in a laboratory starts with 5,000 cells. The population increases by 4% per hour under controlled conditions. No cells are removed from the culture."
+        },
+        "questions": [
+          {
+            "id": "qr3-s09-q1",
+            "stem": "How many cells are in the culture after 2 hours?",
+            "options": [
+              { "label": "A", "text": "5,408" },
+              { "label": "B", "text": "5,416" },
+              { "label": "C", "text": "5,600" },
+              { "label": "D", "text": "5,800" },
+              { "label": "E", "text": "10,400" }
+            ],
+            "correct_answer": "A",
+            "answer_reason": "Step 1: After 1 hour: 5,000 x 1.04 = 5,200. Step 2: After 2 hours: 5,200 x 1.04 = 5,408. A common error is using simple growth (5,000 + 2 x 200 = 5,400) instead of compound growth, which misses the 8 additional cells from growth on the first hour's increase. Another error is doubling the original population (10,400). The answer is 5,408.",
+            "order_index": 0
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-10",
+        "title": "Driving Route Comparison",
         "stimulus": {
           "type": "multi",
           "items": [
             {
               "type": "text",
-              "text": "Route 42 runs between Greenfield and Laketown. An adult single fare is £2.40. Children under 16 travel at half the adult fare. A monthly pass for unlimited travel costs £85. 1 mile = 1.6 km."
+              "text": "A family drives from Bristol to Edinburgh. Their car uses 8 litres of fuel per 100 km. Petrol costs £1.50 per litre. 1 mile = 1.6 km."
             },
             {
               "type": "table",
               "data": {
-                "headers": ["Stop", "Distance from Greenfield (miles)", "Departs"],
+                "headers": ["Route", "Distance (miles)", "Motorway Toll", "Estimated Time"],
                 "rows": [
-                  ["Greenfield", "0", "07:15"],
-                  ["Millbridge", "5", "07:27"],
-                  ["Oakford", "12", "07:45"],
-                  ["Laketown", "20", "08:01"]
+                  ["M5/M6", "375", "£0.00", "6 h 15 min"],
+                  ["M4/M1", "400", "£12.50", "6 h 40 min"]
                 ]
               }
             }
@@ -483,319 +565,225 @@
         },
         "questions": [
           {
-            "id": "qr2-s09-q1",
-            "stem": "How long does the bus take to travel from Greenfield to Laketown?",
+            "id": "qr3-s10-q1",
+            "stem": "What is the fuel cost for the M5/M6 route?",
             "options": [
-              { "label": "A", "text": "38 minutes" },
-              { "label": "B", "text": "42 minutes" },
-              { "label": "C", "text": "44 minutes" },
-              { "label": "D", "text": "46 minutes" },
-              { "label": "E", "text": "50 minutes" }
+              { "label": "A", "text": "£45.00" },
+              { "label": "B", "text": "£56.25" },
+              { "label": "C", "text": "£72.00" },
+              { "label": "D", "text": "£80.00" },
+              { "label": "E", "text": "£96.00" }
             ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: The bus departs Greenfield at 07:15 and arrives at Laketown at 08:01. Step 2: Journey time = 08:01 − 07:15 = 46 minutes. A common error is miscalculating across the hour boundary. The answer is 46 minutes.",
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Convert miles to km: 375 x 1.6 = 600 km. Step 2: Fuel used = 600 / 100 x 8 = 48 litres. Step 3: Fuel cost = 48 x £1.50 = £72.00. A common error is forgetting to convert miles to km (375 / 100 x 8 x 1.50 = £45.00) or using the wrong conversion factor. The answer is £72.00.",
             "order_index": 0
           },
           {
-            "id": "qr2-s09-q2",
-            "stem": "What is the average speed of the bus between Oakford and Laketown, to the nearest mph?",
+            "id": "qr3-s10-q2",
+            "stem": "Which route has the lower total travel cost (fuel plus toll), and by how much?",
             "options": [
-              { "label": "A", "text": "24 mph" },
-              { "label": "B", "text": "27 mph" },
-              { "label": "C", "text": "30 mph" },
-              { "label": "D", "text": "33 mph" },
-              { "label": "E", "text": "36 mph" }
+              { "label": "A", "text": "M5/M6, by £17.30" },
+              { "label": "B", "text": "M5/M6, by £12.50" },
+              { "label": "C", "text": "M5/M6, by £4.80" },
+              { "label": "D", "text": "M4/M1, by £4.80" },
+              { "label": "E", "text": "M4/M1, by £12.50" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Distance from Oakford to Laketown = 20 − 12 = 8 miles. Step 2: Time = 08:01 − 07:45 = 16 minutes = 16 ÷ 60 hours. Step 3: Speed = 8 ÷ (16/60) = 8 × 60 ÷ 16 = 30 mph. A common error is converting 16 minutes as 0.16 hours instead of 16/60 = 0.267 hours. The answer is 30 mph.",
+            "correct_answer": "A",
+            "answer_reason": "Step 1: M5/M6 fuel cost = £72.00 (calculated previously). M5/M6 total = £72.00 + £0.00 = £72.00. Step 2: M4/M1 distance in km = 400 x 1.6 = 640 km. Fuel = 640 / 100 x 8 = 51.2 litres. Fuel cost = 51.2 x £1.50 = £76.80. M4/M1 total = £76.80 + £12.50 = £89.30. Step 3: Difference = £89.30 - £72.00 = £17.30. A common error is comparing only fuel costs without the toll, or assuming the toll makes the routes equal. The answer is M5/M6, by £17.30.",
             "order_index": 1
           },
           {
-            "id": "qr2-s09-q3",
-            "stem": "What is the distance from Millbridge to Laketown in kilometres?",
+            "id": "qr3-s10-q3",
+            "stem": "What is the average speed of the M4/M1 route in km/h?",
             "options": [
-              { "label": "A", "text": "12.0 km" },
-              { "label": "B", "text": "19.2 km" },
-              { "label": "C", "text": "24.0 km" },
-              { "label": "D", "text": "32.0 km" },
-              { "label": "E", "text": "38.4 km" }
+              { "label": "A", "text": "60 km/h" },
+              { "label": "B", "text": "84 km/h" },
+              { "label": "C", "text": "90 km/h" },
+              { "label": "D", "text": "96 km/h" },
+              { "label": "E", "text": "100 km/h" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Distance from Millbridge to Laketown = 20 − 5 = 15 miles. Step 2: Convert to kilometres: 15 × 1.6 = 24.0 km. A common error is converting only the Oakford distance (12 × 1.6 = 19.2 km) or the total route distance (20 × 1.6 = 32.0 km) instead of the Millbridge-to-Laketown segment. The answer is 24.0 km.",
+            "correct_answer": "D",
+            "answer_reason": "Step 1: M4/M1 distance = 640 km (400 miles x 1.6). Step 2: Time = 6 hours 40 minutes = 6 + 40/60 = 20/3 hours. Step 3: Average speed = 640 / (20/3) = 640 x 3/20 = 1,920 / 20 = 96 km/h. A common error is treating 6 h 40 min as 6.40 hours instead of 6.667 hours, giving 640 / 6.40 = 100 km/h. Another error is using miles (400) instead of km, giving 400 / 6.667 = 60 km/h. The answer is 96 km/h.",
             "order_index": 2
           }
         ]
       },
       {
-        "set_id": "qr2-set-10",
-        "title": "Charity Fundraising Budget",
-        "stimulus": {
-          "type": "pie_chart",
-          "context": "The charity has 45 active volunteers across all fundraising activities.",
-          "data": {
-            "title": "Annual Fundraising Income by Source",
-            "segments": [
-              { "label": "Corporate Sponsorship", "value": 45000 },
-              { "label": "Individual Donations", "value": 32000 },
-              { "label": "Grant Funding", "value": null },
-              { "label": "Event Revenue", "value": 18000 },
-              { "label": "Merchandise Sales", "value": 8000 }
-            ],
-            "total": 120000,
-            "unit": "£"
-          }
-        },
-        "questions": [
-          {
-            "id": "qr2-s10-q1",
-            "stem": "What was the Grant Funding amount?",
-            "options": [
-              { "label": "A", "text": "£12,000" },
-              { "label": "B", "text": "£14,000" },
-              { "label": "C", "text": "£17,000" },
-              { "label": "D", "text": "£20,000" },
-              { "label": "E", "text": "£23,000" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: The total budget is £120,000. Sum of known segments: Corporate Sponsorship £45,000 + Individual Donations £32,000 + Event Revenue £18,000 + Merchandise Sales £8,000 = £103,000. Step 2: Grant Funding = £120,000 − £103,000 = £17,000. A common error is omitting one of the smaller segments from the subtraction. The answer is £17,000.",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s10-q2",
-            "stem": "What percentage of the total budget was raised from sources other than Corporate Sponsorship? Give your answer to one decimal place.",
-            "options": [
-              { "label": "A", "text": "54.2%" },
-              { "label": "B", "text": "58.3%" },
-              { "label": "C", "text": "62.5%" },
-              { "label": "D", "text": "66.7%" },
-              { "label": "E", "text": "70.8%" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Corporate Sponsorship = £45,000. Total budget = £120,000. Step 2: All other sources = £120,000 − £45,000 = £75,000. Step 3: Percentage = 75,000 ÷ 120,000 × 100 = 62.5%. A common error is calculating Corporate Sponsorship's own percentage (37.5%) and reporting that instead of the complement, or misreading the Corporate Sponsorship value from the chart. The answer is 62.5%.",
-            "order_index": 1
-          },
-          {
-            "id": "qr2-s10-q3",
-            "stem": "Next year, both Corporate Sponsorship and Individual Donations are expected to grow by 10%. If all other sources remain unchanged, what will the new total budget be?",
-            "options": [
-              { "label": "A", "text": "£120,000" },
-              { "label": "B", "text": "£123,200" },
-              { "label": "C", "text": "£124,500" },
-              { "label": "D", "text": "£127,700" },
-              { "label": "E", "text": "£132,000" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: New Corporate Sponsorship = £45,000 × 1.10 = £49,500. Step 2: New Individual Donations = £32,000 × 1.10 = £35,200. Step 3: Unchanged sources = Grant Funding £17,000 + Event Revenue £18,000 + Merchandise Sales £8,000 = £43,000. Step 4: New total = £49,500 + £35,200 + £43,000 = £127,700. A common error is applying the 10% increase to only one source (giving £123,200 or £124,500) or applying 10% to the entire budget (giving £132,000). The answer is £127,700.",
-            "order_index": 2
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-11",
-        "title": "Fencing a Rectangular Field",
+        "set_id": "qr3-set-11",
+        "title": "Recipe Scaling for a Dinner Party",
         "stimulus": {
           "type": "text",
-          "text": "A farmer has a rectangular field measuring 120 metres long and 80 metres wide. She wants to divide it into three equal plots by installing two internal fences running parallel to the shorter side. Fencing costs £12.50 per metre."
+          "text": "A recipe for 6 servings of soup requires 450 g of potatoes, 200 ml of cream, and 1.2 litres of stock. Each serving also requires 15 g of butter."
         },
         "questions": [
           {
-            "id": "qr2-s11-q1",
-            "stem": "What is the total cost of the internal fencing?",
+            "id": "qr3-s11-q1",
+            "stem": "How many grams of potatoes are needed for 10 servings?",
             "options": [
-              { "label": "A", "text": "£1,000" },
-              { "label": "B", "text": "£1,500" },
-              { "label": "C", "text": "£2,000" },
-              { "label": "D", "text": "£3,000" },
-              { "label": "E", "text": "£5,000" }
+              { "label": "A", "text": "375 g" },
+              { "label": "B", "text": "450 g" },
+              { "label": "C", "text": "600 g" },
+              { "label": "D", "text": "675 g" },
+              { "label": "E", "text": "750 g" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: The fences run parallel to the shorter side (80 m), so each fence is 80 m long. Two fences are needed to create three equal plots. Step 2: Total fencing = 2 × 80 = 160 m. Step 3: Cost = 160 × £12.50 = £2,000. A common error is installing only one fence (£1,000) or running the fences parallel to the longer side, making each fence 120 m (total cost £3,000). The answer is £2,000.",
+            "correct_answer": "E",
+            "answer_reason": "Step 1: Potatoes per serving = 450 / 6 = 75 g. Step 2: For 10 servings = 75 x 10 = 750 g. A common error is scaling to the wrong number of servings, such as 8 (giving 600 g), or using the original recipe amount unchanged (450 g). The answer is 750 g.",
             "order_index": 0
           }
         ]
       },
       {
-        "set_id": "qr2-set-12",
-        "title": "Riverside Hotel Room Prices",
+        "set_id": "qr3-set-12",
+        "title": "City Health Indicators",
         "stimulus": {
-          "type": "table",
-          "context": "Weeknights are Monday to Thursday. Weekends are Friday to Sunday. Discounts and surcharges apply to the rack rate. VAT at 20% is added to the final price after all discounts or surcharges.",
+          "type": "scatter_plot",
+          "context": "Each point represents a city. The x-axis shows hospital beds per 10,000 population and the y-axis shows life expectancy in years.",
           "data": {
-            "headers": ["Room Type", "Rack Rate (per night)", "Weeknight Discount", "Weekend Surcharge", "Max Occupancy"],
-            "rows": [
-              ["Single", "£85", "15%", "0%", "1"],
-              ["Double", "£120", "15%", "10%", "2"],
-              ["Family", "£175", "20%", "15%", "4"],
-              ["Suite", "£250", "10%", "20%", "2"],
-              ["Penthouse", "£420", "0%", "25%", "4"]
+            "title": "City Health Indicators",
+            "xAxisLabel": "Hospital Beds per 10,000 Population",
+            "yAxisLabel": "Life Expectancy (years)",
+            "series": [
+              {
+                "name": "Cities",
+                "points": [
+                  { "x": 25, "y": 78.5, "label": "A" },
+                  { "x": 40, "y": 81.2, "label": "B" },
+                  { "x": 18, "y": 76.0, "label": "C" },
+                  { "x": 55, "y": 82.8, "label": "D" },
+                  { "x": 32, "y": 79.6, "label": "E" },
+                  { "x": 48, "y": 80.4, "label": "F" },
+                  { "x": 22, "y": 82.0, "label": "G" }
+                ]
+              }
             ]
           }
         },
         "questions": [
           {
-            "id": "qr2-s12-q1",
-            "stem": "What is the weeknight price of a Double room before VAT?",
+            "id": "qr3-s12-q1",
+            "stem": "What is the range of life expectancy values across all seven cities?",
             "options": [
-              { "label": "A", "text": "£96.00" },
-              { "label": "B", "text": "£102.00" },
-              { "label": "C", "text": "£108.00" },
-              { "label": "D", "text": "£114.00" },
-              { "label": "E", "text": "£120.00" }
+              { "label": "A", "text": "4.8 years" },
+              { "label": "B", "text": "6.8 years" },
+              { "label": "C", "text": "7.2 years" },
+              { "label": "D", "text": "8.4 years" },
+              { "label": "E", "text": "37.0 years" }
             ],
             "correct_answer": "B",
-            "answer_reason": "Step 1: The Double room rack rate is £120 with a weeknight discount of 15%. Step 2: Weeknight price = £120 × (1 − 0.15) = £120 × 0.85 = £102.00. A common error is applying the weekend surcharge instead of the weeknight discount, or forgetting the discount entirely (£120). The answer is £102.00.",
+            "answer_reason": "Step 1: Highest life expectancy = City D at 82.8 years. Lowest = City C at 76.0 years. Step 2: Range = 82.8 - 76.0 = 6.8 years. A common error is calculating the range of hospital beds (55 - 18 = 37) rather than life expectancy. The answer is 6.8 years.",
             "order_index": 0
           },
           {
-            "id": "qr2-s12-q2",
-            "stem": "A couple books a Suite for a Saturday night. What is the total cost including VAT?",
+            "id": "qr3-s12-q2",
+            "stem": "City E has a population of 250,000. How many hospital beds does it have?",
             "options": [
-              { "label": "A", "text": "£288.00" },
-              { "label": "B", "text": "£300.00" },
-              { "label": "C", "text": "£324.00" },
-              { "label": "D", "text": "£360.00" },
-              { "label": "E", "text": "£396.00" }
+              { "label": "A", "text": "80" },
+              { "label": "B", "text": "320" },
+              { "label": "C", "text": "800" },
+              { "label": "D", "text": "3,200" },
+              { "label": "E", "text": "8,000" }
             ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: The Suite rack rate is £250 with a weekend surcharge of 20%. Weekend price = £250 × 1.20 = £300.00. Step 2: Add 20% VAT: £300.00 × 1.20 = £360.00. A common error is forgetting to add VAT (giving £300.00) or applying the surcharge and VAT as a combined 40% increase. The answer is £360.00.",
+            "correct_answer": "C",
+            "answer_reason": "Step 1: City E has 32 beds per 10,000 population. Step 2: Population = 250,000 = 25 x 10,000. Step 3: Total beds = 32 x 25 = 800. A common error is multiplying 32 x 250 = 8,000 (forgetting that the rate is per 10,000, not per 1,000). The answer is 800.",
             "order_index": 1
           },
           {
-            "id": "qr2-s12-q3",
-            "stem": "A family books a Family room for 3 weeknights and 2 weekend nights. What is the total cost including VAT?",
+            "id": "qr3-s12-q3",
+            "stem": "City D plans to build a new hospital, adding 200 beds. Its population is 400,000. What will its new hospital beds per 10,000 population figure be?",
             "options": [
-              { "label": "A", "text": "£822.50" },
-              { "label": "B", "text": "£891.00" },
-              { "label": "C", "text": "£945.00" },
-              { "label": "D", "text": "£987.00" },
-              { "label": "E", "text": "£1,050.00" }
+              { "label": "A", "text": "55.5" },
+              { "label": "B", "text": "56.0" },
+              { "label": "C", "text": "57.5" },
+              { "label": "D", "text": "58.5" },
+              { "label": "E", "text": "60.0" }
             ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Family room rack rate = £175. Weeknight price = £175 × 0.80 = £140 per night. Weekend price = £175 × 1.15 = £201.25 per night. Step 2: 3 weeknights = 3 × £140 = £420. 2 weekend nights = 2 × £201.25 = £402.50. Step 3: Subtotal = £420 + £402.50 = £822.50. Step 4: Add 20% VAT: £822.50 × 1.20 = £987.00. A common error is forgetting VAT (giving £822.50) or applying the weeknight discount to all 5 nights. The answer is £987.00.",
+            "correct_answer": "E",
+            "answer_reason": "Step 1: City D currently has 55 beds per 10,000 people. Population = 400,000 = 40 x 10,000. Step 2: Current total beds = 55 x 40 = 2,200. Step 3: New total beds = 2,200 + 200 = 2,400. Step 4: New rate = 2,400 / 40 = 60.0 beds per 10,000. A common error is simply adding 200 / 10,000 = 0.02 to the rate, or not converting the population to units of 10,000. The answer is 60.0.",
             "order_index": 2
-          },
-          {
-            "id": "qr2-s12-q4",
-            "stem": "A guest books 2 weeknights in a Double room and 1 weekend night in a Single room. What is the total cost including VAT?",
-            "options": [
-              { "label": "A", "text": "£289.00" },
-              { "label": "B", "text": "£312.00" },
-              { "label": "C", "text": "£331.20" },
-              { "label": "D", "text": "£346.80" },
-              { "label": "E", "text": "£372.00" }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Double weeknight: £120 × 0.85 = £102 per night. For 2 nights: £102 × 2 = £204. Step 2: Single weekend: £85 × 1.00 = £85 per night (0% surcharge). For 1 night: £85. Step 3: Subtotal = £204 + £85 = £289. Step 4: Add 20% VAT: £289 × 1.20 = £346.80. A common error is applying a weekend surcharge to the Single room (which has 0%) or forgetting VAT (giving £289.00). The answer is £346.80.",
-            "order_index": 3
           }
         ]
       },
       {
-        "set_id": "qr2-set-13",
-        "title": "L-shaped Patio Design",
-        "stimulus": {
-          "type": "geometry_diagram",
-          "context": "Paving slabs for the patio surface cost £22 per m².",
-          "data": {
-            "title": "L-shaped Patio (plan view)",
-            "viewBox": { "width": 380, "height": 290 },
-            "shapes": [
-              {
-                "type": "polygon",
-                "points": [[55, 50], [230, 50], [230, 190], [335, 190], [335, 260], [55, 260]],
-                "fill": "none",
-                "stroke": "#a0aec0"
-              },
-              {
-                "type": "rect",
-                "x": 230, "y": 178, "width": 12, "height": 12,
-                "fill": "none",
-                "stroke": "#a0aec0"
-              }
-            ],
-            "dimensions": [
-              { "from": [55, 35], "to": [230, 35], "label": "5 m", "side": "top" },
-              { "from": [40, 50], "to": [40, 260], "label": "6 m", "side": "left" },
-              { "from": [230, 202], "to": [335, 202], "label": "3 m", "side": "bottom" },
-              { "from": [345, 190], "to": [345, 260], "label": "2 m", "side": "right" }
-            ]
-          }
-        },
-        "questions": [
-          {
-            "id": "qr2-s13-q1",
-            "stem": "What is the total area of the patio?",
-            "options": [
-              { "label": "A", "text": "28 m²" },
-              { "label": "B", "text": "32 m²" },
-              { "label": "C", "text": "36 m²" },
-              { "label": "D", "text": "42 m²" },
-              { "label": "E", "text": "48 m²" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Derive the unlabeled dimensions. Total width along the bottom = 5 + 3 = 8 m. Inner step height = 6 − 2 = 4 m. Step 2: Method A (subtraction): Full rectangle = 8 × 6 = 48 m². Removed corner = 3 × 4 = 12 m². Area = 48 − 12 = 36 m². Method B (addition): Left rectangle = 5 × 6 = 30 m², bottom-right rectangle = 3 × 2 = 6 m². Area = 30 + 6 = 36 m². A common error is using the full rectangle area (48 m²) without subtracting the missing corner, or confusing area with perimeter (28). The answer is 36 m².",
-            "order_index": 0
-          },
-          {
-            "id": "qr2-s13-q2",
-            "stem": "The homeowner wants to install a decorative stone border around the entire perimeter of the patio. The border costs £6.50 per metre. What is the total cost of the border?",
-            "options": [
-              { "label": "A", "text": "£130.00" },
-              { "label": "B", "text": "£156.00" },
-              { "label": "C", "text": "£182.00" },
-              { "label": "D", "text": "£208.00" },
-              { "label": "E", "text": "£234.00" }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Identify all 6 sides of the L-shape. Labeled: top = 5 m, left = 6 m, step across = 3 m, right side = 2 m. Derived: full bottom = 5 + 3 = 8 m, inner vertical step = 6 − 2 = 4 m. Step 2: Perimeter = 5 + 4 + 3 + 2 + 8 + 6 = 28 m. Step 3: Cost = 28 × £6.50 = £182.00. A common error is treating the patio as a simple rectangle with perimeter 2 × (8 + 4) = 24 m, giving £156.00, or using the area (36 m²) instead of the perimeter, giving £234.00. The answer is £182.00.",
-            "order_index": 1
-          }
-        ]
-      },
-      {
-        "set_id": "qr2-set-14",
-        "title": "Veterinary Clinic Vaccination Records",
+        "set_id": "qr3-set-13",
+        "title": "UK Income Tax Calculation",
         "stimulus": {
           "type": "table",
-          "context": "Figures show the number of vaccinations administered each quarter. The reptile Q4 record was lost during a database migration.",
+          "context": "National Insurance is not included. Figures are for the 2025/26 tax year.",
           "data": {
-            "headers": ["Animal Type", "Q1", "Q2", "Q3", "Q4"],
+            "headers": ["Taxable Income Band", "Rate"],
             "rows": [
-              ["Dogs", "145", "162", "158", "180"],
-              ["Cats", "98", "105", "112", "125"],
-              ["Rabbits", "32", "28", "35", "30"],
-              ["Reptiles", "8", "12", "10", "?"]
+              ["£0 - £12,570", "0% (Personal Allowance)"],
+              ["£12,571 - £50,270", "20% (Basic Rate)"],
+              ["£50,271 - £125,140", "40% (Higher Rate)"]
             ]
           }
         },
         "questions": [
           {
-            "id": "qr2-s14-q1",
-            "stem": "How many more dog vaccinations were administered in Q4 than in Q1?",
+            "id": "qr3-s13-q1",
+            "stem": "Alice earns £42,000 per year. How much income tax does she pay?",
             "options": [
-              { "label": "A", "text": "25" },
-              { "label": "B", "text": "30" },
-              { "label": "C", "text": "35" },
-              { "label": "D", "text": "40" },
-              { "label": "E", "text": "45" }
+              { "label": "A", "text": "£5,886" },
+              { "label": "B", "text": "£6,400" },
+              { "label": "C", "text": "£7,540" },
+              { "label": "D", "text": "£8,400" },
+              { "label": "E", "text": "£10,060" }
             ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: From the Dogs row, Q4 = 180 and Q1 = 145. Step 2: Difference = 180 − 145 = 35. A common error is reading from the wrong animal row, such as Cats (125 − 98 = 27). The answer is 35.",
+            "correct_answer": "A",
+            "answer_reason": "Step 1: Personal Allowance: first £12,570 at 0% = £0. Step 2: Basic Rate: £42,000 - £12,570 = £29,430 at 20% = £5,886. Step 3: Total tax = £0 + £5,886 = £5,886. A common error is applying 20% to the entire income (£42,000 x 0.20 = £8,400), which ignores the tax-free Personal Allowance. The answer is £5,886.",
             "order_index": 0
           },
           {
-            "id": "qr2-s14-q2",
-            "stem": "How many reptile vaccinations were administered in Q4?",
+            "id": "qr3-s13-q2",
+            "stem": "Ben earns £65,000 per year. How much income tax does he pay?",
             "options": [
-              { "label": "A", "text": "8" },
-              { "label": "B", "text": "10" },
-              { "label": "C", "text": "12" },
-              { "label": "D", "text": "14" },
+              { "label": "A", "text": "£7,540" },
+              { "label": "B", "text": "£10,486" },
+              { "label": "C", "text": "£13,432" },
+              { "label": "D", "text": "£18,892" },
+              { "label": "E", "text": "£26,000" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Personal Allowance: first £12,570 at 0% = £0. Step 2: Basic Rate: £50,270 - £12,570 = £37,700 at 20% = £7,540. Step 3: Higher Rate: £65,000 - £50,270 = £14,730 at 40% = £5,892. Step 4: Total tax = £0 + £7,540 + £5,892 = £13,432. A common error is applying 20% to the full income (£65,000 x 0.20 = £13,000) or applying 40% to the full income (£65,000 x 0.40 = £26,000), which ignores progressive banding. The answer is £13,432.",
+            "order_index": 1
+          },
+          {
+            "id": "qr3-s13-q3",
+            "stem": "Carol pays exactly £9,486 in income tax. What is her annual salary?",
+            "options": [
+              { "label": "A", "text": "£47,430" },
+              { "label": "B", "text": "£55,135" },
+              { "label": "C", "text": "£59,716" },
+              { "label": "D", "text": "£62,000" },
+              { "label": "E", "text": "£74,300" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: The full Basic Rate band generates £37,700 x 0.20 = £7,540 in tax. Step 2: Carol's remaining tax in the Higher Rate band = £9,486 - £7,540 = £1,946. Step 3: Income taxed at 40%: £1,946 / 0.40 = £4,865. Step 4: Total salary = £50,270 + £4,865 = £55,135. Verification: PA = £0, Basic = £7,540, Higher = £1,946, Total = £9,486. A common error is dividing total tax by 20% (£9,486 / 0.20 = £47,430), which assumes all income is taxed at a single flat rate. The answer is £55,135.",
+            "order_index": 2
+          }
+        ]
+      },
+      {
+        "set_id": "qr3-set-14",
+        "title": "Courier Delivery Zones",
+        "stimulus": {
+          "type": "text",
+          "text": "A courier charges a base fee of £4.50 per parcel. Zone A deliveries cost £1.20 per kg and Zone B deliveries cost £0.80 per kg. A customer sends two parcels: one weighing 5 kg and one weighing 3 kg. The receipt shows both parcels were sent on the same day but does not specify each parcel's destination zone."
+        },
+        "questions": [
+          {
+            "id": "qr3-s14-q1",
+            "stem": "What was the total cost of sending both parcels?",
+            "options": [
+              { "label": "A", "text": "£15.40" },
+              { "label": "B", "text": "£16.60" },
+              { "label": "C", "text": "£17.40" },
+              { "label": "D", "text": "£18.60" },
               { "label": "E", "text": "Can't Tell" }
             ],
             "correct_answer": "E",
-            "answer_reason": "Step 1: The table shows '?' for reptile vaccinations in Q4, and the context confirms this record was lost. Step 2: No total or mean for reptiles is provided, so there is no way to calculate the missing value from the available data. A common error is assuming the Q4 value equals the average of Q1–Q3, but the question provides no basis for this assumption. The answer is Can't Tell.",
-            "order_index": 1
+            "answer_reason": "Step 1: The total cost depends on which parcel goes to which zone. If both go to Zone B: (£4.50 + 5 x £0.80) + (£4.50 + 3 x £0.80) = £8.50 + £6.90 = £15.40. If 5 kg to Zone B and 3 kg to Zone A: £8.50 + £8.10 = £16.60. If 5 kg to Zone A and 3 kg to Zone B: £10.50 + £6.90 = £17.40. If both to Zone A: £10.50 + £8.10 = £18.60. Step 2: Since the receipt does not specify each parcel's destination zone, the total cost cannot be determined. A common error is assuming both parcels go to the same zone or that the heavier parcel must go to the more expensive zone. The answer is Can't Tell.",
+            "order_index": 0
           }
         ]
       }
