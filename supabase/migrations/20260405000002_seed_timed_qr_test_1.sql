@@ -1,0 +1,481 @@
+-- Seed: Timed QR Test 1 (test_id = 1)
+-- 36 questions across 12 sets, 26 minutes
+
+DO $$
+DECLARE
+  v_s01 UUID;
+  v_s02 UUID;
+  v_s03 UUID;
+  v_s04 UUID;
+  v_s05 UUID;
+  v_s06 UUID;
+  v_s07 UUID;
+  v_s08 UUID;
+  v_s09 UUID;
+  v_s10 UUID;
+  v_s11 UUID;
+  v_s12 UUID;
+BEGIN
+
+  -- Clean up any existing data for test 1
+  DELETE FROM timed_quantitative_reasoning_questions
+    WHERE set_id IN (
+      SELECT id FROM timed_quantitative_reasoning_sets WHERE test_id = 1
+    );
+  DELETE FROM timed_quantitative_reasoning_sets WHERE test_id = 1;
+
+  INSERT INTO timed_quantitative_reasoning_tests (id, title, time_minutes)
+  VALUES (1, 'QR Timed Test 1', 26)
+  ON CONFLICT (id) DO NOTHING;
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 01: Hospital Ward Occupancy
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-01', 'Hospital Ward Occupancy', '{
+    "type": "table",
+    "context": "Ward capacities: Cardiology 32, Orthopaedics 45, Paediatrics 18, Neurology 35, Oncology 25. The weekly mean occupancy for Orthopaedics was 36.4 patients.",
+    "data": {
+      "headers": ["Ward", "Mon", "Tue", "Wed", "Thu", "Fri"],
+      "rows": [
+        ["Cardiology",   "22", "25", "21", "27", "24"],
+        ["Orthopaedics", "38", "35", "40", "36", "?"],
+        ["Paediatrics",  "12", "14", "11", "15", "13"],
+        ["Neurology",    "28", "30", "26", "29", "31"],
+        ["Oncology",     "19", "20", "22", "18", "21"]
+      ]
+    }
+  }'::jsonb, 0)
+  RETURNING id INTO v_s01;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s01, 'qr1-s01-q1', 'What was the total number of patients in the Neurology ward across the five days?',
+     '[{"label":"A","text":"134"},{"label":"B","text":"138"},{"label":"C","text":"141"},{"label":"D","text":"144"},{"label":"E","text":"148"}]'::jsonb,
+     'D', 'Step 1: From the Neurology row, read each day''s occupancy: Mon = 28, Tue = 30, Wed = 26, Thu = 29, Fri = 31. Step 2: Total = 28 + 30 + 26 + 29 + 31 = 144. A common error is accidentally including a value from a neighbouring row. The answer is 144.', 0),
+    (v_s01, 'qr1-s01-q2', 'On which day was the Cardiology ward at the highest percentage of its capacity?',
+     '[{"label":"A","text":"Monday"},{"label":"B","text":"Tuesday"},{"label":"C","text":"Wednesday"},{"label":"D","text":"Thursday"},{"label":"E","text":"Friday"}]'::jsonb,
+     'D', 'Step 1: From the note, Cardiology capacity = 32. Step 2: Calculate occupancy as a percentage of capacity for each day: Mon = 22 ÷ 32 = 68.8%; Tue = 25 ÷ 32 = 78.1%; Wed = 21 ÷ 32 = 65.6%; Thu = 27 ÷ 32 = 84.4%; Fri = 24 ÷ 32 = 75.0%. Step 3: Thursday is the highest at 84.4%. A common error is picking the day with the highest raw count without dividing by capacity. The answer is Thursday.', 1),
+    (v_s01, 'qr1-s01-q3', 'What was the Orthopaedics ward occupancy on Friday?',
+     '[{"label":"A","text":"29"},{"label":"B","text":"31"},{"label":"C","text":"33"},{"label":"D","text":"35"},{"label":"E","text":"37"}]'::jsonb,
+     'C', 'Step 1: The note states the weekly mean occupancy for Orthopaedics was 36.4. Over 5 days, total = 36.4 × 5 = 182. Step 2: Sum of Monday to Thursday = 38 + 35 + 40 + 36 = 149. Step 3: Friday = 182 − 149 = 33. A common error is dividing the total by 4 instead of subtracting the known days. The answer is 33.', 2),
+    (v_s01, 'qr1-s01-q4', 'On Wednesday, what percentage of total ward capacity across all five wards was occupied? Give your answer to the nearest whole number.',
+     '[{"label":"A","text":"72%"},{"label":"B","text":"74%"},{"label":"C","text":"77%"},{"label":"D","text":"80%"},{"label":"E","text":"83%"}]'::jsonb,
+     'C', 'Step 1: Wednesday occupancy from each row: Cardiology 21, Orthopaedics 40, Paediatrics 11, Neurology 26, Oncology 22. Total occupied = 21 + 40 + 11 + 26 + 22 = 120. Step 2: From the note, total capacity = 32 + 45 + 18 + 35 + 25 = 155. Step 3: Percentage = 120 ÷ 155 × 100 = 77.4% ≈ 77%. A common error is using a single ward''s capacity instead of the combined total. The answer is 77%.', 3);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 02: UK Income Tax Bands
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-02', 'UK Income Tax Bands', '{
+    "type": "table",
+    "context": "Tax is calculated band by band — each rate applies only to the income within that band. National Insurance is not included. All figures are annual.",
+    "data": {
+      "headers": ["Tax Band", "Income Range", "Tax Rate"],
+      "rows": [
+        ["Personal Allowance", "Up to £12,570",       "0%"],
+        ["Basic Rate",         "£12,571 – £50,270",   "20%"],
+        ["Higher Rate",        "£50,271 – £125,140",  "40%"],
+        ["Additional Rate",    "Above £125,140",       "45%"]
+      ]
+    }
+  }'::jsonb, 1)
+  RETURNING id INTO v_s02;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s02, 'qr1-s02-q1', 'Priya earns £42,000 per year. How much income tax does she pay annually?',
+     '[{"label":"A","text":"£5,886"},{"label":"B","text":"£7,400"},{"label":"C","text":"£8,400"},{"label":"D","text":"£9,514"},{"label":"E","text":"£12,570"}]'::jsonb,
+     'A', 'Step 1: Personal Allowance — the first £12,570 is tax-free = £0 tax. Step 2: Basic Rate — taxable income in this band = £42,000 − £12,570 = £29,430. Tax = £29,430 × 20% = £5,886. Step 3: £42,000 does not reach the Higher Rate band, so no further tax applies. Total = £5,886. A common error is applying 20% to the full £42,000 instead of only the amount above the Personal Allowance. The answer is £5,886.', 0),
+    (v_s02, 'qr1-s02-q2', 'James earns £68,000 per year. How much income tax does he pay annually?',
+     '[{"label":"A","text":"£12,450"},{"label":"B","text":"£13,600"},{"label":"C","text":"£14,632"},{"label":"D","text":"£17,992"},{"label":"E","text":"£27,200"}]'::jsonb,
+     'C', 'Step 1: Personal Allowance — first £12,570 at 0% = £0. Step 2: Basic Rate band = £50,270 − £12,570 = £37,700 at 20% = £7,540. Step 3: Higher Rate portion = £68,000 − £50,270 = £17,730 at 40% = £7,092. Step 4: Total tax = £7,540 + £7,092 = £14,632. A common error is applying the 40% rate to the entire income above the Personal Allowance, rather than only the portion above £50,270. The answer is £14,632.', 1),
+    (v_s02, 'qr1-s02-q3', 'Sarah earns £52,000 per year and is paid weekly. To the nearest penny, how much income tax is deducted from each weekly pay packet?',
+     '[{"label":"A","text":"£106.15"},{"label":"B","text":"£144.62"},{"label":"C","text":"£158.31"},{"label":"D","text":"£200.00"},{"label":"E","text":"£400.00"}]'::jsonb,
+     'C', 'Step 1: Basic Rate tax = £37,700 × 20% = £7,540. Step 2: Higher Rate portion = £52,000 − £50,270 = £1,730 at 40% = £692. Step 3: Total annual tax = £7,540 + £692 = £8,232. Step 4: Weekly tax = £8,232 ÷ 52 = £158.31 (to the nearest penny). A common error is dividing by 48 or 50 weeks instead of 52. The answer is £158.31.', 2);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 03: Train Journey — Northampton to Edinburgh
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-03', 'Train Journey — Northampton to Edinburgh', '{
+    "type": "multi",
+    "items": [
+      {
+        "type": "text",
+        "text": "A passenger travels from Northampton to Edinburgh, changing at Leeds. The Northampton–Leeds leg is 122 miles and the Leeds–Edinburgh leg is 209 miles. The Leeds–Edinburgh train travels at an average speed of 95 mph. After arriving in Leeds, the passenger waits 18 minutes before the next train departs. A standard return ticket costs £147; a first-class return costs £214. Groups of 3 or more travelling together receive a 15% discount off the total standard fare."
+      },
+      {
+        "type": "table",
+        "data": {
+          "headers": ["Leg", "Distance (miles)", "Departs", "Arrives"],
+          "rows": [
+            ["Northampton → Leeds", "122", "08:10", "09:52"],
+            ["Leeds → Edinburgh",   "209", "10:10", "?"]
+          ]
+        }
+      }
+    ]
+  }'::jsonb, 2)
+  RETURNING id INTO v_s03;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s03, 'qr1-s03-q1', 'What was the average speed of the Northampton to Leeds train in miles per hour? Give your answer to the nearest mph.',
+     '[{"label":"A","text":"68 mph"},{"label":"B","text":"70 mph"},{"label":"C","text":"72 mph"},{"label":"D","text":"76 mph"},{"label":"E","text":"80 mph"}]'::jsonb,
+     'C', 'Step 1: From the timetable, departure = 08:10 and arrival = 09:52. Journey time = 1 hour 42 minutes = 1 + 42/60 = 1.7 hours. Step 2: Speed = Distance ÷ Time = 122 ÷ 1.7 = 71.8 mph ≈ 72 mph. A common error is converting 42 minutes as 0.42 hours instead of 42/60 = 0.7 hours. The answer is 72 mph.', 0),
+    (v_s03, 'qr1-s03-q2', 'At what time does the passenger arrive in Edinburgh?',
+     '[{"label":"A","text":"12:06"},{"label":"B","text":"12:12"},{"label":"C","text":"12:19"},{"label":"D","text":"12:22"},{"label":"E","text":"12:31"}]'::jsonb,
+     'D', 'Step 1: Leeds–Edinburgh distance = 209 miles at 95 mph. Time = 209 ÷ 95 = 2.2 hours = 2 hours 12 minutes. Step 2: The train departs Leeds at 10:10. Arrival = 10:10 + 2 hours 12 minutes = 12:22. A common error is converting 0.2 hours as 20 minutes instead of 0.2 × 60 = 12 minutes. The answer is 12:22.', 1),
+    (v_s03, 'qr1-s03-q3', 'A group of 3 adults buys standard return tickets with the group discount. How much do they pay in total?',
+     '[{"label":"A","text":"£336.11"},{"label":"B","text":"£358.05"},{"label":"C","text":"£374.85"},{"label":"D","text":"£396.45"},{"label":"E","text":"£441.00"}]'::jsonb,
+     'C', 'Step 1: Total before discount = 3 × £147 = £441. Step 2: Apply the 15% group discount: £441 × 0.85 = £374.85. A common error is subtracting 15% of one ticket (£22.05) from the total instead of 15% of the full amount. The answer is £374.85.', 2);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 04: Supermarket Weekly Sales by Department
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-04', 'Supermarket Weekly Sales by Department', '{
+    "type": "bar_chart",
+    "data": {
+      "title": "Weekly Sales by Department (£000s)",
+      "labels": ["Produce", "Bakery", "Dairy", "Meat", "Frozen", "Beverages"],
+      "series": [
+        { "name": "Week 1", "values": [48, 22, 35, 62, 29, 41] },
+        { "name": "Week 2", "values": [51, 25, 33, 58, 34, 44] }
+      ],
+      "yAxisLabel": "Sales (£000s)",
+      "unit": "£"
+    }
+  }'::jsonb, 3)
+  RETURNING id INTO v_s04;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s04, 'qr1-s04-q1', 'What was the combined total sales across all departments in Week 1?',
+     '[{"label":"A","text":"£224,000"},{"label":"B","text":"£229,000"},{"label":"C","text":"£233,000"},{"label":"D","text":"£237,000"},{"label":"E","text":"£241,000"}]'::jsonb,
+     'D', 'Step 1: Read all Week 1 values from the chart (in £000s): Produce 48, Bakery 22, Dairy 35, Meat 62, Frozen 29, Beverages 41. Step 2: Total = 48 + 22 + 35 + 62 + 29 + 41 = 237. Step 3: Since values are in £000s, total = £237,000. A common error is misreading the y-axis scale. The answer is £237,000.', 0),
+    (v_s04, 'qr1-s04-q2', 'Which department had the greatest percentage increase in sales from Week 1 to Week 2?',
+     '[{"label":"A","text":"Produce"},{"label":"B","text":"Bakery"},{"label":"C","text":"Frozen"},{"label":"D","text":"Beverages"},{"label":"E","text":"Meat"}]'::jsonb,
+     'C', 'Step 1: Calculate percentage increase for each department that grew. Produce: (51 − 48) ÷ 48 × 100 = 6.3%. Bakery: (25 − 22) ÷ 22 × 100 = 13.6%. Frozen: (34 − 29) ÷ 29 × 100 = 17.2%. Beverages: (44 − 41) ÷ 41 × 100 = 7.3%. Dairy and Meat both decreased. Step 2: Frozen has the greatest percentage increase at 17.2%. A common error is comparing absolute increases (£5k for Frozen vs £3k for Bakery) rather than percentage increases. The answer is Frozen.', 1),
+    (v_s04, 'qr1-s04-q3', 'In Week 2, Meat sales represented what percentage of total Week 2 sales? Give your answer to one decimal place.',
+     '[{"label":"A","text":"21.8%"},{"label":"B","text":"23.7%"},{"label":"C","text":"25.3%"},{"label":"D","text":"26.1%"},{"label":"E","text":"27.4%"}]'::jsonb,
+     'B', 'Step 1: Read all Week 2 values: 51 + 25 + 33 + 58 + 34 + 44 = 245 (in £000s). Step 2: Meat in Week 2 = 58. Step 3: Percentage = 58 ÷ 245 × 100 = 23.7%. A common error is using the Week 1 total (237) as the denominator instead of the Week 2 total (245). The answer is 23.7%.', 2);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 05: Highland Rescue Patrol Routes
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-05', 'Highland Rescue Patrol Routes', '{
+    "type": "network_diagram",
+    "context": "1 day''s journey covers 15 km",
+    "data": {
+      "title": "Highland Rescue Patrol Routes",
+      "nodes": [
+        { "id": "base", "label": "HQ", "x": 0.15, "y": 0.5 },
+        { "id": "camp1", "label": "Post A", "x": 0.35, "y": 0.15 },
+        { "id": "camp2", "label": "Post B", "x": 0.65, "y": 0.15 },
+        { "id": "camp3", "label": "Post C", "x": 0.85, "y": 0.4 },
+        { "id": "camp4", "label": "Post D", "x": 0.7, "y": 0.7 },
+        { "id": "camp5", "label": "Post E", "x": 0.35, "y": 0.8 }
+      ],
+      "edges": [
+        { "from": "base", "to": "camp1", "label": "2 days" },
+        { "from": "camp1", "to": "camp2", "label": "3 days" },
+        { "from": "camp2", "to": "camp3", "label": "1 day" },
+        { "from": "camp3", "to": "camp4", "label": "2 days" },
+        { "from": "camp4", "to": "camp5", "label": "4 days" },
+        { "from": "camp5", "to": "base", "label": "3 days" },
+        { "from": "camp1", "to": "camp4", "label": "5 days" }
+      ]
+    }
+  }'::jsonb, 4)
+  RETURNING id INTO v_s05;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s05, 'qr1-s05-q1', 'A patrol travels from HQ to Post C via Post A and Post B. What is the total distance of this route in kilometres?',
+     '[{"label":"A","text":"75 km"},{"label":"B","text":"80 km"},{"label":"C","text":"90 km"},{"label":"D","text":"105 km"},{"label":"E","text":"120 km"}]'::jsonb,
+     'C', 'Step 1: Identify the route: HQ → Post A (2 days), Post A → Post B (3 days), Post B → Post C (1 day). Total travel time = 2 + 3 + 1 = 6 days. Step 2: Convert to km using the note: 6 days × 15 km/day = 90 km. A common error is forgetting to apply the conversion factor and answering in days. The answer is 90 km.', 0),
+    (v_s05, 'qr1-s05-q2', 'What is the shortest route in days from HQ to Post D?',
+     '[{"label":"A","text":"5 days"},{"label":"B","text":"6 days"},{"label":"C","text":"7 days"},{"label":"D","text":"8 days"},{"label":"E","text":"9 days"}]'::jsonb,
+     'C', 'Step 1: Identify all possible routes from HQ to Post D. Route A: HQ → Post A → Post B → Post C → Post D = 2 + 3 + 1 + 2 = 8 days. Route B: HQ → Post A → Post D = 2 + 5 = 7 days. Route C: HQ → Post E → Post D = 3 + 4 = 7 days. Step 2: The shortest routes are B and C, both at 7 days. A common error is only checking one route and missing the shortcut via Post A directly to Post D. The answer is 7 days.', 1);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 06: Regional Gym Membership Rates
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-06', 'Regional Gym Membership Rates', '{
+    "type": "line_graph",
+    "context": "2021 data for the North region was not recorded due to a data collection error.",
+    "data": {
+      "title": "Gym Membership Rate by Region (%)",
+      "labels": ["2018", "2019", "2020", "2021", "2022", "2023"],
+      "series": [
+        { "name": "North",    "values": [91.2, 90.8, 88.4, null, 89.6, 90.1] },
+        { "name": "South",    "values": [94.1, 94.5, 93.8, 92.2, 91.5, 92.0] },
+        { "name": "Midlands", "values": [89.5, 90.2, 87.1, 86.4, 88.3, 89.0] }
+      ],
+      "yAxisLabel": "Membership Rate (%)",
+      "unit": ""
+    }
+  }'::jsonb, 5)
+  RETURNING id INTO v_s06;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s06, 'qr1-s06-q1', 'By how many percentage points did the South region membership rate change between 2020 and 2023?',
+     '[{"label":"A","text":"−3.1 pp"},{"label":"B","text":"−2.5 pp"},{"label":"C","text":"−1.8 pp"},{"label":"D","text":"−0.9 pp"},{"label":"E","text":"+0.5 pp"}]'::jsonb,
+     'C', 'Step 1: From the graph, South 2020 = 93.8% and South 2023 = 92.0%. Step 2: Change = 92.0 − 93.8 = −1.8 percentage points. Note: this question asks for percentage points, not percentage change — so a simple subtraction is all that is needed. The answer is −1.8 pp.', 0),
+    (v_s06, 'qr1-s06-q2', 'In 2023, the North region had 280,000 residents eligible for gym membership. How many were members?',
+     '[{"label":"A","text":"245,280"},{"label":"B","text":"248,800"},{"label":"C","text":"250,600"},{"label":"D","text":"252,280"},{"label":"E","text":"254,400"}]'::jsonb,
+     'D', 'Step 1: From the graph, the North region membership rate in 2023 = 90.1%. Step 2: Members = 280,000 × 0.901 = 252,280. A common error is rounding 90.1% to 90% first, which gives 252,000 instead of 252,280. The answer is 252,280.', 1),
+    (v_s06, 'qr1-s06-q3', 'Which region showed the greatest percentage decrease in membership rate between 2019 and 2022?',
+     '[{"label":"A","text":"North"},{"label":"B","text":"South"},{"label":"C","text":"Midlands"},{"label":"D","text":"North and South equally"},{"label":"E","text":"Can''t Tell"}]'::jsonb,
+     'B', 'Step 1: This asks for percentage decrease, not percentage-point decrease. Use the formula: (Original − New) ÷ Original × 100. Step 2: North: (90.8 − 89.6) ÷ 90.8 × 100 = 1.2 ÷ 90.8 = 1.32% decrease. South: (94.5 − 91.5) ÷ 94.5 × 100 = 3.0 ÷ 94.5 = 3.17% decrease. Midlands: (90.2 − 88.3) ÷ 90.2 × 100 = 1.9 ÷ 90.2 = 2.11% decrease. Step 3: South has the greatest percentage decrease at 3.17%. A common error is comparing percentage-point drops (3.0, 1.2, 1.9) instead of percentage changes. The answer is South.', 2),
+    (v_s06, 'qr1-s06-q4', 'What was the mean membership rate across all three regions in 2023, to one decimal place?',
+     '[{"label":"A","text":"89.8%"},{"label":"B","text":"90.2%"},{"label":"C","text":"90.4%"},{"label":"D","text":"90.7%"},{"label":"E","text":"91.0%"}]'::jsonb,
+     'C', 'Step 1: Read the 2023 values from the graph: North = 90.1%, South = 92.0%, Midlands = 89.0%. Step 2: Mean = (90.1 + 92.0 + 89.0) ÷ 3 = 271.1 ÷ 3 = 90.37% ≈ 90.4%. A common error is including the 2021 null value for North, which would give an incorrect count. The answer is 90.4%.', 3);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 07: Revision Hours vs Exam Score
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-07', 'Revision Hours vs Exam Score', '{
+    "type": "scatter_plot",
+    "data": {
+      "title": "Revision Hours vs Exam Score — Year 11 Students",
+      "xAxisLabel": "Total Revision Hours",
+      "yAxisLabel": "Exam Score (%)",
+      "series": [
+        {
+          "name": "Class A",
+          "points": [
+            { "x": 10, "y": 42 },
+            { "x": 15, "y": 51 },
+            { "x": 20, "y": 58 },
+            { "x": 25, "y": 63 },
+            { "x": 30, "y": 70 },
+            { "x": 35, "y": 74 },
+            { "x": 40, "y": 79 },
+            { "x": 45, "y": 83 }
+          ]
+        },
+        {
+          "name": "Class B",
+          "points": [
+            { "x": 10, "y": 38 },
+            { "x": 15, "y": 47 },
+            { "x": 20, "y": 54 },
+            { "x": 25, "y": 60 },
+            { "x": 30, "y": 65 },
+            { "x": 35, "y": 71 },
+            { "x": 40, "y": 75 },
+            { "x": 50, "y": 84 }
+          ]
+        }
+      ]
+    }
+  }'::jsonb, 6)
+  RETURNING id INTO v_s07;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s07, 'qr1-s07-q1', 'A student in Class A revised for 30 hours. What score did they achieve?',
+     '[{"label":"A","text":"63%"},{"label":"B","text":"65%"},{"label":"C","text":"68%"},{"label":"D","text":"70%"},{"label":"E","text":"74%"}]'::jsonb,
+     'D', 'Step 1: Locate the Class A data point at x = 30 hours on the scatter plot. Step 2: Read the y-value: 70%. A common error is reading the Class B point instead (which gives 65%). The answer is 70%.', 0),
+    (v_s07, 'qr1-s07-q2', 'For students who revised 40 hours, what is the difference in exam score between Class A and Class B?',
+     '[{"label":"A","text":"1 percentage point"},{"label":"B","text":"2 percentage points"},{"label":"C","text":"3 percentage points"},{"label":"D","text":"4 percentage points"},{"label":"E","text":"5 percentage points"}]'::jsonb,
+     'D', 'Step 1: At x = 40 hours, Class A score = 79% and Class B score = 75%. Step 2: Difference = 79 − 75 = 4 percentage points. A common error is reading the wrong data point for one of the classes. The answer is 4 percentage points.', 1);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 08: Restaurant Chain Annual Budget
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-08', 'Restaurant Chain Annual Budget', '{
+    "type": "pie_chart",
+    "data": {
+      "title": "Restaurant Chain Annual Budget Allocation (£ millions)",
+      "segments": [
+        { "label": "Staff Salaries",  "value": 142 },
+        { "label": "Food Supplies",   "value": 68 },
+        { "label": "Premises",         "value": 45 },
+        { "label": "Marketing",        "value": null },
+        { "label": "Administration",   "value": 21 }
+      ],
+      "total": 310,
+      "unit": "£m"
+    }
+  }'::jsonb, 7)
+  RETURNING id INTO v_s08;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s08, 'qr1-s08-q1', 'What was the budget allocated to Marketing?',
+     '[{"label":"A","text":"£28m"},{"label":"B","text":"£31m"},{"label":"C","text":"£34m"},{"label":"D","text":"£37m"},{"label":"E","text":"£40m"}]'::jsonb,
+     'C', 'Step 1: Sum the known segments: Staff Salaries £142m + Food Supplies £68m + Premises £45m + Administration £21m = £276m. Step 2: Marketing = Total − known segments = £310m − £276m = £34m. A common error is forgetting to include one of the smaller segments in the subtraction. The answer is £34m.', 0),
+    (v_s08, 'qr1-s08-q2', 'What percentage of the total budget is allocated to Staff Salaries? Give your answer to one decimal place.',
+     '[{"label":"A","text":"42.6%"},{"label":"B","text":"43.8%"},{"label":"C","text":"45.8%"},{"label":"D","text":"47.3%"},{"label":"E","text":"49.0%"}]'::jsonb,
+     'C', 'Step 1: Staff Salaries = £142m. Total budget = £310m. Step 2: Percentage = 142 ÷ 310 × 100 = 45.8%. A common error is using the sum of known segments (£276m) as the denominator instead of the stated total (£310m). The answer is 45.8%.', 1),
+    (v_s08, 'qr1-s08-q3', 'The chain increases its Food Supplies budget by 12% next year while keeping total spending at £310m. By how much must all other categories collectively decrease?',
+     '[{"label":"A","text":"£6.16m"},{"label":"B","text":"£7.52m"},{"label":"C","text":"£8.16m"},{"label":"D","text":"£9.24m"},{"label":"E","text":"£10.40m"}]'::jsonb,
+     'C', 'Step 1: New Food Supplies budget = £68m × 1.12 = £76.16m. Step 2: Increase = £76.16m − £68m = £8.16m. Step 3: Since the total stays at £310m, all other categories must collectively decrease by £8.16m to absorb the increase. A common error is calculating 12% of the total budget (£310m × 0.12 = £37.2m) instead of 12% of Food Supplies alone. The answer is £8.16m.', 2);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 09: Household Appliance Energy Consumption
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-09', 'Household Appliance Energy Consumption', '{
+    "type": "table",
+    "context": "Electricity costs 28p per kWh. Assume 4.3 weeks per month. Energy (kWh) = Power (kW) × Time (hours).",
+    "data": {
+      "headers": ["Appliance", "Power (kW)", "Daily Use (hrs)", "Weekly Use (hrs)", "Brand"],
+      "rows": [
+        ["Electric oven",   "2.2",  "1.5", "10.5", "Hotpoint"],
+        ["Washing machine", "0.9",  "0.5", "3.5",  "Bosch"],
+        ["Refrigerator",    "0.12", "24",  "168",  "Samsung"],
+        ["Electric shower", "9.5",  "0.3", "2.1",  "Mira"],
+        ["LED lighting",    "0.04", "6",   "42",   "Philips"]
+      ]
+    }
+  }'::jsonb, 8)
+  RETURNING id INTO v_s09;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s09, 'qr1-s09-q1', 'How many kWh of energy does the electric oven consume per week?',
+     '[{"label":"A","text":"16.5 kWh"},{"label":"B","text":"19.8 kWh"},{"label":"C","text":"23.1 kWh"},{"label":"D","text":"26.4 kWh"},{"label":"E","text":"29.7 kWh"}]'::jsonb,
+     'C', 'Step 1: From the table, the electric oven has Power = 2.2 kW and Weekly Use = 10.5 hours. Step 2: Using the formula Energy = Power × Time: 2.2 × 10.5 = 23.1 kWh. A common error is using daily hours (1.5) instead of weekly hours (10.5). The answer is 23.1 kWh.', 0),
+    (v_s09, 'qr1-s09-q2', 'What is the monthly electricity cost of running the refrigerator? Give your answer to the nearest penny.',
+     '[{"label":"A","text":"£5.64"},{"label":"B","text":"£22.58"},{"label":"C","text":"£24.27"},{"label":"D","text":"£28.22"},{"label":"E","text":"£30.34"}]'::jsonb,
+     'C', 'Step 1: From the table, the refrigerator has Power = 0.12 kW and Weekly Use = 168 hours. Step 2: Weekly energy = 0.12 × 168 = 20.16 kWh. Step 3: Monthly energy = 20.16 × 4.3 weeks = 86.688 kWh. Step 4: Monthly cost = 86.688 × £0.28 = £24.27 (to the nearest penny). A common error is forgetting to multiply by 4.3 to convert from weekly to monthly, giving only the weekly cost of £5.64. The answer is £24.27.', 1),
+    (v_s09, 'qr1-s09-q3', 'Which appliance has the highest weekly energy consumption in kWh?',
+     '[{"label":"A","text":"Electric oven"},{"label":"B","text":"Washing machine"},{"label":"C","text":"Refrigerator"},{"label":"D","text":"Electric shower"},{"label":"E","text":"LED lighting"}]'::jsonb,
+     'A', 'Step 1: Calculate weekly energy for each appliance using Energy = Power × Weekly hours. Electric oven = 2.2 × 10.5 = 23.1 kWh. Washing machine = 0.9 × 3.5 = 3.15 kWh. Refrigerator = 0.12 × 168 = 20.16 kWh. Electric shower = 9.5 × 2.1 = 19.95 kWh. LED lighting = 0.04 × 42 = 1.68 kWh. Step 2: The electric oven is highest at 23.1 kWh. A common error is assuming the shower must be highest because it has the greatest power rating (9.5 kW), without considering that it is used for the fewest hours. The answer is Electric oven.', 2),
+    (v_s09, 'qr1-s09-q4', 'The family replaces their 9.5 kW electric shower with a 7.5 kW model used for the same duration daily. By how much does their monthly electricity bill decrease? Give your answer to the nearest penny.',
+     '[{"label":"A","text":"£0.63"},{"label":"B","text":"£1.07"},{"label":"C","text":"£2.54"},{"label":"D","text":"£5.06"},{"label":"E","text":"£5.88"}]'::jsonb,
+     'D', 'Step 1: Power reduction = 9.5 − 7.5 = 2.0 kW. Step 2: From the table, weekly shower use = 2.1 hours. Weekly energy saved = 2.0 × 2.1 = 4.2 kWh. Step 3: Monthly energy saved = 4.2 × 4.3 = 18.06 kWh. Step 4: Monthly cost saving = 18.06 × £0.28 = £5.06. A common error is using only the daily usage (0.3 hours) instead of weekly (2.1 hours) for the calculation. The answer is £5.06.', 3);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 10: Packaging Tray Dimensions
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-10', 'Packaging Tray Dimensions', '{
+    "type": "geometry_diagram",
+    "data": {
+      "title": "Cardboard Tray (open top)",
+      "viewBox": { "width": 300, "height": 200 },
+      "shapes": [
+        {
+          "type": "polygon",
+          "points": [[35, 130], [185, 130], [265, 65], [115, 65]],
+          "fill": "none",
+          "stroke": "#a0aec0"
+        },
+        {
+          "type": "rect",
+          "x": 35, "y": 130, "width": 150, "height": 25,
+          "fill": "none",
+          "stroke": "#a0aec0"
+        },
+        {
+          "type": "polygon",
+          "points": [[185, 130], [265, 65], [265, 90], [185, 155]],
+          "fill": "none",
+          "stroke": "#a0aec0"
+        },
+        {
+          "type": "line",
+          "x1": 115, "y1": 65, "x2": 115, "y2": 90,
+          "stroke": "#a0aec0",
+          "strokeDasharray": "4,3"
+        },
+        {
+          "type": "line",
+          "x1": 115, "y1": 90, "x2": 265, "y2": 90,
+          "stroke": "#a0aec0",
+          "strokeDasharray": "4,3"
+        },
+        {
+          "type": "line",
+          "x1": 115, "y1": 90, "x2": 35, "y2": 155,
+          "stroke": "#a0aec0",
+          "strokeDasharray": "4,3"
+        }
+      ],
+      "dimensions": [
+        { "from": [35, 168], "to": [185, 168], "label": "8 in", "side": "bottom" },
+        { "from": [20, 130], "to": [100, 65], "label": "6 in", "side": "left" },
+        { "from": [275, 65], "to": [275, 90], "label": "1 in", "side": "right" }
+      ]
+    }
+  }'::jsonb, 9)
+  RETURNING id INTO v_s10;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s10, 'qr1-s10-q1', 'The tray is open at the top. What is the total area of cardboard used for the four sides and the base of the tray?',
+     '[{"label":"A","text":"62 in²"},{"label":"B","text":"72 in²"},{"label":"C","text":"76 in²"},{"label":"D","text":"96 in²"},{"label":"E","text":"104 in²"}]'::jsonb,
+     'C', 'Step 1: The tray has dimensions 8 in × 6 in × 1 in with an open top. Step 2: Base = 8 × 6 = 48 in². Two long sides = 2 × (8 × 1) = 16 in². Two short sides = 2 × (6 × 1) = 12 in². Step 3: Total = 48 + 16 + 12 = 76 in². A common error is including the open top face as well, giving 76 + 48 = 124 in², or calculating volume instead of surface area. The answer is 76 in².', 0),
+    (v_s10, 'qr1-s10-q2', 'If the cardboard costs 3p per square inch, what is the cost of cardboard for one tray?',
+     '[{"label":"A","text":"£1.86"},{"label":"B","text":"£2.28"},{"label":"C","text":"£2.88"},{"label":"D","text":"£3.12"},{"label":"E","text":"£3.72"}]'::jsonb,
+     'B', 'Step 1: From the previous calculation, total cardboard area = 76 in². Step 2: Cost = 76 × 3p = 228p = £2.28. A common error is using the volume (48 in³) instead of the surface area, or including the open top face. The answer is £2.28.', 1);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 11: Regional Population Growth Index
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-11', 'Regional Population Growth Index', '{
+    "type": "line_graph",
+    "data": {
+      "title": "Population Growth Index by Region (Base: 2018 = 100)",
+      "labels": ["2018", "2019", "2020", "2021", "2022", "2023"],
+      "series": [
+        { "name": "London",     "values": [100, 103, 101, 108, 116, 119] },
+        { "name": "North West", "values": [100, 105, 107, 115, 122, 124] },
+        { "name": "South West", "values": [100, 104, 106, 112, 118, 121] }
+      ],
+      "yAxisLabel": "Index (2018 = 100)",
+      "unit": ""
+    }
+  }'::jsonb, 10)
+  RETURNING id INTO v_s11;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s11, 'qr1-s11-q1', 'The population of London was 480,000 in 2018. What was the approximate population in London in 2023?',
+     '[{"label":"A","text":"524,400"},{"label":"B","text":"539,200"},{"label":"C","text":"556,800"},{"label":"D","text":"571,200"},{"label":"E","text":"583,400"}]'::jsonb,
+     'D', 'Step 1: From the graph, the London index in 2023 = 119 (with a base of 100 in 2018). This means the population grew to 119% of its 2018 level. Step 2: Population = 480,000 × (119 ÷ 100) = 480,000 × 1.19 = 571,200. A common error is adding 119,000 to 480,000 instead of multiplying by 1.19. The answer is 571,200.', 0),
+    (v_s11, 'qr1-s11-q2', 'Between 2020 and 2022, which region had the greatest absolute increase in its index value?',
+     '[{"label":"A","text":"London only"},{"label":"B","text":"North West only"},{"label":"C","text":"South West only"},{"label":"D","text":"London and North West equally"},{"label":"E","text":"North West and South West equally"}]'::jsonb,
+     'D', 'Step 1: Calculate the absolute index increase from 2020 to 2022 for each region. London = 116 − 101 = 15. North West = 122 − 107 = 15. South West = 118 − 106 = 12. Step 2: London and North West both increased by 15 index points — they are tied. A common error is confusing absolute increase with percentage increase. The answer is London and North West equally.', 1),
+    (v_s11, 'qr1-s11-q3', 'The population of the North West was 180,000 in 2018. A person moved to the area when the population was at the 2021 index level, and left when it reached the 2023 level. By how much did the population increase during their stay?',
+     '[{"label":"A","text":"8,100"},{"label":"B","text":"9,540"},{"label":"C","text":"12,600"},{"label":"D","text":"15,300"},{"label":"E","text":"16,200"}]'::jsonb,
+     'E', 'Step 1: North West 2021 index = 115. Population at arrival = 180,000 × 1.15 = 207,000. Step 2: North West 2023 index = 124. Population at departure = 180,000 × 1.24 = 223,200. Step 3: Increase during stay = 223,200 − 207,000 = 16,200. A common error is subtracting the index values (124 − 115 = 9) and multiplying by 1,800, giving 16,200 by luck — but the correct method uses the base population. The answer is 16,200.', 2);
+
+  -- ═══════════════════════════════════════════════════════════════
+  -- SET 12: Office Technology Equipment Order
+  -- ═══════════════════════════════════════════════════════════════
+  INSERT INTO timed_quantitative_reasoning_sets (test_id, set_ref, title, stimulus, order_index)
+  VALUES (1, 'qr1-set-12', 'Office Technology Equipment Order', '{
+    "type": "table",
+    "context": "Discounts are applied to the unit price first, then VAT is applied to the discounted price.",
+    "data": {
+      "headers": ["Item", "Unit Price (£)", "Qty", "Discount", "VAT Rate"],
+      "rows": [
+        ["Laptop",    "180.00", "1", "10%", "20%"],
+        ["Monitor",   "60.00",  "2", "0%",  "20%"],
+        ["Keyboard",  "30.00",  "3", "15%", "20%"],
+        ["USB Hub",   "25.00",  "1", "0%",  "20%"],
+        ["Headset",   "40.00",  "2", "20%", "20%"]
+      ]
+    }
+  }'::jsonb, 11)
+  RETURNING id INTO v_s12;
+
+  INSERT INTO timed_quantitative_reasoning_questions (set_id, question_ref, stem, options, correct_answer, answer_reason, order_index) VALUES
+    (v_s12, 'qr1-s12-q1', 'What is the total cost of the laptop after discount and VAT?',
+     '[{"label":"A","text":"£180.00"},{"label":"B","text":"£194.40"},{"label":"C","text":"£198.00"},{"label":"D","text":"£216.00"},{"label":"E","text":"£237.60"}]'::jsonb,
+     'B', 'Step 1: Unit price = £180.00. Apply 10% discount: £180.00 × 0.90 = £162.00. Step 2: Apply 20% VAT to the discounted price: £162.00 × 1.20 = £194.40. A common error is applying VAT first then discount, or forgetting the discount entirely (giving £216.00). The answer is £194.40.', 0),
+    (v_s12, 'qr1-s12-q2', 'What is the total cost of all 3 keyboards after discount and VAT?',
+     '[{"label":"A","text":"£76.50"},{"label":"B","text":"£81.00"},{"label":"C","text":"£86.40"},{"label":"D","text":"£91.80"},{"label":"E","text":"£108.00"}]'::jsonb,
+     'D', 'Step 1: Unit price = £30.00. Apply 15% discount: £30.00 × 0.85 = £25.50 per keyboard. Step 2: Apply 20% VAT: £25.50 × 1.20 = £30.60 per keyboard. Step 3: Total for 3 keyboards = £30.60 × 3 = £91.80. A common error is applying the discount to the total after multiplying by quantity, which gives the same result here — but forgetting the discount entirely gives £108.00. The answer is £91.80.', 1),
+    (v_s12, 'qr1-s12-q3', 'What is the total cost of the entire order (all items and quantities) after all discounts and VAT?',
+     '[{"label":"A","text":"£447.50"},{"label":"B","text":"£507.00"},{"label":"C","text":"£537.00"},{"label":"D","text":"£556.20"},{"label":"E","text":"£594.00"}]'::jsonb,
+     'C', 'Step 1: Calculate each line item after discount then VAT. Laptop (×1): £180 × 0.90 × 1.20 = £194.40. Monitor (×2): £60 × 1.00 × 1.20 × 2 = £144.00. Keyboard (×3): £30 × 0.85 × 1.20 × 3 = £91.80. USB Hub (×1): £25 × 1.00 × 1.20 = £30.00. Headset (×2): £40 × 0.80 × 1.20 × 2 = £76.80. Step 2: Total = £194.40 + £144.00 + £91.80 + £30.00 + £76.80 = £537.00. A common error is forgetting the headset discount (giving £556.20) or forgetting all discounts (giving £594.00). The answer is £537.00.', 2);
+
+  -- Bump content version
+  UPDATE content_versions
+  SET version = version + 1, updated_at = now()
+  WHERE section = 'timed_quantitative_reasoning';
+
+END $$;
