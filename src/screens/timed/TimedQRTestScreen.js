@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useTimedQRExamProgress } from '../../hooks/attempts/useTimedQRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
 import NotesModal from '../../components/NotesModal';
@@ -22,10 +23,12 @@ import AnswerOptionButton from '../../components/AnswerOptionButton';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedQRResultsScreen from '../../components/TimedQRResultsScreen';
 
-export default function TimedQRTestScreen({ route }) {
+export default function TimedQRTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
+  const { submitExam } = useTimedQRExamProgress();
 
   const [answers, setAnswers] = useState({});
   const [seenQuestions, setSeenQuestions] = useState(new Set());
@@ -35,8 +38,19 @@ export default function TimedQRTestScreen({ route }) {
   const [notes, setNotes] = useState('');
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [showResults, setShowResults] = useState(false);
 
-  const { display: timerDisplay, isUrgent, isPaused, pause, resume } = useTestTimer(test.timeMinutes);
+  const endExamCalledRef = useRef(false);
+  const secondsLeftRef = useRef(null);
+
+  const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume } = useTestTimer(
+    test.timeMinutes,
+    () => endExam(true),
+  );
+
+  useEffect(() => {
+    secondsLeftRef.current = secondsLeft;
+  }, [secondsLeft]);
   const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
     useFlatNavigation(test.flatQuestions, 0);
 
@@ -71,10 +85,48 @@ export default function TimedQRTestScreen({ route }) {
     });
   }
 
+  async function endExam(timerExpired = false) {
+    if (endExamCalledRef.current) return;
+    endExamCalledRef.current = true;
+    await submitExam({
+      test,
+      answers,
+      secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
+    });
+    setShowResults(true);
+  }
+
   function getQuestionStatus(fq) {
     if (answers[fq.question.questionId] != null) return 'Answered';
     if (seenQuestions.has(fq.question.questionId)) return 'Incomplete';
     return 'Unseen';
+  }
+
+  // Normalised sets for results screen
+  const sets = test.sets.map((s) => ({
+    ...s,
+    setId: s.setId,
+    questions: s.questions.map((q) => ({
+      ...q,
+      questionId: q.questionId ?? q.id,
+    })),
+  }));
+
+  // Build a getAnswer function compatible with results screen (keyed by setId, questionId)
+  function getAnswerForResults(setId, questionId) {
+    return answers[questionId] ?? null;
+  }
+
+  if (showResults) {
+    return (
+      <TimedQRResultsScreen
+        sets={sets}
+        getAnswer={getAnswerForResults}
+        flags={flags}
+        test={test}
+        onDone={() => navigation.navigate('TimedTestList', { section: 'QR', title: 'Quantitative Reasoning' })}
+      />
+    );
   }
 
   if (showReview) {
@@ -84,7 +136,7 @@ export default function TimedQRTestScreen({ route }) {
         getStatus={getQuestionStatus}
         flags={flags}
         onNavigateTo={(flatIndex) => { goTo(flatIndex); setShowReview(false); }}
-        onEndTest={() => {}}
+        onEndTest={() => endExam(false)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
         title="Quantitative Reasoning"
