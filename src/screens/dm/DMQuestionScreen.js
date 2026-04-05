@@ -4,6 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
+import NotesModal from '../../components/NotesModal';
+import BottomToolbar from '../../components/BottomToolbar';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
@@ -78,6 +80,8 @@ export default function DMQuestionScreen({ route }) {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState({});
   const [calcVisible, setCalcVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [notes, setNotes] = useState('');
   const { practiceTheme: t } = useTheme();
 
   const { questions, loading } = useDecisionMakingQuestions();
@@ -143,7 +147,6 @@ export default function DMQuestionScreen({ route }) {
         isFirst={isFirst}
         isLast={isLast}
         color={t.sectionDM}
-        onCalculator={() => setCalcVisible(true)}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
@@ -199,6 +202,20 @@ export default function DMQuestionScreen({ route }) {
           </TouchableOpacity>
         )}
       </ScrollView>
+
+      <BottomToolbar
+        onNotes={() => setNotesVisible(true)}
+        onCalculator={() => setCalcVisible(true)}
+        sectionColor={t.sectionDM}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        notes={notes}
+        onChangeNotes={setNotes}
+        onClear={() => setNotes('')}
+        onClose={() => setNotesVisible(false)}
+      />
     </SafeAreaView>
   );
 }

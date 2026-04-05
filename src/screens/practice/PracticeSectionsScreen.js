@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 
 const SECTIONS = [
@@ -8,24 +9,28 @@ const SECTIONS = [
     title: 'Verbal Reasoning',
     description: 'Reading comprehension & analysis',
     color: '#7c3aed',
+    icon: 'book-open-page-variant',
   },
   {
     id: 'DM',
     title: 'Decision Making',
     description: 'Logic puzzles & diagrams',
     color: '#0891b2',
+    icon: 'head-cog-outline',
   },
   {
     id: 'QR',
     title: 'Quantitative Reasoning',
     description: 'Numerical problem solving',
     color: '#059669',
+    icon: 'calculator-variant',
   },
   {
     id: 'SJ',
     title: 'Situational Judgement',
     description: 'Clinical scenario judgement',
     color: '#d97706',
+    icon: 'stethoscope',
   },
 ];
 
@@ -53,7 +58,7 @@ export default function PracticeSectionsScreen({ navigation }) {
             }}
           >
             <View style={[styles.badge, { backgroundColor: section.color }]}>
-              <Text style={styles.badgeText}>{section.id}</Text>
+              <MaterialCommunityIcons name={section.icon} size={26} color="#ffffff" />
             </View>
             <View style={styles.cardText}>
               <Text style={[styles.cardTitle, { color: t.text }]}>{section.title}</Text>
@@ -104,11 +109,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
-  },
-  badgeText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: 13,
   },
   cardText: {
     flex: 1,

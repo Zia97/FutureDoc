@@ -16,6 +16,8 @@ import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
+import NotesModal from '../../components/NotesModal';
+import BottomToolbar from '../../components/BottomToolbar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
@@ -29,6 +31,8 @@ export default function TimedQRTestScreen({ route }) {
   const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [flags, setFlags] = useState(new Set());
   const [calcVisible, setCalcVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [notes, setNotes] = useState('');
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
 
@@ -107,7 +111,6 @@ export default function TimedQRTestScreen({ route }) {
         isFirst={isFirst}
         isLast={false}
         color={t.sectionQR}
-        onCalculator={() => setCalcVisible(true)}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
@@ -151,22 +154,21 @@ export default function TimedQRTestScreen({ route }) {
 
       </ScrollView>
 
-      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity
-          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
-          onPress={pause}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navigatorButton, { borderColor: t.sectionQR }]}
-          onPress={() => setNavigatorVisible(true)}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.navigatorButtonText, { color: t.sectionQR }]}>☰ Navigator</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomToolbar
+        onPause={pause}
+        onNotes={() => setNotesVisible(true)}
+        onCalculator={() => setCalcVisible(true)}
+        onNavigator={() => setNavigatorVisible(true)}
+        sectionColor={t.sectionQR}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        notes={notes}
+        onChangeNotes={setNotes}
+        onClear={() => setNotes('')}
+        onClose={() => setNotesVisible(false)}
+      />
 
       <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
         <View style={styles.pauseOverlay}>
@@ -216,18 +218,6 @@ const styles = StyleSheet.create({
   flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 20 },
   options: { gap: 10 },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderTopWidth: 1,
-  },
-  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
-  pauseButtonText: { fontSize: 12, fontWeight: '700' },
-  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
-  navigatorButtonText: { fontSize: 12, fontWeight: '700' },
   pauseOverlay: {
     flex: 1,
     backgroundColor: 'rgba(10, 15, 30, 0.92)',

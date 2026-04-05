@@ -20,6 +20,8 @@ import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import FeedbackBox from '../../components/FeedbackBox';
 import CalculatorModal from '../../components/CalculatorModal';
+import NotesModal from '../../components/NotesModal';
+import BottomToolbar from '../../components/BottomToolbar';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function QRQuestionScreen({ route }) {
@@ -33,6 +35,8 @@ export default function QRQuestionScreen({ route }) {
 
   const { handleAnswer, getAnswer, resetAnswers } = useAnswers();
   const [calcVisible, setCalcVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [notes, setNotes] = useState('');
   const [pendingAnswer, setPendingAnswer] = useState(null);
 
   useEffect(() => {
@@ -94,7 +98,6 @@ export default function QRQuestionScreen({ route }) {
         isFirst={isFirst}
         isLast={isLast}
         color={t.sectionQR}
-        onCalculator={() => setCalcVisible(true)}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
@@ -151,6 +154,20 @@ export default function QRQuestionScreen({ route }) {
           />
         )}
       </ScrollView>
+
+      <BottomToolbar
+        onNotes={() => setNotesVisible(true)}
+        onCalculator={() => setCalcVisible(true)}
+        sectionColor={t.sectionQR}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        notes={notes}
+        onChangeNotes={setNotes}
+        onClear={() => setNotes('')}
+        onClose={() => setNotesVisible(false)}
+      />
     </SafeAreaView>
   );
 }

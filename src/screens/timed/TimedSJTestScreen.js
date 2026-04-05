@@ -18,6 +18,8 @@ import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import ScreenNavBar from '../../components/ScreenNavBar';
+import NotesModal from '../../components/NotesModal';
+import BottomToolbar from '../../components/BottomToolbar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
@@ -32,6 +34,8 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const endExamCalledRef = useRef(false);
 
   const [navigatorVisible, setNavigatorVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [notes, setNotes] = useState('');
   const [showReview, setShowReview] = useState(false);
   const [examEnded, setExamEnded] = useState(false);
   const [flags, setFlags] = useState(new Set());
@@ -183,22 +187,20 @@ export default function TimedSJTestScreen({ route, navigation }) {
         </View>
       </ScrollView>
 
-      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity
-          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
-          onPress={pause}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navigatorButton, { borderColor: sectionColor }]}
-          onPress={() => setNavigatorVisible(true)}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.navigatorButtonText, { color: sectionColor }]}>☰ Navigator</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomToolbar
+        onPause={pause}
+        onNotes={() => setNotesVisible(true)}
+        onNavigator={() => setNavigatorVisible(true)}
+        sectionColor={sectionColor}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        notes={notes}
+        onChangeNotes={setNotes}
+        onClear={() => setNotes('')}
+        onClose={() => setNotesVisible(false)}
+      />
 
       <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
         <View style={styles.pauseOverlay}>
@@ -250,16 +252,6 @@ const styles = StyleSheet.create({
   flagIcon: { fontSize: 20 },
   questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24 },
   optionsContainer: { gap: 10 },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderTopWidth: 1,
-  },
-  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
-  pauseButtonText: { fontSize: 12, fontWeight: '700' },
   pauseOverlay: {
     flex: 1,
     backgroundColor: 'rgba(10, 15, 30, 0.92)',
@@ -303,6 +295,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   resumeButtonText: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
-  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 12, paddingVertical: 3 },
-  navigatorButtonText: { fontSize: 12, fontWeight: '700' },
 });

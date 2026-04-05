@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../../context/ThemeContext';
 
 const SECTIONS = [
@@ -8,24 +9,28 @@ const SECTIONS = [
     title: 'Verbal Reasoning',
     description: '44 questions — 22 minutes',
     color: '#7c3aed',
+    icon: 'book-open-page-variant',
   },
   {
     id: 'DM',
     title: 'Decision Making',
     description: '35 questions — 37 minutes',
     color: '#0891b2',
+    icon: 'head-cog-outline',
   },
   {
     id: 'QR',
     title: 'Quantitative Reasoning',
     description: '36 questions — 26 minutes',
     color: '#059669',
+    icon: 'calculator-variant',
   },
   {
     id: 'SJ',
     title: 'Situational Judgement',
     description: '69 questions — 26 minutes',
     color: '#d97706',
+    icon: 'stethoscope',
   },
 ];
 
@@ -48,7 +53,7 @@ export default function TimedPracticeSectionsScreen({ navigation }) {
             onPress={() => navigation.navigate('TimedTestList', { section: section.id, title: section.title })}
           >
             <View style={[styles.badge, { backgroundColor: section.color }]}>
-              <Text style={styles.badgeText}>{section.id}</Text>
+              <MaterialCommunityIcons name={section.icon} size={26} color="#ffffff" />
             </View>
             <View style={styles.cardText}>
               <Text style={[styles.cardTitle, { color: t.text }]}>{section.title}</Text>
@@ -99,11 +104,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
-  },
-  badgeText: {
-    color: '#ffffff',
-    fontWeight: '800',
-    fontSize: 13,
   },
   cardText: {
     flex: 1,

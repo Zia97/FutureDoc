@@ -16,6 +16,8 @@ import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
+import NotesModal from '../../components/NotesModal';
+import BottomToolbar from '../../components/BottomToolbar';
 import { DMStemContent, DMOptionsContent } from '../../components/dm/DMQuestionRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import SJTestReviewScreen from '../../components/SJTestReviewScreen';
@@ -31,6 +33,8 @@ export default function TimedDMTestScreen({ route, navigation }) {
   const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [flags, setFlags] = useState(new Set());
   const [calcVisible, setCalcVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [notes, setNotes] = useState('');
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
@@ -164,7 +168,6 @@ export default function TimedDMTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={t.sectionDM}
-        onCalculator={() => setCalcVisible(true)}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
@@ -203,22 +206,21 @@ export default function TimedDMTestScreen({ route, navigation }) {
         />
       </ScrollView>
 
-      <View style={[styles.bottomBar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity
-          style={[styles.pauseButton, { borderColor: t.borderStrong }]}
-          onPress={pause}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.pauseButtonText, { color: t.textSecondary }]}>⏸ Pause</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.navigatorButton, { borderColor: t.sectionDM }]}
-          onPress={() => setNavigatorVisible(true)}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.navigatorButtonText, { color: t.sectionDM }]}>☰ Navigator</Text>
-        </TouchableOpacity>
-      </View>
+      <BottomToolbar
+        onPause={pause}
+        onNotes={() => setNotesVisible(true)}
+        onCalculator={() => setCalcVisible(true)}
+        onNavigator={() => setNavigatorVisible(true)}
+        sectionColor={t.sectionDM}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        notes={notes}
+        onChangeNotes={setNotes}
+        onClear={() => setNotes('')}
+        onClose={() => setNotesVisible(false)}
+      />
 
       <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
         <View style={styles.pauseOverlay}>
@@ -266,18 +268,6 @@ const styles = StyleSheet.create({
   divider: { height: 1, marginVertical: 4 },
   flagButton: { borderRadius: 8, paddingHorizontal: 6, paddingVertical: 2 },
   flagIcon: { fontSize: 18 },
-  bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderTopWidth: 1,
-  },
-  pauseButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
-  pauseButtonText: { fontSize: 12, fontWeight: '700' },
-  navigatorButton: { borderWidth: 1, borderRadius: 6, paddingHorizontal: 14, paddingVertical: 6 },
-  navigatorButtonText: { fontSize: 12, fontWeight: '700' },
   pauseOverlay: {
     flex: 1,
     backgroundColor: 'rgba(10, 15, 30, 0.92)',

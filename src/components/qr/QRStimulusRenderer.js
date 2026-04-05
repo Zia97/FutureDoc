@@ -3,6 +3,9 @@ import { View, Text, TouchableOpacity, Modal, StyleSheet, useWindowDimensions } 
 import BarChartRenderer from './BarChartRenderer';
 import LineGraphRenderer from './LineGraphRenderer';
 import PieChartRenderer from './PieChartRenderer';
+import ScatterPlotRenderer from './ScatterPlotRenderer';
+import NetworkDiagramRenderer from './NetworkDiagramRenderer';
+import GeometryDiagramRenderer from './GeometryDiagramRenderer';
 import DataTable from '../dm/DataTable';
 import ZoomableView from '../ZoomableView';
 import { useTheme } from '../../context/ThemeContext';
@@ -65,24 +68,44 @@ export default function QRStimulusRenderer({ stimulus }) {
     );
   }
 
+  const context = stimulus.context;
+
+  let content;
   switch (stimulus.type) {
     case 'bar_chart':
-      return <ChartWithExpand><BarChartRenderer data={stimulus.data} /></ChartWithExpand>;
+      content = <ChartWithExpand><BarChartRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'line_graph':
-      return <ChartWithExpand><LineGraphRenderer data={stimulus.data} /></ChartWithExpand>;
+      content = <ChartWithExpand><LineGraphRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'pie_chart':
-      return <ChartWithExpand><PieChartRenderer data={stimulus.data} /></ChartWithExpand>;
+      content = <ChartWithExpand><PieChartRenderer data={stimulus.data} /></ChartWithExpand>; break;
+    case 'scatter_plot':
+      content = <ChartWithExpand><ScatterPlotRenderer data={stimulus.data} /></ChartWithExpand>; break;
+    case 'network_diagram':
+      content = <ChartWithExpand><NetworkDiagramRenderer data={stimulus.data} /></ChartWithExpand>; break;
+    case 'geometry_diagram':
+      content = <ChartWithExpand><GeometryDiagramRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'table':
-      return <DataTable tableData={stimulus.data} />;
+      content = <DataTable tableData={stimulus.data} />; break;
     case 'text':
-      return <Text style={[styles.text, { color: t.textSecondary }]}>{stimulus.text}</Text>;
+      content = <Text style={[styles.text, { color: t.textSecondary }]}>{stimulus.text}</Text>; break;
     default:
       return null;
   }
+
+  if (!context) return content;
+
+  return (
+    <View style={styles.withContext}>
+      <Text style={[styles.context, { color: t.textSecondary }]}>{context}</Text>
+      {content}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
   multi: { gap: 16 },
+  withContext: { gap: 8 },
+  context: { fontSize: 13, lineHeight: 20, fontStyle: 'italic' },
   text: { fontSize: 14, lineHeight: 22 },
   tapHintBtn: { alignItems: 'center' },
   tapHint: { fontSize: 11, marginTop: 6, opacity: 0.7 },

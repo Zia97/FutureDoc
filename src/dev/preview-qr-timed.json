@@ -1,669 +1,824 @@
 [
   {
-    "id": "timed-vr-test-001",
-    "title": "VR Timed Test 1",
-    "passage_count": 11,
-    "question_count": 44,
-    "time_minutes": 22,
-    "passages": [
+    "id": "timed-qr-test-001",
+    "title": "QR Timed Test 1",
+    "question_count": 36,
+    "time_minutes": 26,
+    "sets": [
       {
-        "id": "53c4cf20-f8db-4032-9670-c27f3b20854c",
-        "title": "Passage 1 — The Hanseatic League",
-        "body": "The Hanseatic League, a commercial and defensive confederation of merchant guilds and market towns in north-western and central Europe, dominated trade across the Baltic and North Sea regions for several centuries. Founded in the mid-thirteenth century, the League eventually encompassed more than 200 cities and towns at its height, with Lübeck serving as its unofficial capital and primary meeting place for the periodic assembly known as the Hansetag.\n\nThe League operated without a formal central government or a standing army of its own, relying instead on collective economic leverage and occasional military coalitions assembled from member cities. Its power derived principally from its control of key commodities: Baltic herring, Finnish furs, Flemish cloth, and English wool all passed through Hanseatic hands. The League secured trading privileges in foreign cities, establishing Kontore — permanent trading outposts — in Bergen, Bruges, London, and Novgorod, which acted as enclaves of Hanseatic commerce within host nations.\n\nThe League's decline began gradually in the late fifteenth century. The discovery of Atlantic trade routes diverted commercial attention westward, diminishing the relative importance of Baltic commerce. The rise of centralised nation-states — particularly England, Denmark, and the Dutch Republic — eroded the League's negotiating advantage, as individual member cities increasingly found it more beneficial to deal bilaterally with powerful sovereigns than to maintain collective discipline. Internal disputes over membership dues and military contributions further weakened cohesion.\n\nThe last formal Hansetag was held in 1669, attended by only three cities: Lübeck, Hamburg, and Bremen. These three cities, sometimes called the Hanseatic cities, retained the designation into the modern era — Hamburg and Bremen remain officially styled as Free and Hanseatic Cities under the German federal constitution to this day, a linguistic survival of an institution that had effectively dissolved centuries earlier.",
-        "verbal_reasoning_questions": [
+        "set_id": "qr1-set-01",
+        "title": "Hospital Ward Occupancy",
+        "stimulus": {
+          "type": "table",
+          "context": "Ward capacities: Cardiology 32, Orthopaedics 45, Paediatrics 18, Neurology 35, Oncology 25. The weekly mean occupancy for Orthopaedics was 36.4 patients.",
+          "data": {
+            "headers": ["Ward", "Mon", "Tue", "Wed", "Thu", "Fri"],
+            "rows": [
+              ["Cardiology",   "22", "25", "21", "27", "24"],
+              ["Orthopaedics", "38", "35", "40", "36", "?"],
+              ["Paediatrics",  "12", "14", "11", "15", "13"],
+              ["Neurology",    "28", "30", "26", "29", "31"],
+              ["Oncology",     "19", "20", "22", "18", "21"]
+            ]
+          }
+        },
+        "questions": [
           {
-            "id": "b8d2e28b-e0f2-4479-bd02-deb653edee7d",
-            "question_text": "The Hanseatic League had a formal elected president who presided over the Hansetag.",
+            "id": "qr1-s01-q1",
+            "stem": "What was the total number of patients in the Neurology ward across the five days?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "134" },
+              { "label": "B", "text": "138" },
+              { "label": "C", "text": "141" },
+              { "label": "D", "text": "144" },
+              { "label": "E", "text": "148" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage explicitly states the League 'operated without a formal central government.' The Hansetag is described as a periodic assembly, but no elected president or presiding official is mentioned. The statement directly contradicts the passage's description of the League's structure.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: From the Neurology row, read each day's occupancy: Mon = 28, Tue = 30, Wed = 26, Thu = 29, Fri = 31. Step 2: Total = 28 + 30 + 26 + 29 + 31 = 144. A common error is accidentally including a value from a neighbouring row. The answer is 144.",
+            "order_index": 0
           },
           {
-            "id": "eaf2d2ed-c564-440f-ade1-4eab9368c4a6",
-            "question_text": "At the final Hansetag in 1669, fewer cities were present than at any previous Hansetag.",
+            "id": "qr1-s01-q2",
+            "stem": "On which day was the Cardiology ward at the highest percentage of its capacity?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "Monday" },
+              { "label": "B", "text": "Tuesday" },
+              { "label": "C", "text": "Wednesday" },
+              { "label": "D", "text": "Thursday" },
+              { "label": "E", "text": "Friday" }
             ],
-            "correct_answer": "Can't tell",
-            "answer_reason": "The passage states that only three cities attended the 1669 Hansetag, but provides no information about attendance figures at previous Hansetag meetings. We cannot confirm whether this was the lowest ever attendance without that comparative data.",
-            "order_index": 1,
-            "difficulty": "hard"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: From the note, Cardiology capacity = 32. Step 2: Calculate occupancy as a percentage of capacity for each day: Mon = 22 ÷ 32 = 68.8%; Tue = 25 ÷ 32 = 78.1%; Wed = 21 ÷ 32 = 65.6%; Thu = 27 ÷ 32 = 84.4%; Fri = 24 ÷ 32 = 75.0%. Step 3: Thursday is the highest at 84.4%. A common error is picking the day with the highest raw count without dividing by capacity. The answer is Thursday.",
+            "order_index": 1
           },
           {
-            "id": "720ca721-b7ce-4617-b94f-f9bab53b4958",
-            "question_text": "The erosion of the Hanseatic League's influence was partly caused by the growth of powerful centralised states.",
+            "id": "qr1-s01-q3",
+            "stem": "What was the Orthopaedics ward occupancy on Friday?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "29" },
+              { "label": "B", "text": "31" },
+              { "label": "C", "text": "33" },
+              { "label": "D", "text": "35" },
+              { "label": "E", "text": "37" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage directly states that 'the rise of centralised nation-states — particularly England, Denmark, and the Dutch Republic — eroded the League's negotiating advantage.' This is a paraphrase of explicit passage content confirming that centralised states contributed to the League's decline.",
-            "order_index": 2,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: The note states the weekly mean occupancy for Orthopaedics was 36.4. Over 5 days, total = 36.4 × 5 = 182. Step 2: Sum of Monday to Thursday = 38 + 35 + 40 + 36 = 149. Step 3: Friday = 182 − 149 = 33. A common error is dividing the total by 4 instead of subtracting the known days. The answer is 33.",
+            "order_index": 2
           },
           {
-            "id": "671604cc-c25f-4d7b-b471-cf7f7fef9c59",
-            "question_text": "Hamburg and Bremen are the only German cities that still bear the Hanseatic designation in their official names.",
+            "id": "qr1-s01-q4",
+            "stem": "On Wednesday, what percentage of total ward capacity across all five wards was occupied? Give your answer to the nearest whole number.",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "72%" },
+              { "label": "B", "text": "74%" },
+              { "label": "C", "text": "77%" },
+              { "label": "D", "text": "80%" },
+              { "label": "E", "text": "83%" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states that 'Hamburg and Bremen remain officially styled as Free and Hanseatic Cities under the German federal constitution to this day.' Lübeck is mentioned as the third city at the final Hansetag, but is not said to retain the designation today — only Hamburg and Bremen are. The passage provides sufficient information to confirm only these two cities currently bear the title.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Wednesday occupancy from each row: Cardiology 21, Orthopaedics 40, Paediatrics 11, Neurology 26, Oncology 22. Total occupied = 21 + 40 + 11 + 26 + 22 = 120. Step 2: From the note, total capacity = 32 + 45 + 18 + 35 + 25 = 155. Step 3: Percentage = 120 ÷ 155 × 100 = 77.4% ≈ 77%. A common error is using a single ward's capacity instead of the combined total. The answer is 77%.",
+            "order_index": 3
           }
         ]
       },
       {
-        "id": "58fd1980-58d5-454f-9251-2357f160dcaa",
-        "title": "Passage 2 — The Voynich Manuscript",
-        "body": "The Voynich Manuscript is an illustrated codex hand-written in an unknown script, held at Yale University's Beinecke Rare Book and Manuscript Library. Carbon dating of the vellum places its creation in the early fifteenth century, most likely between 1404 and 1438. The manuscript takes its name from Wilfrid Voynich, a Polish-American antiquarian book dealer who acquired it in 1912 from the Jesuit College at Frascati, near Rome.\n\nThe manuscript's 240 surviving pages — scholars believe some pages are missing — contain illustrations divided into several thematic sections. These include what appear to be botanical drawings of unidentifiable plants, astronomical and cosmological diagrams, figures of nude women bathing in interconnected pools or channels, and what may be a pharmaceutical or herbal section listing recipes. The illustrations, though clearly purposeful, do not correspond to any known botanical, astronomical, or medical tradition.\n\nThe script itself has been subjected to intensive analysis. Statistical properties of the text, including character frequency distributions and word-length patterns, suggest it behaves more like natural language than like a random cipher. Multiple professional cryptanalysts, including teams that successfully decoded wartime German Enigma messages, have failed to decipher it. Proposed explanations have ranged from an elaborate hoax constructed from meaningless symbols, to a constructed language, to an encoded natural language, to a script representing an otherwise unattested historical language.\n\nIn 2019, a researcher at the University of Bristol claimed to have identified the manuscript's language as proto-Romance, a form of early Vulgar Latin. This claim was greeted with considerable scepticism by other scholars, and no consensus has emerged. The manuscript remains undeciphered, making it one of the most studied and most debated documents in the history of cryptography.",
-        "verbal_reasoning_questions": [
+        "set_id": "qr1-set-03",
+        "title": "Train Journey — Northampton to Edinburgh",
+        "stimulus": {
+          "type": "multi",
+          "items": [
+            {
+              "type": "text",
+              "text": "A passenger travels from Northampton to Edinburgh, changing at Leeds. The Northampton–Leeds leg is 122 miles and the Leeds–Edinburgh leg is 209 miles. The Leeds–Edinburgh train travels at an average speed of 95 mph. After arriving in Leeds, the passenger waits 18 minutes before the next train departs. A standard return ticket costs £147; a first-class return costs £214. Groups of 3 or more travelling together receive a 15% discount off the total standard fare."
+            },
+            {
+              "type": "table",
+              "data": {
+                "headers": ["Leg", "Distance (miles)", "Departs", "Arrives"],
+                "rows": [
+                  ["Northampton → Leeds", "122", "08:10", "09:52"],
+                  ["Leeds → Edinburgh",   "209", "10:10", "?"]
+                ]
+              }
+            }
+          ]
+        },
+        "questions": [
           {
-            "id": "c6fffcc0-741a-4921-8301-550c0048f58b",
-            "question_text": "According to the passage, what is the most widely accepted explanation for the Voynich Manuscript's content?",
+            "id": "qr1-s03-q1",
+            "stem": "What was the average speed of the Northampton to Leeds train in miles per hour? Give your answer to the nearest mph.",
             "options": [
-              "It is an elaborate hoax containing meaningless symbols",
-              "It is written in proto-Romance, an early form of Vulgar Latin",
-              "No consensus explanation has been established among scholars",
-              "It encodes a natural language using a substitution cipher"
+              { "label": "A", "text": "68 mph" },
+              { "label": "B", "text": "70 mph" },
+              { "label": "C", "text": "72 mph" },
+              { "label": "D", "text": "76 mph" },
+              { "label": "E", "text": "80 mph" }
             ],
-            "correct_answer": "No consensus explanation has been established among scholars",
-            "answer_reason": "The passage explicitly states 'no consensus has emerged' regarding the 2019 proto-Romance claim and lists multiple competing explanations without endorsing any. The other options each represent one proposed theory that the passage presents as unresolved or contested.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: From the timetable, departure = 08:10 and arrival = 09:52. Journey time = 1 hour 42 minutes = 1 + 42/60 = 1.7 hours. Step 2: Speed = Distance ÷ Time = 122 ÷ 1.7 = 71.8 mph ≈ 72 mph. A common error is converting 42 minutes as 0.42 hours instead of 42/60 = 0.7 hours. The answer is 72 mph.",
+            "order_index": 0
           },
           {
-            "id": "3f2a6d2e-1912-4302-9fc1-6dbe4362334d",
-            "question_text": "According to the passage, why is the statistical analysis of the Voynich text considered significant?",
+            "id": "qr1-s03-q2",
+            "stem": "At what time does the passenger arrive in Edinburgh?",
             "options": [
-              "It proves the manuscript is written in a real language",
-              "It suggests the text behaves similarly to natural language rather than random symbols",
-              "It identified the manuscript as a constructed or artificial language",
-              "It enabled cryptanalysts to partially decode sections of the manuscript"
+              { "label": "A", "text": "12:06" },
+              { "label": "B", "text": "12:12" },
+              { "label": "C", "text": "12:19" },
+              { "label": "D", "text": "12:22" },
+              { "label": "E", "text": "12:31" }
             ],
-            "correct_answer": "It suggests the text behaves similarly to natural language rather than random symbols",
-            "answer_reason": "The passage states that 'statistical properties of the text...suggest it behaves more like natural language than like a random cipher.' This is the significance attributed to statistical analysis. The other options overstate or misrepresent what the analysis showed — it suggests natural language behaviour, not proves it, and it did not lead to decipherment.",
-            "order_index": 1,
-            "difficulty": "normal"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Leeds–Edinburgh distance = 209 miles at 95 mph. Time = 209 ÷ 95 = 2.2 hours = 2 hours 12 minutes. Step 2: The train departs Leeds at 10:10. Arrival = 10:10 + 2 hours 12 minutes = 12:22. A common error is converting 0.2 hours as 20 minutes instead of 0.2 × 60 = 12 minutes. The answer is 12:22.",
+            "order_index": 1
           },
           {
-            "id": "f09df975-b8c0-4771-87b6-c81cf0e63796",
-            "question_text": "The teams that failed to decipher the Voynich Manuscript had previously been successful in breaking complex wartime codes.",
+            "id": "qr1-s03-q3",
+            "stem": "A group of 3 adults buys standard return tickets with the group discount. How much do they pay in total?",
             "options": [
-              "Teams that decoded Enigma messages were among those that failed to decipher the manuscript",
-              "No professional cryptanalyst has ever attempted to decipher the manuscript",
-              "The manuscript was successfully decoded in 2019 by a University of Bristol researcher",
-              "The statistical properties of the Voynich text are consistent with a random cipher"
+              { "label": "A", "text": "£336.11" },
+              { "label": "B", "text": "£358.05" },
+              { "label": "C", "text": "£374.85" },
+              { "label": "D", "text": "£396.45" },
+              { "label": "E", "text": "£441.00" }
             ],
-            "correct_answer": "Teams that decoded Enigma messages were among those that failed to decipher the manuscript",
-            "answer_reason": "The passage states that 'Multiple professional cryptanalysts, including teams that successfully decoded wartime German Enigma messages, have failed to decipher it.' This directly supports the correct answer. The other options contradict or misrepresent the passage: the manuscript has not been decoded, and its text behaves unlike a random cipher.",
-            "order_index": 2,
-            "difficulty": "normal"
-          },
-          {
-            "id": "623ab96b-5533-4aab-865a-de8504a0a968",
-            "question_text": "Which of the following best describes the author's attitude toward the 2019 proto-Romance claim?",
-            "options": [
-              "Enthusiastic endorsement of a promising breakthrough",
-              "Neutral presentation of a claim that received a mixed scholarly reception",
-              "Dismissal of an implausible theory unsupported by any evidence",
-              "Regret that scholarly scepticism prevented a valid discovery from being recognised"
-            ],
-            "correct_answer": "Neutral presentation of a claim that received a mixed scholarly reception",
-            "answer_reason": "The author presents the 2019 claim factually, notes it 'was greeted with considerable scepticism by other scholars,' and states 'no consensus has emerged.' This is balanced and neutral — neither endorsing nor dismissing the claim. The author does not express enthusiasm, regret, or outright dismissal.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Total before discount = 3 × £147 = £441. Step 2: Apply the 15% group discount: £441 × 0.85 = £374.85. A common error is subtracting 15% of one ticket (£22.05) from the total instead of 15% of the full amount. The answer is £374.85.",
+            "order_index": 2
           }
         ]
       },
       {
-        "id": "bfb68b96-f0b5-43d3-a639-5216d199b2b4",
-        "title": "Passage 3 — Trophic Cascades",
-        "body": "A trophic cascade occurs when changes at the top of a food chain produce ripple effects throughout the ecosystem below. The concept gained widespread attention through observations of wolf reintroduction in Yellowstone National Park, where wolves were absent for nearly seventy years before their return in 1995.\n\nPrior to reintroduction, elk populations had grown unchecked and overgrazed riverbanks, stripping them of willows and aspens. Without these plants, beavers — dependent on them for food and dam construction — declined sharply, and the rivers widened and became shallower as stabilising root systems disappeared. The return of wolves did not merely reduce elk numbers. It altered elk behaviour: herds avoided lingering in open valleys and riverside areas where they were vulnerable to predation. This behavioural shift, sometimes called the ecology of fear, allowed vegetation to recover in the areas wolves most frequently patrolled.\n\nThe effects were far-reaching. Recovering willows and aspens attracted beavers, whose dams created ponds that provided habitat for fish, amphibians, and waterfowl. Songbird populations increased as shrubland returned. Stabilised riverbanks changed the physical course of rivers — channels narrowed and deepened, and meandering increased. Ecologists coined the term 'geomorphological cascade' to describe how the wolves ultimately reshaped the rivers themselves.\n\nNot all ecologists accept the Yellowstone account as a straightforward demonstration of trophic cascades. Critics point out that drought, human activity, and natural vegetation cycles may have contributed equally to river changes. Some researchers argue that the effects observed were overstated in popular accounts and that direct evidence of wolf-induced vegetation recovery remains contested. Nevertheless, the Yellowstone case has become the canonical example of how the removal or restoration of apex predators can restructure entire ecosystems.",
-        "verbal_reasoning_questions": [
+        "set_id": "qr1-set-02",
+        "title": "UK Income Tax Bands",
+        "stimulus": {
+          "type": "table",
+          "context": "Tax is calculated band by band — each rate applies only to the income within that band. National Insurance is not included. All figures are annual.",
+          "data": {
+            "headers": ["Tax Band", "Income Range", "Tax Rate"],
+            "rows": [
+              ["Personal Allowance", "Up to £12,570",       "0%"],
+              ["Basic Rate",         "£12,571 – £50,270",   "20%"],
+              ["Higher Rate",        "£50,271 – £125,140",  "40%"],
+              ["Additional Rate",    "Above £125,140",       "45%"]
+            ]
+          }
+        },
+        "questions": [
           {
-            "id": "e893d0a9-9893-47cd-9662-d3146e6e15ef",
-            "question_text": "Wolves were absent from Yellowstone for approximately seven decades before 1995.",
+            "id": "qr1-s02-q1",
+            "stem": "Priya earns £42,000 per year. How much income tax does she pay annually?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "£5,886" },
+              { "label": "B", "text": "£7,400" },
+              { "label": "C", "text": "£8,400" },
+              { "label": "D", "text": "£9,514" },
+              { "label": "E", "text": "£12,570" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states wolves 'were absent for nearly seventy years before their return in 1995.' Seventy years is equivalent to approximately seven decades. This is a simple paraphrase of explicit passage content.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "correct_answer": "A",
+            "answer_reason": "Step 1: Personal Allowance — the first £12,570 is tax-free = £0 tax. Step 2: Basic Rate — taxable income in this band = £42,000 − £12,570 = £29,430. Tax = £29,430 × 20% = £5,886. Step 3: £42,000 does not reach the Higher Rate band, so no further tax applies. Total = £5,886. A common error is applying 20% to the full £42,000 instead of only the amount above the Personal Allowance. The answer is £5,886.",
+            "order_index": 0
           },
           {
-            "id": "f7d3787f-687b-481d-99b1-dc5e410fcc93",
-            "question_text": "The reduction in elk numbers following wolf reintroduction was the primary cause of vegetation recovery in Yellowstone.",
+            "id": "qr1-s02-q2",
+            "stem": "James earns £68,000 per year. How much income tax does he pay annually?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "£12,450" },
+              { "label": "B", "text": "£13,600" },
+              { "label": "C", "text": "£14,632" },
+              { "label": "D", "text": "£17,992" },
+              { "label": "E", "text": "£27,200" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage explicitly states the wolf reintroduction 'did not merely reduce elk numbers' — it also changed elk behaviour, causing herds to avoid riverside areas. The passage presents this behavioural shift as an equal or greater mechanism of vegetation recovery, not just the reduction in elk numbers. Attributing recovery solely or primarily to reduced elk numbers contradicts the passage's argument.",
-            "order_index": 1,
-            "difficulty": "hard"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Personal Allowance — first £12,570 at 0% = £0. Step 2: Basic Rate band = £50,270 − £12,570 = £37,700 at 20% = £7,540. Step 3: Higher Rate portion = £68,000 − £50,270 = £17,730 at 40% = £7,092. Step 4: Total tax = £7,540 + £7,092 = £14,632. A common error is applying the 40% rate to the entire income above the Personal Allowance, rather than only the portion above £50,270. The answer is £14,632.",
+            "order_index": 1
           },
           {
-            "id": "96d39ac9-15d1-4124-91da-e56f446a6ba0",
-            "question_text": "All ecologists agree that the Yellowstone wolf reintroduction demonstrates a clear trophic cascade.",
+            "id": "qr1-s02-q3",
+            "stem": "Sarah earns £52,000 per year and is paid weekly. To the nearest penny, how much income tax is deducted from each weekly pay packet?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "£106.15" },
+              { "label": "B", "text": "£144.62" },
+              { "label": "C", "text": "£158.31" },
+              { "label": "D", "text": "£200.00" },
+              { "label": "E", "text": "£400.00" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage directly states 'Not all ecologists accept the Yellowstone account as a straightforward demonstration of trophic cascades,' citing critics who argue other factors contributed and that popular accounts may have overstated the effects. The word 'All' in the statement is directly contradicted by this passage content.",
-            "order_index": 2,
-            "difficulty": "normal"
-          },
-          {
-            "id": "91ae3d0a-fc44-4138-9cbd-8ef70c9e1c12",
-            "question_text": "Before wolves were reintroduced, the rivers in Yellowstone were narrower and deeper than they became during the period of wolf absence.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "Can't tell",
-            "answer_reason": "The passage describes the rivers widening and becoming shallower during wolf absence, and then narrowing and deepening after wolf reintroduction. However, it does not describe the state of rivers before wolves were first removed, only the changes during the period of absence and after return. We cannot determine how the rivers compared to an original pre-removal state.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Basic Rate tax = £37,700 × 20% = £7,540. Step 2: Higher Rate portion = £52,000 − £50,270 = £1,730 at 40% = £692. Step 3: Total annual tax = £7,540 + £692 = £8,232. Step 4: Weekly tax = £8,232 ÷ 52 = £158.31 (to the nearest penny). A common error is dividing by 48 or 50 weeks instead of 52. The answer is £158.31.",
+            "order_index": 2
           }
         ]
       },
       {
-        "id": "f0ad72be-624e-4ada-bb31-4b6866b6897b",
-        "title": "Passage 4 — The Principality of Sealand",
-        "body": "Sealand is a self-proclaimed micronation occupying HM Fort Roughs, a former Royal Navy sea fort constructed during the Second World War approximately twelve kilometres off the coast of Suffolk, England. The platform, built on a sandbar known as Rough Sands, sits in what was international waters at the time of its construction, though subsequent extensions of the United Kingdom's territorial sea brought the structure within British jurisdiction according to the British government's own interpretation.\n\nIn 1967, Paddy Roy Bates, a British pirate radio operator, seized the abandoned fort and declared it an independent nation. Following a series of incidents involving firearms — Bates's son Michael fired warning shots at a British vessel that approached the platform — a British court ruled in 1968 that it lacked jurisdiction over events occurring beyond British territorial waters, a ruling Bates interpreted as de facto recognition of Sealand's sovereignty. No sovereign nation has formally recognised Sealand as an independent state.\n\nSealand issued its own passports, currency (the Sealand dollar), and stamps, though none have been accepted by other nations as legitimate. In 1978, a German businessman named Alexander Achenbach, who had been appointed Sealand's 'Prime Minister,' attempted a coup during Roy Bates's absence, briefly seizing the platform with the aid of Dutch and German mercenaries. Bates retook the platform by helicopter and held Achenbach and his allies as prisoners of war — a designation he justified by reference to Sealand's claimed national status. Achenbach was eventually released following negotiations involving the German government, though Germany's involvement in securing his release was not, Germany maintained, an act of diplomatic recognition.\n\nRoy Bates died in 2012. Sealand's website continues to describe it as a sovereign nation and reportedly sells noble titles as a revenue source.",
-        "verbal_reasoning_questions": [
-          {
-            "id": "8ba94129-afe5-4d32-8a30-62b7c5c6c7c5",
-            "question_text": "The 1968 British court ruling gave Roy Bates formal legal recognition of Sealand as a sovereign state.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
+        "set_id": "qr1-set-04",
+        "title": "Supermarket Weekly Sales by Department",
+        "stimulus": {
+          "type": "bar_chart",
+          "data": {
+            "title": "Weekly Sales by Department (£000s)",
+            "labels": ["Produce", "Bakery", "Dairy", "Meat", "Frozen", "Beverages"],
+            "series": [
+              { "name": "Week 1", "values": [48, 22, 35, 62, 29, 41] },
+              { "name": "Week 2", "values": [51, 25, 33, 58, 34, 44] }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states Bates 'interpreted' the ruling as de facto recognition, but the court ruling was about jurisdiction — that it lacked authority over events beyond British territorial waters. No sovereign nation, including the UK, formally recognised Sealand. The statement claims formal legal recognition, which the passage directly contradicts.",
-            "order_index": 0,
-            "difficulty": "hard"
+            "yAxisLabel": "Sales (£000s)",
+            "unit": "£"
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s04-q1",
+            "stem": "What was the combined total sales across all departments in Week 1?",
+            "options": [
+              { "label": "A", "text": "£224,000" },
+              { "label": "B", "text": "£229,000" },
+              { "label": "C", "text": "£233,000" },
+              { "label": "D", "text": "£237,000" },
+              { "label": "E", "text": "£241,000" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Read all Week 1 values from the chart (in £000s): Produce 48, Bakery 22, Dairy 35, Meat 62, Frozen 29, Beverages 41. Step 2: Total = 48 + 22 + 35 + 62 + 29 + 41 = 237. Step 3: Since values are in £000s, total = £237,000. A common error is misreading the y-axis scale. The answer is £237,000.",
+            "order_index": 0
           },
           {
-            "id": "70ad4994-c8c1-4d63-bbaf-8920da5a73a2",
-            "question_text": "Alexander Achenbach successfully held control of Sealand's platform for an extended period following his 1978 coup.",
+            "id": "qr1-s04-q2",
+            "stem": "Which department had the greatest percentage increase in sales from Week 1 to Week 2?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "Produce" },
+              { "label": "B", "text": "Bakery" },
+              { "label": "C", "text": "Frozen" },
+              { "label": "D", "text": "Beverages" },
+              { "label": "E", "text": "Meat" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage describes Achenbach seizing the platform 'briefly' before Bates retook it by helicopter. 'Briefly' directly contradicts any suggestion of an extended period of control. The passage makes clear the coup was short-lived.",
-            "order_index": 1,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Calculate percentage increase for each department that grew. Produce: (51 − 48) ÷ 48 × 100 = 6.3%. Bakery: (25 − 22) ÷ 22 × 100 = 13.6%. Frozen: (34 − 29) ÷ 29 × 100 = 17.2%. Beverages: (44 − 41) ÷ 41 × 100 = 7.3%. Dairy and Meat both decreased. Step 2: Frozen has the greatest percentage increase at 17.2%. A common error is comparing absolute increases (£5k for Frozen vs £3k for Bakery) rather than percentage increases. The answer is Frozen.",
+            "order_index": 1
           },
           {
-            "id": "5e397b59-d686-462c-a262-b99a4aa806a4",
-            "question_text": "Germany's involvement in negotiating Achenbach's release meant that Germany implicitly recognised Sealand as a sovereign state.",
+            "id": "qr1-s04-q3",
+            "stem": "In Week 2, Meat sales represented what percentage of total Week 2 sales? Give your answer to one decimal place.",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "21.8%" },
+              { "label": "B", "text": "23.7%" },
+              { "label": "C", "text": "25.3%" },
+              { "label": "D", "text": "26.1%" },
+              { "label": "E", "text": "27.4%" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage explicitly states that Germany's involvement 'was not, Germany maintained, an act of diplomatic recognition.' The passage directly contradicts the statement's claim of implicit recognition, making this False rather than Can't Tell.",
-            "order_index": 2,
-            "difficulty": "hard"
-          },
-          {
-            "id": "6bde12b2-983e-4b8c-9819-6a20266e0086",
-            "question_text": "Sealand currently generates income from sources other than the sale of its currency and stamps.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states that Sealand 'reportedly sells noble titles as a revenue source,' which is distinct from currency or stamps. This confirms Sealand has at least one additional income stream. The word 'reportedly' introduces some qualification, but the passage does state this as a current activity.",
-            "order_index": 3,
-            "difficulty": "normal"
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Read all Week 2 values: 51 + 25 + 33 + 58 + 34 + 44 = 245 (in £000s). Step 2: Meat in Week 2 = 58. Step 3: Percentage = 58 ÷ 245 × 100 = 23.7%. A common error is using the Week 1 total (237) as the denominator instead of the Week 2 total (245). The answer is 23.7%.",
+            "order_index": 2
           }
         ]
       },
       {
-        "id": "c8dd084d-099d-49fb-aa91-c6a45a672dad",
-        "title": "Passage 5 — Mercator's Projection",
-        "body": "The Mercator projection, introduced by the Flemish cartographer Gerardus Mercator in 1569, was designed primarily as a navigational aid. Its central innovation was the preservation of angles: any straight line drawn on a Mercator map represents a line of constant compass bearing, called a rhumb line or loxodrome. For mariners navigating by compass, this was invaluable — a ship could maintain a fixed heading and follow a straight line on the chart to reach its destination.\n\nThis navigational utility came at a significant cost to areal accuracy. To preserve angular relationships, the projection must stretch landmasses increasingly as they approach the poles. The result is a dramatic distortion of relative size: Greenland appears roughly comparable in size to Africa on a standard Mercator map, when in reality Africa is approximately fourteen times larger. Scandinavia appears larger than India, though India is in fact three times the size. The equatorial regions, where most of the world's population lives, are compressed, while sparsely populated polar regions are dramatically inflated.\n\nDespite these well-documented distortions, the Mercator projection remained the dominant world map used in schools and atlases well into the twentieth century. Critics argued this had ideological consequences, inflating the apparent size of Europe and North America — the seats of colonial power — relative to equatorial Africa, Asia, and Latin America. In 1973, the German historian Arno Peters introduced what he called a more equitable projection, which preserved relative area at the expense of shape. The Peters projection (now more properly called the Gall-Peters projection, as James Gall had produced an equivalent projection in 1855) generated considerable controversy and was adopted by several development organisations as a corrective statement.\n\nNeither projection is universally superior. Mercator remains the standard for digital mapping applications such as Google Maps, where its angle-preserving properties facilitate route calculation.",
-        "verbal_reasoning_questions": [
-          {
-            "id": "7e9e5d10-4bad-406a-9702-971d038bef04",
-            "question_text": "Mercator designed his 1569 projection primarily to provide an accurate visual representation of the relative sizes of continents.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
+        "set_id": "qr1-set-05",
+        "title": "Highland Rescue Patrol Routes",
+        "stimulus": {
+          "type": "network_diagram",
+          "context": "1 day's journey covers 15 km",
+          "data": {
+            "title": "Highland Rescue Patrol Routes",
+            "nodes": [
+              { "id": "base", "label": "HQ", "x": 0.15, "y": 0.5 },
+              { "id": "camp1", "label": "Post A", "x": 0.35, "y": 0.15 },
+              { "id": "camp2", "label": "Post B", "x": 0.65, "y": 0.15 },
+              { "id": "camp3", "label": "Post C", "x": 0.85, "y": 0.4 },
+              { "id": "camp4", "label": "Post D", "x": 0.7, "y": 0.7 },
+              { "id": "camp5", "label": "Post E", "x": 0.35, "y": 0.8 }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states the Mercator projection 'was designed primarily as a navigational aid' and that its central innovation was the preservation of angles for compass navigation. The passage further explains that areal accuracy was sacrificed. The statement directly contradicts the passage's account of Mercator's design intent.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "edges": [
+              { "from": "base", "to": "camp1", "label": "2 days" },
+              { "from": "camp1", "to": "camp2", "label": "3 days" },
+              { "from": "camp2", "to": "camp3", "label": "1 day" },
+              { "from": "camp3", "to": "camp4", "label": "2 days" },
+              { "from": "camp4", "to": "camp5", "label": "4 days" },
+              { "from": "camp5", "to": "base", "label": "3 days" },
+              { "from": "camp1", "to": "camp4", "label": "5 days" }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s05-q1",
+            "stem": "A patrol travels from HQ to Post C via Post A and Post B. What is the total distance of this route in kilometres?",
+            "options": [
+              { "label": "A", "text": "75 km" },
+              { "label": "B", "text": "80 km" },
+              { "label": "C", "text": "90 km" },
+              { "label": "D", "text": "105 km" },
+              { "label": "E", "text": "120 km" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Identify the route: HQ → Post A (2 days), Post A → Post B (3 days), Post B → Post C (1 day). Total travel time = 2 + 3 + 1 = 6 days. Step 2: Convert to km using the note: 6 days × 15 km/day = 90 km. A common error is forgetting to apply the conversion factor and answering in days. The answer is 90 km.",
+            "order_index": 0
           },
           {
-            "id": "fb3be364-7fa9-4629-94f0-d8cb155635a8",
-            "question_text": "The Gall-Peters projection was first developed in the nineteenth century.",
+            "id": "qr1-s05-q2",
+            "stem": "What is the shortest route in days from HQ to Post D?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "5 days" },
+              { "label": "B", "text": "6 days" },
+              { "label": "C", "text": "7 days" },
+              { "label": "D", "text": "8 days" },
+              { "label": "E", "text": "9 days" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states the projection is 'more properly called the Gall-Peters projection, as James Gall had produced an equivalent projection in 1855.' 1855 falls within the nineteenth century. This is a necessary inference combining the name attribution and the date given in the passage.",
-            "order_index": 1,
-            "difficulty": "hard"
-          },
-          {
-            "id": "126e3eb4-b490-4f76-afd2-026c4fe4515f",
-            "question_text": "The Mercator projection is used in Google Maps because it is more accurate than alternative projections for showing the true size of countries.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states Mercator remains standard for digital mapping because 'its angle-preserving properties facilitate route calculation' — not because of size accuracy. In fact, the passage explicitly describes Mercator as having significant areal distortions. The statement misattributes the reason for its use and contradicts the passage.",
-            "order_index": 2,
-            "difficulty": "normal"
-          },
-          {
-            "id": "c0c552fd-54c3-4258-a79a-e088acb7e150",
-            "question_text": "Peters's 1973 projection preserves the shape of landmasses more accurately than the Mercator projection.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "False",
-            "answer_reason": "The passage describes the Peters projection as one that 'preserved relative area at the expense of shape.' This directly states that the Peters projection sacrifices shape accuracy, implying Mercator is better at preserving shape. The statement's claim that Peters is superior for shape is directly contradicted by the passage.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Identify all possible routes from HQ to Post D. Route A: HQ → Post A → Post B → Post C → Post D = 2 + 3 + 1 + 2 = 8 days. Route B: HQ → Post A → Post D = 2 + 5 = 7 days. Route C: HQ → Post E → Post D = 3 + 4 = 7 days. Step 2: The shortest routes are B and C, both at 7 days. A common error is only checking one route and missing the shortcut via Post A directly to Post D. The answer is 7 days.",
+            "order_index": 1
           }
         ]
       },
       {
-        "id": "3b052598-3eb6-47bd-8c65-d4db99a73d0d",
-        "title": "Passage 6 — The Curies and Radioactivity",
-        "body": "Marie Curie, born Maria Skłodowska in Warsaw in 1867, remains the only person to have won Nobel Prizes in two different scientific disciplines: Physics in 1903 and Chemistry in 1911. The 1903 Physics Prize was shared with her husband Pierre Curie and Henri Becquerel, who had discovered uranium radiation in 1896. The Chemistry Prize was awarded solely to Marie Curie for her discovery and isolation of the elements polonium and radium.\n\nThe Curies' research was conducted under extraordinarily difficult conditions. Working in a leaking, unheated shed at the École de Physique et de Chimie Industrielles in Paris, they processed tonnes of pitchblende — uranium ore residue — by hand to isolate minute quantities of radioactive material. Marie Curie personally coined the term 'radioactivity' to describe the property of emitting radiation from atomic nuclei, replacing the more cumbersome phrase 'uranium radiation' that Becquerel had used.\n\nThe health consequences of this work were severe and ultimately fatal. Neither Marie nor Pierre Curie understood the dangers of prolonged radiation exposure. Marie Curie carried test tubes of radioactive isotopes in her coat pockets and stored them in her desk drawer. Her laboratory notebooks from the period remain dangerously radioactive and are stored in lead-lined boxes at the Bibliothèque nationale de France, where researchers who wish to consult them must sign a liability waiver.\n\nMarie Curie died in 1934 of aplastic anaemia, almost certainly caused by her decades of radiation exposure. Pierre Curie had died earlier, in 1906, in a street accident — he slipped on a wet cobblestone and fell beneath a horse-drawn wagon. Their daughter Irène Joliot-Curie and her husband Frédéric also won a Nobel Prize in Chemistry in 1935, making the Curie family the most decorated family in Nobel Prize history.",
-        "verbal_reasoning_questions": [
-          {
-            "id": "6951259d-8da0-4a4f-8f34-45cfd05afb53",
-            "question_text": "Henri Becquerel shared the 1903 Nobel Prize in Chemistry with the Curies.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
+        "set_id": "qr1-set-06",
+        "title": "Regional Gym Membership Rates",
+        "stimulus": {
+          "type": "line_graph",
+          "context": "2021 data for the North region was not recorded due to a data collection error.",
+          "data": {
+            "title": "Gym Membership Rate by Region (%)",
+            "labels": ["2018", "2019", "2020", "2021", "2022", "2023"],
+            "series": [
+              { "name": "North",    "values": [91.2, 90.8, 88.4, null, 89.6, 90.1] },
+              { "name": "South",    "values": [94.1, 94.5, 93.8, 92.2, 91.5, 92.0] },
+              { "name": "Midlands", "values": [89.5, 90.2, 87.1, 86.4, 88.3, 89.0] }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states the 1903 prize shared with Becquerel was the Nobel Prize in Physics, not Chemistry. The Chemistry Prize in 1911 was awarded solely to Marie Curie. Attributing the shared prize to Chemistry directly contradicts the passage.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "yAxisLabel": "Membership Rate (%)",
+            "unit": ""
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s06-q1",
+            "stem": "By how many percentage points did the South region membership rate change between 2020 and 2023?",
+            "options": [
+              { "label": "A", "text": "−3.1 pp" },
+              { "label": "B", "text": "−2.5 pp" },
+              { "label": "C", "text": "−1.8 pp" },
+              { "label": "D", "text": "−0.9 pp" },
+              { "label": "E", "text": "+0.5 pp" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: From the graph, South 2020 = 93.8% and South 2023 = 92.0%. Step 2: Change = 92.0 − 93.8 = −1.8 percentage points. Note: this question asks for percentage points, not percentage change — so a simple subtraction is all that is needed. The answer is −1.8 pp.",
+            "order_index": 0
           },
           {
-            "id": "9f6859f9-fe75-4a4e-840c-500397633bff",
-            "question_text": "Marie Curie's laboratory notebooks can be viewed by any researcher who visits the Bibliothèque nationale de France.",
+            "id": "qr1-s06-q2",
+            "stem": "In 2023, the North region had 280,000 residents eligible for gym membership. How many were members?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "245,280" },
+              { "label": "B", "text": "248,800" },
+              { "label": "C", "text": "250,600" },
+              { "label": "D", "text": "252,280" },
+              { "label": "E", "text": "254,400" }
             ],
-            "correct_answer": "Can't tell",
-            "answer_reason": "The passage states that researchers who wish to consult the notebooks must sign a liability waiver, but does not indicate that access is refused or limited to particular categories of researcher. A waiver requirement is a condition of access, not a denial of it. The passage provides no information about whether any researcher may consult them — only that a waiver must be signed. We cannot determine from the passage alone whether the statement is true or false.",
-            "order_index": 1,
-            "difficulty": "hard"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: From the graph, the North region membership rate in 2023 = 90.1%. Step 2: Members = 280,000 × 0.901 = 252,280. A common error is rounding 90.1% to 90% first, which gives 252,000 instead of 252,280. The answer is 252,280.",
+            "order_index": 1
           },
           {
-            "id": "cb59faff-b95b-4695-990d-1e9dcb354627",
-            "question_text": "Pierre Curie died as a result of a workplace accident related to radioactivity.",
+            "id": "qr1-s06-q3",
+            "stem": "Which region showed the greatest percentage decrease in membership rate between 2019 and 2022?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "North" },
+              { "label": "B", "text": "South" },
+              { "label": "C", "text": "Midlands" },
+              { "label": "D", "text": "North and South equally" },
+              { "label": "E", "text": "Can't Tell" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage explicitly states Pierre Curie died in 1906 'in a street accident — he slipped on a wet cobblestone and fell beneath a horse-drawn wagon.' This directly contradicts the claim that his death was a workplace accident related to radioactivity. His cause of death was unambiguously described as a street accident.",
-            "order_index": 2,
-            "difficulty": "normal"
+            "correct_answer": "B",
+            "answer_reason": "Step 1: This asks for percentage decrease, not percentage-point decrease. Use the formula: (Original − New) ÷ Original × 100. Step 2: North: (90.8 − 89.6) ÷ 90.8 × 100 = 1.2 ÷ 90.8 = 1.32% decrease. South: (94.5 − 91.5) ÷ 94.5 × 100 = 3.0 ÷ 94.5 = 3.17% decrease. Midlands: (90.2 − 88.3) ÷ 90.2 × 100 = 1.9 ÷ 90.2 = 2.11% decrease. Step 3: South has the greatest percentage decrease at 3.17%. A common error is comparing percentage-point drops (3.0, 1.2, 1.9) instead of percentage changes. The answer is South.",
+            "order_index": 2
           },
           {
-            "id": "1d37bcfd-4c3c-4dfa-bea8-491cb37f3c38",
-            "question_text": "The Curie family has won more Nobel Prizes collectively than any other family.",
+            "id": "qr1-s06-q4",
+            "stem": "What was the mean membership rate across all three regions in 2023, to one decimal place?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "89.8%" },
+              { "label": "B", "text": "90.2%" },
+              { "label": "C", "text": "90.4%" },
+              { "label": "D", "text": "90.7%" },
+              { "label": "E", "text": "91.0%" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states the Curie family is 'the most decorated family in Nobel Prize history,' which is equivalent to saying no other family has won more Nobel Prizes. Combining the information about Marie's two prizes, the shared Physics prize with Pierre, and Irène and Frédéric's 1935 Chemistry prize supports this claim as stated in the passage.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Read the 2023 values from the graph: North = 90.1%, South = 92.0%, Midlands = 89.0%. Step 2: Mean = (90.1 + 92.0 + 89.0) ÷ 3 = 271.1 ÷ 3 = 90.37% ≈ 90.4%. A common error is including the 2021 null value for North, which would give an incorrect count. The answer is 90.4%.",
+            "order_index": 3
           }
         ]
       },
       {
-        "id": "bb23ed83-de96-4fc8-9a9e-c61d04181d4e",
-        "title": "Passage 7 — The Broken Windows Theory",
-        "body": "The broken windows theory, introduced by social scientists James Q. Wilson and George Kelling in a 1982 Atlantic Monthly article, proposed that visible signs of disorder and neglect in urban environments — broken windows, graffiti, litter, abandoned buildings — signal to potential offenders that an area is unwatched and that antisocial behaviour will go unchallenged. The theory suggests that tolerating minor disorder creates conditions that encourage more serious crime, establishing a downward spiral from petty incivility to violent offending.\n\nThe theory gained considerable political traction in New York City during the 1990s, when Mayor Rudolph Giuliani and police commissioner William Bratton implemented policing strategies explicitly modelled on its principles. Officers were directed to address minor violations aggressively — fare evasion, public drinking, graffiti — on the premise that maintaining order at the lowest level would suppress more serious criminal behaviour. New York's crime rates fell sharply during this period, and the broken windows approach was widely credited by politicians and some criminologists.\n\nThe causal claims of the theory have been challenged on several grounds. Crime rates fell in many American cities during the same period that did not adopt broken windows policing, suggesting that broader economic and demographic factors — including the declining crack cocaine epidemic and changing age demographics — may have been more significant drivers. Critics also noted that aggressive enforcement of minor offences disproportionately affected minority communities and generated substantial civil liberties concerns.\n\nAcademic evaluations of the theory's empirical basis have produced mixed results. Some studies have found that addressing environmental disorder does reduce perceptions of crime and certain categories of offending. Others have found no significant effect. The theory remains influential in urban policy debates but is no longer treated as settled science.",
-        "verbal_reasoning_questions": [
+        "set_id": "qr1-set-07",
+        "title": "Revision Hours vs Exam Score",
+        "stimulus": {
+          "type": "scatter_plot",
+          "data": {
+            "title": "Revision Hours vs Exam Score — Year 11 Students",
+            "xAxisLabel": "Total Revision Hours",
+            "yAxisLabel": "Exam Score (%)",
+            "series": [
+              {
+                "name": "Class A",
+                "points": [
+                  { "x": 10, "y": 42 },
+                  { "x": 15, "y": 51 },
+                  { "x": 20, "y": 58 },
+                  { "x": 25, "y": 63 },
+                  { "x": 30, "y": 70 },
+                  { "x": 35, "y": 74 },
+                  { "x": 40, "y": 79 },
+                  { "x": 45, "y": 83 }
+                ]
+              },
+              {
+                "name": "Class B",
+                "points": [
+                  { "x": 10, "y": 38 },
+                  { "x": 15, "y": 47 },
+                  { "x": 20, "y": 54 },
+                  { "x": 25, "y": 60 },
+                  { "x": 30, "y": 65 },
+                  { "x": 35, "y": 71 },
+                  { "x": 40, "y": 75 },
+                  { "x": 50, "y": 84 }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [
           {
-            "id": "da2b2c5a-fe2c-4939-ba16-59f10d47db44",
-            "question_text": "According to the passage, which of the following best explains why some critics disputed the broken windows theory's role in reducing New York's crime in the 1990s?",
+            "id": "qr1-s07-q1",
+            "stem": "A student in Class A revised for 30 hours. What score did they achieve?",
             "options": [
-              "The policing strategy was implemented inconsistently across different boroughs",
-              "Crime rates also fell in cities that did not use broken windows policing during the same period",
-              "William Bratton admitted the policy had failed to reduce serious crime",
-              "The theory was developed after the period in which it was applied"
+              { "label": "A", "text": "63%" },
+              { "label": "B", "text": "65%" },
+              { "label": "C", "text": "68%" },
+              { "label": "D", "text": "70%" },
+              { "label": "E", "text": "74%" }
             ],
-            "correct_answer": "Crime rates also fell in cities that did not use broken windows policing during the same period",
-            "answer_reason": "The passage states that 'Crime rates fell in many American cities during the same period that did not adopt broken windows policing,' which critics used to argue other factors were responsible. The other options are not mentioned in the passage and represent fabrications or misreadings.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Locate the Class A data point at x = 30 hours on the scatter plot. Step 2: Read the y-value: 70%. A common error is reading the Class B point instead (which gives 65%). The answer is 70%.",
+            "order_index": 0
           },
           {
-            "id": "a405f20c-6477-4cff-8a91-78a5a04a0fb3",
-            "question_text": "In which publication did Wilson and Kelling first introduce the broken windows theory?",
+            "id": "qr1-s07-q2",
+            "stem": "For students who revised 40 hours, what is the difference in exam score between Class A and Class B?",
             "options": [
-              "A peer-reviewed criminology journal",
-              "A New York City Police Department policy report",
-              "The Atlantic Monthly",
-              "A book co-authored with Mayor Giuliani"
+              { "label": "A", "text": "1 percentage point" },
+              { "label": "B", "text": "2 percentage points" },
+              { "label": "C", "text": "3 percentage points" },
+              { "label": "D", "text": "4 percentage points" },
+              { "label": "E", "text": "5 percentage points" }
             ],
-            "correct_answer": "The Atlantic Monthly",
-            "answer_reason": "The passage explicitly states the theory was introduced in 'a 1982 Atlantic Monthly article.' The other options are fabrications — the passage makes no reference to a criminology journal, NYPD report, or co-authored book.",
-            "order_index": 1,
-            "difficulty": "normal"
-          },
-          {
-            "id": "18b44884-59aa-4bcb-b07b-5e8357288e6d",
-            "question_text": "Which of the following would, if true, most strengthen the argument of the broken windows theory's critics?",
-            "options": [
-              "A study showing that graffiti removal correlated with reduced vandalism in one city",
-              "Evidence that cities with unchanged policing policies experienced crime reductions similar to New York's",
-              "Data showing that New York's crack cocaine epidemic ended before the broken windows policy began",
-              "A survey finding that residents felt safer after minor disorder was addressed"
-            ],
-            "correct_answer": "Evidence that cities with unchanged policing policies experienced crime reductions similar to New York's",
-            "answer_reason": "Critics argued that broader economic and demographic factors — not broken windows policing — drove crime reductions. Evidence that cities without such policies saw similar reductions would directly support this argument by undermining the causal claim. The other options either support the theory or are unrelated to the critics' specific argument as presented in the passage.",
-            "order_index": 2,
-            "difficulty": "hard"
-          },
-          {
-            "id": "1ab77292-c015-4d37-9d90-38bfed60abdf",
-            "question_text": "Which of the following best describes the current academic standing of the broken windows theory?",
-            "options": [
-              "It has been comprehensively refuted and is no longer referenced in urban policy",
-              "It is widely accepted as proven by the success of New York City's 1990s policing",
-              "It remains influential in policy debates but its empirical basis is disputed",
-              "It is regarded as the most important development in twentieth-century criminology"
-            ],
-            "correct_answer": "It remains influential in policy debates but its empirical basis is disputed",
-            "answer_reason": "The passage states the theory 'remains influential in urban policy debates but is no longer treated as settled science,' and that academic evaluations have 'produced mixed results.' This directly matches the correct answer. The other options either overstate its acceptance or overstate its rejection.",
-            "order_index": 3,
-            "difficulty": "normal"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: At x = 40 hours, Class A score = 79% and Class B score = 75%. Step 2: Difference = 79 − 75 = 4 percentage points. A common error is reading the wrong data point for one of the classes. The answer is 4 percentage points.",
+            "order_index": 1
           }
         ]
       },
       {
-        "id": "7f3860f5-2f65-46db-87a2-4da22555c281",
-        "title": "Passage 8 — The Trebuchet",
-        "body": "The trebuchet was a siege engine that operated on the principle of a counterweight mechanism, using the fall of a heavy counterweight to propel a projectile from a long throwing arm. Distinguished from the earlier traction trebuchet — which relied on teams of men pulling ropes to release the arm — the counterweight trebuchet could deliver consistent, repeatable force independent of the physical state of its crew. This consistency made it particularly valuable for sustained siege operations.\n\nThe counterweight trebuchet appears to have originated in China, with designs involving rotating beams documented as early as the fifth century. By the twelfth century, the technology had reached the Islamic world and subsequently Europe, where it became the most formidable siege weapon of the medieval period. The largest trebuchets, sometimes called 'War Wolves,' were capable of hurling stones weighing over a hundred kilograms distances of several hundred metres.\n\nThe mechanics of the trebuchet were well understood by medieval engineers, who adjusted projectile range and arc through careful calibration of counterweight mass, sling length, and release angle. These adjustments enabled commanders to target specific sections of fortifications with considerable precision for a pre-gunpowder technology. Contemporary accounts describe trebuchets delivering not only stones but also diseased animal carcasses — intended to spread illness within besieged fortifications — and occasionally live prisoners, in acts designed as much for psychological effect as physical damage.\n\nThe trebuchet declined as an effective siege weapon following the widespread adoption of gunpowder artillery in the fifteenth century. However, trebuchets continued to appear in conflict for some time thereafter, valued in situations where gunpowder was scarce or where the noise of cannon fire was strategically undesirable. Modern reconstructions of trebuchets have been built by enthusiasts and researchers, and competitive trebuchet-launching events take place in several countries.",
-        "verbal_reasoning_questions": [
-          {
-            "id": "e6a4d91b-5c17-4c08-9612-d1b8dda526f3",
-            "question_text": "The traction trebuchet was more powerful than the counterweight trebuchet because it relied on human muscle power.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
+        "set_id": "qr1-set-08",
+        "title": "Restaurant Chain Annual Budget",
+        "stimulus": {
+          "type": "pie_chart",
+          "data": {
+            "title": "Restaurant Chain Annual Budget Allocation (£ millions)",
+            "segments": [
+              { "label": "Staff Salaries",  "value": 142 },
+              { "label": "Food Supplies",   "value": 68 },
+              { "label": "Premises",         "value": 45 },
+              { "label": "Marketing",        "value": null },
+              { "label": "Administration",   "value": 21 }
             ],
-            "correct_answer": "Can't tell",
-            "answer_reason": "The passage does not directly compare the power or force of traction versus counterweight trebuchets. It states the counterweight version provided 'consistent, repeatable force' independent of crew condition — but says nothing about which generated greater power overall. The comparison of power levels cannot be determined from the passage.",
-            "order_index": 0,
-            "difficulty": "hard"
+            "total": 310,
+            "unit": "£m"
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s08-q1",
+            "stem": "What was the budget allocated to Marketing?",
+            "options": [
+              { "label": "A", "text": "£28m" },
+              { "label": "B", "text": "£31m" },
+              { "label": "C", "text": "£34m" },
+              { "label": "D", "text": "£37m" },
+              { "label": "E", "text": "£40m" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Sum the known segments: Staff Salaries £142m + Food Supplies £68m + Premises £45m + Administration £21m = £276m. Step 2: Marketing = Total − known segments = £310m − £276m = £34m. A common error is forgetting to include one of the smaller segments in the subtraction. The answer is £34m.",
+            "order_index": 0
           },
           {
-            "id": "799cfea2-2f46-4c85-9c87-cb041d7a51e6",
-            "question_text": "The use of trebuchets in warfare persisted beyond the fifteenth century in certain circumstances.",
+            "id": "qr1-s08-q2",
+            "stem": "What percentage of the total budget is allocated to Staff Salaries? Give your answer to one decimal place.",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "42.6%" },
+              { "label": "B", "text": "43.8%" },
+              { "label": "C", "text": "45.8%" },
+              { "label": "D", "text": "47.3%" },
+              { "label": "E", "text": "49.0%" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states trebuchets 'continued to appear in conflict for some time thereafter' — after the fifteenth century adoption of gunpowder artillery — specifically when gunpowder was scarce or cannon noise was undesirable. This directly confirms that trebuchet use extended beyond the fifteenth century.",
-            "order_index": 1,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Staff Salaries = £142m. Total budget = £310m. Step 2: Percentage = 142 ÷ 310 × 100 = 45.8%. A common error is using the sum of known segments (£276m) as the denominator instead of the stated total (£310m). The answer is 45.8%.",
+            "order_index": 1
           },
           {
-            "id": "a0273a95-e267-4a6c-ad04-84a40cd148fa",
-            "question_text": "Medieval commanders used trebuchets to launch biological material intended to make enemy troops ill.",
+            "id": "qr1-s08-q3",
+            "stem": "The chain increases its Food Supplies budget by 12% next year while keeping total spending at £310m. By how much must all other categories collectively decrease?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "£6.16m" },
+              { "label": "B", "text": "£7.52m" },
+              { "label": "C", "text": "£8.16m" },
+              { "label": "D", "text": "£9.24m" },
+              { "label": "E", "text": "£10.40m" }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states trebuchets delivered 'diseased animal carcasses — intended to spread illness within besieged fortifications.' Diseased carcasses intended to spread illness constitute biological material used for making enemies ill. This is a straightforward paraphrase of explicit passage content.",
-            "order_index": 2,
-            "difficulty": "normal"
-          },
-          {
-            "id": "e3e9d907-3b20-4fd3-acb7-db0bec4b7054",
-            "question_text": "The counterweight trebuchet was invented in Europe during the medieval period.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states the counterweight trebuchet 'appears to have originated in China, with designs involving rotating beams documented as early as the fifth century.' It then reached the Islamic world and 'subsequently Europe.' The invention was in China, not Europe. The statement directly contradicts the passage.",
-            "order_index": 3,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: New Food Supplies budget = £68m × 1.12 = £76.16m. Step 2: Increase = £76.16m − £68m = £8.16m. Step 3: Since the total stays at £310m, all other categories must collectively decrease by £8.16m to absorb the increase. A common error is calculating 12% of the total budget (£310m × 0.12 = £37.2m) instead of 12% of Food Supplies alone. The answer is £8.16m.",
+            "order_index": 2
           }
         ]
       },
       {
-        "id": "d72b381f-e29e-4bcb-b89d-b77363b00471",
-        "title": "Passage 9 — The Aral Sea",
-        "body": "The Aral Sea, once the fourth-largest lake in the world, has undergone one of the most dramatic environmental catastrophes of the twentieth century. Located between Kazakhstan and Uzbekistan in Central Asia, the sea was fed by two major rivers: the Amu Darya from the south and the Syr Darya from the north. Its surface area once covered approximately 68,000 square kilometres and supported a thriving fishing industry, with port towns dotting its shores.\n\nBeginning in the 1960s, Soviet planners diverted the rivers feeding the Aral Sea to irrigate cotton plantations across the Central Asian steppe — a campaign to make the Soviet Union self-sufficient in cotton production. The diversion was extraordinarily successful as an agricultural programme: the Soviet Union became one of the world's largest cotton producers. The consequences for the Aral Sea were catastrophic. Deprived of its inflows, the sea began to shrink. By the 1980s it had split into a smaller northern portion and a larger southern portion; by 2007 the southern portion had largely disappeared, with its remnants reduced to scattered, highly saline pools.\n\nAs the water receded, the fishing industry collapsed. Former port towns found themselves stranded tens of kilometres from the shoreline. Fishing vessels, beached by the retreating water, became one of the most iconic images of the disaster — rusting hulks of trawlers sitting in desert sand. The exposed seabed, heavily contaminated with pesticide and fertiliser residue from decades of agricultural runoff, became a source of toxic dust storms affecting communities across the region.\n\nKazakhstan, with international assistance, constructed the Kok-Aral dam in 2005 to preserve the northern portion of the sea. Water levels in the northern Aral Sea have since recovered significantly, and fish populations have begun to return. No comparable recovery effort has succeeded for the southern portion, which remains largely dessicated.",
-        "verbal_reasoning_questions": [
+        "set_id": "qr1-set-09",
+        "title": "Household Appliance Energy Consumption",
+        "stimulus": {
+          "type": "table",
+          "context": "Electricity costs 28p per kWh. Assume 4.3 weeks per month. Energy (kWh) = Power (kW) × Time (hours).",
+          "data": {
+            "headers": ["Appliance", "Power (kW)", "Daily Use (hrs)", "Weekly Use (hrs)", "Brand"],
+            "rows": [
+              ["Electric oven",   "2.2",  "1.5", "10.5", "Hotpoint"],
+              ["Washing machine", "0.9",  "0.5", "3.5",  "Bosch"],
+              ["Refrigerator",    "0.12", "24",  "168",  "Samsung"],
+              ["Electric shower", "9.5",  "0.3", "2.1",  "Mira"],
+              ["LED lighting",    "0.04", "6",   "42",   "Philips"]
+            ]
+          }
+        },
+        "questions": [
           {
-            "id": "c46a6b36-af6d-4264-97f9-9520ad13fd5e",
-            "question_text": "According to the passage, what was the primary purpose of diverting the rivers feeding the Aral Sea?",
+            "id": "qr1-s09-q1",
+            "stem": "How many kWh of energy does the electric oven consume per week?",
             "options": [
-              "To generate hydroelectric power for Soviet industrial expansion",
-              "To provide drinking water to growing urban populations in Central Asia",
-              "To irrigate cotton crops and make the Soviet Union self-sufficient in cotton",
-              "To prevent seasonal flooding of agricultural land near the rivers"
+              { "label": "A", "text": "16.5 kWh" },
+              { "label": "B", "text": "19.8 kWh" },
+              { "label": "C", "text": "23.1 kWh" },
+              { "label": "D", "text": "26.4 kWh" },
+              { "label": "E", "text": "29.7 kWh" }
             ],
-            "correct_answer": "To irrigate cotton crops and make the Soviet Union self-sufficient in cotton",
-            "answer_reason": "The passage explicitly states the rivers were diverted 'to irrigate cotton plantations across the Central Asian steppe — a campaign to make the Soviet Union self-sufficient in cotton production.' The other options are not mentioned in the passage and represent fabrications.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: From the table, the electric oven has Power = 2.2 kW and Weekly Use = 10.5 hours. Step 2: Using the formula Energy = Power × Time: 2.2 × 10.5 = 23.1 kWh. A common error is using daily hours (1.5) instead of weekly hours (10.5). The answer is 23.1 kWh.",
+            "order_index": 0
           },
           {
-            "id": "0dbbbb6e-02b4-4b34-a8b9-c82ba5662315",
-            "question_text": "According to the passage, how did the Soviet cotton irrigation programme affect the Soviet Union's position in global cotton production?",
+            "id": "qr1-s09-q2",
+            "stem": "What is the monthly electricity cost of running the refrigerator? Give your answer to the nearest penny.",
             "options": [
-              "It had little measurable impact on Soviet cotton output",
-              "It made the Soviet Union one of the world's largest cotton producers",
-              "It enabled the Soviet Union to become the sole global supplier of cotton",
-              "It was abandoned before any significant cotton production was achieved"
+              { "label": "A", "text": "£5.64" },
+              { "label": "B", "text": "£22.58" },
+              { "label": "C", "text": "£24.27" },
+              { "label": "D", "text": "£28.22" },
+              { "label": "E", "text": "£30.34" }
             ],
-            "correct_answer": "It made the Soviet Union one of the world's largest cotton producers",
-            "answer_reason": "The passage states the diversion 'was extraordinarily successful as an agricultural programme' and that 'the Soviet Union became one of the world's largest cotton producers.' The other options contradict this — the programme was successful, not ineffective or abandoned, and the USSR became one of the largest producers, not the sole supplier.",
-            "order_index": 1,
-            "difficulty": "normal"
+            "correct_answer": "C",
+            "answer_reason": "Step 1: From the table, the refrigerator has Power = 0.12 kW and Weekly Use = 168 hours. Step 2: Weekly energy = 0.12 × 168 = 20.16 kWh. Step 3: Monthly energy = 20.16 × 4.3 weeks = 86.688 kWh. Step 4: Monthly cost = 86.688 × £0.28 = £24.27 (to the nearest penny). A common error is forgetting to multiply by 4.3 to convert from weekly to monthly, giving only the weekly cost of £5.64. The answer is £24.27.",
+            "order_index": 1
           },
           {
-            "id": "0ba321a1-95d6-44a6-804c-4baef13800b6",
-            "question_text": "What does the passage identify as a consequence of the Aral Sea's exposed seabed?",
+            "id": "qr1-s09-q3",
+            "stem": "Which appliance has the highest weekly energy consumption in kWh?",
             "options": [
-              "Increased agricultural productivity in surrounding regions due to mineral-rich soil",
-              "Toxic dust storms affecting communities in the region",
-              "Flooding of former port towns as groundwater levels rose",
-              "A significant increase in fish populations in adjacent rivers"
+              { "label": "A", "text": "Electric oven" },
+              { "label": "B", "text": "Washing machine" },
+              { "label": "C", "text": "Refrigerator" },
+              { "label": "D", "text": "Electric shower" },
+              { "label": "E", "text": "LED lighting" }
             ],
-            "correct_answer": "Toxic dust storms affecting communities in the region",
-            "answer_reason": "The passage explicitly states the exposed seabed 'became a source of toxic dust storms affecting communities across the region.' The other options contradict the passage — the seabed was contaminated (not productive for agriculture), port towns were stranded far from the water (not flooded), and fish populations collapsed (not increased).",
-            "order_index": 2,
-            "difficulty": "normal"
+            "correct_answer": "A",
+            "answer_reason": "Step 1: Calculate weekly energy for each appliance using Energy = Power × Weekly hours. Electric oven = 2.2 × 10.5 = 23.1 kWh. Washing machine = 0.9 × 3.5 = 3.15 kWh. Refrigerator = 0.12 × 168 = 20.16 kWh. Electric shower = 9.5 × 2.1 = 19.95 kWh. LED lighting = 0.04 × 42 = 1.68 kWh. Step 2: The electric oven is highest at 23.1 kWh. A common error is assuming the shower must be highest because it has the greatest power rating (9.5 kW), without considering that it is used for the fewest hours. The answer is Electric oven.",
+            "order_index": 2
           },
           {
-            "id": "51e69d8a-e22e-46ff-8fe0-54594aa3c289",
-            "question_text": "Which of the following best describes the current state of the Aral Sea as presented in the passage?",
+            "id": "qr1-s09-q4",
+            "stem": "The family replaces their 9.5 kW electric shower with a 7.5 kW model used for the same duration daily. By how much does their monthly electricity bill decrease? Give your answer to the nearest penny.",
             "options": [
-              "Both the northern and southern portions have been substantially restored through international intervention",
-              "The sea has almost entirely disappeared, with no recovery efforts attempted",
-              "The northern portion has partially recovered while the southern portion remains largely dried out",
-              "The sea's surface area is now approximately half of its original 68,000 square kilometres"
+              { "label": "A", "text": "£0.63" },
+              { "label": "B", "text": "£1.07" },
+              { "label": "C", "text": "£2.54" },
+              { "label": "D", "text": "£5.06" },
+              { "label": "E", "text": "£5.88" }
             ],
-            "correct_answer": "The northern portion has partially recovered while the southern portion remains largely dried out",
-            "answer_reason": "The passage describes Kazakhstan's dam construction in 2005, after which 'water levels in the northern Aral Sea have since recovered significantly,' while 'no comparable recovery effort has succeeded for the southern portion, which remains largely dessicated.' This matches the correct option. The other options contradict or misrepresent passage details.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Power reduction = 9.5 − 7.5 = 2.0 kW. Step 2: From the table, weekly shower use = 2.1 hours. Weekly energy saved = 2.0 × 2.1 = 4.2 kWh. Step 3: Monthly energy saved = 4.2 × 4.3 = 18.06 kWh. Step 4: Monthly cost saving = 18.06 × £0.28 = £5.06. A common error is using only the daily usage (0.3 hours) instead of weekly (2.1 hours) for the calculation. The answer is £5.06.",
+            "order_index": 3
           }
         ]
       },
       {
-        "id": "0b644d56-8217-4314-bed6-5063c451fb55",
-        "title": "Passage 10 — The Philosophy of Thought Experiments",
-        "body": "A thought experiment is a device of the imagination used to investigate the nature of things by envisioning hypothetical scenarios and reasoning through their implications. Unlike empirical experiments, thought experiments require no physical apparatus — they are conducted entirely in the mind. The technique has a long history: Archimedes reportedly used thought experiments to arrive at principles of mechanics, and Galileo famously argued against Aristotelian physics through an imagined scenario involving objects of different masses dropped simultaneously from a tower.\n\nThought experiments played a central role in the development of modern physics. Einstein's 'riding the beam' thought experiment — in which he imagined chasing a beam of light at the speed of light — led him toward the special theory of relativity. The thought experiment revealed a paradox: Maxwell's equations predicted electromagnetic waves would oscillate at the speed of light, but if an observer were moving at that speed, the waves should appear frozen, which contradicted Maxwell's theory. This irresolvable tension motivated Einstein's subsequent theoretical work.\n\nPhilosophers have used thought experiments to test moral intuitions and probe the limits of ethical theories. Peter Singer's drowning child scenario — in which a passerby can save a drowning child at minimal personal cost — argues by extension that affluent individuals have a strong moral obligation to donate to poverty relief, since distance and anonymity are morally irrelevant. Judith Jarvis Thomson's violinist thought experiment, constructed in 1971, presents a scenario in which a person wakes up connected to a famous musician who requires nine months of their body's support to survive, and uses this to argue about the limits of obligatory bodily assistance.\n\nCritics of thought experiments argue that they can mislead by activating emotional or intuitive responses inappropriate to the abstract principles at stake. Scenarios involving individual identifiable victims, for example, have been shown in psychological research to elicit stronger moral concern than statistically equivalent mass harm — a response that may distort rather than illuminate moral reasoning.",
-        "verbal_reasoning_questions": [
-          {
-            "id": "e4f769d6-11bb-4d23-ac61-a938adc8bb75",
-            "question_text": "Galileo's tower thought experiment was designed to challenge the physics of Aristotle.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
+        "set_id": "qr1-set-10",
+        "title": "Packaging Tray Dimensions",
+        "stimulus": {
+          "type": "geometry_diagram",
+          "data": {
+            "title": "Cardboard Tray (open top)",
+            "viewBox": { "width": 300, "height": 200 },
+            "shapes": [
+              {
+                "type": "polygon",
+                "points": [[35, 130], [185, 130], [265, 65], [115, 65]],
+                "fill": "none",
+                "stroke": "#a0aec0"
+              },
+              {
+                "type": "rect",
+                "x": 35, "y": 130, "width": 150, "height": 25,
+                "fill": "none",
+                "stroke": "#a0aec0"
+              },
+              {
+                "type": "polygon",
+                "points": [[185, 130], [265, 65], [265, 90], [185, 155]],
+                "fill": "none",
+                "stroke": "#a0aec0"
+              },
+              {
+                "type": "line",
+                "x1": 115, "y1": 65, "x2": 115, "y2": 90,
+                "stroke": "#a0aec0",
+                "strokeDasharray": "4,3"
+              },
+              {
+                "type": "line",
+                "x1": 115, "y1": 90, "x2": 265, "y2": 90,
+                "stroke": "#a0aec0",
+                "strokeDasharray": "4,3"
+              },
+              {
+                "type": "line",
+                "x1": 115, "y1": 90, "x2": 35, "y2": 155,
+                "stroke": "#a0aec0",
+                "strokeDasharray": "4,3"
+              }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage explicitly states Galileo 'famously argued against Aristotelian physics through an imagined scenario involving objects of different masses dropped simultaneously from a tower.' This directly confirms that the thought experiment was directed against Aristotle's physics.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "dimensions": [
+              { "from": [35, 168], "to": [185, 168], "label": "8 in", "side": "bottom" },
+              { "from": [20, 130], "to": [100, 65], "label": "6 in", "side": "left" },
+              { "from": [275, 65], "to": [275, 90], "label": "1 in", "side": "right" }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s10-q1",
+            "stem": "The tray is open at the top. What is the total area of cardboard used for the four sides and the base of the tray?",
+            "options": [
+              { "label": "A", "text": "62 in²" },
+              { "label": "B", "text": "72 in²" },
+              { "label": "C", "text": "76 in²" },
+              { "label": "D", "text": "96 in²" },
+              { "label": "E", "text": "104 in²" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: The tray has dimensions 8 in × 6 in × 1 in with an open top. Step 2: Base = 8 × 6 = 48 in². Two long sides = 2 × (8 × 1) = 16 in². Two short sides = 2 × (6 × 1) = 12 in². Step 3: Total = 48 + 16 + 12 = 76 in². A common error is including the open top face as well, giving 76 + 48 = 124 in², or calculating volume instead of surface area. The answer is 76 in².",
+            "order_index": 0
           },
           {
-            "id": "59af101e-b08a-4b9a-a405-d949f6b7eceb",
-            "question_text": "Einstein's 'riding the beam' thought experiment directly produced the special theory of relativity.",
+            "id": "qr1-s10-q2",
+            "stem": "If the cardboard costs 3p per square inch, what is the cost of cardboard for one tray?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "£1.86" },
+              { "label": "B", "text": "£2.28" },
+              { "label": "C", "text": "£2.88" },
+              { "label": "D", "text": "£3.12" },
+              { "label": "E", "text": "£3.72" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states the thought experiment 'led him toward the special theory of relativity' and 'motivated Einstein's subsequent theoretical work' — it did not directly produce the theory. The passage is careful to describe it as a motivating factor, not the direct source. Saying it 'directly produced' the theory overstates the passage's claim.",
-            "order_index": 1,
-            "difficulty": "hard"
-          },
-          {
-            "id": "c486c3dc-4ac4-4e16-af54-c43ac368d9d7",
-            "question_text": "Judith Jarvis Thomson constructed her violinist thought experiment to argue about bodily autonomy and the limits of obligatory assistance.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states Thomson's thought experiment 'uses this to argue about the limits of obligatory bodily assistance.' This is a direct paraphrase of the passage's description of the argument's purpose.",
-            "order_index": 2,
-            "difficulty": "normal"
-          },
-          {
-            "id": "b19aed84-cc53-49c4-ae9c-407415b4ca11",
-            "question_text": "According to critics cited in the passage, thought experiments involving identifiable individuals produce stronger emotional reactions than scenarios involving equivalent large-scale harm.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
-            ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states 'Scenarios involving individual identifiable victims...have been shown in psychological research to elicit stronger moral concern than statistically equivalent mass harm.' This directly supports the statement. The passage attributes this finding to psychological research cited by critics of thought experiments.",
-            "order_index": 3,
-            "difficulty": "hard"
+            "correct_answer": "B",
+            "answer_reason": "Step 1: From the previous calculation, total cardboard area = 76 in². Step 2: Cost = 76 × 3p = 228p = £2.28. A common error is using the volume (48 in³) instead of the surface area, or including the open top face. The answer is £2.28.",
+            "order_index": 1
           }
         ]
       },
       {
-        "id": "841407d7-3ce0-404e-b840-fc2534e91381",
-        "title": "Passage 11 — The Columbian Exchange",
-        "body": "The Columbian Exchange, a term coined by historian Alfred W. Crosby in his 1972 book, refers to the widespread transfer of plants, animals, culture, human populations, technology, diseases, and ideas between the Americas and the Old World following Christopher Columbus's 1492 voyage. The exchange was profoundly asymmetric in its biological consequences: while the Americas contributed many nutritionally valuable crops to the Old World, the Old World transmitted diseases to the Americas against which indigenous populations had no immunity.\n\nAmong the crops that moved from the Americas to Europe, Asia, and Africa, the potato and maize had the most transformative effects. The potato, adopted widely in northern Europe by the eighteenth century, dramatically increased caloric yields per hectare compared with existing grain crops and supported rapid population growth in countries including Ireland, where the crop became a dietary staple. Maize spread across Africa, Asia, and southern Europe, providing a high-yield, drought-tolerant food source that contributed to population increases in multiple regions.\n\nThe disease component of the exchange has been described by some historians as the most consequential single biological event in human history. Old World diseases — including smallpox, measles, influenza, and typhus — swept through the Americas following contact, against which indigenous peoples had no prior immunity. Estimates of indigenous population decline vary substantially among historians, with some scholars suggesting mortality rates as high as ninety percent in certain regions within a century of contact. The exact figures remain contested due to the limited documentary record of pre-contact population sizes.\n\nThe Columbian Exchange also moved animals: horses, cattle, pigs, and sheep were introduced to the Americas, transforming indigenous societies in ways both destructive and adaptive. Several Plains Indian nations, for example, built entire cultures around the reintroduced horse within two centuries of its arrival — the horse had been native to the Americas in prehistoric times but had been extinct on the continent for thousands of years before European reintroduction.",
-        "verbal_reasoning_questions": [
-          {
-            "id": "8681131a-ea6a-4308-8fa3-152bcdf7e694",
-            "question_text": "Alfred Crosby coined the term 'Columbian Exchange' in a publication released before 1980.",
-            "options": [
-              "True",
-              "False",
-              "Can't tell"
+        "set_id": "qr1-set-11",
+        "title": "Regional Population Growth Index",
+        "stimulus": {
+          "type": "line_graph",
+          "data": {
+            "title": "Population Growth Index by Region (Base: 2018 = 100)",
+            "labels": ["2018", "2019", "2020", "2021", "2022", "2023"],
+            "series": [
+              { "name": "London",     "values": [100, 103, 101, 108, 116, 119] },
+              { "name": "North West", "values": [100, 105, 107, 115, 122, 124] },
+              { "name": "South West", "values": [100, 104, 106, 112, 118, 121] }
             ],
-            "correct_answer": "True",
-            "answer_reason": "The passage states the term was coined by Crosby 'in his 1972 book.' 1972 is before 1980. This is a straightforward necessary inference from the date given.",
-            "order_index": 0,
-            "difficulty": "normal"
+            "yAxisLabel": "Index (2018 = 100)",
+            "unit": ""
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s11-q1",
+            "stem": "The population of London was 480,000 in 2018. What was the approximate population in London in 2023?",
+            "options": [
+              { "label": "A", "text": "524,400" },
+              { "label": "B", "text": "539,200" },
+              { "label": "C", "text": "556,800" },
+              { "label": "D", "text": "571,200" },
+              { "label": "E", "text": "583,400" }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Step 1: From the graph, the London index in 2023 = 119 (with a base of 100 in 2018). This means the population grew to 119% of its 2018 level. Step 2: Population = 480,000 × (119 ÷ 100) = 480,000 × 1.19 = 571,200. A common error is adding 119,000 to 480,000 instead of multiplying by 1.19. The answer is 571,200.",
+            "order_index": 0
           },
           {
-            "id": "4024ba3d-e382-4b95-a10e-8149541064b6",
-            "question_text": "The Columbian Exchange was biologically symmetrical, with both the Americas and the Old World suffering equally from introduced diseases.",
+            "id": "qr1-s11-q2",
+            "stem": "Between 2020 and 2022, which region had the greatest absolute increase in its index value?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "London only" },
+              { "label": "B", "text": "North West only" },
+              { "label": "C", "text": "South West only" },
+              { "label": "D", "text": "London and North West equally" },
+              { "label": "E", "text": "North West and South West equally" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage explicitly states the exchange 'was profoundly asymmetric in its biological consequences' — Old World diseases devastated American indigenous populations, while the Americas contributed crops, not comparable disease burdens, to the Old World. The statement's claim of symmetry directly contradicts the passage.",
-            "order_index": 1,
-            "difficulty": "normal"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Calculate the absolute index increase from 2020 to 2022 for each region. London = 116 − 101 = 15. North West = 122 − 107 = 15. South West = 118 − 106 = 12. Step 2: London and North West both increased by 15 index points — they are tied. A common error is confusing absolute increase with percentage increase. The answer is London and North West equally.",
+            "order_index": 1
           },
           {
-            "id": "22443dd2-aa23-44c1-a954-6b03f5868965",
-            "question_text": "Horses were unknown in the Americas before European contact.",
+            "id": "qr1-s11-q3",
+            "stem": "The population of the North West was 180,000 in 2018. A person moved to the area when the population was at the 2021 index level, and left when it reached the 2023 level. By how much did the population increase during their stay?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "8,100" },
+              { "label": "B", "text": "9,540" },
+              { "label": "C", "text": "12,600" },
+              { "label": "D", "text": "15,300" },
+              { "label": "E", "text": "16,200" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage states that the horse 'had been native to the Americas in prehistoric times but had been extinct on the continent for thousands of years before European reintroduction.' Horses were therefore not unknown — they had existed in the Americas previously but had gone extinct. The statement is directly contradicted by the passage.",
-            "order_index": 2,
-            "difficulty": "hard"
+            "correct_answer": "E",
+            "answer_reason": "Step 1: North West 2021 index = 115. Population at arrival = 180,000 × 1.15 = 207,000. Step 2: North West 2023 index = 124. Population at departure = 180,000 × 1.24 = 223,200. Step 3: Increase during stay = 223,200 − 207,000 = 16,200. A common error is subtracting the index values (124 − 115 = 9) and multiplying by 1,800, giving 16,200 by luck — but the correct method uses the base population. The answer is 16,200.",
+            "order_index": 2
+          }
+        ]
+      },
+      {
+        "set_id": "qr1-set-12",
+        "title": "Office Technology Equipment Order",
+        "stimulus": {
+          "type": "table",
+          "context": "Discounts are applied to the unit price first, then VAT is applied to the discounted price.",
+          "data": {
+            "headers": ["Item", "Unit Price (£)", "Qty", "Discount", "VAT Rate"],
+            "rows": [
+              ["Laptop",    "180.00", "1", "10%", "20%"],
+              ["Monitor",   "60.00",  "2", "0%",  "20%"],
+              ["Keyboard",  "30.00",  "3", "15%", "20%"],
+              ["USB Hub",   "25.00",  "1", "0%",  "20%"],
+              ["Headset",   "40.00",  "2", "20%", "20%"]
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "qr1-s12-q1",
+            "stem": "What is the total cost of the laptop after discount and VAT?",
+            "options": [
+              { "label": "A", "text": "£180.00" },
+              { "label": "B", "text": "£194.40" },
+              { "label": "C", "text": "£198.00" },
+              { "label": "D", "text": "£216.00" },
+              { "label": "E", "text": "£237.60" }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Step 1: Unit price = £180.00. Apply 10% discount: £180.00 × 0.90 = £162.00. Step 2: Apply 20% VAT to the discounted price: £162.00 × 1.20 = £194.40. A common error is applying VAT first then discount, or forgetting the discount entirely (giving £216.00). The answer is £194.40.",
+            "order_index": 0
           },
           {
-            "id": "7a4a9726-dafb-4285-a04c-2b8fe9f83d66",
-            "question_text": "Historians have reached a consensus on the percentage of indigenous Americans who died as a result of Old World diseases following contact.",
+            "id": "qr1-s12-q2",
+            "stem": "What is the total cost of all 3 keyboards after discount and VAT?",
             "options": [
-              "True",
-              "False",
-              "Can't tell"
+              { "label": "A", "text": "£76.50" },
+              { "label": "B", "text": "£81.00" },
+              { "label": "C", "text": "£86.40" },
+              { "label": "D", "text": "£91.80" },
+              { "label": "E", "text": "£108.00" }
             ],
-            "correct_answer": "False",
-            "answer_reason": "The passage explicitly states that 'Estimates of indigenous population decline vary substantially among historians' and that 'The exact figures remain contested due to the limited documentary record.' This directly contradicts any claim of historical consensus on mortality percentages.",
-            "order_index": 3,
-            "difficulty": "normal"
+            "correct_answer": "D",
+            "answer_reason": "Step 1: Unit price = £30.00. Apply 15% discount: £30.00 × 0.85 = £25.50 per keyboard. Step 2: Apply 20% VAT: £25.50 × 1.20 = £30.60 per keyboard. Step 3: Total for 3 keyboards = £30.60 × 3 = £91.80. A common error is applying the discount to the total after multiplying by quantity, which gives the same result here — but forgetting the discount entirely gives £108.00. The answer is £91.80.",
+            "order_index": 1
+          },
+          {
+            "id": "qr1-s12-q3",
+            "stem": "What is the total cost of the entire order (all items and quantities) after all discounts and VAT?",
+            "options": [
+              { "label": "A", "text": "£447.50" },
+              { "label": "B", "text": "£507.00" },
+              { "label": "C", "text": "£537.00" },
+              { "label": "D", "text": "£556.20" },
+              { "label": "E", "text": "£594.00" }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Step 1: Calculate each line item after discount then VAT. Laptop (×1): £180 × 0.90 × 1.20 = £194.40. Monitor (×2): £60 × 1.00 × 1.20 × 2 = £144.00. Keyboard (×3): £30 × 0.85 × 1.20 × 3 = £91.80. USB Hub (×1): £25 × 1.00 × 1.20 = £30.00. Headset (×2): £40 × 0.80 × 1.20 × 2 = £76.80. Step 2: Total = £194.40 + £144.00 + £91.80 + £30.00 + £76.80 = £537.00. A common error is forgetting the headset discount (giving £556.20) or forgetting all discounts (giving £594.00). The answer is £537.00.",
+            "order_index": 2
           }
         ]
       }

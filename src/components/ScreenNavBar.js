@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 
-export default function ScreenNavBar({ title, meta, onPrev, onNext, isFirst, isLast, color, onCalculator }) {
+export default function ScreenNavBar({ title, meta, onPrev, onNext, isFirst, isLast, color }) {
   const { practiceTheme: t } = useTheme();
 
   return (
@@ -14,12 +14,6 @@ export default function ScreenNavBar({ title, meta, onPrev, onNext, isFirst, isL
         <Text style={[styles.navTitle, { color: '#ffffff' }]} numberOfLines={1}>{title}</Text>
         <Text style={[styles.navMeta, { color: 'rgba(255,255,255,0.65)' }]}>{meta}</Text>
       </View>
-
-      {onCalculator && (
-        <TouchableOpacity style={styles.navButton} onPress={onCalculator}>
-          <Text style={[styles.calcIcon, { color: color || '#ffffff' }]}>⊞</Text>
-        </TouchableOpacity>
-      )}
 
       <TouchableOpacity style={styles.navButton} onPress={onNext} disabled={isLast}>
         <Text style={[styles.navArrow, { color: isLast ? t.borderStrong : (color || '#ffffff') }]}>›</Text>
@@ -57,9 +51,5 @@ const styles = StyleSheet.create({
   navMeta: {
     fontSize: 12,
     marginTop: 2,
-  },
-  calcIcon: {
-    fontSize: 22,
-    lineHeight: 26,
   },
 });

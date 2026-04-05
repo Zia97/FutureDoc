@@ -23,10 +23,14 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 
 export default function PieChartRenderer({ data }) {
   const { segments, total, unit = '' } = data;
-  const computedTotal = total ?? segments.reduce((s, seg) => s + seg.value, 0);
+  const computedTotal = total ?? segments.reduce((s, seg) => s + (seg.value ?? 0), 0);
+
+  // Separate known and null segments
+  const knownSegments = segments.filter((seg) => seg.value != null);
+  const nullSegments = segments.filter((seg) => seg.value == null);
 
   let cumulative = 0;
-  const slices = segments.map((seg, i) => {
+  const slices = knownSegments.map((seg, i) => {
     const startDeg = (cumulative / computedTotal) * 360;
     cumulative += seg.value;
     const endDeg = (cumulative / computedTotal) * 360;
@@ -38,8 +42,26 @@ export default function PieChartRenderer({ data }) {
     };
   });
 
+  // Null segments get a "missing" slice for the remainder
+  const nullSlices = nullSegments.map((seg, i) => ({
+    ...seg,
+    startDeg: (cumulative / computedTotal) * 360,
+    endDeg: 360,
+    color: '#2d3748',
+  }));
+
+  const allSlices = [...slices, ...nullSlices];
+
+  // Legend includes all segments (known + null)
+  const legendItems = segments.map((seg, i) => ({
+    ...seg,
+    color: seg.value != null
+      ? (seg.color ?? COLORS[knownSegments.indexOf(seg) % COLORS.length])
+      : '#2d3748',
+  }));
+
   const ROW_H = 40;
-  const legendStartY = Math.max(14, (VH - slices.length * ROW_H) / 2);
+  const legendStartY = Math.max(14, (VH - legendItems.length * ROW_H) / 2);
 
   return (
     <View>
@@ -51,7 +73,7 @@ export default function PieChartRenderer({ data }) {
         preserveAspectRatio="xMidYMid meet"
       >
         {/* Pie slices */}
-        {slices.map((slice, i) => (
+        {allSlices.map((slice, i) => (
           <Path
             key={i}
             d={arcPath(CX, CY, R, slice.startDeg, slice.endDeg)}
@@ -62,17 +84,19 @@ export default function PieChartRenderer({ data }) {
         ))}
 
         {/* Legend */}
-        {slices.map((slice, i) => {
+        {legendItems.map((seg, i) => {
           const ly = legendStartY + i * ROW_H;
-          const pct = ((slice.value / computedTotal) * 100).toFixed(1);
+          const isNull = seg.value == null;
+          const pct = isNull ? '?' : ((seg.value / computedTotal) * 100).toFixed(1);
+          const valText = isNull ? '?' : `${unit}${seg.value.toLocaleString()}`;
           return (
             <G key={i} x={200} y={ly}>
-              <Rect x={0} y={0} width={13} height={13} fill={slice.color} rx={3} />
+              <Rect x={0} y={0} width={13} height={13} fill={seg.color} rx={3} />
               <SvgText x={19} y={11} fontSize={12} fill="#e2e8f0" fontWeight="600">
-                {slice.label}
+                {seg.label}
               </SvgText>
               <SvgText x={19} y={27} fontSize={11} fill="#718096">
-                {unit}{slice.value.toLocaleString()} ({pct}%)
+                {valText} ({pct}%)
               </SvgText>
             </G>
           );

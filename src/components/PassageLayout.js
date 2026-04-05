@@ -15,6 +15,8 @@ import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { useTheme } from '../context/ThemeContext';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
+import NotesModal from './NotesModal';
+import BottomToolbar from './BottomToolbar';
 
 export default function PassageLayout({
   flatQuestions,
@@ -35,6 +37,8 @@ export default function PassageLayout({
 
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [pendingAnswer, setPendingAnswer] = useState(null);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [notes, setNotes] = useState('');
 
   const qid = item.question.questionId ?? item.question.id;
   const selectedAnswer = getAnswer(item.stemId, qid);
@@ -127,6 +131,19 @@ export default function PassageLayout({
           />
         )}
       </ScrollView>
+
+      <BottomToolbar
+        onNotes={() => setNotesVisible(true)}
+        sectionColor={sectionColor}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        notes={notes}
+        onChangeNotes={setNotes}
+        onClear={() => setNotes('')}
+        onClose={() => setNotesVisible(false)}
+      />
     </SafeAreaView>
   );
 }
