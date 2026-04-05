@@ -2,8 +2,8 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
 
 const VW = 360;
-const VH = 240;
-const M = { top: 20, right: 16, bottom: 62, left: 54 };
+const VH = 300;
+const M = { top: 24, right: 16, bottom: 90, left: 54 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
@@ -13,7 +13,7 @@ function niceStep(range, tickCount) {
   const raw = range / tickCount;
   const mag = Math.pow(10, Math.floor(Math.log10(raw)));
   const norm = raw / mag;
-  const nice = norm <= 1.5 ? 1.5 : norm <= 2 ? 2 : norm <= 3 ? 3 : norm <= 5 ? 5 : norm <= 7 ? 7 : 10;
+  const nice = norm < 1.5 ? 1 : norm < 3.5 ? 2 : norm < 7.5 ? 5 : 10;
   return nice * mag;
 }
 
@@ -29,14 +29,14 @@ export default function BarChartRenderer({ data }) {
   const hasNegative = rawMin < 0;
   const tickCount = 5;
 
-  // Calculate nice axis bounds
+  // Calculate nice axis bounds — always leave ≥1 tick of headroom beyond data
   let axisMin, axisMax, step;
   if (hasNegative) {
-    const absMax = Math.max(Math.abs(rawMin), Math.abs(rawMax));
-    step = niceStep(absMax, Math.floor(tickCount / 2));
-    const nTicks = Math.ceil(absMax / step);
-    axisMax = nTicks * step;
+    step = niceStep(rawMax - rawMin, tickCount);
+    axisMax = Math.ceil(rawMax / step) * step;
     axisMin = -Math.ceil(Math.abs(rawMin) / step) * step;
+    if (axisMax - rawMax < step * 0.3) axisMax += step;
+    if (rawMin - axisMin < step * 0.3) axisMin -= step;
   } else {
     const mag = Math.pow(10, Math.floor(Math.log10(rawMax || 1)));
     const norm = rawMax / mag;
@@ -44,6 +44,7 @@ export default function BarChartRenderer({ data }) {
     axisMax = nice * mag;
     axisMin = 0;
     step = axisMax / tickCount;
+    if (axisMax - rawMax < step * 0.3) axisMax += step;
   }
 
   const axisRange = axisMax - axisMin;
@@ -79,6 +80,9 @@ export default function BarChartRenderer({ data }) {
           {/* Gridlines & Y-axis ticks */}
           {ticks.map((val, i) => {
             const y = yPos(val);
+            const absVal = Math.abs(val);
+            const fmtNum = Number.isInteger(absVal) ? absVal : absVal.toFixed(1);
+            const tickLabel = `${val < 0 ? '-' : ''}${unit}${fmtNum}`;
             return (
               <G key={i}>
                 <Line
@@ -86,8 +90,8 @@ export default function BarChartRenderer({ data }) {
                   stroke={val === 0 && hasNegative ? '#4a5568' : '#2d3748'}
                   strokeWidth={val === 0 && hasNegative ? 1.2 : 0.7}
                 />
-                <SvgText x={-5} y={y + 4} fontSize={11} fill="#718096" textAnchor="end">
-                  {unit}{Number.isInteger(val) ? val : val.toFixed(1)}
+                <SvgText x={-5} y={y + 4} fontSize={12} fill="#718096" textAnchor="end">
+                  {tickLabel}
                 </SvgText>
               </G>
             );
@@ -96,7 +100,7 @@ export default function BarChartRenderer({ data }) {
           {/* Y-axis label */}
           {yAxisLabel && (
             <SvgText
-              x={-40} y={CH / 2} fontSize={10} fill="#a0aec0"
+              x={-40} y={CH / 2} fontSize={11} fill="#a0aec0"
               textAnchor="middle" rotation="-90"
               originX={-40} originY={CH / 2}
             >
@@ -116,19 +120,32 @@ export default function BarChartRenderer({ data }) {
                   const barTop = yPos(Math.max(val, 0));
                   const barBottom = yPos(Math.min(val, 0));
                   const bh = barBottom - barTop;
+                  const barX = gx + si * (barW + 1.5);
+                  const barCx = barX + barW / 2;
+                  const labelY = val >= 0 ? barTop - 4 : barBottom + 12;
                   return (
-                    <Rect
-                      key={s.name}
-                      x={gx + si * (barW + 1.5)}
-                      y={barTop}
-                      width={barW}
-                      height={Math.max(bh, 1)}
-                      fill={COLORS[si % COLORS.length]}
-                      rx={2}
-                    />
+                    <G key={s.name}>
+                      <Rect
+                        x={barX}
+                        y={barTop}
+                        width={barW}
+                        height={Math.max(bh, 1)}
+                        fill={COLORS[si % COLORS.length]}
+                        rx={2}
+                      />
+                      <SvgText
+                        x={barCx}
+                        y={labelY}
+                        fontSize={10}
+                        fill="#cbd5e0"
+                        textAnchor="middle"
+                      >
+                        {Math.abs(val)}
+                      </SvgText>
+                    </G>
                   );
                 })}
-                <SvgText x={lx} y={CH + 16} fontSize={11} fill="#a0aec0" textAnchor="middle">
+                <SvgText x={lx} y={CH + 28} fontSize={12} fill="#a0aec0" textAnchor="middle">
                   {label}
                 </SvgText>
               </G>
@@ -147,9 +164,9 @@ export default function BarChartRenderer({ data }) {
         {/* Legend */}
         {numSeries > 1 &&
           series.map((s, si) => (
-            <G key={s.name} x={M.left + si * 110} y={VH - 10}>
-              <Rect x={0} y={-10} width={11} height={11} fill={COLORS[si % COLORS.length]} rx={2} />
-              <SvgText x={16} y={0} fontSize={11} fill="#a0aec0">
+            <G key={s.name} x={M.left + si * 110} y={VH - 14}>
+              <Rect x={0} y={-10} width={12} height={12} fill={COLORS[si % COLORS.length]} rx={2} />
+              <SvgText x={18} y={0} fontSize={12} fill="#a0aec0">
                 {s.name}
               </SvgText>
             </G>

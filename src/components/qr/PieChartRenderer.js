@@ -88,7 +88,8 @@ export default function PieChartRenderer({ data }) {
           const ly = legendStartY + i * ROW_H;
           const isNull = seg.value == null;
           const pct = isNull ? '?' : ((seg.value / computedTotal) * 100).toFixed(1);
-          const valText = isNull ? '?' : `${unit}${seg.value.toLocaleString()}`;
+          const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
+          const valText = isNull ? '?' : (unit.length > 1 ? `${unit} ${fmtVal}` : `${unit}${fmtVal}`);
           return (
             <G key={i} x={200} y={ly}>
               <Rect x={0} y={0} width={13} height={13} fill={seg.color} rx={3} />
