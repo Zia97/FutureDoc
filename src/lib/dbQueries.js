@@ -282,6 +282,42 @@ class DatabaseService {
       timed_decision_making_questions: questionsByTest[t.id] ?? [],
     }));
   }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed Quantitative Reasoning
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches all timed QR tests with nested sets and questions.
+   * Each set contains a stimulus (chart/table data) shared across its questions.
+   */
+  async fetchTimedQRTests() {
+    const { data, error } = await supabase
+      .from('timed_quantitative_reasoning_tests')
+      .select(`
+        id,
+        title,
+        time_minutes,
+        timed_quantitative_reasoning_sets (
+          id,
+          set_ref,
+          title,
+          stimulus,
+          order_index,
+          timed_quantitative_reasoning_questions (
+            id,
+            stem,
+            options,
+            correct_answer,
+            answer_reason,
+            order_index
+          )
+        )
+      `)
+      .order('id', { ascending: true });
+    if (error) throw error;
+    return data;
+  }
 }
 
 export const db = new DatabaseService();

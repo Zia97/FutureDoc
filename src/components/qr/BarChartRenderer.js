@@ -17,6 +17,26 @@ function niceStep(range, tickCount) {
   return nice * mag;
 }
 
+// Split a label into up to 2 lines on the space nearest the midpoint.
+// Single-word labels return as-is.
+function wrapLabel(label) {
+  if (!label || !label.includes(' ')) return [label];
+  const mid = label.length / 2;
+  let bestSpace = -1;
+  let bestDist = Infinity;
+  for (let i = 0; i < label.length; i++) {
+    if (label[i] === ' ') {
+      const d = Math.abs(i - mid);
+      if (d < bestDist) {
+        bestDist = d;
+        bestSpace = i;
+      }
+    }
+  }
+  if (bestSpace === -1) return [label];
+  return [label.slice(0, bestSpace), label.slice(bestSpace + 1)];
+}
+
 export default function BarChartRenderer({ data }) {
   const { labels, series, yAxisLabel, unit = '' } = data;
   const numGroups = labels.length;
@@ -145,9 +165,18 @@ export default function BarChartRenderer({ data }) {
                     </G>
                   );
                 })}
-                <SvgText x={lx} y={CH + 28} fontSize={12} fill="#a0aec0" textAnchor="middle">
-                  {label}
-                </SvgText>
+                {wrapLabel(label).map((line, li) => (
+                  <SvgText
+                    key={li}
+                    x={lx}
+                    y={CH + 22 + li * 13}
+                    fontSize={11}
+                    fill="#a0aec0"
+                    textAnchor="middle"
+                  >
+                    {line}
+                  </SvgText>
+                ))}
               </G>
             );
           })}
@@ -161,16 +190,28 @@ export default function BarChartRenderer({ data }) {
           )}
         </G>
 
-        {/* Legend */}
-        {numSeries > 1 &&
-          series.map((s, si) => (
-            <G key={s.name} x={M.left + si * 110} y={VH - 14}>
-              <Rect x={0} y={-10} width={12} height={12} fill={COLORS[si % COLORS.length]} rx={2} />
-              <SvgText x={18} y={0} fontSize={12} fill="#a0aec0">
-                {s.name}
-              </SvgText>
-            </G>
-          ))}
+        {/* Legend — dynamic width, centered so long names don't clip */}
+        {numSeries > 1 && (() => {
+          const gap = 14;
+          const items = series.map((s) => ({
+            name: s.name,
+            width: 18 + s.name.length * 6.4,
+          }));
+          const totalW = items.reduce((sum, it) => sum + it.width, 0) + gap * (items.length - 1);
+          let cx = Math.max(8, (VW - totalW) / 2);
+          return items.map((item, si) => {
+            const x = cx;
+            cx += item.width + gap;
+            return (
+              <G key={series[si].name} x={x} y={VH - 14}>
+                <Rect x={0} y={-10} width={12} height={12} fill={COLORS[si % COLORS.length]} rx={2} />
+                <SvgText x={18} y={0} fontSize={12} fill="#a0aec0">
+                  {item.name}
+                </SvgText>
+              </G>
+            );
+          });
+        })()}
       </Svg>
     </View>
   );

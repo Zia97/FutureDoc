@@ -166,20 +166,30 @@ export default function LineGraphRenderer({ data }) {
             })()}
           </G>
 
-          {/* Legend */}
-          {series.length > 1 &&
-            series.map((s, si) => {
+          {/* Legend — dynamic width, centered so long names don't clip */}
+          {series.length > 1 && (() => {
+            const gap = 14;
+            const items = series.map((s) => ({
+              name: s.name,
+              width: 20 + s.name.length * 6.2,
+            }));
+            const totalW = items.reduce((sum, it) => sum + it.width, 0) + gap * (items.length - 1);
+            let cx = Math.max(8, (VW - totalW) / 2);
+            return items.map((item, si) => {
               const color = COLORS[si % COLORS.length];
+              const x = cx;
+              cx += item.width + gap;
               return (
-                <G key={s.name} x={M.left + si * 125} y={VH - 10}>
+                <G key={series[si].name} x={x} y={VH - 10}>
                   <Line x1={0} y1={-4} x2={16} y2={-4} stroke={color} strokeWidth={2} />
                   <Circle cx={8} cy={-4} r={5} fill={color} />
                   <SvgText x={20} y={0} fontSize={11} fill="#a0aec0">
-                    {s.name}
+                    {item.name}
                   </SvgText>
                 </G>
               );
-            })}
+            });
+          })()}
         </Svg>
       </Pressable>
     </View>

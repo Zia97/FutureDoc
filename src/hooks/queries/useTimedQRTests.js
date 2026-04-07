@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import { db } from '../../lib/dbQueries';
-import { getCached } from '../../services/contentCache';
+import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { flattenTimedQRSets } from '../../lib/flattenQuestions';
 
 const SECTION = 'timed_quantitative_reasoning';
 
-function mapTests(data) {
+function addFlatQuestions(test) {
+  return { ...test, flatQuestions: flattenTimedQRSets(test.sets) };
+}
+
+// Maps dev JSON format (preview-qr-timed.json) into the app data shape.
+function mapDevTests(data) {
   return data.map((test) => {
     const sets = test.sets.map((s) => ({
       setId: s.set_id,
@@ -23,21 +28,52 @@ function mapTests(data) {
           answeringReason: q.answer_reason,
         })),
     }));
-    return {
+    return addFlatQuestions({
       id: test.id,
       title: test.title,
       questionCount: test.question_count,
       timeMinutes: test.time_minutes,
       sets,
-      flatQuestions: flattenTimedQRSets(sets),
-    };
+    });
+  });
+}
+
+// Maps DB rows (from timed_quantitative_reasoning_tests with nested sets and questions) into the app data shape.
+function mapDBTests(rows) {
+  return rows.map((test) => {
+    const sets = [...test.timed_quantitative_reasoning_sets]
+      .sort((a, b) => a.order_index - b.order_index)
+      .map((s) => ({
+        setId: s.set_ref,
+        title: s.title,
+        stimulus: s.stimulus,
+        questions: [...s.timed_quantitative_reasoning_questions]
+          .sort((a, b) => a.order_index - b.order_index)
+          .map((q) => ({
+            questionId: q.id,
+            stem: q.stem,
+            options: q.options ?? [],
+            answer: q.correct_answer,
+            answeringReason: q.answer_reason,
+          })),
+      }));
+
+    const questionCount = sets.reduce((sum, s) => sum + s.questions.length, 0);
+
+    return addFlatQuestions({
+      id: `timed-qr-test-${test.id}`,
+      title: test.title,
+      questionCount,
+      timeMinutes: test.time_minutes,
+      sets,
+    });
   });
 }
 
 export function useTimedQRTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function load() {
@@ -46,7 +82,7 @@ export function useTimedQRTests() {
         if (enabled) {
           const data = require('../../dev/preview-qr-timed.json');
           if (data?.length > 0) {
-            setTests(mapTests(data));
+            setTests(mapDevTests(data));
             setLoading(false);
             return;
           }
@@ -56,28 +92,41 @@ export function useTimedQRTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
-      const ensureFlatQuestions = (t) =>
-        t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedQRSets(t.sets) };
-
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
-      } catch {
-        if (hasValidCache) setTests(cached.data.map(ensureFlatQuestions));
+      } catch (versionError) {
+        if (hasValidCache) {
+          setTests(cached.data.map(addFlatQuestions));
+        } else {
+          setError(versionError);
+        }
         setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
-        setTests(cached.data.map(ensureFlatQuestions));
+        setTests(cached.data.map(addFlatQuestions));
         setLoading(false);
         return;
       }
 
-      // TODO: fetch timed QR tests from DB once schema is designed.
-      // For now fall back to cache even if stale.
-      if (hasValidCache) setTests(cached.data.map(ensureFlatQuestions));
-      setLoading(false);
+      try {
+        const rows = await withRetry(() => db.fetchTimedQRTests(), {
+          shouldRetry: (result) => result.length === 0,
+        });
+        const mapped = mapDBTests(rows);
+        setTests(mapped);
+        await saveCache(SECTION, versionRow.version, mapped);
+      } catch (err) {
+        if (hasValidCache) {
+          setTests(cached.data.map(addFlatQuestions));
+        } else {
+          setError(err);
+        }
+      } finally {
+        setLoading(false);
+      }
     }
 
     load();
