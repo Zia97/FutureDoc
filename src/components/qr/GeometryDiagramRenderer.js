@@ -1,14 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Circle, Ellipse, Polygon, Path, Text as SvgText } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const DEFAULT_VW = 300;
 const DEFAULT_VH = 220;
-const SHAPE_STROKE = '#a0aec0';
 const DIM_COLOR = '#f6ad55';
-const DIM_TEXT_COLOR = '#e2e8f0';
 const CAP_SIZE = 4; // end-cap length for dimension arrows
 
 export default function GeometryDiagramRenderer({ data }) {
+  const { theme: t } = useTheme();
+  const SHAPE_STROKE = t.text;
+  const DIM_TEXT_COLOR = t.text;
   const { shapes = [], dimensions = [] } = data;
   const vw = data.viewBox?.width || DEFAULT_VW;
   const vh = data.viewBox?.height || DEFAULT_VH;
@@ -175,7 +177,7 @@ export default function GeometryDiagramRenderer({ data }) {
 
   return (
     <View>
-      {data.title && <Text style={styles.title}>{data.title}</Text>}
+      {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
         width="100%"
         height={vh}
@@ -194,7 +196,6 @@ export default function GeometryDiagramRenderer({ data }) {
 
 const styles = StyleSheet.create({
   title: {
-    color: '#90cdf4',
     fontSize: 13,
     fontWeight: '700',
     textAlign: 'center',

@@ -253,7 +253,7 @@ export default function AboutUCATScreen() {
 
         {/* Verbal Reasoning */}
         <View ref={registerRef('vr')} style={styles.section}>
-          <SectionBadge label="VR" color="#7c3aed" styles={styles} />
+          <SectionBadge label="VR" color={t.accent} styles={styles} />
           <Text style={styles.sectionTitle}>Verbal Reasoning</Text>
           <StatRow items={[{ label: 'Questions', value: '44' }, { label: 'Time', value: '22 min' }, { label: 'Per question', value: '~30 sec' }]} styles={styles} />
           <Text style={styles.body}>
@@ -278,7 +278,7 @@ export default function AboutUCATScreen() {
 
         {/* Decision Making */}
         <View ref={registerRef('dm')} style={styles.section}>
-          <SectionBadge label="DM" color="#0891b2" styles={styles} />
+          <SectionBadge label="DM" color={t.accent} styles={styles} />
           <Text style={styles.sectionTitle}>Decision Making</Text>
           <StatRow items={[{ label: 'Questions', value: '35' }, { label: 'Time', value: '37 min' }, { label: 'Per question', value: '~63 sec' }]} styles={styles} />
           <Text style={styles.body}>
@@ -303,7 +303,7 @@ export default function AboutUCATScreen() {
 
         {/* Quantitative Reasoning */}
         <View ref={registerRef('qr')} style={styles.section}>
-          <SectionBadge label="QR" color="#059669" styles={styles} />
+          <SectionBadge label="QR" color={t.accent} styles={styles} />
           <Text style={styles.sectionTitle}>Quantitative Reasoning</Text>
           <StatRow items={[{ label: 'Questions', value: '36' }, { label: 'Time', value: '26 min' }, { label: 'Per question', value: '~43 sec' }]} styles={styles} />
           <Text style={styles.body}>
@@ -330,7 +330,7 @@ export default function AboutUCATScreen() {
 
         {/* Situational Judgement */}
         <View ref={registerRef('sj')} style={styles.section}>
-          <SectionBadge label="SJ" color="#d97706" styles={styles} />
+          <SectionBadge label="SJ" color={t.accent} styles={styles} />
           <Text style={styles.sectionTitle}>Situational Judgement</Text>
           <StatRow items={[{ label: 'Questions', value: '69' }, { label: 'Time', value: '26 min' }, { label: 'Per question', value: '~23 sec' }]} styles={styles} />
           <Text style={styles.body}>
@@ -392,7 +392,7 @@ export default function AboutUCATScreen() {
           <Text style={styles.body}>{r.scoringStatsIntro}</Text>
           <View style={styles.chartCard}>
             <Text style={styles.chartTitle}>Total Cognitive Score Distribution (2025)</Text>
-            <BellCurveChart data={r.bellCurve} />
+            <BellCurveChart data={r.bellCurve} t={t} />
             <Text style={styles.chartNote}>{r.chartNote}</Text>
           </View>
           <StatRow items={r.statItems} styles={styles} />
@@ -400,7 +400,7 @@ export default function AboutUCATScreen() {
           {region === 'uk' && (
             <>
               <Text style={styles.subheading}>SJ Band Distribution — 2025</Text>
-              <SJBandBar />
+              <SJBandBar t={t} />
             </>
           )}
 
@@ -425,7 +425,7 @@ export default function AboutUCATScreen() {
           ]} styles={styles} />
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="VR" color="#7c3aed" styles={styles} />
+          <SectionBadge label="VR" color={t.accent} styles={styles} />
           <Text style={styles.subheading}>Verbal Reasoning</Text>
           <BulletList items={[
             'Base every answer solely on the passage — prior knowledge must be ignored completely.',
@@ -436,7 +436,7 @@ export default function AboutUCATScreen() {
           ]} styles={styles} />
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="DM" color="#0891b2" styles={styles} />
+          <SectionBadge label="DM" color={t.accent} styles={styles} />
           <Text style={styles.subheading}>Decision Making</Text>
           <BulletList items={[
             'Use the whiteboard provided to sketch Venn diagrams for set-logic questions.',
@@ -447,7 +447,7 @@ export default function AboutUCATScreen() {
           ]} styles={styles} />
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="QR" color="#059669" styles={styles} />
+          <SectionBadge label="QR" color={t.accent} styles={styles} />
           <Text style={styles.subheading}>Quantitative Reasoning</Text>
           <BulletList items={[
             'Read the question before examining the data — identify exactly which numbers you need.',
@@ -458,7 +458,7 @@ export default function AboutUCATScreen() {
           ]} styles={styles} />
 
           <View style={styles.tipDivider} />
-          <SectionBadge label="SJ" color="#d97706" styles={styles} />
+          <SectionBadge label="SJ" color={t.accent} styles={styles} />
           <Text style={styles.subheading}>Situational Judgement</Text>
           <BulletList items={[
             'Patient safety is always the overriding priority — escalate anything that puts a patient at risk.',
@@ -560,7 +560,7 @@ function BulletList({ items, styles }) {
   );
 }
 
-function BellCurveChart({ data }) {
+function BellCurveChart({ data, t }) {
   const { mean: MEAN, sd: SD, d1: D1, d9: D9 } = data;
   const SCORE_MIN = 900;
   const SCORE_MAX = 2700;
@@ -602,17 +602,17 @@ function BellCurveChart({ data }) {
 
   const markers = [
     { score: D1, label: 'Bot. 10%', sub: String(D1), color: '#f87171' },
-    { score: MEAN, label: 'Mean', sub: String(MEAN), color: '#e2e8f0' },
+    { score: MEAN, label: 'Mean', sub: String(MEAN), color: t.text },
     { score: D9, label: 'Top 10%', sub: String(D9), color: '#34d399' },
   ];
 
   return (
     <Svg width={W} height={H}>
-      <Path d={fullFill} fill="rgba(79,70,229,0.12)" />
+      <Path d={fullFill} fill={t.accent + '1f'} />
       {bot10Fill && <Path d={bot10Fill} fill="rgba(239,68,68,0.22)" />}
       {top10Fill && <Path d={top10Fill} fill="rgba(16,185,129,0.22)" />}
-      <Path d={fullCurve} stroke="#4f46e5" strokeWidth="2.5" fill="none" />
-      <Line x1={pL} y1={baseY} x2={W - pR} y2={baseY} stroke="#2d4a6e" strokeWidth="1" />
+      <Path d={fullCurve} stroke={t.accent} strokeWidth="2.5" fill="none" />
+      <Line x1={pL} y1={baseY} x2={W - pR} y2={baseY} stroke={t.border} strokeWidth="1" />
       {markers.map(({ score, label, sub, color }) => (
         <G key={score}>
           <Line
@@ -631,7 +631,7 @@ function BellCurveChart({ data }) {
   );
 }
 
-function SJBandBar() {
+function SJBandBar({ t }) {
   const bands = [
     { label: 'Band 1', pct: 21, color: '#10b981' },
     { label: 'Band 2', pct: 39, color: '#3b82f6' },
@@ -651,7 +651,7 @@ function SJBandBar() {
         {bands.map((b) => (
           <View key={b.label} style={{ flexDirection: 'row', alignItems: 'center', gap: 5 }}>
             <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: b.color }} />
-            <Text style={{ fontSize: 12, color: '#94a3b8' }}>{b.label} — {b.pct}%</Text>
+            <Text style={{ fontSize: 12, color: t.text }}>{b.label} — {b.pct}%</Text>
           </View>
         ))}
       </View>
@@ -836,7 +836,7 @@ function makeStyles(t) { return StyleSheet.create({
     paddingRight: 8,
   },
   bullet: {
-    color: '#4f46e5',
+    color: t.accent,
     fontSize: 16,
     marginRight: 10,
     lineHeight: 22,
@@ -844,7 +844,7 @@ function makeStyles(t) { return StyleSheet.create({
   bulletText: {
     flex: 1,
     fontSize: 14,
-    color: t.textSecondary,
+    color: t.text,
     lineHeight: 22,
   },
 
@@ -957,33 +957,33 @@ function makeStyles(t) { return StyleSheet.create({
 
   // Disclaimer
   disclaimerSection: {
-    backgroundColor: '#1a1206',
+    backgroundColor: t.bgCard,
     borderRadius: 14,
     padding: 18,
     borderWidth: 1,
-    borderColor: '#92400e',
+    borderColor: t.border,
   },
   disclaimerTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#fbbf24',
+    color: t.text,
     marginBottom: 12,
   },
   disclaimerBody: {
     fontSize: 14,
-    color: '#d1b87a',
+    color: t.text,
     lineHeight: 22,
     marginBottom: 10,
   },
   officialLink: {
     marginTop: 8,
-    backgroundColor: '#92400e',
+    backgroundColor: t.accent,
     borderRadius: 10,
     paddingVertical: 12,
     alignItems: 'center',
   },
   officialLinkText: {
-    color: '#fef3c7',
+    color: '#ffffff',
     fontWeight: '700',
     fontSize: 14,
   },

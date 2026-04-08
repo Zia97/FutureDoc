@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Line, Text as SvgText } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const VW = 360;
 const VH = 260;
@@ -8,13 +9,14 @@ const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
 const NODE_R = 6;
-const NODE_FILL = '#4a9eff';
-const NODE_STROKE = '#1a1a2e';
-const EDGE_COLOR = '#4a5568';
-const LABEL_COLOR = '#a0aec0';
-const EDGE_LABEL_COLOR = '#e2e8f0';
 
 export default function NetworkDiagramRenderer({ data }) {
+  const { theme: t } = useTheme();
+  const NODE_FILL = t.accent;
+  const NODE_STROKE = t.bgCard;
+  const EDGE_COLOR = t.borderStrong;
+  const LABEL_COLOR = t.text;
+  const EDGE_LABEL_COLOR = t.text;
   const { nodes = [], edges = [], note } = data;
 
   function px(frac) {
@@ -32,7 +34,7 @@ export default function NetworkDiagramRenderer({ data }) {
 
   return (
     <View>
-      {data.title && <Text style={styles.title}>{data.title}</Text>}
+      {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
         width="100%"
         height={VH}
@@ -122,7 +124,7 @@ export default function NetworkDiagramRenderer({ data }) {
             x={VW / 2}
             y={VH - 4}
             fontSize={10}
-            fill="#718096"
+            fill={t.text}
             textAnchor="middle"
           >
             {note}
@@ -135,7 +137,6 @@ export default function NetworkDiagramRenderer({ data }) {
 
 const styles = StyleSheet.create({
   title: {
-    color: '#90cdf4',
     fontSize: 13,
     fontWeight: '700',
     textAlign: 'center',

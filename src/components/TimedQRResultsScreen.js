@@ -107,10 +107,10 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
           <View
             style={[
               styles.stimulusCard,
-              { backgroundColor: t.bgCard, borderLeftColor: t.sectionQR ?? '#059669', borderColor: t.border },
+              { backgroundColor: t.bgCard, borderLeftColor: t.accent, borderColor: t.border },
             ]}
           >
-            <Text style={[styles.stimulusLabel, { color: t.sectionQR ?? '#059669' }]}>STIMULUS</Text>
+            <Text style={[styles.stimulusLabel, { color: t.accent }]}>STIMULUS</Text>
             <QRStimulusRenderer stimulus={set.stimulus} />
           </View>
 
@@ -217,8 +217,8 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
         {/* UCAT Score */}
         <Text style={[styles.sectionHeader, { color: t.textSecondary }]}>UCAT SCORE ESTIMATE</Text>
         <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={[styles.scaledBadge, { backgroundColor: '#05966922' }]}>
-            <Text style={[styles.scaledBadgeText, { color: '#059669' }]}>{scaledScore}</Text>
+          <View style={[styles.scaledBadge, { backgroundColor: t.accent + '22' }]}>
+            <Text style={[styles.scaledBadgeText, { color: t.accent }]}>{scaledScore}</Text>
           </View>
           <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>
             Scaled score estimate (300–900)

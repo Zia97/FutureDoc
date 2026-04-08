@@ -32,17 +32,10 @@ const INSTRUCTION_ROUTE = {
   SJ: 'SJInstruction',
 };
 
-const SECTION_COLOR = {
-  VR: '#7c3aed',
-  DM: '#0891b2',
-  QR: '#059669',
-  SJ: '#d97706',
-};
-
 export default function TimedTestListScreen({ navigation, route }) {
   const { section, title } = route.params;
   const { theme: t } = useTheme();
-  const color = SECTION_COLOR[section] ?? t.accent;
+  const color = t.accent;
 
   const vr = useTimedVRTests();
   const dm = useTimedDMTests();

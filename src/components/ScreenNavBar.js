@@ -31,7 +31,6 @@ export default function ScreenNavBar({
   onNext,
   isFirst,
   isLast,
-  color,
   report = null, // { questionId, section, testId?, isTimed? }
 }) {
   const { practiceTheme: t } = useTheme();
@@ -40,11 +39,11 @@ export default function ScreenNavBar({
   const showReport = !!(report && report.questionId && report.section);
 
   return (
-    <View style={[styles.navBar, { backgroundColor: t.headerBg, borderBottomColor: t.border }]}>
+    <View style={[styles.navBar, { backgroundColor: t.headerBg, borderBottomColor: t.headerBg }]}>
       <View style={styles.sideGroup}>
         {showReport && <View style={styles.iconButton} />}
         <TouchableOpacity style={styles.navButton} onPress={onPrev} disabled={isFirst}>
-          <Text style={[styles.navArrow, { color: isFirst ? t.borderStrong : (color || '#ffffff') }]}>‹</Text>
+          <Text style={[styles.navArrow, { color: isFirst ? 'rgba(255,255,255,0.35)' : '#ffffff' }]}>‹</Text>
         </TouchableOpacity>
       </View>
 
@@ -55,7 +54,7 @@ export default function ScreenNavBar({
 
       <View style={styles.sideGroup}>
         <TouchableOpacity style={styles.navButton} onPress={onNext} disabled={isLast}>
-          <Text style={[styles.navArrow, { color: isLast ? t.borderStrong : (color || '#ffffff') }]}>›</Text>
+          <Text style={[styles.navArrow, { color: isLast ? 'rgba(255,255,255,0.35)' : '#ffffff' }]}>›</Text>
         </TouchableOpacity>
         {showReport && (
           <TouchableOpacity
@@ -64,7 +63,7 @@ export default function ScreenNavBar({
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             accessibilityLabel="Report this question"
           >
-            <BugIcon color={color || '#ffffff'} size={20} />
+            <BugIcon color="#ffffff" size={20} />
           </TouchableOpacity>
         )}
       </View>

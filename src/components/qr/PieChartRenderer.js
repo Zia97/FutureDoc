@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const VW = 360;
 const VH = 220;
@@ -22,6 +23,7 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 }
 
 export default function PieChartRenderer({ data }) {
+  const { theme: t } = useTheme();
   const { segments, total, unit = '' } = data;
   const computedTotal = total ?? segments.reduce((s, seg) => s + (seg.value ?? 0), 0);
 
@@ -65,7 +67,7 @@ export default function PieChartRenderer({ data }) {
 
   return (
     <View>
-      {data.title && <Text style={styles.title}>{data.title}</Text>}
+      {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
         width="100%"
         height={VH}
@@ -78,7 +80,7 @@ export default function PieChartRenderer({ data }) {
             key={i}
             d={arcPath(CX, CY, R, slice.startDeg, slice.endDeg)}
             fill={slice.color}
-            stroke="#1a1a2e"
+            stroke={t.bgCard}
             strokeWidth={1.5}
           />
         ))}
@@ -93,10 +95,10 @@ export default function PieChartRenderer({ data }) {
           return (
             <G key={i} x={200} y={ly}>
               <Rect x={0} y={0} width={13} height={13} fill={seg.color} rx={3} />
-              <SvgText x={19} y={11} fontSize={12} fill="#e2e8f0" fontWeight="600">
+              <SvgText x={19} y={11} fontSize={12} fill={t.text} fontWeight="600">
                 {seg.label}
               </SvgText>
-              <SvgText x={19} y={27} fontSize={11} fill="#718096">
+              <SvgText x={19} y={27} fontSize={11} fill={t.text}>
                 {valText} ({pct}%)
               </SvgText>
             </G>
@@ -109,7 +111,6 @@ export default function PieChartRenderer({ data }) {
 
 const styles = StyleSheet.create({
   title: {
-    color: '#90cdf4',
     fontSize: 13,
     fontWeight: '700',
     textAlign: 'center',

@@ -108,10 +108,10 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
           <View
             style={[
               styles.passageCard,
-              { backgroundColor: t.bgCard, borderLeftColor: t.sectionVR ?? '#7c3aed', borderColor: t.border },
+              { backgroundColor: t.bgCard, borderLeftColor: t.accent, borderColor: t.border },
             ]}
           >
-            <Text style={[styles.passageLabel, { color: t.sectionVR ?? '#7c3aed' }]}>PASSAGE</Text>
+            <Text style={[styles.passageLabel, { color: t.accent }]}>PASSAGE</Text>
             <Text style={[styles.passageText, { color: t.textSecondary }]}>
               {passage.resource ?? passage.body}
             </Text>
@@ -227,8 +227,8 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
         {/* UCAT Score */}
         <Text style={[styles.sectionHeader, { color: t.textSecondary }]}>UCAT SCORE ESTIMATE</Text>
         <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={[styles.scaledBadge, { backgroundColor: '#7c3aed22' }]}>
-            <Text style={[styles.scaledBadgeText, { color: '#7c3aed' }]}>{scaledScore}</Text>
+          <View style={[styles.scaledBadge, { backgroundColor: t.accent + '22' }]}>
+            <Text style={[styles.scaledBadgeText, { color: t.accent }]}>{scaledScore}</Text>
           </View>
           <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>
             Scaled score estimate (300–900)

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Polyline, Circle, Line, Rect, Text as SvgText } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const VW = 360;
 const VH = 240;
@@ -21,6 +22,7 @@ function computeYAxis(allValues, tickCount = 5) {
 }
 
 export default function LineGraphRenderer({ data }) {
+  const { theme: t } = useTheme();
   const [selected, setSelected] = useState(null);
   const [svgWidth, setSvgWidth] = useState(VW);
   const { labels, series, yAxisLabel, unit = '' } = data;
@@ -64,7 +66,7 @@ export default function LineGraphRenderer({ data }) {
 
   return (
     <View>
-      {data.title && <Text style={styles.title}>{data.title}</Text>}
+      {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Pressable onPress={handleTap} onLayout={(e) => setSvgWidth(e.nativeEvent.layout.width)}>
         <Svg
           width="100%"
@@ -81,9 +83,9 @@ export default function LineGraphRenderer({ data }) {
                 <G key={i}>
                   <Line
                     x1={0} y1={y} x2={CW} y2={y}
-                    stroke="#2d3748" strokeWidth={0.7}
+                    stroke={t.border} strokeWidth={0.7}
                   />
-                  <SvgText x={-5} y={y + 4} fontSize={11} fill="#718096" textAnchor="end">
+                  <SvgText x={-5} y={y + 4} fontSize={11} fill={t.text} textAnchor="end">
                     {unit}{Math.round(val)}
                   </SvgText>
                 </G>
@@ -93,7 +95,7 @@ export default function LineGraphRenderer({ data }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-40} y={CH / 2} fontSize={10} fill="#a0aec0"
+                x={-40} y={CH / 2} fontSize={10} fill={t.text}
                 textAnchor="middle" rotation="-90"
                 originX={-40} originY={CH / 2}
               >
@@ -105,7 +107,7 @@ export default function LineGraphRenderer({ data }) {
             {labels.map((label, i) => (
               <SvgText
                 key={i} x={xPos(i)} y={CH + 16}
-                fontSize={11} fill="#a0aec0" textAnchor="middle"
+                fontSize={11} fill={t.text} textAnchor="middle"
               >
                 {label}
               </SvgText>
@@ -134,7 +136,7 @@ export default function LineGraphRenderer({ data }) {
                     if (v == null) return null;
                     return (
                       <Circle key={i} cx={xPos(i)} cy={yPos(v)} r={5}
-                              fill={color} stroke="#1a1a2e" strokeWidth={1} />
+                              fill={color} stroke={t.bgCard} strokeWidth={1} />
                     );
                   })}
                 </G>
@@ -142,8 +144,8 @@ export default function LineGraphRenderer({ data }) {
             })}
 
             {/* Axes */}
-            <Line x1={0} y1={0} x2={0} y2={CH} stroke="#4a5568" strokeWidth={1} />
-            <Line x1={0} y1={CH} x2={CW} y2={CH} stroke="#4a5568" strokeWidth={1} />
+            <Line x1={0} y1={0} x2={0} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
+            <Line x1={0} y1={CH} x2={CW} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
 
             {/* Tooltip */}
             {selected && (() => {
@@ -156,8 +158,8 @@ export default function LineGraphRenderer({ data }) {
               return (
                 <G>
                   <Rect x={tx - tw / 2} y={ty} width={tw} height={th} rx={6}
-                        fill="#1a202c" stroke="#4a5568" strokeWidth={0.8} />
-                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={12} fill="#e2e8f0"
+                        fill={t.bgCard} stroke={t.borderStrong} strokeWidth={0.8} />
+                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={12} fill={t.text}
                            textAnchor="middle" fontWeight="600">
                     {text}
                   </SvgText>
@@ -183,7 +185,7 @@ export default function LineGraphRenderer({ data }) {
                 <G key={series[si].name} x={x} y={VH - 10}>
                   <Line x1={0} y1={-4} x2={16} y2={-4} stroke={color} strokeWidth={2} />
                   <Circle cx={8} cy={-4} r={5} fill={color} />
-                  <SvgText x={20} y={0} fontSize={11} fill="#a0aec0">
+                  <SvgText x={20} y={0} fontSize={11} fill={t.text}>
                     {item.name}
                   </SvgText>
                 </G>
@@ -198,7 +200,6 @@ export default function LineGraphRenderer({ data }) {
 
 const styles = StyleSheet.create({
   title: {
-    color: '#90cdf4',
     fontSize: 13,
     fontWeight: '700',
     textAlign: 'center',

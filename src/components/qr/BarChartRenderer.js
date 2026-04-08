@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
 
 const VW = 360;
 const VH = 300;
@@ -38,6 +39,7 @@ function wrapLabel(label) {
 }
 
 export default function BarChartRenderer({ data }) {
+  const { theme: t } = useTheme();
   const { labels, series, yAxisLabel, unit = '' } = data;
   const numGroups = labels.length;
   const numSeries = series.length;
@@ -89,7 +91,7 @@ export default function BarChartRenderer({ data }) {
 
   return (
     <View>
-      {data.title && <Text style={styles.title}>{data.title}</Text>}
+      {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
         width="100%"
         height={VH}
@@ -107,10 +109,10 @@ export default function BarChartRenderer({ data }) {
               <G key={i}>
                 <Line
                   x1={0} y1={y} x2={CW} y2={y}
-                  stroke={val === 0 && hasNegative ? '#4a5568' : '#2d3748'}
+                  stroke={val === 0 && hasNegative ? t.borderStrong : t.border}
                   strokeWidth={val === 0 && hasNegative ? 1.2 : 0.7}
                 />
-                <SvgText x={-5} y={y + 4} fontSize={12} fill="#718096" textAnchor="end">
+                <SvgText x={-5} y={y + 4} fontSize={12} fill={t.text} textAnchor="end">
                   {tickLabel}
                 </SvgText>
               </G>
@@ -120,7 +122,7 @@ export default function BarChartRenderer({ data }) {
           {/* Y-axis label */}
           {yAxisLabel && (
             <SvgText
-              x={-40} y={CH / 2} fontSize={11} fill="#a0aec0"
+              x={-40} y={CH / 2} fontSize={11} fill={t.text}
               textAnchor="middle" rotation="-90"
               originX={-40} originY={CH / 2}
             >
@@ -157,7 +159,7 @@ export default function BarChartRenderer({ data }) {
                         x={barCx}
                         y={labelY}
                         fontSize={10}
-                        fill="#cbd5e0"
+                        fill={t.text}
                         textAnchor="middle"
                       >
                         {Math.abs(val)}
@@ -171,7 +173,7 @@ export default function BarChartRenderer({ data }) {
                     x={lx}
                     y={CH + 22 + li * 13}
                     fontSize={11}
-                    fill="#a0aec0"
+                    fill={t.text}
                     textAnchor="middle"
                   >
                     {line}
@@ -182,11 +184,11 @@ export default function BarChartRenderer({ data }) {
           })}
 
           {/* Axes */}
-          <Line x1={0} y1={0} x2={0} y2={CH} stroke="#4a5568" strokeWidth={1} />
-          <Line x1={0} y1={CH} x2={CW} y2={CH} stroke="#4a5568" strokeWidth={1} />
+          <Line x1={0} y1={0} x2={0} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
+          <Line x1={0} y1={CH} x2={CW} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
           {/* Zero line for negative charts */}
           {hasNegative && (
-            <Line x1={0} y1={zeroY} x2={CW} y2={zeroY} stroke="#4a5568" strokeWidth={1.2} />
+            <Line x1={0} y1={zeroY} x2={CW} y2={zeroY} stroke={t.borderStrong} strokeWidth={1.2} />
           )}
         </G>
 
@@ -205,7 +207,7 @@ export default function BarChartRenderer({ data }) {
             return (
               <G key={series[si].name} x={x} y={VH - 14}>
                 <Rect x={0} y={-10} width={12} height={12} fill={COLORS[si % COLORS.length]} rx={2} />
-                <SvgText x={18} y={0} fontSize={12} fill="#a0aec0">
+                <SvgText x={18} y={0} fontSize={12} fill={t.text}>
                   {item.name}
                 </SvgText>
               </G>
@@ -219,7 +221,6 @@ export default function BarChartRenderer({ data }) {
 
 const styles = StyleSheet.create({
   title: {
-    color: '#90cdf4',
     fontSize: 13,
     fontWeight: '700',
     textAlign: 'center',

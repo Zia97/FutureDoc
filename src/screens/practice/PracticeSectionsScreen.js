@@ -8,28 +8,24 @@ const SECTIONS = [
     id: 'VR',
     title: 'Verbal Reasoning',
     description: 'Reading comprehension & analysis',
-    color: '#7c3aed',
     icon: 'book-open-page-variant',
   },
   {
     id: 'DM',
     title: 'Decision Making',
     description: 'Logic puzzles & diagrams',
-    color: '#0891b2',
     icon: 'head-cog-outline',
   },
   {
     id: 'QR',
     title: 'Quantitative Reasoning',
     description: 'Numerical problem solving',
-    color: '#059669',
     icon: 'calculator-variant',
   },
   {
     id: 'SJ',
     title: 'Situational Judgement',
     description: 'Clinical scenario judgement',
-    color: '#d97706',
     icon: 'stethoscope',
   },
 ];
@@ -42,13 +38,13 @@ export default function PracticeSectionsScreen({ navigation }) {
       <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
 
       <Text style={[styles.heading, { color: t.text }]}>Select Section</Text>
-      <Text style={[styles.subheading, { color: t.textSecondary }]}>Choose a section to practise</Text>
+      <Text style={[styles.subheading, { color: t.textSecondary }]}>Choose a section to practice</Text>
 
       <View style={styles.grid}>
         {SECTIONS.map((section) => (
           <TouchableOpacity
             key={section.id}
-            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
+            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: t.accent, borderColor: t.border }]}
             activeOpacity={0.8}
             onPress={() => {
               if (section.id === 'VR') navigation.navigate('VRQuestionList');
@@ -57,7 +53,7 @@ export default function PracticeSectionsScreen({ navigation }) {
               if (section.id === 'QR') navigation.navigate('QRQuestionList');
             }}
           >
-            <View style={[styles.badge, { backgroundColor: section.color }]}>
+            <View style={[styles.badge, { backgroundColor: t.accent }]}>
               <MaterialCommunityIcons name={section.icon} size={26} color="#ffffff" />
             </View>
             <View style={styles.cardText}>

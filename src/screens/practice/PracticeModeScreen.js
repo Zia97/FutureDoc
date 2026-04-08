@@ -9,7 +9,7 @@ export default function PracticeModeScreen({ navigation }) {
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
       <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
 
-      <Text style={[styles.heading, { color: t.text }]}>How do you want to practise?</Text>
+      <Text style={[styles.heading, { color: t.text }]}>How do you want to practice?</Text>
       <Text style={[styles.subheading, { color: t.textSecondary }]}>Choose a practice mode</Text>
 
       <View style={styles.grid}>

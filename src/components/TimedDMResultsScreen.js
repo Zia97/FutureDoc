@@ -167,8 +167,8 @@ export default function TimedDMResultsScreen({ questions, answers, test, onDone 
         {/* UCAT Score */}
         <Text style={[styles.sectionHeader, { color: t.textSecondary }]}>UCAT SCORE ESTIMATE</Text>
         <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={[styles.scaledBadge, { backgroundColor: '#0891b222' }]}>
-            <Text style={[styles.scaledBadgeText, { color: '#0891b2' }]}>{scaledScore}</Text>
+          <View style={[styles.scaledBadge, { backgroundColor: t.accent + '22' }]}>
+            <Text style={[styles.scaledBadgeText, { color: t.accent }]}>{scaledScore}</Text>
           </View>
           <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>
             Scaled score estimate (300–900)

@@ -8,28 +8,24 @@ const SECTIONS = [
     id: 'VR',
     title: 'Verbal Reasoning',
     description: '44 questions — 22 minutes',
-    color: '#7c3aed',
     icon: 'book-open-page-variant',
   },
   {
     id: 'DM',
     title: 'Decision Making',
     description: '35 questions — 37 minutes',
-    color: '#0891b2',
     icon: 'head-cog-outline',
   },
   {
     id: 'QR',
     title: 'Quantitative Reasoning',
     description: '36 questions — 26 minutes',
-    color: '#059669',
     icon: 'calculator-variant',
   },
   {
     id: 'SJ',
     title: 'Situational Judgement',
     description: '69 questions — 26 minutes',
-    color: '#d97706',
     icon: 'stethoscope',
   },
 ];
@@ -48,11 +44,11 @@ export default function TimedPracticeSectionsScreen({ navigation }) {
         {SECTIONS.map((section) => (
           <TouchableOpacity
             key={section.id}
-            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: section.color, borderColor: t.border }]}
+            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: t.accent, borderColor: t.border }]}
             activeOpacity={0.8}
             onPress={() => navigation.navigate('TimedTestList', { section: section.id, title: section.title })}
           >
-            <View style={[styles.badge, { backgroundColor: section.color }]}>
+            <View style={[styles.badge, { backgroundColor: t.accent }]}>
               <MaterialCommunityIcons name={section.icon} size={26} color="#ffffff" />
             </View>
             <View style={styles.cardText}>

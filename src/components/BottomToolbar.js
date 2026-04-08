@@ -3,44 +3,45 @@ import { useTheme } from '../context/ThemeContext';
 
 export default function BottomToolbar({ onNotes, onCalculator, onPause, onNavigator, sectionColor }) {
   const { practiceTheme: t } = useTheme();
+  const fg = '#ffffff';
 
   return (
-    <View style={[styles.bar, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+    <View style={[styles.bar, { backgroundColor: t.headerBg, borderColor: t.headerBg }]}>
       {onPause && (
         <TouchableOpacity
-          style={[styles.button, { borderColor: t.borderStrong }]}
+          style={[styles.button, { borderColor: fg }]}
           onPress={onPause}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: t.textSecondary }]}>⏸ Pause</Text>
+          <Text style={[styles.buttonText, { color: fg }]}>⏸ Pause</Text>
         </TouchableOpacity>
       )}
 
       <TouchableOpacity
-        style={[styles.button, { borderColor: sectionColor || t.borderStrong }]}
+        style={[styles.button, { borderColor: fg }]}
         onPress={onNotes}
         activeOpacity={0.8}
       >
-        <Text style={[styles.buttonText, { color: sectionColor || t.textSecondary }]}>✎ Notes</Text>
+        <Text style={[styles.buttonText, { color: fg }]}>✎ Notes</Text>
       </TouchableOpacity>
 
       {onCalculator && (
         <TouchableOpacity
-          style={[styles.button, { borderColor: sectionColor || t.borderStrong }]}
+          style={[styles.button, { borderColor: fg }]}
           onPress={onCalculator}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: sectionColor || t.textSecondary }]}>⊞ Calc</Text>
+          <Text style={[styles.buttonText, { color: fg }]}>⊞ Calc</Text>
         </TouchableOpacity>
       )}
 
       {onNavigator && (
         <TouchableOpacity
-          style={[styles.button, { borderColor: sectionColor || t.borderStrong }]}
+          style={[styles.button, { borderColor: fg }]}
           onPress={onNavigator}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: sectionColor || t.textSecondary }]}>☰ Navigator</Text>
+          <Text style={[styles.buttonText, { color: fg }]}>☰ Navigator</Text>
         </TouchableOpacity>
       )}
     </View>

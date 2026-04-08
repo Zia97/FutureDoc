@@ -8,18 +8,11 @@ import {
   ScrollView,
   ActivityIndicator,
   Switch,
-  LayoutAnimation,
-  Platform,
-  UIManager,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
-
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 const PRACTICE_SECTIONS = [
   { id: 'vr', label: 'Verbal Reasoning' },
@@ -28,47 +21,9 @@ const PRACTICE_SECTIONS = [
   { id: 'sj', label: 'Situational Judgement' },
 ];
 
-function CollapsibleSection({ title, subtitle, defaultOpen = false, accentColor, t, children }) {
-  const [open, setOpen] = useState(defaultOpen);
-
-  const toggle = () => {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setOpen((v) => !v);
-  };
-
-  return (
-    <View style={styles.collapsibleWrapper}>
-      <TouchableOpacity
-        style={[styles.collapsibleHeader, { backgroundColor: t.bgCard, borderColor: t.border }]}
-        onPress={toggle}
-        activeOpacity={0.8}
-      >
-        <View style={styles.collapsibleHeaderLeft}>
-          <Text style={[styles.collapsibleTitle, { color: accentColor ?? t.text }]}>{title}</Text>
-          {subtitle && !open && (
-            <Text style={[styles.collapsibleSubtitle, { color: t.textMuted }]} numberOfLines={1}>
-              {subtitle}
-            </Text>
-          )}
-        </View>
-        <Text style={[styles.chevron, { color: t.textMuted }]}>{open ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
-
-      {open && (
-        <View style={[styles.collapsibleBody, { borderColor: t.border }]}>
-          {subtitle && (
-            <Text style={[styles.bodySubtitle, { color: t.textMuted }]}>{subtitle}</Text>
-          )}
-          {children}
-        </View>
-      )}
-    </View>
-  );
-}
-
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
-  const { theme: t, isDark, useUCATScheme, toggleDark, toggleUCATScheme } = useTheme();
+  const { theme: t, isDark, toggleDark } = useTheme();
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
 
@@ -130,70 +85,43 @@ export default function ProfileScreen() {
       </View>
 
       {/* Appearance */}
-      <CollapsibleSection title="Appearance" subtitle="Theme and display options" defaultOpen t={t}>
-        <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <View style={styles.toggleRow}>
-            <View style={styles.toggleLabel}>
-              <Text style={[styles.toggleTitle, { color: t.text }]}>Dark Mode</Text>
-              <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
-                Switch between light and dark theme
-              </Text>
-            </View>
-            <Switch
-              value={isDark}
-              onValueChange={toggleDark}
-              trackColor={{ false: t.border, true: t.accent }}
-              thumbColor="#ffffff"
-            />
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Appearance</Text>
+      <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <View style={styles.toggleRow}>
+          <View style={styles.toggleLabel}>
+            <Text style={[styles.toggleTitle, { color: t.text }]}>Dark Mode</Text>
+            <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
+              Switch between light and dark theme
+            </Text>
           </View>
-
-          <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />
-
-          <View style={styles.toggleRow}>
-            <View style={styles.toggleLabel}>
-              <Text style={[styles.toggleTitle, { color: t.text }]}>Use UCAT Colour Scheme in Questions</Text>
-              <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
-                Practice screens match the real UCAT interface
-              </Text>
-            </View>
-            <Switch
-              value={useUCATScheme}
-              onValueChange={toggleUCATScheme}
-              trackColor={{ false: t.border, true: t.accent }}
-              thumbColor="#ffffff"
-            />
-          </View>
+          <Switch
+            value={isDark}
+            onValueChange={toggleDark}
+            trackColor={{ false: t.border, true: t.accent }}
+            thumbColor="#ffffff"
+          />
         </View>
-      </CollapsibleSection>
+      </View>
 
       {/* Content */}
-      <CollapsibleSection
-        title="Content"
-        subtitle="Check for new questions or updates"
-        t={t}
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Content</Text>
+      <TouchableOpacity
+        style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}
+        onPress={handleCheckForUpdates}
+        disabled={checkingUpdates}
+        activeOpacity={0.8}
       >
-        <TouchableOpacity
-          style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}
-          onPress={handleCheckForUpdates}
-          disabled={checkingUpdates}
-          activeOpacity={0.8}
-        >
-          {checkingUpdates ? (
-            <ActivityIndicator size="small" color={t.accent} />
-          ) : (
-            <Text style={[styles.updateButtonText, { color: t.accent }]}>Check for Updates</Text>
-          )}
-        </TouchableOpacity>
-      </CollapsibleSection>
+        {checkingUpdates ? (
+          <ActivityIndicator size="small" color={t.accent} />
+        ) : (
+          <Text style={[styles.updateButtonText, { color: t.accent }]}>Check for Updates</Text>
+        )}
+      </TouchableOpacity>
 
       {/* Developer (DEV only) */}
       {__DEV__ && (
-        <CollapsibleSection
-          title="Developer"
-          subtitle="Preview local JSON content"
-          accentColor="#f59e0b"
-          t={t}
-        >
+        <>
+          <Text style={[styles.sectionHeading, { color: t.text }]}>Developer</Text>
           <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
             Load questions from a local JSON file instead of the database. Reload the app after placing content in src/dev/.
           </Text>
@@ -218,7 +146,7 @@ export default function ProfileScreen() {
               </React.Fragment>
             ))}
           </View>
-        </CollapsibleSection>
+        </>
       )}
 
       <TouchableOpacity
@@ -264,55 +192,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  // Collapsible section
-  collapsibleWrapper: {
-    marginBottom: 12,
-  },
-  collapsibleHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-  },
-  collapsibleHeaderLeft: {
-    flex: 1,
-    marginRight: 12,
-  },
-  collapsibleTitle: {
+  sectionHeading: {
     fontSize: 16,
     fontWeight: '700',
-  },
-  collapsibleSubtitle: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  chevron: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  collapsibleBody: {
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderBottomWidth: 1,
-    borderBottomLeftRadius: 12,
-    borderBottomRightRadius: 12,
-    paddingHorizontal: 18,
-    paddingTop: 16,
-    paddingBottom: 16,
-    marginTop: -8,
-    paddingTop: 20,
-  },
-  bodySubtitle: {
-    fontSize: 13,
-    marginBottom: 16,
-    lineHeight: 18,
+    marginTop: 8,
+    marginBottom: 10,
   },
   bodyWarning: {
     fontSize: 13,
-    marginBottom: 16,
+    marginBottom: 12,
     lineHeight: 18,
   },
 
@@ -320,7 +208,7 @@ const styles = StyleSheet.create({
   toggleCard: {
     borderRadius: 12,
     borderWidth: 1,
-    marginBottom: 4,
+    marginBottom: 16,
     overflow: 'hidden',
   },
   toggleRow: {
@@ -353,6 +241,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     alignItems: 'center',
     borderWidth: 1,
+    marginBottom: 16,
   },
   updateButtonText: {
     fontSize: 16,
