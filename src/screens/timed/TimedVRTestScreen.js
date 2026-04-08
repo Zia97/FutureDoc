@@ -176,6 +176,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={sectionColor}
+        report={{ questionId: qid, section: 'vr', testId: test.id, isTimed: true }}
       />
 
       <ScrollView

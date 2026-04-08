@@ -147,6 +147,7 @@ export default function DMQuestionScreen({ route }) {
         isFirst={isFirst}
         isLast={isLast}
         color={t.sectionDM}
+        report={{ questionId: question.id, section: 'dm' }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />

@@ -168,6 +168,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={t.sectionDM}
+        report={{ questionId: qid, section: 'dm', testId: test.id, isTimed: true }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />

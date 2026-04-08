@@ -147,6 +147,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={sectionColor}
+        report={{ questionId: itemId, section: 'sj', testId: test.id, isTimed: true }}
       />
 
       <ScrollView

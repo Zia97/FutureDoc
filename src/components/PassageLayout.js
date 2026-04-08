@@ -84,6 +84,7 @@ export default function PassageLayout({
         isFirst={isFirst}
         isLast={isLast}
         color={sectionColor}
+        report={{ questionId: qid, section }}
       />
 
       <ScrollView

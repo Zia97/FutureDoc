@@ -163,6 +163,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={t.sectionQR}
+        report={{ questionId: qid, section: 'qr', testId: test.id, isTimed: true }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />

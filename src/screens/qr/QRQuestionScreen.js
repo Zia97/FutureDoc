@@ -98,6 +98,7 @@ export default function QRQuestionScreen({ route }) {
         isFirst={isFirst}
         isLast={isLast}
         color={t.sectionQR}
+        report={{ questionId: qid, section: 'qr' }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
