@@ -13,6 +13,8 @@ import SignUpScreen from '../screens/auth/SignUpScreen';
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/home/ProfileScreen';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
+import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
+import TermsOfServiceScreen from '../screens/home/TermsOfServiceScreen';
 import PracticeModeScreen from '../screens/practice/PracticeModeScreen';
 import PracticeSectionsScreen from '../screens/practice/PracticeSectionsScreen';
 import TimedPracticeSectionsScreen from '../screens/practice/TimedPracticeSectionsScreen';
@@ -90,6 +92,8 @@ function AppStack() {
       <Stack.Screen name="QRQuestion" component={QRQuestionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
       <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ title: 'About the UCAT' }} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
+      <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ title: 'Terms of Service' }} />
     </Stack.Navigator>
   );
 }

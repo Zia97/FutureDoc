@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   Switch,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
@@ -22,8 +23,10 @@ const PRACTICE_SECTIONS = [
 ];
 
 export default function ProfileScreen() {
-  const { user, signOut } = useAuth();
+  const navigation = useNavigation();
+  const { user, signOut, deleteAccount } = useAuth();
   const { theme: t, isDark, toggleDark } = useTheme();
+  const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
 
@@ -67,6 +70,42 @@ export default function ProfileScreen() {
       { text: 'Cancel', style: 'cancel' },
       { text: 'Sign Out', style: 'destructive', onPress: signOut },
     ]);
+  };
+
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete Account',
+      'This will permanently delete your account and all associated data. This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert(
+              'Are you sure?',
+              'All your progress, scores, and personal data will be permanently erased.',
+              [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                  text: 'Delete Forever',
+                  style: 'destructive',
+                  onPress: async () => {
+                    setDeleting(true);
+                    try {
+                      await deleteAccount();
+                    } catch {
+                      setDeleting(false);
+                      Alert.alert('Error', 'Could not delete account. Please try again or contact support.');
+                    }
+                  },
+                },
+              ],
+            );
+          },
+        },
+      ],
+    );
   };
 
   const emailInitial = user?.email?.[0]?.toUpperCase() ?? '?';
@@ -149,12 +188,48 @@ export default function ProfileScreen() {
         </>
       )}
 
+      {/* Legal */}
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Legal</Text>
+      <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <TouchableOpacity
+          style={styles.linkRow}
+          onPress={() => navigation.navigate('PrivacyPolicy')}
+          activeOpacity={0.7}
+        >
+          <Text style={[styles.linkText, { color: t.text }]}>Privacy Policy</Text>
+          <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
+        </TouchableOpacity>
+        <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />
+        <TouchableOpacity
+          style={styles.linkRow}
+          onPress={() => navigation.navigate('TermsOfService')}
+          activeOpacity={0.7}
+        >
+          <Text style={[styles.linkText, { color: t.text }]}>Terms of Service</Text>
+          <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
+        </TouchableOpacity>
+      </View>
+
       <TouchableOpacity
         style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
         onPress={handleSignOut}
         activeOpacity={0.8}
       >
         <Text style={[styles.signOutText, { color: t.textSecondary }]}>Sign Out</Text>
+      </TouchableOpacity>
+
+      {/* Delete Account */}
+      <TouchableOpacity
+        style={[styles.deleteButton, { borderColor: t.danger ?? '#dc2626' }]}
+        onPress={handleDeleteAccount}
+        activeOpacity={0.8}
+        disabled={deleting}
+      >
+        {deleting ? (
+          <ActivityIndicator size="small" color={t.danger ?? '#dc2626'} />
+        ) : (
+          <Text style={[styles.deleteText, { color: t.danger ?? '#dc2626' }]}>Delete Account</Text>
+        )}
       </TouchableOpacity>
     </ScrollView>
   );
@@ -247,6 +322,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  linkRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+  },
+  linkText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  linkChevron: {
+    fontSize: 22,
+    fontWeight: '300',
+  },
+
   signOutButton: {
     marginTop: 12,
     borderRadius: 12,
@@ -255,6 +346,19 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   signOutText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  deleteButton: {
+    marginTop: 12,
+    borderRadius: 12,
+    paddingVertical: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    backgroundColor: 'transparent',
+    marginBottom: 8,
+  },
+  deleteText: {
     fontSize: 16,
     fontWeight: '600',
   },
