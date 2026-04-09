@@ -45,7 +45,7 @@ export function useTimedQRExamProgress() {
   }
 
   // Called when the exam ends (user ends it or timer expires).
-  async function submitExam({ test, answers, secondsLeft }) {
+  async function submitExam({ test, answers, secondsLeft, flags }) {
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { correctCount, scorePercent } = computeScores(test.sets, answers);
 
@@ -67,6 +67,7 @@ export function useTimedQRExamProgress() {
       submittedAt: new Date().toISOString(),
       timeTakenSeconds,
       answerMap,
+      flags: flags ? Array.from(flags) : [],
     };
 
     // ── Save to local storage (fast, device-first) ──────────────────────

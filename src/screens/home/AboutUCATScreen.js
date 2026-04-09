@@ -325,7 +325,7 @@ export default function AboutUCATScreen() {
             The key skill is not raw arithmetic but knowing which calculation to perform efficiently
             within the tight time limit.
           </Text>
-          <InfoBox text="Practise reading tables and graphs quickly. The bottleneck is usually identifying the right numbers, not the calculation itself." styles={styles} />
+          <InfoBox text="Practice reading tables and graphs quickly. The bottleneck is usually identifying the right numbers, not the calculation itself." styles={styles} />
         </View>
 
         {/* Situational Judgement */}
@@ -451,7 +451,7 @@ export default function AboutUCATScreen() {
           <Text style={styles.subheading}>Quantitative Reasoning</Text>
           <BulletList items={[
             'Read the question before examining the data — identify exactly which numbers you need.',
-            `Practise specifically with the on-screen ${region === 'uk' ? 'UCAT' : 'UCAT ANZ'} calculator; it behaves differently to a standard one.`,
+            `Practice specifically with the on-screen ${region === 'uk' ? 'UCAT' : 'UCAT ANZ'} calculator; it behaves differently to a standard one.`,
             'Plan your calculation before picking up the calculator — efficiency beats speed.',
             'Most questions test data interpretation, not complex maths. GCSE-level arithmetic is sufficient.',
             'Watch for unit changes (e.g. km to m, monthly to annual) — these are common traps.',

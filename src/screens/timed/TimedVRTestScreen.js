@@ -88,6 +88,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
       test,
       getAnswer,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
+      flags,
     });
     setShowResults(true);
   }

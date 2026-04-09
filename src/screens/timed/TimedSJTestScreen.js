@@ -57,7 +57,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
     if (endExamCalledRef.current) return;
     endExamCalledRef.current = true;
     setExamEnded(true);
-    submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current });
+    submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current, flags });
   }
 
   onExpireRef.current = endExam;

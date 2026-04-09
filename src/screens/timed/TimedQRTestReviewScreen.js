@@ -8,6 +8,7 @@ export default function TimedQRTestReviewScreen({ route, navigation }) {
 
   const attempt = completedAttempts[test.id];
   const answerMap = attempt?.answerMap ?? {};
+  const flags = useMemo(() => new Set(attempt?.flags ?? []), [attempt]);
 
   const getAnswer = (setId, questionId) => answerMap[setId]?.[questionId] ?? null;
 
@@ -28,7 +29,7 @@ export default function TimedQRTestReviewScreen({ route, navigation }) {
     <TimedQRResultsScreen
       sets={sets}
       getAnswer={getAnswer}
-      flags={new Set()}
+      flags={flags}
       test={test}
       onDone={() => navigation.navigate('TimedTestList', { section: 'QR', title: 'Quantitative Reasoning' })}
     />

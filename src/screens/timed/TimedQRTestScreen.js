@@ -92,6 +92,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
       test,
       answers,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
+      flags,
     });
     setShowResults(true);
   }

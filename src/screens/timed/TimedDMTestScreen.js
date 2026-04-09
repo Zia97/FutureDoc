@@ -90,6 +90,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
       test,
       answers,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
+      flags,
     });
     setShowResults(true);
   }
@@ -125,6 +126,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
       <TimedDMResultsScreen
         questions={test.questions}
         answers={answers}
+        flags={flags}
         test={test}
         onDone={() => navigation.navigate('TimedTestList', { section: 'DM', title: 'Decision Making' })}
       />

@@ -9,17 +9,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 
-export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, routeName, navigation, listFooter }) {
+export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, routeName, navigation }) {
   const { theme: t } = useTheme();
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['bottom', 'left', 'right']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['left', 'right']}>
       <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        ListFooterComponent={listFooter ?? null}
         renderItem={({ item, index }) => {
           const status = getStatus ? getStatus(item) : null;
           const navIndex = getIndex ? getIndex(item, index) : index;

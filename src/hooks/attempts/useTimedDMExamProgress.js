@@ -55,7 +55,7 @@ export function useTimedDMExamProgress() {
     }
   }
 
-  async function submitExam({ test, answers, secondsLeft }) {
+  async function submitExam({ test, answers, secondsLeft, flags }) {
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answerList, correctCount, scorePercent } = computeScores(test.questions, answers);
 
@@ -65,6 +65,7 @@ export function useTimedDMExamProgress() {
       submittedAt: new Date().toISOString(),
       timeTakenSeconds,
       answerMap: answers,
+      flags: flags ? Array.from(flags) : [],
     };
 
     // ── 1. Save to local storage (fast, device-first) ───────────────────────

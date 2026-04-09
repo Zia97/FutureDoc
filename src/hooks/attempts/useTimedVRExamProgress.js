@@ -49,7 +49,7 @@ export function useTimedVRExamProgress() {
 
   // Called when the exam ends (user ends it or timer expires).
   // Saves locally first, then writes to DB in background (non-blocking).
-  async function submitExam({ test, getAnswer, secondsLeft }) {
+  async function submitExam({ test, getAnswer, secondsLeft, flags }) {
     const numericTestId = getNumericTestId(test.id);
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answers, correctCount, scorePercent } = computeScores(
@@ -76,6 +76,7 @@ export function useTimedVRExamProgress() {
       submittedAt: new Date().toISOString(),
       timeTakenSeconds,
       answerMap,
+      flags: flags ? Array.from(flags) : [],
     };
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);

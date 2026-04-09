@@ -8,6 +8,7 @@ export default function TimedVRTestReviewScreen({ route, navigation }) {
 
   const attempt = completedAttempts[test.id];
   const answerMap = attempt?.answerMap ?? {};
+  const flags = useMemo(() => new Set(attempt?.flags ?? []), [attempt]);
 
   const getAnswer = (passageId, questionId) => answerMap[passageId]?.[questionId] ?? null;
 
@@ -30,7 +31,7 @@ export default function TimedVRTestReviewScreen({ route, navigation }) {
     <TimedVRResultsScreen
       passages={passages}
       getAnswer={getAnswer}
-      flags={new Set()}
+      flags={flags}
       test={test}
       onDone={() => navigation.navigate('TimedTestList', { section: 'VR', title: 'Verbal Reasoning' })}
     />

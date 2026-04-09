@@ -34,14 +34,19 @@ function getQuestionResult(q, answers) {
   return selected === q.answer ? 'correct' : 'incorrect';
 }
 
-export default function TimedDMResultsScreen({ questions, answers, test, onDone }) {
+export default function TimedDMResultsScreen({ questions, answers, flags, test, onDone }) {
   const { practiceTheme: t } = useTheme();
   const insets = useSafeAreaInsets();
   const [reviewIndex, setReviewIndex] = useState(null);
 
   const questionResults = useMemo(
-    () => questions.map((q) => ({ ...q, result: getQuestionResult(q, answers) })),
-    [questions, answers],
+    () =>
+      questions.map((q) => ({
+        ...q,
+        result: getQuestionResult(q, answers),
+        flagged: flags ? flags.has(q.questionId) : false,
+      })),
+    [questions, answers, flags],
   );
 
   const correctCount = questionResults.filter((q) => q.result === 'correct').length;
@@ -196,6 +201,7 @@ export default function TimedDMResultsScreen({ questions, answers, test, onDone 
           >
             <Text style={[styles.qNumber, { color: t.text }]}>Q{idx + 1}</Text>
             <View style={styles.questionRowRight}>
+              {q.flagged && <Text style={styles.flaggedBadge}>⚑</Text>}
               <View
                 style={[styles.resultBadge, { backgroundColor: resultColor[q.result] + '22' }]}
               >
@@ -331,6 +337,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     minWidth: 36,
+  },
+  flaggedBadge: {
+    fontSize: 16,
+    color: '#d97706',
   },
   resultBadge: {
     borderRadius: 6,

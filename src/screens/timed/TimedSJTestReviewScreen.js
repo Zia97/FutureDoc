@@ -9,6 +9,7 @@ export default function TimedSJTestReviewScreen({ route, navigation }) {
 
   const attempt = completedAttempts[test.id];
   const answerMap = attempt?.answerMap ?? {};
+  const flags = useMemo(() => new Set(attempt?.flags ?? []), [attempt]);
 
   const getAnswer = (scenarioId, itemId) => answerMap[scenarioId]?.[itemId] ?? null;
 
@@ -21,7 +22,7 @@ export default function TimedSJTestReviewScreen({ route, navigation }) {
     <TimedSJResultsScreen
       scenarios={scenarios}
       getAnswer={getAnswer}
-      flags={new Set()}
+      flags={flags}
       test={test}
       onDone={() => navigation.navigate('TimedTestList', { section: 'SJ', title: 'Situational Judgement' })}
     />

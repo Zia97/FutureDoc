@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
@@ -32,6 +33,7 @@ export default function SJScenarioListScreen({ navigation }) {
   const { progressMap, reload } = useSituationalJudgementProgress();
   const { localAnswers } = useSituationalJudgementAttempts();
   const { theme: t } = useTheme();
+  const insets = useSafeAreaInsets();
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState('all');
@@ -69,6 +71,11 @@ export default function SJScenarioListScreen({ navigation }) {
     return status === activeFilter;
   });
 
+  const activeFilterLabel = FILTERS.find((f) => f.value === activeFilter)?.label;
+  const countLabel = activeFilter === 'all'
+    ? `${scenarios.length} ${scenarios.length === 1 ? 'scenario' : 'scenarios'}`
+    : `${filteredScenarios.length} of ${scenarios.length} · ${activeFilterLabel}`;
+
   if (loading) {
     return (
       <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
@@ -89,6 +96,9 @@ export default function SJScenarioListScreen({ navigation }) {
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
       <View style={styles.filterWrapper}>
+        <Text style={[styles.countLabel, { color: t.textSecondary }]} numberOfLines={1}>
+          {countLabel}
+        </Text>
         <TouchableOpacity
           style={[styles.filterButton, { backgroundColor: t.bgCard, borderColor: activeFilter !== 'all' ? t.sectionSJ : t.border }]}
           onPress={() => setDropdownOpen((o) => !o)}
@@ -123,26 +133,21 @@ export default function SJScenarioListScreen({ navigation }) {
         getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
         routeName="SJScenario"
         navigation={navigation}
-        listFooter={
-          <View style={[styles.deleteBanner, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            <View style={styles.deleteBannerInfo}>
-              <Text style={[styles.deleteBannerTitle, { color: t.text }]}>Reset Progress</Text>
-              <Text style={[styles.deleteBannerSub, { color: t.textMuted }]}>Delete all answers for this section</Text>
-            </View>
-            <TouchableOpacity
-              style={[styles.deleteBtn, { borderColor: t.danger }]}
-              onPress={handleDeleteProgress}
-              disabled={deleting}
-              activeOpacity={0.8}
-            >
-              {deleting
-                ? <ActivityIndicator size="small" color={t.danger} />
-                : <Text style={[styles.deleteBtnText, { color: t.danger }]}>Reset</Text>
-              }
-            </TouchableOpacity>
-          </View>
-        }
       />
+
+      <View style={[styles.bottomPanel, { backgroundColor: t.headerBg, paddingBottom: insets.bottom + 12 }]}>
+        <TouchableOpacity
+          style={[styles.deleteBtn, { borderColor: t.danger }]}
+          onPress={handleDeleteProgress}
+          disabled={deleting}
+          activeOpacity={0.8}
+        >
+          {deleting
+            ? <ActivityIndicator size="small" color={t.danger} />
+            : <Text style={[styles.deleteBtnText, { color: t.danger }]}>Reset Progress</Text>
+          }
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -152,7 +157,15 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
   loadingText: { marginTop: 12, fontSize: 14 },
   errorText: { color: 'red', textAlign: 'center' },
-  filterWrapper: { alignItems: 'flex-end', paddingHorizontal: 24, paddingTop: 12, zIndex: 10 },
+  filterWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingTop: 12,
+    zIndex: 10,
+  },
+  countLabel: { fontSize: 13, fontWeight: '500', flex: 1, marginRight: 12 },
   filterButton: {
     width: 34, height: 34, borderRadius: 17,
     borderWidth: 1, justifyContent: 'center', alignItems: 'center',
@@ -168,27 +181,17 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   dropdownItemText: { fontSize: 14 },
-  deleteBanner: {
-    marginTop: 32,
-    marginHorizontal: 4,
-    marginBottom: 8,
-    borderRadius: 12,
-    borderWidth: 1,
-    paddingVertical: 14,
-    paddingHorizontal: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  bottomPanel: {
+    paddingTop: 14,
+    paddingHorizontal: 24,
+    alignItems: 'flex-end',
   },
-  deleteBannerInfo: { flex: 1, marginRight: 12 },
-  deleteBannerTitle: { fontSize: 15, fontWeight: '600', marginBottom: 2 },
-  deleteBannerSub: { fontSize: 12 },
   deleteBtn: {
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 7,
+    paddingHorizontal: 14,
     borderRadius: 8,
     borderWidth: 1,
     alignItems: 'center',
   },
-  deleteBtnText: { fontSize: 13, fontWeight: '600' },
+  deleteBtnText: { fontSize: 12, fontWeight: '600' },
 });
