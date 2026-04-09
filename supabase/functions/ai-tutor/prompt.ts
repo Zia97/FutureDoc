@@ -159,6 +159,8 @@ export function buildQuestionContext({
   userAnswer,
   correctAnswer,
   explanation,
+  passage,
+  options,
   stimulusData,
   vennDiagrams,
   topStruggles,
@@ -168,6 +170,8 @@ export function buildQuestionContext({
   userAnswer: string;
   correctAnswer: string;
   explanation: string;
+  passage?: string;
+  options?: string[];
   stimulusData?: unknown;
   vennDiagrams?: string;
   topStruggles: string[];
@@ -180,6 +184,14 @@ export function buildQuestionContext({
   };
 
   const sectionName = sectionNames[section] ?? section.toUpperCase();
+
+  const passageNote = passage
+    ? `\n\n--- Passage ---\n${passage}\n---`
+    : '';
+
+  const optionsNote = options && options.length > 0
+    ? `\nAnswer options: ${options.join(' | ')}`
+    : '';
 
   const stimulusNote = stimulusData
     ? `\n\n--- Data / Chart ---\n${JSON.stringify(stimulusData, null, 2)}\n---`
@@ -195,8 +207,8 @@ Bear this in mind but do not reference it explicitly unless relevant.`
     : '';
 
   return `\
---- Current question (${sectionName}) ---
-Question: ${question}
+--- Current question (${sectionName}) ---${passageNote}
+Question: ${question}${optionsNote}
 Student's answer: ${userAnswer}
 Correct answer: ${correctAnswer}
 Official explanation: ${explanation}${stimulusNote}${vennNote}

@@ -38,7 +38,8 @@
       "expo-asset",
       "expo-secure-store",
       "expo-web-browser",
-      "expo-apple-authentication"
+      "expo-apple-authentication",
+      "expo-build-properties"
     ],
     "owner": "qhz123"
   }

@@ -63,6 +63,7 @@ function mapDBTests(rows) {
     return addFlatQuestions({
       id: `timed-qr-test-${test.id}`,
       title: test.title,
+      isFree: test.is_free ?? false,
       questionCount,
       timeMinutes: test.time_minutes,
       sets,

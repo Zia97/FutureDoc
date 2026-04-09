@@ -11,6 +11,7 @@ function mapScenarios(data) {
   return data.map((s) => ({
     id: s.id,
     scenarioId: s.id,
+    isFree: s.is_free ?? s.isFree ?? false,
     resource: s.body,
     questions: [...s.situational_judgement_questions]
       .sort((a, b) => a.order_index - b.order_index)

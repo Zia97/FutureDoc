@@ -64,6 +64,7 @@ function mapDBTests(rows) {
     return addFlatQuestions({
       id: `timed-sj-test-${test.id}`,
       title: test.title,
+      isFree: test.is_free ?? false,
       scenarioCount: scenarios.length,
       questionCount,
       timeMinutes: test.time_minutes,

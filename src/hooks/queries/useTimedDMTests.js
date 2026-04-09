@@ -41,6 +41,7 @@ function mapTests(data) {
     return {
       id: test.id,
       title: test.title,
+      isFree: test.is_free ?? test.isFree ?? false,
       passageCount: 0,
       questionCount: test.question_count ?? questions.length,
       timeMinutes: test.time_minutes,

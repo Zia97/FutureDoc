@@ -35,6 +35,7 @@ export default function VRPassageScreen({ route }) {
       initialAnswers={localAnswers}
       onAnswerCommit={handleAnswerCommit}
       section="vr"
+      getItemIsFree={(item) => item.isFree}
       getQuestionOptions={(item, question) => question.options}
       renderOptions={({ question, getOptionState, onAnswer }) =>
         question.options.map((opt) => (

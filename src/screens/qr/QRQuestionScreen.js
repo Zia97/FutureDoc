@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
+import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
@@ -30,8 +31,20 @@ export default function QRQuestionScreen({ route }) {
   const { submitAttempt, localAnswers, cacheLoading } = useQuantitativeReasoningAttempts();
   const { practiceTheme: t } = useTheme();
 
-  const { index, item, isFirst, isLast, goNext, goPrev } =
+  const { index, item, isFirst, isLast, goNext: rawGoNext, goPrev: rawGoPrev } =
     useFlatNavigation(flatQuestions, initialIndex);
+  const { canAccess } = usePremiumGate((item) => item.isFree);
+
+  function goNext() {
+    const next = flatQuestions[index + 1];
+    if (next && !canAccess(next)) return;
+    rawGoNext();
+  }
+  function goPrev() {
+    const prev = flatQuestions[index - 1];
+    if (prev && !canAccess(prev)) return;
+    rawGoPrev();
+  }
 
   const { handleAnswer, getAnswer, resetAnswers } = useAnswers();
   const [calcVisible, setCalcVisible] = useState(false);

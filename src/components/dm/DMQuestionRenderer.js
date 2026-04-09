@@ -15,6 +15,7 @@ import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
 import VennDiagramKey from './VennDiagramKey';
 import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/ai/useAITutor';
+import { useAICredits } from '../../hooks/ai/useAICredits';
 import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
@@ -181,6 +182,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   const [inputText, setInputText] = useState('');
   const [activeTutorContext, setActiveTutorContext] = useState(null);
   const tutorState = useAITutor(activeTutorContext);
+  const { creditsRemaining, isPro: isPremium, decrement: decrementCredits } = useAICredits();
 
   const isYesNo  = YES_NO_TYPES.includes(question.type);
   const isCorrect = isYesNo
@@ -244,6 +246,9 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
           tutorState={tutorState}
           inputText={inputText}
           setInputText={setInputText}
+          creditsRemaining={creditsRemaining}
+          isPro={isPremium}
+          onCreditUsed={decrementCredits}
         />
       )}
     </View>

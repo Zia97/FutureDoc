@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState, useEffect } from 'react';
 import AITutorModal from './AITutorModal';
 import { useAITutor } from '../hooks/ai/useAITutor';
+import { useAICredits } from '../hooks/ai/useAICredits';
 import { useTheme } from '../context/ThemeContext';
 
 export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
@@ -10,6 +11,7 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
   const [inputText, setInputText] = useState('');
 
   const tutorState = useAITutor(questionContext);
+  const { creditsRemaining, isPro, decrement: decrementCredits } = useAICredits();
 
   useEffect(() => {
     setInputText('');
@@ -52,6 +54,9 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
           tutorState={tutorState}
           inputText={inputText}
           setInputText={setInputText}
+          creditsRemaining={creditsRemaining}
+          isPro={isPro}
+          onCreditUsed={decrementCredits}
         />
       )}
     </>

@@ -130,6 +130,7 @@ export default function QRQuestionListScreen({ navigation }) {
         getTitle={(item) => item.title}
         getStatus={(item) => progressMap[item.setId] ?? null}
         getIndex={(item) => getTargetFlatIndex(item.setId, flatQuestions, localAnswers)}
+        getIsFree={(item) => item.isFree}
         routeName="QRQuestion"
         navigation={navigation}
       />

@@ -1,6 +1,7 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
+import { SubscriptionProvider } from './src/context/SubscriptionContext';
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
@@ -8,7 +9,9 @@ export default function App() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider>
         <AuthProvider>
-          <AppNavigator />
+          <SubscriptionProvider>
+            <AppNavigator />
+          </SubscriptionProvider>
         </AuthProvider>
       </ThemeProvider>
     </GestureHandlerRootView>

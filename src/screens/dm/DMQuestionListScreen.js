@@ -129,6 +129,7 @@ export default function DMQuestionListScreen({ navigation }) {
         getTitle={(item) => item.title}
         getStatus={(item) => progressMap[item.id] ?? null}
         getIndex={(item) => item._originalIndex}
+        getIsFree={(item) => item.isFree}
         routeName="DMQuestion"
         navigation={navigation}
       />

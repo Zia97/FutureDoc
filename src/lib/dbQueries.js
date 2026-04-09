@@ -44,6 +44,7 @@ class DatabaseService {
         id,
         title,
         body,
+        is_free,
         verbal_reasoning_questions (
           id,
           question_text,
@@ -79,6 +80,7 @@ class DatabaseService {
         hide_labels,
         correct_answer,
         answer_reason,
+        is_free,
         decision_making_question_options (
           id,
           label,
@@ -113,6 +115,7 @@ class DatabaseService {
         id,
         title,
         stimulus,
+        is_free,
         quantitative_reasoning_questions (
           id,
           question_text,
@@ -141,6 +144,7 @@ class DatabaseService {
       .select(`
         id,
         body,
+        is_free,
         situational_judgement_questions (
           id,
           question_text,
@@ -170,6 +174,7 @@ class DatabaseService {
         id,
         title,
         time_minutes,
+        is_free,
         timed_situational_judgement_scenarios (
           id,
           body,
@@ -198,24 +203,28 @@ class DatabaseService {
    */
   async fetchTimedVRTests() {
     const { data, error } = await supabase
-      .from('timed_verbal_reasoning_passages')
+      .from('timed_verbal_reasoning_tests')
       .select(`
         id,
-        test_id,
         title,
-        body,
-        order_index,
-        timed_verbal_reasoning_questions (
+        time_minutes,
+        is_free,
+        timed_verbal_reasoning_passages (
           id,
-          question_text,
-          options,
-          correct_answer,
-          answer_reason,
-          order_index
+          title,
+          body,
+          order_index,
+          timed_verbal_reasoning_questions (
+            id,
+            question_text,
+            options,
+            correct_answer,
+            answer_reason,
+            order_index
+          )
         )
       `)
-      .order('test_id', { ascending: true })
-      .order('order_index', { ascending: true });
+      .order('id', { ascending: true });
     if (error) throw error;
     return data;
   }
@@ -230,7 +239,7 @@ class DatabaseService {
   async fetchTimedDMTests() {
     const { data: tests, error: testsError } = await supabase
       .from('timed_decision_making_tests')
-      .select('id, title, time_minutes')
+      .select('id, title, time_minutes, is_free')
       .order('id', { ascending: true });
     if (testsError) throw testsError;
 
@@ -298,6 +307,7 @@ class DatabaseService {
         id,
         title,
         time_minutes,
+        is_free,
         timed_quantitative_reasoning_sets (
           id,
           set_ref,

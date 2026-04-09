@@ -12,6 +12,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
 
@@ -26,6 +27,7 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const { user, signOut, deleteAccount } = useAuth();
   const { theme: t, isDark, toggleDark } = useTheme();
+  const { isPro } = useSubscription();
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
@@ -122,6 +124,42 @@ export default function ProfileScreen() {
         </View>
         <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{user?.email}</Text>
       </View>
+
+      {/* Subscription */}
+      <Text style={[styles.sectionHeading, { color: t.text }]}>Subscription</Text>
+      {isPro ? (
+        <View style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.correct ?? '#38a169' }]}>
+          <View style={styles.subscriptionRow}>
+            <View style={styles.subscriptionInfo}>
+              <Text style={[styles.subscriptionPlan, { color: t.text }]}>Premium Plan</Text>
+              <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
+                All features unlocked
+              </Text>
+            </View>
+            <View style={[styles.upgradeBadge, { backgroundColor: t.correct ?? '#38a169' }]}>
+              <Text style={styles.upgradeBadgeText}>Active</Text>
+            </View>
+          </View>
+        </View>
+      ) : (
+        <TouchableOpacity
+          style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.accent }]}
+          onPress={() => navigation.navigate('Paywall')}
+          activeOpacity={0.8}
+        >
+          <View style={styles.subscriptionRow}>
+            <View style={styles.subscriptionInfo}>
+              <Text style={[styles.subscriptionPlan, { color: t.text }]}>Free Plan</Text>
+              <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
+                Limited questions & AI Tutor usage
+              </Text>
+            </View>
+            <View style={[styles.upgradeBadge, { backgroundColor: t.accent }]}>
+              <Text style={styles.upgradeBadgeText}>Upgrade</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )}
 
       {/* Appearance */}
       <Text style={[styles.sectionHeading, { color: t.text }]}>Appearance</Text>
@@ -272,6 +310,40 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     marginTop: 8,
     marginBottom: 10,
+  },
+  subscriptionCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+    marginBottom: 16,
+  },
+  subscriptionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  subscriptionInfo: {
+    flex: 1,
+    marginRight: 12,
+  },
+  subscriptionPlan: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginBottom: 3,
+  },
+  subscriptionDesc: {
+    fontSize: 13,
+    lineHeight: 18,
+  },
+  upgradeBadge: {
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+  },
+  upgradeBadgeText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '700',
   },
   bodyWarning: {
     fontSize: 13,

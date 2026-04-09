@@ -37,6 +37,7 @@ export default function SJScenarioScreen({ route }) {
       initialAnswers={localAnswers}
       onAnswerCommit={handleAnswerCommit}
       section="sj"
+      getItemIsFree={(item) => item.isFree}
       getQuestionOptions={(item) => LABEL_SETS[item.labelSet] ?? LABEL_SETS[1]}
       renderOptions={({ item, getOptionState, onAnswer }) =>
         (LABEL_SETS[item.labelSet] ?? LABEL_SETS[1]).map((opt) => (

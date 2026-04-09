@@ -131,6 +131,7 @@ export default function SJScenarioListScreen({ navigation }) {
         getTitle={(_, index) => `Scenario ${index + 1}`}
         getStatus={(item) => progressMap[item.id] ?? null}
         getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
+        getIsFree={(item) => item.isFree}
         routeName="SJScenario"
         navigation={navigation}
       />

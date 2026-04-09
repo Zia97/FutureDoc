@@ -14,8 +14,14 @@ import { useRef, useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
 
-export default function AITutorModal({ visible, onClose, questionContext, tutorState, inputText, setInputText }) {
-  const { messages, streamingContent, isStreaming, error, sendMessage } = tutorState;
+export default function AITutorModal({ visible, onClose, questionContext, tutorState, inputText, setInputText, creditsRemaining, isPro, onCreditUsed }) {
+  const { messages, streamingContent, isStreaming, error, sendMessage: rawSendMessage } = tutorState;
+
+  function sendMessage(text) {
+    rawSendMessage(text);
+    // Decrement credit counter locally when a message is sent (free users only)
+    if (!isPro && onCreditUsed) onCreditUsed();
+  }
 
   const flatListRef = useRef(null);
   const insets = useSafeAreaInsets();
@@ -67,10 +73,15 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
     >
       <View style={containerStyle}>
           {/* Header */}
-          <View style={[styles.header, { paddingTop: Platform.OS === 'android' ? insets.top + 8 : 12 }]}>
+          <View style={[styles.header, { paddingTop: Math.max(insets.top, 12) + 8 }]}>
             <View style={styles.headerCenter}>
               <Text style={styles.headerTitle}>AI Genius Chat</Text>
               <Text style={styles.headerSub}>Ask me anything about this question</Text>
+              {!isPro && creditsRemaining != null && (
+                <Text style={styles.creditCounter}>
+                  {creditsRemaining}/5 free explanations remaining
+                </Text>
+              )}
             </View>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn} hitSlop={12}>
               <Text style={styles.closeBtnText}>✕</Text>
@@ -92,7 +103,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
           />
 
           {/* Error banner */}
-          {error && <ErrorBanner error={error} />}
+          {error && <ErrorBanner error={error} onUpgrade={onClose} />}
 
           {/* Input */}
           {!error && (
@@ -208,8 +219,8 @@ function MessageBubble({ message }) {
   );
 }
 
-function ErrorBanner({ error }) {
-  const isLimit = error === TUTOR_ERROR.DAILY_LIMIT || error === TUTOR_ERROR.LIFETIME_LIMIT;
+function ErrorBanner({ error, onUpgrade }) {
+  const isLimit = error === TUTOR_ERROR.LIFETIME_LIMIT;
   return (
     <View style={styles.errorBanner}>
       <Text style={styles.errorTitle}>
@@ -217,11 +228,14 @@ function ErrorBanner({ error }) {
       </Text>
       <Text style={styles.errorText}>
         {error === TUTOR_ERROR.LIFETIME_LIMIT
-          ? "You've used all 3 free AI sessions. Upgrade to Premium for 10 sessions per day."
-          : error === TUTOR_ERROR.DAILY_LIMIT
-          ? "You've reached your 10 daily AI sessions. Come back tomorrow or manage your plan."
+          ? "You've used all 5 free AI explanations. Upgrade for unlimited AI Tutor access."
           : 'Could not reach the AI tutor. Check your connection and try again.'}
       </Text>
+      {isLimit && onUpgrade && (
+        <TouchableOpacity style={styles.upgradeBtn} onPress={onUpgrade} activeOpacity={0.8}>
+          <Text style={styles.upgradeBtnText}>Upgrade to Premium</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -437,5 +451,23 @@ const styles = StyleSheet.create({
     color: '#a0aec0',
     fontSize: 13,
     lineHeight: 20,
+  },
+  upgradeBtn: {
+    marginTop: 12,
+    backgroundColor: '#3b5bdb',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  upgradeBtnText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  creditCounter: {
+    color: '#f6ad55',
+    fontSize: 11,
+    fontWeight: '600',
+    marginTop: 4,
   },
 });

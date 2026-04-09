@@ -10,6 +10,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useSubscription } from '../../context/SubscriptionContext';
 
 function useFadeSlide(delay = 0) {
   const opacity = useRef(new Animated.Value(0)).current;
@@ -38,6 +39,7 @@ function useFadeSlide(delay = 0) {
 export default function HomeScreen({ navigation }) {
   const { user } = useAuth();
   const { theme: t } = useTheme();
+  const { isPro } = useSubscription();
   const emailInitial = user?.email?.[0]?.toUpperCase() ?? '?';
 
   const headerAnim = useFadeSlide(0);
@@ -59,13 +61,24 @@ export default function HomeScreen({ navigation }) {
 
       <Animated.View style={[styles.header, headerAnim]}>
         <Text style={[styles.wordmark, { color: t.text }]}>UCAT Genius AI</Text>
-        <TouchableOpacity
-          style={[styles.profileButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
-          onPress={() => navigation.navigate('Profile')}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.profileInitial, { color: t.accent }]}>{emailInitial}</Text>
-        </TouchableOpacity>
+        <View style={styles.headerRight}>
+          {!isPro && (
+            <TouchableOpacity
+              style={[styles.proButton, { backgroundColor: t.accent }]}
+              onPress={() => navigation.navigate('Paywall')}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.proButtonText}>PRO</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            style={[styles.profileButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
+            onPress={() => navigation.navigate('Profile')}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.profileInitial, { color: t.accent }]}>{emailInitial}</Text>
+          </TouchableOpacity>
+        </View>
       </Animated.View>
 
       <View style={styles.hero}>
@@ -113,6 +126,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  proButton: {
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 8,
+  },
+  proButtonText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 1,
   },
   wordmark: {
     fontSize: 18,

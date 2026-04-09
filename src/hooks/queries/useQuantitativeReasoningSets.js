@@ -12,6 +12,7 @@ function mapSets(data) {
     id: s.id,
     setId: s.id,
     title: s.title,
+    isFree: s.is_free ?? s.isFree ?? false,
     stimulus: s.stimulus,
     questions: [...s.quantitative_reasoning_questions]
       .sort((a, b) => a.order_index - b.order_index)

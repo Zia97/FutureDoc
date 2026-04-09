@@ -12,6 +12,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFlatNavigation } from '../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
+import { usePremiumGate } from '../hooks/ui/usePremiumGate';
 import { useTheme } from '../context/ThemeContext';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
@@ -29,11 +30,24 @@ export default function PassageLayout({
   onAnswerCommit = null,
   initialAnswers = {},
   section = 'vr',
+  getItemIsFree = null,
 }) {
   const { practiceTheme: t } = useTheme();
 
-  const { index, item, isFirst, isLast, goNext, goPrev } =
+  const { index, item, isFirst, isLast, goNext: rawGoNext, goPrev: rawGoPrev } =
     useFlatNavigation(flatQuestions, initialIndex);
+  const { canAccess } = usePremiumGate(getItemIsFree);
+
+  function goNext() {
+    const next = flatQuestions[index + 1];
+    if (next && !canAccess(next)) return;
+    rawGoNext();
+  }
+  function goPrev() {
+    const prev = flatQuestions[index - 1];
+    if (prev && !canAccess(prev)) return;
+    rawGoPrev();
+  }
 
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [pendingAnswer, setPendingAnswer] = useState(null);

@@ -7,57 +7,43 @@ import { flattenTimedVRPassages } from '../../lib/flattenQuestions';
 
 const SECTION = 'timed_verbal_reasoning';
 
-function mapPassagesToTests(rows) {
-  // Rows are passages grouped by test_id — aggregate into test objects.
-  const testMap = new Map();
-
-  for (const row of rows) {
-    if (!testMap.has(row.test_id)) {
-      testMap.set(row.test_id, {
-        id: `timed-vr-test-${String(row.test_id).padStart(3, '0')}`,
-        title: `VR Timed Test ${row.test_id}`,
-        passageCount: 0,
-        questionCount: 0,
-        timeMinutes: 22,
-        passages: [],
-      });
-    }
-
-    const test = testMap.get(row.test_id);
-    const questions = [...(row.timed_verbal_reasoning_questions ?? [])]
+function mapTestsFromNested(rows) {
+  return rows.map((test) => {
+    const passages = [...(test.timed_verbal_reasoning_passages ?? [])]
       .sort((a, b) => a.order_index - b.order_index)
-      .map((q) => ({
-        questionId: q.id,
-        questionText: q.question_text,
-        options: q.options,
-        answer: q.correct_answer,
-        answeringReason: q.answer_reason,
-      }));
-
-    test.passages.push({
-      id: row.id,
-      title: row.title,
-      resource: row.body,
-      questions,
-    });
-
-    test.passageCount += 1;
-    test.questionCount += questions.length;
-  }
-
-  return Array.from(testMap.values()).map((t) => ({
-    ...t,
-    flatQuestions: flattenTimedVRPassages(t.passages),
-  }));
+      .map((p) => {
+        const questions = [...(p.timed_verbal_reasoning_questions ?? [])]
+          .sort((a, b) => a.order_index - b.order_index)
+          .map((q) => ({
+            questionId: q.id,
+            questionText: q.question_text,
+            options: q.options,
+            answer: q.correct_answer,
+            answeringReason: q.answer_reason,
+          }));
+        return { id: p.id, title: p.title, resource: p.body, questions };
+      });
+    return {
+      id: test.id,
+      title: test.title,
+      isFree: test.is_free ?? false,
+      passageCount: passages.length,
+      questionCount: passages.reduce((n, p) => n + p.questions.length, 0),
+      timeMinutes: test.time_minutes ?? 22,
+      passages,
+      flatQuestions: flattenTimedVRPassages(passages),
+    };
+  });
 }
 
 function mapTests(data) {
   return data.map((test) => {
-    const passages = test.passages.map((p) => ({
+    const rawPassages = test.timed_verbal_reasoning_passages ?? test.passages ?? [];
+    const passages = rawPassages.map((p) => ({
       id: p.id,
       title: p.title,
       resource: p.body ?? p.resource,
-      questions: [...(p.verbal_reasoning_questions ?? p.questions ?? [])]
+      questions: [...(p.timed_verbal_reasoning_questions ?? p.verbal_reasoning_questions ?? p.questions ?? [])]
         .sort((a, b) => a.order_index - b.order_index)
         .map((q) => ({
           questionId: q.id ?? q.questionId,
@@ -70,6 +56,7 @@ function mapTests(data) {
     return {
       id: test.id,
       title: test.title,
+      isFree: test.is_free ?? test.isFree ?? false,
       passageCount: test.passage_count ?? passages.length,
       questionCount: test.question_count ?? passages.reduce((n, p) => n + p.questions.length, 0),
       timeMinutes: test.time_minutes ?? 22,
@@ -133,7 +120,7 @@ export function useTimedVRTests() {
 
       try {
         const rows = await withRetry(() => db.fetchTimedVRTests());
-        const mapped = mapPassagesToTests(rows);
+        const mapped = mapTestsFromNested(rows);
         await saveCache(SECTION, versionRow.version, mapped);
         setTests(mapped);
       } catch (fetchErr) {

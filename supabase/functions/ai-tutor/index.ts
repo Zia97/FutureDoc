@@ -5,8 +5,8 @@ import { ChatMessage } from './providers/types.ts';
 import { getSectionPrompt, buildQuestionContext } from './prompt.ts';
 
 // ── Limits ────────────────────────────────────────────────────────────────────
-const FREE_LIFETIME_LIMIT = 3;
-const PREMIUM_DAILY_LIMIT = 20;
+const FREE_LIFETIME_LIMIT = 5;
+// Premium users get unlimited access (no daily cap)
 
 // ── Provider factory ──────────────────────────────────────────────────────────
 function getProvider() {
@@ -62,6 +62,8 @@ Deno.serve(async (req) => {
     correctAnswer,
     userAnswer,
     explanation,
+    passage,
+    options,
     stimulusData,
     vennDiagrams,
     messages,
@@ -72,6 +74,8 @@ Deno.serve(async (req) => {
     correctAnswer: string;
     userAnswer: string;
     explanation: string;
+    passage?: string;
+    options?: string[];
     stimulusData?: unknown;
     vennDiagrams?: string;
     messages: ChatMessage[];
@@ -96,19 +100,12 @@ Deno.serve(async (req) => {
     .single();
 
   if (isPremium) {
-    const resetNeeded = !usage || usage.daily_reset_at !== today;
-    const currentDaily = resetNeeded ? 0 : (usage?.daily_count ?? 0);
-
-    if (currentDaily >= PREMIUM_DAILY_LIMIT) {
-      return json({ error: 'daily_limit_reached', limit: PREMIUM_DAILY_LIMIT }, 429);
-    }
-
-    // Upsert with reset if needed
+    // Premium users have unlimited AI Tutor access — just track usage for analytics
     await supabase.from('user_ai_usage').upsert({
       user_id: user.id,
-      daily_count: currentDaily + 1,
-      daily_reset_at: today,
       lifetime_count: (usage?.lifetime_count ?? 0) + 1,
+      daily_count: (usage?.daily_count ?? 0) + 1,
+      daily_reset_at: usage?.daily_reset_at ?? today,
     });
   } else {
     const currentLifetime = usage?.lifetime_count ?? 0;
@@ -156,6 +153,8 @@ Deno.serve(async (req) => {
     userAnswer,
     correctAnswer,
     explanation,
+    passage,
+    options,
     stimulusData,
     vennDiagrams,
     topStruggles,

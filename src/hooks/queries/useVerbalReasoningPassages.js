@@ -11,6 +11,7 @@ function mapPassages(data) {
   return data.map((p) => ({
     id: p.id,
     title: p.title,
+    isFree: p.is_free ?? p.isFree ?? false,
     resource: p.body,
     questions: [...p.verbal_reasoning_questions]
       .sort((a, b) => a.order_index - b.order_index)

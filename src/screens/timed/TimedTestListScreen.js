@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
+import { useSubscription } from '../../context/SubscriptionContext';
 import { useTimedVRTests } from '../../hooks/queries/useTimedVRTests';
 import { useTimedDMTests } from '../../hooks/queries/useTimedDMTests';
 import { useTimedQRTests } from '../../hooks/queries/useTimedQRTests';
@@ -35,6 +36,7 @@ const INSTRUCTION_ROUTE = {
 export default function TimedTestListScreen({ navigation, route }) {
   const { section, title } = route.params;
   const { theme: t } = useTheme();
+  const { isPro } = useSubscription();
   const color = t.accent;
 
   const vr = useTimedVRTests();
@@ -106,16 +108,22 @@ export default function TimedTestListScreen({ navigation, route }) {
         renderItem={({ item, index }) => {
           const isCompleted = (section === 'SJ' || section === 'VR' || section === 'DM' || section === 'QR') && !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
+          const isLocked = !item.isFree && !isPro;
           const sc = isCompleted ? scoreColor(attempt.scorePercent) : color;
           return (
             <TouchableOpacity
               style={[
                 styles.card,
-                { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: color },
+                { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: isLocked ? t.border : color },
                 isCompleted && { borderLeftColor: '#16a34a' },
+                isLocked && { opacity: 0.7 },
               ]}
               activeOpacity={0.8}
               onPress={() => {
+                if (isLocked) {
+                  navigation.navigate('Paywall');
+                  return;
+                }
                 if (isCompleted) {
                   const reviewRoute = section === 'VR' ? 'TimedVRTestReview' : section === 'DM' ? 'TimedDMTestReview' : section === 'QR' ? 'TimedQRTestReview' : 'TimedSJTestReview';
                   navigation.navigate(reviewRoute, { test: item });
@@ -124,8 +132,8 @@ export default function TimedTestListScreen({ navigation, route }) {
                 }
               }}
             >
-              <View style={[styles.numberBadge, { backgroundColor: isCompleted ? '#16a34a' : color }]}>
-                <Text style={styles.numberText}>{isCompleted ? '✓' : index + 1}</Text>
+              <View style={[styles.numberBadge, { backgroundColor: isCompleted ? '#16a34a' : isLocked ? '#6b7280' : color }]}>
+                <Text style={styles.numberText}>{isCompleted ? '✓' : isLocked ? '🔒' : index + 1}</Text>
               </View>
               <View style={styles.cardBody}>
                 <Text style={[styles.cardTitle, { color: t.text }]}>{item.title}</Text>
@@ -136,6 +144,9 @@ export default function TimedTestListScreen({ navigation, route }) {
                     ? `${item.scenarioCount} scenarios · ${item.questionCount} questions · ${item.timeMinutes} min`
                     : `${item.questionCount} questions · ${item.timeMinutes} min`}
                 </Text>
+                {isLocked && (
+                  <Text style={[styles.lockedLabel, { color: t.accent }]}>Premium</Text>
+                )}
                 {isCompleted && (
                   <Text style={[styles.completedScore, { color: sc }]}>{attempt.scorePercent}% · Tap to review</Text>
                 )}
@@ -190,6 +201,7 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: 16, fontWeight: '700' },
   cardMeta: { fontSize: 13, marginTop: 4 },
   completedScore: { fontSize: 13, marginTop: 4, fontWeight: '700' },
+  lockedLabel: { fontSize: 12, marginTop: 4, fontWeight: '700' },
   resetButton: {
     width: 36,
     height: 36,

@@ -12,6 +12,7 @@ function mapQuestions(data) {
     title: q.title,
     type: q.type,
     stem: q.stem,
+    isFree: q.is_free ?? q.isFree ?? false,
     tableData: q.table_data,
     stimulusDiagram: q.stimulus_diagram,
     hideLabels: q.hideLabels ?? q.hide_labels ?? false,

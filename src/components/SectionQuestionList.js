@@ -8,9 +8,11 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
+import { useSubscription } from '../context/SubscriptionContext';
 
-export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, routeName, navigation }) {
+export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, getIsFree, routeName, navigation }) {
   const { theme: t } = useTheme();
+  const { isPro } = useSubscription();
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['left', 'right']}>
@@ -22,18 +24,31 @@ export default function SectionQuestionList({ items, getTitle, getStatus, getInd
         renderItem={({ item, index }) => {
           const status = getStatus ? getStatus(item) : null;
           const navIndex = getIndex ? getIndex(item, index) : index;
+          const isFree = getIsFree ? getIsFree(item) : true;
+          const isLocked = !isFree && !isPro;
           return (
             <TouchableOpacity
-              style={[styles.row, { borderBottomColor: t.border }]}
-              onPress={() => navigation.navigate(routeName, { index: navIndex })}
+              style={[styles.row, { borderBottomColor: t.border }, isLocked && { opacity: 0.5 }]}
+              onPress={() => {
+                if (isLocked) {
+                  navigation.navigate('Paywall');
+                  return;
+                }
+                navigation.navigate(routeName, { index: navIndex });
+              }}
               activeOpacity={0.75}
             >
-              <Text style={[styles.number, { color: t.accent }]}>{index + 1}.</Text>
+              <Text style={[styles.number, { color: isLocked ? '#6b7280' : t.accent }]}>
+                {isLocked ? '🔒' : `${index + 1}.`}
+              </Text>
               <Text style={[styles.title, { color: t.text }]} numberOfLines={2}>{getTitle(item, index)}</Text>
-              {getStatus && (
+              {getStatus && !isLocked && (
                 <Text style={[styles.statusCircle, { color: t.accent }]}>
                   {status === 'completed' ? '●' : status === 'in_progress' ? '◑' : '○'}
                 </Text>
+              )}
+              {isLocked && (
+                <Text style={[styles.premiumLabel, { color: t.accent }]}>Premium</Text>
               )}
             </TouchableOpacity>
           );
@@ -71,5 +86,9 @@ const styles = StyleSheet.create({
   },
   statusCircle: {
     fontSize: 28,
+  },
+  premiumLabel: {
+    fontSize: 11,
+    fontWeight: '700',
   },
 });

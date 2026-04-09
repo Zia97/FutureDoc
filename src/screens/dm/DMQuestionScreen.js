@@ -10,6 +10,7 @@ import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
 import { useTheme } from '../../context/ThemeContext';
+import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
@@ -86,6 +87,7 @@ export default function DMQuestionScreen({ route }) {
 
   const { questions, loading } = useDecisionMakingQuestions();
   const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
+  const { canAccess } = usePremiumGate((item) => item.isFree);
 
   useEffect(() => {
     if (!cacheLoading) {
@@ -98,8 +100,16 @@ export default function DMQuestionScreen({ route }) {
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === questions.length - 1;
 
-  function goPrev() { if (!isFirst) setCurrentIndex((i) => i - 1); }
-  function goNext() { if (!isLast) setCurrentIndex((i) => i + 1); }
+  function goPrev() {
+    const prev = questions[currentIndex - 1];
+    if (!isFirst && prev && !canAccess(prev)) return;
+    if (!isFirst) setCurrentIndex((i) => i - 1);
+  }
+  function goNext() {
+    const next = questions[currentIndex + 1];
+    if (!isLast && next && !canAccess(next)) return;
+    if (!isLast) setCurrentIndex((i) => i + 1);
+  }
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,

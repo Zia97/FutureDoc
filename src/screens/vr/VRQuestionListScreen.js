@@ -132,6 +132,7 @@ export default function VRQuestionListScreen({ navigation }) {
         getTitle={(item) => item.title}
         getStatus={(item) => progressMap[item.id] ?? null}
         getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
+        getIsFree={(item) => item.isFree}
         routeName="VRPassage"
         navigation={navigation}
       />
