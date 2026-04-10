@@ -81,12 +81,16 @@ Deno.serve(async (req) => {
     messages: ChatMessage[];
   } = await req.json();
 
-  // 3. Check subscription tier
+  // 3. Check subscription tier + ban status
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('is_premium')
+    .select('is_premium, ai_banned')
     .eq('user_id', user.id)
     .single();
+
+  if (profile?.ai_banned) {
+    return json({ error: 'account_restricted' }, 403);
+  }
 
   const isPremium = profile?.is_premium ?? false;
 
@@ -160,8 +164,17 @@ Deno.serve(async (req) => {
     topStruggles,
   });
 
-  // 8. Call AI provider and stream response
-  console.log('[ai-tutor] reaching provider, key present:', !!Deno.env.get('OPENAI_API_KEY'));
+  // 8. Log the user's message for abuse monitoring
+  const lastUserMsg = messages.filter((m: ChatMessage) => m.role === 'user').pop();
+  if (lastUserMsg?.content) {
+    await supabase.from('ai_tutor_logs').insert({
+      user_id: user.id,
+      message: lastUserMsg.content.slice(0, 1000),
+      section,
+    });
+  }
+
+
   const provider = getProvider();
   let aiResponse: Response;
   try {
