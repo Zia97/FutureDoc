@@ -27,7 +27,7 @@ export default function ProfileScreen() {
   const navigation = useNavigation();
   const { user, signOut, deleteAccount } = useAuth();
   const { theme: t, isDark, toggleDark } = useTheme();
-  const { isPro } = useSubscription();
+  const { isPro, presentCustomerCenter } = useSubscription();
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
@@ -128,19 +128,29 @@ export default function ProfileScreen() {
       {/* Subscription */}
       <Text style={[styles.sectionHeading, { color: t.text }]}>Subscription</Text>
       {isPro ? (
-        <View style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.correct ?? '#38a169' }]}>
-          <View style={styles.subscriptionRow}>
-            <View style={styles.subscriptionInfo}>
-              <Text style={[styles.subscriptionPlan, { color: t.text }]}>Premium Plan</Text>
-              <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
-                All features unlocked
-              </Text>
-            </View>
-            <View style={[styles.upgradeBadge, { backgroundColor: t.correct ?? '#38a169' }]}>
-              <Text style={styles.upgradeBadgeText}>Active</Text>
+        <>
+          <View style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.correct ?? '#38a169' }]}>
+            <View style={styles.subscriptionRow}>
+              <View style={styles.subscriptionInfo}>
+                <Text style={[styles.subscriptionPlan, { color: t.text }]}>Premium Plan</Text>
+                <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
+                  All features unlocked
+                </Text>
+              </View>
+              <View style={[styles.upgradeBadge, { backgroundColor: t.correct ?? '#38a169' }]}>
+                <Text style={styles.upgradeBadgeText}>Active</Text>
+              </View>
             </View>
           </View>
-        </View>
+          <TouchableOpacity
+            style={[styles.manageButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
+            onPress={presentCustomerCenter}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.manageButtonText, { color: t.text }]}>Manage Subscription</Text>
+            <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
+          </TouchableOpacity>
+        </>
       ) : (
         <TouchableOpacity
           style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.accent }]}
@@ -410,6 +420,20 @@ const styles = StyleSheet.create({
     fontWeight: '300',
   },
 
+  manageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    marginBottom: 16,
+  },
+  manageButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
   signOutButton: {
     marginTop: 12,
     borderRadius: 12,

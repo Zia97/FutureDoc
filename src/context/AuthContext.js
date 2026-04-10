@@ -12,6 +12,7 @@ const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -36,8 +37,20 @@ export function AuthProvider({ children }) {
           const params = new URLSearchParams(hash);
           const access_token = params.get('access_token');
           const refresh_token = params.get('refresh_token');
+          const type = params.get('type');
+
           if (access_token && refresh_token) {
             await supabase.auth.setSession({ access_token, refresh_token });
+          }
+
+          // Email verification — session is set, user is now confirmed
+          if (type === 'signup') {
+            // Session already set above, user will be logged in automatically
+          }
+
+          // Password recovery — session is set, user can now call updateUser
+          if (type === 'recovery') {
+            setPasswordRecovery(true);
           }
         }
         const { data: { session } } = await supabase.auth.getSession();
@@ -64,10 +77,21 @@ export function AuthProvider({ children }) {
 
   const signOut = () => supabase.auth.signOut();
 
+  const resetPassword = (email) =>
+    supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'ucatgeniusai://auth/callback',
+    });
+
   const deleteAccount = async () => {
     const { error } = await supabase.rpc('delete_user_account');
     if (error) throw error;
     await supabase.auth.signOut();
+  };
+
+  const updatePassword = async (newPassword) => {
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    if (!error) setPasswordRecovery(false);
+    return { error };
   };
 
   const signInWithGoogle = async () => {
@@ -113,7 +137,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, deleteAccount, signInWithGoogle, signInWithApple }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery }}>
       {children}
     </AuthContext.Provider>
   );

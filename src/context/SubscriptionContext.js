@@ -1,14 +1,14 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Platform } from 'react-native';
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import { AppState } from 'react-native';
 import Purchases from 'react-native-purchases';
+import RevenueCatUI from 'react-native-purchases-ui';
 import { useAuth } from './AuthContext';
 import { supabase } from '../lib/supabase';
 
-const REVENUECAT_API_KEY_ANDROID = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY ?? '';
-const REVENUECAT_API_KEY_IOS = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY ?? '';
+const REVENUECAT_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ?? '';
 
-// Must match the entitlement identifier you create in RevenueCat dashboard
-const ENTITLEMENT_ID = 'premium';
+// Must match the entitlement identifier created in RevenueCat dashboard
+const ENTITLEMENT_ID = 'UCAT Genius AI Pro';
 
 const SubscriptionContext = createContext(null);
 
@@ -17,7 +17,17 @@ export function SubscriptionProvider({ children }) {
   const [isPro, setIsPro] = useState(false);
   const [adminOverride, setAdminOverride] = useState(false);
   const [offerings, setOfferings] = useState(null);
+  const [customerInfo, setCustomerInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // Derive premium status from customer info
+  const checkEntitlement = useCallback(
+    (info) => {
+      const entitlement = info?.entitlements?.active?.[ENTITLEMENT_ID];
+      return !!entitlement;
+    },
+    [],
+  );
 
   // Sync is_premium flag to Supabase user_profiles
   async function syncPremiumToSupabase(isPremium) {
@@ -32,29 +42,68 @@ export function SubscriptionProvider({ children }) {
     }
   }
 
-  // Initialise RevenueCat SDK (do NOT check subscription here — user is not identified yet)
+  // Initialise RevenueCat SDK
   useEffect(() => {
     async function init() {
-      const apiKey = Platform.OS === 'ios' ? REVENUECAT_API_KEY_IOS : REVENUECAT_API_KEY_ANDROID;
-      if (!apiKey) {
-        console.warn('[SubscriptionContext] No RevenueCat API key for', Platform.OS);
+      if (!REVENUECAT_API_KEY) {
+        console.warn('[SubscriptionContext] No RevenueCat API key configured');
         setLoading(false);
         return;
       }
 
-      await Purchases.configure({ apiKey });
+      try {
+        Purchases.configure({ apiKey: REVENUECAT_API_KEY });
+      } catch (err) {
+        console.error('[SubscriptionContext] configure failed:', err);
+        setLoading(false);
+        return;
+      }
+
       await loadOfferings();
       setLoading(false);
     }
     init();
   }, []);
 
+  // Listen for real-time purchase updates (e.g. renewals, cancellations, family sharing)
+  useEffect(() => {
+    if (!REVENUECAT_API_KEY) return;
+
+    const listener = (info) => {
+      setCustomerInfo(info);
+      const premium = checkEntitlement(info);
+      setIsPro(premium || adminOverride);
+      syncPremiumToSupabase(premium);
+    };
+
+    Purchases.addCustomerInfoUpdateListener(listener);
+
+    return () => {
+      Purchases.removeCustomerInfoUpdateListener(listener);
+    };
+  }, [adminOverride, checkEntitlement]);
+
+  // Re-check subscription when app returns to foreground
+  useEffect(() => {
+    if (!REVENUECAT_API_KEY || !user?.id) return;
+
+    const appStateRef = { current: AppState.currentState };
+    const subscription = AppState.addEventListener('change', (nextState) => {
+      if (appStateRef.current.match(/inactive|background/) && nextState === 'active') {
+        checkSubscription();
+      }
+      appStateRef.current = nextState;
+    });
+
+    return () => subscription.remove();
+  }, [user?.id, adminOverride]);
+
   // Identify user and check subscription + admin status when auth state changes
   useEffect(() => {
     async function identify() {
       if (!user?.id) return;
 
-      // 1. Check RevenueCat subscription first
+      // 1. Check RevenueCat subscription
       let premium = false;
       try {
         await Purchases.logIn(user.id);
@@ -62,9 +111,9 @@ export function SubscriptionProvider({ children }) {
         console.error('[SubscriptionContext] logIn failed:', err);
       }
       try {
-        const customerInfo = await Purchases.getCustomerInfo();
-        const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
-        premium = !!entitlement;
+        const info = await Purchases.getCustomerInfo();
+        setCustomerInfo(info);
+        premium = checkEntitlement(info);
       } catch (err) {
         console.error('[SubscriptionContext] getCustomerInfo failed:', err);
       }
@@ -92,9 +141,9 @@ export function SubscriptionProvider({ children }) {
 
   async function checkSubscription() {
     try {
-      const customerInfo = await Purchases.getCustomerInfo();
-      const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
-      const premium = !!entitlement;
+      const info = await Purchases.getCustomerInfo();
+      setCustomerInfo(info);
+      const premium = checkEntitlement(info);
       setIsPro(premium || adminOverride);
       syncPremiumToSupabase(premium);
     } catch (err) {
@@ -112,26 +161,60 @@ export function SubscriptionProvider({ children }) {
   }
 
   async function purchasePackage(pkg) {
-    const { customerInfo } = await Purchases.purchasePackage(pkg);
-    const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
-    const premium = !!entitlement;
-    setIsPro(premium);
+    const { customerInfo: info } = await Purchases.purchasePackage(pkg);
+    setCustomerInfo(info);
+    const premium = checkEntitlement(info);
+    setIsPro(premium || adminOverride);
     if (premium) syncPremiumToSupabase(true);
     return premium;
   }
 
   async function restorePurchases() {
-    const customerInfo = await Purchases.restorePurchases();
-    const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
-    const premium = !!entitlement;
-    setIsPro(premium);
+    const info = await Purchases.restorePurchases();
+    setCustomerInfo(info);
+    const premium = checkEntitlement(info);
+    setIsPro(premium || adminOverride);
     syncPremiumToSupabase(premium);
     return premium;
   }
 
+  // Present RevenueCat's native paywall UI
+  async function presentPaywall() {
+    const result = await RevenueCatUI.presentPaywall();
+    // After paywall dismisses, refresh subscription state
+    await checkSubscription();
+    return result;
+  }
+
+  // Present RevenueCat's native paywall if the user is not subscribed
+  async function presentPaywallIfNeeded() {
+    const result = await RevenueCatUI.presentPaywallIfNeeded({
+      requiredEntitlementIdentifier: ENTITLEMENT_ID,
+    });
+    await checkSubscription();
+    return result;
+  }
+
+  // Present RevenueCat Customer Center (manage/cancel subscription)
+  async function presentCustomerCenter() {
+    await RevenueCatUI.presentCustomerCenter();
+    await checkSubscription();
+  }
+
   return (
     <SubscriptionContext.Provider
-      value={{ isPro, offerings, loading, purchasePackage, restorePurchases, checkSubscription }}
+      value={{
+        isPro,
+        offerings,
+        customerInfo,
+        loading,
+        purchasePackage,
+        restorePurchases,
+        checkSubscription,
+        presentPaywall,
+        presentPaywallIfNeeded,
+        presentCustomerCenter,
+      }}
     >
       {children}
     </SubscriptionContext.Provider>

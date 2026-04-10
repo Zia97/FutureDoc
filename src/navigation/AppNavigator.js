@@ -9,6 +9,8 @@ import { useContentVersionCheck } from '../services/contentUpdateService';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/home/ProfileScreen';
@@ -48,6 +50,7 @@ function AuthStack() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
 }
@@ -100,8 +103,16 @@ function AppStack() {
   );
 }
 
+function RecoveryStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+    </Stack.Navigator>
+  );
+}
+
 export default function AppNavigator() {
-  const { user, loading } = useAuth();
+  const { user, loading, passwordRecovery } = useAuth();
   const { theme: t } = useTheme();
 
   if (loading) {
@@ -112,9 +123,15 @@ export default function AppNavigator() {
     );
   }
 
+  const getStack = () => {
+    if (!user) return <AuthStack />;
+    if (passwordRecovery) return <RecoveryStack />;
+    return <AppStack />;
+  };
+
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
+      {getStack()}
     </NavigationContainer>
   );
 }

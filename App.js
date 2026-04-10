@@ -2,18 +2,21 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { SubscriptionProvider } from './src/context/SubscriptionContext';
+import ErrorBoundary from './src/components/ErrorBoundary';
 import AppNavigator from './src/navigation/AppNavigator';
 
 export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider>
-        <AuthProvider>
-          <SubscriptionProvider>
-            <AppNavigator />
-          </SubscriptionProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <ErrorBoundary>
+        <ThemeProvider>
+          <AuthProvider>
+            <SubscriptionProvider>
+              <AppNavigator />
+            </SubscriptionProvider>
+          </AuthProvider>
+        </ThemeProvider>
+      </ErrorBoundary>
     </GestureHandlerRootView>
   );
 }
