@@ -173,6 +173,7 @@ export default function DMQuestionScreen({ route }) {
           onAnswer={handleAnswer}
           submitted={isSubmitted}
           questionContext={isSubmitted ? {
+            questionId: question.id,
             question: question.stem,
             questionType: question.type,
             section: 'dm',

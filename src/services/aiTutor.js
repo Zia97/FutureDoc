@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 const FUNCTION_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/ai-tutor`;
 
 export async function streamAITutor({
+  questionId,
   question,
   questionType,
   section,
@@ -33,6 +34,7 @@ export async function streamAITutor({
         Authorization: `Bearer ${session.access_token}`,
       },
       body: JSON.stringify({
+        questionId,
         question,
         questionType,
         section,

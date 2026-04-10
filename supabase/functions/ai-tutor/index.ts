@@ -56,6 +56,7 @@ Deno.serve(async (req) => {
 
   // 2. Parse body
   const {
+    questionId,
     question,
     questionType,
     section,
@@ -68,6 +69,7 @@ Deno.serve(async (req) => {
     vennDiagrams,
     messages,
   }: {
+    questionId?: string;
     question: string;
     questionType: string;
     section: string;
@@ -171,6 +173,11 @@ Deno.serve(async (req) => {
       user_id: user.id,
       message: lastUserMsg.content.slice(0, 1000),
       section,
+      question_type: questionType,
+      question_id: questionId ?? null,
+      question_text: question?.slice(0, 500) ?? null,
+      user_answer: userAnswer ?? null,
+      correct_answer: correctAnswer ?? null,
     });
   }
 

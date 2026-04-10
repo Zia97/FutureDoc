@@ -134,6 +134,7 @@ export default function PassageLayout({
             reason={item.question.answeringReason}
             showReason={!isCorrect || alwaysShowReason}
             questionContext={!isCorrect ? {
+              questionId: qid,
               question: item.question.questionText,
               questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
               section,

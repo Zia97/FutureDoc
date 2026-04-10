@@ -156,6 +156,7 @@ export default function QRQuestionScreen({ route }) {
             reason={item.question.answeringReason}
             showReason
             questionContext={!isCorrect ? {
+              questionId: item.question.questionId ?? item.question.id,
               question: item.question.questionText,
               questionType: item.stimulus?.type ?? 'quantitative_reasoning',
               section: 'qr',
