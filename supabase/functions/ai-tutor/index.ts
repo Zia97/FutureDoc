@@ -83,10 +83,10 @@ Deno.serve(async (req) => {
     messages: ChatMessage[];
   } = await req.json();
 
-  // 3. Check subscription tier + ban status
+  // 3. Check subscription tier + admin status + ban status
   const { data: profile } = await supabase
     .from('user_profiles')
-    .select('is_premium, ai_banned')
+    .select('is_premium, is_admin, ai_banned')
     .eq('user_id', user.id)
     .single();
 
@@ -94,7 +94,8 @@ Deno.serve(async (req) => {
     return json({ error: 'account_restricted' }, 403);
   }
 
-  const isPremium = profile?.is_premium ?? false;
+  // Unlimited access for RevenueCat subscribers OR admins
+  const isPremium = !!(profile?.is_premium || profile?.is_admin);
 
   // 4. Enforce usage limits
   const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD

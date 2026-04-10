@@ -32,25 +32,7 @@ export function SubscriptionProvider({ children }) {
     }
   }
 
-  // Check if user is admin from Supabase
-  async function checkAdmin() {
-    if (!user?.id) return;
-    try {
-      const { data } = await supabase
-        .from('user_profiles')
-        .select('is_admin')
-        .eq('user_id', user.id)
-        .single();
-      if (data?.is_admin) {
-        setAdminOverride(true);
-        setIsPro(true); // Admin gets full access
-      }
-    } catch (err) {
-      console.error('[SubscriptionContext] checkAdmin failed:', err);
-    }
-  }
-
-  // Initialise RevenueCat SDK
+  // Initialise RevenueCat SDK (do NOT check subscription here — user is not identified yet)
   useEffect(() => {
     async function init() {
       const apiKey = Platform.OS === 'ios' ? REVENUECAT_API_KEY_IOS : REVENUECAT_API_KEY_ANDROID;
@@ -61,24 +43,49 @@ export function SubscriptionProvider({ children }) {
       }
 
       await Purchases.configure({ apiKey });
-      await checkSubscription();
       await loadOfferings();
       setLoading(false);
     }
     init();
   }, []);
 
-  // Check admin status and identify user in RevenueCat when auth state changes
+  // Identify user and check subscription + admin status when auth state changes
   useEffect(() => {
     async function identify() {
       if (!user?.id) return;
-      await checkAdmin();
+
+      // 1. Check RevenueCat subscription first
+      let premium = false;
       try {
         await Purchases.logIn(user.id);
-        await checkSubscription();
       } catch (err) {
         console.error('[SubscriptionContext] logIn failed:', err);
       }
+      try {
+        const customerInfo = await Purchases.getCustomerInfo();
+        const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
+        premium = !!entitlement;
+      } catch (err) {
+        console.error('[SubscriptionContext] getCustomerInfo failed:', err);
+      }
+
+      // 2. Check admin override from Supabase
+      let isAdmin = false;
+      try {
+        const { data } = await supabase
+          .from('user_profiles')
+          .select('is_admin')
+          .eq('user_id', user.id)
+          .single();
+        isAdmin = !!data?.is_admin;
+      } catch (err) {
+        console.error('[SubscriptionContext] checkAdmin failed:', err);
+      }
+
+      // 3. User is pro if RevenueCat subscriber OR admin
+      setAdminOverride(isAdmin);
+      setIsPro(premium || isAdmin);
+      syncPremiumToSupabase(premium);
     }
     identify();
   }, [user?.id]);
@@ -88,8 +95,7 @@ export function SubscriptionProvider({ children }) {
       const customerInfo = await Purchases.getCustomerInfo();
       const entitlement = customerInfo.entitlements.active[ENTITLEMENT_ID];
       const premium = !!entitlement;
-      // Don't downgrade if user is admin
-      if (premium || !adminOverride) setIsPro(premium || adminOverride);
+      setIsPro(premium || adminOverride);
       syncPremiumToSupabase(premium);
     } catch (err) {
       console.error('[SubscriptionContext] checkSubscription failed:', err);
