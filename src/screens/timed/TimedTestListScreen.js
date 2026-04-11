@@ -120,7 +120,9 @@ export default function TimedTestListScreen({ navigation, route }) {
   }
 
   const completedCount = Object.keys(completedAttempts ?? {}).length;
-  const showAnalyticsEntry = section === 'VR' && completedCount > 0;
+  const ANALYTICS_ROUTE = { VR: 'VRAnalytics', QR: 'QRAnalytics' };
+  const analyticsRoute = ANALYTICS_ROUTE[section];
+  const showAnalyticsEntry = !!analyticsRoute && completedCount > 0;
   const analyticsLocked = !isPro;
 
   return (
@@ -142,7 +144,7 @@ export default function TimedTestListScreen({ navigation, route }) {
                 onPress={() =>
                   analyticsLocked
                     ? navigation.navigate('Paywall')
-                    : navigation.navigate('VRAnalytics', { tests })
+                    : navigation.navigate(analyticsRoute, { tests })
                 }
               >
                 <View style={[styles.analyticsBadge, { backgroundColor: analyticsLocked ? '#6b7280' : t.accent }]}>

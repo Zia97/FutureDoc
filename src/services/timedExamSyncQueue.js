@@ -37,6 +37,22 @@ const DELETE_FN = {
 // foreground listener firing simultaneously) don't double-push.
 let isFlushing = false;
 
+// Loose UUID v4-ish check — anything containing dashes in the right
+// places is treated as a valid Postgres UUID. We use this to detect
+// queue entries created before the QR setId fix (legacy entries used
+// human-readable refs like "qr1-set-01" which Postgres rejects as
+// `22P02 invalid input syntax for type uuid`).
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+function isValidQrSubmitPayload(payload) {
+  if (!payload || !Array.isArray(payload.answers)) return true;
+  for (const a of payload.answers) {
+    if (a.set_id != null && !UUID_RE.test(String(a.set_id))) return false;
+    if (a.question_id != null && !UUID_RE.test(String(a.question_id))) return false;
+  }
+  return true;
+}
+
 async function readQueue() {
   try {
     const raw = await AsyncStorage.getItem(QUEUE_KEY);
@@ -116,9 +132,31 @@ export async function flush(user) {
     if (mine.length === 0) return { flushed: 0, remaining: 0 };
 
     let flushed = 0;
+    const dropped = []; // indices we permanently discarded (will not be retried)
 
     for (let i = 0; i < mine.length; i++) {
       const entry = mine[i];
+
+      // Pre-flight: drop entries we know will never succeed so they don't
+      // block the queue forever. Today the only case is QR submit payloads
+      // created before the setId-UUID fix (see useTimedQRTests.js comment).
+      if (
+        entry.op === 'submit' &&
+        entry.section === 'qr' &&
+        !isValidQrSubmitPayload(entry.payload)
+      ) {
+        if (__DEV__) {
+          console.warn(
+            '[timedExamSyncQueue] dropping legacy QR submit with non-UUID set_id (test',
+            entry.testId,
+            ') — user will need to retake this test',
+          );
+        }
+        dropped.push(i);
+        flushed++;
+        continue;
+      }
+
       try {
         if (entry.op === 'submit') {
           const fn = SUBMIT_FN[entry.section];
@@ -142,7 +180,7 @@ export async function flush(user) {
     // Keep any entries we didn't get through (preserves order).
     const remainder = mine.slice(flushed);
     await writeQueue([...others, ...remainder]);
-    return { flushed, remaining: remainder.length };
+    return { flushed, remaining: remainder.length, dropped: dropped.length };
   } finally {
     isFlushing = false;
   }

@@ -17,6 +17,32 @@ function keyFromNumericTestId(id) {
   return `timed-qr-test-${id}`;
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Earlier versions of useTimedQRTests stored s.set_ref (e.g. "qr1-set-01")
+// as the client setId, so cached completed attempts created before the fix
+// have answerMaps keyed by those refs instead of by the set UUID. After the
+// fix, the test object's setIds are UUIDs and the review screen lookup
+// `answerMap[set.setId]` returns nothing — review shows everything as
+// unanswered. Drop those legacy attempts so the user gets a clean
+// "not taken yet" state and can re-take the test cleanly.
+function pruneLegacyAttempts(attempts) {
+  if (!attempts || typeof attempts !== 'object') return { pruned: attempts, droppedCount: 0 };
+  let droppedCount = 0;
+  const pruned = {};
+  for (const [key, attempt] of Object.entries(attempts)) {
+    const map = attempt?.answerMap;
+    const setKeys = map ? Object.keys(map) : [];
+    const allUuid = setKeys.every((k) => UUID_RE.test(k));
+    if (setKeys.length === 0 || allUuid) {
+      pruned[key] = attempt;
+    } else {
+      droppedCount++;
+    }
+  }
+  return { pruned, droppedCount };
+}
+
 // Score 1 mark per correct answer (matched by option label).
 function computeScores(sets, answers) {
   const answerList = [];
@@ -53,6 +79,27 @@ export function useTimedQRExamProgress() {
     } catch (err) {
       if (__DEV__) console.error('[useTimedQRExamProgress] local load failed:', err);
     }
+
+    // One-time cleanup: drop any legacy attempts whose answerMap is keyed
+    // by set_ref strings instead of UUIDs (see pruneLegacyAttempts comment).
+    // Persists the pruned cache so the next launch is clean.
+    const { pruned, droppedCount } = pruneLegacyAttempts(local);
+    if (droppedCount > 0) {
+      if (__DEV__) {
+        console.warn(
+          '[useTimedQRExamProgress] pruned',
+          droppedCount,
+          'legacy QR attempt(s) with non-UUID setIds — user must retake those tests',
+        );
+      }
+      local = pruned;
+      try {
+        await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(local));
+      } catch (err) {
+        if (__DEV__) console.error('[useTimedQRExamProgress] local prune save failed:', err);
+      }
+    }
+
     setCompletedAttempts(local);
 
     if (!user) return;
@@ -90,7 +137,9 @@ export function useTimedQRExamProgress() {
   }, [loadAttempts]);
 
   // Called when the exam ends (user ends it or timer expires).
-  async function submitExam({ test, answers, secondsLeft, flags }) {
+  // timeMsByQid is an optional { [questionId]: ms } map from the per-question
+  // time tracker; null/missing entries are stored as NULL in the DB.
+  async function submitExam({ test, answers, secondsLeft, flags, timeMsByQid }) {
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answerList, correctCount, scorePercent } = computeScores(test.sets, answers);
     const flagsArr = flags ? Array.from(flags) : [];
@@ -130,12 +179,17 @@ export function useTimedQRExamProgress() {
     // ── 2. Sync to cloud (best effort) ─────────────────────────────────────
     if (!user) return;
 
+    // Only persist answered questions; the review screen treats absent
+    // entries as unanswered the same way local cache does.
+    // time_ms is included if the per-question tracker has a value for the
+    // question — null/missing means "not tracked" (e.g. older clients).
     const dbAnswers = answerList
       .filter((a) => a.selectedAnswer)
       .map((a) => ({
         question_id: a.questionId,
         set_id: a.setId,
         selected_answer: a.selectedAnswer,
+        time_ms: timeMsByQid?.[a.questionId] ?? null,
       }));
 
     const numericId = numericTestIdFromKey(test.id);

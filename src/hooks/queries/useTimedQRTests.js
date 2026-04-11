@@ -39,12 +39,24 @@ function mapDevTests(data) {
 }
 
 // Maps DB rows (from timed_quantitative_reasoning_tests with nested sets and questions) into the app data shape.
+//
+// NB: setId MUST be the UUID s.id, not the human-readable s.set_ref.
+// The DB column timed_quantitative_reasoning_question_answers.set_id is a
+// UUID FK to timed_quantitative_reasoning_sets.id, so any submission that
+// uses set_ref (e.g. "qr1-set-01") gets rejected with `22P02 invalid input
+// syntax for type uuid`. Earlier versions of this file used set_ref by
+// mistake, which is why old local cache and old offline queue entries may
+// contain non-UUID setIds. Pruning logic in:
+//   • src/services/timedExamSyncQueue.js (validate-and-drop in flush)
+//   • src/hooks/attempts/useTimedQRExamProgress.js (prune bad local attempts)
+// handles the cleanup the next time the app loads.
 function mapDBTests(rows) {
   return rows.map((test) => {
     const sets = [...test.timed_quantitative_reasoning_sets]
       .sort((a, b) => a.order_index - b.order_index)
       .map((s) => ({
-        setId: s.set_ref,
+        setId: s.id,
+        setRef: s.set_ref,
         title: s.title,
         stimulus: s.stimulus,
         questions: [...s.timed_quantitative_reasoning_questions]

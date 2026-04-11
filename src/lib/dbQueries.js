@@ -527,7 +527,7 @@ class DatabaseService {
       attemptsTable: 'timed_quantitative_reasoning_exam_attempts',
       answersTable:  'timed_quantitative_reasoning_question_answers',
       userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
-      answers, // [{ question_id, set_id, selected_answer }]
+      answers, // [{ question_id, set_id, selected_answer, time_ms }]
     });
   }
 
@@ -557,6 +557,73 @@ class DatabaseService {
       .delete()
       .eq('test_id', testId);
     if (error) throw error;
+  }
+
+  /**
+   * Loads everything the QR analytics screen needs in two round trips:
+   *   1. All of the user's QR exam attempts (one row per test).
+   *   2. All answer rows for those attempts, joined with the question's
+   *      `correct_answer` and `difficulty` AND the set's `stimulus` JSONB,
+   *      so the client can compute correctness, difficulty buckets, and
+   *      per-stimulus-type accuracy in one pass.
+   *
+   * Returns: [{ id, test_id, submitted_at, time_taken_seconds,
+   *             correct_count, score_percent,
+   *             answers: [{ question_id, set_id, selected_answer, time_ms,
+   *                          correct_answer, difficulty, stimulus_type }] }]
+   *
+   * stimulus_type is read from the JSONB stimulus blob (e.g. 'bar_chart',
+   * 'line_graph', 'table', 'pie_chart'). Falls back to 'unknown' if the
+   * blob doesn't carry a type — that should never happen in practice but
+   * keeps the analytics screen from crashing if a seed is malformed.
+   *
+   * Returns [] for users with no attempts. Ordered oldest → newest by
+   * submitted_at so the trend line can render in submission order.
+   */
+  async loadQRAnalytics() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_quantitative_reasoning_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent')
+      .order('submitted_at', { ascending: true });
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    // Aliased joins ("question:" and "set:") are required here. Without
+    // aliases PostgREST auto-generates relation names like
+    //   timed_quantitative_reasoning_question_answers_timed_quantitative_reasoning_questions
+    // which Postgres truncates to 63 characters; both joins then collide
+    // and the query fails with `42712 table name ... specified more than once`.
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_quantitative_reasoning_question_answers')
+      .select(`
+        exam_attempt_id,
+        question_id,
+        set_id,
+        selected_answer,
+        time_ms,
+        question:timed_quantitative_reasoning_questions ( correct_answer, difficulty ),
+        set:timed_quantitative_reasoning_sets ( stimulus )
+      `)
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    // Flatten the joined fields onto each answer row.
+    const flatAnswers = (answers ?? []).map((a) => ({
+      exam_attempt_id: a.exam_attempt_id,
+      question_id: a.question_id,
+      set_id: a.set_id,
+      selected_answer: a.selected_answer,
+      time_ms: a.time_ms,
+      correct_answer: a.question?.correct_answer ?? null,
+      difficulty: a.question?.difficulty ?? 'normal',
+      stimulus_type: a.set?.stimulus?.type ?? 'unknown',
+    }));
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: flatAnswers.filter((r) => r.exam_attempt_id === a.id),
+    }));
   }
 
   // ── Situational Judgement ──────────────────────────────────

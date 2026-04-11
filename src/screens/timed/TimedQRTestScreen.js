@@ -14,6 +14,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
 import { useTimedQRExamProgress } from '../../hooks/attempts/useTimedQRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -62,6 +63,14 @@ export default function TimedQRTestScreen({ route, navigation }) {
   const currentAnswer = answers[qid];
   const isFlagged = flags.has(qid);
 
+  // Per-question time tracking. Active only while the user is genuinely
+  // engaged with a question — paused state, end-of-test review modal, and
+  // results screen all stop the clock.
+  const getQuestionTimes = useQuestionTimeTracker(
+    qid,
+    !isPaused && !showReview && !showResults,
+  );
+
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,
     isLast ? null : goNext,
@@ -92,11 +101,15 @@ export default function TimedQRTestScreen({ route, navigation }) {
   async function endExam(timerExpired = false) {
     if (endExamCalledRef.current) return;
     endExamCalledRef.current = true;
+    // Snapshot per-question times BEFORE flipping to results so the
+    // in-flight question doesn't lose its last few seconds.
+    const timeMsByQid = getQuestionTimes();
     await submitExam({
       test,
       answers,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
       flags,
+      timeMsByQid,
     });
     setShowResults(true);
   }
