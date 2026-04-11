@@ -1,13 +1,21 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../context/AuthContext';
+import { db } from '../../lib/dbQueries';
+import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 
 // Local storage key — stores completed exam results keyed by test.id string
 const COMPLETED_KEY = 'timed_sj_completed_attempts';
+const SECTION = 'sj';
 
-// Extracts the numeric test_id from test.id e.g. "timed-sj-test-1" → 1
-function getNumericTestId(testId) {
-  return Number(testId.split('-').pop());
+// SJ test.id is the string "timed-sj-test-N" produced by useTimedSJTests.
+// The DB stores test_id as a SMALLINT, so we convert in both directions.
+function numericTestIdFromKey(key) {
+  return Number(String(key).split('-').pop());
+}
+function keyFromNumericTestId(id) {
+  return `timed-sj-test-${id}`;
 }
 
 // Computes UCAT SJ marks and builds the answers array for DB insertion.
@@ -44,31 +52,62 @@ function computeScores(scenarios, getAnswer) {
 }
 
 export function useTimedSJExamProgress() {
-  // { [testId]: { scorePercent, correctCount, totalQuestions, submittedAt, timeTakenSeconds } }
+  const { user } = useAuth();
+  // { [testId]: { scorePercent, correctCount, submittedAt, timeTakenSeconds, answerMap, flags } }
   const [completedAttempts, setCompletedAttempts] = useState({});
 
-  useEffect(() => {
-    loadLocalAttempts();
-  }, []);
-
-  async function loadLocalAttempts() {
+  const loadAttempts = useCallback(async () => {
+    let local = {};
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
-      if (raw) setCompletedAttempts(JSON.parse(raw));
+      if (raw) local = JSON.parse(raw);
     } catch (err) {
-      console.error('[useTimedSJExamProgress] loadLocalAttempts failed:', err);
+      if (__DEV__) console.error('[useTimedSJExamProgress] local load failed:', err);
     }
-  }
+    setCompletedAttempts(local);
+
+    if (!user) return;
+
+    // Push any pending offline writes first so the hydrate sees them.
+    await flush(user);
+
+    try {
+      const rows = await db.loadTimedSJAttempts();
+      const merged = { ...local };
+      for (const row of rows) {
+        const answerMap = {};
+        for (const a of row.answers) {
+          if (!answerMap[a.scenario_id]) answerMap[a.scenario_id] = {};
+          answerMap[a.scenario_id][a.question_id] = a.selected_answer;
+        }
+        merged[keyFromNumericTestId(row.test_id)] = {
+          scorePercent: row.score_percent,
+          correctCount: row.correct_count,
+          submittedAt: row.submitted_at,
+          timeTakenSeconds: row.time_taken_seconds,
+          answerMap,
+          flags: row.flags ?? [],
+        };
+      }
+      await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(merged));
+      setCompletedAttempts(merged);
+    } catch (err) {
+      if (__DEV__) console.error('[useTimedSJExamProgress] cloud hydrate failed:', err);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    loadAttempts();
+  }, [loadAttempts]);
 
   // Called when the exam ends (user ends it or timer expires).
-  // Saves locally first, then writes to DB in background (non-blocking).
   async function submitExam({ test, getAnswer, secondsLeft, flags }) {
-    const numericTestId = getNumericTestId(test.id);
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answers, correctCount, scorePercent } = computeScores(
       test.scenarios,
       getAnswer,
     );
+    const flagsArr = flags ? Array.from(flags) : [];
 
     // Build answer map for review: { [scenarioId]: { [itemId]: selectedAnswer } }
     const answerMap = {};
@@ -89,7 +128,7 @@ export function useTimedSJExamProgress() {
       submittedAt: new Date().toISOString(),
       timeTakenSeconds,
       answerMap,
-      flags: flags ? Array.from(flags) : [],
+      flags: flagsArr,
     };
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
@@ -98,12 +137,48 @@ export function useTimedSJExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
     } catch (err) {
-      console.error('[useTimedSJExamProgress] local save failed:', err);
+      if (__DEV__) console.error('[useTimedSJExamProgress] local save failed:', err);
     }
 
+    // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
+    if (!user) return;
+
+    const dbAnswers = answers
+      .filter((a) => a.selectedAnswer)
+      .map((a) => ({
+        question_id: a.questionId,
+        scenario_id: a.scenarioId,
+        selected_answer: a.selectedAnswer,
+      }));
+
+    const numericId = numericTestIdFromKey(test.id);
+    const payload = {
+      userId: user.id,
+      testId: numericId,
+      scorePercent,
+      correctCount,
+      timeTakenSeconds,
+      flags: flagsArr,
+      answers: dbAnswers,
+    };
+
+    try {
+      await db.submitTimedSJExam(payload);
+      await removePending({ userId: user.id, section: SECTION, testKey: test.id });
+    } catch (err) {
+      if (__DEV__) console.error('[useTimedSJExamProgress] cloud save failed, queueing:', err);
+      await enqueue({
+        userId: user.id,
+        section: SECTION,
+        op: 'submit',
+        testKey: test.id,
+        testId: numericId,
+        payload,
+      });
+    }
   }
 
-  // Removes a completed attempt from local storage and DB.
+  // Removes a completed attempt from local storage and cloud.
   async function deleteAttempt(testId) {
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
@@ -112,9 +187,25 @@ export function useTimedSJExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
     } catch (err) {
-      console.error('[useTimedSJExamProgress] local delete failed:', err);
+      if (__DEV__) console.error('[useTimedSJExamProgress] local delete failed:', err);
+    }
+
+    if (!user) return;
+    const numericId = numericTestIdFromKey(testId);
+    try {
+      await db.deleteTimedSJAttempt(numericId);
+      await removePending({ userId: user.id, section: SECTION, testKey: testId });
+    } catch (err) {
+      if (__DEV__) console.error('[useTimedSJExamProgress] cloud delete failed, queueing:', err);
+      await enqueue({
+        userId: user.id,
+        section: SECTION,
+        op: 'delete',
+        testKey: testId,
+        testId: numericId,
+      });
     }
   }
 
-  return { completedAttempts, submitExam, deleteAttempt, reload: loadLocalAttempts };
+  return { completedAttempts, submitExam, deleteAttempt, reload: loadAttempts };
 }

@@ -15,6 +15,7 @@ import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useExitWarning } from '../../hooks/ui/useExitWarning';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -40,6 +41,9 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const [examEnded, setExamEnded] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenItems, setSeenItems] = useState(new Set());
+
+  // Block accidental exits while the test is in progress.
+  useExitWarning(navigation, !examEnded);
 
   const { submitExam } = useTimedSJExamProgress();
 

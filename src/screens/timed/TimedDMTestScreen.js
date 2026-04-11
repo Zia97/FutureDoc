@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../../context/ThemeContext';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useExitWarning } from '../../hooks/ui/useExitWarning';
 import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
@@ -38,6 +39,9 @@ export default function TimedDMTestScreen({ route, navigation }) {
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
+
+  // Block accidental exits while the test is in progress.
+  useExitWarning(navigation, !showResults);
 
   const endExamCalledRef = useRef(false);
   const secondsLeftRef = useRef(null);

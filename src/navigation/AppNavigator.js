@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useContentVersionCheck } from '../services/contentUpdateService';
+import { useTimedExamSyncOnForeground } from '../hooks/useTimedExamSyncOnForeground';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
@@ -58,6 +59,7 @@ function AuthStack() {
 function AppStack() {
   const { theme: t } = useTheme();
   useContentVersionCheck();
+  useTimedExamSyncOnForeground();
 
   const screenOptions = {
     headerStyle: { backgroundColor: t.headerBg },

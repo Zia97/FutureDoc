@@ -15,6 +15,7 @@ import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useExitWarning } from '../../hooks/ui/useExitWarning';
 import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import NotesModal from '../../components/NotesModal';
@@ -36,6 +37,9 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const [showResults, setShowResults] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
+
+  // Block accidental exits while the test is in progress.
+  useExitWarning(navigation, !showResults);
 
   const secondsLeftRef = useRef(null);
 

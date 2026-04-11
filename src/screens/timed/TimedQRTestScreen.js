@@ -14,6 +14,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useExitWarning } from '../../hooks/ui/useExitWarning';
 import { useTimedQRExamProgress } from '../../hooks/attempts/useTimedQRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
@@ -39,6 +40,9 @@ export default function TimedQRTestScreen({ route, navigation }) {
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
+
+  // Block accidental exits while the test is in progress.
+  useExitWarning(navigation, !showResults);
 
   const endExamCalledRef = useRef(false);
   const secondsLeftRef = useRef(null);

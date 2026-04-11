@@ -328,6 +328,221 @@ class DatabaseService {
     if (error) throw error;
     return data;
   }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Timed exam attempt sync (cloud-backed)
+  // ─────────────────────────────────────────────────────────────────────────────
+  //
+  // Each section has three operations:
+  //   submit  — write attempt + bulk-insert answers (upsert by user/test)
+  //   load    — fetch all attempts + answers for the current user
+  //   delete  — delete the attempt (cascades to answers)
+  //
+  // RLS guarantees user-scoping, so we never pass user_id from the client
+  // for SELECT/DELETE — auth.uid() does that for us.
+  //
+  // The submit functions intentionally DELETE any prior attempt for the
+  // same (user, test) before inserting. This matches the "reset to retake"
+  // UX and avoids upsert/cascade complexity on the answers table.
+
+  async _submitTimedExamAttempt({
+    attemptsTable,
+    answersTable,
+    userId,
+    testId,
+    scorePercent,
+    correctCount,
+    timeTakenSeconds,
+    flags,
+    answers, // [{ question_id, selected_answer, ...parentRef }]
+  }) {
+    // Wipe any prior attempt for this (user, test) so the unique constraint
+    // doesn't block resubmission, and orphan answer rows are cascaded away.
+    const { error: delError } = await supabase
+      .from(attemptsTable)
+      .delete()
+      .eq('user_id', userId)
+      .eq('test_id', testId);
+    if (delError) throw delError;
+
+    const { data: attempt, error: insError } = await supabase
+      .from(attemptsTable)
+      .insert({
+        user_id: userId,
+        test_id: testId,
+        score_percent: scorePercent,
+        correct_count: correctCount,
+        time_taken_seconds: timeTakenSeconds,
+        flags: flags ?? [],
+      })
+      .select('id')
+      .single();
+    if (insError) throw insError;
+
+    if (answers.length > 0) {
+      const rows = answers.map((a) => ({
+        ...a,
+        exam_attempt_id: attempt.id,
+        user_id: userId,
+      }));
+      const { error: ansError } = await supabase.from(answersTable).insert(rows);
+      if (ansError) throw ansError;
+    }
+
+    return attempt.id;
+  }
+
+  // ── Verbal Reasoning ───────────────────────────────────────
+  async submitTimedVRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+    return this._submitTimedExamAttempt({
+      attemptsTable: 'timed_verbal_reasoning_exam_attempts',
+      answersTable:  'timed_verbal_reasoning_question_answers',
+      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      answers, // [{ question_id, passage_id, selected_answer }]
+    });
+  }
+
+  async loadTimedVRAttempts() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_verbal_reasoning_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, flags');
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_verbal_reasoning_question_answers')
+      .select('exam_attempt_id, question_id, passage_id, selected_answer')
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: (answers ?? []).filter((r) => r.exam_attempt_id === a.id),
+    }));
+  }
+
+  async deleteTimedVRAttempt(testId) {
+    const { error } = await supabase
+      .from('timed_verbal_reasoning_exam_attempts')
+      .delete()
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
+
+  // ── Decision Making ────────────────────────────────────────
+  async submitTimedDMExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+    return this._submitTimedExamAttempt({
+      attemptsTable: 'timed_decision_making_exam_attempts',
+      answersTable:  'timed_decision_making_question_answers',
+      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      answers, // [{ question_id, selected_answer (JSONB) }]
+    });
+  }
+
+  async loadTimedDMAttempts() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_decision_making_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, flags');
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_decision_making_question_answers')
+      .select('exam_attempt_id, question_id, selected_answer')
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: (answers ?? []).filter((r) => r.exam_attempt_id === a.id),
+    }));
+  }
+
+  async deleteTimedDMAttempt(testId) {
+    const { error } = await supabase
+      .from('timed_decision_making_exam_attempts')
+      .delete()
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
+
+  // ── Quantitative Reasoning ─────────────────────────────────
+  async submitTimedQRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+    return this._submitTimedExamAttempt({
+      attemptsTable: 'timed_quantitative_reasoning_exam_attempts',
+      answersTable:  'timed_quantitative_reasoning_question_answers',
+      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      answers, // [{ question_id, set_id, selected_answer }]
+    });
+  }
+
+  async loadTimedQRAttempts() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_quantitative_reasoning_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, flags');
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_quantitative_reasoning_question_answers')
+      .select('exam_attempt_id, question_id, set_id, selected_answer')
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: (answers ?? []).filter((r) => r.exam_attempt_id === a.id),
+    }));
+  }
+
+  async deleteTimedQRAttempt(testId) {
+    const { error } = await supabase
+      .from('timed_quantitative_reasoning_exam_attempts')
+      .delete()
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
+
+  // ── Situational Judgement ──────────────────────────────────
+  async submitTimedSJExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+    return this._submitTimedExamAttempt({
+      attemptsTable: 'timed_situational_judgement_exam_attempts',
+      answersTable:  'timed_situational_judgement_question_answers',
+      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      answers, // [{ question_id, scenario_id, selected_answer }]
+    });
+  }
+
+  async loadTimedSJAttempts() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_situational_judgement_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, flags');
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_situational_judgement_question_answers')
+      .select('exam_attempt_id, question_id, scenario_id, selected_answer')
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: (answers ?? []).filter((r) => r.exam_attempt_id === a.id),
+    }));
+  }
+
+  async deleteTimedSJAttempt(testId) {
+    const { error } = await supabase
+      .from('timed_situational_judgement_exam_attempts')
+      .delete()
+      .eq('test_id', testId);
+    if (error) throw error;
+  }
 }
 
 export const db = new DatabaseService();

@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuth } from '../../context/AuthContext';
+import { db } from '../../lib/dbQueries';
+import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 
 const COMPLETED_KEY = 'timed_vr_completed_attempts';
+const SECTION = 'vr';
 
-// Extracts the numeric test_id from test.id e.g. "timed-vr-test-001" → 1
-function getNumericTestId(testId) {
-  return Number(testId.replace(/\D+/g, '').replace(/^0+/, '') || '0');
-}
+// VR test.id is the numeric SMALLINT from the DB (e.g. 1, 2, 3).
+// AsyncStorage object keys are stringified, so the local cache is keyed
+// by the string form. We mirror that on the DB hydrate path.
 
 // Computes VR scores: 1 mark per correct answer.
 function computeScores(passages, getAnswer) {
@@ -32,25 +35,59 @@ function computeScores(passages, getAnswer) {
 }
 
 export function useTimedVRExamProgress() {
+  const { user } = useAuth();
   const [completedAttempts, setCompletedAttempts] = useState({});
 
-  useEffect(() => {
-    loadLocalAttempts();
-  }, []);
-
-  async function loadLocalAttempts() {
+  const loadAttempts = useCallback(async () => {
+    // 1. Local cache first (instant, works offline).
+    let local = {};
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
-      if (raw) setCompletedAttempts(JSON.parse(raw));
+      if (raw) local = JSON.parse(raw);
     } catch (err) {
-      console.error('[useTimedVRExamProgress] loadLocalAttempts failed:', err);
+      if (__DEV__) console.error('[useTimedVRExamProgress] local load failed:', err);
     }
-  }
+    setCompletedAttempts(local);
+
+    // 2. Hydrate from cloud if signed in. DB is source of truth across devices,
+    //    so we overwrite local entries with whatever the DB returns.
+    if (!user) return;
+
+    // Push any pending offline writes first so the hydrate sees them.
+    await flush(user);
+
+    try {
+      const rows = await db.loadTimedVRAttempts();
+      const merged = { ...local };
+      for (const row of rows) {
+        const answerMap = {};
+        for (const a of row.answers) {
+          if (!answerMap[a.passage_id]) answerMap[a.passage_id] = {};
+          answerMap[a.passage_id][a.question_id] = a.selected_answer;
+        }
+        merged[row.test_id] = {
+          scorePercent: row.score_percent,
+          correctCount: row.correct_count,
+          submittedAt: row.submitted_at,
+          timeTakenSeconds: row.time_taken_seconds,
+          answerMap,
+          flags: row.flags ?? [],
+        };
+      }
+      await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(merged));
+      setCompletedAttempts(merged);
+    } catch (err) {
+      if (__DEV__) console.error('[useTimedVRExamProgress] cloud hydrate failed:', err);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    loadAttempts();
+  }, [loadAttempts]);
 
   // Called when the exam ends (user ends it or timer expires).
-  // Saves locally first, then writes to DB in background (non-blocking).
+  // Saves locally first, then writes to DB best-effort (non-blocking errors).
   async function submitExam({ test, getAnswer, secondsLeft, flags }) {
-    const numericTestId = getNumericTestId(test.id);
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answers, correctCount, scorePercent } = computeScores(
       test.passages,
@@ -69,6 +106,8 @@ export function useTimedVRExamProgress() {
       }
     }
 
+    const flagsArr = flags ? Array.from(flags) : [];
+
     // ── 1. Save to local storage (fast, device-first) ───────────────────────
     const attemptData = {
       scorePercent,
@@ -76,7 +115,7 @@ export function useTimedVRExamProgress() {
       submittedAt: new Date().toISOString(),
       timeTakenSeconds,
       answerMap,
-      flags: flags ? Array.from(flags) : [],
+      flags: flagsArr,
     };
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
@@ -85,12 +124,51 @@ export function useTimedVRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
     } catch (err) {
-      console.error('[useTimedVRExamProgress] local save failed:', err);
+      if (__DEV__) console.error('[useTimedVRExamProgress] local save failed:', err);
     }
 
+    // ── 2. Sync to cloud (best effort — local already saved) ────────────────
+    if (!user) return;
+
+    // Only persist answered questions; the review screen treats absent
+    // entries as unanswered the same way local cache does.
+    const dbAnswers = answers
+      .filter((a) => a.selectedAnswer)
+      .map((a) => ({
+        question_id: a.questionId,
+        passage_id: a.passageId,
+        selected_answer: a.selectedAnswer,
+      }));
+
+    const payload = {
+      userId: user.id,
+      testId: test.id,
+      scorePercent,
+      correctCount,
+      timeTakenSeconds,
+      flags: flagsArr,
+      answers: dbAnswers,
+    };
+
+    try {
+      await db.submitTimedVRExam(payload);
+      // Direct write succeeded — drop any earlier queued copy of the same op.
+      await removePending({ userId: user.id, section: SECTION, testKey: test.id });
+    } catch (err) {
+      if (__DEV__) console.error('[useTimedVRExamProgress] cloud save failed, queueing:', err);
+      await enqueue({
+        userId: user.id,
+        section: SECTION,
+        op: 'submit',
+        testKey: test.id,
+        testId: test.id,
+        payload,
+      });
+    }
   }
 
   async function deleteAttempt(testId) {
+    // Local first so the UI updates immediately, then mirror to cloud.
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       const current = raw ? JSON.parse(raw) : {};
@@ -98,9 +176,24 @@ export function useTimedVRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
     } catch (err) {
-      console.error('[useTimedVRExamProgress] local delete failed:', err);
+      if (__DEV__) console.error('[useTimedVRExamProgress] local delete failed:', err);
+    }
+
+    if (!user) return;
+    try {
+      await db.deleteTimedVRAttempt(testId);
+      await removePending({ userId: user.id, section: SECTION, testKey: testId });
+    } catch (err) {
+      if (__DEV__) console.error('[useTimedVRExamProgress] cloud delete failed, queueing:', err);
+      await enqueue({
+        userId: user.id,
+        section: SECTION,
+        op: 'delete',
+        testKey: testId,
+        testId,
+      });
     }
   }
 
-  return { completedAttempts, submitExam, deleteAttempt, reload: loadLocalAttempts };
+  return { completedAttempts, submitExam, deleteAttempt, reload: loadAttempts };
 }
