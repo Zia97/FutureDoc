@@ -11,12 +11,11 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useTheme } from '../context/ThemeContext';
 import AnswerOptionButton from './AnswerOptionButton';
 import FeedbackBox from './FeedbackBox';
-
-// UCAT VR scaled score: linear estimate 300–900 based on raw percentage.
-// Actual score is cohort-relative so this is approximate.
-function getVRScaledScore(pct) {
-  return Math.round(300 + (pct / 100) * 600);
-}
+import {
+  getVRScaledScore,
+  SCORE_UNCERTAINTY,
+  UCAT_SCORE_DISCLAIMER_SHORT,
+} from '../lib/ucatScoring';
 
 export default function TimedVRResultsScreen({ passages, getAnswer, flags, test, onDone }) {
   const { practiceTheme: t } = useTheme();
@@ -228,13 +227,15 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
         <Text style={[styles.sectionHeader, { color: t.textSecondary }]}>UCAT SCORE ESTIMATE</Text>
         <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
           <View style={[styles.scaledBadge, { backgroundColor: t.accent + '22' }]}>
-            <Text style={[styles.scaledBadgeText, { color: t.accent }]}>{scaledScore}</Text>
+            <Text style={[styles.scaledBadgeText, { color: t.accent }]}>
+              {scaledScore} <Text style={styles.scaledBadgeRange}>±{SCORE_UNCERTAINTY}</Text>
+            </Text>
           </View>
           <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>
             Scaled score estimate (300–900)
           </Text>
           <Text style={[styles.ucatDisclaimer, { color: t.textSecondary }]}>
-            * Estimate only. Actual UCAT score is cohort-scaled and varies each year.
+            * {UCAT_SCORE_DISCLAIMER_SHORT}
           </Text>
         </View>
 
@@ -374,6 +375,11 @@ const styles = StyleSheet.create({
   scaledBadgeText: {
     fontSize: 28,
     fontWeight: '800',
+  },
+  scaledBadgeRange: {
+    fontSize: 13,
+    fontWeight: '600',
+    opacity: 0.7,
   },
   ucatDesc: {
     fontSize: 13,

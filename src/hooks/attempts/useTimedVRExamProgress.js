@@ -87,7 +87,9 @@ export function useTimedVRExamProgress() {
 
   // Called when the exam ends (user ends it or timer expires).
   // Saves locally first, then writes to DB best-effort (non-blocking errors).
-  async function submitExam({ test, getAnswer, secondsLeft, flags }) {
+  // timeMsByQid is an optional { [questionId]: ms } map from the per-question
+  // time tracker; null/missing entries are stored as NULL in the DB.
+  async function submitExam({ test, getAnswer, secondsLeft, flags, timeMsByQid }) {
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answers, correctCount, scorePercent } = computeScores(
       test.passages,
@@ -132,12 +134,15 @@ export function useTimedVRExamProgress() {
 
     // Only persist answered questions; the review screen treats absent
     // entries as unanswered the same way local cache does.
+    // time_ms is included if the per-question tracker has a value for the
+    // question — null/missing means "not tracked" (e.g. older clients).
     const dbAnswers = answers
       .filter((a) => a.selectedAnswer)
       .map((a) => ({
         question_id: a.questionId,
         passage_id: a.passageId,
         selected_answer: a.selectedAnswer,
+        time_ms: timeMsByQid?.[a.questionId] ?? null,
       }));
 
     const payload = {

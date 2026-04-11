@@ -12,6 +12,11 @@ import { useTheme } from '../context/ThemeContext';
 import { LABEL_SETS } from '../constants/sjLabelSets';
 import AnswerOptionButton from './AnswerOptionButton';
 import FeedbackBox from './FeedbackBox';
+import {
+  getSJBand,
+  SCORE_UNCERTAINTY,
+  UCAT_SCORE_DISCLAIMER_SHORT,
+} from '../lib/ucatScoring';
 
 // ── UCAT SJ scoring helpers ───────────────────────────────────────────────────
 // Mark scheme: 4 marks (exact), 2 marks (1 position off), 0 marks (2+ off / unanswered)
@@ -27,21 +32,9 @@ function sjMarkForQuestion(selected, correct, labelSet) {
   return 0;
 }
 
-// UK bands — approximate thresholds widely cited by UCAT prep companies.
-// Official thresholds are not published and vary slightly each year.
-const UK_BANDS = [
-  { band: 1, minPct: 83, color: '#16a34a', description: 'Excellent — judgement very closely aligned with expert panel' },
-  { band: 2, minPct: 67, color: '#2563eb', description: 'Good — mostly appropriate judgement shown' },
-  { band: 3, minPct: 50, color: '#d97706', description: 'Modest — appropriate judgement in some areas' },
-  { band: 4, minPct: 0,  color: '#dc2626', description: 'Lower performance — limited appropriate judgement' },
-];
-
-function getUKBand(rawPct) {
-  return UK_BANDS.find((b) => rawPct >= b.minPct) ?? UK_BANDS[3];
-}
-
-// ANZ scaled score: linear estimate 300–900 based on raw mark percentage.
-// Actual ANZ scoring is cohort-relative so this is approximate.
+// ANZ uses a 300–900 scaled score for SJ (UK uses bands). Without
+// section-specific anchor data we keep the linear estimate; ANZ has its
+// own annual statistics that we don't track separately yet.
 function getANZScaledScore(rawPct) {
   return Math.round(300 + (rawPct / 100) * 600);
 }
@@ -89,7 +82,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
   }, [scenarios, getAnswer]);
 
   const rawPct = maxRawScore > 0 ? (rawScore / maxRawScore) * 100 : 0;
-  const ukBand = getUKBand(rawPct);
+  const ukBand = getSJBand(rawPct);
   const anzScore = getANZScaledScore(rawPct);
 
   const correctCount = flatQuestions.filter((q) => q.result === 'correct').length;
@@ -292,14 +285,16 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
           <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
             <Text style={[styles.ucatCardRegion, { color: t.textSecondary }]}>AU / NZ</Text>
             <View style={[styles.bandBadge, { backgroundColor: ukBand.color + '22' }]}>
-              <Text style={[styles.bandBadgeText, { color: ukBand.color }]}>{anzScore}</Text>
+              <Text style={[styles.bandBadgeText, { color: ukBand.color }]}>
+                {anzScore} ±{SCORE_UNCERTAINTY}
+              </Text>
             </View>
             <Text style={[styles.ucatRaw, { color: t.textSecondary }]}>
               {rawScore} / {maxRawScore} marks
             </Text>
             <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>Band {ukBand.band} · {ukBand.description}</Text>
             <Text style={[styles.ucatDisclaimer, { color: t.textSecondary }]}>
-              * Estimate (300–900). Actual score is cohort-scaled
+              * {UCAT_SCORE_DISCLAIMER_SHORT}
             </Text>
           </View>
         </View>

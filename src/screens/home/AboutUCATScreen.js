@@ -405,6 +405,46 @@ export default function AboutUCATScreen() {
           )}
 
           <Text style={styles.body}>{r.scoringThresholdNote}</Text>
+
+          {/* ── How this app estimates your score ─────────────────────── */}
+          <View style={styles.tipDivider} />
+          <Text style={styles.subheading}>How UCAT Genius AI estimates your score</Text>
+          <Text style={styles.body}>
+            The real {region === 'uk' ? 'UCAT' : 'UCAT ANZ'} does not use a simple
+            formula. Pearson VUE uses Item Response Theory (IRT) — specifically the
+            Rasch model since 2011 — with item-level calibration. Each test form has
+            its own raw → scaled conversion table that is generated before the
+            testing window opens. Two candidates with the same number of correct
+            answers on different forms can receive different scaled scores. The
+            conversion tables are proprietary and not published.
+          </Text>
+          <Text style={styles.body}>
+            That means no third-party app — including this one — can replicate
+            UCAT scoring exactly. We do the next best thing:
+          </Text>
+          <BulletList items={[
+            'Verbal Reasoning uses piecewise-linear interpolation against community-derived raw → scaled anchor points, validated against the 2025 official deciles published by the UCAT Consortium.',
+            'Decision Making and Quantitative Reasoning use a z-score transformation anchored at each section\u2019s 2025 mean and standard deviation (Pearson VUE 2023 technical report).',
+            'Situational Judgement is reported as a UK Band (1\u20134) using community-derived approximate thresholds. Official band boundaries are reset annually and not published before each cycle.',
+          ]} styles={styles} />
+          <Text style={styles.body}>
+            Each estimated scaled score carries a typical uncertainty of about
+            ±40 points (the standard error of measurement reported in the
+            Pearson VUE 2023 technical report). You will see this margin
+            displayed alongside every scaled score in the app — for example
+            "620 ±40". Treat the numbers as a rough indicator of where your
+            performance sits, not a prediction of your actual UCAT result.
+          </Text>
+          <InfoBox
+            text={
+              'Practice scores tend to under-estimate real UCAT performance. ' +
+              'Most prep platforms (including this one) draw their data from a ' +
+              'self-selected user pool that is more motivated than the average ' +
+              'UCAT candidate. Use these scores to track your own progress over ' +
+              'time, not to predict your final result.'
+            }
+            styles={styles}
+          />
         </View>
 
         {/* Study Tips */}

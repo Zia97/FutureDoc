@@ -1,7 +1,7 @@
 import { ScrollView, Text, View, StyleSheet } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 
-const LAST_UPDATED = '9 April 2026';
+const LAST_UPDATED = '11 April 2026';
 
 const SECTIONS = [
   {
@@ -32,7 +32,7 @@ const SECTIONS = [
   {
     title: '6. Disclaimer',
     body:
-      'UCAT Genius AI is an independent study tool and is not affiliated with, endorsed by, or connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university. "UCAT" is a registered trademark of the UCAT Consortium; its use here is purely descriptive.\n\nThis app is intended solely as a supplementary preparation aid. It does not replace official UCAT resources. We strongly recommend that all users visit the official UCAT website (ucat.ac.uk) for the latest information on exam format, registration dates, and scoring.\n\nPractice questions are original content designed to reflect the style and difficulty of the UCAT. They are not past exam questions. Scaled score estimates are approximations and may not reflect actual UCAT results.',
+      'UCAT Genius AI is an independent study tool and is not affiliated with, endorsed by, or connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university. "UCAT" is a registered trademark of the UCAT Consortium; its use here is purely descriptive.\n\nThis app is intended solely as a supplementary preparation aid. It does not replace official UCAT resources. We strongly recommend that all users visit the official UCAT website (ucat.ac.uk) for the latest information on exam format, registration dates, and scoring.\n\nPractice questions are original content designed to reflect the style and difficulty of the UCAT. They are not past exam questions.\n\nScaled scores (300\u2013900) and SJ bands shown in this app are estimates only. The real UCAT uses Item Response Theory scoring with proprietary, item-level parameters that no third-party app can replicate exactly. Our estimates are derived from the 2025 UCAT Consortium official statistics (means, standard deviations, and decile tables) using piecewise-linear interpolation (Verbal Reasoning) and z-score transformation (Decision Making, Quantitative Reasoning), with a typical \u00b140-point uncertainty per subtest. Treat any score shown in this app as a rough indicator of progress, not as a prediction of your actual UCAT result. See "About UCAT \u2192 Scoring" inside the app for the full methodology.',
   },
   {
     title: '7. Limitation of Liability',

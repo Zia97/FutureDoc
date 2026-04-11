@@ -19,8 +19,28 @@ import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgr
 import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
 import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 import { useTimedQRExamProgress } from '../../hooks/attempts/useTimedQRExamProgress';
+import {
+  getVRScaledScore,
+  getDMScaledScore,
+  getQRScaledScore,
+  scoreColor as scaledScoreColor,
+} from '../../lib/ucatScoring';
 
-function scoreColor(pct) {
+// Score formatter shared across the four sections. VR/DM/QR show their
+// estimated UCAT scaled score (300–900). UK SJ is intentionally left as
+// a percentage because it's reported as bands, not a scaled number.
+function formatScoreForCard(section, pct) {
+  if (section === 'SJ') return { display: `${pct}%`, scaled: null };
+  let scaled;
+  if (section === 'VR') scaled = getVRScaledScore(pct);
+  else if (section === 'DM') scaled = getDMScaledScore(pct);
+  else scaled = getQRScaledScore(pct);
+  return { display: String(scaled), scaled };
+}
+
+// Fallback colour bands for SJ (which lacks a scaled score). VR/DM/QR
+// route through scaledScoreColor from ucatScoring.
+function sjScoreColor(pct) {
   if (pct >= 70) return '#16a34a';
   if (pct >= 50) return '#d97706';
   return '#dc2626';
@@ -66,7 +86,7 @@ export default function TimedTestListScreen({ navigation, route }) {
   const handleResetAttempt = (testId, testTitle) => {
     Alert.alert(
       'Reset Test',
-      `This will delete your result for "${testTitle}" and allow you to retake it. This cannot be undone.`,
+      `This will delete your result for "${testTitle}" and remove it from your performance analytics. You'll be able to retake the test. This cannot be undone.`,
       [
         { text: 'Cancel', style: 'cancel' },
         { text: 'Reset', style: 'destructive', onPress: () => deleteAttempt(testId) },
@@ -99,17 +119,59 @@ export default function TimedTestListScreen({ navigation, route }) {
     );
   }
 
+  const completedCount = Object.keys(completedAttempts ?? {}).length;
+  const showAnalyticsEntry = section === 'VR' && completedCount > 0;
+  const analyticsLocked = !isPro;
+
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
       <FlatList
         data={tests}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          showAnalyticsEntry ? (
+            <View>
+              <TouchableOpacity
+                style={[
+                  styles.analyticsCard,
+                  { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: t.accent },
+                  analyticsLocked && { opacity: 0.7 },
+                ]}
+                activeOpacity={0.85}
+                onPress={() =>
+                  analyticsLocked
+                    ? navigation.navigate('Paywall')
+                    : navigation.navigate('VRAnalytics', { tests })
+                }
+              >
+                <View style={[styles.analyticsBadge, { backgroundColor: analyticsLocked ? '#6b7280' : t.accent }]}>
+                  <Text style={styles.analyticsBadgeText}>{analyticsLocked ? '🔒' : '📊'}</Text>
+                </View>
+                <View style={styles.cardBody}>
+                  <Text style={[styles.cardTitle, { color: t.text }]}>Performance Analytics</Text>
+                  {analyticsLocked && (
+                    <Text style={[styles.lockedLabel, { color: t.accent }]}>Premium</Text>
+                  )}
+                </View>
+                <Text style={[styles.rowChevron, { color: t.textSecondary }]}>›</Text>
+              </TouchableOpacity>
+              <View style={[styles.headerDivider, { backgroundColor: t.border }]} />
+            </View>
+          ) : null
+        }
         renderItem={({ item, index }) => {
           const isCompleted = (section === 'SJ' || section === 'VR' || section === 'DM' || section === 'QR') && !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
           const isLocked = !item.isFree && !isPro;
-          const sc = isCompleted ? scoreColor(attempt.scorePercent) : color;
+          const formatted = isCompleted ? formatScoreForCard(section, attempt.scorePercent) : null;
+          // Colour by scaled score where we have one (VR/DM/QR); SJ falls
+          // back to its percent-based band thresholds.
+          const sc = isCompleted
+            ? formatted.scaled != null
+              ? scaledScoreColor(formatted.scaled, t)
+              : sjScoreColor(attempt.scorePercent)
+            : color;
           return (
             <TouchableOpacity
               style={[
@@ -137,18 +199,13 @@ export default function TimedTestListScreen({ navigation, route }) {
               </View>
               <View style={styles.cardBody}>
                 <Text style={[styles.cardTitle, { color: t.text }]}>{item.title}</Text>
-                <Text style={[styles.cardMeta, { color: t.textSecondary }]}>
-                  {section === 'VR'
-                    ? `${item.passageCount} passages · ${item.questionCount} questions · ${item.timeMinutes} min`
-                    : section === 'SJ'
-                    ? `${item.scenarioCount} scenarios · ${item.questionCount} questions · ${item.timeMinutes} min`
-                    : `${item.questionCount} questions · ${item.timeMinutes} min`}
-                </Text>
                 {isLocked && (
                   <Text style={[styles.lockedLabel, { color: t.accent }]}>Premium</Text>
                 )}
                 {isCompleted && (
-                  <Text style={[styles.completedScore, { color: sc }]}>{attempt.scorePercent}% · Tap to review</Text>
+                  <Text style={[styles.completedScore, { color: sc }]}>
+                    Score: {formatted.display} · Tap to review
+                  </Text>
                 )}
               </View>
               {isCompleted && (
@@ -212,4 +269,34 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   resetText: { fontSize: 20, fontWeight: '600' },
+  analyticsCard: {
+    borderRadius: 14,
+    borderWidth: 1,
+    borderLeftWidth: 4,
+    padding: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 14,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.12,
+    shadowRadius: 5,
+  },
+  analyticsBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  analyticsBadgeText: { fontSize: 20 },
+  rowChevron: { fontSize: 26, fontWeight: '300', marginLeft: 8 },
+  headerDivider: {
+    height: StyleSheet.hairlineWidth,
+    marginTop: 14,
+    marginBottom: 4,
+    opacity: 0.6,
+  },
 });

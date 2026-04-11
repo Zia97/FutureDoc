@@ -15,6 +15,7 @@ import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
+import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
 import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -61,6 +62,14 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const scrollRef = useRef(null);
   const prevStemId = useRef(item.stemId);
 
+  // Per-question time tracking. Active only while the user is genuinely
+  // engaged with a question — paused state, end-of-test review modal, and
+  // results screen all stop the clock.
+  const getQuestionTimes = useQuestionTimeTracker(
+    qid,
+    !isPaused && !showReview && !showResults,
+  );
+
   useEffect(() => {
     if (item.stemId !== prevStemId.current) {
       scrollRef.current?.scrollTo({ y: 0, animated: false });
@@ -84,21 +93,25 @@ export default function TimedVRTestScreen({ route, navigation }) {
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,
-    isLast ? null : goNext,
+    isLast ? () => setShowReview(true) : goNext,
   );
 
   async function handleExamEnd(timerExpired = false) {
+    // Snapshot per-question times BEFORE we flip to the results screen,
+    // otherwise the tracker unmounts and the in-flight question loses its
+    // last few seconds.
+    const timeMsByQid = getQuestionTimes();
     await submitExam({
       test,
       getAnswer,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
       flags,
+      timeMsByQid,
     });
     setShowResults(true);
   }
 
   function onAnswer(option) {
-    if (hasAnswered) return;
     handleAnswer(item.stemId, qid, option);
   }
 

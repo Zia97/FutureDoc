@@ -398,7 +398,7 @@ class DatabaseService {
       attemptsTable: 'timed_verbal_reasoning_exam_attempts',
       answersTable:  'timed_verbal_reasoning_question_answers',
       userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
-      answers, // [{ question_id, passage_id, selected_answer }]
+      answers, // [{ question_id, passage_id, selected_answer, time_ms }]
     });
   }
 
@@ -428,6 +428,59 @@ class DatabaseService {
       .delete()
       .eq('test_id', testId);
     if (error) throw error;
+  }
+
+  /**
+   * Loads everything the VR analytics screen needs in two round trips:
+   *   1. All of the user's VR exam attempts (one row per test).
+   *   2. All answer rows for those attempts, joined with the question's
+   *      `correct_answer` and `difficulty` so the client can compute
+   *      correctness and difficulty buckets without a third query.
+   *
+   * Returns: [{ id, test_id, submitted_at, time_taken_seconds,
+   *             correct_count, score_percent,
+   *             answers: [{ question_id, selected_answer, time_ms,
+   *                          correct_answer, difficulty }] }]
+   *
+   * Returns [] for users with no attempts. Ordered oldest → newest by
+   * submitted_at so the trend line can render in submission order.
+   */
+  async loadVRAnalytics() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_verbal_reasoning_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent')
+      .order('submitted_at', { ascending: true });
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_verbal_reasoning_question_answers')
+      .select(`
+        exam_attempt_id,
+        question_id,
+        selected_answer,
+        time_ms,
+        timed_verbal_reasoning_questions ( correct_answer, difficulty )
+      `)
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    // Flatten the joined question fields onto each answer row so the
+    // analytics screen can treat the result as a flat list.
+    const flatAnswers = (answers ?? []).map((a) => ({
+      exam_attempt_id: a.exam_attempt_id,
+      question_id: a.question_id,
+      selected_answer: a.selected_answer,
+      time_ms: a.time_ms,
+      correct_answer: a.timed_verbal_reasoning_questions?.correct_answer ?? null,
+      difficulty: a.timed_verbal_reasoning_questions?.difficulty ?? 'normal',
+    }));
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: flatAnswers.filter((r) => r.exam_attempt_id === a.id),
+    }));
   }
 
   // ── Decision Making ────────────────────────────────────────
