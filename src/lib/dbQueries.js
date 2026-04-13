@@ -521,6 +521,102 @@ class DatabaseService {
     if (error) throw error;
   }
 
+  /**
+   * Loads everything the DM analytics screen needs in three round trips:
+   *   1. All of the user's DM exam attempts (one row per test).
+   *   2. All answer rows for those attempts, joined with the question's
+   *      `type` and `correct_answer`.
+   *   3. For statement-based questions (syllogism / interpreting_info),
+   *      the correct answers per statement so we can compute correctness.
+   *
+   * Returns: [{ id, test_id, submitted_at, time_taken_seconds,
+   *             correct_count, score_percent,
+   *             answers: [{ question_id, selected_answer,
+   *                          question_type, difficulty, is_correct }] }]
+   *
+   * DM does NOT have per-question time_ms, so the analytics screen omits
+   * the pacing card.
+   *
+   * Returns [] for users with no attempts. Ordered oldest → newest by
+   * submitted_at so the trend line can render in submission order.
+   */
+  async loadDMAnalytics() {
+    const { data: attempts, error: aErr } = await supabase
+      .from('timed_decision_making_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent')
+      .order('submitted_at', { ascending: true });
+    if (aErr) throw aErr;
+    if (!attempts?.length) return [];
+
+    const ids = attempts.map((a) => a.id);
+    const { data: answers, error: ansErr } = await supabase
+      .from('timed_decision_making_question_answers')
+      .select(`
+        exam_attempt_id,
+        question_id,
+        selected_answer,
+        question:timed_decision_making_questions ( type, correct_answer, difficulty )
+      `)
+      .in('exam_attempt_id', ids);
+    if (ansErr) throw ansErr;
+
+    // Collect question IDs for statement-based types so we can check
+    // per-statement correctness in one batch query.
+    const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
+    const yesNoQIds = [...new Set(
+      (answers ?? [])
+        .filter((a) => YES_NO_TYPES.includes(a.question?.type))
+        .map((a) => a.question_id),
+    )];
+
+    let statementsMap = {};
+    if (yesNoQIds.length > 0) {
+      const { data: stmts, error: stErr } = await supabase
+        .from('timed_decision_making_question_statements')
+        .select('question_id, correct_answer, order_index')
+        .in('question_id', yesNoQIds)
+        .order('order_index', { ascending: true });
+      if (stErr) throw stErr;
+      // Group by question_id, sorted by order_index.
+      for (const s of stmts ?? []) {
+        if (!statementsMap[s.question_id]) statementsMap[s.question_id] = [];
+        statementsMap[s.question_id].push(s);
+      }
+    }
+
+    // Flatten and compute correctness for each answer row.
+    const flatAnswers = (answers ?? []).map((a) => {
+      const qType = a.question?.type ?? 'unknown';
+      const isYesNo = YES_NO_TYPES.includes(qType);
+      let isCorrect = false;
+
+      if (isYesNo) {
+        const sel = a.selected_answer;
+        const stmts = statementsMap[a.question_id];
+        if (sel && typeof sel === 'object' && stmts?.length > 0) {
+          isCorrect = stmts.every((s, i) => sel[String(i)] === s.correct_answer);
+        }
+      } else {
+        const sel = a.selected_answer;
+        isCorrect = sel != null && sel === a.question?.correct_answer;
+      }
+
+      return {
+        exam_attempt_id: a.exam_attempt_id,
+        question_id: a.question_id,
+        selected_answer: a.selected_answer,
+        question_type: qType,
+        difficulty: a.question?.difficulty ?? 'normal',
+        is_correct: isCorrect,
+      };
+    });
+
+    return attempts.map((a) => ({
+      ...a,
+      answers: flatAnswers.filter((r) => r.exam_attempt_id === a.id),
+    }));
+  }
+
   // ── Quantitative Reasoning ─────────────────────────────────
   async submitTimedQRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
     return this._submitTimedExamAttempt({

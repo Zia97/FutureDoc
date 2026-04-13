@@ -650,7 +650,7 @@
       {
         "id": "dm4r-018-arg",
         "title": "Meditation in Schools",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "difficulty": "normal",
         "stem": "Should schools introduce daily meditation sessions to improve student concentration?",
         "options": [
@@ -666,7 +666,7 @@
       {
         "id": "dm4r-019-arg",
         "title": "Banning Private Cars in City Centres",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "difficulty": "normal",
         "stem": "Should city centres ban private cars during weekday mornings to reduce air pollution?",
         "options": [
@@ -682,7 +682,7 @@
       {
         "id": "dm4r-020-arg",
         "title": "Age Verification on Social Media",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "difficulty": "hard",
         "stem": "Should social media platforms require age verification to protect children from harmful content?",
         "options": [
@@ -698,7 +698,7 @@
       {
         "id": "dm4r-021-arg",
         "title": "Four-Day Working Week",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "difficulty": "normal",
         "stem": "Should employers offer a four-day working week to improve employee productivity?",
         "options": [
@@ -714,7 +714,7 @@
       {
         "id": "dm4r-022-arg",
         "title": "Solar Panels on New Homes",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "difficulty": "normal",
         "stem": "Should all new homes be required to have solar panels to reduce household energy costs?",
         "options": [

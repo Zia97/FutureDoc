@@ -19,7 +19,7 @@ import { useAICredits } from '../../hooks/ai/useAICredits';
 import { useTheme } from '../../context/ThemeContext';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
-const MCQ_TYPES    = ['logic_puzzle', 'strongest_argument', 'probabilistic', 'probabilistic_reasoning'];
+const MCQ_TYPES    = ['logic_puzzle', 'recognising_assumptions', 'strongest_argument', 'probabilistic'];
 
 // Derived question type flags — shared between stem and options renders
 function useQuestionMeta(question, screenWidth) {

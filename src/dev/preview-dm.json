@@ -215,7 +215,7 @@
       {
         "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e13",
         "title": "Speed Cameras on Motorways",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "stem": "All speed cameras on motorways should be removed.",
         "options": [
           {
@@ -726,7 +726,7 @@
       {
         "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e15",
         "title": "Animal Testing for Medical Research",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "stem": "Animal testing for medical research should be banned.",
         "options": [
           {
@@ -1073,7 +1073,7 @@
       {
         "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e14",
         "title": "School Uniforms",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "stem": "All secondary schools should require students to wear a uniform.",
         "options": [
           {
@@ -1525,7 +1525,7 @@
       {
         "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e16",
         "title": "Lowering the Voting Age",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "stem": "The minimum voting age should be lowered to 16.",
         "options": [
           {
@@ -1807,7 +1807,7 @@
       {
         "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e12",
         "title": "University Tuition Fees",
-        "type": "strongest_argument",
+        "type": "recognising_assumptions",
         "stem": "University tuition fees should be abolished and replaced with government funding.",
         "options": [
           {

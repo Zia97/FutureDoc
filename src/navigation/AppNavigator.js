@@ -37,6 +37,7 @@ import TimedDMTestReviewScreen from '../screens/timed/TimedDMTestReviewScreen';
 import TimedQRTestReviewScreen from '../screens/timed/TimedQRTestReviewScreen';
 import VRAnalyticsScreen from '../screens/timed/VRAnalyticsScreen';
 import QRAnalyticsScreen from '../screens/timed/QRAnalyticsScreen';
+import DMAnalyticsScreen from '../screens/timed/DMAnalyticsScreen';
 import VRQuestionListScreen from '../screens/vr/VRQuestionListScreen';
 import VRPassageScreen from '../screens/vr/VRPassageScreen';
 import SJScenarioListScreen from '../screens/sj/SJScenarioListScreen';
@@ -92,6 +93,7 @@ function AppStack() {
       <Stack.Screen name="TimedQRTestReview" component={TimedQRTestReviewScreen} options={{ headerShown: false }} />
       <Stack.Screen name="VRAnalytics" component={VRAnalyticsScreen} options={{ title: 'VR Performance' }} />
       <Stack.Screen name="QRAnalytics" component={QRAnalyticsScreen} options={{ title: 'QR Performance' }} />
+      <Stack.Screen name="DMAnalytics" component={DMAnalyticsScreen} options={{ title: 'DM Performance' }} />
       <Stack.Screen name="VRQuestionList" component={VRQuestionListScreen} options={{ title: 'Verbal Reasoning' }} />
       <Stack.Screen name="VRPassage" component={VRPassageScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SJScenarioList" component={SJScenarioListScreen} options={{ title: 'Situational Judgement' }} />

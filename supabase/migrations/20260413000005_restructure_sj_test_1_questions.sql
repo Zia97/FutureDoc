@@ -1,0 +1,311 @@
+-- Reseed: Timed SJ Test 1 (test_id = 1)
+-- label_set: 1 = importance scale, 2 = appropriateness scale
+-- Source: sj-test-001-opus-validated.json (24 scenarios, 69 items)
+
+-- Ensure the test metadata row exists
+INSERT INTO timed_situational_judgement_tests (id, title, time_minutes)
+VALUES (1, 'SJ Timed Test 1', 26)
+ON CONFLICT (id) DO NOTHING;
+
+-- Clear existing Test 1 data (questions first due to FK, then scenarios)
+DELETE FROM timed_situational_judgement_questions
+WHERE scenario_id IN (
+  SELECT id FROM timed_situational_judgement_scenarios WHERE test_id = 1
+);
+DELETE FROM timed_situational_judgement_scenarios WHERE test_id = 1;
+
+DO $$
+DECLARE
+  v_s16 UUID; v_s06 UUID; v_s19 UUID; v_s24 UUID; v_s14 UUID;
+  v_s11 UUID; v_s18 UUID; v_s12 UUID; v_s15 UUID; v_s17 UUID;
+  v_s02 UUID; v_s13 UUID; v_s22 UUID; v_s07 UUID; v_s10 UUID;
+  v_s03 UUID; v_s23 UUID; v_s05 UUID; v_s20 UUID; v_s08 UUID;
+  v_s09 UUID; v_s01 UUID; v_s04 UUID; v_s21 UUID;
+BEGIN
+
+  -- S16:Flatmate showing signs of mental health crisis
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Over the past few weeks, a flatmate and fellow student, Alex, has become increasingly withdrawn, stopped attending social events, and has been missing lectures. When asked if everything is alright, Alex says they are fine and changes the subject. Other flatmates have expressed concern to each other privately.
+
+How important to take into account are the following considerations for Alex''s flatmates when deciding how to respond?')
+  RETURNING id INTO v_s16;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s16, 1, 'That Alex said they are fine and it might be intrusive to push further.', 'Of minor importance', 'This is of minor importance because while respecting Alex''s stated wishes shows consideration, saying ''I''m fine'' when behaviour suggests otherwise is extremely common among people who are struggling. This consideration should not prevent the flatmates from gently offering ongoing support. It is worth noting but should not be the deciding factor.', 0),
+    (v_s16, 1, 'Whether Alex''s withdrawal and missed lectures could indicate a serious wellbeing issue that may need professional support.', 'Very important', 'This is very important because the pattern of behaviour â withdrawal, social isolation, and missed academic commitments â could indicate a significant mental health or wellbeing concern. Recognising this pattern and considering whether professional support might be needed is essential. GMC principles emphasise supporting the wellbeing of colleagues and fellow students.', 1),
+    (v_s16, 1, 'That the flatmates are not qualified mental health professionals and therefore cannot help.', 'Not important at all', 'This is not important at all because you do not need to be a mental health professional to offer support, express concern, or help someone access appropriate services. The role of a friend or peer is to notice, to care, and to signpost â not to diagnose or treat. Using a lack of qualifications as a reason for inaction would be an abdication of basic human concern.', 2)
+;
+
+  -- S06:Infection control breach - glove changing
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'During a routine infection control audit at a dental outreach clinic, Fatima, a final-year dental student, observes that the supervising dentist has not been changing gloves between patients. She has noticed this on at least three separate occasions during the morning session.
+
+How appropriate is each of the following responses by Fatima?')
+  RETURNING id INTO v_s06;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s06, 2, 'Fatima raises the issue with the supervising dentist privately and respectfully at an appropriate moment, explaining what she has observed.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Fatima is addressing a patient safety concern directly with the person involved, in a private and professional manner. Repeated failure to change gloves between patients is a serious breach of infection control that puts patients at risk. Direct, respectful communication is the appropriate first step, consistent with GMC principles on raising concerns.', 0),
+    (v_s06, 2, 'Fatima says nothing because the supervising dentist is more experienced and may have a good reason for their approach.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because there is no acceptable clinical reason for not changing gloves between patients. Deferring to seniority when patient safety is at risk is never appropriate. GMC guidance is clear that all healthcare professionals, regardless of their level of training, have a duty to raise concerns about patient safety.', 1),
+    (v_s06, 2, 'Fatima makes a note of what she has observed but decides to include it in the written audit report at the end of the placement rather than raising it immediately.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while documenting the observation is a reasonable instinct, delaying action on an ongoing infection control breach means patients continue to be put at risk in the interim. The correct approach is to raise the concern promptly to stop the breach from continuing, while also documenting it. Delayed reporting for a current risk is insufficient.', 2)
+;
+
+  -- S19:Plagiarism in group presentation slides
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'While reviewing a classmate''s slides before a group presentation, Jordan discovers that an entire section has been copied directly from a published textbook without attribution. The presentation is due to be delivered in two hours.
+
+How important to take into account are the following considerations for Jordan when deciding how to respond?')
+  RETURNING id INTO v_s19;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s19, 1, 'That there are only two hours until the presentation and rewriting the section would be stressful.', 'Of minor importance', 'This is of minor importance because while the time pressure is a practical consideration, it does not change the fact that the content is plagiarised. The difficulty of correcting the problem should not be used as a justification for presenting dishonest work. Professional integrity requires action even when it is inconvenient.', 0),
+    (v_s19, 1, 'That presenting plagiarised material could constitute academic misconduct for the entire group.', 'Very important', 'This is very important because academic misconduct has serious consequences, and all members of a group may be held accountable for the content of a joint presentation. Jordan has a duty to ensure the work submitted under their name is honest and properly attributed. The potential for disciplinary action for the whole group makes this a critical consideration.', 1),
+    (v_s19, 1, 'Whether Jordan''s relationship with the classmate might be affected by raising the issue.', 'Not important at all', 'This is not important at all because personal relationships should not prevent someone from addressing academic dishonesty. Raising a legitimate concern about plagiarism is a matter of integrity, not personal conflict. Allowing concern about social consequences to override professional duty is the kind of self-interest-based reasoning that GMC principles explicitly reject.', 2)
+;
+
+  -- S24:Discriminatory speaker exclusion
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Kai is part of a student committee organising a guest lecture series. One committee member suggests excluding a particular speaker because of their nationality, arguing that students from certain countries might feel uncomfortable. Other committee members are unsure how to respond.
+
+How important to take into account are the following considerations for the committee when making this decision?')
+  RETURNING id INTO v_s24;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s24, 1, 'Whether excluding a speaker on the basis of their nationality would constitute discrimination.', 'Very important', 'This is very important because excluding someone based on their nationality is discriminatory and directly contradicts the principle of justice, which requires fair and equal treatment regardless of personal characteristics. Discrimination on the basis of nationality is also unlawful under the Equality Act 2010. The committee has a clear duty not to make decisions based on prejudice or discriminatory reasoning.', 0),
+    (v_s24, 1, 'Whether the speaker''s academic expertise and the relevance of their topic are suitable for the lecture series.', 'Important', 'This is important because the quality and relevance of a speaker''s expertise is a legitimate criterion for inclusion in an academic lecture series. Decisions about speakers should be based on academic merit, topic relevance, and educational value â not on personal characteristics such as nationality. This is the kind of factor that should guide the decision.', 1)
+;
+
+  -- S14:Patient withdraws consent during dental procedure
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'During a dental clinic session, a patient becomes visibly anxious and tells Deepak, a third-year dental student, that they want to stop the procedure. The supervising dentist is in another room attending to a different patient.
+
+How appropriate is each of the following responses by Deepak?')
+  RETURNING id INTO v_s14;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s14, 2, 'Deepak tells the patient that they are nearly finished and continues with the procedure to avoid having to reschedule.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because the patient has withdrawn consent. Continuing a procedure after a patient has asked to stop is a fundamental violation of patient autonomy and could constitute assault. The inconvenience of rescheduling is never a justification for overriding a patient''s clearly expressed wishes. GMC principles on consent are unequivocal on this point.', 0),
+    (v_s14, 2, 'Deepak stops the procedure immediately, reassures the patient, and goes to inform the supervising dentist about the situation.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Deepak respects the patient''s autonomy by stopping immediately, provides reassurance to address their distress, and appropriately involves the supervisor. As a dental student, Deepak is acting within his scope by stopping when consent is withdrawn and escalating to the qualified dentist for further management.', 1)
+;
+
+  -- S11:Plagiarism in lab report
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Wei is working on a joint lab report with his partner, Callum. The deadline is tomorrow. Wei discovers that Callum has copied a large section of the discussion from an online source and included it as original work in their shared draft.
+
+How appropriate is each of the following responses by Wei?')
+  RETURNING id INTO v_s11;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s11, 2, 'Wei submits the report as it is, reasoning that since Callum wrote that section, it is Callum''s responsibility if plagiarism is detected.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because Wei is knowingly submitting work that contains plagiarism. Both authors share responsibility for a joint submission. Allowing plagiarised content to be submitted is dishonest and a breach of academic integrity. GMC principles of honesty apply equally to academic and clinical contexts â aware complicity in misconduct is itself misconduct.', 0),
+    (v_s11, 2, 'Wei contacts Callum to explain what he has found, asks Callum to rewrite the section in his own words, and offers to help if needed.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Wei is addressing the issue directly with Callum, giving him the opportunity to correct the problem, and offering constructive support. This upholds academic integrity while maintaining a respectful and collaborative working relationship. It demonstrates honesty, directness, and teamwork.', 1),
+    (v_s11, 2, 'Wei quietly rewrites the plagiarised section himself without saying anything to Callum about what he found.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because Wei ensures the submitted work is original, which protects academic integrity. However, by not telling Callum what he found, Wei misses the opportunity to address the behaviour. Callum may continue to plagiarise in future work, and the underlying problem goes unresolved. A better approach would be to address the issue directly.', 2)
+;
+
+  -- S18:Data alterations in research project
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Ruby is a third-year medical student participating in a research project supervised by a consultant. During data analysis, Ruby notices that some of the data entries appear to have been altered to make the results look more favourable. She is unsure who made the changes.
+
+How important to take into account are the following considerations for Ruby when deciding how to respond?')
+  RETURNING id INTO v_s18;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s18, 1, 'That the consultant is Ruby''s supervisor and raising concerns could affect her research grade.', 'Not important at all', 'This is not important at all because concerns about personal academic consequences should never prevent someone from raising a legitimate concern about research integrity. Falsified data could mislead clinical practice and harm patients. Self-interest â including grades, references, or career progression â must never override professional duty to uphold honesty in research.', 0),
+    (v_s18, 1, 'Whether the data alterations could affect the validity of the research findings and any subsequent clinical decisions based on them.', 'Very important', 'This is very important because falsified research data can lead to incorrect clinical recommendations that ultimately affect patient care. The integrity of research underpins evidence-based medicine. If the altered data were published and used to guide treatment, the consequences could be serious. This is the most critical consideration and demands prompt action.', 1),
+    (v_s18, 1, 'That Ruby is not certain who made the alterations.', 'Of minor importance', 'This is of minor importance because while knowing who altered the data might inform how Ruby raises the concern, uncertainty about the responsible individual does not change the fact that the data appears to have been falsified. The concern about data integrity stands regardless of who made the changes, and Ruby should raise it through appropriate channels irrespective.', 2)
+;
+
+  -- S12:Patient privacy during examination
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'While assisting with a bedside examination, Olivia, a second-year medical student, notices that the curtain around the patient''s bed has been left partially open and people are walking past in the corridor. The registrar conducting the examination does not seem to have noticed.
+
+How appropriate is each of the following responses by Olivia?')
+  RETURNING id INTO v_s12;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s12, 2, 'Olivia discreetly closes the curtain herself without interrupting the examination.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Olivia is acting to protect the patient''s privacy and dignity in a practical, immediate way that does not disrupt the clinical interaction. Patient dignity is a core GMC principle, and a small proactive action to maintain it demonstrates good professional values.', 0),
+    (v_s12, 2, 'Olivia assumes the registrar has intentionally left the curtain open and does nothing.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because the patient''s dignity is being compromised, and assuming the registrar intended this without checking is a failure to act. However, the consequences are limited â the examination is temporary and the exposure is not severe. A student should always act to protect patient dignity, even if unsure about the senior''s intentions.', 1),
+    (v_s12, 2, 'Olivia loudly asks the registrar whether they meant to leave the curtain open, drawing attention to the situation.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while Olivia''s intention is correct â she wants to protect the patient''s dignity â drawing attention to the situation loudly may cause embarrassment to the patient and the registrar. A discreet approach, such as quietly closing the curtain or mentioning it softly, would better serve the patient''s interests.', 2)
+;
+
+  -- S15:Senior student belittling quieter group member
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Grace is a first-year medical student. During a problem-based learning session, she witnesses a senior student repeatedly interrupting and belittling a quieter member of the group whenever they try to contribute. The tutor facilitating the session does not intervene.
+
+How important to take into account are the following considerations for Grace when deciding how to respond?')
+  RETURNING id INTO v_s15;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s15, 1, 'Whether the quieter student has asked for help or seems to want someone to intervene.', 'Important', 'This is important because understanding the affected student''s wishes helps Grace determine the most appropriate and respectful way to respond. However, even if the student has not explicitly asked for help, the behaviour is still unacceptable and should be addressed â so this consideration should inform the approach but should not be a reason for inaction.', 0),
+    (v_s15, 1, 'Whether the senior student''s behaviour is preventing effective learning for the whole group.', 'Important', 'This is important because the disruptive behaviour may well be affecting the educational experience for all group members, not just the targeted student. However, the behaviour would be unacceptable regardless of its impact on group learning â a student being belittled is a concern in its own right. The group-wide impact is a relevant supporting consideration but is not the primary reason for action.', 1),
+    (v_s15, 1, 'That Grace might be seen as confrontational or difficult if she speaks up.', 'Not important at all', 'This is not important at all because concerns about personal reputation should never prevent someone from addressing unprofessional behaviour. Professional duty to support colleagues and maintain respectful working environments overrides any anxiety about being perceived negatively. Self-interest in avoiding social discomfort is not a legitimate consideration.', 2)
+;
+
+  -- S17:Allocating last HDU bed between two deteriorating patients
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Having been on call overnight, Dr Mensah, an F2 doctor, is asked by the registrar to prioritise which of two patients should receive the last available bed in the high dependency unit. Both patients are deteriorating, and neither has family present to advocate for them.
+
+How important to take into account are the following considerations for Dr Mensah when making this decision?')
+  RETURNING id INTO v_s17;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s17, 1, 'The clinical condition and likelihood of benefit from high dependency care for each patient.', 'Very important', 'This is very important because resource allocation decisions must be based on clinical need and the likelihood that the intervention will benefit the patient. This is the most ethically defensible basis for prioritisation and aligns with the principle of justice â ensuring resources go where they can do the most good based on objective clinical criteria.', 0),
+    (v_s17, 1, 'Whether one patient has been waiting longer than the other.', 'Of minor importance', 'This is of minor importance because while waiting time can be a relevant factor in some resource allocation decisions, clinical urgency and likelihood of benefit should take precedence. If both patients have equal clinical need, waiting time might serve as a tiebreaker, but it should not override clinical judgement about who would benefit most from high dependency care.', 1),
+    (v_s17, 1, 'That Dr Mensah is tired from being on call overnight and may not be thinking clearly.', 'Important', 'This is important because fatigue can impair clinical judgement, and high-stakes decisions about resource allocation require clear thinking. Recognising one''s own limitations due to tiredness is a professional responsibility. Dr Mensah should consider whether they need to involve the registrar or another senior colleague more directly in the decision to ensure it is made safely.', 2)
+;
+
+  -- S02:Pharmacology assignment plagiarism
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Liam is a second-year medical student who has been struggling with a pharmacology assignment. His close friend, who completed the same module last year, offers to share their marked submission so Liam can use it as a reference. Several other students in the cohort have reportedly done the same thing.
+
+How appropriate is each of the following responses by Liam?')
+  RETURNING id INTO v_s02;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s02, 2, 'Liam accepts the submission and closely follows its structure and arguments in his own work.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because closely reproducing the structure and arguments of another student''s work constitutes academic misconduct. That other students have done the same does not make it acceptable. GMC Good Medical Practice requires honesty and integrity in all professional activities, including academic work.', 0),
+    (v_s02, 2, 'Liam declines the offer and instead asks his tutor for guidance on how to approach the assignment.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Liam is maintaining academic integrity while proactively seeking legitimate help. Approaching a tutor is the proper channel for academic support. This demonstrates honesty, self-awareness about areas of difficulty, and a willingness to seek appropriate help â all core GMC values.', 1),
+    (v_s02, 2, 'Liam accepts the submission to read for general understanding of the topic but writes his own work entirely independently.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because while Liam intends to write his own work, reading a marked submission creates a risk of unconsciously replicating its content. A better approach would be to use approved resources such as textbooks, lecture notes, or tutor guidance. The intention is honest, but the method is imperfect.', 2)
+;
+
+  -- S13:Documentation of fluid prescription change
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Dr Khan is an F1 doctor reaching the end of a long night shift. She is handing over to the incoming day team but realises she forgot to document an important change to a patient''s fluid prescription that was agreed by the registrar three hours ago. The day team will be managing this patient.
+
+How appropriate is each of the following responses by Dr Khan?')
+  RETURNING id INTO v_s13;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s13, 2, 'Dr Khan completes the documentation and verbally highlights the change to the incoming doctor during handover, explaining the omission.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Dr Khan is correcting her error immediately, ensuring accurate documentation, and communicating the change clearly to the incoming team. This upholds patient safety through proper handover, demonstrates honesty about the omission, and fulfils the duty of candour. Documentation errors during busy shifts are understandable, but must always be corrected.', 0),
+    (v_s13, 2, 'Dr Khan tells the incoming doctor about the fluid change verbally but does not update the documentation, planning to do it remotely later when she gets home.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because the verbal handover does communicate the critical clinical information to the incoming team, which protects patient safety in the immediate term. However, failing to update the written documentation at the time creates risk â verbal information can be forgotten or miscommunicated, and clinical records should be accurate and contemporaneous. The intent is right but the execution falls short of best practice.', 1),
+    (v_s13, 2, 'Dr Khan decides not to mention the omission during handover, hoping the day team will check the fluid chart themselves and notice the discrepancy.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because relying on the day team to independently discover an undocumented change is dangerous and dishonest. It puts the patient at risk of receiving incorrect fluids and fails the fundamental duty of safe handover. GMC principles require honest communication, accurate documentation, and safe transfer of care. Hoping someone else will catch the error is a serious dereliction of duty.', 2)
+;
+
+  -- S22:Study group member expressing hopelessness
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'During revision week, a close friend and coursemate, Sam, confides to their study group that they have been feeling overwhelmed and have not been sleeping. Sam makes a passing comment about ''not seeing the point anymore'' but quickly laughs it off and changes the subject.
+
+How important to take into account are the following considerations for the study group members when deciding how to respond?')
+  RETURNING id INTO v_s22;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s22, 1, 'That it is revision week and everyone is feeling stressed, so Sam''s feelings are probably normal.', 'Of minor importance', 'This is of minor importance because while it is true that revision periods are stressful for most students, this does not diminish the significance of Sam''s comment about ''not seeing the point anymore.'' Normalising a potentially serious expression of hopelessness because others are also stressed could lead to a serious concern being overlooked. The context is worth noting but should not be used to dismiss the remark.', 0),
+    (v_s22, 1, 'Whether Sam''s comment about ''not seeing the point anymore'' could indicate something more serious than exam stress.', 'Very important', 'This is very important because phrases like ''not seeing the point'' can be indirect expressions of suicidal ideation or severe distress. Combined with poor sleep and feeling overwhelmed, this pattern of behaviour warrants serious attention. The duty to support a colleague''s wellbeing requires taking such comments seriously rather than assuming they are throwaway remarks.', 1),
+    (v_s22, 1, 'That Sam laughed it off and seemed to want to move on.', 'Of minor importance', 'This is of minor importance because people who are struggling often deflect with humour or quickly change the subject to avoid burdening others. Sam laughing off the comment does not mean the underlying feelings are not serious. This consideration might inform the approach â a private conversation rather than pressing in front of the group â but should not be treated as evidence that no follow-up is needed.', 2)
+;
+
+  -- S07:Colleague impaired by alcohol
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Hasan is a fourth-year medical student on a general practice placement. During a coffee break, he notices that one of the registrars, Dr Ellis, smells strongly of alcohol. Dr Ellis has three patient consultations scheduled for the remainder of the morning.
+
+How appropriate is each of the following responses by Hasan?')
+  RETURNING id INTO v_s07;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s07, 2, 'Hasan mentions to another medical student that Dr Ellis smells of alcohol and asks whether they have noticed anything, before deciding what to do.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because while seeking a second perspective is understandable, discussing a colleague''s potential impairment with a peer delays action on what could be an immediate patient safety risk. A more appropriate first step would be to raise the concern directly with a senior clinician or practice manager who can act on it promptly.', 0),
+    (v_s07, 2, 'Hasan speaks to the practice manager or a senior GP immediately to report his concern about Dr Ellis.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because if Dr Ellis is impaired by alcohol, patients scheduled for consultations could be at risk. Reporting directly to a senior who can assess the situation and take immediate action is the most effective way to protect patients. GMC guidance requires doctors and students to raise concerns about colleagues'' fitness to practise when patient safety may be at risk.', 1),
+    (v_s07, 2, 'Hasan decides not to say anything because he is only a student and it is not his place to question a qualified doctor.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because patient safety overrides hierarchical considerations. Being a student does not exempt Hasan from the professional duty to raise concerns when patients may be at risk. GMC guidance makes clear that all members of the healthcare team â including students â have a responsibility to speak up about safety concerns, regardless of seniority.', 2)
+;
+
+  -- S10:Consultant''s dismissive weight comment
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'During a ward round, a consultant makes a dismissive remark about a patient''s weight in front of the patient and several members of the team. Amira, a third-year medical student, notices that the patient looks visibly upset. No one else on the team acknowledges what happened.
+
+How appropriate is each of the following responses by Amira?')
+  RETURNING id INTO v_s10;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s10, 2, 'Amira challenges the consultant in front of the team and the patient during the ward round, telling them their comment was unacceptable.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while Amira''s instinct to advocate for the patient is correct, confronting a consultant publicly during a ward round is likely to escalate the situation, cause further distress to the patient, and damage professional relationships. The method of communication matters â private, respectful discussion is always preferred over public confrontation.', 0),
+    (v_s10, 2, 'Amira goes back to the patient after the ward round to check how they are feeling and to offer reassurance.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because checking on the patient demonstrates compassion and care, which is commendable. However, on its own it does not address the consultant''s behaviour, which could be repeated with other patients. Ideally, Amira would both support the patient and address the underlying issue with the consultant or a senior colleague.', 1),
+    (v_s10, 2, 'Amira waits until after the ward round and then speaks to the consultant privately, expressing concern about the effect of the comment on the patient.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Amira is addressing the issue directly with the person involved, in private, and in a respectful manner. The comment caused distress to the patient and was unprofessional. Raising it privately after the ward round avoids public confrontation while still upholding the duty to advocate for the patient''s dignity.', 2)
+;
+
+  -- S03:Group presentation - missing team member
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'During preparation for a group presentation worth 30% of the module grade, one team member, Priya, has consistently missed meetings and has not completed her allocated section. The presentation is due in three days. The remaining team members are frustrated and unsure how to proceed.
+
+How appropriate is each of the following responses by the remaining team members?')
+  RETURNING id INTO v_s03;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s03, 2, 'The group contacts Priya directly to express their concern, ask whether she is facing any difficulties, and discuss how the work can be completed before the deadline.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because it addresses the core issue directly through private, respectful communication. It shows concern for Priya''s wellbeing while also being clear about the team''s needs. This approach prioritises constructive dialogue before any escalation, consistent with GMC principles of effective communication and teamwork.', 0),
+    (v_s03, 2, 'The group divides Priya''s section among themselves without contacting her, to ensure the work is completed on time.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because it ensures the presentation is completed and protects the group''s academic interests, but it avoids addressing the underlying problem. Priya may be struggling with personal or health issues, and not reaching out misses an opportunity to support a colleague. It also fails to address the fairness issue directly.', 1),
+    (v_s03, 2, 'The group emails the module coordinator to report that Priya has not contributed, without first speaking to Priya about the situation.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while the group''s concern is legitimate, escalating to a module coordinator without first attempting to communicate directly with Priya is premature. It bypasses the opportunity for resolution within the team and could unfairly damage Priya''s standing. However, it does not cause lasting harm and reflects a genuine concern.', 2)
+;
+
+  -- S23:Uncertain drug allergy record
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'After completing a patient history on an orthopaedic ward, Ben, a third-year medical student, realises he may have recorded an incorrect drug allergy in the patient''s notes. He is not certain whether he wrote down the right medication name. The clinical team will use these notes for ongoing care decisions.
+
+How important to take into account are the following considerations for Ben when deciding how to respond?')
+  RETURNING id INTO v_s23;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s23, 1, 'That admitting the potential error might make Ben look careless in front of the clinical team.', 'Not important at all', 'This is not important at all because personal reputation should never take precedence over patient safety. An incorrect allergy record could lead to a patient being given a medication that causes a serious allergic reaction. GMC Good Medical Practice is clear that doctors and students must be honest about mistakes, and self-interest must never override the duty to protect patients.', 0),
+    (v_s23, 1, 'Whether the incorrect allergy information could lead to the patient being prescribed a medication that harms them.', 'Very important', 'This is very important because drug allergy records directly inform prescribing decisions. An incorrect entry could lead to a patient receiving a medication they are genuinely allergic to, with potentially life-threatening consequences. Patient safety is the overriding principle, and any uncertainty about the accuracy of allergy documentation must be resolved immediately.', 1),
+    (v_s23, 1, 'That the clinical team will likely double-check the allergy information themselves before prescribing.', 'Of minor importance', 'This is of minor importance because while it is true that prescribing clinicians should verify allergy information, relying on others to catch a known potential error is not an acceptable approach to patient safety. Each person in the chain of care has a responsibility for the accuracy of the information they contribute. The possibility of a safety net does not absolve Ben of his duty to flag the concern.', 2)
+;
+
+  -- S05:Child with suspicious injuries - safeguarding concern
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'After examining a six-year-old boy brought into the emergency department with a fractured arm, Dr Okonkwo, an F2 doctor, notices several bruises of varying ages across the child''s torso. The child''s mother explains that he fell from a climbing frame, but the pattern of injuries does not appear consistent with this account.
+
+How appropriate is each of the following responses by Dr Okonkwo?')
+  RETURNING id INTO v_s05;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s05, 2, 'Dr Okonkwo questions the mother in detail about the bruises in front of the child, pressing her to explain each one.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while the instinct to investigate is understandable, questioning the parent in front of the child could compromise safeguarding procedures, distress the child, and alert the parent to suspicion â potentially increasing risk. Safeguarding protocols require concerns to be raised through proper channels rather than through informal interrogation.', 0),
+    (v_s05, 2, 'Dr Okonkwo documents the findings carefully, including the distribution and approximate age of the bruises, and contacts the designated safeguarding lead before the child is discharged.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Dr Okonkwo is following safeguarding protocol precisely â documenting findings objectively and referring to the designated safeguarding lead. This protects the child, ensures proper processes are followed, and avoids actions that could compromise subsequent investigation. GMC guidance makes clear that safeguarding children is a paramount duty.', 1),
+    (v_s05, 2, 'Dr Okonkwo accepts the mother''s explanation, treats the fracture, and discharges the child without further action.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because the pattern of injuries raises clear safeguarding concerns that cannot be ignored. Accepting a potentially implausible explanation and discharging the child without further assessment could leave the child at serious risk of ongoing harm. GMC guidance is unequivocal that doctors must act to protect vulnerable patients, especially children.', 2)
+;
+
+  -- S20:Doctor spoke rudely and didn''t answer patient''s questions
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'Ellie is a fourth-year medical student on a respiratory ward placement. A patient complains to Ellie that a doctor spoke to them rudely during the morning ward round and did not answer their questions about their treatment plan.
+
+How important to take into account are the following considerations for Ellie when deciding how to respond?')
+  RETURNING id INTO v_s20;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s20, 1, 'Whether the patient''s concerns about their treatment plan remain unanswered.', 'Very important', 'This is very important because patients have a right to understand their treatment, and unanswered questions about care can cause anxiety and undermine informed consent. Ensuring the patient receives the information they need is a core professional duty, regardless of how the original interaction went. Patient welfare and understanding must be prioritised.', 0),
+    (v_s20, 1, 'That the doctor may have been under time pressure during the ward round.', 'Of minor importance', 'This is of minor importance because while time pressure is a common reality in clinical settings and may provide context, it does not excuse rude behaviour or failure to communicate with patients. Understanding the circumstances might inform how Ellie raises the issue, but it should not be used to dismiss the patient''s legitimate complaint.', 1)
+;
+
+  -- S08:Patient photo breach - confidentiality
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'A photograph of a patient''s unusual skin condition is posted to a medical student social media group by a member who was on placement at the time. The patient''s face is not visible, but the hospital ward name badge is partially visible in the background. Several students, including Nadia, have seen the post.
+
+How appropriate is each of the following responses by Nadia?')
+  RETURNING id INTO v_s08;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s08, 2, 'Nadia comments on the post asking for the diagnosis, as she finds the case educationally interesting.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because engaging with a post that may breach patient confidentiality normalises and compounds the original breach. Even though the patient''s face is not visible, the ward name badge could enable identification. Interacting with the post rather than addressing the breach fails to uphold confidentiality principles under GMC Good Medical Practice.', 0),
+    (v_s08, 2, 'Nadia contacts the student who posted the photograph privately to explain that the post may breach patient confidentiality and suggests they remove it immediately.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Nadia is addressing the breach directly, privately, and constructively. The identifiable ward information means the patient could potentially be identified, making this a confidentiality concern. Contacting the student privately respects their dignity while acting promptly to protect the patient''s rights.', 1),
+    (v_s08, 2, 'Nadia ignores the post, reasoning that since the patient''s face is not visible, no real harm has been done.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while Nadia has not actively contributed to the breach, failing to act when a confidentiality concern has been identified is a professional shortcoming. The visible ward badge means the patient could be identifiable. However, the consequences of Nadia''s inaction alone are limited compared to the original poster''s actions.', 2)
+;
+
+  -- S09:Elderly patient refusing medication
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'An 82-year-old patient, Mr Patel, who has moderate dementia, is refusing his evening medication. Dr Simmons, an F1 doctor on the ward, has been asked by the nursing staff to help. Mr Patel appears distressed and is saying he wants to go home. His family are not present.
+
+How appropriate is each of the following responses by Dr Simmons?')
+  RETURNING id INTO v_s09;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s09, 2, 'Dr Simmons sits with Mr Patel, speaks calmly, tries to understand his concerns, and gently explains what the medication is for, checking whether he can understand and retain this information.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Dr Simmons is treating Mr Patel with dignity, taking time to communicate, and assessing his capacity to make an informed decision about his medication. This aligns with the principles of patient autonomy, respect, and the Mental Capacity Act requirement to take all practicable steps to help someone make their own decision before concluding they lack capacity.', 0),
+    (v_s09, 2, 'Dr Simmons instructs the nursing staff to crush the medication and mix it into Mr Patel''s food without telling him, to ensure he receives the treatment.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because covert medication without a proper capacity assessment and best-interests decision is a serious breach of patient autonomy and potentially unlawful. Even for patients with dementia, the law requires a formal capacity assessment and documented best-interests process before treatment can be given against a patient''s wishes. Concealing medication is deceptive and disrespectful.', 1),
+    (v_s09, 2, 'Dr Simmons documents that Mr Patel has refused the medication and plans to reassess the situation later in the evening or discuss it with the senior team the next morning.', 'Appropriate, but not ideal', 'This is appropriate, but not ideal because documenting the refusal is important and respects Mr Patel''s current decision. However, Dr Simmons should also attempt to explore Mr Patel''s understanding and carry out a capacity assessment before simply accepting the refusal, particularly given his dementia. Deferring entirely without further assessment falls short of best practice, though it avoids causing harm.', 2)
+;
+
+  -- S01:Insulin dose error
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'While reviewing a patient''s drug chart during an evening shift, Dr Anwar, a foundation year 1 doctor, notices that a colleague has prescribed a dose of insulin that appears to be ten times higher than the usual amount. The prescribing doctor has already left the hospital for the night.
+
+How appropriate is each of the following responses by Dr Anwar?')
+  RETURNING id INTO v_s01;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s01, 2, 'Dr Anwar corrects the dose on the drug chart without informing anyone else, reasoning that the error is straightforward and easily fixed.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while Dr Anwar addresses the immediate patient safety issue, silently correcting a prescription without informing the prescribing doctor or documenting the error undermines the duty of candour and prevents learning from mistakes. However, the patient is at least protected from the immediate harm.', 0),
+    (v_s01, 2, 'Dr Anwar contacts the on-call registrar to discuss the prescription and confirm the correct dose before taking any action.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Dr Anwar is recognising the limits of their own competence, seeking senior guidance to confirm the correct dose, and ensuring patient safety through proper channels. This aligns with GMC principles of working within your competence and collaborating with colleagues to protect patients.', 1),
+    (v_s01, 2, 'Dr Anwar decides to leave the drug chart as it is until the prescribing doctor returns the following morning, so they can discuss it then.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because patient safety is at immediate risk. A tenfold insulin overdose could cause life-threatening hypoglycaemia. Delaying action until the next day prioritises convenience over patient welfare, which violates the fundamental GMC principle that patient safety must always come first.', 2)
+;
+
+  -- S04:Patient with domestic violence disclosure
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'A 42-year-old patient, Mrs Kaur, confides in Tom, a third-year medical student on his surgical placement, that she has been experiencing domestic violence at home. She becomes tearful and asks Tom not to tell anyone, saying she is afraid her husband will find out she has spoken about it.
+
+How appropriate is each of the following responses by Tom?')
+  RETURNING id INTO v_s04;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s04, 2, 'Tom suggests that Mrs Kaur contact a domestic violence support helpline and takes no further action himself.', 'Inappropriate, but not awful', 'This is inappropriate, but not awful because while Tom provides some potentially useful guidance, he fails to involve the clinical team in what is a safeguarding concern. As a medical student, Tom has a professional duty to share safeguarding information with senior clinical staff. Signposting alone is an incomplete response, though it does offer Mrs Kaur some support.', 0),
+    (v_s04, 2, 'Tom explains sensitively to Mrs Kaur that he has a duty to share this information with the clinical team to help keep her safe, and asks if there is anything she needs immediately.', 'A very appropriate thing to do', 'This is a very appropriate thing to do because Tom is being honest with the patient about the limits of confidentiality while showing compassion. Domestic violence is a safeguarding matter that must be escalated. Being transparent about this maintains trust and respects Mrs Kaur''s dignity while fulfilling a professional duty to protect her from serious harm.', 1),
+    (v_s04, 2, 'Tom promises Mrs Kaur that he will keep everything she has told him completely confidential.', 'A very inappropriate thing to do', 'This is a very inappropriate thing to do because promising absolute confidentiality in a safeguarding situation prevents appropriate escalation and could leave Mrs Kaur at continued risk of serious harm. Confidentiality is not absolute under GMC guidance â it must be breached when there is a risk of serious harm. Making a promise Tom cannot ethically keep also undermines trust.', 2)
+;
+
+  -- S21:Deaf patient without hearing loop or interpreter
+  INSERT INTO timed_situational_judgement_scenarios (test_id, body)
+  VALUES (1, 'A patient with a hearing impairment, Mr Jacobs, arrives for a dental appointment at an outreach clinic where Sonia, a second-year dental student, is on placement. The clinic does not have a hearing loop system, and no interpreter has been arranged. Mr Jacobs appears frustrated and is struggling to follow the receptionist''s instructions.
+
+How important to take into account are the following considerations for Sonia when deciding how to respond?')
+  RETURNING id INTO v_s21;
+  INSERT INTO timed_situational_judgement_questions (scenario_id, label_set, question_text, correct_answer, answer_reason, order_index) VALUES
+    (v_s21, 1, 'Whether the clinic has access to alternative communication methods that could help Mr Jacobs understand the information he needs.', 'Very important', 'This is very important because effective communication is essential for informed consent and safe treatment. Without understanding what is being communicated, Mr Jacobs cannot make informed decisions about his care. Finding alternative communication methods â written notes, visual aids, or arranging an interpreter â is a practical step that directly addresses the patient''s needs and upholds the principle of autonomy.', 0),
+    (v_s21, 1, 'That Mr Jacobs has been a patient at the clinic before and managed without an interpreter on previous occasions.', 'Not important at all', 'This is not important at all because past experiences do not negate the current access need. The fact that Mr Jacobs previously attended without support does not mean his needs were adequately met on those occasions. Each appointment requires effective communication, and relying on the assumption that he managed before would be complacent and potentially discriminatory.', 1),
+    (v_s21, 1, 'Whether the lack of a hearing loop represents a broader accessibility issue that should be raised with the clinic management.', 'Important', 'This is important because while the immediate priority is to help Mr Jacobs today, the systemic issue of inadequate accessibility provisions affects all patients with hearing impairments who attend the clinic. Raising this with management could prevent similar situations in future and aligns with the principle of justice â ensuring equitable access to healthcare for all patients.', 2)
+;
+
+END $$;
