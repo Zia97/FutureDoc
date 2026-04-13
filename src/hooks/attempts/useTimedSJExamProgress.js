@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { buildSJAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 
 // Local storage key — stores completed exam results keyed by test.id string
@@ -101,7 +102,7 @@ export function useTimedSJExamProgress() {
   }, [loadAttempts]);
 
   // Called when the exam ends (user ends it or timer expires).
-  async function submitExam({ test, getAnswer, secondsLeft, flags }) {
+  async function submitExam({ test, getAnswer, secondsLeft, flags, timeMsByQid }) {
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answers, correctCount, scorePercent } = computeScores(
       test.scenarios,
@@ -149,7 +150,10 @@ export function useTimedSJExamProgress() {
         question_id: a.questionId,
         scenario_id: a.scenarioId,
         selected_answer: a.selectedAnswer,
+        time_ms: timeMsByQid?.[a.questionId] ?? null,
       }));
+
+    const analyticsSummary = buildSJAnalyticsSummary({ test, getAnswer, timeMsByQid });
 
     const numericId = numericTestIdFromKey(test.id);
     const payload = {
@@ -160,6 +164,7 @@ export function useTimedSJExamProgress() {
       timeTakenSeconds,
       flags: flagsArr,
       answers: dbAnswers,
+      analyticsSummary,
     };
 
     try {

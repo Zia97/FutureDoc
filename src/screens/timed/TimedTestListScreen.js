@@ -120,7 +120,7 @@ export default function TimedTestListScreen({ navigation, route }) {
   }
 
   const completedCount = Object.keys(completedAttempts ?? {}).length;
-  const ANALYTICS_ROUTE = { VR: 'VRAnalytics', QR: 'QRAnalytics', DM: 'DMAnalytics' };
+  const ANALYTICS_ROUTE = { VR: 'VRAnalytics', QR: 'QRAnalytics', DM: 'DMAnalytics', SJ: 'SJAnalytics' };
   const analyticsRoute = ANALYTICS_ROUTE[section];
   const showAnalyticsEntry = !!analyticsRoute && completedCount > 0;
   const analyticsLocked = !isPro;

@@ -40,7 +40,6 @@ function aggregate(rows, tests) {
     };
   }
 
-  // Sorted oldest → newest by submitted_at (matches DB query order).
   const trend = rows.map((r) => ({
     testId: r.test_id,
     label: `Test ${r.test_id}`,
@@ -53,7 +52,7 @@ function aggregate(rows, tests) {
   const avg = Math.round(scaledScores.reduce((a, b) => a + b, 0) / scaledScores.length);
   const best = Math.max(...scaledScores);
 
-  // Difficulty + completion + timing all walk the same answer rows.
+  // Sum pre-aggregated summaries across all attempts.
   let normalCorrect = 0, normalTotal = 0, hardCorrect = 0, hardTotal = 0;
   let totalQuestions = 0, totalAnswered = 0;
   let totalTimeMs = 0, timedCount = 0;
@@ -61,36 +60,25 @@ function aggregate(rows, tests) {
   let incorrectTimeMs = 0, incorrectTimedCount = 0;
 
   for (const attempt of rows) {
-    // Pull total question count from the test object so the completion
-    // row reflects "of 44" rather than "of however many were answered".
-    const test = tests.find((t) => String(t.id) === String(attempt.test_id));
-    const questionsInTest = test?.questionCount ?? attempt.answers.length;
-    totalQuestions += questionsInTest;
-    totalAnswered += attempt.answers.length;
+    const s = attempt.analytics_summary;
+    if (!s) continue;
 
-    for (const ans of attempt.answers) {
-      const isCorrect =
-        ans.correct_answer != null && ans.selected_answer === ans.correct_answer;
+    const d = s.difficulty ?? {};
+    normalCorrect += d.normal?.correct ?? 0;
+    normalTotal += d.normal?.total ?? 0;
+    hardCorrect += d.hard?.correct ?? 0;
+    hardTotal += d.hard?.total ?? 0;
 
-      if (ans.difficulty === 'hard') {
-        hardTotal++;
-        if (isCorrect) hardCorrect++;
-      } else {
-        normalTotal++;
-        if (isCorrect) normalCorrect++;
-      }
+    totalAnswered += s.completion?.answered ?? 0;
+    totalQuestions += s.completion?.total ?? 0;
 
-      if (ans.time_ms != null) {
-        totalTimeMs += ans.time_ms;
-        timedCount++;
-        if (isCorrect) {
-          correctTimeMs += ans.time_ms;
-          correctTimedCount++;
-        } else {
-          incorrectTimeMs += ans.time_ms;
-          incorrectTimedCount++;
-        }
-      }
+    if (s.pacing) {
+      totalTimeMs += s.pacing.total_ms ?? 0;
+      timedCount += s.pacing.timed_count ?? 0;
+      correctTimeMs += s.pacing.correct_ms ?? 0;
+      correctTimedCount += s.pacing.correct_count ?? 0;
+      incorrectTimeMs += s.pacing.incorrect_ms ?? 0;
+      incorrectTimedCount += s.pacing.incorrect_count ?? 0;
     }
   }
 
@@ -110,9 +98,6 @@ function aggregate(rows, tests) {
     answeredPct: pct(totalAnswered, totalQuestions),
   };
 
-  // Target seconds per question on this section, derived from the test
-  // metadata (22 min / 44 q = 30s for VR). Used as a benchmark next to
-  // the user's actual average.
   const benchmarkTest = tests.find((t) => t.timeMinutes && t.questionCount);
   const targetSec = benchmarkTest
     ? Math.round((benchmarkTest.timeMinutes * 60) / benchmarkTest.questionCount)

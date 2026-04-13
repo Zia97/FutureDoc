@@ -53,17 +53,11 @@ function aggregate(rows, tests) {
       questionType: null,
       difficulty: null,
       completion: null,
+      pacing: null,
+      hasTimingData: false,
     };
   }
 
-  // DM test.id is "timed-dm-test-N" while attempt.test_id is the SMALLINT N.
-  const testByNumericId = new Map();
-  for (const t of tests) {
-    const numeric = Number(String(t.id).replace(/\D+/g, '').replace(/^0+/, '') || '0');
-    if (numeric > 0) testByNumericId.set(numeric, t);
-  }
-
-  // Sorted oldest → newest by submitted_at (matches DB query order).
   const trend = rows.map((r) => ({
     testId: r.test_id,
     label: `Test ${r.test_id}`,
@@ -76,9 +70,12 @@ function aggregate(rows, tests) {
   const avg = Math.round(scaledScores.reduce((a, b) => a + b, 0) / scaledScores.length);
   const best = Math.max(...scaledScores);
 
-  // Question type + difficulty + completion walk the same answer rows.
+  // Sum pre-aggregated summaries across all attempts.
   let totalQuestions = 0, totalAnswered = 0;
   let normalCorrect = 0, normalTotal = 0, hardCorrect = 0, hardTotal = 0;
+  let totalTimeMs = 0, timedCount = 0;
+  let correctTimeMs = 0, correctTimedCount = 0;
+  let incorrectTimeMs = 0, incorrectTimedCount = 0;
 
   // Seed all 6 official types so they always appear in the breakdown.
   const OFFICIAL_TYPES = [
@@ -89,30 +86,40 @@ function aggregate(rows, tests) {
   for (const t of OFFICIAL_TYPES) typeTotals[t] = { correct: 0, total: 0 };
 
   for (const attempt of rows) {
-    const test = testByNumericId.get(attempt.test_id);
-    const questionsInTest = test?.questionCount ?? attempt.answers.length;
-    totalQuestions += questionsInTest;
-    totalAnswered += attempt.answers.length;
+    const s = attempt.analytics_summary;
+    if (!s) continue;
 
-    for (const ans of attempt.answers) {
-      const qtype = ans.question_type ?? 'unknown';
-      if (!typeTotals[qtype]) typeTotals[qtype] = { correct: 0, total: 0 };
-      typeTotals[qtype].total++;
-      if (ans.is_correct) typeTotals[qtype].correct++;
+    const d = s.difficulty ?? {};
+    normalCorrect += d.normal?.correct ?? 0;
+    normalTotal += d.normal?.total ?? 0;
+    hardCorrect += d.hard?.correct ?? 0;
+    hardTotal += d.hard?.total ?? 0;
 
-      if (ans.difficulty === 'hard') {
-        hardTotal++;
-        if (ans.is_correct) hardCorrect++;
-      } else {
-        normalTotal++;
-        if (ans.is_correct) normalCorrect++;
+    totalAnswered += s.completion?.answered ?? 0;
+    totalQuestions += s.completion?.total ?? 0;
+
+    // Merge type breakdown
+    if (s.type_breakdown) {
+      for (const [qtype, counts] of Object.entries(s.type_breakdown)) {
+        if (!typeTotals[qtype]) typeTotals[qtype] = { correct: 0, total: 0 };
+        typeTotals[qtype].correct += counts.correct ?? 0;
+        typeTotals[qtype].total += counts.total ?? 0;
       }
+    }
+
+    if (s.pacing) {
+      totalTimeMs += s.pacing.total_ms ?? 0;
+      timedCount += s.pacing.timed_count ?? 0;
+      correctTimeMs += s.pacing.correct_ms ?? 0;
+      correctTimedCount += s.pacing.correct_count ?? 0;
+      incorrectTimeMs += s.pacing.incorrect_ms ?? 0;
+      incorrectTimedCount += s.pacing.incorrect_count ?? 0;
     }
   }
 
   const pct = (c, t) => (t > 0 ? Math.round((c / t) * 100) : null);
+  const avgSec = (ms, n) => (n > 0 ? Math.round(ms / n / 1000) : null);
 
-  // Question type rows sorted by sample size descending.
   const questionType = Object.entries(typeTotals)
     .map(([key, v]) => ({
       key,
@@ -136,6 +143,21 @@ function aggregate(rows, tests) {
     hard:   { value: pct(hardCorrect, hardTotal),     correct: hardCorrect,   total: hardTotal },
   };
 
+  const benchmarkTest = tests.find((t) => t.timeMinutes && t.questionCount);
+  const targetSec = benchmarkTest
+    ? Math.round((benchmarkTest.timeMinutes * 60) / benchmarkTest.questionCount)
+    : null;
+
+  const pacing = timedCount > 0
+    ? {
+        avgSec: avgSec(totalTimeMs, timedCount),
+        avgCorrectSec: avgSec(correctTimeMs, correctTimedCount),
+        avgIncorrectSec: avgSec(incorrectTimeMs, incorrectTimedCount),
+        sampleSize: timedCount,
+        targetSec,
+      }
+    : null;
+
   return {
     attemptCount: rows.length,
     headline: { avg, best, latest: scaledScores[scaledScores.length - 1] },
@@ -143,6 +165,8 @@ function aggregate(rows, tests) {
     questionType,
     difficulty,
     completion,
+    pacing,
+    hasTimingData: timedCount > 0,
   };
 }
 
@@ -512,6 +536,55 @@ export default function DMAnalyticsScreen({ route }) {
           )}
         </View>
 
+        {/* Pacing */}
+        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+          <Text style={[styles.cardTitle, { color: t.text }]}>Pacing</Text>
+          <Text style={[styles.cardSub, { color: t.textSecondary }]}>
+            Average time you're spending on each question.
+          </Text>
+          {!stats.hasTimingData ? (
+            <Text style={[styles.emptyInline, { color: t.textSecondary }]}>
+              We'll start tracking question timing on your next test. Take one to see
+              your pacing.
+            </Text>
+          ) : (
+            <>
+              <View style={styles.pacingHero}>
+                <Text style={[styles.bigStat, { color: t.text }]}>
+                  {stats.pacing.avgSec}s
+                </Text>
+                <Text style={[styles.completionMeta, { color: t.textSecondary }]}>
+                  per question
+                  {stats.pacing.targetSec != null && (
+                    <Text>{`\nTarget pace: ${stats.pacing.targetSec}s per question`}</Text>
+                  )}
+                </Text>
+              </View>
+              {(stats.pacing.avgCorrectSec != null || stats.pacing.avgIncorrectSec != null) && (
+                <View style={[styles.pacingSplit, { borderTopColor: t.border }]}>
+                  <View style={styles.pacingSplitItem}>
+                    <Text style={[styles.pacingSplitValue, { color: t.correct }]}>
+                      {stats.pacing.avgCorrectSec != null ? `${stats.pacing.avgCorrectSec}s` : '\u2014'}
+                    </Text>
+                    <Text style={[styles.pacingSplitLabel, { color: t.textSecondary }]}>
+                      avg on correct
+                    </Text>
+                  </View>
+                  <View style={[styles.pacingSplitDivider, { backgroundColor: t.border }]} />
+                  <View style={styles.pacingSplitItem}>
+                    <Text style={[styles.pacingSplitValue, { color: t.danger }]}>
+                      {stats.pacing.avgIncorrectSec != null ? `${stats.pacing.avgIncorrectSec}s` : '\u2014'}
+                    </Text>
+                    <Text style={[styles.pacingSplitLabel, { color: t.textSecondary }]}>
+                      avg on incorrect
+                    </Text>
+                  </View>
+                </View>
+              )}
+            </>
+          )}
+        </View>
+
         {/* Completion rate */}
         <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Completion rate</Text>
@@ -661,6 +734,24 @@ const styles = StyleSheet.create({
   barValue: { fontSize: 13, fontWeight: '700' },
   barTrack: { height: 8, borderRadius: 4, overflow: 'hidden' },
   barFill: { height: '100%', borderRadius: 4 },
+
+  pacingHero: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 14,
+    gap: 16,
+  },
+  pacingSplit: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+  },
+  pacingSplitItem: { flex: 1, alignItems: 'center' },
+  pacingSplitValue: { fontSize: 22, fontWeight: '800' },
+  pacingSplitLabel: { fontSize: 11, marginTop: 4, fontWeight: '600' },
+  pacingSplitDivider: { width: 1, height: 36 },
 
   completionRow: {
     flexDirection: 'row',

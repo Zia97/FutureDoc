@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { buildVRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 
 const COMPLETED_KEY = 'timed_vr_completed_attempts';
 const SECTION = 'vr';
@@ -145,6 +146,8 @@ export function useTimedVRExamProgress() {
         time_ms: timeMsByQid?.[a.questionId] ?? null,
       }));
 
+    const analyticsSummary = buildVRAnalyticsSummary({ test, getAnswer, timeMsByQid });
+
     const payload = {
       userId: user.id,
       testId: test.id,
@@ -153,6 +156,7 @@ export function useTimedVRExamProgress() {
       timeTakenSeconds,
       flags: flagsArr,
       answers: dbAnswers,
+      analyticsSummary,
     };
 
     try {

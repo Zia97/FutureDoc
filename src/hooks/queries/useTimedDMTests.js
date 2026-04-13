@@ -32,6 +32,7 @@ function mapQuestion(q) {
     hideLabels: q.hideLabels ?? q.hide_labels ?? false,
     answer: q.correct_answer,
     answeringReason: q.answer_reason,
+    difficulty: q.difficulty ?? 'normal',
   };
 }
 

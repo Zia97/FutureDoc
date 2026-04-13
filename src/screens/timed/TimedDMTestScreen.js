@@ -14,6 +14,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
+import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
@@ -62,6 +63,14 @@ export default function TimedDMTestScreen({ route, navigation }) {
   const currentAnswer = answers[qid];
   const isFlagged = flags.has(qid);
 
+  // Per-question time tracking. Active only while the user is genuinely
+  // engaged with a question — paused state, end-of-test review modal, and
+  // results screen all stop the clock.
+  const getQuestionTimes = useQuestionTimeTracker(
+    qid,
+    !isPaused && !showReview && !showResults,
+  );
+
   const panHandlers = useSwipeGesture(
     isFirst ? null : () => setCurrentIndex((i) => i - 1),
     isLast ? () => setShowReview(true) : () => setCurrentIndex((i) => i + 1),
@@ -90,11 +99,13 @@ export default function TimedDMTestScreen({ route, navigation }) {
   async function endExam(timerExpired = false) {
     if (endExamCalledRef.current) return;
     endExamCalledRef.current = true;
+    const timeMsByQid = getQuestionTimes();
     await submitExam({
       test,
       answers,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
       flags,
+      timeMsByQid,
     });
     setShowResults(true);
   }

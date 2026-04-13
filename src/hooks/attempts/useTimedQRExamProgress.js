@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { buildQRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 
 const COMPLETED_KEY = 'timed_qr_completed_attempts';
 const SECTION = 'qr';
@@ -192,6 +193,8 @@ export function useTimedQRExamProgress() {
         time_ms: timeMsByQid?.[a.questionId] ?? null,
       }));
 
+    const analyticsSummary = buildQRAnalyticsSummary({ test, answers, timeMsByQid });
+
     const numericId = numericTestIdFromKey(test.id);
     const payload = {
       userId: user.id,
@@ -201,6 +204,7 @@ export function useTimedQRExamProgress() {
       timeTakenSeconds,
       flags: flagsArr,
       answers: dbAnswers,
+      analyticsSummary,
     };
 
     try {

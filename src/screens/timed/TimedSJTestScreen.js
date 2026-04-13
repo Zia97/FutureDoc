@@ -16,6 +16,7 @@ import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
+import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -57,16 +58,26 @@ export default function TimedSJTestScreen({ route, navigation }) {
     useFlatNavigation(test.flatQuestions, 0);
   const { handleAnswer, getAnswer } = useAnswers({});
 
+  const itemId = item.question.itemId;
+
+  // Per-question time tracking. Active only while the user is genuinely
+  // engaged with a question — paused state, end-of-test review modal, and
+  // results screen all stop the clock.
+  const getQuestionTimes = useQuestionTimeTracker(
+    itemId,
+    !isPaused && !showReview && !examEnded,
+  );
+
   function endExam() {
     if (endExamCalledRef.current) return;
     endExamCalledRef.current = true;
+    const timeMsByQid = getQuestionTimes();
     setExamEnded(true);
-    submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current, flags });
+    submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current, flags, timeMsByQid });
   }
 
   onExpireRef.current = endExam;
 
-  const itemId = item.question.itemId;
   const selectedAnswer = getAnswer(item.stemId, itemId);
   const sectionColor = t.sectionSJ;
   const isFlagged = flags.has(itemId);

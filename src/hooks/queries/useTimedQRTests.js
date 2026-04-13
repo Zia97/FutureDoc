@@ -26,6 +26,7 @@ function mapDevTests(data) {
           options: q.options ?? [],
           answer: q.correct_answer,
           answeringReason: q.answer_reason,
+          difficulty: q.difficulty ?? 'normal',
         })),
     }));
     return addFlatQuestions({
@@ -67,6 +68,7 @@ function mapDBTests(rows) {
             options: q.options ?? [],
             answer: q.correct_answer,
             answeringReason: q.answer_reason,
+            difficulty: q.difficulty ?? 'normal',
           })),
       }));
 

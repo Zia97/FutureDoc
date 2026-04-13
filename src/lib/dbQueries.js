@@ -185,7 +185,8 @@ class DatabaseService {
             correct_answer,
             answer_reason,
             order_index,
-            label_set
+            label_set,
+            difficulty
           )
         )
       `)
@@ -220,7 +221,8 @@ class DatabaseService {
             options,
             correct_answer,
             answer_reason,
-            order_index
+            order_index,
+            difficulty
           )
         )
       `)
@@ -247,7 +249,7 @@ class DatabaseService {
 
     const { data: questions, error: questionsError } = await supabase
       .from('timed_decision_making_questions')
-      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, correct_answer, answer_reason, order_index, hide_labels')
+      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, correct_answer, answer_reason, order_index, hide_labels, difficulty')
       .in('test_id', testIds)
       .order('order_index', { ascending: true });
     if (questionsError) throw questionsError;
@@ -320,7 +322,8 @@ class DatabaseService {
             options,
             correct_answer,
             answer_reason,
-            order_index
+            order_index,
+            difficulty
           )
         )
       `)
@@ -355,6 +358,7 @@ class DatabaseService {
     timeTakenSeconds,
     flags,
     answers, // [{ question_id, selected_answer, ...parentRef }]
+    analyticsSummary,
   }) {
     // Wipe any prior attempt for this (user, test) so the unique constraint
     // doesn't block resubmission, and orphan answer rows are cascaded away.
@@ -374,6 +378,7 @@ class DatabaseService {
         correct_count: correctCount,
         time_taken_seconds: timeTakenSeconds,
         flags: flags ?? [],
+        analytics_summary: analyticsSummary ?? null,
       })
       .select('id')
       .single();
@@ -393,12 +398,13 @@ class DatabaseService {
   }
 
   // ── Verbal Reasoning ───────────────────────────────────────
-  async submitTimedVRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+  async submitTimedVRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       attemptsTable: 'timed_verbal_reasoning_exam_attempts',
       answersTable:  'timed_verbal_reasoning_question_answers',
       userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, passage_id, selected_answer, time_ms }]
+      analyticsSummary,
     });
   }
 
@@ -431,65 +437,26 @@ class DatabaseService {
   }
 
   /**
-   * Loads everything the VR analytics screen needs in two round trips:
-   *   1. All of the user's VR exam attempts (one row per test).
-   *   2. All answer rows for those attempts, joined with the question's
-   *      `correct_answer` and `difficulty` so the client can compute
-   *      correctness and difficulty buckets without a third query.
-   *
-   * Returns: [{ id, test_id, submitted_at, time_taken_seconds,
-   *             correct_count, score_percent,
-   *             answers: [{ question_id, selected_answer, time_ms,
-   *                          correct_answer, difficulty }] }]
-   *
-   * Returns [] for users with no attempts. Ordered oldest → newest by
-   * submitted_at so the trend line can render in submission order.
+   * Loads VR analytics from pre-aggregated summaries stored on attempt rows.
+   * Single query, no answer-table joins.
    */
   async loadVRAnalytics() {
-    const { data: attempts, error: aErr } = await supabase
+    const { data, error } = await supabase
       .from('timed_verbal_reasoning_exam_attempts')
-      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, analytics_summary')
       .order('submitted_at', { ascending: true });
-    if (aErr) throw aErr;
-    if (!attempts?.length) return [];
-
-    const ids = attempts.map((a) => a.id);
-    const { data: answers, error: ansErr } = await supabase
-      .from('timed_verbal_reasoning_question_answers')
-      .select(`
-        exam_attempt_id,
-        question_id,
-        selected_answer,
-        time_ms,
-        timed_verbal_reasoning_questions ( correct_answer, difficulty )
-      `)
-      .in('exam_attempt_id', ids);
-    if (ansErr) throw ansErr;
-
-    // Flatten the joined question fields onto each answer row so the
-    // analytics screen can treat the result as a flat list.
-    const flatAnswers = (answers ?? []).map((a) => ({
-      exam_attempt_id: a.exam_attempt_id,
-      question_id: a.question_id,
-      selected_answer: a.selected_answer,
-      time_ms: a.time_ms,
-      correct_answer: a.timed_verbal_reasoning_questions?.correct_answer ?? null,
-      difficulty: a.timed_verbal_reasoning_questions?.difficulty ?? 'normal',
-    }));
-
-    return attempts.map((a) => ({
-      ...a,
-      answers: flatAnswers.filter((r) => r.exam_attempt_id === a.id),
-    }));
+    if (error) throw error;
+    return data ?? [];
   }
 
   // ── Decision Making ────────────────────────────────────────
-  async submitTimedDMExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+  async submitTimedDMExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       attemptsTable: 'timed_decision_making_exam_attempts',
       answersTable:  'timed_decision_making_question_answers',
       userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, selected_answer (JSONB) }]
+      analyticsSummary,
     });
   }
 
@@ -522,108 +489,26 @@ class DatabaseService {
   }
 
   /**
-   * Loads everything the DM analytics screen needs in three round trips:
-   *   1. All of the user's DM exam attempts (one row per test).
-   *   2. All answer rows for those attempts, joined with the question's
-   *      `type` and `correct_answer`.
-   *   3. For statement-based questions (syllogism / interpreting_info),
-   *      the correct answers per statement so we can compute correctness.
-   *
-   * Returns: [{ id, test_id, submitted_at, time_taken_seconds,
-   *             correct_count, score_percent,
-   *             answers: [{ question_id, selected_answer,
-   *                          question_type, difficulty, is_correct }] }]
-   *
-   * DM does NOT have per-question time_ms, so the analytics screen omits
-   * the pacing card.
-   *
-   * Returns [] for users with no attempts. Ordered oldest → newest by
-   * submitted_at so the trend line can render in submission order.
+   * Loads DM analytics from pre-aggregated summaries stored on attempt rows.
+   * Single query, no answer-table joins.
    */
   async loadDMAnalytics() {
-    const { data: attempts, error: aErr } = await supabase
+    const { data, error } = await supabase
       .from('timed_decision_making_exam_attempts')
-      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, analytics_summary')
       .order('submitted_at', { ascending: true });
-    if (aErr) throw aErr;
-    if (!attempts?.length) return [];
-
-    const ids = attempts.map((a) => a.id);
-    const { data: answers, error: ansErr } = await supabase
-      .from('timed_decision_making_question_answers')
-      .select(`
-        exam_attempt_id,
-        question_id,
-        selected_answer,
-        question:timed_decision_making_questions ( type, correct_answer, difficulty )
-      `)
-      .in('exam_attempt_id', ids);
-    if (ansErr) throw ansErr;
-
-    // Collect question IDs for statement-based types so we can check
-    // per-statement correctness in one batch query.
-    const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
-    const yesNoQIds = [...new Set(
-      (answers ?? [])
-        .filter((a) => YES_NO_TYPES.includes(a.question?.type))
-        .map((a) => a.question_id),
-    )];
-
-    let statementsMap = {};
-    if (yesNoQIds.length > 0) {
-      const { data: stmts, error: stErr } = await supabase
-        .from('timed_decision_making_question_statements')
-        .select('question_id, correct_answer, order_index')
-        .in('question_id', yesNoQIds)
-        .order('order_index', { ascending: true });
-      if (stErr) throw stErr;
-      // Group by question_id, sorted by order_index.
-      for (const s of stmts ?? []) {
-        if (!statementsMap[s.question_id]) statementsMap[s.question_id] = [];
-        statementsMap[s.question_id].push(s);
-      }
-    }
-
-    // Flatten and compute correctness for each answer row.
-    const flatAnswers = (answers ?? []).map((a) => {
-      const qType = a.question?.type ?? 'unknown';
-      const isYesNo = YES_NO_TYPES.includes(qType);
-      let isCorrect = false;
-
-      if (isYesNo) {
-        const sel = a.selected_answer;
-        const stmts = statementsMap[a.question_id];
-        if (sel && typeof sel === 'object' && stmts?.length > 0) {
-          isCorrect = stmts.every((s, i) => sel[String(i)] === s.correct_answer);
-        }
-      } else {
-        const sel = a.selected_answer;
-        isCorrect = sel != null && sel === a.question?.correct_answer;
-      }
-
-      return {
-        exam_attempt_id: a.exam_attempt_id,
-        question_id: a.question_id,
-        selected_answer: a.selected_answer,
-        question_type: qType,
-        difficulty: a.question?.difficulty ?? 'normal',
-        is_correct: isCorrect,
-      };
-    });
-
-    return attempts.map((a) => ({
-      ...a,
-      answers: flatAnswers.filter((r) => r.exam_attempt_id === a.id),
-    }));
+    if (error) throw error;
+    return data ?? [];
   }
 
   // ── Quantitative Reasoning ─────────────────────────────────
-  async submitTimedQRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+  async submitTimedQRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       attemptsTable: 'timed_quantitative_reasoning_exam_attempts',
       answersTable:  'timed_quantitative_reasoning_question_answers',
       userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, set_id, selected_answer, time_ms }]
+      analyticsSummary,
     });
   }
 
@@ -656,79 +541,26 @@ class DatabaseService {
   }
 
   /**
-   * Loads everything the QR analytics screen needs in two round trips:
-   *   1. All of the user's QR exam attempts (one row per test).
-   *   2. All answer rows for those attempts, joined with the question's
-   *      `correct_answer` and `difficulty` AND the set's `stimulus` JSONB,
-   *      so the client can compute correctness, difficulty buckets, and
-   *      per-stimulus-type accuracy in one pass.
-   *
-   * Returns: [{ id, test_id, submitted_at, time_taken_seconds,
-   *             correct_count, score_percent,
-   *             answers: [{ question_id, set_id, selected_answer, time_ms,
-   *                          correct_answer, difficulty, stimulus_type }] }]
-   *
-   * stimulus_type is read from the JSONB stimulus blob (e.g. 'bar_chart',
-   * 'line_graph', 'table', 'pie_chart'). Falls back to 'unknown' if the
-   * blob doesn't carry a type — that should never happen in practice but
-   * keeps the analytics screen from crashing if a seed is malformed.
-   *
-   * Returns [] for users with no attempts. Ordered oldest → newest by
-   * submitted_at so the trend line can render in submission order.
+   * Loads QR analytics from pre-aggregated summaries stored on attempt rows.
+   * Single query, no answer-table joins.
    */
   async loadQRAnalytics() {
-    const { data: attempts, error: aErr } = await supabase
+    const { data, error } = await supabase
       .from('timed_quantitative_reasoning_exam_attempts')
-      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, analytics_summary')
       .order('submitted_at', { ascending: true });
-    if (aErr) throw aErr;
-    if (!attempts?.length) return [];
-
-    const ids = attempts.map((a) => a.id);
-    // Aliased joins ("question:" and "set:") are required here. Without
-    // aliases PostgREST auto-generates relation names like
-    //   timed_quantitative_reasoning_question_answers_timed_quantitative_reasoning_questions
-    // which Postgres truncates to 63 characters; both joins then collide
-    // and the query fails with `42712 table name ... specified more than once`.
-    const { data: answers, error: ansErr } = await supabase
-      .from('timed_quantitative_reasoning_question_answers')
-      .select(`
-        exam_attempt_id,
-        question_id,
-        set_id,
-        selected_answer,
-        time_ms,
-        question:timed_quantitative_reasoning_questions ( correct_answer, difficulty ),
-        set:timed_quantitative_reasoning_sets ( stimulus )
-      `)
-      .in('exam_attempt_id', ids);
-    if (ansErr) throw ansErr;
-
-    // Flatten the joined fields onto each answer row.
-    const flatAnswers = (answers ?? []).map((a) => ({
-      exam_attempt_id: a.exam_attempt_id,
-      question_id: a.question_id,
-      set_id: a.set_id,
-      selected_answer: a.selected_answer,
-      time_ms: a.time_ms,
-      correct_answer: a.question?.correct_answer ?? null,
-      difficulty: a.question?.difficulty ?? 'normal',
-      stimulus_type: a.set?.stimulus?.type ?? 'unknown',
-    }));
-
-    return attempts.map((a) => ({
-      ...a,
-      answers: flatAnswers.filter((r) => r.exam_attempt_id === a.id),
-    }));
+    if (error) throw error;
+    return data ?? [];
   }
 
   // ── Situational Judgement ──────────────────────────────────
-  async submitTimedSJExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers }) {
+  async submitTimedSJExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       attemptsTable: 'timed_situational_judgement_exam_attempts',
       answersTable:  'timed_situational_judgement_question_answers',
       userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, scenario_id, selected_answer }]
+      analyticsSummary,
     });
   }
 
@@ -750,6 +582,19 @@ class DatabaseService {
       ...a,
       answers: (answers ?? []).filter((r) => r.exam_attempt_id === a.id),
     }));
+  }
+
+  /**
+   * Loads SJ analytics from pre-aggregated summaries stored on attempt rows.
+   * Single query, no answer-table joins.
+   */
+  async loadSJAnalytics() {
+    const { data, error } = await supabase
+      .from('timed_situational_judgement_exam_attempts')
+      .select('id, test_id, submitted_at, time_taken_seconds, correct_count, score_percent, analytics_summary')
+      .order('submitted_at', { ascending: true });
+    if (error) throw error;
+    return data ?? [];
   }
 
   async deleteTimedSJAttempt(testId) {

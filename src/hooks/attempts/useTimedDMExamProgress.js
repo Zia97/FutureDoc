@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { buildDMAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 
 const COMPLETED_KEY = 'timed_dm_completed_attempts';
 const SECTION = 'dm';
@@ -93,7 +94,7 @@ export function useTimedDMExamProgress() {
     loadAttempts();
   }, [loadAttempts]);
 
-  async function submitExam({ test, answers, secondsLeft, flags }) {
+  async function submitExam({ test, answers, secondsLeft, flags, timeMsByQid }) {
     const timeTakenSeconds = test.timeMinutes * 60 - (secondsLeft ?? 0);
     const { answerList, correctCount, scorePercent } = computeScores(test.questions, answers);
     const flagsArr = flags ? Array.from(flags) : [];
@@ -128,7 +129,10 @@ export function useTimedDMExamProgress() {
         // selected_answer is JSONB on the DB; supabase-js handles
         // both strings and objects through the JSON column transparently.
         selected_answer: a.selectedAnswer,
+        time_ms: timeMsByQid?.[a.questionId] ?? null,
       }));
+
+    const analyticsSummary = buildDMAnalyticsSummary({ test, answers, timeMsByQid });
 
     const payload = {
       userId: user.id,
@@ -138,6 +142,7 @@ export function useTimedDMExamProgress() {
       timeTakenSeconds,
       flags: flagsArr,
       answers: dbAnswers,
+      analyticsSummary,
     };
 
     try {

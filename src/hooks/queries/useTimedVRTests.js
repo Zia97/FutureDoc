@@ -20,6 +20,7 @@ function mapTestsFromNested(rows) {
             options: q.options,
             answer: q.correct_answer,
             answeringReason: q.answer_reason,
+            difficulty: q.difficulty ?? 'normal',
           }));
         return { id: p.id, title: p.title, resource: p.body, questions };
       });
@@ -51,6 +52,7 @@ function mapTests(data) {
           options: q.options,
           answer: q.correct_answer ?? q.answer,
           answeringReason: q.answer_reason ?? q.answeringReason,
+          difficulty: q.difficulty ?? 'normal',
         })),
     }));
     return {
