@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -296,17 +296,19 @@ function StatBar({ label, value, sub, color, barBg, textColor, mutedColor }) {
 // Screen
 // ─────────────────────────────────────────────────────────────────────────────
 
-export default function VRAnalyticsScreen({ route }) {
+export default function VRAnalyticsScreen({ route, preloadedRows }) {
   const { theme: t } = useTheme();
   const { user } = useAuth();
   const tests = route.params?.tests ?? [];
+  const hasPreloaded = preloadedRows !== undefined;
 
-  const [rows, setRows] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [rows, setRows] = useState(hasPreloaded ? preloadedRows : null);
+  const [loading, setLoading] = useState(!hasPreloaded);
   const [error, setError] = useState(null);
   const [chartWidth, setChartWidth] = useState(320);
 
   const load = useCallback(async () => {
+    if (hasPreloaded) return;
     if (!user) {
       setRows([]);
       setLoading(false);
@@ -323,13 +325,21 @@ export default function VRAnalyticsScreen({ route }) {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, hasPreloaded]);
 
   useFocusEffect(
     useCallback(() => {
-      load();
-    }, [load]),
+      if (!hasPreloaded) load();
+    }, [load, hasPreloaded]),
   );
+
+  // Sync preloaded data from parent (unified analytics screen)
+  useEffect(() => {
+    if (hasPreloaded) {
+      setRows(preloadedRows);
+      setLoading(false);
+    }
+  }, [hasPreloaded, preloadedRows]);
 
   const stats = useMemo(() => aggregate(rows ?? [], tests), [rows, tests]);
 

@@ -104,6 +104,22 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.primaryButtonText}>Start Practising</Text>
         </TouchableOpacity>
         <TouchableOpacity
+          style={[styles.analyticsButton, { backgroundColor: t.bgCard, borderColor: t.accent, borderLeftWidth: 4 }]}
+          onPress={() =>
+            isPro
+              ? navigation.navigate('PerformanceAnalytics')
+              : navigation.navigate('Paywall')
+          }
+          activeOpacity={0.85}
+        >
+          <Text style={[styles.analyticsButtonText, { color: t.text }]}>Performance Analytics</Text>
+          {!isPro && (
+            <View style={[styles.proBadge, { backgroundColor: t.accent }]}>
+              <Text style={styles.proBadgeText}>PRO</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
           style={[styles.secondaryButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
           onPress={() => navigation.navigate('AboutUCAT')}
           activeOpacity={0.85}
@@ -212,5 +228,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     letterSpacing: 0.3,
+  },
+  analyticsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 17,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  analyticsButtonText: {
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.3,
+  },
+  proBadge: {
+    marginLeft: 10,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  proBadgeText: {
+    color: '#ffffff',
+    fontSize: 10,
+    fontWeight: '800',
+    letterSpacing: 0.8,
   },
 });

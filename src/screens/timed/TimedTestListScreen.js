@@ -119,49 +119,12 @@ export default function TimedTestListScreen({ navigation, route }) {
     );
   }
 
-  const completedCount = Object.keys(completedAttempts ?? {}).length;
-  const ANALYTICS_ROUTE = { VR: 'VRAnalytics', QR: 'QRAnalytics', DM: 'DMAnalytics', SJ: 'SJAnalytics' };
-  const analyticsRoute = ANALYTICS_ROUTE[section];
-  const showAnalyticsEntry = !!analyticsRoute && completedCount > 0;
-  const analyticsLocked = !isPro;
-
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
       <FlatList
         data={tests}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
-        ListHeaderComponent={
-          showAnalyticsEntry ? (
-            <View>
-              <TouchableOpacity
-                style={[
-                  styles.analyticsCard,
-                  { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: t.accent },
-                  analyticsLocked && { opacity: 0.7 },
-                ]}
-                activeOpacity={0.85}
-                onPress={() =>
-                  analyticsLocked
-                    ? navigation.navigate('Paywall')
-                    : navigation.navigate(analyticsRoute, { tests })
-                }
-              >
-                <View style={[styles.analyticsBadge, { backgroundColor: analyticsLocked ? '#6b7280' : t.accent }]}>
-                  <Text style={styles.analyticsBadgeText}>{analyticsLocked ? '🔒' : '📊'}</Text>
-                </View>
-                <View style={styles.cardBody}>
-                  <Text style={[styles.cardTitle, { color: t.text }]}>Performance Analytics</Text>
-                  {analyticsLocked && (
-                    <Text style={[styles.lockedLabel, { color: t.accent }]}>Premium</Text>
-                  )}
-                </View>
-                <Text style={[styles.rowChevron, { color: t.textSecondary }]}>›</Text>
-              </TouchableOpacity>
-              <View style={[styles.headerDivider, { backgroundColor: t.border }]} />
-            </View>
-          ) : null
-        }
         renderItem={({ item, index }) => {
           const isCompleted = (section === 'SJ' || section === 'VR' || section === 'DM' || section === 'QR') && !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
@@ -271,34 +234,5 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   resetText: { fontSize: 20, fontWeight: '600' },
-  analyticsCard: {
-    borderRadius: 14,
-    borderWidth: 1,
-    borderLeftWidth: 4,
-    padding: 18,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 14,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.12,
-    shadowRadius: 5,
-  },
-  analyticsBadge: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  analyticsBadgeText: { fontSize: 20 },
   rowChevron: { fontSize: 26, fontWeight: '300', marginLeft: 8 },
-  headerDivider: {
-    height: StyleSheet.hairlineWidth,
-    marginTop: 14,
-    marginBottom: 4,
-    opacity: 0.6,
-  },
 });
