@@ -31,7 +31,7 @@ export default function TimedQRTestReviewScreen({ route, navigation }) {
       getAnswer={getAnswer}
       flags={flags}
       test={test}
-      onDone={() => navigation.navigate('TimedTestList', { section: 'QR', title: 'Quantitative Reasoning' })}
+      onDone={() => navigation.goBack()}
     />
   );
 }

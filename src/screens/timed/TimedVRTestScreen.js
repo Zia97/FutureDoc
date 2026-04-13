@@ -155,7 +155,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
         getAnswer={getAnswer}
         flags={flags}
         test={test}
-        onDone={() => navigation.navigate('TimedTestList', { section: 'VR', title: 'Verbal Reasoning' })}
+        onDone={() => navigation.goBack()}
       />
     );
   }

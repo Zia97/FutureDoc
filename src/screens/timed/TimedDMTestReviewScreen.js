@@ -16,7 +16,7 @@ export default function TimedDMTestReviewScreen({ route, navigation }) {
       answers={answers}
       flags={flags}
       test={test}
-      onDone={() => navigation.navigate('TimedTestList', { section: 'DM', title: 'Decision Making' })}
+      onDone={() => navigation.goBack()}
     />
   );
 }

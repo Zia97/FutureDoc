@@ -24,7 +24,7 @@ export default function TimedSJTestReviewScreen({ route, navigation }) {
       getAnswer={getAnswer}
       flags={flags}
       test={test}
-      onDone={() => navigation.navigate('TimedTestList', { section: 'SJ', title: 'Situational Judgement' })}
+      onDone={() => navigation.goBack()}
     />
   );
 }

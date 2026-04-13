@@ -73,7 +73,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,
-    isLast ? null : goNext,
+    isLast ? () => setShowReview(true) : goNext,
   );
 
   useEffect(() => {
@@ -142,7 +142,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
         getAnswer={getAnswerForResults}
         flags={flags}
         test={test}
-        onDone={() => navigation.navigate('TimedTestList', { section: 'QR', title: 'Quantitative Reasoning' })}
+        onDone={() => navigation.goBack()}
       />
     );
   }

@@ -83,7 +83,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,
-    isLast ? null : goNext,
+    isLast ? () => setShowReview(true) : goNext,
   );
 
   function onAnswer(option) {
@@ -113,7 +113,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
         getAnswer={getAnswer}
         flags={flags}
         test={test}
-        onDone={() => navigation.navigate('TimedTestList', { section: 'SJ', title: 'Situational Judgement' })}
+        onDone={() => navigation.goBack()}
       />
     );
   }

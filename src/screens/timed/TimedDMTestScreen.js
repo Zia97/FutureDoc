@@ -64,7 +64,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : () => setCurrentIndex((i) => i - 1),
-    isLast ? null : () => setCurrentIndex((i) => i + 1),
+    isLast ? () => setShowReview(true) : () => setCurrentIndex((i) => i + 1),
   );
 
   useEffect(() => {
@@ -132,7 +132,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
         answers={answers}
         flags={flags}
         test={test}
-        onDone={() => navigation.navigate('TimedTestList', { section: 'DM', title: 'Decision Making' })}
+        onDone={() => navigation.goBack()}
       />
     );
   }
