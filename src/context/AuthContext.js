@@ -4,6 +4,7 @@ import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Linking from 'expo-linking';
 import { supabase } from '../lib/supabase';
+import { clearLocalUserData } from '../services/localUserData';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -85,6 +86,7 @@ export function AuthProvider({ children }) {
   const deleteAccount = async () => {
     const { error } = await supabase.rpc('delete_user_account');
     if (error) throw error;
+    await clearLocalUserData();
     await supabase.auth.signOut();
   };
 
