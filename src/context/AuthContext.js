@@ -10,6 +10,8 @@ WebBrowser.maybeCompleteAuthSession();
 
 const AuthContext = createContext(null);
 
+const isEmailVerified = (u) => !!u && !!u.email_confirmed_at;
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -17,12 +19,12 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      setUser(isEmailVerified(session?.user) ? session.user : null);
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+      setUser(isEmailVerified(session?.user) ? session.user : null);
     });
 
     return () => subscription.unsubscribe();
@@ -55,7 +57,7 @@ export function AuthProvider({ children }) {
           }
         }
         const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user ?? null);
+        setUser(isEmailVerified(session?.user) ? session.user : null);
       }
     };
 
@@ -73,8 +75,18 @@ export function AuthProvider({ children }) {
   const signUp = (email, password) =>
     supabase.auth.signUp({ email, password });
 
-  const signIn = (email, password) =>
-    supabase.auth.signInWithPassword({ email, password });
+  const signIn = async (email, password) => {
+    const result = await supabase.auth.signInWithPassword({ email, password });
+    if (result.error) return result;
+    if (!isEmailVerified(result.data?.user)) {
+      await supabase.auth.signOut();
+      return {
+        data: null,
+        error: new Error('Please verify your email before signing in. Check your inbox for the confirmation link.'),
+      };
+    }
+    return result;
+  };
 
   const signOut = () => supabase.auth.signOut();
 
