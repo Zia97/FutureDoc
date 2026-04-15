@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
+import { reportError } from '../../lib/reportError';
 
 import VRAnalyticsScreen from './VRAnalyticsScreen';
 import DMAnalyticsScreen from './DMAnalyticsScreen';
@@ -90,7 +91,7 @@ export default function PerformanceAnalyticsScreen({ route }) {
         loadedRef.current.add(section);
         setCache((prev) => ({ ...prev, [section]: data }));
       } catch (err) {
-        if (__DEV__) console.error(`[PerformanceAnalytics] ${section} load failed:`, err);
+        reportError('PerformanceAnalytics', err, { level: 'warning', extra: { note: 'load failed', section } });
         setError(err);
       } finally {
         setLoading(false);

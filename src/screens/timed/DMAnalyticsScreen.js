@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
 import {
   getDMScaledScore,
@@ -352,7 +353,7 @@ export default function DMAnalyticsScreen({ route, preloadedRows }) {
       setRows(data);
       setError(null);
     } catch (err) {
-      if (__DEV__) console.error('[DMAnalyticsScreen] load failed:', err);
+      reportError('DMAnalyticsScreen', err, { level: 'warning', extra: { note: 'load failed' } });
       setError(err);
     } finally {
       setLoading(false);

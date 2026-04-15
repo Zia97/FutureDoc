@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DM_ATTEMPTS_KEY } from '../attempts/useDecisionMakingAttempts';
+import { reportError } from '../../lib/reportError';
 
 /**
  * Returns { [questionId]: 'completed' } for the current user.
@@ -23,7 +24,7 @@ export function useDecisionMakingProgress() {
         setProgressMap(map);
       }
     } catch (err) {
-      console.error('[useDecisionMakingProgress] load failed:', err);
+      reportError('useDecisionMakingProgress', err, { level: 'warning', extra: { note: 'load failed' } });
     } finally {
       setLoading(false);
     }

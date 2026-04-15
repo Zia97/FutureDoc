@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { db } from '../lib/dbQueries';
+import { reportError, reportMessage } from '../lib/reportError';
 
 // ============================================================
 // Offline write queue for timed exam submissions and deletions.
@@ -66,7 +67,7 @@ async function writeQueue(entries) {
   try {
     await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(entries));
   } catch (err) {
-    if (__DEV__) console.error('[timedExamSyncQueue] writeQueue failed:', err);
+    reportError('timedExamSyncQueue', err, { level: 'warning', extra: { note: 'writeQueue failed' } });
   }
 }
 
@@ -168,11 +169,11 @@ export async function flush(user) {
           await db[fn](entry.testId);
         } else {
           // Unknown op — drop it rather than block the queue forever.
-          if (__DEV__) console.warn('[timedExamSyncQueue] dropping unknown op:', entry.op);
+          reportMessage('timedExamSyncQueue', 'dropping unknown op', { level: 'error', extra: { op: entry.op, section: entry.section } });
         }
         flushed++;
       } catch (err) {
-        if (__DEV__) console.error('[timedExamSyncQueue] flush failed at index', i, err);
+        reportError('timedExamSyncQueue', err, { level: 'error', extra: { note: 'flush failed', index: i } });
         break;
       }
     }

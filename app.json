@@ -39,7 +39,15 @@
       "expo-secure-store",
       "expo-web-browser",
       "expo-apple-authentication",
-      "expo-build-properties"
+      "expo-build-properties",
+      [
+        "@sentry/react-native/expo",
+        {
+          "url": "https://sentry.io/",
+          "project": "react-native",
+          "organization": "ucat-genius"
+        }
+      ]
     ],
     "owner": "qhz123"
   }

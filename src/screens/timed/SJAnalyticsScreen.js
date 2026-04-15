@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
 import { getSJBand, SJ_UK_BANDS } from '../../lib/ucatScoring';
 
@@ -314,7 +315,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
       setRows(data);
       setError(null);
     } catch (err) {
-      if (__DEV__) console.error('[SJAnalyticsScreen] load failed:', err);
+      reportError('SJAnalyticsScreen', err, { level: 'warning', extra: { note: 'load failed' } });
       setError(err);
     } finally {
       setLoading(false);

@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildQRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
+import { reportError } from '../../lib/reportError';
 
 const COMPLETED_KEY = 'timed_qr_completed_attempts';
 const SECTION = 'qr';
@@ -78,7 +79,7 @@ export function useTimedQRExamProgress() {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       if (raw) local = JSON.parse(raw);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedQRExamProgress] local load failed:', err);
+      reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local load failed' } });
     }
 
     // One-time cleanup: drop any legacy attempts whose answerMap is keyed
@@ -97,7 +98,7 @@ export function useTimedQRExamProgress() {
       try {
         await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(local));
       } catch (err) {
-        if (__DEV__) console.error('[useTimedQRExamProgress] local prune save failed:', err);
+        reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local prune save failed' } });
       }
     }
 
@@ -129,7 +130,7 @@ export function useTimedQRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(merged));
       setCompletedAttempts(merged);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedQRExamProgress] cloud hydrate failed:', err);
+      reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'cloud hydrate failed' } });
     }
   }, [user]);
 
@@ -174,7 +175,7 @@ export function useTimedQRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedQRExamProgress] local save failed:', err);
+      reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort) ─────────────────────────────────────
@@ -211,7 +212,7 @@ export function useTimedQRExamProgress() {
       await db.submitTimedQRExam(payload);
       await removePending({ userId: user.id, section: SECTION, testKey: test.id });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedQRExamProgress] cloud save failed, queueing:', err);
+      reportError('useTimedQRExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,
@@ -231,7 +232,7 @@ export function useTimedQRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedQRExamProgress] local delete failed:', err);
+      reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
     if (!user) return;
@@ -240,7 +241,7 @@ export function useTimedQRExamProgress() {
       await db.deleteTimedQRAttempt(numericId);
       await removePending({ userId: user.id, section: SECTION, testKey: testId });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedQRExamProgress] cloud delete failed, queueing:', err);
+      reportError('useTimedQRExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,

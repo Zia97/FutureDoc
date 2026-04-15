@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { reportError } from '../lib/reportError';
 
 export default class ErrorBoundary extends React.Component {
   state = { hasError: false };
@@ -9,7 +10,10 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    console.error('ErrorBoundary caught:', error, errorInfo);
+    reportError('ErrorBoundary', error, {
+      level: 'fatal',
+      extra: { componentStack: errorInfo?.componentStack },
+    });
   }
 
   handleRestart = () => {

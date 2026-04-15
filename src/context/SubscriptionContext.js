@@ -4,6 +4,7 @@ import Purchases from 'react-native-purchases';
 import RevenueCatUI from 'react-native-purchases-ui';
 import { useAuth } from './AuthContext';
 import { supabase } from '../lib/supabase';
+import { reportError } from '../lib/reportError';
 
 const REVENUECAT_API_KEY = process.env.EXPO_PUBLIC_REVENUECAT_API_KEY ?? '';
 
@@ -38,7 +39,7 @@ export function SubscriptionProvider({ children }) {
         .update({ is_premium: isPremium })
         .eq('user_id', user.id);
     } catch (err) {
-      console.error('[SubscriptionContext] syncPremiumToSupabase failed:', err);
+      reportError('SubscriptionContext', err, { level: 'error', extra: { note: 'syncPremiumToSupabase failed' } });
     }
   }
 
@@ -46,7 +47,10 @@ export function SubscriptionProvider({ children }) {
   useEffect(() => {
     async function init() {
       if (!REVENUECAT_API_KEY) {
-        console.warn('[SubscriptionContext] No RevenueCat API key configured');
+        reportError('SubscriptionContext', new Error('Missing EXPO_PUBLIC_REVENUECAT_API_KEY'), {
+          level: 'fatal',
+          extra: { note: 'RevenueCat not configured — purchases disabled' },
+        });
         setLoading(false);
         return;
       }
@@ -54,7 +58,7 @@ export function SubscriptionProvider({ children }) {
       try {
         Purchases.configure({ apiKey: REVENUECAT_API_KEY });
       } catch (err) {
-        console.error('[SubscriptionContext] configure failed:', err);
+        reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'configure failed' } });
         setLoading(false);
         return;
       }
@@ -108,14 +112,14 @@ export function SubscriptionProvider({ children }) {
       try {
         await Purchases.logIn(user.id);
       } catch (err) {
-        console.error('[SubscriptionContext] logIn failed:', err);
+        reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'logIn failed' } });
       }
       try {
         const info = await Purchases.getCustomerInfo();
         setCustomerInfo(info);
         premium = checkEntitlement(info);
       } catch (err) {
-        console.error('[SubscriptionContext] getCustomerInfo failed:', err);
+        reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'getCustomerInfo failed' } });
       }
 
       // 2. Check admin override from Supabase
@@ -128,7 +132,7 @@ export function SubscriptionProvider({ children }) {
           .single();
         isAdmin = !!data?.is_admin;
       } catch (err) {
-        console.error('[SubscriptionContext] checkAdmin failed:', err);
+        reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'checkAdmin failed' } });
       }
 
       // 3. User is pro if RevenueCat subscriber OR admin
@@ -147,7 +151,7 @@ export function SubscriptionProvider({ children }) {
       setIsPro(premium || adminOverride);
       syncPremiumToSupabase(premium);
     } catch (err) {
-      console.error('[SubscriptionContext] checkSubscription failed:', err);
+      reportError('SubscriptionContext', err, { level: 'error', extra: { note: 'checkSubscription failed' } });
     }
   }
 
@@ -156,7 +160,7 @@ export function SubscriptionProvider({ children }) {
       const offeringsResult = await Purchases.getOfferings();
       setOfferings(offeringsResult.current);
     } catch (err) {
-      console.error('[SubscriptionContext] loadOfferings failed:', err);
+      reportError('SubscriptionContext', err, { level: 'error', extra: { note: 'loadOfferings failed' } });
     }
   }
 

@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildDMAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
+import { reportError } from '../../lib/reportError';
 
 const COMPLETED_KEY = 'timed_dm_completed_attempts';
 const SECTION = 'dm';
@@ -56,7 +57,7 @@ export function useTimedDMExamProgress() {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       if (raw) local = JSON.parse(raw);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedDMExamProgress] local load failed:', err);
+      reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local load failed' } });
     }
     setCompletedAttempts(local);
 
@@ -86,7 +87,7 @@ export function useTimedDMExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(merged));
       setCompletedAttempts(merged);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedDMExamProgress] cloud hydrate failed:', err);
+      reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'cloud hydrate failed' } });
     }
   }, [user]);
 
@@ -116,7 +117,7 @@ export function useTimedDMExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedDMExamProgress] local save failed:', err);
+      reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
@@ -149,7 +150,7 @@ export function useTimedDMExamProgress() {
       await db.submitTimedDMExam(payload);
       await removePending({ userId: user.id, section: SECTION, testKey: test.id });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedDMExamProgress] cloud save failed, queueing:', err);
+      reportError('useTimedDMExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,
@@ -169,7 +170,7 @@ export function useTimedDMExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedDMExamProgress] local delete failed:', err);
+      reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
     if (!user) return;
@@ -177,7 +178,7 @@ export function useTimedDMExamProgress() {
       await db.deleteTimedDMAttempt(testId);
       await removePending({ userId: user.id, section: SECTION, testKey: testId });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedDMExamProgress] cloud delete failed, queueing:', err);
+      reportError('useTimedDMExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,

@@ -4,6 +4,7 @@ import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { flattenTimedVRPassages } from '../../lib/flattenQuestions';
+import { reportError } from '../../lib/reportError';
 
 const SECTION = 'timed_verbal_reasoning';
 
@@ -126,7 +127,7 @@ export function useTimedVRTests() {
         await saveCache(SECTION, versionRow.version, mapped);
         setTests(mapped);
       } catch (fetchErr) {
-        console.error('[useTimedVRTests] fetch failed:', fetchErr);
+        reportError('useTimedVRTests', fetchErr, { level: 'warning', extra: { note: 'fetch failed' } });
         if (hasValidCache) {
           setTests(
             cached.data.map((t) =>

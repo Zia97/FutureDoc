@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
+import { reportError, reportMessage } from '../../lib/reportError';
 
 const ATTEMPTS_KEY = 'sj_attempts';
 export const SJ_PROGRESS_CACHE_KEY = 'sj_scenario_progress';
@@ -32,7 +33,7 @@ export function useSituationalJudgementAttempts() {
         setLocalAnswers(mapped);
       }
     } catch (err) {
-      console.error('[useSituationalJudgementAttempts] loadCache failed:', err);
+      reportError('useSituationalJudgementAttempts', err, { level: 'warning', extra: { note: 'loadCache failed' } });
     }
   }
 
@@ -50,7 +51,7 @@ export function useSituationalJudgementAttempts() {
 
       return attempts;
     } catch (err) {
-      console.error('[useSituationalJudgementAttempts] saveToCache failed:', err);
+      reportError('useSituationalJudgementAttempts', err, { level: 'warning', extra: { note: 'saveToCache failed' } });
       return null;
     }
   }
@@ -65,13 +66,13 @@ export function useSituationalJudgementAttempts() {
       progressMap[scenarioId] = status;
       await AsyncStorage.setItem(SJ_PROGRESS_CACHE_KEY, JSON.stringify(progressMap));
     } catch (err) {
-      console.error('[useSituationalJudgementAttempts] updateProgressCache failed:', err);
+      reportError('useSituationalJudgementAttempts', err, { level: 'warning', extra: { note: 'updateProgressCache failed' } });
     }
   }
 
   async function submitAttempt({ questionId, scenarioId, selectedAnswer, totalQuestions }) {
     if (!user) {
-      console.warn('[useSituationalJudgementAttempts] submitAttempt called with no logged-in user');
+      reportMessage('useSituationalJudgementAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
       return;
     }
     if (submitting.current.has(questionId)) return;

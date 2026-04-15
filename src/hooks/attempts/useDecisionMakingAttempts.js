@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
+import { reportError, reportMessage } from '../../lib/reportError';
 
 export const DM_ATTEMPTS_KEY = 'dm_attempts';
 const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
@@ -40,7 +41,7 @@ export function useDecisionMakingAttempts() {
         setLocalSubmitted(submitted);
       }
     } catch (err) {
-      console.error('[useDecisionMakingAttempts] loadCache failed:', err);
+      reportError('useDecisionMakingAttempts', err, { level: 'warning', extra: { note: 'loadCache failed' } });
     }
   }
 
@@ -54,13 +55,13 @@ export function useDecisionMakingAttempts() {
       setLocalAnswers((prev) => ({ ...prev, [questionId]: answer }));
       setLocalSubmitted((prev) => ({ ...prev, [questionId]: true }));
     } catch (err) {
-      console.error('[useDecisionMakingAttempts] saveToCache failed:', err);
+      reportError('useDecisionMakingAttempts', err, { level: 'warning', extra: { note: 'saveToCache failed' } });
     }
   }
 
   async function submitAttempt({ questionId, answer }) {
     if (!user) {
-      console.warn('[useDecisionMakingAttempts] submitAttempt called with no logged-in user');
+      reportMessage('useDecisionMakingAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
       return;
     }
     if (submitting.current.has(questionId)) return;

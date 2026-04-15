@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
 import {
   getVRScaledScore,
@@ -320,7 +321,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
       setRows(data);
       setError(null);
     } catch (err) {
-      if (__DEV__) console.error('[VRAnalyticsScreen] load failed:', err);
+      reportError('VRAnalyticsScreen', err, { level: 'warning', extra: { note: 'load failed' } });
       setError(err);
     } finally {
       setLoading(false);

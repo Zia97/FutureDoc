@@ -4,6 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildVRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
+import { reportError } from '../../lib/reportError';
 
 const COMPLETED_KEY = 'timed_vr_completed_attempts';
 const SECTION = 'vr';
@@ -46,7 +47,7 @@ export function useTimedVRExamProgress() {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       if (raw) local = JSON.parse(raw);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedVRExamProgress] local load failed:', err);
+      reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local load failed' } });
     }
     setCompletedAttempts(local);
 
@@ -78,7 +79,7 @@ export function useTimedVRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(merged));
       setCompletedAttempts(merged);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedVRExamProgress] cloud hydrate failed:', err);
+      reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'cloud hydrate failed' } });
     }
   }, [user]);
 
@@ -127,7 +128,7 @@ export function useTimedVRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedVRExamProgress] local save failed:', err);
+      reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort — local already saved) ────────────────
@@ -164,7 +165,7 @@ export function useTimedVRExamProgress() {
       // Direct write succeeded — drop any earlier queued copy of the same op.
       await removePending({ userId: user.id, section: SECTION, testKey: test.id });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedVRExamProgress] cloud save failed, queueing:', err);
+      reportError('useTimedVRExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,
@@ -185,7 +186,7 @@ export function useTimedVRExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedVRExamProgress] local delete failed:', err);
+      reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
     if (!user) return;
@@ -193,7 +194,7 @@ export function useTimedVRExamProgress() {
       await db.deleteTimedVRAttempt(testId);
       await removePending({ userId: user.id, section: SECTION, testKey: testId });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedVRExamProgress] cloud delete failed, queueing:', err);
+      reportError('useTimedVRExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,

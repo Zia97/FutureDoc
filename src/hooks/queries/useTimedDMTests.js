@@ -3,6 +3,7 @@ import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
+import { reportError } from '../../lib/reportError';
 
 const SECTION = 'timed_decision_making';
 
@@ -79,7 +80,7 @@ export function useTimedDMTests() {
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (e) {
-        console.error('[DM] getContentVersion failed:', e);
+        reportError('DM', e, { level: 'warning', extra: { note: 'getContentVersion failed' } });
         if (hasValidCache) setTests(cached.data);
         setLoading(false);
         return;
@@ -97,7 +98,7 @@ export function useTimedDMTests() {
         await saveCache(SECTION, versionRow.version, mapped);
         setTests(mapped);
       } catch (e) {
-        console.error('[DM] fetchTimedDMTests failed:', e);
+        reportError('DM', e, { level: 'warning', extra: { note: 'fetchTimedDMTests failed' } });
         if (hasValidCache) setTests(cached.data);
       } finally {
         setLoading(false);

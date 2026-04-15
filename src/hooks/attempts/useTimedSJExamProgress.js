@@ -5,6 +5,7 @@ import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildSJAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
+import { reportError } from '../../lib/reportError';
 
 // Local storage key — stores completed exam results keyed by test.id string
 const COMPLETED_KEY = 'timed_sj_completed_attempts';
@@ -63,7 +64,7 @@ export function useTimedSJExamProgress() {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       if (raw) local = JSON.parse(raw);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedSJExamProgress] local load failed:', err);
+      reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local load failed' } });
     }
     setCompletedAttempts(local);
 
@@ -93,7 +94,7 @@ export function useTimedSJExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(merged));
       setCompletedAttempts(merged);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedSJExamProgress] cloud hydrate failed:', err);
+      reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'cloud hydrate failed' } });
     }
   }, [user]);
 
@@ -138,7 +139,7 @@ export function useTimedSJExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
     } catch (err) {
-      if (__DEV__) console.error('[useTimedSJExamProgress] local save failed:', err);
+      reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
@@ -171,7 +172,7 @@ export function useTimedSJExamProgress() {
       await db.submitTimedSJExam(payload);
       await removePending({ userId: user.id, section: SECTION, testKey: test.id });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedSJExamProgress] cloud save failed, queueing:', err);
+      reportError('useTimedSJExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,
@@ -192,7 +193,7 @@ export function useTimedSJExamProgress() {
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedSJExamProgress] local delete failed:', err);
+      reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
     if (!user) return;
@@ -201,7 +202,7 @@ export function useTimedSJExamProgress() {
       await db.deleteTimedSJAttempt(numericId);
       await removePending({ userId: user.id, section: SECTION, testKey: testId });
     } catch (err) {
-      if (__DEV__) console.error('[useTimedSJExamProgress] cloud delete failed, queueing:', err);
+      reportError('useTimedSJExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
       await enqueue({
         userId: user.id,
         section: SECTION,

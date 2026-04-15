@@ -43,3 +43,5 @@ yarn-error.*
 
 # Claude Code memory
 .claude/
+
+.env.local

@@ -1,3 +1,5 @@
+import { reportError } from './reportError';
+
 const MAX_ATTEMPTS = 3;
 const BASE_DELAY_MS = 1000;
 
@@ -34,5 +36,6 @@ export async function withRetry(fn, { maxAttempts = MAX_ATTEMPTS, shouldRetry } 
     }
   }
 
+  reportError('withRetry', lastError, { level: 'warning', extra: { note: 'all attempts exhausted', maxAttempts } });
   throw lastError;
 }

@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
+import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
 import {
   getQRScaledScore,
@@ -346,7 +347,7 @@ export default function QRAnalyticsScreen({ route, preloadedRows }) {
       setRows(data);
       setError(null);
     } catch (err) {
-      if (__DEV__) console.error('[QRAnalyticsScreen] load failed:', err);
+      reportError('QRAnalyticsScreen', err, { level: 'warning', extra: { note: 'load failed' } });
       setError(err);
     } finally {
       setLoading(false);

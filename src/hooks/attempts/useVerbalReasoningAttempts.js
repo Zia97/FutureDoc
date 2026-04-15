@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
+import { reportError, reportMessage } from '../../lib/reportError';
 
 const ATTEMPTS_KEY  = 'vr_attempts';
 export const VR_PROGRESS_CACHE_KEY = 'vr_passage_progress';
@@ -35,7 +36,7 @@ export function useVerbalReasoningAttempts() {
         setLocalAnswers(mapped);
       }
     } catch (err) {
-      console.error('[useVerbalReasoningAttempts] loadCache failed:', err);
+      reportError('useVerbalReasoningAttempts', err, { level: 'warning', extra: { note: 'loadCache failed' } });
     }
   }
 
@@ -53,7 +54,7 @@ export function useVerbalReasoningAttempts() {
 
       return attempts;
     } catch (err) {
-      console.error('[useVerbalReasoningAttempts] saveToCache failed:', err);
+      reportError('useVerbalReasoningAttempts', err, { level: 'warning', extra: { note: 'saveToCache failed' } });
       return null;
     }
   }
@@ -68,7 +69,7 @@ export function useVerbalReasoningAttempts() {
       progressMap[passageId] = status;
       await AsyncStorage.setItem(VR_PROGRESS_CACHE_KEY, JSON.stringify(progressMap));
     } catch (err) {
-      console.error('[useVerbalReasoningAttempts] updateProgressCache failed:', err);
+      reportError('useVerbalReasoningAttempts', err, { level: 'warning', extra: { note: 'updateProgressCache failed' } });
     }
   }
 
@@ -76,7 +77,7 @@ export function useVerbalReasoningAttempts() {
 
   async function submitAttempt({ questionId, passageId, selectedAnswer, totalQuestions }) {
     if (!user) {
-      console.warn('[useVerbalReasoningAttempts] submitAttempt called with no logged-in user');
+      reportMessage('useVerbalReasoningAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
       return;
     }
     if (submitting.current.has(questionId)) return;

@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
+import { reportError, reportMessage } from '../../lib/reportError';
 
 const ATTEMPTS_KEY = 'qr_attempts';
 export const QR_PROGRESS_CACHE_KEY = 'qr_set_progress';
@@ -32,7 +33,7 @@ export function useQuantitativeReasoningAttempts() {
         setLocalAnswers(mapped);
       }
     } catch (err) {
-      console.error('[useQuantitativeReasoningAttempts] loadCache failed:', err);
+      reportError('useQuantitativeReasoningAttempts', err, { level: 'warning', extra: { note: 'loadCache failed' } });
     }
   }
 
@@ -50,7 +51,7 @@ export function useQuantitativeReasoningAttempts() {
 
       return attempts;
     } catch (err) {
-      console.error('[useQuantitativeReasoningAttempts] saveToCache failed:', err);
+      reportError('useQuantitativeReasoningAttempts', err, { level: 'warning', extra: { note: 'saveToCache failed' } });
       return null;
     }
   }
@@ -65,13 +66,13 @@ export function useQuantitativeReasoningAttempts() {
       progressMap[setId] = status;
       await AsyncStorage.setItem(QR_PROGRESS_CACHE_KEY, JSON.stringify(progressMap));
     } catch (err) {
-      console.error('[useQuantitativeReasoningAttempts] updateProgressCache failed:', err);
+      reportError('useQuantitativeReasoningAttempts', err, { level: 'warning', extra: { note: 'updateProgressCache failed' } });
     }
   }
 
   async function submitAttempt({ questionId, setId, selectedAnswer, totalQuestions }) {
     if (!user) {
-      console.warn('[useQuantitativeReasoningAttempts] submitAttempt called with no logged-in user');
+      reportMessage('useQuantitativeReasoningAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
       return;
     }
     if (submitting.current.has(questionId)) return;
