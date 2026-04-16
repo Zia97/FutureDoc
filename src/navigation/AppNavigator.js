@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, AppState, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useContentVersionCheck } from '../services/contentUpdateService';
+import { checkForceUpdate } from '../services/appVersionGate';
 import { useTimedExamSyncOnForeground } from '../hooks/useTimedExamSyncOnForeground';
 
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -14,6 +15,7 @@ import SignUpScreen from '../screens/auth/SignUpScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import ToSAcceptanceScreen, { TOS_FLAG_KEY } from '../screens/onboarding/ToSAcceptanceScreen';
+import ForceUpdateScreen from '../screens/onboarding/ForceUpdateScreen';
 import HeaderAuthButton from '../components/HeaderAuthButton';
 
 import HomeScreen from '../screens/home/HomeScreen';
@@ -125,11 +127,33 @@ export default function AppNavigator() {
   const { user, loading, passwordRecovery } = useAuth();
   const { theme: t } = useTheme();
   const [tosAccepted, setTosAccepted] = useState(null); // null = unknown (loading)
+  const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
 
   useEffect(() => {
     AsyncStorage.getItem(TOS_FLAG_KEY)
       .then((v) => setTosAccepted(v === 'true'))
       .catch(() => setTosAccepted(false));
+  }, []);
+
+  // Fail-open version check: any error resolves to no update required so a
+  // Supabase outage cannot lock users out of the app. Re-runs on foreground
+  // so an emergency min-version bump reaches users who keep the app backgrounded.
+  const appState = useRef(AppState.currentState);
+  useEffect(() => {
+    let cancelled = false;
+    const runCheck = () => {
+      checkForceUpdate()
+        .then((result) => { if (!cancelled) setVersionGate(result); })
+        .catch(() => { if (!cancelled && versionGate === null) setVersionGate({ updateRequired: false, storeUrl: null }); });
+    };
+    runCheck();
+    const sub = AppState.addEventListener('change', (next) => {
+      if (appState.current.match(/inactive|background/) && next === 'active') {
+        runCheck();
+      }
+      appState.current = next;
+    });
+    return () => { cancelled = true; sub.remove(); };
   }, []);
 
   // If a returning verified user is already signed in but pre-dates the ToS flag,
@@ -140,12 +164,16 @@ export default function AppNavigator() {
     }
   }, [tosAccepted, user]);
 
-  if (loading || tosAccepted === null) {
+  if (loading || tosAccepted === null || versionGate === null) {
     return (
       <View style={{ flex: 1, backgroundColor: t.headerBg, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color={t.accent} />
       </View>
     );
+  }
+
+  if (versionGate.updateRequired) {
+    return <ForceUpdateScreen storeUrl={versionGate.storeUrl} />;
   }
 
   if (!tosAccepted) {
