@@ -53,35 +53,63 @@ const INSTRUCTION_ROUTE = {
   SJ: 'SJInstruction',
 };
 
+const REVIEW_ROUTE = {
+  VR: 'TimedVRTestReview',
+  DM: 'TimedDMTestReview',
+  QR: 'TimedQRTestReview',
+  SJ: 'TimedSJTestReview',
+};
+
+// Section-specific wrappers. Each calls only the hook pair for its own
+// section so opening the DM list doesn't fan out queries to VR/QR/SJ.
+function VRList(props) {
+  const { tests, loading, error } = useTimedVRTests();
+  const progress = useTimedVRExamProgress();
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+}
+
+function DMList(props) {
+  const { tests, loading, error } = useTimedDMTests();
+  const progress = useTimedDMExamProgress();
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+}
+
+function QRList(props) {
+  const { tests, loading, error } = useTimedQRTests();
+  const progress = useTimedQRExamProgress();
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+}
+
+function SJList(props) {
+  const { tests, loading, error } = useTimedSJTests();
+  const progress = useTimedSJExamProgress();
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+}
+
+const SECTION_COMPONENT = {
+  VR: VRList,
+  DM: DMList,
+  QR: QRList,
+  SJ: SJList,
+};
+
 export default function TimedTestListScreen({ navigation, route }) {
   const { section, title } = route.params;
+  const Component = SECTION_COMPONENT[section] ?? VRList;
+  return <Component navigation={navigation} section={section} title={title} />;
+}
+
+function TimedListBody({ navigation, section, title, tests, loading, error, progress }) {
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
   const color = t.accent;
-
-  const vr = useTimedVRTests();
-  const dm = useTimedDMTests();
-  const qr = useTimedQRTests();
-  const sj = useTimedSJTests();
-  const { completedAttempts: sjAttempts, reload: reloadSJ, deleteAttempt: deleteSJAttempt } = useTimedSJExamProgress();
-  const { completedAttempts: vrAttempts, reload: reloadVR, deleteAttempt: deleteVRAttempt } = useTimedVRExamProgress();
-  const { completedAttempts: dmAttempts, reload: reloadDM, deleteAttempt: deleteDMAttempt } = useTimedDMExamProgress();
-  const { completedAttempts: qrAttempts, reload: reloadQR, deleteAttempt: deleteQRAttempt } = useTimedQRExamProgress();
+  const { completedAttempts, reload, deleteAttempt } = progress;
 
   useFocusEffect(
     useCallback(() => {
-      reloadSJ();
-      reloadVR();
-      reloadDM();
-      reloadQR();
-    }, []),
+      reload();
+    }, [reload]),
   );
-  const completedAttempts = section === 'VR' ? vrAttempts : section === 'DM' ? dmAttempts : section === 'QR' ? qrAttempts : sjAttempts;
-  const deleteAttempt = section === 'VR' ? deleteVRAttempt : section === 'DM' ? deleteDMAttempt : section === 'QR' ? deleteQRAttempt : deleteSJAttempt;
-  const { tests, loading, error } =
-    section === 'DM' ? dm :
-    section === 'QR' ? qr :
-    section === 'SJ' ? sj : vr;
 
   const handleResetAttempt = (testId, testTitle) => {
     Alert.alert(
@@ -126,7 +154,7 @@ export default function TimedTestListScreen({ navigation, route }) {
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
         renderItem={({ item, index }) => {
-          const isCompleted = (section === 'SJ' || section === 'VR' || section === 'DM' || section === 'QR') && !!completedAttempts[item.id];
+          const isCompleted = !!completedAttempts[item.id];
           const attempt = isCompleted ? completedAttempts[item.id] : null;
           const isLocked = !item.isFree && !isPro;
           const formatted = isCompleted ? formatScoreForCard(section, attempt.scorePercent) : null;
@@ -152,8 +180,7 @@ export default function TimedTestListScreen({ navigation, route }) {
                   return;
                 }
                 if (isCompleted) {
-                  const reviewRoute = section === 'VR' ? 'TimedVRTestReview' : section === 'DM' ? 'TimedDMTestReview' : section === 'QR' ? 'TimedQRTestReview' : 'TimedSJTestReview';
-                  navigation.navigate(reviewRoute, { test: item });
+                  navigation.navigate(REVIEW_ROUTE[section] ?? 'TimedVRTestReview', { test: item });
                 } else {
                   navigation.navigate(INSTRUCTION_ROUTE[section] ?? 'VRInstruction', { test: item, section, title });
                 }

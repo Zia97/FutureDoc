@@ -38,7 +38,12 @@ export function AuthProvider({ children }) {
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        const { data, error } = await supabase.auth.signInAnonymously();
+        if (!error) setUser(isUsable(data?.user) ? data.user : null);
+        return;
+      }
       setUser(isUsable(session?.user) ? session.user : null);
     });
 

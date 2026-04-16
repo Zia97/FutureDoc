@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as Font from 'expo-font';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthProvider } from './src/context/AuthContext';
@@ -44,17 +45,19 @@ export default Sentry.wrap(function App() {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <ErrorBoundary>
-        <NetworkProvider>
-          <ThemeProvider>
-            <AuthProvider>
-              <SubscriptionProvider>
-                <AppNavigator />
-              </SubscriptionProvider>
-            </AuthProvider>
-          </ThemeProvider>
-        </NetworkProvider>
-      </ErrorBoundary>
+      <SafeAreaProvider>
+        <ErrorBoundary>
+          <NetworkProvider>
+            <ThemeProvider>
+              <AuthProvider>
+                <SubscriptionProvider>
+                  <AppNavigator />
+                </SubscriptionProvider>
+              </AuthProvider>
+            </ThemeProvider>
+          </NetworkProvider>
+        </ErrorBoundary>
+      </SafeAreaProvider>
     </GestureHandlerRootView>
   );
 });
