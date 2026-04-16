@@ -13,7 +13,7 @@ import { useTheme } from '../context/ThemeContext';
 
 const STATUS_ORDER = { Unseen: 0, Incomplete: 1, Answered: 2 };
 
-export default function SJTestReviewScreen({
+export default function TimedTestReviewScreen({
   questions,
   getStatus,
   flags,
@@ -22,7 +22,6 @@ export default function SJTestReviewScreen({
   timerDisplay,
   isUrgent,
   title = 'Situational Judgement',
-  groupLabel = 'Scenario',
 }) {
   const { practiceTheme: t } = useTheme();
   const insets = useSafeAreaInsets();
@@ -75,10 +74,6 @@ export default function SJTestReviewScreen({
     return list;
   }, [questions, activeTab, sortKey, sortAsc, flags, getStatus]);
 
-  function getScenarioTitle(q) {
-    return `${groupLabel} ${q.stemIndex + 1}`;
-  }
-
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]}>
       <StatusBar barStyle="light-content" backgroundColor={t.headerBg} />
@@ -121,9 +116,6 @@ export default function SJTestReviewScreen({
         <TouchableOpacity style={[styles.colHeaderBtn, styles.colQ]} onPress={() => handleSort('number')}>
           <Text style={styles.colHeaderText}>QUESTION{sortIndicator('number')}</Text>
         </TouchableOpacity>
-        <View style={[styles.colHeaderBtn, styles.colTitle]}>
-          <Text style={styles.colHeaderText}>TITLE</Text>
-        </View>
         <TouchableOpacity style={[styles.colHeaderBtn, styles.colStatus]} onPress={() => handleSort('status')}>
           <Text style={styles.colHeaderText}>STATUS{sortIndicator('status')}</Text>
         </TouchableOpacity>
@@ -149,9 +141,6 @@ export default function SJTestReviewScreen({
             >
               <Text style={[styles.cell, styles.colQ, { color: t.text }]}>
                 {q.flatIndex + 1}
-              </Text>
-              <Text style={[styles.cell, styles.colTitle, { color: t.textSecondary }]} numberOfLines={1}>
-                {getScenarioTitle(q)}
               </Text>
               <Text style={[styles.cell, styles.colStatus, { color: statusColor[status] ?? t.text, fontWeight: '700' }]}>
                 {status}
@@ -270,9 +259,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
-  colQ: { flex: 1.8 },
-  colTitle: { flex: 2 },
-  colStatus: { flex: 2.5 },
+  colQ: { flex: 2 },
+  colStatus: { flex: 3 },
   colFlag: { flex: 2 },
   list: {
     flex: 1,

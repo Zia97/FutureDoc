@@ -24,7 +24,7 @@ import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
-import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedSJResultsScreen from '../../components/TimedSJResultsScreen';
 
 export default function TimedSJTestScreen({ route, navigation }) {
@@ -131,7 +131,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
   if (showReview) {
     return (
-      <SJTestReviewScreen
+      <TimedTestReviewScreen
         questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}

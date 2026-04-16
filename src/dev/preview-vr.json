@@ -1,17 +1,562 @@
 [
   {
-    "id": "a1b2c3d4-0001-0001-0001-000000000001",
-    "title": "NHS Workforce and Burnout",
-    "body": "The NHS Long Term Workforce Plan, published in 2023, outlined commitments to expanding the medical workforce through increased domestic training places and a stated aim to reduce reliance on international recruitment. The plan projected that by 2036, approximately half of all new doctors entering the workforce would be UK-trained graduates, compared with around one third at the time of publication. However, workforce analysts have noted that the projections assume retention rates will improve substantially, a condition that has not consistently been met in previous workforce strategies.\n\nIn 2022, the NHS experienced its highest recorded levels of staff vacancies, with over 100,000 posts unfilled across England alone. Burnout was cited as the primary reason for early departure in a survey of junior doctors conducted by the British Medical Association, with 43% of respondents reporting that they had considered leaving clinical practice within the next five years. The BMA survey did not include dentists or allied health professionals.",
+    "id": "f1a2b3c4-0001-4001-8001-000000000001",
+    "title": "The Antikythera Mechanism",
+    "body": "In 1901, sponge divers working off the Greek island of Antikythera discovered the wreck of a Roman-era cargo ship. Among bronze statues and amphorae, they recovered a corroded lump of metal that was initially overlooked. It was not until 1902 that archaeologist Valerios Stais, examining the object at the National Archaeological Museum in Athens, identified gear wheels embedded in the encrustation. The object, now known as the Antikythera Mechanism, is generally dated by its accompanying pottery to between 150 and 100 BCE.\n\nSubsequent analysis, particularly using X-ray tomography in the early 2000s, revealed at least thirty interlocking bronze gears housed in a wooden case roughly the size of a modern shoebox. The mechanism was used to predict astronomical positions and eclipses decades in advance, and it also tracked the four-year cycle of the ancient Olympic Games. Front and back dials displayed the positions of the Sun and Moon, the phase of the Moon, and the timing of athletic festivals across the Greek world.\n\nNo comparable device is known from the ancient world. Technology of similar mechanical sophistication does not reappear in the surviving historical record until the astronomical clocks of medieval Europe, more than a thousand years later. Some scholars have suggested the mechanism was produced in a workshop associated with the school of the astronomer Hipparchus on Rhodes, though this attribution remains disputed. What is clear is that the device demonstrates a Hellenistic understanding of gearing and astronomical modelling substantially more advanced than was previously credited to the period.",
+    "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "a1b2c3d4-0001-0001-0002-000000000002",
-        "question_text": "Burnout was the most commonly cited reason for junior doctors considering leaving clinical practice.",
+        "id": "f1a2b3c4-0001-4001-8001-000000000002",
+        "question_text": "According to the passage, who first recognised that the corroded object contained gear wheels?",
+        "options": [
+          "The sponge divers who originally recovered it in 1901",
+          "Valerios Stais, examining the object at the museum in 1902",
+          "Researchers using X-ray tomography in the early 2000s",
+          "Astronomers associated with the school of Hipparchus"
+        ],
+        "correct_answer": "Valerios Stais, examining the object at the museum in 1902",
+        "answer_reason": "The passage states that 'in 1902, archaeologist Valerios Stais, examining the object at the National Archaeological Museum in Athens, identified gear wheels embedded in the encrustation'. The sponge divers recovered the object but 'overlooked' it, and X-ray tomography came later to reveal the internal structure in more detail.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0001-4001-8001-000000000003",
+        "question_text": "Which of the following is most strongly supported by the passage?",
+        "options": [
+          "Hellenistic engineers routinely produced mechanisms as complex as the Antikythera device",
+          "The mechanical sophistication of the Antikythera Mechanism was not matched for over a millennium in surviving records",
+          "The Antikythera Mechanism was used primarily to schedule the Olympic Games",
+          "Medieval European clockmakers based their designs on recovered Greek devices"
+        ],
+        "correct_answer": "The mechanical sophistication of the Antikythera Mechanism was not matched for over a millennium in surviving records",
+        "answer_reason": "The passage states that 'technology of similar mechanical sophistication does not reappear in the surviving historical record until the astronomical clocks of medieval Europe, more than a thousand years later'. The first option overstates the case — the passage says 'no comparable device is known', suggesting such sophistication was unusual, not routine.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0001-4001-8001-000000000004",
+        "question_text": "Why does the author mention the school of Hipparchus?",
+        "options": [
+          "To confirm the origin of the Antikythera Mechanism",
+          "To illustrate a proposed but contested theory about where the device was made",
+          "To argue that Rhodes was the centre of Hellenistic astronomy",
+          "To contrast Hipparchus's methods with those of the mechanism's designer"
+        ],
+        "correct_answer": "To illustrate a proposed but contested theory about where the device was made",
+        "answer_reason": "The passage says 'some scholars have suggested' the mechanism came from a workshop associated with Hipparchus's school 'though this attribution remains disputed'. The mention is specifically to present an unresolved hypothesis, not to confirm anything.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0001-4001-8001-000000000005",
+        "question_text": "The dating of the Antikythera Mechanism to between 150 and 100 BCE is based primarily on:",
+        "options": [
+          "Radiocarbon analysis of the wooden case",
+          "The style of the bronze gears",
+          "Pottery recovered alongside it from the shipwreck",
+          "Historical records of Hipparchus's workshop"
+        ],
+        "correct_answer": "Pottery recovered alongside it from the shipwreck",
+        "answer_reason": "The passage states the mechanism 'is generally dated by its accompanying pottery to between 150 and 100 BCE'. No mention is made of radiocarbon analysis, gear style, or historical records as dating evidence.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0002-4002-8002-000000000001",
+    "title": "Tulip Mania",
+    "body": "Between 1634 and early 1637, the Dutch Republic experienced an episode of extraordinary speculation in tulip bulbs that has since become a standard reference point in discussions of financial bubbles. Tulips had been introduced to the Low Countries from the Ottoman Empire in the late sixteenth century, and rare variegated varieties — prized for their flame-like colour patterns, which are now known to have been caused by a mosaic virus — commanded increasingly high prices among wealthy collectors.\n\nBy 1636, trade in tulip bulbs had moved beyond collectors into taverns, where standardised contracts for the delivery of bulbs at future dates were bought and sold. A single bulb of the most coveted variety, Semper Augustus, was reported to have changed hands for a sum equivalent to the annual income of a skilled Amsterdam craftsman several times over. Contemporary pamphlets later condemned the trade as immoral, though these pamphlets were often written decades after the events they describe.\n\nThe market collapsed in February 1637, reportedly when a bulb auction in Haarlem failed to attract buyers. Prices fell to a fraction of their peak within weeks. The economic historian Anne Goldgar, writing in 2007, has argued that the long-standing narrative of nationwide ruin is exaggerated: most transactions took place among a relatively small circle of merchants, and few bankruptcies in the period can be directly attributed to tulip speculation. Nonetheless, the episode remains widely cited in discussions of speculative excess.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0002-4002-8002-000000000002",
+        "question_text": "The distinctive flame patterns of the most prized tulips were caused by a viral infection.",
         "options": ["True", "False", "Can't tell"],
         "correct_answer": "True",
-        "answer_reason": "The passage states that burnout was 'cited as the primary reason for early departure', confirming it was the leading factor among survey respondents.",
-        "order_index": 0
+        "answer_reason": "The passage states the flame-like colour patterns 'are now known to have been caused by a mosaic virus', directly supporting the statement.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0002-4002-8002-000000000003",
+        "question_text": "The collapse of the tulip market caused widespread bankruptcy across the Dutch Republic.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage explicitly refers to Goldgar's argument that 'the long-standing narrative of nationwide ruin is exaggerated' and that 'few bankruptcies in the period can be directly attributed to tulip speculation'. This directly contradicts the statement of widespread bankruptcy.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0002-4002-8002-000000000004",
+        "question_text": "Tulips were native to the Dutch Republic before the seventeenth century.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states tulips 'had been introduced to the Low Countries from the Ottoman Empire in the late sixteenth century', which contradicts the claim that they were native.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0002-4002-8002-000000000005",
+        "question_text": "The failed Haarlem auction was the sole cause of the market collapse.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "Can't tell",
+        "answer_reason": "The passage says the market collapsed 'reportedly when' a Haarlem auction failed, which presents it as an associated event but does not establish it as the sole cause. No information is given on whether other factors contributed.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0003-4003-8003-000000000001",
+    "title": "Forensic Linguistics",
+    "body": "Forensic linguistics is the application of linguistic analysis to legal contexts. Its modern form is often traced to the 1968 trial of Timothy Evans in the United Kingdom, in which linguist Jan Svartvik demonstrated that portions of a disputed confession contained grammatical structures inconsistent with Evans's documented speech patterns. Svartvik's analysis contributed to the posthumous pardon of Evans, who had been executed in 1950.\n\nThe field has since expanded considerably. Practitioners analyse disputed authorship, threatening communications, plagiarism, trademark disputes, and transcripts of police interviews. In authorship attribution, analysts examine features such as sentence length distribution, function-word frequency, and idiosyncratic spelling or punctuation. The 1996 identification of Theodore Kaczynski as the Unabomber was assisted by linguistic comparison between his published manifesto and letters he had written to family members; his brother David recognised characteristic phrases and alerted the authorities.\n\nForensic linguists generally distinguish between the study of written texts and spoken language. Spoken-language analysis may be used to identify regional dialects or to determine whether a recorded voice matches a suspect. However, voice identification through linguistic features alone is considered less reliable than acoustic analysis, and most courts require corroborating evidence before admitting either type. The International Association of Forensic Linguists, founded in 1993, has developed ethical guidelines that discourage practitioners from offering opinions beyond the limits of available evidence.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0003-4003-8003-000000000002",
+        "question_text": "What was the outcome of Jan Svartvik's linguistic analysis in the Timothy Evans case?",
+        "options": [
+          "Evans was acquitted at his original trial in 1968",
+          "Evans received a posthumous pardon after having been executed in 1950",
+          "Svartvik identified the true author of the confession",
+          "The confession was determined to be partially authentic"
+        ],
+        "correct_answer": "Evans received a posthumous pardon after having been executed in 1950",
+        "answer_reason": "The passage states Svartvik's analysis 'contributed to the posthumous pardon of Evans, who had been executed in 1950'. The 1968 trial referenced in the passage was the legal proceeding in which the analysis was presented, not Evans's original trial.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0003-4003-8003-000000000003",
+        "question_text": "According to the passage, which of the following is NOT listed as a feature used in authorship attribution?",
+        "options": [
+          "Sentence length distribution",
+          "Frequency of function words",
+          "Regional dialect variation",
+          "Idiosyncratic spelling"
+        ],
+        "correct_answer": "Regional dialect variation",
+        "answer_reason": "The passage lists 'sentence length distribution, function-word frequency, and idiosyncratic spelling or punctuation' as features of authorship attribution. Regional dialects are mentioned separately in the context of spoken-language analysis, not authorship attribution.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0003-4003-8003-000000000004",
+        "question_text": "Which of the following can be most reasonably inferred about voice identification?",
+        "options": [
+          "It is rejected by most courts as unreliable",
+          "Acoustic analysis alone is sufficient for conviction",
+          "Courts generally require supporting evidence before admitting it",
+          "It has replaced traditional forensic linguistics in many jurisdictions"
+        ],
+        "correct_answer": "Courts generally require supporting evidence before admitting it",
+        "answer_reason": "The passage states that 'most courts require corroborating evidence before admitting either type' of voice identification. The passage does not say voice identification is outright rejected, nor that acoustic analysis alone is sufficient.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0003-4003-8003-000000000005",
+        "question_text": "Why does the author mention David Kaczynski?",
+        "options": [
+          "To criticise the reliability of forensic linguistic evidence",
+          "To illustrate how personal familiarity with a writer's style can assist linguistic identification",
+          "To show that forensic linguists often rely on family testimony",
+          "To demonstrate that the Unabomber case was solved without expert analysis"
+        ],
+        "correct_answer": "To illustrate how personal familiarity with a writer's style can assist linguistic identification",
+        "answer_reason": "The passage describes David recognising 'characteristic phrases' and alerting authorities, which shows how familiarity with an individual's writing style can aid identification. The passage does not suggest the case was solved without expert analysis — linguistic comparison was involved.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0004-4004-8004-000000000001",
+    "title": "The Beaufort Scale",
+    "body": "The Beaufort Scale, used to describe wind force based on observable conditions, was devised by Francis Beaufort, an officer of the Royal Navy, in 1805. In its original form it related wind strength to the amount of sail a fully rigged frigate could carry in particular conditions, rather than to any numerical measurement of wind speed. The scale ran from 0, denoting calm, to 12, denoting a storm under which no canvas could be set.\n\nThe scale was adopted by the Royal Navy in 1838 and progressively modified over the following century. In 1906, the British meteorologist George Simpson extended the scale to land-based observation, linking each number to visible effects such as the movement of leaves, the swaying of trees, and structural damage to buildings. The scale was later correlated with wind-speed measurements in metres per second and kilometres per hour, though the correlations vary slightly between national meteorological services.\n\nIn 1946, the original twelve-point scale was supplemented with additional categories from 13 to 17, intended to describe tropical cyclone conditions exceeding the original maximum. These extensions, however, were never widely adopted outside Taiwan and mainland China, and the World Meteorological Organization continues to use the original scale of 0 to 12 for international reporting. Beaufort himself did not live to see his scale standardised; he retired from the Admiralty in 1855 and died two years later.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0004-4004-8004-000000000002",
+        "question_text": "The Beaufort Scale was originally based on measurements of wind speed in metres per second.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states that in its original form the scale 'related wind strength to the amount of sail a fully rigged frigate could carry in particular conditions, rather than to any numerical measurement of wind speed'. This directly contradicts the statement.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0004-4004-8004-000000000003",
+        "question_text": "Francis Beaufort died in 1857.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "True",
+        "answer_reason": "The passage states Beaufort 'retired from the Admiralty in 1855 and died two years later'. 1855 plus two years is 1857, a necessary inference from the passage.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0004-4004-8004-000000000004",
+        "question_text": "The extensions to the Beaufort Scale numbered 13 to 17 are used internationally for reporting tropical cyclones.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states the extensions 'were never widely adopted outside Taiwan and mainland China' and that the World Meteorological Organization 'continues to use the original scale of 0 to 12 for international reporting'. This contradicts the statement about international use.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0004-4004-8004-000000000005",
+        "question_text": "George Simpson was the first person to apply the Beaufort Scale to observation on land.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "Can't tell",
+        "answer_reason": "The passage states that in 1906 Simpson 'extended the scale to land-based observation', but does not confirm he was the first to do so. Someone else could have attempted a land-based application before him that the passage does not mention.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0005-4005-8005-000000000001",
+    "title": "Kintsugi",
+    "body": "Kintsugi, sometimes rendered kintsukuroi, is the Japanese art of repairing broken ceramic objects using a lacquer mixed with powdered gold, silver, or platinum. The repaired vessel displays the fractures prominently as shining veins, rather than concealing them. The practice is commonly associated with an aesthetic philosophy in which damage and repair are understood as part of an object's history, not a cause for disposal.\n\nThe origins of kintsugi are not precisely documented, but a widely repeated account links its development to the late fifteenth-century shogun Ashikaga Yoshimasa, who is said to have been dissatisfied with the metal staples used to repair a damaged Chinese tea bowl and to have commissioned Japanese craftsmen to devise a more aesthetically pleasing alternative. Whether this story is historically accurate remains disputed; no contemporary documents directly confirm it. What is clear is that by the seventeenth century, repaired ceramics with visible gold seams were being collected by tea masters, and some collectors reportedly broke intact vessels deliberately in order to have them repaired in the kintsugi style.\n\nThe lacquer used in kintsugi is derived from the sap of the Toxicodendron vernicifluum tree, commonly called the Japanese lacquer tree. The sap is toxic in its raw form, causing skin reactions similar to those of poison ivy, to which the tree is related. Once hardened, however, the lacquer becomes inert and food-safe. A single repair may require months to complete, as each layer of lacquer must cure fully before the next is applied, and the final gold or silver dusting is added only to the outermost layer.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0005-4005-8005-000000000002",
+        "question_text": "According to the passage, what is the relationship between kintsugi and the shogun Ashikaga Yoshimasa?",
+        "options": [
+          "Yoshimasa is historically confirmed as the inventor of kintsugi",
+          "A popular account credits him with prompting its development, though this is not documented",
+          "Yoshimasa imported the technique from China",
+          "He prohibited the use of metal staples in ceramic repair"
+        ],
+        "correct_answer": "A popular account credits him with prompting its development, though this is not documented",
+        "answer_reason": "The passage describes a 'widely repeated account' linking kintsugi's development to Yoshimasa but notes the story's historical accuracy 'remains disputed' and that 'no contemporary documents directly confirm it'. This matches the option about an undocumented popular account.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0005-4005-8005-000000000003",
+        "question_text": "Which of the following is most strongly suggested by the passage about seventeenth-century attitudes towards kintsugi?",
+        "options": [
+          "Kintsugi was universally regarded as an inferior form of repair",
+          "Some collectors valued kintsugi repairs so highly they damaged intact vessels to obtain them",
+          "Tea masters preferred staples to gold lacquer",
+          "The technique was forbidden outside the shogun's household"
+        ],
+        "correct_answer": "Some collectors valued kintsugi repairs so highly they damaged intact vessels to obtain them",
+        "answer_reason": "The passage states 'some collectors reportedly broke intact vessels deliberately in order to have them repaired in the kintsugi style', directly supporting this interpretation of their attitude.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0005-4005-8005-000000000004",
+        "question_text": "Which of the following is most likely to be true based on the passage?",
+        "options": [
+          "Handling raw lacquer could cause skin irritation similar to that caused by poison ivy",
+          "All ceramic vessels repaired with kintsugi are safe for immediate food use",
+          "Kintsugi cannot be performed on vessels older than the fifteenth century",
+          "Silver is the most commonly used metal in modern kintsugi"
+        ],
+        "correct_answer": "Handling raw lacquer could cause skin irritation similar to that caused by poison ivy",
+        "answer_reason": "The passage states the sap 'is toxic in its raw form, causing skin reactions similar to those of poison ivy'. The other options either overstate passage claims or introduce information not provided.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0005-4005-8005-000000000005",
+        "question_text": "Why does the author mention that the lacquer must cure fully before each new layer is applied?",
+        "options": [
+          "To explain why kintsugi repairs are expensive",
+          "To contrast kintsugi with Western repair methods",
+          "To account for the lengthy time required to complete a single repair",
+          "To argue that kintsugi is more durable than alternatives"
+        ],
+        "correct_answer": "To account for the lengthy time required to complete a single repair",
+        "answer_reason": "The curing detail is given directly after the statement that 'a single repair may require months to complete', and the word 'as' links the two ideas causally — the curing requirement explains the time. The passage does not discuss cost, Western methods, or durability.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0006-4006-8006-000000000001",
+    "title": "The Drake Equation",
+    "body": "The Drake Equation, formulated by astronomer Frank Drake in 1961, is a probabilistic framework for estimating the number of active, communicative extraterrestrial civilisations in our galaxy. It was devised as the agenda for a small conference at the Green Bank Observatory in West Virginia, attended by a handful of scientists including Carl Sagan. Drake later emphasised that the equation was intended as a tool for structuring discussion rather than a method for producing a definitive numerical answer.\n\nThe equation multiplies together seven factors. These include the rate of star formation in the galaxy, the fraction of stars with planetary systems, the fraction of those planets capable of supporting life, the fraction on which life actually develops, the fraction that develop intelligent life, the fraction of intelligent civilisations that produce detectable signals, and the length of time such civilisations remain detectable. The first three factors have become considerably better constrained since 1961, particularly following the detection of thousands of exoplanets by the Kepler space telescope, launched in 2009. The later factors, however, remain largely a matter of speculation.\n\nCritics have argued that the equation's utility is limited precisely because several of its terms cannot meaningfully be estimated. The physicist Enrico Fermi, some years before Drake's formulation, had posed what became known as the Fermi Paradox: if intelligent life is common, why have we not detected any sign of it? Various resolutions have been proposed, including the possibility that technological civilisations are short-lived, that interstellar communication is more difficult than assumed, or that we have simply not been listening for long enough. None of these proposals has achieved general acceptance.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0006-4006-8006-000000000002",
+        "question_text": "According to the passage, which statement best describes Frank Drake's intention for his equation?",
+        "options": [
+          "To produce a precise estimate of extraterrestrial civilisations",
+          "To prove that intelligent life exists elsewhere in the galaxy",
+          "To provide a framework for structuring scientific discussion",
+          "To disprove the Fermi Paradox"
+        ],
+        "correct_answer": "To provide a framework for structuring scientific discussion",
+        "answer_reason": "The passage states Drake 'emphasised that the equation was intended as a tool for structuring discussion rather than a method for producing a definitive numerical answer'. This directly matches the selected option.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0006-4006-8006-000000000003",
+        "question_text": "Which of the equation's terms can be most reasonably described as now better constrained than in 1961?",
+        "options": [
+          "The length of time civilisations remain detectable",
+          "The fraction of intelligent civilisations producing detectable signals",
+          "The rate of star formation and fraction of stars with planets",
+          "The fraction of planets on which intelligent life develops"
+        ],
+        "correct_answer": "The rate of star formation and fraction of stars with planets",
+        "answer_reason": "The passage states 'the first three factors have become considerably better constrained since 1961, particularly following the detection of thousands of exoplanets by Kepler'. The first three factors listed include the star formation rate and the fraction of stars with planetary systems. The later factors, per the passage, 'remain largely a matter of speculation'.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0006-4006-8006-000000000004",
+        "question_text": "If the Fermi Paradox were resolved by evidence that intelligent civilisations typically last only a few centuries, how would this affect the Drake Equation?",
+        "options": [
+          "It would invalidate the equation entirely",
+          "It would reduce the value of the final factor, lowering the estimated number of detectable civilisations",
+          "It would increase the value of the star-formation factor",
+          "It would have no effect on the equation's terms"
+        ],
+        "correct_answer": "It would reduce the value of the final factor, lowering the estimated number of detectable civilisations",
+        "answer_reason": "The passage states the final factor is 'the length of time such civilisations remain detectable'. A shorter lifespan would reduce this factor, which by the equation's multiplicative structure would lower the total estimate. The equation would not be invalidated but recalibrated.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0006-4006-8006-000000000005",
+        "question_text": "Which of the following best summarises the passage?",
+        "options": [
+          "The Drake Equation has definitively estimated the number of extraterrestrial civilisations",
+          "The Drake Equation offers a structured framework for a question that remains partially beyond empirical answer",
+          "The Fermi Paradox has been resolved by the discovery of exoplanets",
+          "Carl Sagan invented the Drake Equation at a conference in Green Bank"
+        ],
+        "correct_answer": "The Drake Equation offers a structured framework for a question that remains partially beyond empirical answer",
+        "answer_reason": "The passage describes the equation as a discussion-structuring tool, notes that some factors remain speculative, and concludes that no proposed resolutions to the related Fermi Paradox have achieved general acceptance. This matches the option describing a framework for a partially unanswerable question. The other options misattribute authorship, overstate achievements, or claim resolutions the passage denies.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0007-4007-8007-000000000001",
+    "title": "The Canal du Midi",
+    "body": "The Canal du Midi, a 240-kilometre waterway linking the Garonne river at Toulouse with the Mediterranean port of Sète, was constructed between 1667 and 1681 under the supervision of Pierre-Paul Riquet. It was the largest civil engineering project in Europe in the seventeenth century. Riquet, a tax collector by profession rather than a trained engineer, had submitted his proposal to the minister Jean-Baptiste Colbert in 1662. The project received royal approval the following year.\n\nThe primary engineering challenge was supplying the canal's summit level with water. Riquet addressed this by constructing a network of dams and feeder channels in the Montagne Noire, a mountain range to the north of the canal's route, which collected rainwater and delivered it to the summit via a 25-kilometre feeder canal. The system was largely original to Riquet's design, although he drew in part on his personal observation of local streams and catchments during several years of informal surveying.\n\nRiquet financed much of the work himself, investing his personal fortune and mortgaging property belonging to his family. He died in October 1680, six months before the canal opened for commercial traffic. His heirs inherited substantial debts but also a share of the canal's future tolls. The canal became commercially important for the transport of wine, wheat, and textiles between the south-west of France and the Mediterranean, and it remained profitable until the expansion of the French railway network in the mid-nineteenth century made barge transport increasingly uncompetitive. The canal was designated a UNESCO World Heritage Site in 1996.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0007-4007-8007-000000000002",
+        "question_text": "Pierre-Paul Riquet was professionally trained as an engineer before he proposed the Canal du Midi.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states Riquet was 'a tax collector by profession rather than a trained engineer', directly contradicting the statement.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0007-4007-8007-000000000003",
+        "question_text": "Riquet lived to see the canal open for commercial traffic.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states Riquet 'died in October 1680, six months before the canal opened for commercial traffic'. The statement is directly contradicted.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0007-4007-8007-000000000004",
+        "question_text": "Riquet had previously worked on other canal construction projects before proposing the Canal du Midi.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "Can't tell",
+        "answer_reason": "The passage states Riquet was 'a tax collector by profession rather than a trained engineer' and refers to 'several years of informal surveying' of streams and catchments, but does not indicate whether he had worked on any other canal projects beforehand. His prior project experience is simply not addressed, so the statement cannot be confirmed or contradicted.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0007-4007-8007-000000000005",
+        "question_text": "The Canal du Midi ceased to be profitable as a result of railway expansion.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "True",
+        "answer_reason": "The passage states the canal 'remained profitable until the expansion of the French railway network in the mid-nineteenth century made barge transport increasingly uncompetitive'. The necessary inference is that railway expansion led to its loss of profitability.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0008-4008-8008-000000000001",
+    "title": "Venetian Glassmaking on Murano",
+    "body": "The Venetian glass industry was relocated from the city proper to the island of Murano by a decree of the Venetian Republic in 1291. The official justification was the prevention of fires, which were frequent in Venice's densely packed wooden buildings and were exacerbated by the intense heat of glassmaking furnaces. A secondary, less publicly acknowledged motive was the easier supervision and containment of the industry's closely guarded techniques.\n\nMuranese glassmakers enjoyed unusual privileges. Their daughters were permitted to marry into the Venetian nobility, a right denied to almost all other artisans. In return, however, they were legally prohibited from leaving the republic. Penalties for those who did leave to practise their craft abroad ranged from confiscation of family property to, in extreme cases, orders for assassination. Despite these measures, some craftsmen did emigrate, and Venetian glassmaking methods spread gradually to France, Bohemia, and England over the sixteenth and seventeenth centuries.\n\nMurano's dominance declined in the eighteenth century as cheaper lead crystal developed by English glassmakers captured a growing share of the European market. The island experienced a partial revival in the nineteenth century, particularly after 1866 when the Austrian administration that had governed the region was replaced by the newly unified Italian state. Traditional techniques such as filigrana and millefiori were deliberately revived for both domestic sale and export. Today, around fifty glassworks remain on the island, though many produce tourist goods rather than the elaborate objects for which Murano was historically famous.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0008-4008-8008-000000000002",
+        "question_text": "According to the passage, what was the publicly stated reason for moving the glass industry to Murano?",
+        "options": [
+          "To allow easier supervision of the industry's techniques",
+          "To reduce the risk of fires in Venice",
+          "To permit glassmakers' daughters to marry into the nobility",
+          "To compete with English lead crystal producers"
+        ],
+        "correct_answer": "To reduce the risk of fires in Venice",
+        "answer_reason": "The passage states 'the official justification was the prevention of fires'. The supervision motive is explicitly described as a 'secondary, less publicly acknowledged motive', not the publicly stated reason.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0008-4008-8008-000000000003",
+        "question_text": "Which of the following is most strongly supported by the passage regarding the social status of Muranese glassmakers?",
+        "options": [
+          "They were considered inferior to other artisans",
+          "They held legal privileges that distinguished them from most other craftspeople",
+          "They were granted full Venetian citizenship regardless of origin",
+          "They were permitted to travel freely throughout Europe"
+        ],
+        "correct_answer": "They held legal privileges that distinguished them from most other craftspeople",
+        "answer_reason": "The passage states that glassmakers 'enjoyed unusual privileges' and specifically notes the marriage right 'denied to almost all other artisans'. The claim about free travel is directly contradicted by the passage, which describes strict prohibitions on leaving the republic.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0008-4008-8008-000000000004",
+        "question_text": "What does the passage suggest about the effectiveness of restrictions on glassmakers leaving Venice?",
+        "options": [
+          "The restrictions completely prevented emigration",
+          "The restrictions were effective only until the eighteenth century",
+          "Despite the restrictions, some craftsmen emigrated and spread the techniques abroad",
+          "The restrictions led to the complete collapse of foreign glass industries"
+        ],
+        "correct_answer": "Despite the restrictions, some craftsmen emigrated and spread the techniques abroad",
+        "answer_reason": "The passage states 'despite these measures, some craftsmen did emigrate, and Venetian glassmaking methods spread gradually to France, Bohemia, and England'. The first option is directly contradicted; the others introduce claims not made in the passage.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0008-4008-8008-000000000005",
+        "question_text": "If it were discovered that filigrana and millefiori techniques had actually been developed outside Murano, how would this most directly affect the passage's account?",
+        "options": [
+          "It would invalidate the claim that Murano's industry declined in the eighteenth century",
+          "It would complicate the description of these techniques as traditional to Murano",
+          "It would confirm the assassination policy was ineffective",
+          "It would prove the Austrian administration was responsible for the revival"
+        ],
+        "correct_answer": "It would complicate the description of these techniques as traditional to Murano",
+        "answer_reason": "The passage describes filigrana and millefiori as 'traditional techniques' that were 'revived' on Murano. If they were actually developed elsewhere, this characterisation as traditional to Murano would be challenged. The other options either concern unrelated claims or overstate the implication.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0009-4009-8009-000000000001",
+    "title": "The Dvorak Keyboard",
+    "body": "The Dvorak Simplified Keyboard, patented in 1936 by August Dvorak and his brother-in-law William Dealey, was designed as an alternative to the QWERTY layout that had dominated English-language typewriters since the 1870s. Dvorak, a professor of education at the University of Washington, argued that the QWERTY arrangement had been developed to address mechanical limitations of early typewriters — specifically, to reduce the jamming of neighbouring typebars — and was therefore poorly suited to the needs of typists once those mechanical issues had been resolved.\n\nOn the Dvorak layout, the most frequently used English letters are placed on the middle row, or home row, so that a typist's fingers rest over them by default. Vowels are assigned to the left hand; the most common consonants to the right. Advocates have argued the layout reduces finger travel distance, increases typing speed, and lowers the risk of repetitive strain injury. However, a 1956 study commissioned by the United States General Services Administration, which had considered adopting the Dvorak layout for federal use, concluded that the gains in efficiency did not justify the cost and disruption of retraining. The study has been criticised by later researchers for methodological flaws, including small sample sizes and potential bias in the selection of comparison typists.\n\nDespite its claimed advantages, the Dvorak layout has not displaced QWERTY, and the latter remains the default arrangement on the overwhelming majority of keyboards sold today. The economist Paul David cited QWERTY's persistence in a 1985 paper as a classic example of path dependence in technology — the phenomenon whereby an initially arbitrary choice becomes locked in through network effects and sunk costs, even when alternatives might be more efficient.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0009-4009-8009-000000000002",
+        "question_text": "The QWERTY layout was originally designed to accommodate mechanical constraints of early typewriters.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "True",
+        "answer_reason": "The passage states the QWERTY arrangement 'had been developed to address mechanical limitations of early typewriters — specifically, to reduce the jamming of neighbouring typebars', supporting this as Dvorak's documented argument.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0009-4009-8009-000000000003",
+        "question_text": "The 1956 General Services Administration study concluded that the Dvorak layout offered no efficiency advantages over QWERTY.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states the study 'concluded that the gains in efficiency did not justify the cost and disruption of retraining'. This acknowledges efficiency gains existed but deemed them insufficient to warrant change, which contradicts the claim of no efficiency advantages.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0009-4009-8009-000000000004",
+        "question_text": "The Dvorak keyboard reduces the risk of repetitive strain injury for typists.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "Can't tell",
+        "answer_reason": "The passage says 'advocates have argued' the layout lowers RSI risk, but this is presented as a claim by proponents rather than an established fact. The passage neither confirms nor denies the claim independently.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0009-4009-8009-000000000005",
+        "question_text": "Paul David's 1985 paper argued that QWERTY is more efficient than alternatives.",
+        "options": ["True", "False", "Can't tell"],
+        "correct_answer": "False",
+        "answer_reason": "The passage states David cited QWERTY as an example of path dependence, where an arbitrary choice becomes locked in 'even when alternatives might be more efficient'. This implies David's argument suggested alternatives may be more, not less, efficient — contradicting the statement.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "f1a2b3c4-0010-4010-8010-000000000001",
+    "title": "Lichen Biology",
+    "body": "A lichen is not a single organism but a composite life form, consisting of a fungus living in symbiotic partnership with one or more photosynthetic organisms — most commonly a green alga, though in some species a cyanobacterium fulfils this role instead. The fungus provides structural support and protection, while the photosynthetic partner supplies sugars produced through photosynthesis. This association was first characterised in 1867 by the Swiss botanist Simon Schwendener, whose proposal was initially rejected by many contemporaries who regarded lichens as simple plants.\n\nLichens are slow-growing and exceptionally long-lived. Some crustose species found in Arctic regions are estimated to be more than 8,000 years old, making them among the oldest living organisms on Earth. Their durability allows them to colonise surfaces inhospitable to most life, including bare rock, Antarctic dry valleys, and the exterior of spacecraft exposed to vacuum conditions during experiments conducted by the European Space Agency in 2005. The same characteristics, however, make lichens sensitive indicators of air quality: many species are intolerant of sulphur dioxide and are absent from industrialised areas.\n\nRecent genomic work, reported in a 2016 paper by researchers at the University of Montana, has complicated the classical two-partner model of lichen symbiosis. The researchers identified a third partner — a yeast of the Basidiomycota group — embedded within the cortex of many lichen species previously believed to involve only a single fungus and alga. The discovery has prompted a re-examination of species distinctions that had been based on chemical differences between lichens previously thought to involve the same fungal and algal partners.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "f1a2b3c4-0010-4010-8010-000000000002",
+        "question_text": "Which of the following most accurately describes the photosynthetic partner in a lichen?",
+        "options": [
+          "Always a green alga",
+          "Usually a green alga, but sometimes a cyanobacterium",
+          "A specialised type of fungus",
+          "A yeast of the Basidiomycota group"
+        ],
+        "correct_answer": "Usually a green alga, but sometimes a cyanobacterium",
+        "answer_reason": "The passage states the photosynthetic partner is 'most commonly a green alga, though in some species a cyanobacterium fulfils this role instead'. The first option's use of 'always' is contradicted by the passage's hedging.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0010-4010-8010-000000000003",
+        "question_text": "In the phrase 'their durability allows them to colonise surfaces inhospitable to most life', the word 'their' most likely refers to:",
+        "options": [
+          "Crustose species in Arctic regions only",
+          "Lichens in general",
+          "Photosynthetic partners",
+          "Green algae and cyanobacteria"
+        ],
+        "correct_answer": "Lichens in general",
+        "answer_reason": "Although 'crustose species in Arctic regions' is the most recent noun phrase, the examples that follow — Antarctic dry valleys and the exterior of spacecraft in European Space Agency experiments — cannot plausibly refer only to Arctic crustose species. The scope of the durability claim therefore extends to lichens as a whole, consistent with the paragraph's opening statement that 'lichens are slow-growing and exceptionally long-lived'.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f1a2b3c4-0010-4010-8010-000000000004",
+        "question_text": "Which of the following can be most reasonably inferred about lichens and air pollution?",
+        "options": [
+          "Lichens increase sulphur dioxide concentrations in industrialised areas",
+          "All lichen species can tolerate high sulphur dioxide levels",
+          "The absence of certain lichen species can indicate poor air quality",
+          "Lichens grown on spacecraft are immune to pollution"
+        ],
+        "correct_answer": "The absence of certain lichen species can indicate poor air quality",
+        "answer_reason": "The passage states that 'many species are intolerant of sulphur dioxide and are absent from industrialised areas', which directly supports the inference that their absence serves as an air-quality indicator — consistent with the passage's description of lichens as 'sensitive indicators of air quality'.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1a2b3c4-0010-4010-8010-000000000005",
+        "question_text": "How has the 2016 University of Montana research affected the classification of lichens?",
+        "options": [
+          "It has confirmed the traditional two-partner model of lichen symbiosis",
+          "It has prompted a reconsideration of species distinctions based on chemical differences",
+          "It has identified a new class of algae within lichen structures",
+          "It has disproved Schwendener's original symbiosis proposal"
+        ],
+        "correct_answer": "It has prompted a reconsideration of species distinctions based on chemical differences",
+        "answer_reason": "The passage states the discovery 'has prompted a re-examination of species distinctions that had been based on chemical differences'. The first option is contradicted by the passage saying the work has 'complicated' the two-partner model. The fourth option is wrong because the research adds a third partner rather than disproving the existence of a symbiotic relationship.",
+        "order_index": 3,
+        "difficulty": "normal"
       }
     ]
   }
-]
+] 

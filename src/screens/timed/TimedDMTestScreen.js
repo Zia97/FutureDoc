@@ -22,7 +22,7 @@ import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
 import { DMStemContent, DMOptionsContent } from '../../components/dm/DMQuestionRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
-import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedDMResultsScreen from '../../components/TimedDMResultsScreen';
 
 export default function TimedDMTestScreen({ route, navigation }) {
@@ -150,7 +150,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
 
   if (showReview) {
     return (
-      <SJTestReviewScreen
+      <TimedTestReviewScreen
         questions={flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
@@ -159,7 +159,6 @@ export default function TimedDMTestScreen({ route, navigation }) {
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
         title="Decision Making"
-        groupLabel="Question"
       />
     );
   }

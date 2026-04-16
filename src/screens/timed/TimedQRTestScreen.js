@@ -24,7 +24,7 @@ import BottomToolbar from '../../components/BottomToolbar';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
-import SJTestReviewScreen from '../../components/SJTestReviewScreen';
+import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedQRResultsScreen from '../../components/TimedQRResultsScreen';
 
 export default function TimedQRTestScreen({ route, navigation }) {
@@ -149,7 +149,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
 
   if (showReview) {
     return (
-      <SJTestReviewScreen
+      <TimedTestReviewScreen
         questions={test.flatQuestions}
         getStatus={getQuestionStatus}
         flags={flags}
