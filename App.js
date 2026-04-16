@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { SubscriptionProvider } from './src/context/SubscriptionContext';
+import { NetworkProvider } from './src/context/NetworkContext';
 import ErrorBoundary from './src/components/ErrorBoundary';
 import AppNavigator from './src/navigation/AppNavigator';
 import * as Sentry from '@sentry/react-native';
@@ -44,13 +45,15 @@ export default Sentry.wrap(function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ErrorBoundary>
-        <ThemeProvider>
-          <AuthProvider>
-            <SubscriptionProvider>
-              <AppNavigator />
-            </SubscriptionProvider>
-          </AuthProvider>
-        </ThemeProvider>
+        <NetworkProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <SubscriptionProvider>
+                <AppNavigator />
+              </SubscriptionProvider>
+            </AuthProvider>
+          </ThemeProvider>
+        </NetworkProvider>
       </ErrorBoundary>
     </GestureHandlerRootView>
   );

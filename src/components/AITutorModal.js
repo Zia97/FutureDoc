@@ -221,16 +221,25 @@ function MessageBubble({ message }) {
 
 function ErrorBanner({ error, onUpgrade }) {
   const isLimit = error === TUTOR_ERROR.LIFETIME_LIMIT;
+  const isOffline = error === TUTOR_ERROR.OFFLINE;
+
+  let title;
+  let body;
+  if (isLimit) {
+    title = 'Usage limit reached';
+    body = "You've used all 5 free AI explanations. Upgrade for unlimited AI Tutor access.";
+  } else if (isOffline) {
+    title = "You're offline";
+    body = 'Reconnect to the internet to ask the AI tutor. Your message was not sent.';
+  } else {
+    title = 'Something went wrong';
+    body = 'Could not reach the AI tutor. Check your connection and try again.';
+  }
+
   return (
     <View style={styles.errorBanner}>
-      <Text style={styles.errorTitle}>
-        {isLimit ? 'Usage limit reached' : 'Something went wrong'}
-      </Text>
-      <Text style={styles.errorText}>
-        {error === TUTOR_ERROR.LIFETIME_LIMIT
-          ? "You've used all 5 free AI explanations. Upgrade for unlimited AI Tutor access."
-          : 'Could not reach the AI tutor. Check your connection and try again.'}
-      </Text>
+      <Text style={styles.errorTitle}>{title}</Text>
+      <Text style={styles.errorText}>{body}</Text>
       {isLimit && onUpgrade && (
         <TouchableOpacity style={styles.upgradeBtn} onPress={onUpgrade} activeOpacity={0.8}>
           <Text style={styles.upgradeBtnText}>Upgrade to Premium</Text>

@@ -5,6 +5,7 @@ export const TUTOR_ERROR = {
   DAILY_LIMIT: 'daily_limit_reached',
   LIFETIME_LIMIT: 'lifetime_limit_reached',
   NETWORK: 'network_error',
+  OFFLINE: 'offline',
 };
 
 /**
@@ -57,7 +58,11 @@ export function useAITutor(questionContext) {
       },
       onError: (err) => {
         const code = err?.code;
-        if (code === TUTOR_ERROR.DAILY_LIMIT || code === TUTOR_ERROR.LIFETIME_LIMIT) {
+        if (
+          code === TUTOR_ERROR.DAILY_LIMIT ||
+          code === TUTOR_ERROR.LIFETIME_LIMIT ||
+          code === TUTOR_ERROR.OFFLINE
+        ) {
           setError(code);
         } else {
           setError(TUTOR_ERROR.NETWORK);

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
+import NetInfo from '@react-native-community/netinfo';
 import { useAuth } from '../context/AuthContext';
 import { flush } from '../services/timedExamSyncQueue';
 
@@ -19,6 +20,9 @@ export function useTimedExamSyncOnForeground() {
   const { user } = useAuth();
   const userRef = useRef(user);
   userRef.current = user;
+  // Tracks the last reachability we saw so we only flush on the
+  // false → true edge (NetInfo emits multiple events while online).
+  const wasOnlineRef = useRef(true);
 
   useEffect(() => {
     if (!user) return;
@@ -27,12 +31,25 @@ export function useTimedExamSyncOnForeground() {
     // when the app was killed while items were still queued.
     flush(user).catch(() => {});
 
-    const sub = AppState.addEventListener('change', (state) => {
+    const appStateSub = AppState.addEventListener('change', (state) => {
       if (state === 'active' && userRef.current) {
         flush(userRef.current).catch(() => {});
       }
     });
 
-    return () => sub.remove();
+    // Reconnect listener — covers the user-keeps-app-open-on-flaky-wifi
+    // case that AppState alone misses.
+    const netSub = NetInfo.addEventListener((s) => {
+      const isOnline = s.isInternetReachable !== false && s.isConnected !== false;
+      if (isOnline && !wasOnlineRef.current && userRef.current) {
+        flush(userRef.current).catch(() => {});
+      }
+      wasOnlineRef.current = isOnline;
+    });
+
+    return () => {
+      appStateSub.remove();
+      netSub();
+    };
   }, [user]);
 }

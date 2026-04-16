@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase';
+import { getIsOnline } from '../context/NetworkContext';
 
 const FUNCTION_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/ai-tutor`;
 
@@ -19,6 +20,14 @@ export async function streamAITutor({
   onDone,
   onError,
 }) {
+  // Pre-flight: never debit a credit (or stall on a hung fetch) when offline.
+  // Streaming AI responses are non-idempotent and credit-gated server-side, so
+  // we refuse to even start the request. The caller surfaces an inline retry.
+  if (!getIsOnline()) {
+    onError({ code: 'offline' });
+    return;
+  }
+
   const { data: { session } } = await supabase.auth.getSession();
   if (!session) {
     onError(new Error('Not authenticated'));
