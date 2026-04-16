@@ -1,9 +1,26 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Alert } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function PracticeModeScreen({ navigation }) {
   const { theme: t } = useTheme();
+  const { isAnonymous } = useAuth();
+
+  const handleTimedPractice = () => {
+    if (isAnonymous) {
+      Alert.alert(
+        'Create an account',
+        'Timed practice simulates real UCAT conditions and saves your results so you can track progress. Create a free account to unlock it.',
+        [
+          { text: 'Not now', style: 'cancel' },
+          { text: 'Create account', onPress: () => navigation.navigate('SignUp') },
+        ],
+      );
+      return;
+    }
+    navigation.navigate('TimedPracticeSections');
+  };
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
@@ -32,13 +49,20 @@ export default function PracticeModeScreen({ navigation }) {
         <TouchableOpacity
           style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: '#e11d48' }]}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('TimedPracticeSections')}
+          onPress={handleTimedPractice}
         >
           <View style={[styles.iconBox, { backgroundColor: '#e11d48' }]}>
             <Text style={styles.iconText}>⏱</Text>
           </View>
           <View style={styles.cardText}>
-            <Text style={[styles.cardTitle, { color: t.text }]}>Timed Practice</Text>
+            <View style={styles.cardTitleRow}>
+              <Text style={[styles.cardTitle, { color: t.text }]}>Timed Practice</Text>
+              {isAnonymous && (
+                <View style={[styles.lockBadge, { borderColor: t.border, backgroundColor: t.bgInput }]}>
+                  <Text style={[styles.lockBadgeText, { color: t.textMuted }]}>Account required</Text>
+                </View>
+              )}
+            </View>
             <Text style={[styles.cardDescription, { color: t.textSecondary }]}>
               Sit timed tests under real UCAT conditions
             </Text>
@@ -95,9 +119,25 @@ const styles = StyleSheet.create({
   cardText: {
     flex: 1,
   },
+  cardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
   cardTitle: {
     fontSize: 17,
     fontWeight: '700',
+  },
+  lockBadge: {
+    borderRadius: 6,
+    borderWidth: 1,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  lockBadgeText: {
+    fontSize: 11,
+    fontWeight: '600',
   },
   cardDescription: {
     fontSize: 13,

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 
@@ -45,9 +46,27 @@ function getPeriodLabel(pkg) {
 
 export default function PaywallScreen({ navigation }) {
   const { theme: t } = useTheme();
+  const { isAnonymous } = useAuth();
   const { offerings, purchasePackage, restorePurchases, isPro } = useSubscription();
   const [selected, setSelected] = useState('season');
   const [loading, setLoading] = useState(false);
+
+  // Anonymous users must create an account before purchasing — RevenueCat
+  // can't reliably persist an entitlement against a throwaway anonymous id
+  // (reinstall = lost purchase).
+  useEffect(() => {
+    if (!isAnonymous) return;
+    Alert.alert(
+      'Create an account',
+      'You need an account to subscribe so your purchase is saved and restorable across devices.',
+      [
+        { text: 'Cancel', style: 'cancel', onPress: () => navigation.goBack() },
+        { text: 'Create account', onPress: () => navigation.replace('SignUp') },
+      ],
+    );
+  }, [isAnonymous, navigation]);
+
+  if (isAnonymous) return null;
 
   // Build plans from RevenueCat offerings or fall back to hardcoded
   const plans = useMemo(() => {

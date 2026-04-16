@@ -10,7 +10,14 @@ WebBrowser.maybeCompleteAuthSession();
 
 const AuthContext = createContext(null);
 
-const isEmailVerified = (u) => !!u && !!u.email_confirmed_at;
+// A user is "usable" (session-ready) if they have a session at all.
+// Anonymous users have no email; real users must have a verified email
+// before we treat them as signed in (prevents unverified-email bypass).
+const isUsable = (u) => {
+  if (!u) return false;
+  if (u.is_anonymous) return true;
+  return !!u.email_confirmed_at;
+};
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -18,13 +25,21 @@ export function AuthProvider({ children }) {
   const [passwordRecovery, setPasswordRecovery] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(isEmailVerified(session?.user) ? session.user : null);
+    // Anonymous-by-default: if there's no session on startup, silently create
+    // an anonymous one so the app always lands on Home with a usable user.
+    supabase.auth.getSession().then(async ({ data: { session } }) => {
+      if (isUsable(session?.user)) {
+        setUser(session.user);
+        setLoading(false);
+        return;
+      }
+      const { data, error } = await supabase.auth.signInAnonymously();
+      if (!error) setUser(isUsable(data?.user) ? data.user : null);
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(isEmailVerified(session?.user) ? session.user : null);
+      setUser(isUsable(session?.user) ? session.user : null);
     });
 
     return () => subscription.unsubscribe();
@@ -57,7 +72,7 @@ export function AuthProvider({ children }) {
           }
         }
         const { data: { session } } = await supabase.auth.getSession();
-        setUser(isEmailVerified(session?.user) ? session.user : null);
+        setUser(isUsable(session?.user) ? session.user : null);
       }
     };
 
@@ -75,10 +90,18 @@ export function AuthProvider({ children }) {
   const signUp = (email, password) =>
     supabase.auth.signUp({ email, password });
 
+  const signInAnonymously = () => supabase.auth.signInAnonymously();
+
+  // Upgrades the current anonymous user into a real account. Preserves user_id,
+  // so AI usage count, struggles, and progress all carry over.
+  const linkAccount = (email, password) =>
+    supabase.auth.updateUser({ email, password });
+
   const signIn = async (email, password) => {
     const result = await supabase.auth.signInWithPassword({ email, password });
     if (result.error) return result;
-    if (!isEmailVerified(result.data?.user)) {
+    const u = result.data?.user;
+    if (u && !u.is_anonymous && !u.email_confirmed_at) {
       await supabase.auth.signOut();
       return {
         data: null,
@@ -151,7 +174,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery }}>
+    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, linkAccount, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery }}>
       {children}
     </AuthContext.Provider>
   );

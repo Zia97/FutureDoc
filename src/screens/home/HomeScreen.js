@@ -37,9 +37,10 @@ function useFadeSlide(delay = 0) {
 }
 
 export default function HomeScreen({ navigation }) {
-  const { user } = useAuth();
+  const { user, isAnonymous } = useAuth();
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
+  const showProfile = !!user && !isAnonymous;
   const emailInitial = user?.email?.[0]?.toUpperCase() ?? '?';
 
   const headerAnim = useFadeSlide(0);
@@ -62,7 +63,7 @@ export default function HomeScreen({ navigation }) {
       <Animated.View style={[styles.header, headerAnim]}>
         <Text style={[styles.wordmark, { color: t.text }]}>UCAT Genius AI</Text>
         <View style={styles.headerRight}>
-          {!isPro && (
+          {!isPro && !isAnonymous && (
             <TouchableOpacity
               style={[styles.proButton, { backgroundColor: t.accent }]}
               onPress={() => navigation.navigate('Paywall')}
@@ -71,13 +72,23 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.proButtonText}>PRO</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            style={[styles.profileButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
-            onPress={() => navigation.navigate('Profile')}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.profileInitial, { color: t.accent }]}>{emailInitial}</Text>
-          </TouchableOpacity>
+          {showProfile ? (
+            <TouchableOpacity
+              style={[styles.profileButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
+              onPress={() => navigation.navigate('Profile')}
+              activeOpacity={0.8}
+            >
+              <Text style={[styles.profileInitial, { color: t.accent }]}>{emailInitial}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Login')}
+              activeOpacity={0.7}
+              style={styles.loginButton}
+            >
+              <Text style={[styles.loginButtonText, { color: t.text }]}>Log in</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </Animated.View>
 
@@ -103,22 +114,24 @@ export default function HomeScreen({ navigation }) {
         >
           <Text style={styles.primaryButtonText}>Start Practising</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.analyticsButton, { backgroundColor: t.bgCard, borderColor: t.accent, borderLeftWidth: 4 }]}
-          onPress={() =>
-            isPro
-              ? navigation.navigate('PerformanceAnalytics')
-              : navigation.navigate('Paywall')
-          }
-          activeOpacity={0.85}
-        >
-          <Text style={[styles.analyticsButtonText, { color: t.text }]}>Performance Analytics</Text>
-          {!isPro && (
-            <View style={[styles.proBadge, { backgroundColor: t.accent }]}>
-              <Text style={styles.proBadgeText}>PRO</Text>
-            </View>
-          )}
-        </TouchableOpacity>
+        {!isAnonymous && (
+          <TouchableOpacity
+            style={[styles.analyticsButton, { backgroundColor: t.bgCard, borderColor: t.accent, borderLeftWidth: 4 }]}
+            onPress={() =>
+              isPro
+                ? navigation.navigate('PerformanceAnalytics')
+                : navigation.navigate('Paywall')
+            }
+            activeOpacity={0.85}
+          >
+            <Text style={[styles.analyticsButtonText, { color: t.text }]}>Performance Analytics</Text>
+            {!isPro && (
+              <View style={[styles.proBadge, { backgroundColor: t.accent }]}>
+                <Text style={styles.proBadgeText}>PRO</Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={[styles.secondaryButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
           onPress={() => navigation.navigate('AboutUCAT')}
@@ -175,6 +188,14 @@ const styles = StyleSheet.create({
   profileInitial: {
     fontSize: 15,
     fontWeight: '700',
+  },
+  loginButton: {
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+  },
+  loginButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
   },
   hero: {
     flex: 1,

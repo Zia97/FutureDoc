@@ -9,18 +9,24 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function SignUpScreen({ navigation }) {
-  const { signUp } = useAuth();
+  const { signUp, linkAccount, isAnonymous } = useAuth();
   const { theme: t } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleSignUp = async () => {
+  const dismissToHome = () => {
+    if (navigation.canGoBack()) navigation.goBack();
+    else navigation.navigate('Home');
+  };
+
+  const handleSubmit = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter your email and password.');
       return;
@@ -30,15 +36,30 @@ export default function SignUpScreen({ navigation }) {
       return;
     }
     setLoading(true);
-    const { error } = await signUp(email, password);
-    setLoading(false);
-    if (error) {
-      Alert.alert('Sign up failed', error.message);
+    if (isAnonymous) {
+      // Upgrade existing anonymous account — preserves user_id + progress + AI usage.
+      const { error } = await linkAccount(email, password);
+      setLoading(false);
+      if (error) {
+        Alert.alert('Could not save progress', error.message);
+        return;
+      }
+      Alert.alert(
+        'Check your email',
+        'We sent you a confirmation link. Verify your email to finish setting up your account.',
+        [{ text: 'OK', onPress: dismissToHome }],
+      );
     } else {
+      const { error } = await signUp(email, password);
+      setLoading(false);
+      if (error) {
+        Alert.alert('Sign up failed', error.message);
+        return;
+      }
       Alert.alert(
         'Check your email',
         'We sent you a confirmation link. Please verify your email before signing in.',
-        [{ text: 'OK', onPress: () => navigation.navigate('Login') }]
+        [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
       );
     }
   };
@@ -48,45 +69,52 @@ export default function SignUpScreen({ navigation }) {
       style={[styles.container, { backgroundColor: t.bg }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={[styles.title, { color: t.text }]}>UCAT Genius AI</Text>
-      <Text style={[styles.subtitle, { color: t.textMuted }]}>Create your account</Text>
+      <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+        <Text style={[styles.title, { color: t.text }]}>UCAT Genius AI</Text>
+        <Text style={[styles.subtitle, { color: t.textMuted }]}>Create your account</Text>
 
-      <TextInput
-        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
-        placeholder="Email"
-        placeholderTextColor={t.textMuted}
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
-        placeholder="Password (min 6 characters)"
-        placeholderTextColor={t.textMuted}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+        <TextInput
+          style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
+          placeholder="Email"
+          placeholderTextColor={t.textMuted}
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+        />
+        <TextInput
+          style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
+          placeholder="Password (min 6 characters)"
+          placeholderTextColor={t.textMuted}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: t.accent }]} onPress={handleSignUp} disabled={loading}>
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Sign Up</Text>
-        )}
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: t.accent }]}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Sign Up</Text>
+          )}
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-        <Text style={[styles.link, { color: t.accent }]}>Already have an account? Sign in</Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+          <Text style={[styles.link, { color: t.accent }]}>Already have an account? Sign in</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: { flex: 1 },
+  scroll: {
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 24,
@@ -95,10 +123,12 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: '700',
     marginBottom: 8,
+    textAlign: 'center',
   },
   subtitle: {
     fontSize: 16,
     marginBottom: 40,
+    textAlign: 'center',
   },
   input: {
     width: '100%',

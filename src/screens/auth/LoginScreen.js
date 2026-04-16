@@ -22,6 +22,11 @@ export default function LoginScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(null);
 
+  const dismissToHome = () => {
+    if (navigation.canGoBack()) navigation.goBack();
+    else navigation.navigate('Home');
+  };
+
   const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter your email and password.');
@@ -30,21 +35,33 @@ export default function LoginScreen({ navigation }) {
     setLoading(true);
     const { error } = await signIn(email, password);
     setLoading(false);
-    if (error) Alert.alert('Login failed', error.message);
+    if (error) {
+      Alert.alert('Login failed', error.message);
+      return;
+    }
+    dismissToHome();
   };
 
   const handleGoogle = async () => {
     setSocialLoading('google');
     const { error } = await signInWithGoogle();
     setSocialLoading(null);
-    if (error) Alert.alert('Google sign-in failed', error.message);
+    if (error) {
+      Alert.alert('Google sign-in failed', error.message);
+      return;
+    }
+    dismissToHome();
   };
 
   const handleApple = async () => {
     setSocialLoading('apple');
     try {
       const { error } = await signInWithApple();
-      if (error) Alert.alert('Apple sign-in failed', error.message);
+      if (error) {
+        Alert.alert('Apple sign-in failed', error.message);
+        return;
+      }
+      dismissToHome();
     } catch (e) {
       if (e.code !== 'ERR_REQUEST_CANCELED') {
         Alert.alert('Apple sign-in failed', e.message);

@@ -25,7 +25,7 @@ const PRACTICE_SECTIONS = [
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const { user, signOut, deleteAccount } = useAuth();
+  const { user, signOut, deleteAccount, isAnonymous } = useAuth();
   const { theme: t, isDark, toggleDark } = useTheme();
   const { isPro, presentCustomerCenter } = useSubscription();
   const [deleting, setDeleting] = useState(false);
@@ -67,10 +67,22 @@ export default function ProfileScreen() {
     }
   };
 
+  const dismissToHome = () => {
+    if (navigation.canGoBack()) navigation.popToTop();
+    else navigation.navigate('Home');
+  };
+
   const handleSignOut = () => {
     Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
       { text: 'Cancel', style: 'cancel' },
-      { text: 'Sign Out', style: 'destructive', onPress: signOut },
+      {
+        text: 'Sign Out',
+        style: 'destructive',
+        onPress: async () => {
+          await signOut();
+          dismissToHome();
+        },
+      },
     ]);
   };
 
@@ -96,6 +108,7 @@ export default function ProfileScreen() {
                     setDeleting(true);
                     try {
                       await deleteAccount();
+                      dismissToHome();
                     } catch {
                       setDeleting(false);
                       Alert.alert('Error', 'Could not delete account. Please try again or contact support.');
@@ -110,7 +123,8 @@ export default function ProfileScreen() {
     );
   };
 
-  const emailInitial = user?.email?.[0]?.toUpperCase() ?? '?';
+  const emailInitial = isAnonymous ? 'G' : (user?.email?.[0]?.toUpperCase() ?? '?');
+  const emailLabel = isAnonymous ? 'Guest — progress saved on this device' : user?.email;
 
   return (
     <ScrollView
@@ -122,8 +136,39 @@ export default function ProfileScreen() {
         <View style={[styles.avatar, { backgroundColor: t.accent }]}>
           <Text style={styles.avatarText}>{emailInitial}</Text>
         </View>
-        <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{user?.email}</Text>
+        <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{emailLabel}</Text>
       </View>
+
+      {isAnonymous && (
+        <>
+          <Text style={[styles.sectionHeading, { color: t.text }]}>Account</Text>
+          <TouchableOpacity
+            style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.accent }]}
+            onPress={() => navigation.navigate('SignUp')}
+            activeOpacity={0.8}
+          >
+            <View style={styles.subscriptionRow}>
+              <View style={styles.subscriptionInfo}>
+                <Text style={[styles.subscriptionPlan, { color: t.text }]}>Save your progress</Text>
+                <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
+                  Add an email to sync across devices and avoid losing progress if you reinstall.
+                </Text>
+              </View>
+              <View style={[styles.upgradeBadge, { backgroundColor: t.accent }]}>
+                <Text style={styles.upgradeBadgeText}>Save</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.manageButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
+            onPress={() => navigation.navigate('Login')}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.manageButtonText, { color: t.text }]}>Already have an account? Sign in</Text>
+            <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
+          </TouchableOpacity>
+        </>
+      )}
 
       {/* Subscription */}
       <Text style={[styles.sectionHeading, { color: t.text }]}>Subscription</Text>
@@ -258,27 +303,31 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity
-        style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
-        onPress={handleSignOut}
-        activeOpacity={0.8}
-      >
-        <Text style={[styles.signOutText, { color: t.textSecondary }]}>Sign Out</Text>
-      </TouchableOpacity>
+      {!isAnonymous && (
+        <TouchableOpacity
+          style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
+          onPress={handleSignOut}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.signOutText, { color: t.textSecondary }]}>Sign Out</Text>
+        </TouchableOpacity>
+      )}
 
       {/* Delete Account */}
-      <TouchableOpacity
-        style={[styles.deleteButton, { borderColor: t.danger ?? '#dc2626' }]}
-        onPress={handleDeleteAccount}
-        activeOpacity={0.8}
-        disabled={deleting}
-      >
-        {deleting ? (
-          <ActivityIndicator size="small" color={t.danger ?? '#dc2626'} />
-        ) : (
-          <Text style={[styles.deleteText, { color: t.danger ?? '#dc2626' }]}>Delete Account</Text>
-        )}
-      </TouchableOpacity>
+      {!isAnonymous && (
+        <TouchableOpacity
+          style={[styles.deleteButton, { borderColor: t.danger ?? '#dc2626' }]}
+          onPress={handleDeleteAccount}
+          activeOpacity={0.8}
+          disabled={deleting}
+        >
+          {deleting ? (
+            <ActivityIndicator size="small" color={t.danger ?? '#dc2626'} />
+          ) : (
+            <Text style={[styles.deleteText, { color: t.danger ?? '#dc2626' }]}>Delete Account</Text>
+          )}
+        </TouchableOpacity>
+      )}
     </ScrollView>
   );
 }

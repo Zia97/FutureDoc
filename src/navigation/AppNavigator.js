@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, View } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,6 +13,8 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
+import ToSAcceptanceScreen, { TOS_FLAG_KEY } from '../screens/onboarding/ToSAcceptanceScreen';
+import HeaderAuthButton from '../components/HeaderAuthButton';
 
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/home/ProfileScreen';
@@ -51,16 +54,6 @@ import QRQuestionScreen from '../screens/qr/QRQuestionScreen';
 
 const Stack = createNativeStackNavigator();
 
-function AuthStack() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
-    </Stack.Navigator>
-  );
-}
-
 function AppStack() {
   const { theme: t } = useTheme();
   useContentVersionCheck();
@@ -72,6 +65,7 @@ function AppStack() {
     headerTitleStyle: { fontWeight: '700' },
     headerBackTitle: 'Back',
     animation: 'slide_from_right',
+    headerRight: () => <HeaderAuthButton />,
   };
 
   return (
@@ -106,11 +100,15 @@ function AppStack() {
       <Stack.Screen name="DMQuestion" component={DMQuestionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="QRQuestionList" component={QRQuestionListScreen} options={{ title: 'Quantitative Reasoning' }} />
       <Stack.Screen name="QRQuestion" component={QRQuestionScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile' }} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile', headerRight: undefined }} />
       <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ title: 'About the UCAT' }} />
       <Stack.Screen name="Paywall" component={PaywallScreen} options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ title: 'Terms of Service' }} />
+      {/* Reachable from Profile for anonymous users who want to link an account or sign in. */}
+      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
@@ -126,8 +124,23 @@ function RecoveryStack() {
 export default function AppNavigator() {
   const { user, loading, passwordRecovery } = useAuth();
   const { theme: t } = useTheme();
+  const [tosAccepted, setTosAccepted] = useState(null); // null = unknown (loading)
 
-  if (loading) {
+  useEffect(() => {
+    AsyncStorage.getItem(TOS_FLAG_KEY)
+      .then((v) => setTosAccepted(v === 'true'))
+      .catch(() => setTosAccepted(false));
+  }, []);
+
+  // If a returning verified user is already signed in but pre-dates the ToS flag,
+  // they implicitly accepted at signup — silently mark and skip the modal.
+  useEffect(() => {
+    if (tosAccepted === false && user && !user.is_anonymous) {
+      AsyncStorage.setItem(TOS_FLAG_KEY, 'true').then(() => setTosAccepted(true));
+    }
+  }, [tosAccepted, user]);
+
+  if (loading || tosAccepted === null) {
     return (
       <View style={{ flex: 1, backgroundColor: t.headerBg, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color={t.accent} />
@@ -135,8 +148,11 @@ export default function AppNavigator() {
     );
   }
 
+  if (!tosAccepted) {
+    return <ToSAcceptanceScreen onAccepted={() => setTosAccepted(true)} />;
+  }
+
   const getStack = () => {
-    if (!user) return <AuthStack />;
     if (passwordRecovery) return <RecoveryStack />;
     return <AppStack />;
   };
