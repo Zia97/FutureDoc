@@ -143,6 +143,7 @@ export default function PassageLayout({
               correctAnswer: item.question.answer,
               userAnswer: selectedAnswer,
               explanation: item.question.answeringReason,
+              isTimed: false,
             } : undefined}
           />
         )}

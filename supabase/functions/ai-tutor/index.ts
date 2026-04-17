@@ -67,6 +67,7 @@ Deno.serve(async (req) => {
     options,
     stimulusData,
     vennDiagrams,
+    isTimed,
     messages,
   }: {
     questionId?: string;
@@ -80,11 +81,12 @@ Deno.serve(async (req) => {
     options?: string[];
     stimulusData?: unknown;
     vennDiagrams?: string;
+    isTimed?: boolean;
     messages: ChatMessage[];
   } = await req.json();
 
   // 3. Check subscription tier + admin status + ban status
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('user_profiles')
     .select('is_premium, is_admin, ai_banned')
     .eq('user_id', user.id)
@@ -170,16 +172,16 @@ Deno.serve(async (req) => {
   // 8. Log the user's message for abuse monitoring
   const lastUserMsg = messages.filter((m: ChatMessage) => m.role === 'user').pop();
   if (lastUserMsg?.content) {
-    await supabase.from('ai_tutor_logs').insert({
+    const { error: logError } = await supabase.from('ai_tutor_logs').insert({
       user_id: user.id,
       message: lastUserMsg.content.slice(0, 1000),
       section,
-      question_type: questionType,
       question_id: questionId ?? null,
-      question_text: question?.slice(0, 500) ?? null,
-      user_answer: userAnswer ?? null,
-      correct_answer: correctAnswer ?? null,
+      is_timed: isTimed ?? false,
     });
+    if (logError) {
+      console.error('[ai-tutor] failed to insert log:', logError.message, logError.details);
+    }
   }
 
 

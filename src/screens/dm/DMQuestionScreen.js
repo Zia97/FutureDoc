@@ -197,6 +197,7 @@ export default function DMQuestionScreen({ route }) {
             vennDiagrams: question.type === 'venn_diagram'
               ? buildVennAIContext(question)
               : undefined,
+            isTimed: false,
           } : undefined}
         />
 

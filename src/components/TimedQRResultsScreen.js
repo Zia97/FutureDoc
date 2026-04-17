@@ -80,6 +80,7 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
           correctAnswer: q.answer,
           userAnswer: selectedAnswer ?? 'Not answered',
           explanation: q.answeringReason,
+          isTimed: true,
         }
       : undefined;
 

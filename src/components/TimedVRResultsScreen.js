@@ -80,6 +80,7 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
           correctAnswer: q.answer,
           userAnswer: selectedAnswer ?? 'Not answered',
           explanation: q.answeringReason,
+          isTimed: true,
         }
       : undefined;
 

@@ -6,7 +6,7 @@ const FREE_LIMIT = 5;
 
 /**
  * Returns the number of free AI tutor credits remaining.
- * Premium users always get `null` (unlimited).
+ * Premium / admin users always get `null` (unlimited).
  */
 export function useAICredits() {
   const { isPro } = useSubscription();
@@ -20,6 +20,18 @@ export function useAICredits() {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+
+      // Check admin flag directly — SubscriptionContext may not have resolved yet
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('is_admin')
+        .eq('user_id', user.id)
+        .single();
+      if (profile?.is_admin) {
+        setCreditsRemaining(null);
+        return;
+      }
+
       const { data } = await supabase
         .from('user_ai_usage')
         .select('lifetime_count')

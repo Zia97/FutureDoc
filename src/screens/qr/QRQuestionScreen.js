@@ -165,6 +165,7 @@ export default function QRQuestionScreen({ route }) {
               userAnswer: selectedAnswer,
               explanation: item.question.answeringReason,
               stimulusData: item.stimulus,
+              isTimed: false,
             } : undefined}
           />
         )}
