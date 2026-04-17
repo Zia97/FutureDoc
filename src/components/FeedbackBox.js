@@ -36,7 +36,7 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
             <Text style={[styles.reason, { color: t.textSecondary }]}>{reason}</Text>
           </>
         )}
-        {!isCorrect && questionContext && (
+        {questionContext && (
           <TouchableOpacity
             style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
             onPress={() => setTutorVisible(true)}

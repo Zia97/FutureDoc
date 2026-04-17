@@ -132,8 +132,8 @@ export default function PassageLayout({
             isCorrect={isCorrect}
             correctAnswer={item.question.answer}
             reason={item.question.answeringReason}
-            showReason={!isCorrect || alwaysShowReason}
-            questionContext={!isCorrect ? {
+            showReason
+            questionContext={{
               questionId: qid,
               question: item.question.questionText,
               questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
@@ -144,7 +144,7 @@ export default function PassageLayout({
               userAnswer: selectedAnswer,
               explanation: item.question.answeringReason,
               isTimed: false,
-            } : undefined}
+            }}
           />
         )}
       </ScrollView>

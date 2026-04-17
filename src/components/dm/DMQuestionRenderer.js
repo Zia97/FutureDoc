@@ -227,7 +227,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         <View style={[styles.explanation, { backgroundColor: t.bgCard, borderLeftColor: t.sectionDM }]}>
           <Text style={[styles.explanationLabel, { color: t.accent }]}>Explanation</Text>
           <Text style={[styles.explanationText, { color: t.textSecondary }]}>{question.answeringReason}</Text>
-          {!isCorrect && questionContext && (
+          {questionContext && (
             <TouchableOpacity
               style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
               onPress={handleMCQTeachMe}

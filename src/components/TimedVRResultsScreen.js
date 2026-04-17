@@ -70,19 +70,17 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
       return 'idle';
     }
 
-    const questionContext = !isCorrect
-      ? {
-          question: q.questionText,
-          questionType: 'verbal_reasoning',
-          section: 'vr',
-          passage: passage.resource ?? passage.body,
-          options: q.options,
-          correctAnswer: q.answer,
-          userAnswer: selectedAnswer ?? 'Not answered',
-          explanation: q.answeringReason,
-          isTimed: true,
-        }
-      : undefined;
+    const questionContext = {
+      question: q.questionText,
+      questionType: 'verbal_reasoning',
+      section: 'vr',
+      passage: passage.resource ?? passage.body,
+      options: q.options,
+      correctAnswer: q.answer,
+      userAnswer: selectedAnswer ?? 'Not answered',
+      explanation: q.answeringReason,
+      isTimed: true,
+    };
 
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]}>

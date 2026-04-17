@@ -70,19 +70,17 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
       return 'idle';
     }
 
-    const questionContext = !isCorrect
-      ? {
-          question: q.stem,
-          questionType: 'quantitative_reasoning',
-          section: 'qr',
-          stimulus: set.stimulus,
-          options: q.options,
-          correctAnswer: q.answer,
-          userAnswer: selectedAnswer ?? 'Not answered',
-          explanation: q.answeringReason,
-          isTimed: true,
-        }
-      : undefined;
+    const questionContext = {
+      question: q.stem,
+      questionType: 'quantitative_reasoning',
+      section: 'qr',
+      stimulus: set.stimulus,
+      options: q.options,
+      correctAnswer: q.answer,
+      userAnswer: selectedAnswer ?? 'Not answered',
+      explanation: q.answeringReason,
+      isTimed: true,
+    };
 
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]}>

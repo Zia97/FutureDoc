@@ -155,7 +155,7 @@ export default function QRQuestionScreen({ route }) {
             correctAnswer={item.question.answer}
             reason={item.question.answeringReason}
             showReason
-            questionContext={!isCorrect ? {
+            questionContext={{
               questionId: item.question.questionId ?? item.question.id,
               question: item.question.questionText,
               questionType: item.stimulus?.type ?? 'quantitative_reasoning',
@@ -166,7 +166,7 @@ export default function QRQuestionScreen({ route }) {
               explanation: item.question.answeringReason,
               stimulusData: item.stimulus,
               isTimed: false,
-            } : undefined}
+            }}
           />
         )}
       </ScrollView>

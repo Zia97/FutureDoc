@@ -11,7 +11,7 @@ export default function YesNoStatements({ statements, answers = {}, onAnswer, su
         const selected = answers[index];
         const isCorrect = selected === statement.answer;
         const showExplanation = submitted && !timedMode;
-        const gotWrong = showExplanation && selected && !isCorrect;
+        const showTeachMe = showExplanation && selected;
 
         return (
           <View key={index}>
@@ -67,7 +67,7 @@ export default function YesNoStatements({ statements, answers = {}, onAnswer, su
                 <Text style={[styles.explanationText, { color: t.textSecondary }]}>
                   {statement.reason}
                 </Text>
-                {gotWrong && onTeachMe && (
+                {showTeachMe && onTeachMe && (
                   <TouchableOpacity
                     style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
                     onPress={() => onTeachMe(index)}

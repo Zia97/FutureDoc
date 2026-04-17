@@ -112,18 +112,16 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
       return 'idle';
     }
 
-    const questionContext = !isCorrect
-      ? {
-          question: item.text,
-          questionType: 'situational_judgement',
-          section: 'sj',
-          passage: scenario.stem,
-          options: labelSet,
-          correctAnswer: item.answer,
-          userAnswer: selectedAnswer ?? 'Not answered',
-          explanation: item.answeringReason,
-        }
-      : undefined;
+    const questionContext = {
+      question: item.text,
+      questionType: 'situational_judgement',
+      section: 'sj',
+      passage: scenario.stem,
+      options: labelSet,
+      correctAnswer: item.answer,
+      userAnswer: selectedAnswer ?? 'Not answered',
+      explanation: item.answeringReason,
+    };
 
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]}>
