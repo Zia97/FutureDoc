@@ -76,7 +76,7 @@ export default function LoginScreen({ navigation }) {
       style={[styles.container, { backgroundColor: t.bg }]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Text style={[styles.title, { color: t.text }]}>UCAT Genius AI</Text>
+      <Text style={[styles.title, { color: t.text }]}>UCAT Genius</Text>
       <Text style={[styles.subtitle, { color: t.textMuted }]}>Sign in to continue</Text>
 
       <TextInput

@@ -64,9 +64,9 @@ export default function PrivacyPolicyScreen() {
       </Text>
 
       <Text style={[styles.intro, { color: t.textSecondary }]}>
-        UCAT Genius AI ("we", "our", "us") is committed to protecting your privacy.
+        UCAT Genius ("we", "our", "us") is committed to protecting your privacy.
         This policy explains what data we collect, how we use it, and your rights.
-        {'\n\n'}UCAT Genius AI is an independent study tool and is not affiliated with, endorsed by, or
+        {'\n\n'}UCAT Genius is an independent study tool and is not affiliated with, endorsed by, or
         connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university.
         We recommend visiting the official UCAT website (ucat.ac.uk) for the latest exam information.
       </Text>

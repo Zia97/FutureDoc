@@ -27,7 +27,7 @@ export default function ForceUpdateScreen({ storeUrl }) {
       <View style={styles.content}>
         <Text style={[styles.title, { color: t.text }]}>Update required</Text>
         <Text style={[styles.subtitle, { color: t.textMuted }]}>
-          A new version of UCAT Genius AI is available. Please update to continue.
+          A new version of UCAT Genius is available. Please update to continue.
         </Text>
 
         <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>

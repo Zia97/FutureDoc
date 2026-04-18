@@ -23,7 +23,7 @@ export default function ToSAcceptanceScreen({ onAccepted }) {
   return (
     <View style={[styles.container, { backgroundColor: t.bg }]}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={[styles.title, { color: t.text }]}>Welcome to UCAT Genius AI</Text>
+        <Text style={[styles.title, { color: t.text }]}>Welcome to UCAT Genius</Text>
         <Text style={[styles.subtitle, { color: t.textMuted }]}>
           Before you start, please review our terms.
         </Text>
@@ -34,7 +34,7 @@ export default function ToSAcceptanceScreen({ onAccepted }) {
             • You must be at least 16 years old to use this app.
           </Text>
           <Text style={[styles.bullet, { color: t.textSecondary }]}>
-            • UCAT Genius AI is an independent study tool. It is not affiliated with the UCAT Consortium or Pearson VUE. Practice questions are original content, not past exam questions.
+            • UCAT Genius is an independent study tool. It is not affiliated with the UCAT Consortium or Pearson VUE. Practice questions are original content, not past exam questions.
           </Text>
           <Text style={[styles.bullet, { color: t.textSecondary }]}>
             • Scaled scores and SJ bands shown in the app are estimates only — treat them as rough indicators of progress, not predictions of your UCAT result.

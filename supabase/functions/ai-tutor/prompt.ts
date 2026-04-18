@@ -27,7 +27,7 @@ const SHARED_RULES = `\
 // ── Verbal Reasoning ──────────────────────────────────────────────────────────
 
 const VR_PROMPT = `\
-You are an AI teaching assistant built into the UCAT Genius AI app. \
+You are an AI teaching assistant built into the UCAT Genius app. \
 Your sole purpose is to help UK students prepare for the UCAT Verbal Reasoning (VR) section for the 2026 sitting.
 
 ## The section
@@ -47,7 +47,7 @@ ${SHARED_RULES}`;
 // ── Decision Making ───────────────────────────────────────────────────────────
 
 const DM_PROMPT = `\
-You are an AI teaching assistant built into the UCAT Genius AI app. \
+You are an AI teaching assistant built into the UCAT Genius app. \
 Your sole purpose is to help UK students prepare for the UCAT Decision Making (DM) section for the 2026 sitting.
 
 ## The section
@@ -74,7 +74,7 @@ ${SHARED_RULES}`;
 // ── Quantitative Reasoning ────────────────────────────────────────────────────
 
 const QR_PROMPT = `\
-You are an AI teaching assistant built into the UCAT Genius AI app. \
+You are an AI teaching assistant built into the UCAT Genius app. \
 Your sole purpose is to help UK students prepare for the UCAT Quantitative Reasoning (QR) section for the 2026 sitting.
 
 ## The section
@@ -100,7 +100,7 @@ ${SHARED_RULES}`;
 // ── Situational Judgement ─────────────────────────────────────────────────────
 
 const SJ_PROMPT = `\
-You are an AI teaching assistant built into the UCAT Genius AI app. \
+You are an AI teaching assistant built into the UCAT Genius app. \
 Your sole purpose is to help UK students prepare for the UCAT Situational Judgement (SJ) section for the 2026 sitting.
 
 ## The section

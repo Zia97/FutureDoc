@@ -7,12 +7,12 @@ const SECTIONS = [
   {
     title: '1. Acceptance of Terms',
     body:
-      'By creating an account or using UCAT Genius AI, you agree to these Terms of Service. If you do not agree, do not use the app.',
+      'By creating an account or using UCAT Genius, you agree to these Terms of Service. If you do not agree, do not use the app.',
   },
   {
     title: '2. Description of Service',
     body:
-      'UCAT Genius AI is a mobile application designed to help students prepare for the University Clinical Aptitude Test (UCAT). The app provides practice questions, timed mock tests, and performance tracking across the four UCAT sections.',
+      'UCAT Genius is a mobile application designed to help students prepare for the University Clinical Aptitude Test (UCAT). The app provides practice questions, timed mock tests, and performance tracking across the four UCAT sections.',
   },
   {
     title: '3. Accounts',
@@ -27,12 +27,12 @@ const SECTIONS = [
   {
     title: '5. Intellectual Property',
     body:
-      'All content in the app \u2014 including questions, explanations, diagrams, and UI design \u2014 is the intellectual property of UCAT Genius AI. You may not reproduce, distribute, or create derivative works from our content without written permission.',
+      'All content in the app \u2014 including questions, explanations, diagrams, and UI design \u2014 is the intellectual property of UCAT Genius. You may not reproduce, distribute, or create derivative works from our content without written permission.',
   },
   {
     title: '6. Disclaimer',
     body:
-      'UCAT Genius AI is an independent study tool and is not affiliated with, endorsed by, or connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university. "UCAT" is a registered trademark of the UCAT Consortium; its use here is purely descriptive.\n\nThis app is intended solely as a supplementary preparation aid. It does not replace official UCAT resources. We strongly recommend that all users visit the official UCAT website (ucat.ac.uk) for the latest information on exam format, registration dates, and scoring.\n\nPractice questions are original content designed to reflect the style and difficulty of the UCAT. They are not past exam questions.\n\nScaled scores (300\u2013900) and SJ bands shown in this app are estimates only. The real UCAT uses Item Response Theory scoring with proprietary, item-level parameters that no third-party app can replicate exactly. Our estimates are derived from the 2025 UCAT Consortium official statistics (means, standard deviations, and decile tables) using piecewise-linear interpolation (Verbal Reasoning) and z-score transformation (Decision Making, Quantitative Reasoning), with a typical \u00b140-point uncertainty per subtest. Treat any score shown in this app as a rough indicator of progress, not as a prediction of your actual UCAT result. See "About UCAT \u2192 Scoring" inside the app for the full methodology.',
+      'UCAT Genius is an independent study tool and is not affiliated with, endorsed by, or connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university. "UCAT" is a registered trademark of the UCAT Consortium; its use here is purely descriptive.\n\nThis app is intended solely as a supplementary preparation aid. It does not replace official UCAT resources. We strongly recommend that all users visit the official UCAT website (ucat.ac.uk) for the latest information on exam format, registration dates, and scoring.\n\nPractice questions are original content designed to reflect the style and difficulty of the UCAT. They are not past exam questions.\n\nScaled scores (300\u2013900) and SJ bands shown in this app are estimates only. The real UCAT uses Item Response Theory scoring with proprietary, item-level parameters that no third-party app can replicate exactly. Our estimates are derived from the 2025 UCAT Consortium official statistics (means, standard deviations, and decile tables) using piecewise-linear interpolation (Verbal Reasoning) and z-score transformation (Decision Making, Quantitative Reasoning), with a typical \u00b140-point uncertainty per subtest. Treat any score shown in this app as a rough indicator of progress, not as a prediction of your actual UCAT result. See "About UCAT \u2192 Scoring" inside the app for the full methodology.',
   },
   {
     title: '7. Limitation of Liability',
@@ -79,7 +79,7 @@ export default function TermsOfServiceScreen() {
       </Text>
 
       <Text style={[styles.intro, { color: t.textSecondary }]}>
-        Please read these terms carefully before using UCAT Genius AI.
+        Please read these terms carefully before using UCAT Genius.
       </Text>
 
       {SECTIONS.map((section) => (

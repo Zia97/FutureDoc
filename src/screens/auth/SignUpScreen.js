@@ -70,7 +70,7 @@ export default function SignUpScreen({ navigation }) {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        <Text style={[styles.title, { color: t.text }]}>UCAT Genius AI</Text>
+        <Text style={[styles.title, { color: t.text }]}>UCAT Genius</Text>
         <Text style={[styles.subtitle, { color: t.textMuted }]}>Create your account</Text>
 
         <TextInput

@@ -408,7 +408,7 @@ export default function AboutUCATScreen() {
 
           {/* ── How this app estimates your score ─────────────────────── */}
           <View style={styles.tipDivider} />
-          <Text style={styles.subheading}>How UCAT Genius AI estimates your score</Text>
+          <Text style={styles.subheading}>How UCAT Genius estimates your score</Text>
           <Text style={styles.body}>
             The real {region === 'uk' ? 'UCAT' : 'UCAT ANZ'} does not use a simple
             formula. Pearson VUE uses Item Response Theory (IRT) — specifically the

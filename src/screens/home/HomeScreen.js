@@ -61,7 +61,7 @@ export default function HomeScreen({ navigation }) {
       />
 
       <Animated.View style={[styles.header, headerAnim]}>
-        <Text style={[styles.wordmark, { color: t.text }]}>UCAT Genius AI</Text>
+        <Text style={[styles.wordmark, { color: t.text }]}>UCAT Genius</Text>
         <View style={styles.headerRight}>
           {!isPro && !isAnonymous && (
             <TouchableOpacity
