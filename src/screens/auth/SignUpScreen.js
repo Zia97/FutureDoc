@@ -15,16 +15,11 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function SignUpScreen({ navigation }) {
-  const { signUp, linkAccount, isAnonymous } = useAuth();
+  const { signUp } = useAuth();
   const { theme: t } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-
-  const dismissToHome = () => {
-    if (navigation.canGoBack()) navigation.goBack();
-    else navigation.navigate('Home');
-  };
 
   const handleSubmit = async () => {
     if (!email || !password) {
@@ -36,32 +31,17 @@ export default function SignUpScreen({ navigation }) {
       return;
     }
     setLoading(true);
-    if (isAnonymous) {
-      // Upgrade existing anonymous account — preserves user_id + progress + AI usage.
-      const { error } = await linkAccount(email, password);
-      setLoading(false);
-      if (error) {
-        Alert.alert('Could not save progress', error.message);
-        return;
-      }
-      Alert.alert(
-        'Check your email',
-        'We sent you a confirmation link. Verify your email to finish setting up your account.',
-        [{ text: 'OK', onPress: dismissToHome }],
-      );
-    } else {
-      const { error } = await signUp(email, password);
-      setLoading(false);
-      if (error) {
-        Alert.alert('Sign up failed', error.message);
-        return;
-      }
-      Alert.alert(
-        'Check your email',
-        'We sent you a confirmation link. Please verify your email before signing in.',
-        [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
-      );
+    const { error } = await signUp(email, password);
+    setLoading(false);
+    if (error) {
+      Alert.alert('Sign up failed', error.message);
+      return;
     }
+    Alert.alert(
+      'Check your email',
+      'We sent you a confirmation link. Please verify your email before signing in.',
+      [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
+    );
   };
 
   return (

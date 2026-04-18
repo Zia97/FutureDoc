@@ -92,15 +92,14 @@ export function AuthProvider({ children }) {
     return () => subscription.remove();
   }, []);
 
+  // Works whether or not the current session is anonymous. Calling signUp while
+  // anon creates a brand-new user and fires the "Confirm sign up" email (not
+  // "Change email"). The orphaned anon user is harmless — local practice
+  // progress lives in device-scoped AsyncStorage and survives the swap.
   const signUp = (email, password) =>
     supabase.auth.signUp({ email, password });
 
   const signInAnonymously = () => supabase.auth.signInAnonymously();
-
-  // Upgrades the current anonymous user into a real account. Preserves user_id,
-  // so AI usage count, struggles, and progress all carry over.
-  const linkAccount = (email, password) =>
-    supabase.auth.updateUser({ email, password });
 
   const signIn = async (email, password) => {
     const result = await supabase.auth.signInWithPassword({ email, password });
@@ -179,7 +178,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, linkAccount, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery }}>
+    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery }}>
       {children}
     </AuthContext.Provider>
   );
