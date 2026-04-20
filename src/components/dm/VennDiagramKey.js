@@ -17,8 +17,9 @@ function KeyShape({ shape, stroke }) {
     case 'oval':
       return <Ellipse cx={MID} cy={MID} rx={R} ry={R * 0.65} {...props} />;
     case 'square':
-    case 'rectangle':
       return <Rect x={MID - R} y={MID - R} width={R * 2} height={R * 2} {...props} />;
+    case 'rectangle':
+      return <Rect x={MID - R * 1.2} y={MID - R * 0.7} width={R * 2.4} height={R * 1.4} {...props} />;
     case 'triangle': {
       const pts = `${MID},${MID - R} ${MID - R},${MID + R} ${MID + R},${MID + R}`;
       return <Polygon points={pts} {...props} />;

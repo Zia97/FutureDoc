@@ -10,9 +10,24 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import * as AppleAuthentication from 'expo-apple-authentication';
+import Svg, { Path } from 'react-native-svg';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+
+const GoogleIcon = ({ size = 20 }) => (
+  <Svg width={size} height={size} viewBox="0 0 533.5 544.3">
+    <Path fill="#4285F4" d="M533.5 278.4c0-17.4-1.6-34.1-4.6-50.4H272v95.4h146.9c-6.3 34.1-25.3 63-53.9 82.3v68h87.1c51-47.1 81.4-116.5 81.4-195.3z" />
+    <Path fill="#34A853" d="M272 544.3c72.6 0 133.6-24.1 178.1-65.4l-87.1-68c-24.2 16.2-55.1 25.7-91 25.7-70 0-129.4-47.2-150.6-110.6H32.3v69.5C76.5 487 167.1 544.3 272 544.3z" />
+    <Path fill="#FBBC05" d="M121.4 325.9c-10.3-30.6-10.3-63.5 0-94.1V162.3H32.3c-34.3 68.5-34.3 150.1 0 218.6l89.1-54.9z" />
+    <Path fill="#EA4335" d="M272 107.7c39.4-.6 77.3 13.9 106.3 40.4l79.1-79.1C407.5 23.9 341 .3 272 1 167.1 1 76.5 58.3 32.3 162.3l89.1 69.5C142.5 155 201.9 107.7 272 107.7z" />
+  </Svg>
+);
+
+const AppleIcon = ({ size = 22, color = '#fff' }) => (
+  <Svg width={size} height={size} viewBox="0 0 384 512">
+    <Path fill={color} d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z" />
+  </Svg>
+);
 
 export default function LoginScreen({ navigation }) {
   const { signIn, signInWithGoogle, signInWithApple } = useAuth();
@@ -107,27 +122,37 @@ export default function LoginScreen({ navigation }) {
         <View style={[styles.dividerLine, { backgroundColor: t.border }]} />
       </View>
 
-      <TouchableOpacity
-        style={[styles.socialButton, { backgroundColor: t.bgCard, borderColor: t.border, borderWidth: 1 }]}
-        onPress={handleGoogle}
-        disabled={socialLoading !== null}
-      >
-        {socialLoading === 'google' ? (
-          <ActivityIndicator color={t.text} />
-        ) : (
-          <Text style={[styles.googleButtonText, { color: t.text }]}>Continue with Google</Text>
-        )}
-      </TouchableOpacity>
+      <View style={styles.socialRow}>
+        <TouchableOpacity
+          style={[styles.socialButton, { backgroundColor: t.bgCard, borderColor: t.border, borderWidth: 1 }]}
+          onPress={handleGoogle}
+          disabled={socialLoading !== null}
+        >
+          {socialLoading === 'google' ? (
+            <ActivityIndicator color={t.text} />
+          ) : (
+            <>
+              <GoogleIcon size={20} />
+              <Text style={[styles.socialButtonText, { color: t.text }]}>Google</Text>
+            </>
+          )}
+        </TouchableOpacity>
 
-      {Platform.OS === 'ios' && (
-        <AppleAuthentication.AppleAuthenticationButton
-          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-          cornerRadius={10}
-          style={styles.appleButton}
+        <TouchableOpacity
+          style={[styles.socialButton, { backgroundColor: '#000' }]}
           onPress={handleApple}
-        />
-      )}
+          disabled={socialLoading !== null}
+        >
+          {socialLoading === 'apple' ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <>
+              <AppleIcon size={22} color="#fff" />
+              <Text style={[styles.socialButtonText, { color: '#fff' }]}>Apple</Text>
+            </>
+          )}
+        </TouchableOpacity>
+      </View>
 
       <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
         <Text style={[styles.link, { color: t.textMuted }]}>Forgot your password?</Text>
@@ -191,21 +216,25 @@ const styles = StyleSheet.create({
     marginHorizontal: 12,
     fontSize: 14,
   },
-  socialButton: {
+  socialRow: {
+    flexDirection: 'row',
     width: '100%',
-    borderRadius: 10,
-    padding: 16,
-    alignItems: 'center',
+    gap: 12,
     marginBottom: 12,
   },
-  googleButtonText: {
+  socialButton: {
+    flex: 1,
+    flexDirection: 'row',
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    height: 52,
+  },
+  socialButtonText: {
     fontSize: 16,
     fontWeight: '600',
-  },
-  appleButton: {
-    width: '100%',
-    height: 52,
-    marginBottom: 12,
   },
   link: {
     fontSize: 14,

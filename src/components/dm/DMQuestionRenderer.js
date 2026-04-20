@@ -11,7 +11,7 @@ import AnswerOptionButton from '../AnswerOptionButton';
 import ZoomableView from '../ZoomableView';
 import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
-import VennDiagramRenderer, { getCanvasSize } from './VennDiagramRenderer';
+import VennDiagramRenderer from './VennDiagramRenderer';
 import VennDiagramKey from './VennDiagramKey';
 import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/ai/useAITutor';
@@ -32,11 +32,12 @@ function useQuestionMeta(question, screenWidth) {
   const vennKeySets  = isVenn
     ? (stimDiagram?.sets ?? question.options?.[0]?.vennConfig?.sets ?? question.options?.[0]?.option_data?.sets ?? null)
     : null;
-  const contentWidth    = screenWidth - 40;
-  const stimulusCanvas  = getCanvasSize(stimDiagram?.diagramLayout, stimDiagram);
-  const stimulusScale   = Math.min(1.2, contentWidth / stimulusCanvas.width);
-  const expandedScale   = Math.min(2.2, (screenWidth - 48) / stimulusCanvas.width);
-  return { isYesNo, isMCQ, isVenn, isSelectVenn, isInterpVenn, vennKeySets, stimDiagram, contentWidth, stimulusScale, expandedScale };
+  const contentWidth     = screenWidth - 40;
+  // Pixel widths handed straight to the baker — diagrams render 1:1 at these
+  // sizes with real-pixel font sizes (no shrink-at-render).
+  const stimulusWidthPx  = contentWidth;               // vennStimulus card has no horizontal padding
+  const expandedWidthPx  = screenWidth  - 80;          // modal padding ~40 each side
+  return { isYesNo, isMCQ, isVenn, isSelectVenn, isInterpVenn, vennKeySets, stimDiagram, contentWidth, stimulusWidthPx, expandedWidthPx };
 }
 
 // Renders the stem, data table, diagram stimulus — everything except the answer inputs
@@ -44,7 +45,7 @@ export function DMStemContent({ question, showLabel = true }) {
   const { width: screenWidth } = useWindowDimensions();
   const { practiceTheme: t } = useTheme();
   const [diagramExpanded, setDiagramExpanded] = useState(false);
-  const { isInterpVenn, vennKeySets, stimDiagram, stimulusScale, expandedScale } = useQuestionMeta(question, screenWidth);
+  const { isInterpVenn, vennKeySets, stimDiagram, stimulusWidthPx, expandedWidthPx } = useQuestionMeta(question, screenWidth);
 
   return (
     <View style={styles.container}>
@@ -62,7 +63,7 @@ export function DMStemContent({ question, showLabel = true }) {
             onPress={() => setDiagramExpanded(true)}
             activeOpacity={0.85}
           >
-            <VennDiagramRenderer vennConfig={stimDiagram} scale={stimulusScale} />
+            <VennDiagramRenderer vennConfig={stimDiagram} widthPx={stimulusWidthPx} />
             <Text style={[styles.tapHint, { color: t.accent }]}>Tap to expand</Text>
           </TouchableOpacity>
 
@@ -79,7 +80,7 @@ export function DMStemContent({ question, showLabel = true }) {
             >
               <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
                 <ZoomableView maxZoom={4}>
-                  <VennDiagramRenderer vennConfig={stimDiagram} scale={expandedScale} />
+                  <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} />
                 </ZoomableView>
                 <Text style={[styles.modalDismiss, { color: t.accent }]}>Tap anywhere to close</Text>
               </View>
@@ -108,12 +109,9 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
   const optionsLabel = showLabel ? <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>{isYesNo ? 'QUESTIONS' : 'OPTIONS'}</Text> : null;
 
   if (isSelectVenn) {
-    const OPTION_PADDING_H = 24;
-    const maxCvW = Math.max(...question.options.map(opt => {
-      const cfg = opt.vennConfig ?? opt.option_data;
-      return getCanvasSize(cfg?.diagramLayout, cfg).width;
-    }));
-    const optionScale = Math.min(1.8, (contentWidth - OPTION_PADDING_H) / maxCvW);
+    // Each option card spans the full content width; diagram inside the card
+    // fits within `contentWidth - 2 * paddingHorizontal(12) = contentWidth - 24`.
+    const optionWidthPx = contentWidth - 24;
 
     return (
       <View style={styles.vennGrid}>
@@ -133,7 +131,7 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
               disabled={submitted}
             >
               <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
-              <VennDiagramRenderer vennConfig={cfg} scale={optionScale} />
+              <VennDiagramRenderer vennConfig={cfg} widthPx={optionWidthPx} />
             </TouchableOpacity>
           );
         })}

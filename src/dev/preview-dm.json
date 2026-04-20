@@ -1,1836 +1,513 @@
 [
   {
-    "id": "timed-dm-test-002",
-    "title": "DM Timed Test 2",
-    "question_count": 35,
-    "time_minutes": 37,
-    "questions": [
+    "id": "dmp-venn-001",
+    "title": "Science Electives",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A class of 50 first-year science students each chose to study some combination of Biology, Chemistry, and Physics this term, or none of them.\n\n8 students study only Biology. 6 study only Chemistry. 7 study only Physics. 4 students study Biology and Chemistry but not Physics. 3 study Biology and Physics but not Chemistry. 5 study Chemistry and Physics but not Biology. 2 students study all three subjects. The remaining students study none of these subjects.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "Biology only = 8, Chemistry only = 6, Physics only = 7, Biology and Chemistry only = 4, Biology and Physics only = 3, Chemistry and Physics only = 5, all three = 2 (subtotal 35). With 50 students total, 15 study none. Only option A matches every region. Option B swaps Biology only and Chemistry only. Option C swaps the Biology+Chemistry and Biology+Physics overlap counts. Option D shows 4 in the all-three region instead of 2.",
+    "order_index": 1,
+    "decision_making_question_options": [
       {
-        "id": "a3f7c210-84e1-4b9a-bc6d-9e1f2a3b4c03",
-        "title": "Athletes and Swimmers",
-        "type": "syllogism",
-        "stem": "Some athletes are swimmers. All swimmers train daily. No swimmers are afraid of water.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Some athletes train daily.",
-            "correct_answer": "Yes",
-            "answer_reason": "Some athletes are swimmers, and all swimmers train daily. Therefore those athletes who are swimmers must train daily — so at least some athletes train daily.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All athletes train daily.",
-            "correct_answer": "No",
-            "answer_reason": "Only some athletes are swimmers. Non-swimmer athletes may or may not train daily — the premises give no information about them.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "No people afraid of water are swimmers.",
-            "correct_answer": "Yes",
-            "answer_reason": "No swimmers are afraid of water. By contraposition, anyone afraid of water is not a swimmer.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "All people who train daily are swimmers.",
-            "correct_answer": "No",
-            "answer_reason": "All swimmers train daily, but other people may also train daily without being swimmers. This reverses the premise.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Some athletes are not afraid of water.",
-            "correct_answer": "Yes",
-            "answer_reason": "Some athletes are swimmers, and no swimmers are afraid of water. Therefore those athletes who swim are not afraid of water.",
-            "order_index": 5
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
+            { "id": "set2", "label": "Chemistry", "shape": "oval" },
+            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
+          ],
+          "regions": {
+            "set1_only": 8, "set2_only": 6, "set3_only": 7,
+            "set1_set2": 4, "set1_set3": 3, "set2_set3": 5,
+            "set1_set2_set3": 2, "outside": 15
           }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
         },
-        "answer_reason": null,
         "order_index": 1
       },
       {
-        "id": "d7a0f540-b3c4-4e2d-cf9a-2b4c6d8e0f17",
-        "title": "Student Exam Results",
-        "type": "interpreting_info",
-        "stem": "A school recorded average exam scores by subject and year group.",
-        "table_data": {
-          "headers": [
-            "Subject",
-            "Year 10",
-            "Year 11",
-            "Year 12"
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
+            { "id": "set2", "label": "Chemistry", "shape": "oval" },
+            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
           ],
-          "rows": [
-            [
-              "Maths",
-              "62",
-              "71",
-              "78"
-            ],
-            [
-              "English",
-              "68",
-              "72",
-              "75"
-            ],
-            [
-              "Science",
-              "58",
-              "65",
-              "82"
-            ],
-            [
-              "History",
-              "70",
-              "68",
-              "74"
-            ]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Science has the greatest improvement in score from Year 10 to Year 12.",
-            "correct_answer": "Yes",
-            "answer_reason": "Science improved by 82 − 58 = 24 points. Maths improved by 16, English by 7, and History by 4. Science has the greatest improvement.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "History scores decreased between Year 10 and Year 11.",
-            "correct_answer": "Yes",
-            "answer_reason": "History Year 10 = 70, Year 11 = 68. The score fell by 2 points.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "In Year 10, Maths has a higher average score than English.",
-            "correct_answer": "No",
-            "answer_reason": "Year 10 Maths = 62, English = 68. Maths is lower, not higher.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "The range of Year 12 scores across all subjects is greater than 10.",
-            "correct_answer": "No",
-            "answer_reason": "Year 12 scores: 78, 75, 82, 74. Highest = 82, lowest = 74. Range = 82 − 74 = 8, which is not greater than 10.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Science has the lowest average score in Year 10.",
-            "correct_answer": "Yes",
-            "answer_reason": "Year 10 scores: Maths 62, English 68, Science 58, History 70. Science at 58 is the lowest.",
-            "order_index": 5
+          "regions": {
+            "set1_only": 6, "set2_only": 8, "set3_only": 7,
+            "set1_set2": 4, "set1_set3": 3, "set2_set3": 5,
+            "set1_set2_set3": 2, "outside": 15
           }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "Yes",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
         },
-        "answer_reason": null,
         "order_index": 2
       },
       {
-        "id": "d7a0f540-b3c4-4e2d-cf9a-2b4c6d8e0f18",
-        "title": "Clinic Waiting Times",
-        "type": "interpreting_info",
-        "stem": "A study recorded average waiting times (in minutes) at different clinics by day of the week.",
-        "table_data": {
-          "headers": [
-            "Day",
-            "GP",
-            "Dentist",
-            "Physio",
-            "Eye Clinic"
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
+            { "id": "set2", "label": "Chemistry", "shape": "oval" },
+            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
           ],
-          "rows": [
-            [
-              "Monday",
-              "18",
-              "25",
-              "30",
-              "12"
-            ],
-            [
-              "Wednesday",
-              "22",
-              "20",
-              "35",
-              "15"
-            ],
-            [
-              "Friday",
-              "15",
-              "30",
-              "28",
-              "18"
-            ]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Eye Clinic has the shortest waiting time on every day.",
-            "correct_answer": "No",
-            "answer_reason": "Monday: Eye Clinic = 12 (lowest). Wednesday: Eye Clinic = 15 (lowest). However, on Friday: GP = 15 and Eye Clinic = 18. The GP has a shorter waiting time on Friday, so the statement is false.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "GP waiting time on Wednesday is longer than on Friday.",
-            "correct_answer": "Yes",
-            "answer_reason": "GP Wednesday = 22, GP Friday = 15. 22 > 15.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Physio has the longest waiting time on every day.",
-            "correct_answer": "No",
-            "answer_reason": "On Friday: Dentist = 30, Physio = 28. Dentist is longer than Physio on Friday.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "The total waiting time across all clinics is lowest on Monday.",
-            "correct_answer": "Yes",
-            "answer_reason": "Monday total: 18 + 25 + 30 + 12 = 85. Wednesday: 22 + 20 + 35 + 15 = 92. Friday: 15 + 30 + 28 + 18 = 91. Monday (85) is lowest.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Dentist waiting time increases consistently from Monday to Friday.",
-            "correct_answer": "No",
-            "answer_reason": "Dentist: Monday 25, Wednesday 20, Friday 30. It decreases from Monday to Wednesday before increasing. This is not a consistent increase.",
-            "order_index": 5
+          "regions": {
+            "set1_only": 8, "set2_only": 6, "set3_only": 7,
+            "set1_set2": 3, "set1_set3": 4, "set2_set3": 5,
+            "set1_set2_set3": 2, "outside": 15
           }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "Yes",
-          "2": "No",
-          "3": "Yes",
-          "4": "No"
         },
-        "answer_reason": null,
         "order_index": 3
       },
       {
-        "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e13",
-        "title": "Speed Cameras on Motorways",
-        "type": "recognising_assumptions",
-        "stem": "All speed cameras on motorways should be removed.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Yes; speed cameras generate large revenues for local authorities, suggesting they are used primarily as a money-making tool rather than a safety measure."
-          },
-          {
-            "label": "B",
-            "text": "No; areas with speed cameras have consistently shown lower rates of fatal and serious accidents compared to similar roads without cameras."
-          },
-          {
-            "label": "C",
-            "text": "Yes; modern cars have advanced braking systems that make high-speed collisions less likely."
-          },
-          {
-            "label": "D",
-            "text": "No; removing speed cameras would cost money, as the infrastructure has already been installed."
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
+            { "id": "set2", "label": "Chemistry", "shape": "oval" },
+            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
+          ],
+          "regions": {
+            "set1_only": 8, "set2_only": 6, "set3_only": 7,
+            "set1_set2": 4, "set1_set3": 3, "set2_set3": 5,
+            "set1_set2_set3": 4, "outside": 13
           }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Option B is the strongest argument because it directly addresses road safety with evidence-based reasoning — speed cameras are associated with fewer fatal accidents. Option A's revenue argument does not disprove that cameras also save lives. Option C is irrelevant to whether speed enforcement is needed. Option D is a weak sunk-cost argument.",
+        },
         "order_index": 4
-      },
-      {
-        "id": "a3f7c210-84e1-4b9a-bc6d-9e1f2a3b4c01",
-        "title": "Teachers and Musicians",
-        "type": "syllogism",
-        "stem": "All music teachers are musicians. Some musicians perform in orchestras. No musicians are tone-deaf.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Some music teachers perform in orchestras.",
-            "correct_answer": "No",
-            "answer_reason": "'Some musicians perform in orchestras' does not specify which musicians — those who perform may or may not be music teachers. Since we cannot determine this, the conclusion does not follow.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "No music teachers are tone-deaf.",
-            "correct_answer": "Yes",
-            "answer_reason": "All music teachers are musicians, and no musicians are tone-deaf. By transitive reasoning, no music teacher can be tone-deaf.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "All musicians are music teachers.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states all music teachers are musicians — not the reverse. There may be musicians who are not music teachers. Reversing a universal statement is invalid.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Some orchestra performers are musicians.",
-            "correct_answer": "Yes",
-            "answer_reason": "The premise states some musicians perform in orchestras. Those orchestra performers are, by definition, musicians.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "It is possible that some tone-deaf people are music teachers.",
-            "correct_answer": "No",
-            "answer_reason": "All music teachers are musicians. No musicians are tone-deaf. Therefore no music teacher can be tone-deaf — it is logically impossible.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "Yes",
-          "2": "No",
-          "3": "Yes",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 5
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b28",
-        "title": "Dog and Cat Owners",
-        "type": "venn_diagram",
-        "stem": "The diagram shows pet ownership in a neighbourhood. Each letter marks a different region of the diagram.\n\nWhich letter represents someone who owns both a dog and a cat?",
-        "stimulus_diagram": {
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Dogs",
-              "shape": "square"
-            },
-            {
-              "id": "set2",
-              "label": "Cats",
-              "shape": "hexagon"
-            }
-          ],
-          "regions": {
-            "set1_only": "P",
-            "set1_set2": "Q",
-            "set2_only": "R",
-            "outside": "S"
-          },
-          "diagramLayout": "two_overlap"
-        },
-        "options": [
-          {
-            "label": "A",
-            "text": "Letter P"
-          },
-          {
-            "label": "B",
-            "text": "Letter Q"
-          },
-          {
-            "label": "C",
-            "text": "Letter R"
-          },
-          {
-            "label": "D",
-            "text": "Letter S"
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "The square is Dogs and the hexagon is Cats. Region Q is the overlap between both shapes — inside the square AND inside the hexagon — representing people who own both a dog and a cat. P is Dogs only, R is Cats only, S is outside both (neither pet).",
-        "order_index": 6
-      },
-      {
-        "id": "a3f7c210-84e1-4b9a-bc6d-9e1f2a3b4c06",
-        "title": "Medical Students and Anatomy",
-        "type": "syllogism",
-        "stem": "All medical students study anatomy. Some anatomy students fail their exams. No medical students are unqualified.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Some medical students fail their exams.",
-            "correct_answer": "No",
-            "answer_reason": "Some anatomy students fail, but medical students are a subset of anatomy students. The failing students could all be non-medical anatomy students.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All anatomy students are medical students.",
-            "correct_answer": "No",
-            "answer_reason": "All medical students study anatomy, but anatomy is also studied by non-medical students. The reverse does not hold.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "No unqualified people study anatomy.",
-            "correct_answer": "No",
-            "answer_reason": "No medical students are unqualified, but other anatomy students (non-medical) could be unqualified. The premise only restricts medical students.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "All medical students are qualified.",
-            "correct_answer": "Yes",
-            "answer_reason": "'No medical students are unqualified' means every medical student is qualified. This follows directly from the premise.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Some people who study anatomy are qualified.",
-            "correct_answer": "Yes",
-            "answer_reason": "All medical students study anatomy and all medical students are qualified. Therefore at least some anatomy students (namely the medical students) are qualified.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "No",
-          "2": "No",
-          "3": "Yes",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 7
-      },
-      {
-        "id": "b5e8d320-91f2-4c0b-ad7e-0f2a3b4c5d09",
-        "title": "Dentist Appointments",
-        "type": "logic_puzzle",
-        "stem": "A dentist sees four patients – Fiona, George, Hana, and Ivan – one after another in a single morning.\n\n• Hana is seen before George.\n• Ivan is not seen first or last.\n• Fiona is seen immediately before Ivan.\n\nIn which position is George seen?",
-        "options": [
-          {
-            "label": "A",
-            "text": "First"
-          },
-          {
-            "label": "B",
-            "text": "Second"
-          },
-          {
-            "label": "C",
-            "text": "Third"
-          },
-          {
-            "label": "D",
-            "text": "Fourth"
-          }
-        ],
-        "correct_answer": "D",
-        "answer_reason": "Fiona is immediately before Ivan, so (F, I) is a consecutive pair. Ivan is not 1st or 4th, so Ivan = 2nd or 3rd. If Ivan = 2nd, Fiona = 1st. Remaining: Hana and George for 3rd and 4th. Hana before George → Hana = 3rd, George = 4th. If Ivan = 3rd, Fiona = 2nd. Remaining: Hana and George for 1st and 4th. Hana before George → Hana = 1st, George = 4th. In both cases George is 4th.",
-        "order_index": 8
-      },
-      {
-        "id": "a3f7c210-84e1-4b9a-bc6d-9e1f2a3b4c02",
-        "title": "Flowers and Water",
-        "type": "syllogism",
-        "stem": "All roses are flowers. All flowers need water. Some flowers are fragrant.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "All roses need water.",
-            "correct_answer": "Yes",
-            "answer_reason": "All roses are flowers, and all flowers need water. By transitive reasoning, all roses need water.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Some roses are fragrant.",
-            "correct_answer": "No",
-            "answer_reason": "Some flowers are fragrant, but this does not mean those fragrant flowers include any roses. Roses are flowers, but the fragrant ones could be entirely non-rose flowers.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "All things that need water are flowers.",
-            "correct_answer": "No",
-            "answer_reason": "The premise says all flowers need water — not that everything needing water is a flower. Many non-flowers also need water. This reverses the universal statement.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Some fragrant things are flowers.",
-            "correct_answer": "Yes",
-            "answer_reason": "The premise states some flowers are fragrant. Those fragrant flowers are, by definition, both fragrant and flowers.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "All flowers are roses.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states all roses are flowers — not the converse. Many flowers are not roses. This is a reversal error.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "Yes",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 9
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b33",
-        "title": "Medical Conditions",
-        "type": "venn_diagram",
-        "stem": "The diagram shows patients at a clinic grouped by medical condition. Each letter marks a different region.\n\nWhich letter represents patients who have Diabetes and Asthma but not Hypertension?",
-        "stimulus_diagram": {
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Diabetes",
-              "shape": "square"
-            },
-            {
-              "id": "set2",
-              "label": "Hypertension",
-              "shape": "circle"
-            },
-            {
-              "id": "set3",
-              "label": "Asthma",
-              "shape": "octagon"
-            }
-          ],
-          "regions": {
-            "set1_only": "W",
-            "set2_only": "X",
-            "set3_only": "Y",
-            "set1_set2": "T",
-            "set1_set3": "U",
-            "set2_set3": "V",
-            "all_three": "Z"
-          },
-          "diagramLayout": "three_all_overlap"
-        },
-        "options": [
-          {
-            "label": "A",
-            "text": "Letter T"
-          },
-          {
-            "label": "B",
-            "text": "Letter U"
-          },
-          {
-            "label": "C",
-            "text": "Letter V"
-          },
-          {
-            "label": "D",
-            "text": "Letter Z"
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Diabetes = square (set1), Asthma = octagon (set3), Hypertension = circle (set2). The region inside Diabetes AND Asthma but outside Hypertension is set1_set3 = U. Region T is Diabetes ∩ Hypertension. Region V is Hypertension ∩ Asthma. Region Z is all three conditions. Answer: B (Letter U).",
-        "order_index": 10
-      },
-      {
-        "id": "e8b1a650-c4d5-4f3e-da0b-3c5d7e9f1a24",
-        "title": "Weather Forecast Accuracy",
-        "type": "probabilistic",
-        "stem": "A weather forecasting model correctly predicts rain 80% of the time when it does rain, and correctly predicts dry weather 85% of the time when it does not rain. In a given month of 30 days, it rains on 10 days.",
-        "options": [
-          {
-            "label": "A",
-            "text": "The model will predict rain on exactly 8 days."
-          },
-          {
-            "label": "B",
-            "text": "When the model predicts rain, there is approximately a 73% chance it actually rains."
-          },
-          {
-            "label": "C",
-            "text": "The model is more accurate on rainy days than on dry days."
-          },
-          {
-            "label": "D",
-            "text": "The model will make incorrect predictions on fewer than 3 days."
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Correct rain predictions (true positive): 10 × 0.80 = 8. False rain predictions (false positive): 20 × 0.15 = 3. Total rain predictions: 8 + 3 = 11. So A is wrong (11, not 8). P(rain | predicts rain) = 8/11 ≈ 72.7%, so B is correct. The model is 80% accurate on rainy days vs 85% on dry days, so C is wrong. Total errors = 2 (missed rain) + 3 (false rain) = 5, so D is wrong.",
-        "order_index": 11
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b27",
-        "title": "Fruit Preferences",
-        "type": "venn_diagram",
-        "stem": "A survey of 12 people asked about fruit preferences. Three like only apples, two like only bananas, one likes only cherries, two like apples and bananas, and four like bananas and cherries.\n\nWhich of the following diagrams best represents the above data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Apples",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Bananas",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Cherries",
-                  "shape": "circle"
-                }
-              ],
-              "regions": {
-                "set1_only": 3,
-                "set1_set2": 4,
-                "set2_only": 2,
-                "set2_set3": 2,
-                "set3_only": 1
-              },
-              "diagramLayout": "three_linear"
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Apples",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Bananas",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Cherries",
-                  "shape": "circle"
-                }
-              ],
-              "regions": {
-                "set1_only": 3,
-                "set1_set2": 2,
-                "set2_only": 2,
-                "set2_set3": 4,
-                "set3_only": 1
-              },
-              "diagramLayout": "three_linear"
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Apples",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Bananas",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Cherries",
-                  "shape": "circle"
-                }
-              ],
-              "regions": {
-                "set1_only": 2,
-                "set1_set2": 2,
-                "set2_only": 3,
-                "set2_set3": 4,
-                "set3_only": 1
-              },
-              "diagramLayout": "three_linear"
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Apples",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Bananas",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Cherries",
-                  "shape": "circle"
-                }
-              ],
-              "regions": {
-                "set1_only": 3,
-                "set1_set2": 2,
-                "set2_only": 4,
-                "set2_set3": 2,
-                "set3_only": 1
-              },
-              "diagramLayout": "three_linear"
-            }
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Apples only = 3 (set1_only). Apples ∩ Bananas = 2 (set1_set2). Bananas only = 2 (set2_only). Bananas ∩ Cherries = 4 (set2_set3). Cherries only = 1 (set3_only). Total = 3+2+2+4+1 = 12. Only option B has all five values correct. Option A swaps the two overlap regions. Option C swaps set1_only and set2_only. Option D swaps set2_only and set2_set3.",
-        "order_index": 12
-      },
-      {
-        "id": "e8b1a650-c4d5-4f3e-da0b-3c5d7e9f1a22",
-        "title": "Disease Screening Test",
-        "type": "probabilistic",
-        "stem": "A screening test for a disease has a sensitivity of 95% (correctly identifies 95% of people with the disease) and a specificity of 90% (correctly identifies 90% of people without the disease). In a population of 10,000 people, 200 have the disease.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Approximately 1,170 people will test positive in total."
-          },
-          {
-            "label": "B",
-            "text": "A person who tests positive has a greater than 90% chance of having the disease."
-          },
-          {
-            "label": "C",
-            "text": "The test will correctly identify all 200 people with the disease."
-          },
-          {
-            "label": "D",
-            "text": "Fewer than 100 people without the disease will receive a false positive result."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "True positives: 200 × 0.95 = 190. False positives: 9,800 × 0.10 = 980. Total positive tests: 190 + 980 = 1,170, so A is correct. The positive predictive value is only 190/1170 ≈ 16%, so B is wrong. C is wrong because 5% (10 people) will be missed. D is wrong because there are 980 false positives, far more than 100.",
-        "order_index": 13
-      },
-      {
-        "id": "b5e8d320-91f2-4c0b-ad7e-0f2a3b4c5d10",
-        "title": "Film Schedule",
-        "type": "logic_puzzle",
-        "stem": "A cinema shows four films – W, X, Y, and Z – in four consecutive time slots (1pm, 3pm, 5pm, and 7pm).\n\n• Film W is shown later than Film Z.\n• Film Y is shown at 5pm.\n• Film X is shown immediately after Film Z.\n\nWhich film is shown at 7pm?",
-        "options": [
-          {
-            "label": "A",
-            "text": "Film W"
-          },
-          {
-            "label": "B",
-            "text": "Film X"
-          },
-          {
-            "label": "C",
-            "text": "Film Y"
-          },
-          {
-            "label": "D",
-            "text": "Film Z"
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Y is at 5pm. X is immediately after Z, so (Z, X) are consecutive. Z cannot be at 5pm (taken by Y). If Z = 1pm, X = 3pm. W must be later than Z (1pm), so W = 7pm. This works: Z(1pm), X(3pm), Y(5pm), W(7pm). If Z = 3pm, X = 5pm — but Y is at 5pm. Conflict. If Z = 5pm — taken. If Z = 7pm, X needs an 9pm slot which doesn't exist. The only solution is W at 7pm.",
-        "order_index": 14
-      },
-      {
-        "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e15",
-        "title": "Animal Testing for Medical Research",
-        "type": "recognising_assumptions",
-        "stem": "Animal testing for medical research should be banned.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Yes; advances in computer modelling and cell-based testing now provide reliable alternatives that can replace most animal experiments."
-          },
-          {
-            "label": "B",
-            "text": "No; without animal testing, it would be impossible to ensure new medicines are safe for humans, potentially leading to dangerous side effects being missed before clinical trials."
-          },
-          {
-            "label": "C",
-            "text": "Yes; animals suffer during experiments, and causing suffering to any living creature is morally wrong."
-          },
-          {
-            "label": "D",
-            "text": "No; animal testing has been practised for centuries and is an established part of the scientific process."
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Option B is the strongest argument because it directly addresses patient safety with a concrete, serious consequence — dangerous medicines reaching clinical trials without adequate safety testing. Option A is reasonable but the qualifier 'most' acknowledges gaps. Option C is an emotional/ethical argument that does not address the practical consequences. Option D is an appeal to tradition, which is logically weak.",
-        "order_index": 15
-      },
-      {
-        "id": "b5e8d320-91f2-4c0b-ad7e-0f2a3b4c5d08",
-        "title": "Race Finishing Order",
-        "type": "logic_puzzle",
-        "stem": "Five runners – A, B, C, D, and E – finish a race in different positions (1st to 5th).\n\n• A finishes before B.\n• C finishes immediately after D.\n• E finishes in 3rd place.\n• D finishes before A.\n\nWho finishes in 1st place?",
-        "options": [
-          {
-            "label": "A",
-            "text": "Runner A"
-          },
-          {
-            "label": "B",
-            "text": "Runner B"
-          },
-          {
-            "label": "C",
-            "text": "Runner D"
-          },
-          {
-            "label": "D",
-            "text": "Runner E"
-          }
-        ],
-        "correct_answer": "C",
-        "answer_reason": "E is 3rd. D finishes before A, and A finishes before B, giving the order D → A → B. C is immediately after D. If D = 1st, C = 2nd. E = 3rd. A must come after D, so A = 4th, B = 5th. Final order: D(1st), C(2nd), E(3rd), A(4th), B(5th). Runner D finishes 1st.",
-        "order_index": 16
-      },
-      {
-        "id": "e8b1a650-c4d5-4f3e-da0b-3c5d7e9f1a23",
-        "title": "Coin and Die Probability",
-        "type": "probabilistic",
-        "stem": "A fair coin is tossed and a fair six-sided die is rolled simultaneously. What is the probability of getting heads on the coin and a number greater than 4 on the die?",
-        "options": [
-          {
-            "label": "A",
-            "text": "1/12"
-          },
-          {
-            "label": "B",
-            "text": "1/6"
-          },
-          {
-            "label": "C",
-            "text": "1/3"
-          },
-          {
-            "label": "D",
-            "text": "1/4"
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "P(heads) = 1/2. P(greater than 4) = P(5 or 6) = 2/6 = 1/3. Since the events are independent: P(heads AND >4) = 1/2 × 1/3 = 1/6.",
-        "order_index": 17
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b30",
-        "title": "Language Students",
-        "type": "venn_diagram",
-        "stem": "The diagram shows students categorised by the languages they study. Each letter marks a different region.\n\nWhich letter represents students who study all three languages?",
-        "stimulus_diagram": {
-          "sets": [
-            {
-              "id": "set1",
-              "label": "French",
-              "shape": "circle"
-            },
-            {
-              "id": "set2",
-              "label": "Spanish",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set3",
-              "label": "German",
-              "shape": "triangle"
-            }
-          ],
-          "regions": {
-            "set1_only": "A",
-            "set2_only": "B",
-            "set3_only": "C",
-            "set1_set2": "D",
-            "set1_set3": "E",
-            "set2_set3": "F",
-            "all_three": "G",
-            "outside": "H"
-          },
-          "diagramLayout": "three_all_overlap_v2"
-        },
-        "options": [
-          {
-            "label": "A",
-            "text": "Letter D"
-          },
-          {
-            "label": "B",
-            "text": "Letter E"
-          },
-          {
-            "label": "C",
-            "text": "Letter F"
-          },
-          {
-            "label": "D",
-            "text": "Letter G"
-          }
-        ],
-        "correct_answer": "D",
-        "answer_reason": "Region G is the central overlap where all three shapes intersect — inside the circle (French), inside the hexagon (Spanish), and inside the triangle (German). D is French ∩ Spanish only. E is French ∩ German only. F is Spanish ∩ German only. Students studying all three languages are in region G — Answer D.",
-        "order_index": 18
-      },
-      {
-        "id": "d7a0f540-b3c4-4e2d-cf9a-2b4c6d8e0f19",
-        "title": "Library Book Loans",
-        "type": "interpreting_info",
-        "stem": "A library recorded the number of books borrowed per month by genre.",
-        "table_data": {
-          "headers": [
-            "Genre",
-            "January",
-            "February",
-            "March"
-          ],
-          "rows": [
-            [
-              "Fiction",
-              "240",
-              "210",
-              "280"
-            ],
-            [
-              "Non-fiction",
-              "180",
-              "195",
-              "170"
-            ],
-            [
-              "Children's",
-              "320",
-              "290",
-              "350"
-            ],
-            [
-              "Reference",
-              "45",
-              "50",
-              "40"
-            ]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Children's books are the most borrowed genre in every month.",
-            "correct_answer": "Yes",
-            "answer_reason": "January: 320 (highest). February: 290 (highest). March: 350 (highest). Children's leads every month.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Non-fiction borrowing increased each month.",
-            "correct_answer": "No",
-            "answer_reason": "Non-fiction: January 180, February 195, March 170. It increased from January to February but decreased in March.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "More Fiction books were borrowed in March than in January and February combined.",
-            "correct_answer": "No",
-            "answer_reason": "March Fiction = 280. January + February Fiction = 240 + 210 = 450. 280 < 450.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Reference books are the least borrowed genre in every month.",
-            "correct_answer": "Yes",
-            "answer_reason": "January: 45 (lowest). February: 50 (lowest). March: 40 (lowest). Reference is consistently the least borrowed.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Total borrowing across all genres was highest in March.",
-            "correct_answer": "Yes",
-            "answer_reason": "January: 240+180+320+45 = 785. February: 210+195+290+50 = 745. March: 280+170+350+40 = 840. March (840) is the highest.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "Yes",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 19
-      },
-      {
-        "id": "d7a0f540-b3c4-4e2d-cf9a-2b4c6d8e0f21",
-        "title": "Fitness Class Attendance",
-        "type": "interpreting_info",
-        "stem": "A gym recorded the number of participants in weekly fitness classes at different times of day.",
-        "table_data": {
-          "headers": [
-            "Class",
-            "6am",
-            "12pm",
-            "6pm"
-          ],
-          "rows": [
-            [
-              "Yoga",
-              "15",
-              "22",
-              "30"
-            ],
-            [
-              "Spinning",
-              "25",
-              "18",
-              "35"
-            ],
-            [
-              "Pilates",
-              "12",
-              "20",
-              "24"
-            ],
-            [
-              "Boxing",
-              "20",
-              "14",
-              "40"
-            ]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "The 6pm classes have the highest attendance for every class type.",
-            "correct_answer": "Yes",
-            "answer_reason": "Yoga: 30 > 22 > 15. Spinning: 35 > 25 > 18. Pilates: 24 > 20 > 12. Boxing: 40 > 20 > 14. The 6pm slot is highest in every case.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Boxing has more participants than Spinning at 6am.",
-            "correct_answer": "No",
-            "answer_reason": "Boxing 6am = 20, Spinning 6am = 25. Boxing has fewer participants.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Yoga has more 12pm participants than Pilates has 6pm participants.",
-            "correct_answer": "No",
-            "answer_reason": "Yoga 12pm = 22, Pilates 6pm = 24. Yoga has fewer.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "The total number of 6am participants across all classes is less than 80.",
-            "correct_answer": "Yes",
-            "answer_reason": "6am total: 15 + 25 + 12 + 20 = 72. 72 < 80.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Spinning has more participants than Yoga at every time slot.",
-            "correct_answer": "No",
-            "answer_reason": "At 12pm: Spinning = 18, Yoga = 22. Yoga has more participants at 12pm.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "Yes",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 20
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b31",
-        "title": "Qualified and Certified Staff",
-        "type": "venn_diagram",
-        "stem": "The diagram shows the relationship between qualified and certified employees at a company. Each letter marks a different region.\n\nWhich letter represents employees who are qualified but not certified?",
-        "stimulus_diagram": {
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Qualified",
-              "shape": "pentagon"
-            },
-            {
-              "id": "set2",
-              "label": "Certified",
-              "shape": "octagon"
-            }
-          ],
-          "regions": {
-            "set1_only": "M",
-            "set1_set2": "N",
-            "outside": "P"
-          },
-          "diagramLayout": "two_nested"
-        },
-        "options": [
-          {
-            "label": "A",
-            "text": "Letter M"
-          },
-          {
-            "label": "B",
-            "text": "Letter N"
-          },
-          {
-            "label": "C",
-            "text": "Letter P"
-          },
-          {
-            "label": "D",
-            "text": "Cannot be determined from the diagram"
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "The pentagon (Qualified) is the outer shape and the octagon (Certified) is entirely inside it. Region M is inside the pentagon but outside the octagon — qualified but not certified. Region N is inside both shapes — qualified and certified. Region P is outside both — neither. Answer: A (Letter M).",
-        "order_index": 21
-      },
-      {
-        "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e14",
-        "title": "School Uniforms",
-        "type": "recognising_assumptions",
-        "stem": "All secondary schools should require students to wear a uniform.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Yes; school uniforms reduce visible economic inequality among students, which can decrease bullying related to clothing."
-          },
-          {
-            "label": "B",
-            "text": "No; uniforms are expensive and add a financial burden on families who are already struggling."
-          },
-          {
-            "label": "C",
-            "text": "Yes; wearing a uniform teaches children discipline, which will help them in their future careers."
-          },
-          {
-            "label": "D",
-            "text": "No; students should be free to express their individuality through their clothing choices."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Option A is the strongest argument because it identifies a specific, measurable social benefit — reducing inequality-driven bullying — that directly supports the proposal. Option B raises a valid but secondary practical concern. Option C makes a speculative causal claim about discipline. Option D appeals to a general principle but does not weigh it against the concrete benefits.",
-        "order_index": 22
-      },
-      {
-        "id": "e8b1a650-c4d5-4f3e-da0b-3c5d7e9f1a25",
-        "title": "Blood Bank Selection",
-        "type": "probabilistic",
-        "stem": "In a hospital blood bank, 45% of donations are type O, 40% are type A, 10% are type B, and 5% are type AB. A doctor selects two units at random from a large supply.",
-        "options": [
-          {
-            "label": "A",
-            "text": "The probability that both units are type O is approximately 20%."
-          },
-          {
-            "label": "B",
-            "text": "The probability that both units are type A is greater than 20%."
-          },
-          {
-            "label": "C",
-            "text": "The probability of selecting one type O and one type A (in any order) is less than 30%."
-          },
-          {
-            "label": "D",
-            "text": "The probability that the two units are different blood types is less than 50%."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "P(both O) = 0.45 × 0.45 = 0.2025 ≈ 20%, so A is correct. P(both A) = 0.40 × 0.40 = 0.16 = 16%, not > 20%, so B is wrong. P(one O, one A) = 2 × 0.45 × 0.40 = 0.36 = 36%, not < 30%, so C is wrong. P(same type) = 0.45² + 0.40² + 0.10² + 0.05² = 0.375, so P(different) = 0.625, not < 50%, so D is wrong.",
-        "order_index": 23
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b29",
-        "title": "Rock and Jazz Music",
-        "type": "venn_diagram",
-        "stem": "In a class of 20 students, 8 like rock music only, 5 like jazz music only, and 7 like both rock and jazz.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Rock",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Jazz",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 5,
-                "set1_set2": 7,
-                "set2_only": 8
-              },
-              "diagramLayout": "two_overlap"
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Rock",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Jazz",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 8,
-                "set1_set2": 5,
-                "set2_only": 7
-              },
-              "diagramLayout": "two_overlap"
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Rock",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Jazz",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 8,
-                "set1_set2": 7,
-                "set2_only": 5
-              },
-              "diagramLayout": "two_overlap"
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Rock",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Jazz",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 7,
-                "set1_set2": 8,
-                "set2_only": 5
-              },
-              "diagramLayout": "two_overlap"
-            }
-          }
-        ],
-        "correct_answer": "C",
-        "answer_reason": "Rock only = 8 (set1_only). Both = 7 (set1_set2). Jazz only = 5 (set2_only). Total = 8+7+5 = 20. Only option C has all three values correct. A swaps set1_only and set2_only. B puts the overlap as 5 instead of 7. D puts 7 in set1_only and 8 in the overlap.",
-        "order_index": 24
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b35",
-        "title": "School Activity Groups",
-        "type": "venn_diagram",
-        "stem": "The diagram shows pupils categorised by school activity. Each letter marks a distinct region. A pupil's letter indicates which groups they belong to.\n\nWhich letter represents pupils who are in the Year Group and are both Debaters and Musicians but not Athletes?",
-        "stimulus_diagram": {
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Year Group",
-              "shape": "rectangle"
-            },
-            {
-              "id": "set2",
-              "label": "Prefects",
-              "shape": "square"
-            },
-            {
-              "id": "set3",
-              "label": "Athletes",
-              "shape": "triangle"
-            },
-            {
-              "id": "set4",
-              "label": "Debaters",
-              "shape": "circle"
-            },
-            {
-              "id": "set5",
-              "label": "Musicians",
-              "shape": "diamond"
-            }
-          ],
-          "regions": {
-            "set2_only": "A",
-            "set1_set2": "B",
-            "set1_only": "C",
-            "set1_set4": "D",
-            "set1_set4_set5": "E",
-            "set1_set3_set5": "F",
-            "set3_only": "G",
-            "outside": "H"
-          },
-          "diagramLayout": "five_complex"
-        },
-        "options": [
-          {
-            "label": "A",
-            "text": "Letter D"
-          },
-          {
-            "label": "B",
-            "text": "Letter E"
-          },
-          {
-            "label": "C",
-            "text": "Letter F"
-          },
-          {
-            "label": "D",
-            "text": "Letter G"
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Year Group = rectangle (set1), Debaters = circle (set4), Musicians = diamond (set5), Athletes = triangle (set3). Region E (set1_set4_set5) is inside the rectangle, inside the circle, and inside the diamond — but outside the triangle. This is Year Group ∩ Debaters ∩ Musicians without Athletes. Region D is set1 ∩ set4 (no Musicians). Region F is set1 ∩ set3 ∩ set5 (Athletes, not Debaters). Region G is Athletes only. Answer: B (Letter E).",
-        "order_index": 25
-      },
-      {
-        "id": "d7a0f540-b3c4-4e2d-cf9a-2b4c6d8e0f20",
-        "title": "Employee Satisfaction Scores",
-        "type": "interpreting_info",
-        "stem": "A company recorded employee satisfaction scores (out of 100) by department over three years.",
-        "table_data": {
-          "headers": [
-            "Department",
-            "2023",
-            "2024",
-            "2025"
-          ],
-          "rows": [
-            [
-              "Sales",
-              "72",
-              "68",
-              "75"
-            ],
-            [
-              "Marketing",
-              "80",
-              "82",
-              "78"
-            ],
-            [
-              "IT",
-              "65",
-              "70",
-              "76"
-            ],
-            [
-              "HR",
-              "78",
-              "79",
-              "80"
-            ]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "HR satisfaction has increased every year.",
-            "correct_answer": "Yes",
-            "answer_reason": "HR: 2023 = 78, 2024 = 79, 2025 = 80. Each year is higher than the last.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "IT had the lowest satisfaction score in 2023.",
-            "correct_answer": "Yes",
-            "answer_reason": "2023 scores: Sales 72, Marketing 80, IT 65, HR 78. IT at 65 is the lowest.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Marketing's satisfaction score decreased between 2024 and 2025.",
-            "correct_answer": "Yes",
-            "answer_reason": "Marketing 2024 = 82, Marketing 2025 = 78. The score fell by 4 points.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Sales satisfaction in 2025 is higher than Marketing satisfaction in 2025.",
-            "correct_answer": "No",
-            "answer_reason": "Sales 2025 = 75, Marketing 2025 = 78. Sales is lower, not higher.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "The average satisfaction across all departments was highest in 2025.",
-            "correct_answer": "Yes",
-            "answer_reason": "2023 average: (72+80+65+78)/4 = 73.75. 2024: (68+82+70+79)/4 = 74.75. 2025: (75+78+76+80)/4 = 77.25. 2025 is highest.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "Yes",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 26
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b34",
-        "title": "Online vs In-Store Shopping",
-        "type": "venn_diagram",
-        "stem": "A survey found that 15 people prefer online shopping only and 10 people prefer in-store shopping only. No one reported preferring both.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Online",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "In-Store",
-                  "shape": "diamond"
-                }
-              ],
-              "regions": {
-                "set1_only": 10,
-                "set2_only": 15
-              },
-              "diagramLayout": "two_separate_staggered"
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Online",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "In-Store",
-                  "shape": "diamond"
-                }
-              ],
-              "regions": {
-                "set1_only": 15,
-                "set2_only": 10
-              },
-              "diagramLayout": "two_separate_staggered"
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Online",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "In-Store",
-                  "shape": "diamond"
-                }
-              ],
-              "regions": {
-                "set1_only": 10,
-                "set1_set2": 5,
-                "set2_only": 10
-              },
-              "diagramLayout": "two_overlap_staggered"
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Online",
-                  "shape": "octagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "In-Store",
-                  "shape": "diamond"
-                }
-              ],
-              "regions": {
-                "set1_only": 15,
-                "set2_only": 15
-              },
-              "diagramLayout": "two_separate_staggered"
-            }
-          }
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Online only = 15 (set1_only). In-store only = 10 (set2_only). No overlap, so the shapes must be separate. Only option B correctly shows 15 online and 10 in-store with no overlap. A swaps the counts. C incorrectly shows an overlap of 5. D shows 15 for both groups.",
-        "order_index": 27
-      },
-      {
-        "id": "a3f7c210-84e1-4b9a-bc6d-9e1f2a3b4c05",
-        "title": "Vehicles and Electric Cars",
-        "type": "syllogism",
-        "stem": "All cars are vehicles. All electric cars are cars. Some vehicles are imported.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "All electric cars are vehicles.",
-            "correct_answer": "Yes",
-            "answer_reason": "All electric cars are cars, and all cars are vehicles. By transitive reasoning, all electric cars are vehicles.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Some cars are imported.",
-            "correct_answer": "No",
-            "answer_reason": "Some vehicles are imported, but cars are a subset of vehicles. The imported vehicles may all be non-car vehicles (e.g. lorries, buses). This does not necessarily follow.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "All vehicles are cars.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states all cars are vehicles — not the reverse. Buses, lorries, and motorcycles are vehicles but not cars.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Some imported vehicles are electric cars.",
-            "correct_answer": "No",
-            "answer_reason": "We only know some vehicles are imported. Those imported vehicles could be any type of vehicle — there is no basis to conclude any are electric cars.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "All cars are electric cars.",
-            "correct_answer": "No",
-            "answer_reason": "All electric cars are cars, but many cars run on petrol or diesel. The reverse does not follow.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "No",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 28
-      },
-      {
-        "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e16",
-        "title": "Lowering the Voting Age",
-        "type": "recognising_assumptions",
-        "stem": "The minimum voting age should be lowered to 16.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Yes; 16-year-olds can work, pay taxes, and join the armed forces, so they should have a say in how they are governed."
-          },
-          {
-            "label": "B",
-            "text": "No; most 16-year-olds lack the life experience needed to make informed decisions about complex political issues."
-          },
-          {
-            "label": "C",
-            "text": "Yes; lowering the voting age would increase overall voter turnout and strengthen democracy."
-          },
-          {
-            "label": "D",
-            "text": "No; 16-year-olds might simply vote the same way as their parents, adding no genuine diversity to the electorate."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Option A is the strongest argument because it draws a direct, principled parallel — if 16-year-olds already bear civic responsibilities (work, taxes, military service), denying them political representation is inconsistent. Option B makes a broad generalisation about maturity. Option C is speculative about turnout effects. Option D is patronising and unsupported.",
-        "order_index": 29
-      },
-      {
-        "id": "f9c2b760-d5e6-4a4f-eb1c-4d6e8f0a2b32",
-        "title": "Youth Club Hobbies",
-        "type": "venn_diagram",
-        "stem": "In a youth club of 15 members, 4 enjoy painting only, 3 enjoy both painting and drawing, 2 enjoy drawing only, and 6 enjoy photography only. No one enjoys both photography and painting, or both photography and drawing.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Painting",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drawing",
-                  "shape": "square"
-                },
-                {
-                  "id": "set3",
-                  "label": "Photography",
-                  "shape": "hexagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 6,
-                "set1_set2": 3,
-                "set2_only": 2,
-                "set3_only": 4
-              },
-              "diagramLayout": "three_one_separate"
-            }
-          },
-          {
-            "label": "B",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Painting",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drawing",
-                  "shape": "square"
-                },
-                {
-                  "id": "set3",
-                  "label": "Photography",
-                  "shape": "hexagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 4,
-                "set1_set2": 2,
-                "set2_only": 3,
-                "set3_only": 6
-              },
-              "diagramLayout": "three_one_separate"
-            }
-          },
-          {
-            "label": "C",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Painting",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drawing",
-                  "shape": "square"
-                },
-                {
-                  "id": "set3",
-                  "label": "Photography",
-                  "shape": "hexagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 3,
-                "set1_set2": 4,
-                "set2_only": 2,
-                "set3_only": 6
-              },
-              "diagramLayout": "three_one_separate"
-            }
-          },
-          {
-            "label": "D",
-            "option_data": {
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Painting",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drawing",
-                  "shape": "square"
-                },
-                {
-                  "id": "set3",
-                  "label": "Photography",
-                  "shape": "hexagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 4,
-                "set1_set2": 3,
-                "set2_only": 2,
-                "set3_only": 6
-              },
-              "diagramLayout": "three_one_separate"
-            }
-          }
-        ],
-        "correct_answer": "D",
-        "answer_reason": "Painting only = 4 (set1_only). Painting ∩ Drawing = 3 (set1_set2). Drawing only = 2 (set2_only). Photography only = 6 (set3_only). Total = 4+3+2+6 = 15. Only option D has all four values correct. A swaps painting-only and photography-only. B swaps the overlap and drawing-only. C swaps painting-only and the overlap.",
-        "order_index": 30
-      },
-      {
-        "id": "b5e8d320-91f2-4c0b-ad7e-0f2a3b4c5d07",
-        "title": "Office Floors",
-        "type": "logic_puzzle",
-        "stem": "Four employees – James, Kate, Liam, and Maya – each work on a different floor of a four-storey building (floors 1 to 4).\n\n• Kate works on a higher floor than James.\n• Maya works on floor 2.\n• Liam does not work on a floor adjacent to Maya's.\n\nWhich floor does Kate work on?",
-        "options": [
-          {
-            "label": "A",
-            "text": "Floor 1"
-          },
-          {
-            "label": "B",
-            "text": "Floor 2"
-          },
-          {
-            "label": "C",
-            "text": "Floor 3"
-          },
-          {
-            "label": "D",
-            "text": "Floor 4"
-          }
-        ],
-        "correct_answer": "C",
-        "answer_reason": "Maya is on floor 2. Liam cannot be adjacent to Maya, so Liam is not on floor 1 or 3 — Liam must be on floor 4. The remaining floors (1 and 3) go to James and Kate. Since Kate works higher than James: James = floor 1, Kate = floor 3.",
-        "order_index": 31
-      },
-      {
-        "id": "b5e8d320-91f2-4c0b-ad7e-0f2a3b4c5d11",
-        "title": "Parking Spaces",
-        "type": "logic_puzzle",
-        "stem": "Four cars – red, blue, green, and white – park in four numbered spaces (1 to 4) from left to right.\n\n• The red car is in a lower-numbered space than the blue car.\n• The green car is in space 3.\n• The white car is not next to the green car.\n\nWhich space is the blue car in?",
-        "options": [
-          {
-            "label": "A",
-            "text": "Space 1"
-          },
-          {
-            "label": "B",
-            "text": "Space 2"
-          },
-          {
-            "label": "C",
-            "text": "Space 3"
-          },
-          {
-            "label": "D",
-            "text": "Space 4"
-          }
-        ],
-        "correct_answer": "D",
-        "answer_reason": "Green is in space 3. White is not next to green (not space 2 or 4), so white = space 1. Remaining spaces for red and blue: 2 and 4. Red must be in a lower-numbered space than blue, so red = 2 and blue = 4.",
-        "order_index": 32
-      },
-      {
-        "id": "e8b1a650-c4d5-4f3e-da0b-3c5d7e9f1a26",
-        "title": "Study Hours and Grades",
-        "type": "probabilistic",
-        "stem": "A university surveyed 400 students about their study habits. 240 students reported studying more than 3 hours per day, and of those, 180 achieved a first-class grade. Of the 160 students who studied 3 hours or fewer, 40 achieved a first-class grade.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Students who study more than 3 hours are three times as likely to achieve a first-class grade as those who study 3 hours or fewer."
-          },
-          {
-            "label": "B",
-            "text": "A student selected at random has a 50% chance of achieving a first-class grade."
-          },
-          {
-            "label": "C",
-            "text": "Studying more than 3 hours per day guarantees a first-class grade."
-          },
-          {
-            "label": "D",
-            "text": "The majority of students who did not achieve a first-class grade studied more than 3 hours per day."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "P(first | >3h) = 180/240 = 75%. P(first | ≤3h) = 40/160 = 25%. 75% ÷ 25% = 3, so A is correct. Total first-class = 220, so P = 220/400 = 55%, not 50%, so B is wrong. C is wrong because only 75%, not 100%, achieved first-class. Non-first-class students: 60 studied >3h, 120 studied ≤3h — the majority studied ≤3h, so D is wrong.",
-        "order_index": 33
-      },
-      {
-        "id": "a3f7c210-84e1-4b9a-bc6d-9e1f2a3b4c04",
-        "title": "Novels and Bestsellers",
-        "type": "syllogism",
-        "stem": "All novels are books. Some books are bestsellers. No textbooks are novels.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Some novels are bestsellers.",
-            "correct_answer": "No",
-            "answer_reason": "Some books are bestsellers, but those bestselling books may not include any novels. The overlap between novels and bestsellers is not established by the premises.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "No textbooks are books.",
-            "correct_answer": "No",
-            "answer_reason": "The premise says no textbooks are novels — not that textbooks are not books. Textbooks could still be books; they just cannot be novels.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "All books are novels.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states all novels are books — not that all books are novels. This is a reversal error.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Some bestsellers are books.",
-            "correct_answer": "Yes",
-            "answer_reason": "Some books are bestsellers. Those bestselling books are, by definition, both bestsellers and books.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "No novels are textbooks.",
-            "correct_answer": "Yes",
-            "answer_reason": "No textbooks are novels. By the symmetry of 'no' statements, if no textbook is a novel, then no novel is a textbook.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "No",
-          "2": "No",
-          "3": "Yes",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 34
-      },
-      {
-        "id": "c6f9e430-a2b3-4d1c-be8f-1a3b5c7d9e12",
-        "title": "University Tuition Fees",
-        "type": "recognising_assumptions",
-        "stem": "University tuition fees should be abolished and replaced with government funding.",
-        "options": [
-          {
-            "label": "A",
-            "text": "Yes; many talented students from low-income backgrounds are deterred from attending university due to the cost of tuition fees."
-          },
-          {
-            "label": "B",
-            "text": "No; universities need a reliable income stream, and government budgets are subject to annual political decisions that could destabilise funding."
-          },
-          {
-            "label": "C",
-            "text": "Yes; other countries have free university education, so the UK should follow their example."
-          },
-          {
-            "label": "D",
-            "text": "No; students who pay fees are more motivated to study hard and get good grades."
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Option A is the strongest argument because it directly addresses the core issue of access to education with a concrete, evidence-based reason — financial barriers preventing talented students from attending university. Option B raises a practical concern about funding stability but does not address the access problem. Option C relies on a weak 'other countries do it' comparison. Option D makes a speculative claim about motivation with no supporting evidence.",
-        "order_index": 35
       }
-    ]
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-002",
+    "title": "Music School Grades",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A music school enrols 83 pupils. Each pupil studies one or two of the following grades: Grade 1, Grade 2, Grade 3, Grade 4.\n\n22 pupils study only Grade 1. 18 study only Grade 2. 15 study only Grade 3. 10 study only Grade 4. 6 pupils study Grade 1 and Grade 2. 5 pupils study Grade 2 and Grade 3. 4 pupils study Grade 3 and Grade 4. The remaining pupils are temporarily withdrawn from all grades.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "Single-grade pupils: 22 + 18 + 15 + 10 = 65. Pair pupils: 6 + 5 + 4 = 15. Subtotal 80. Withdrawn: 83 - 80 = 3. Only option A matches every value. Option B shifts pupils from Grade 1 only into the Grade 1 + Grade 2 overlap. Option C swaps the Grade 3 only and Grade 4 only counts. Option D balances the three overlap counts to 5 each, which contradicts the stated values.",
+    "order_index": 2,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
+            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
+            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
+            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+          ],
+          "regions": {
+            "set1_only": 22, "set2_only": 18, "set3_only": 15, "set4_only": 10,
+            "set1_set2": 6, "set2_set3": 5, "set3_set4": 4,
+            "outside": 3
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
+            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
+            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
+            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+          ],
+          "regions": {
+            "set1_only": 20, "set2_only": 18, "set3_only": 15, "set4_only": 10,
+            "set1_set2": 8, "set2_set3": 5, "set3_set4": 4,
+            "outside": 3
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
+            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
+            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
+            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+          ],
+          "regions": {
+            "set1_only": 22, "set2_only": 18, "set3_only": 10, "set4_only": 15,
+            "set1_set2": 6, "set2_set3": 5, "set3_set4": 4,
+            "outside": 3
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
+            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
+            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
+            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+          ],
+          "regions": {
+            "set1_only": 22, "set2_only": 18, "set3_only": 15, "set4_only": 10,
+            "set1_set2": 5, "set2_set3": 5, "set3_set4": 5,
+            "outside": 3
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-003",
+    "title": "Fitness Class Crossover",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A studio runs three weekly fitness classes: Yoga, Pilates, and HIIT. 70 members are on the register.\n\n18 members attend only Yoga. 12 attend only Pilates. 14 attend only HIIT. 6 members attend both Yoga and Pilates. 8 members attend both Yoga and HIIT. 12 members are currently on a break and attend none of the classes.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "Single-class members: 18 + 12 + 14 = 44. Yoga and Pilates = 6, Yoga and HIIT = 8 (subtotal 58). On a break = 12. Total = 70. The stem does not mention any Pilates and HIIT crossover, so that overlap is 0 and is omitted. Only option A matches every stated value. Option B swaps the Yoga only and Pilates only counts. Option C swaps the two overlap counts. Option D shifts 2 members between the Yoga only and the overlap regions.",
+    "order_index": 3,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
+            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
+            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+          ],
+          "regions": {
+            "set1_only": 18, "set2_only": 12, "set3_only": 14,
+            "set1_set2": 6, "set1_set3": 8,
+            "outside": 12
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
+            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
+            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+          ],
+          "regions": {
+            "set1_only": 12, "set2_only": 18, "set3_only": 14,
+            "set1_set2": 6, "set1_set3": 8,
+            "outside": 12
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
+            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
+            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+          ],
+          "regions": {
+            "set1_only": 18, "set2_only": 12, "set3_only": 14,
+            "set1_set2": 8, "set1_set3": 6,
+            "outside": 12
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
+            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
+            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+          ],
+          "regions": {
+            "set1_only": 16, "set2_only": 12, "set3_only": 14,
+            "set1_set2": 7, "set1_set3": 9,
+            "outside": 12
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-004",
+    "title": "Heart Disease Risk by Age",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "A GP clinic classifies adult patients by age band (20–39, 40–59, 60–79, 80+) and separately records whether each patient has been assessed as being at risk of heart disease.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a patient aged 60–79 who has also been assessed as being at risk of heart disease?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "At risk of heart disease", "shape": "pentagon" },
+        { "id": "set2", "label": "Aged 20–39",               "shape": "circle" },
+        { "id": "set3", "label": "Aged 40–59",               "shape": "hexagon" },
+        { "id": "set4", "label": "Aged 60–79",               "shape": "diamond" },
+        { "id": "set5", "label": "Aged 80+",                 "shape": "square" }
+      ],
+      "regions": {
+        "set1_only": "P",
+        "set2_only": "Q",
+        "set3_only": "R",
+        "set4_only": "S",
+        "set5_only": "T",
+        "set1_set2": "U",
+        "set1_set3": "V",
+        "set1_set4": "W",
+        "set1_set5": "X",
+        "outside":   "Y"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "A patient aged 60–79 who is at risk of heart disease lies inside both the Aged 60–79 shape and the At risk of heart disease shape, but outside every other age band. That region is marked W. Letter S marks patients aged 60–79 who are not at risk. Letter V marks patients aged 40–59 who are at risk. Letter X marks patients aged 80+ who are at risk.",
+    "order_index": 4,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter S", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter V", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter W", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter X", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-005",
+    "title": "Year Group Bridging",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "A primary school enrols every pupil in one of Years 1 to 5. A small number of pupils are bridging two consecutive year groups this term while they finish content from the lower year before joining the next.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a pupil who is bridging Year 3 and Year 4?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Year 1", "shape": "octagon" },
+        { "id": "set2", "label": "Year 2", "shape": "circle" },
+        { "id": "set3", "label": "Year 3", "shape": "hexagon" },
+        { "id": "set4", "label": "Year 4", "shape": "diamond" },
+        { "id": "set5", "label": "Year 5", "shape": "vertical_oval" }
+      ],
+      "regions": {
+        "set1_only": "P",
+        "set2_only": "Q",
+        "set3_only": "R",
+        "set4_only": "S",
+        "set5_only": "T",
+        "set1_set2": "U",
+        "set2_set3": "V",
+        "set3_set4": "W",
+        "set4_set5": "X",
+        "outside":   "Y"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "B",
+    "answer_reason": "A pupil bridging Year 3 and Year 4 lies inside both the Year 3 shape and the Year 4 shape, but outside every other year. That region is marked W. Letter R marks pupils who are only in Year 3. Letter V marks pupils bridging Year 2 and Year 3. Letter X marks pupils bridging Year 4 and Year 5.",
+    "order_index": 5,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter R", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter V", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter X", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-006",
+    "title": "Specialist Referrals",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "A community clinic logs each appointment by which specialty the patient attended. Patients attend exactly one specialty per appointment. Separately, each appointment is recorded as having been booked via a specialist referral or as a routine self-booking.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents an appointment in Cardiology that was booked via a specialist referral?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Specialist referral", "shape": "circle" },
+        { "id": "set2", "label": "Paediatrics",         "shape": "triangle" },
+        { "id": "set3", "label": "Geriatrics",          "shape": "diamond" },
+        { "id": "set4", "label": "Cardiology",          "shape": "hexagon" },
+        { "id": "set5", "label": "Dermatology",         "shape": "pentagon" },
+        { "id": "set6", "label": "Psychiatry",          "shape": "square" }
+      ],
+      "regions": {
+        "set2_only": "P",
+        "set3_only": "Q",
+        "set4_only": "R",
+        "set5_only": "S",
+        "set6_only": "T",
+        "set1_set2": "U",
+        "set1_set3": "V",
+        "set1_set4": "W",
+        "set1_set5": "X",
+        "set1_set6": "Y",
+        "outside":   "Z"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "B",
+    "answer_reason": "An appointment in Cardiology booked via a specialist referral lies inside both the Cardiology shape and the Specialist referral shape. That region is marked W. Letter R marks Cardiology appointments that were self-booked rather than referred. Letter V marks Geriatrics appointments booked via referral. Letter X marks Dermatology appointments booked via referral.",
+    "order_index": 6,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter R", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter V", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter X", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-007",
+    "title": "Music School Grades",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "A music school registers every pupil for at least one of the following six grades. A small number of pupils are studying two consecutive grades at the same time while they prepare to move up.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a pupil who is studying both Grade 5 and Grade 6?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Grade 3", "shape": "hexagon" },
+        { "id": "set2", "label": "Grade 4", "shape": "pentagon" },
+        { "id": "set3", "label": "Grade 5", "shape": "circle" },
+        { "id": "set4", "label": "Grade 6", "shape": "diamond" },
+        { "id": "set5", "label": "Grade 7", "shape": "square" },
+        { "id": "set6", "label": "Grade 8", "shape": "octagon" }
+      ],
+      "regions": {
+        "set1_only": "P",
+        "set2_only": "Q",
+        "set3_only": "R",
+        "set4_only": "S",
+        "set5_only": "T",
+        "set6_only": "U",
+        "set1_set2": "V",
+        "set2_set3": "W",
+        "set3_set4": "X",
+        "set4_set5": "Y",
+        "set5_set6": "Z"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "A pupil studying both Grade 5 and Grade 6 lies inside both the Grade 5 shape and the Grade 6 shape, but outside every other grade. That region is marked X. Letter W marks pupils studying both Grade 4 and Grade 5. Letter Y marks pupils studying both Grade 6 and Grade 7. Letter R marks pupils registered only for Grade 5.",
+    "order_index": 7,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter X", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter Y", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter R", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-008",
+    "title": "Hospital Patient Care",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "The diagram classifies a hospital's currently admitted patients by their care status. A separate group of visiting outpatients attend day clinics on the ward but are not admitted to the hospital.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents an admitted patient who is post-operative and has a chronic illness, but is not on Medication X, not aged 65 or over, does not require isolation, and is not a visiting outpatient?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Admitted patients",   "shape": "rectangle" },
+        { "id": "set2", "label": "Post-operative",      "shape": "circle" },
+        { "id": "set3", "label": "Chronic illness",     "shape": "square" },
+        { "id": "set4", "label": "On Medication X",     "shape": "pentagon" },
+        { "id": "set5", "label": "Aged 65+",            "shape": "hexagon" },
+        { "id": "set6", "label": "Requires isolation",  "shape": "diamond" },
+        { "id": "set7", "label": "Visiting outpatients","shape": "star" }
+      ],
+      "regions": {
+        "set1_only":      "P",
+        "set1_set2":      "Q",
+        "set1_set3":      "R",
+        "set1_set4":      "S",
+        "set1_set5":      "T",
+        "set1_set6":      "U",
+        "set1_set2_set3": "V",
+        "set1_set3_set4": "W",
+        "set7_only":      "X",
+        "outside":        "Y"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "A patient who is post-operative and has a chronic illness but is not on Medication X, not aged 65+, not requiring isolation, and not a visiting outpatient lies inside the Admitted patients rectangle, inside the Post-operative and Chronic illness shapes, and outside every other shape. That region is marked V. Letter W marks chronically ill patients who are also on Medication X. Letter Q marks post-operative patients only. Letter T marks elderly patients only.",
+    "order_index": 8,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter V", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter Q", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter T", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-venn-009",
+    "title": "Leisure Centre Passes",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "A leisure centre classifies its registered members by which facility passes they hold: Swimming pool, Gym, and Sauna. Members may hold any combination of the three. The centre also receives day-visit guests on a pay-per-entry basis, and tournament athletes from external clubs who train at the centre during competitions but are not registered members.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a registered member who holds passes for the Swimming pool, the Gym and the Sauna?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Swimming pool pass",   "shape": "circle" },
+        { "id": "set2", "label": "Gym pass",             "shape": "hexagon" },
+        { "id": "set3", "label": "Sauna pass",           "shape": "pentagon" },
+        { "id": "set4", "label": "Day-visit guests",     "shape": "oval" },
+        { "id": "set5", "label": "Tournament athletes",  "shape": "triangle" }
+      ],
+      "regions": {
+        "set1_only":      "P",
+        "set2_only":      "Q",
+        "set3_only":      "R",
+        "set1_set2":      "S",
+        "set1_set3":      "T",
+        "set2_set3":      "U",
+        "set1_set2_set3": "V",
+        "set4_only":      "W",
+        "set5_only":      "X",
+        "outside":        "Y"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "A member who holds all three passes lies inside the Swimming pool, Gym and Sauna shapes simultaneously. That region is marked V. Letter S marks members with only the Swimming pool and Gym passes. Letter T marks members with only the Swimming pool and Sauna passes. Letter U marks members with only the Gym and Sauna passes.",
+    "order_index": 9,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter V", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter S", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter T", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter U", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
   }
 ]
