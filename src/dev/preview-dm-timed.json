@@ -1,757 +1,722 @@
 [
   {
+    "id": "timed-dm-test-003",
+    "title": "DM Timed Test 3",
+    "question_count": 35,
+    "time_minutes": 37,
+    "questions": [
+      {
+        "id": "dm3r-023-venn",
+        "title": "Library Catalogue",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "A library holds 80 books. 30 are hardbacks, 38 are fiction, and 22 are children's books. 12 are both hardback and fiction. 8 are both hardback and children's. 10 are both fiction and children's. 4 books fall into all three categories. 16 books fit none of these categories.\n\nWhich of the following diagrams best represents the data?",
+        "options": [
+          {
+            "label": "A",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Hardback",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Fiction",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Children's",
+                  "shape": "oval"
+                }
+              ],
+              "regions": {
+                "set1_only": 14,
+                "set2_only": 20,
+                "set3_only": 8,
+                "set1_set2": 8,
+                "set1_set3": 4,
+                "set2_set3": 6,
+                "set1_set2_set3": 4,
+                "outside": 16
+              }
+            },
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Hardback",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Fiction",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Children's",
+                  "shape": "oval"
+                }
+              ],
+              "regions": {
+                "set1_only": 14,
+                "set2_only": 20,
+                "set3_only": 8,
+                "set1_set2": 8,
+                "set1_set3": 4,
+                "set2_set3": 6,
+                "set1_set2_set3": 6,
+                "outside": 14
+              }
+            },
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Hardback",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Fiction",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Children's",
+                  "shape": "oval"
+                }
+              ],
+              "regions": {
+                "set1_only": 20,
+                "set2_only": 20,
+                "set3_only": 8,
+                "set1_set2": 8,
+                "set1_set3": 4,
+                "set2_set3": 6,
+                "set1_set2_set3": 4,
+                "outside": 10
+              }
+            },
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Hardback",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Fiction",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Children's",
+                  "shape": "oval"
+                }
+              ],
+              "regions": {
+                "set1_only": 14,
+                "set2_only": 20,
+                "set3_only": 8,
+                "set1_set2": 12,
+                "set1_set3": 8,
+                "set2_set3": 10,
+                "set1_set2_set3": 4,
+                "outside": 4
+              }
+            },
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Two freebies: 4 books are in all three categories (the centre) and 16 fit none (outside). Scan — B shows 6 in the centre, stem says 4 — eliminate B. C shows 10 outside, stem says 16 — eliminate C. That leaves A and D. The stem says 12 are both hardback and fiction; 4 of those are also children's, so hardback-and-fiction only = 12 − 4 = 8. A shows 8 ✓. D shows 12 — eliminate D. Answer: A.",
+        "order_index": 23
+      },
+      {
+        "id": "dm3r-024-venn",
+        "title": "Bootcamp Student Skills",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "A coding bootcamp tracks 50 students by their skill areas. 15 are strong in Frontend, 14 in Backend, 13 in Database, and 14 in DevOps. 4 students are strong in both Frontend and Backend. 3 are strong in both Backend and Database. 4 are strong in both Database and DevOps. 5 students are not strong in any of these areas.\n\nWhich of the following diagrams best represents the data?",
+        "options": [
+          {
+            "label": "A",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Frontend",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set2",
+                  "label": "Backend",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set3",
+                  "label": "Database",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "DevOps",
+                  "shape": "triangle"
+                }
+              ],
+              "regions": {
+                "set1_only": 11,
+                "set2_only": 7,
+                "set3_only": 6,
+                "set4_only": 10,
+                "set1_set2": 4,
+                "set2_set3": 3,
+                "set3_set4": 4,
+                "outside": 5
+              }
+            },
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Frontend",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set2",
+                  "label": "Backend",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set3",
+                  "label": "Database",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "DevOps",
+                  "shape": "triangle"
+                }
+              ],
+              "regions": {
+                "set1_only": 11,
+                "set2_only": 7,
+                "set3_only": 6,
+                "set4_only": 10,
+                "set1_set2": 3,
+                "set2_set3": 4,
+                "set3_set4": 4,
+                "outside": 5
+              }
+            },
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Frontend",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set2",
+                  "label": "Backend",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set3",
+                  "label": "Database",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "DevOps",
+                  "shape": "triangle"
+                }
+              ],
+              "regions": {
+                "set1_only": 15,
+                "set2_only": 7,
+                "set3_only": 6,
+                "set4_only": 10,
+                "set1_set2": 4,
+                "set2_set3": 3,
+                "set3_set4": 4,
+                "outside": 1
+              }
+            },
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Frontend",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set2",
+                  "label": "Backend",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set3",
+                  "label": "Database",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "DevOps",
+                  "shape": "triangle"
+                }
+              ],
+              "regions": {
+                "set1_only": 10,
+                "set2_only": 7,
+                "set3_only": 6,
+                "set4_only": 11,
+                "set1_set2": 4,
+                "set2_set3": 3,
+                "set3_set4": 4,
+                "outside": 5
+              }
+            },
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Four values are freebies — the overlap counts 4, 3, 4 and the 5 students outside. Scan — C shows 1 outside (stem says 5) — eliminate C. B shows 3 in the Frontend-and-Backend overlap (stem says 4) — eliminate B. That leaves A and D, which differ in the Frontend-only and DevOps-only values. Frontend total = 15, minus the 4 also strong in Backend, leaves 11 Frontend-only. D shows 10 there — eliminate D. A shows 11 — correct. Answer: A.",
+        "order_index": 24
+      },
+      {
+        "id": "dm3r-025-venn",
+        "title": "Greenhouse Plants",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "hide_labels": true,
+        "stem": "A school greenhouse has 40 plants, each classified as succulent, flowering, or trailing. 12 plants are succulent, 18 are flowering, and 14 are trailing. 5 plants are both succulent and flowering. 6 plants are both flowering and trailing. 7 plants are none of these types.\n\nWhich of the following diagrams is consistent with the data?",
+        "options": [
+          {
+            "label": "A",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Succulent",
+                  "shape": "star"
+                },
+                {
+                  "id": "set2",
+                  "label": "Flowering",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Trailing",
+                  "shape": "octagon"
+                }
+              ],
+              "regions": {
+                "set1_only": 7,
+                "set2_only": 7,
+                "set3_only": 8,
+                "set1_set2": 5,
+                "set2_set3": 6,
+                "outside": 7
+              }
+            },
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Succulent",
+                  "shape": "star"
+                },
+                {
+                  "id": "set2",
+                  "label": "Flowering",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Trailing",
+                  "shape": "octagon"
+                }
+              ],
+              "regions": {
+                "set1_only": 8,
+                "set2_only": 7,
+                "set3_only": 7,
+                "set1_set2": 5,
+                "set2_set3": 6,
+                "outside": 7
+              }
+            },
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Succulent",
+                  "shape": "star"
+                },
+                {
+                  "id": "set2",
+                  "label": "Flowering",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Trailing",
+                  "shape": "octagon"
+                }
+              ],
+              "regions": {
+                "set1_only": 7,
+                "set2_only": 10,
+                "set3_only": 8,
+                "set1_set2": 5,
+                "set2_set3": 6,
+                "outside": 4
+              }
+            },
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "",
+            "option_data": {
+              "diagramLayout": "auto",
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Succulent",
+                  "shape": "star"
+                },
+                {
+                  "id": "set2",
+                  "label": "Flowering",
+                  "shape": "trapezoid"
+                },
+                {
+                  "id": "set3",
+                  "label": "Trailing",
+                  "shape": "octagon"
+                }
+              ],
+              "regions": {
+                "set1_only": 7,
+                "set2_only": 7,
+                "set3_only": 8,
+                "set1_set2": 6,
+                "set2_set3": 5,
+                "outside": 7
+              }
+            },
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The category totals are Succulent 12, Flowering 18, Trailing 14, and only flowering overlaps with the other two — so one shape must total 18 and overlap with both sides. Work out each shape's total in every option. Option C has the middle shape totalling 10 + 5 + 6 = 21 — no category has that total — eliminate C. Option D has side shapes totalling 7 + 6 = 13 and 8 + 5 = 13 — neither matches Succulent 12 or Trailing 14 — eliminate D. Option B has sides totalling 8 + 5 = 13 and 7 + 6 = 13 — same problem — eliminate B. Only Option A has sides totalling 7 + 5 = 12 (Succulent) and 8 + 6 = 14 (Trailing), with the middle shape at 7 + 5 + 6 = 18 (Flowering). Answer: A.",
+        "order_index": 25
+      },
+      {
+        "id": "dm3r-026-venn",
+        "title": "Office Task Classification",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "The diagram shows office tasks categorised by five attributes. Each letter marks a different region.\n\nWhich letter represents a task that is urgent and requires approval, but is not recurring, does not need a manager, and is not automated?",
+        "stimulus_diagram": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Urgent",
+              "shape": "rectangle"
+            },
+            {
+              "id": "set2",
+              "label": "Approval",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set3",
+              "label": "Recurring",
+              "shape": "diamond"
+            },
+            {
+              "id": "set4",
+              "label": "Manager",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set5",
+              "label": "Automated",
+              "shape": "star"
+            }
+          ],
+          "regions": {
+            "set1_only": "V",
+            "set1_set2": "P",
+            "set1_set3": "Q",
+            "set1_set4": "R",
+            "set1_set5": "S",
+            "set2_only": "T",
+            "set3_only": "U",
+            "set4_only": "W",
+            "set5_only": "X",
+            "outside": "Y"
+          }
+        },
+        "options": [
+          {
+            "label": "A",
+            "text": "Letter P",
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "text": "Letter T",
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "text": "Letter V",
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "text": "Letter R",
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The question needs a task that is urgent (inside the rectangle) and requires approval (inside the pentagon), but outside the diamond (recurring), hexagon (manager), and star (automated). Letter T sits in the pentagon only — missing urgent. Letter V sits in the rectangle only — missing approval. Letter R sits where the rectangle and hexagon overlap — that includes the manager, which is excluded. Letter P sits where the rectangle and pentagon overlap, outside every other shape — matching every condition. Option A.",
+        "order_index": 26
+      },
+      {
+        "id": "dm3r-027-venn",
+        "title": "Employee Training Records",
+        "type": "venn_diagram",
+        "difficulty": "hard",
+        "stem": "The diagram shows 150 workers at a company, categorised by employment type and training records. Every completed induction and every safety certification belongs to a full-time staff member. Contract staff are not full-time and hold neither induction nor safety certification. Each letter marks a different region.\n\nWhich letter represents a full-time staff member who has completed induction, but has not completed safety certification and is not contract staff?",
+        "stimulus_diagram": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Full-time staff",
+              "shape": "rectangle"
+            },
+            {
+              "id": "set2",
+              "label": "Induction done",
+              "shape": "circle"
+            },
+            {
+              "id": "set3",
+              "label": "Safety certified",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set4",
+              "label": "Contract staff",
+              "shape": "diamond"
+            }
+          ],
+          "regions": {
+            "set1_only": "P",
+            "set1_set2": "Q",
+            "set1_set2_set3": "R",
+            "set1_set3": "S",
+            "set4_only": "T",
+            "outside": "U"
+          }
+        },
+        "options": [
+          {
+            "label": "A",
+            "text": "Letter Q",
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "text": "Letter R",
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "text": "Letter P",
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "text": "Letter T",
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The question needs a full-time staff member (inside the rectangle) who has completed induction (inside the circle), but has not completed safety certification (outside the pentagon) and is not contract staff (outside the diamond). Letter R sits where the rectangle, circle, and pentagon all overlap — that includes safety certified, which is excluded. Letter P is inside the rectangle only — missing induction. Letter T is inside the diamond, outside the rectangle — not full-time staff at all. Letter Q sits inside the rectangle and circle but outside the pentagon and diamond — matching every condition. Option A.",
+        "order_index": 27
+      },
+      {
+        "id": "dm3r-028-venn",
+        "title": "Engineer Certification Hierarchy",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "The diagram shows the engineering staff at a firm. All senior engineers are engineers. All principal engineers are senior engineers. Each letter marks a different region.\n\nWhich letter represents an engineer who is senior but not principal?",
+        "stimulus_diagram": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Engineer",
+              "shape": "octagon"
+            },
+            {
+              "id": "set2",
+              "label": "Senior engineer",
+              "shape": "square"
+            },
+            {
+              "id": "set3",
+              "label": "Principal engineer",
+              "shape": "circle"
+            }
+          ],
+          "regions": {
+            "set1_only": "P",
+            "set1_set2": "Q",
+            "set1_set2_set3": "R",
+            "outside": "S"
+          }
+        },
+        "options": [
+          {
+            "label": "A",
+            "text": "Letter P",
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "text": "Letter Q",
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "text": "Letter R",
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "text": "Letter S",
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "The diagram shows three nested shapes: the octagon (engineers) contains the square (senior engineers), which contains the circle (principal engineers). A senior engineer who is not principal sits in the ring between the square and the circle. Letter P is inside the octagon but outside the square — an engineer who is not senior. Letter R is inside all three — a principal engineer, which the question excludes. Letter S is outside all three — not an engineer at all. Letter Q is inside the octagon and square but outside the circle — matching the description. Option B.",
+        "order_index": 28
+      }
+    ]
+  },
+  {
     "id": "timed-dm-test-004",
     "title": "DM Timed Test 4",
     "question_count": 35,
     "time_minutes": 37,
     "questions": [
       {
-        "id": "dm4r-001-syl",
-        "title": "Photography Club Rules",
-        "type": "syllogism",
-        "difficulty": "normal",
-        "stem": "Members of the photography club must submit a portfolio before exhibiting their work unless they have won a regional award. All regional award winners have been members for at least three years. Some members who have been members for at least three years have not won a regional award.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "A member exhibiting work without submitting a portfolio must have won a regional award.",
-            "correct_answer": "Yes",
-            "answer_reason": "The premise states members must submit a portfolio unless they have won a regional award. The only exception to submitting a portfolio is having won a regional award. Therefore, if a member exhibits without a portfolio, they must have won a regional award.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All members who have been members for at least three years have won a regional award.",
-            "correct_answer": "No",
-            "answer_reason": "The premises explicitly state that some members who have been members for at least three years have NOT won a regional award. This conclusion directly contradicts the given information. This is a quantifier shift — 'some have not' cannot become 'all have.'",
-            "order_index": 2
-          },
-          {
-            "statement_text": "A regional award winner has been a member for at least three years.",
-            "correct_answer": "Yes",
-            "answer_reason": "This is directly stated in the premises: 'All regional award winners have been members for at least three years.' It follows immediately.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "A member who has been a member for at least three years may exhibit without submitting a portfolio.",
-            "correct_answer": "No",
-            "answer_reason": "Being a member for three years does not guarantee winning a regional award — the premises state some three-year members have not won one. Only regional award winners can exhibit without a portfolio. Therefore, long membership alone is not sufficient to bypass the portfolio requirement.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Some members who have not won a regional award have been members for at least three years.",
-            "correct_answer": "Yes",
-            "answer_reason": "This is a direct restatement of the third premise: 'Some members who have been members for at least three years have not won a regional award.' The same group is described from the other direction.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 1
-      },
-      {
-        "id": "dm4r-002-syl",
-        "title": "Zorplek Classification",
-        "type": "syllogism",
-        "difficulty": "hard",
-        "stem": "All zorpleks produce fizzle. No grunthi produces fizzle. Some zorpleks are also quibbles. Only quibbles can be certified as nimtars.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "A nimtar must be a quibble.",
-            "correct_answer": "Yes",
-            "answer_reason": "'Only quibbles can be certified as nimtars' means being a quibble is a necessary condition for being a nimtar. Therefore every nimtar must be a quibble.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "No grunthi is a zorplek.",
-            "correct_answer": "Yes",
-            "answer_reason": "All zorpleks produce fizzle, and no grunthi produces fizzle. If a grunthi were a zorplek, it would produce fizzle, contradicting the second premise. Therefore no grunthi can be a zorplek.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Some nimtars produce fizzle.",
-            "correct_answer": "No",
-            "answer_reason": "Nimtars must be quibbles, and some zorpleks are quibbles. However, we do not know whether the quibbles that are certified as nimtars are specifically zorplek-quibbles (which produce fizzle) or non-zorplek quibbles (which may not). We cannot chain two 'some' claims to guarantee nimtars produce fizzle.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "All zorpleks are quibbles.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states 'some zorpleks are also quibbles.' Under UCAT's definition, 'some' means more than zero but less than all. Therefore not all zorpleks are quibbles — this is a quantifier shift from 'some' to 'all.'",
-            "order_index": 4
-          },
-          {
-            "statement_text": "A grunthi cannot be a nimtar.",
-            "correct_answer": "No",
-            "answer_reason": "Nimtars must be quibbles, but the premises do not prevent a grunthi from being a quibble. A grunthi cannot be a zorplek, but nothing stops a grunthi from being a quibble through other means. Therefore a grunthi could potentially be a quibble and be certified as a nimtar.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "Yes",
-          "2": "No",
-          "3": "No",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 2
-      },
-      {
-        "id": "dm4r-003-syl",
-        "title": "Community Garden Rules",
-        "type": "syllogism",
-        "difficulty": "normal",
-        "stem": "If a plot holder grows vegetables, they must attend the monthly meeting. Some plot holders who attend the monthly meeting also volunteer for maintenance. No volunteer for maintenance is under the age of 18.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "A plot holder who grows vegetables attends the monthly meeting.",
-            "correct_answer": "Yes",
-            "answer_reason": "This follows directly from the first premise: 'If a plot holder grows vegetables, they must attend the monthly meeting.' Growing vegetables guarantees attendance at the meeting.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All plot holders attend the monthly meeting.",
-            "correct_answer": "No",
-            "answer_reason": "Only plot holders who grow vegetables must attend. The premises say nothing about plot holders who do not grow vegetables — they may or may not attend. This extends the scope beyond what is stated.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Some plot holders who grow vegetables volunteer for maintenance.",
-            "correct_answer": "No",
-            "answer_reason": "Vegetable growers attend meetings, and some meeting attendees volunteer for maintenance. However, the vegetable growers might be among those meeting attendees who do not volunteer. Two 'some' claims cannot be chained to produce a definite conclusion.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "No plot holder who grows vegetables is under 18.",
-            "correct_answer": "No",
-            "answer_reason": "The age restriction applies only to maintenance volunteers. Growing vegetables requires attending meetings, but not volunteering for maintenance. A vegetable-growing plot holder could attend meetings without volunteering, so the age restriction does not necessarily apply to them.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "If a plot holder volunteers for maintenance, they are at least 18 years old.",
-            "correct_answer": "Yes",
-            "answer_reason": "'No volunteer for maintenance is under the age of 18' means every maintenance volunteer must be 18 or older. By contraposition, being under 18 means not being a maintenance volunteer.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 3
-      },
-      {
-        "id": "dm4r-004-syl",
-        "title": "Cycling Club Members",
-        "type": "syllogism",
-        "difficulty": "normal",
-        "stem": "Completing at least five training rides is necessary to enter the cycling club's annual race. Only members who complete the annual race receive a participation medal. Some members who have completed at least five training rides did not enter the annual race.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "A member with a participation medal has completed the annual race.",
-            "correct_answer": "Yes",
-            "answer_reason": "'Only members who complete the annual race receive a participation medal' means completing the race is necessary for receiving the medal. Therefore any medal holder must have completed the race.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "A member who has completed at least five training rides will receive a participation medal.",
-            "correct_answer": "No",
-            "answer_reason": "Completing five training rides is necessary to enter the race, but it does not guarantee entry — the premises state some members with five rides did not enter. Even entering does not guarantee completing the race or receiving a medal. Multiple steps are assumed.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "A member entering the annual race has completed at least five training rides.",
-            "correct_answer": "Yes",
-            "answer_reason": "The premise states that completing at least five training rides is necessary to enter the race. Therefore any member who enters must have completed the required rides.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "All members who have completed at least five training rides entered the annual race.",
-            "correct_answer": "No",
-            "answer_reason": "This is directly contradicted by the premises, which state that some members who completed five training rides did not enter the race. Five rides are necessary but not sufficient for entry.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "No member who receives a participation medal has completed fewer than five training rides.",
-            "correct_answer": "Yes",
-            "answer_reason": "A medal requires completing the race. Entering the race requires completing five training rides. Therefore: medal implies race completion implies five rides completed. No medal holder can have fewer than five rides.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 4
-      },
-      {
-        "id": "dm4r-005-syl",
-        "title": "Chemical Compound Properties",
-        "type": "syllogism",
-        "difficulty": "hard",
-        "stem": "Compound X is unstable if it has not been treated with reagent A. Any compound used in the final product must be stable. Some compounds treated with reagent A are also treated with reagent B. No compound treated with reagent B is suitable for external use.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "A compound used in the final product has been treated with reagent A.",
-            "correct_answer": "Yes",
-            "answer_reason": "A compound not treated with reagent A is unstable. Any compound in the final product must be stable. By contraposition: stable implies treated with A. Therefore final product implies stable implies treated with A.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All compounds treated with reagent A are stable.",
-            "correct_answer": "No",
-            "answer_reason": "The premise states that not being treated with A causes instability. The contrapositive is: stable implies treated with A. However, this does not mean treated with A implies stable — there could be other causes of instability besides lacking reagent A.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "A compound treated with reagent B is not used in the final product.",
-            "correct_answer": "No",
-            "answer_reason": "Compounds treated with reagent B are not suitable for external use, but the premises do not state that the final product is for external use. A compound treated with B could still be stable and used in a final product that is not intended for external use.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Some compounds treated with reagent A are not suitable for external use.",
-            "correct_answer": "Yes",
-            "answer_reason": "Some compounds treated with reagent A are also treated with reagent B. No compound treated with reagent B is suitable for external use. Therefore those compounds treated with both A and B are not suitable for external use — and they are among the compounds treated with A.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "All compounds used in the final product are suitable for external use.",
-            "correct_answer": "No",
-            "answer_reason": "The premises provide no information linking final product use with external use suitability. These are independent attributes, and no premise connects them. This conclusion introduces a relationship not established in the given information.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "Yes",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 5
-      },
-      {
-        "id": "dm4r-006-logic",
-        "title": "Concert Hall Seating",
-        "type": "logic_puzzle",
-        "difficulty": "normal",
-        "stem": "Five friends — Aisha, Ben, Clara, Dan, and Emma — sit in a row of five seats at a concert hall. The seats are numbered 1 to 5 from left to right.\n\n- Aisha sits directly next to Ben.\n- Clara sits in seat 3.\n- Dan sits further to the right than Emma.\n- Ben does not sit directly next to Clara.\n- Emma does not sit at either end.\n\nWhich of the following must be true?",
-        "options": [
-          {"label": "A", "text": "Ben sits in seat 1."},
-          {"label": "B", "text": "Dan sits in seat 4."},
-          {"label": "C", "text": "Emma sits in seat 2."},
-          {"label": "D", "text": "Aisha sits in seat 4."}
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Clara is in seat 3. Emma cannot sit at either end, so Emma is in seat 2 or 4. Ben cannot sit next to Clara (seat 3), so Ben cannot be in seat 2 or 4 — Ben must be in seat 1 or 5. Aisha sits directly next to Ben: if Ben is in seat 1, Aisha is in seat 2; if Ben is in seat 5, Aisha is in seat 4. Testing Ben in seat 5: Aisha is in seat 4, leaving Emma for seat 2 and Dan for seat 1. But Dan (seat 1) must be further right than Emma (seat 2), and 1 is left of 2, so this fails. Therefore Ben must be in seat 1, with Aisha in seat 2, Emma in seat 4, and Dan in seat 5.",
-        "order_index": 6
-      },
-      {
-        "id": "dm4r-007-logic",
-        "title": "Biscuit Production Schedule",
-        "type": "logic_puzzle",
-        "difficulty": "normal",
-        "stem": "A bakery produces five types of biscuit on Monday. The total production is 200 biscuits. Shortbread accounts for twice as many as ginger snaps. Digestives account for 20 more than shortbread. Bourbons and custard creams together total 50. Custard creams account for 10 more than bourbons.\n\nHow many digestive biscuits were produced?",
-        "options": [
-          {"label": "A", "text": "52"},
-          {"label": "B", "text": "66"},
-          {"label": "C", "text": "72"},
-          {"label": "D", "text": "78"}
-        ],
-        "correct_answer": "C",
-        "answer_reason": "Start with bourbons and custard creams: they total 50, and custard creams are 10 more than bourbons. So 2 × bourbons + 10 = 50, giving bourbons = 20 and custard creams = 30. Let ginger snaps = G. Shortbread = 2G, and digestives = 2G + 20. The total is G + 2G + (2G + 20) + 20 + 30 = 200, so 5G + 70 = 200, giving G = 26. Therefore digestives = 2 × 26 + 20 = 72.",
-        "order_index": 7
-      },
-      {
-        "id": "dm4r-008-logic",
-        "title": "Science Fair Project Assignment",
-        "type": "logic_puzzle",
-        "difficulty": "normal",
-        "stem": "Four students — Priya, Ravi, Sara, and Tom — each select a different science fair project from: Volcanoes, Solar System, Plant Growth, and Robotics.\n\n- Priya does not choose Robotics or Solar System.\n- Sara chooses Plant Growth.\n- Tom does not choose Volcanoes.\n- Ravi does not choose Solar System.\n\nWhich project does Tom choose?",
-        "options": [
-          {"label": "A", "text": "Volcanoes"},
-          {"label": "B", "text": "Solar System"},
-          {"label": "C", "text": "Plant Growth"},
-          {"label": "D", "text": "Robotics"}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "Sara chooses Plant Growth, eliminating it for others. Priya cannot choose Robotics or Solar System, and with Plant Growth taken, Priya must choose Volcanoes. Ravi cannot choose Solar System, and with Volcanoes and Plant Growth both taken, Ravi must choose Robotics. The only remaining project for Tom is Solar System.",
-        "order_index": 8
-      },
-      {
-        "id": "dm4r-009-logic",
-        "title": "Charity Fundraiser Amounts",
-        "type": "logic_puzzle",
-        "difficulty": "hard",
-        "stem": "Five colleagues — Amy, Ben, Carol, Dave, and Emma — each raise a different amount for a charity event. The following is known:\n\n- The total raised by all five is £450.\n- Amy raises £30 more than Dave.\n- Ben raises twice as much as Carol.\n- Emma raises £50.\n- Carol raises £20 less than Dave.\n\nHow much does Amy raise?",
-        "options": [
-          {"label": "A", "text": "£86"},
-          {"label": "B", "text": "£96"},
-          {"label": "C", "text": "£116"},
-          {"label": "D", "text": "£132"}
-        ],
-        "correct_answer": "C",
-        "answer_reason": "Emma raises £50. Let Dave = D. Then Amy = D + 30, Carol = D − 20, and Ben = 2 × (D − 20) = 2D − 40. The total is (D + 30) + (2D − 40) + (D − 20) + D + 50 = 450. Simplifying: 5D + 20 = 450, so D = 86. Amy raises 86 + 30 = £116. Checking: Dave = £86, Carol = £66, Ben = £132, Emma = £50. Total = 116 + 132 + 66 + 86 + 50 = £450.",
-        "order_index": 9
-      },
-      {
-        "id": "dm4r-010-logic",
-        "title": "Meeting Room Booking",
-        "type": "logic_puzzle",
-        "difficulty": "normal",
-        "stem": "A company has four meeting rooms available for booking on Friday. The four teams, their sizes, and available rooms are:\n\nTeam Alpha: 11 members — can use Room 1 or Room 4\nTeam Beta: 5 members — can use Room 2 or Room 3\nTeam Gamma: 14 members — can use Room 4 only\nTeam Delta: 7 members — can use Room 1 or Room 2\n\nRoom 1 seats 12, Room 2 seats 8, Room 3 seats 6, and Room 4 seats 16. Each room is booked by exactly one team. A team must use a room that seats all its members.\n\nWhich room does Team Alpha book?",
-        "options": [
-          {"label": "A", "text": "Room 1"},
-          {"label": "B", "text": "Room 2"},
-          {"label": "C", "text": "Room 3"},
-          {"label": "D", "text": "Room 4"}
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Team Gamma has 14 members and can only use Room 4 (which seats 16), so Gamma must book Room 4. Team Alpha has 11 members and can use Room 1 or Room 4. Since Room 4 is taken by Gamma, Alpha must book Room 1 (seats 12, which accommodates 11). Team Delta then takes Room 2 (seats 8, accommodates 7), and Team Beta takes Room 3 (seats 6, accommodates 5).",
-        "order_index": 10
-      },
-      {
-        "id": "dm4r-011-logic",
-        "title": "Honest and Dishonest Players",
-        "type": "logic_puzzle",
-        "difficulty": "hard",
-        "stem": "Four players — Faye, George, Holly, and Ivan — play a game. Each player is either always honest or always dishonest. The following statements are made:\n\n- Faye says: \"George is dishonest.\"\n- George says: \"Holly and I are both honest.\"\n- Holly says: \"Faye is dishonest.\"\n\nIvan is known to be honest. Ivan says: \"Exactly two of Faye, George, and Holly are honest.\"\n\nWhich player among Faye, George, and Holly is dishonest?",
-        "options": [
-          {"label": "A", "text": "Faye"},
-          {"label": "B", "text": "George"},
-          {"label": "C", "text": "Holly"},
-          {"label": "D", "text": "It cannot be determined."}
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Ivan is honest, so exactly two of Faye, George, and Holly are honest — meaning exactly one is dishonest. If George is honest, his claim that 'Holly and I are both honest' is true, making Holly honest. Then Faye must be the dishonest one. Checking: Faye (dishonest) says 'George is dishonest' — a lie, consistent since George is honest. Holly (honest) says 'Faye is dishonest' — true, consistent. If instead George is dishonest, then Faye and Holly must both be honest. But Holly (honest) says 'Faye is dishonest,' which would be false since Faye is honest — a contradiction. Therefore George must be honest and Faye is the dishonest player.",
-        "order_index": 11
-      },
-      {
-        "id": "dm4r-012-info",
-        "title": "Regional Rainfall Data",
-        "type": "interpreting_info",
-        "difficulty": "normal",
-        "stem": "The table below shows the average monthly rainfall in millimetres for four regions over a four-month period.",
-        "table_data": {
-          "headers": ["Region", "January", "February", "March", "April"],
-          "rows": [
-            ["North", "85", "72", "68", "55"],
-            ["South", "42", "38", "45", "52"],
-            ["East", "63", "58", "61", "49"],
-            ["West", "91", "88", "76", "70"]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "The West region had the highest rainfall in every month shown.",
-            "correct_answer": "Yes",
-            "answer_reason": "In January, West (91) is higher than North (85), South (42), and East (63). In February, West (88) exceeds all others. In March, West (76) exceeds North (68), South (45), and East (61). In April, West (70) exceeds North (55), South (52), and East (49). West has the highest rainfall in every month.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "The total rainfall for the South region across all four months was less than the total for the North region in January and February combined.",
-            "correct_answer": "No",
-            "answer_reason": "South total = 42 + 38 + 45 + 52 = 177 mm. North in January and February = 85 + 72 = 157 mm. 177 is greater than 157, not less. The statement is false.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "The North region had a decrease in rainfall from January to April.",
-            "correct_answer": "Yes",
-            "answer_reason": "North's rainfall went from 85 mm in January to 55 mm in April. 55 is less than 85, confirming a decrease over this period.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "The East region had higher rainfall than the South region in every month.",
-            "correct_answer": "No",
-            "answer_reason": "In January (63 > 42), February (58 > 38), and March (61 > 45), East exceeds South. However, in April, East (49) is less than South (52). The statement fails in April.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Rainfall in the West region decreased each month from January to April.",
-            "correct_answer": "Yes",
-            "answer_reason": "West's monthly figures are 91, 88, 76, 70. Each value is lower than the one before: 91 > 88 > 76 > 70. The rainfall decreased every month.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "Yes",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 12
-      },
-      {
-        "id": "dm4r-013-info",
-        "title": "Renewable Energy Report",
-        "type": "interpreting_info",
-        "difficulty": "normal",
-        "stem": "A recent report states that the proportion of electricity generated from renewable sources in Country X rose from 18% in 2015 to 34% in 2023. Over the same period, total electricity consumption in the country increased by 12%. The report notes that investment in wind farms has doubled since 2018, while solar panel installations have grown by 150% since 2020. The report concludes that if current trends continue, renewable energy could supply more than half of the country's electricity by 2030.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "The total amount of electricity generated from renewable sources increased between 2015 and 2023.",
-            "correct_answer": "Yes",
-            "answer_reason": "The renewable share nearly doubled (18% to 34%) while total consumption also increased by 12%. If total consumption in 2015 was 100 units, renewable output was 18. In 2023, total consumption was 112 units, with renewable output at 34% of 112 = 38.1. The absolute amount increased from 18 to 38.1.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Investment in wind farms doubled between 2015 and 2023.",
-            "correct_answer": "No",
-            "answer_reason": "The report states investment in wind farms has doubled 'since 2018,' not since 2015. We have no information about investment levels in 2015, so we cannot conclude a doubling over the 2015–2023 period.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Renewable energy will supply more than half of the country's electricity by 2030.",
-            "correct_answer": "No",
-            "answer_reason": "The report says 'if current trends continue, renewable energy could supply more than half.' This is a conditional projection using the word 'could,' not a definite prediction. Future trends may change, so this cannot be stated as fact.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Solar panel installations grew faster than wind farm investment between 2020 and 2023.",
-            "correct_answer": "No",
-            "answer_reason": "Solar installations grew 150% since 2020, while wind investment doubled since 2018. These cover different time periods and measure different things (installations vs investment). They cannot be directly compared over the same interval.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "The proportion of electricity from non-renewable sources decreased between 2015 and 2023.",
-            "correct_answer": "Yes",
-            "answer_reason": "If renewable energy rose from 18% to 34%, then non-renewable fell from 82% to 66%. The proportion from non-renewable sources decreased.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 13
-      },
-      {
-        "id": "dm4r-014-info",
-        "title": "Bicycle Storage",
-        "type": "interpreting_info",
-        "difficulty": "normal",
-        "stem": "In a building's bike storage, there are 40 bicycles. There are 24 road bikes and the rest are mountain bikes. Half of the road bikes are black and the other half are silver. None of the silver bicycles are mountain bikes.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Some of the mountain bikes are black.",
-            "correct_answer": "No",
-            "answer_reason": "We know mountain bikes cannot be silver (stated), but 'not silver' does not mean 'black.' Mountain bikes could be any non-silver colour — red, blue, green, or any other colour. We cannot conclude they are black.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All of the silver bicycles are road bikes.",
-            "correct_answer": "Yes",
-            "answer_reason": "The only types of bicycle are road bikes and mountain bikes. None of the silver bicycles are mountain bikes. Therefore all silver bicycles must be road bikes.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "There are more black road bikes than silver mountain bikes.",
-            "correct_answer": "Yes",
-            "answer_reason": "There are 12 black road bikes (half of 24). There are zero silver mountain bikes (stated: none of the silver bicycles are mountain bikes). 12 is more than 0.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "There are fewer mountain bikes than silver bicycles.",
-            "correct_answer": "No",
-            "answer_reason": "There are 16 mountain bikes (40 − 24). All silver bicycles are road bikes, and there are 12 silver road bikes (half of 24). Since 16 is greater than 12, there are more mountain bikes than silver bicycles, not fewer.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Half of all the bicycles are black.",
-            "correct_answer": "No",
-            "answer_reason": "We know 12 road bikes are black. Half of 40 is 20. We would need 8 mountain bikes to also be black, but we have no information about mountain bike colours beyond knowing they are not silver. We cannot determine the total number of black bicycles.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "No",
-          "1": "Yes",
-          "2": "Yes",
-          "3": "No",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 14
-      },
-      {
-        "id": "dm4r-015-info",
-        "title": "Volunteer Shift Survey",
-        "type": "interpreting_info",
-        "difficulty": "normal",
-        "stem": "A survey of 120 volunteers at a community centre found that volunteers work either morning shifts, afternoon shifts, or both. The survey showed that 78 volunteers work morning shifts and 65 work afternoon shifts. A follow-up report noted that volunteers who work both shifts were more likely to report feeling 'very satisfied' with their role than those working a single shift. The centre manager stated that satisfaction levels have improved steadily since the introduction of flexible shift patterns two years ago.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "23 volunteers work both morning and afternoon shifts.",
-            "correct_answer": "Yes",
-            "answer_reason": "Using the inclusion-exclusion principle: morning + afternoon − both = total. So 78 + 65 − both = 120, giving both = 143 − 120 = 23.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "More volunteers work only morning shifts than work only afternoon shifts.",
-            "correct_answer": "Yes",
-            "answer_reason": "Morning only = 78 − 23 = 55. Afternoon only = 65 − 23 = 42. 55 is more than 42.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "Volunteers who work both shifts are more satisfied because they have more flexible hours.",
-            "correct_answer": "No",
-            "answer_reason": "The report notes a correlation between working both shifts and higher satisfaction, but does not establish a causal link to 'flexible hours.' The satisfaction could be due to many other factors. This assumes a cause that is not stated in the data.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Flexible shift patterns have caused satisfaction levels to improve.",
-            "correct_answer": "No",
-            "answer_reason": "The manager states that satisfaction improved since flexible shifts were introduced. However, this is correlation, not proven causation. Other changes over the two years could explain the improvement.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "Most volunteers work a single shift.",
-            "correct_answer": "Yes",
-            "answer_reason": "Volunteers working a single shift = 55 (morning only) + 42 (afternoon only) = 97. Out of 120 total, 97 work a single shift, which is about 81% — well over half, so 'most' is correct.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "Yes",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 15
-      },
-      {
-        "id": "dm4r-016-info",
-        "title": "Factory Production Output",
-        "type": "interpreting_info",
-        "difficulty": "normal",
-        "stem": "The table below shows the daily output in units for four production lines over one working week.",
-        "table_data": {
-          "headers": ["Line", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-          "rows": [
-            ["A", "120", "135", "128", "140", "132"],
-            ["B", "98", "102", "115", "108", "97"],
-            ["C", "150", "142", "138", "145", "155"],
-            ["D", "85", "90", "88", "92", "95"]
-          ]
-        },
-        "decision_making_question_statements": [
-          {
-            "statement_text": "Line C had the highest total output for the week.",
-            "correct_answer": "Yes",
-            "answer_reason": "Line A total = 120 + 135 + 128 + 140 + 132 = 655. Line B = 98 + 102 + 115 + 108 + 97 = 520. Line C = 150 + 142 + 138 + 145 + 155 = 730. Line D = 85 + 90 + 88 + 92 + 95 = 450. Line C at 730 has the highest total.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "Line B's output increased from Monday to Friday.",
-            "correct_answer": "No",
-            "answer_reason": "Line B's figures are 98, 102, 115, 108, 97. The output increased from Monday to Wednesday but then decreased on Thursday (108) and again on Friday (97). It did not increase throughout the week.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "The average daily output of Line A was more than 132 units.",
-            "correct_answer": "No",
-            "answer_reason": "Line A's total output is 655. The average is 655 ÷ 5 = 131. This is less than 132, not more.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "Line D's output increased every day throughout the week.",
-            "correct_answer": "No",
-            "answer_reason": "Line D's figures are 85, 90, 88, 92, 95. From Tuesday (90) to Wednesday (88) there is a decrease. Therefore the output did not increase every day.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "The combined output of all four lines was highest on Thursday.",
-            "correct_answer": "Yes",
-            "answer_reason": "Monday combined = 120 + 98 + 150 + 85 = 453. Tuesday = 135 + 102 + 142 + 90 = 469. Wednesday = 128 + 115 + 138 + 88 = 469. Thursday = 140 + 108 + 145 + 92 = 485. Friday = 132 + 97 + 155 + 95 = 479. Thursday at 485 is the highest.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "No",
-          "2": "No",
-          "3": "No",
-          "4": "Yes"
-        },
-        "answer_reason": null,
-        "order_index": 16
-      },
-      {
-        "id": "dm4r-017-info",
-        "title": "Trophy Cabinet Categories",
-        "type": "interpreting_info",
-        "difficulty": "hard",
-        "stem": "A sports club displays 36 trophies. Of these, 20 are gold and the rest are silver. There are 22 trophies for individual events and the rest are for team events. All of the gold trophies are for individual events. None of the silver team trophies were won after 2015.",
-        "decision_making_question_statements": [
-          {
-            "statement_text": "There are exactly 2 silver individual trophies.",
-            "correct_answer": "Yes",
-            "answer_reason": "There are 22 individual trophies in total and 20 gold trophies, all of which are for individual events. Therefore silver individual trophies = 22 − 20 = 2.",
-            "order_index": 1
-          },
-          {
-            "statement_text": "All team trophies are silver.",
-            "correct_answer": "Yes",
-            "answer_reason": "All gold trophies are for individual events, meaning there are zero gold team trophies. Team trophies = 36 − 22 = 14. Since no gold trophy is a team trophy, all 14 team trophies must be silver.",
-            "order_index": 2
-          },
-          {
-            "statement_text": "There are 14 gold team trophies.",
-            "correct_answer": "No",
-            "answer_reason": "All gold trophies are for individual events. This means there are zero gold team trophies, not 14. The 14 team trophies are all silver.",
-            "order_index": 3
-          },
-          {
-            "statement_text": "All trophies won after 2015 are for individual events.",
-            "correct_answer": "Yes",
-            "answer_reason": "None of the silver team trophies were won after 2015, and all team trophies are silver (as shown above). Therefore no team trophy was won after 2015. Any trophy won after 2015 must be for an individual event.",
-            "order_index": 4
-          },
-          {
-            "statement_text": "All trophies won after 2015 are gold.",
-            "correct_answer": "No",
-            "answer_reason": "We know trophies won after 2015 must be individual (since no team trophy was won after 2015). However, there are 2 silver individual trophies, and we do not know when they were won. One or both could have been won after 2015. Therefore some post-2015 trophies could be silver.",
-            "order_index": 5
-          }
-        ],
-        "correct_answer": {
-          "0": "Yes",
-          "1": "Yes",
-          "2": "No",
-          "3": "Yes",
-          "4": "No"
-        },
-        "answer_reason": null,
-        "order_index": 17
-      },
-      {
-        "id": "dm4r-018-arg",
-        "title": "Meditation in Schools",
-        "type": "recognising_assumptions",
-        "difficulty": "normal",
-        "stem": "Should schools introduce daily meditation sessions to improve student concentration?",
-        "options": [
-          {"label": "A", "text": "Yes; students would enjoy having a break during the school day."},
-          {"label": "B", "text": "No; some teachers are not trained in meditation techniques."},
-          {"label": "C", "text": "Yes; studies have shown that regular meditation practice improves attention span and working memory, which are directly linked to concentration in academic tasks."},
-          {"label": "D", "text": "No; students already have physical education lessons to help them focus."}
-        ],
-        "correct_answer": "C",
-        "answer_reason": "The proposition asks whether meditation should be introduced (action) to improve concentration (outcome). Option C is the strongest because it directly addresses both parts: it connects meditation (the action) to improved concentration (the outcome) with evidence about attention span and working memory. Option A addresses enjoyment rather than concentration — the wrong outcome. Option B focuses on practicality for 'some' teachers, not whether meditation improves concentration. Option D addresses a different activity (PE) and does not directly counter whether meditation would improve concentration.",
-        "order_index": 18
-      },
-      {
-        "id": "dm4r-019-arg",
-        "title": "Banning Private Cars in City Centres",
-        "type": "recognising_assumptions",
-        "difficulty": "normal",
-        "stem": "Should city centres ban private cars during weekday mornings to reduce air pollution?",
-        "options": [
-          {"label": "A", "text": "Yes; fewer cars would make city centres quieter for pedestrians."},
-          {"label": "B", "text": "No; many people rely on their cars to commute to work in the city centre."},
-          {"label": "C", "text": "No; data from cities that have introduced similar bans shows no significant reduction in citywide air pollution levels, as traffic is simply displaced to surrounding areas."},
-          {"label": "D", "text": "Yes; some commuters already prefer to use public transport."}
-        ],
-        "correct_answer": "C",
-        "answer_reason": "The proposition asks whether banning cars (action) would reduce air pollution (outcome). Option C directly addresses both parts with evidence: it references data showing that similar bans do not reduce air pollution because traffic is displaced. Option A discusses noise reduction, not air pollution — wrong outcome. Option B focuses on convenience for commuters, not pollution levels. Option D notes that 'some' commuters use public transport, which is about existing behaviour, not whether the ban would reduce pollution.",
-        "order_index": 19
-      },
-      {
-        "id": "dm4r-020-arg",
-        "title": "Age Verification on Social Media",
-        "type": "recognising_assumptions",
-        "difficulty": "hard",
-        "stem": "Should social media platforms require age verification to protect children from harmful content?",
-        "options": [
-          {"label": "A", "text": "Yes; research indicates that children under 13 who use social media without supervision are exposed to significantly more harmful content, and age verification would restrict their access."},
-          {"label": "B", "text": "Yes; parents would feel reassured knowing their children cannot access social media."},
-          {"label": "C", "text": "No; some children use social media for educational purposes."},
-          {"label": "D", "text": "No; determined children will find ways to bypass age verification."}
-        ],
-        "correct_answer": "A",
-        "answer_reason": "The proposition asks whether age verification (action) should be required to protect children from harmful content (outcome). Option A is strongest because it addresses both parts with evidence: research showing children under 13 face more harmful content, and age verification restricting their access. Option B discusses parental reassurance rather than actual protection from harmful content. Option C addresses educational use for 'some' children, which is a tangential benefit rather than addressing the harmful content concern. Option D argues about bypass potential but does not address whether the measure would reduce exposure to harmful content for the majority.",
-        "order_index": 20
-      },
-      {
-        "id": "dm4r-021-arg",
-        "title": "Four-Day Working Week",
-        "type": "recognising_assumptions",
-        "difficulty": "normal",
-        "stem": "Should employers offer a four-day working week to improve employee productivity?",
-        "options": [
-          {"label": "A", "text": "Yes; employees would have more time for personal activities."},
-          {"label": "B", "text": "No; a trial in several UK companies found that overall output per employee did not increase when the working week was reduced by one day."},
-          {"label": "C", "text": "No; some industries require staff to be available five days a week."},
-          {"label": "D", "text": "Yes; employee morale is generally higher when working fewer days."}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "The proposition asks whether a four-day week (action) should be offered to improve productivity (outcome). Option B directly addresses both parts with evidence: trial data showing that reducing the week did not increase output per employee — directly challenging the link between the action and the desired outcome. Option A addresses personal time, not productivity. Option C focuses on practicality for 'some' industries rather than productivity. Option D discusses morale, which is a different outcome from productivity.",
-        "order_index": 21
-      },
-      {
-        "id": "dm4r-022-arg",
-        "title": "Solar Panels on New Homes",
-        "type": "recognising_assumptions",
-        "difficulty": "normal",
-        "stem": "Should all new homes be required to have solar panels to reduce household energy costs?",
-        "options": [
-          {"label": "A", "text": "Yes; solar panels would make houses look more modern."},
-          {"label": "B", "text": "No; the initial cost of installing solar panels increases the purchase price of new homes."},
-          {"label": "C", "text": "No; some homeowners prefer to use gas heating rather than electricity."},
-          {"label": "D", "text": "Yes; data from countries where solar panels are mandatory on new builds shows that household electricity bills are on average 40% lower."}
-        ],
-        "correct_answer": "D",
-        "answer_reason": "The proposition asks whether solar panels should be required (action) to reduce household energy costs (outcome). Option D is strongest because it directly addresses both parts with specific evidence: data showing a 40% reduction in electricity bills in countries with mandatory solar panels. Option A discusses aesthetics, not energy costs. Option B addresses the purchase price of homes, which is a different cost metric from ongoing household energy costs. Option C focuses on preferences of 'some' homeowners and does not address whether solar panels reduce energy costs.",
-        "order_index": 22
-      },
-      {
         "id": "dm4r-023-venn",
-        "title": "Household Recycling Survey",
+        "title": "Magazine Subscriptions",
         "type": "venn_diagram",
         "difficulty": "normal",
-        "stem": "A council surveyed 80 households about recycling habits. Of these, 38 households recycle paper, 34 recycle glass, and 42 recycle plastic. 15 recycle both paper and glass, 18 recycle both paper and plastic, and 12 recycle both glass and plastic. 8 households recycle all three materials, and 3 households recycle none.\n\nWhich of the following diagrams best represents the data?",
+        "stem": "A newsagent stocks 90 magazine titles. 42 are weekly editions, 36 have a digital format, and 30 cover environmental topics. 15 are both weekly and digital. 12 are both weekly and environmental. 10 are both digital and environmental. 6 magazines are all three. 13 magazines fit none of these categories.\n\nWhich of the following diagrams best represents the data?",
         "options": [
           {
             "label": "A",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Paper", "shape": "diamond"},
-                {"id": "set2", "label": "Glass", "shape": "trapezoid"},
-                {"id": "set3", "label": "Plastic", "shape": "vertical_oval"}
+                {
+                  "id": "set1",
+                  "label": "Weekly",
+                  "shape": "vertical_oval"
+                },
+                {
+                  "id": "set2",
+                  "label": "Digital",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set3",
+                  "label": "Environmental",
+                  "shape": "pentagon"
+                }
               ],
               "regions": {
-                "set1_only": 15,
-                "set2_only": 13,
-                "set3_only": 20,
-                "set1_set2": 7,
-                "set1_set3": 10,
+                "set1_only": 21,
+                "set2_only": 17,
+                "set3_only": 14,
+                "set1_set2": 9,
+                "set1_set3": 6,
                 "set2_set3": 4,
-                "all_three": 8,
-                "outside": 3
+                "set1_set2_set3": 6,
+                "outside": 13
               }
             },
             "order_index": 1
@@ -760,20 +725,33 @@
             "label": "B",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Paper", "shape": "diamond"},
-                {"id": "set2", "label": "Glass", "shape": "trapezoid"},
-                {"id": "set3", "label": "Plastic", "shape": "vertical_oval"}
+                {
+                  "id": "set1",
+                  "label": "Weekly",
+                  "shape": "vertical_oval"
+                },
+                {
+                  "id": "set2",
+                  "label": "Digital",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set3",
+                  "label": "Environmental",
+                  "shape": "pentagon"
+                }
               ],
               "regions": {
-                "set1_only": 5,
-                "set2_only": 7,
-                "set3_only": 12,
-                "set1_set2": 15,
-                "set1_set3": 18,
-                "set2_set3": 12,
-                "all_three": 8,
-                "outside": 3
+                "set1_only": 21,
+                "set2_only": 17,
+                "set3_only": 14,
+                "set1_set2": 9,
+                "set1_set3": 6,
+                "set2_set3": 4,
+                "set1_set2_set3": 8,
+                "outside": 11
               }
             },
             "order_index": 2
@@ -782,20 +760,33 @@
             "label": "C",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Paper", "shape": "diamond"},
-                {"id": "set2", "label": "Glass", "shape": "trapezoid"},
-                {"id": "set3", "label": "Plastic", "shape": "vertical_oval"}
+                {
+                  "id": "set1",
+                  "label": "Weekly",
+                  "shape": "vertical_oval"
+                },
+                {
+                  "id": "set2",
+                  "label": "Digital",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set3",
+                  "label": "Environmental",
+                  "shape": "pentagon"
+                }
               ],
               "regions": {
-                "set1_only": 13,
-                "set2_only": 15,
-                "set3_only": 20,
-                "set1_set2": 7,
-                "set1_set3": 10,
+                "set1_only": 24,
+                "set2_only": 17,
+                "set3_only": 14,
+                "set1_set2": 9,
+                "set1_set3": 6,
                 "set2_set3": 4,
-                "all_three": 8,
-                "outside": 3
+                "set1_set2_set3": 6,
+                "outside": 10
               }
             },
             "order_index": 3
@@ -804,52 +795,84 @@
             "label": "D",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Paper", "shape": "diamond"},
-                {"id": "set2", "label": "Glass", "shape": "trapezoid"},
-                {"id": "set3", "label": "Plastic", "shape": "vertical_oval"}
+                {
+                  "id": "set1",
+                  "label": "Weekly",
+                  "shape": "vertical_oval"
+                },
+                {
+                  "id": "set2",
+                  "label": "Digital",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set3",
+                  "label": "Environmental",
+                  "shape": "pentagon"
+                }
               ],
               "regions": {
-                "set1_only": 13,
-                "set2_only": 15,
-                "set3_only": 20,
-                "set1_set2": 10,
-                "set1_set3": 7,
-                "set2_set3": 4,
-                "all_three": 8,
-                "outside": 3
+                "set1_only": 21,
+                "set2_only": 17,
+                "set3_only": 14,
+                "set1_set2": 4,
+                "set1_set3": 6,
+                "set2_set3": 9,
+                "set1_set2_set3": 6,
+                "outside": 13
               }
             },
             "order_index": 4
           }
         ],
-        "correct_answer": "C",
-        "answer_reason": "Starting with the triple overlap: 8 households recycle all three. Paper and glass only (excluding those who also recycle plastic) = 15 − 8 = 7. Paper and plastic only = 18 − 8 = 10. Glass and plastic only = 12 − 8 = 4. The exclusive regions: paper only = 38 − 7 − 10 − 8 = 13, glass only = 34 − 7 − 4 − 8 = 15, plastic only = 42 − 10 − 4 − 8 = 20. Outside = 3. Total: 13 + 15 + 20 + 7 + 10 + 4 + 8 + 3 = 80. Only Option C has all these values correct. Option A swaps the paper-only and glass-only values. Option B uses the inclusive overlap counts without subtracting the triple overlap. Option D swaps the paper-glass and paper-plastic overlap values.",
+        "correct_answer": "A",
+        "answer_reason": "Two values are freebies: 6 magazines are all three (the centre) and 13 fit none (outside). Scan — B shows 8 in the centre (stem says 6) — eliminate B. C shows 10 outside (stem says 13) — eliminate C. That leaves A and D. The stem says 15 are both weekly and digital; 6 of those are also environmental, so the weekly-and-digital-only area = 15 − 6 = 9. D shows 4 there — eliminate D. A shows 9 — correct. Answer: A.",
         "order_index": 23
       },
       {
         "id": "dm4r-024-venn",
-        "title": "Sports Club Membership",
+        "title": "Restaurant Dishes",
         "type": "venn_diagram",
         "difficulty": "normal",
-        "stem": "A sports club has 60 members. 28 play badminton, 22 play tennis, and 18 play swimming. 10 members play both badminton and tennis, and 6 play both badminton and swimming. No member plays both tennis and swimming. 8 members do not play any of these sports.\n\nWhich of the following diagrams best represents the data?",
+        "stem": "A restaurant lists 70 dishes. 20 are spicy, 14 are vegetarian, 18 contain nuts, and 20 are gluten-free. 8 dishes are both spicy and vegetarian. 6 dishes both contain nuts and are gluten-free. 12 dishes fit none of these descriptions.\n\nWhich of the following diagrams best represents the data?",
         "options": [
           {
             "label": "A",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Badminton", "shape": "oval"},
-                {"id": "set2", "label": "Tennis", "shape": "star"},
-                {"id": "set3", "label": "Swimming", "shape": "hexagon"}
+                {
+                  "id": "set1",
+                  "label": "Spicy",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Vegetarian",
+                  "shape": "star"
+                },
+                {
+                  "id": "set3",
+                  "label": "Contains nuts",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "Gluten-free",
+                  "shape": "oval"
+                }
               ],
               "regions": {
-                "set1_only": 18,
-                "set2_only": 12,
+                "set1_only": 12,
+                "set2_only": 6,
+                "set1_set2": 8,
                 "set3_only": 12,
-                "set1_set2": 10,
-                "set1_set3": 6,
-                "outside": 2
+                "set4_only": 14,
+                "set3_set4": 6,
+                "outside": 12
               }
             },
             "order_index": 1
@@ -858,18 +881,37 @@
             "label": "B",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Badminton", "shape": "oval"},
-                {"id": "set2", "label": "Tennis", "shape": "star"},
-                {"id": "set3", "label": "Swimming", "shape": "hexagon"}
+                {
+                  "id": "set1",
+                  "label": "Spicy",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Vegetarian",
+                  "shape": "star"
+                },
+                {
+                  "id": "set3",
+                  "label": "Contains nuts",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "Gluten-free",
+                  "shape": "oval"
+                }
               ],
               "regions": {
                 "set1_only": 12,
-                "set2_only": 12,
+                "set2_only": 6,
+                "set1_set2": 6,
                 "set3_only": 12,
-                "set1_set2": 10,
-                "set1_set3": 6,
-                "outside": 8
+                "set4_only": 14,
+                "set3_set4": 8,
+                "outside": 12
               }
             },
             "order_index": 2
@@ -878,18 +920,37 @@
             "label": "C",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Badminton", "shape": "oval"},
-                {"id": "set2", "label": "Tennis", "shape": "star"},
-                {"id": "set3", "label": "Swimming", "shape": "hexagon"}
+                {
+                  "id": "set1",
+                  "label": "Spicy",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Vegetarian",
+                  "shape": "star"
+                },
+                {
+                  "id": "set3",
+                  "label": "Contains nuts",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "Gluten-free",
+                  "shape": "oval"
+                }
               ],
               "regions": {
-                "set1_only": 12,
-                "set2_only": 12,
+                "set1_only": 14,
+                "set2_only": 6,
+                "set1_set2": 8,
                 "set3_only": 12,
-                "set1_set2": 6,
-                "set1_set3": 10,
-                "outside": 8
+                "set4_only": 14,
+                "set3_set4": 6,
+                "outside": 10
               }
             },
             "order_index": 3
@@ -898,50 +959,85 @@
             "label": "D",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Badminton", "shape": "oval"},
-                {"id": "set2", "label": "Tennis", "shape": "star"},
-                {"id": "set3", "label": "Swimming", "shape": "hexagon"}
+                {
+                  "id": "set1",
+                  "label": "Spicy",
+                  "shape": "hexagon"
+                },
+                {
+                  "id": "set2",
+                  "label": "Vegetarian",
+                  "shape": "star"
+                },
+                {
+                  "id": "set3",
+                  "label": "Contains nuts",
+                  "shape": "square"
+                },
+                {
+                  "id": "set4",
+                  "label": "Gluten-free",
+                  "shape": "oval"
+                }
               ],
               "regions": {
                 "set1_only": 12,
-                "set2_only": 10,
+                "set2_only": 12,
+                "set1_set2": 8,
                 "set3_only": 6,
-                "set1_set2": 12,
-                "set1_set3": 12,
-                "outside": 8
+                "set4_only": 14,
+                "set3_set4": 6,
+                "outside": 12
               }
             },
             "order_index": 4
           }
         ],
-        "correct_answer": "B",
-        "answer_reason": "Since no member plays both tennis and swimming, these two sports are separate from each other but both overlap with badminton. Badminton only = 28 − 10 − 6 = 12. Tennis only = 22 − 10 = 12. Swimming only = 18 − 6 = 12. The badminton-tennis overlap has 10 members and the badminton-swimming overlap has 6. Outside = 8. Total: 12 + 12 + 12 + 10 + 6 + 8 = 60. Only Option B has all values correct. Option A fails to subtract the overlaps from badminton, giving 18 instead of 12 for badminton only. Option C swaps the two overlap values. Option D confuses the overlap and exclusive region values.",
+        "correct_answer": "A",
+        "answer_reason": "Three values are freebies: 8 spicy-and-vegetarian, 6 nuts-and-gluten-free, and 12 outside. Scan — B shows 6 in the spicy-and-vegetarian overlap and 8 in the nuts-and-gluten-free overlap (swapped) — eliminate B. C shows 10 outside (stem says 12) — eliminate C. That leaves A and D. Vegetarian total = 14, with 8 also spicy, so vegetarian-only = 14 − 8 = 6. D shows 12 there — eliminate D. A shows 6 — correct. Answer: A.",
         "order_index": 24
       },
       {
         "id": "dm4r-025-venn",
-        "title": "Pet Shop Animals",
+        "title": "Classroom Clubs",
         "type": "venn_diagram",
         "difficulty": "normal",
         "hide_labels": true,
-        "stem": "A pet shop has 45 animals, comprising cats, dogs, and rabbits. There are 20 cats, 12 dogs, and 10 rabbits. 5 animals are both cats and dogs. No animal is both a cat and a rabbit, and no animal is both a dog and a rabbit.\n\nWhich of the following diagrams is consistent with the data?",
+        "stem": "A school records which clubs 80 students belong to. 30 are in music, 24 are in drama, and 18 are in art. 10 students are in both music and drama. 7 are in both music and art. 6 are in both drama and art. 3 students are in all three clubs. 28 students are in none of these clubs.\n\nWhich of the following diagrams is consistent with the data?",
         "options": [
           {
             "label": "A",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Cats", "shape": "hexagon"},
-                {"id": "set2", "label": "Dogs", "shape": "circle"},
-                {"id": "set3", "label": "Rabbits", "shape": "pentagon"}
+                {
+                  "id": "set1",
+                  "label": "Music",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set2",
+                  "label": "Drama",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set3",
+                  "label": "Art",
+                  "shape": "triangle"
+                }
               ],
               "regions": {
-                "set1_only": 13,
+                "set1_only": 16,
+                "set2_only": 11,
+                "set3_only": 8,
                 "set1_set2": 7,
-                "set2_only": 10,
-                "set3_only": 12,
-                "outside": 3
+                "set1_set3": 4,
+                "set2_set3": 3,
+                "set1_set2_set3": 3,
+                "outside": 28
               }
             },
             "order_index": 1
@@ -950,17 +1046,33 @@
             "label": "B",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Cats", "shape": "hexagon"},
-                {"id": "set2", "label": "Dogs", "shape": "circle"},
-                {"id": "set3", "label": "Rabbits", "shape": "pentagon"}
+                {
+                  "id": "set1",
+                  "label": "Music",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set2",
+                  "label": "Drama",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set3",
+                  "label": "Art",
+                  "shape": "triangle"
+                }
               ],
               "regions": {
-                "set1_only": 17,
-                "set1_set2": 3,
-                "set2_only": 9,
-                "set3_only": 10,
-                "outside": 6
+                "set1_only": 16,
+                "set2_only": 11,
+                "set3_only": 8,
+                "set1_set2": 7,
+                "set1_set3": 4,
+                "set2_set3": 3,
+                "set1_set2_set3": 5,
+                "outside": 26
               }
             },
             "order_index": 2
@@ -969,17 +1081,33 @@
             "label": "C",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Cats", "shape": "hexagon"},
-                {"id": "set2", "label": "Dogs", "shape": "circle"},
-                {"id": "set3", "label": "Rabbits", "shape": "pentagon"}
+                {
+                  "id": "set1",
+                  "label": "Music",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set2",
+                  "label": "Drama",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set3",
+                  "label": "Art",
+                  "shape": "triangle"
+                }
               ],
               "regions": {
-                "set1_only": 15,
-                "set1_set2": 5,
-                "set2_only": 9,
+                "set1_only": 16,
+                "set2_only": 11,
                 "set3_only": 8,
-                "outside": 8
+                "set1_set2": 10,
+                "set1_set3": 7,
+                "set2_set3": 6,
+                "set1_set2_set3": 3,
+                "outside": 19
               }
             },
             "order_index": 3
@@ -988,239 +1116,261 @@
             "label": "D",
             "option_text": "",
             "option_data": {
+              "diagramLayout": "auto",
               "sets": [
-                {"id": "set1", "label": "Cats", "shape": "hexagon"},
-                {"id": "set2", "label": "Dogs", "shape": "circle"},
-                {"id": "set3", "label": "Rabbits", "shape": "pentagon"}
+                {
+                  "id": "set1",
+                  "label": "Music",
+                  "shape": "circle"
+                },
+                {
+                  "id": "set2",
+                  "label": "Drama",
+                  "shape": "diamond"
+                },
+                {
+                  "id": "set3",
+                  "label": "Art",
+                  "shape": "triangle"
+                }
               ],
               "regions": {
-                "set1_only": 15,
-                "set1_set2": 5,
-                "set2_only": 7,
-                "set3_only": 10,
-                "outside": 8
+                "set1_only": 8,
+                "set2_only": 11,
+                "set3_only": 16,
+                "set1_set2": 7,
+                "set1_set3": 4,
+                "set2_set3": 3,
+                "set1_set2_set3": 3,
+                "outside": 28
               }
             },
             "order_index": 4
           }
         ],
-        "correct_answer": "D",
-        "answer_reason": "Cats and dogs overlap (5 are both), while rabbits are entirely separate. Cat-only = 20 − 5 = 15. Dog-only = 12 − 5 = 7. The overlap contains 5. Rabbits = 10 (separate). Total inside = 15 + 5 + 7 + 10 = 37, so outside = 45 − 37 = 8. Only Option D matches: the overlapping pair totals 15 + 5 = 20 (cats) and 7 + 5 = 12 (dogs), with the separate shape showing 10 (rabbits) and 8 outside. Option A has the wrong overlap value (7 instead of 5). Option B has 3 in the overlap instead of 5. Option C has 9 for the dog-only region instead of 7.",
+        "correct_answer": "A",
+        "answer_reason": "One shape must total 30 (music), another 24 (drama), the third 18 (art). The centre should be 3, and the pair overlaps 10, 7, and 6. Check each option's shape totals. Option B has a centre of 5 and shape totals 32, 26, 20 — none match — eliminate B. Option C has centre 3 but one shape totals 16+10+7+3 = 36 (forgot to subtract the triple from the pair overlaps) — eliminate C. Option D has one shape totalling 8+7+4+3 = 22 — no match — eliminate D. Only Option A works: shape totals are 16+7+4+3 = 30 (music), 11+7+3+3 = 24 (drama), and 8+4+3+3 = 18 (art), with centre 3. Answer: A.",
         "order_index": 25
       },
       {
         "id": "dm4r-026-venn",
-        "title": "Library Resource Categories",
+        "title": "Library Book Handling Stages",
         "type": "venn_diagram",
         "difficulty": "hard",
-        "stem": "The diagram shows library resources categorised by five attributes. Each letter marks a different region.\n\nWhich letter represents a resource that is available to borrow, is a new arrival, and is staff recommended, but does not have digital access?",
+        "stem": "The diagram shows 120 library books categorised by five handling stages. Each letter marks a different region.\n\nWhich letter represents a book that has been shelved and wrapped, but has not been catalogued, stamped, or tagged?",
         "stimulus_diagram": {
+          "diagramLayout": "auto",
           "sets": [
-            {"id": "set1", "label": "Available to borrow", "shape": "rectangle"},
-            {"id": "set2", "label": "Reference only", "shape": "hexagon"},
-            {"id": "set3", "label": "Digital access", "shape": "triangle"},
-            {"id": "set4", "label": "New arrivals", "shape": "oval"},
-            {"id": "set5", "label": "Staff recommended", "shape": "pentagon"}
-          ],
-          "regions": {
-            "set2_only": "P",
-            "set1_set2": "Q",
-            "set1_only": "R",
-            "set1_set4": "S",
-            "set1_set4_set5": "T",
-            "set1_set3_set5": "U",
-            "set3_only": "V",
-            "outside": "W"
-          }
-        },
-        "options": [
-          {"label": "A", "text": "Letter S", "order_index": 1},
-          {"label": "B", "text": "Letter T", "order_index": 2},
-          {"label": "C", "text": "Letter U", "order_index": 3},
-          {"label": "D", "text": "Letter R", "order_index": 4}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "The question asks for a resource that is available to borrow (inside the rectangle), is a new arrival (inside the circle), and is staff recommended (inside the diamond), but does not have digital access (outside the triangle). Letter T is in the region where the rectangle, circle, and diamond all overlap, but outside the triangle — matching all four conditions. Letter S is where the rectangle and circle overlap without the diamond, so it is missing the staff recommended attribute. Letter U is where the rectangle, triangle, and diamond overlap — this includes digital access, which the question excludes. Letter R is inside the rectangle only, missing both new arrival and staff recommended.",
-        "order_index": 26
-      },
-      {
-        "id": "dm4r-027-venn",
-        "title": "Festival Event Categories",
-        "type": "venn_diagram",
-        "difficulty": "hard",
-        "stem": "The diagram shows festival events categorised by six attributes. Each letter marks a different region.\n\nWhich letter represents an indoor event with food stalls and evening sessions, but without live music, workshop activities, or free entry?",
-        "stimulus_diagram": {
-          "sets": [
-            {"id": "set1", "label": "Indoor events", "shape": "rectangle"},
-            {"id": "set2", "label": "Live music", "shape": "octagon"},
-            {"id": "set3", "label": "Food stalls", "shape": "trapezoid"},
-            {"id": "set4", "label": "Workshop activities", "shape": "star"},
-            {"id": "set5", "label": "Evening sessions", "shape": "vertical_oval"},
-            {"id": "set6", "label": "Free entry", "shape": "diamond"}
-          ],
-          "regions": {
-            "set1_set2": "P",
-            "set1_set2_set3": "Q",
-            "set1_set3": "R",
-            "set1_set3_set5": "S",
-            "set1_set4": "T",
-            "set1_set5": "U",
-            "set1_only": "V",
-            "set1_set6": "W",
-            "set6_only": "X",
-            "outside": "Y"
-          }
-        },
-        "options": [
-          {"label": "A", "text": "Letter R", "order_index": 1},
-          {"label": "B", "text": "Letter S", "order_index": 2},
-          {"label": "C", "text": "Letter U", "order_index": 3},
-          {"label": "D", "text": "Letter Q", "order_index": 4}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "The question asks for an event that is indoor (inside the rectangle), has food stalls (inside the pentagon), and is an evening session (inside the diamond), but does not have live music (outside the circle), workshop activities (outside the hexagon), or free entry (outside the triangle). Letter S is in the region where the rectangle, pentagon, and diamond overlap, outside all other shapes — matching every condition. Letter R is where the rectangle and pentagon overlap without the diamond, missing evening sessions. Letter U is where the rectangle and diamond overlap without the pentagon, missing food stalls. Letter Q includes live music, which the question excludes.",
-        "order_index": 27
-      },
-      {
-        "id": "dm4r-028-venn",
-        "title": "University Course Requirements",
-        "type": "venn_diagram",
-        "difficulty": "normal",
-        "stem": "The diagram shows university courses categorised by three attributes. All courses that require programming also require statistics. All courses that require statistics are Social Science courses. Each letter marks a different region.\n\nWhich letter represents a Social Science course that requires both statistics and programming?",
-        "stimulus_diagram": {
-          "sets": [
-            {"id": "set1", "label": "Social Science", "shape": "octagon"},
-            {"id": "set2", "label": "Statistics required", "shape": "pentagon"},
-            {"id": "set3", "label": "Programming required", "shape": "circle"}
+            {
+              "id": "set1",
+              "label": "Catalogued",
+              "shape": "trapezoid"
+            },
+            {
+              "id": "set2",
+              "label": "Stamped",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set3",
+              "label": "Shelved",
+              "shape": "oval"
+            },
+            {
+              "id": "set4",
+              "label": "Wrapped",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set5",
+              "label": "Tagged",
+              "shape": "square"
+            }
           ],
           "regions": {
             "set1_only": "P",
             "set1_set2": "Q",
-            "all_three": "R",
-            "outside": "S"
+            "set2_only": "R",
+            "set2_set3": "S",
+            "set3_only": "T",
+            "set3_set4": "U",
+            "set4_only": "V",
+            "set4_set5": "W",
+            "set5_only": "X",
+            "outside": "Y"
           }
         },
         "options": [
-          {"label": "A", "text": "Letter P", "order_index": 1},
-          {"label": "B", "text": "Letter Q", "order_index": 2},
-          {"label": "C", "text": "Letter R", "order_index": 3},
-          {"label": "D", "text": "Letter S", "order_index": 4}
+          {
+            "label": "A",
+            "text": "Letter S",
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "text": "Letter U",
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "text": "Letter T",
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "text": "Letter W",
+            "order_index": 4
+          }
         ],
-        "correct_answer": "C",
-        "answer_reason": "The diagram shows three concentric shapes: the hexagon (Social Science) contains the diamond (statistics required), which contains the star (programming required). A course requiring both statistics and programming would be inside all three shapes — the innermost region. This is letter R. Letter P represents Social Science courses that do not require statistics. Letter Q represents courses requiring statistics but not programming — in the ring between the diamond and star. Letter S is outside all three categories.",
+        "correct_answer": "B",
+        "answer_reason": "The question needs a book that is shelved (inside the oval) and wrapped (inside the hexagon), but outside the trapezoid (catalogued), pentagon (stamped), and square (tagged). Letter S sits where the pentagon and oval overlap — that includes stamped, which is excluded. Letter T sits in the oval only — missing wrapped. Letter W sits where the hexagon and square overlap — that includes tagged, which is excluded. Letter U sits where the oval and hexagon overlap, outside every other shape — matching every condition. Option B.",
+        "order_index": 26
+      },
+      {
+        "id": "dm4r-027-venn",
+        "title": "Festival Programming",
+        "type": "venn_diagram",
+        "difficulty": "hard",
+        "stem": "The diagram shows 200 festival activities. All music acts, comedy acts, and family-friendly acts take place on the main stage. Food stalls and free-entry activities do not take place on the main stage and do not overlap with the staged acts. Each letter marks a different region.\n\nWhich letter represents a main-stage act that is both comedy and family-friendly, but is not a music act?",
+        "stimulus_diagram": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Main stage",
+              "shape": "rectangle"
+            },
+            {
+              "id": "set2",
+              "label": "Music",
+              "shape": "circle"
+            },
+            {
+              "id": "set3",
+              "label": "Comedy",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set4",
+              "label": "Family-friendly",
+              "shape": "star"
+            },
+            {
+              "id": "set5",
+              "label": "Food stall",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set6",
+              "label": "Free entry",
+              "shape": "diamond"
+            }
+          ],
+          "regions": {
+            "set1_only": "V",
+            "set1_set2": "P",
+            "set1_set2_set3": "Q",
+            "set1_set3": "R",
+            "set1_set3_set4": "S",
+            "set1_set4": "T",
+            "set5_only": "U",
+            "set6_only": "W",
+            "outside": "Y"
+          }
+        },
+        "options": [
+          {
+            "label": "A",
+            "text": "Letter Q",
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "text": "Letter S",
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "text": "Letter R",
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "text": "Letter T",
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "The question needs an act on the main stage (inside the rectangle), that is comedy (inside the pentagon) and family-friendly (inside the star), but not music (outside the circle). Letter Q sits where the rectangle, circle, and pentagon overlap — that includes music, which is excluded. Letter R is where the rectangle and pentagon overlap only — missing family-friendly. Letter T is where the rectangle and star overlap only — missing comedy. Letter S sits where the rectangle, pentagon, and star overlap, outside every other shape — matching every condition. Option B.",
+        "order_index": 27
+      },
+      {
+        "id": "dm4r-028-venn",
+        "title": "Employee Competency Network",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "The diagram shows 80 employees categorised by job role competencies. Each letter marks a different region.\n\nWhich letter represents an employee who has both manager and analyst competencies but is neither a designer nor a developer?",
+        "stimulus_diagram": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Manager",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set2",
+              "label": "Designer",
+              "shape": "oval"
+            },
+            {
+              "id": "set3",
+              "label": "Developer",
+              "shape": "trapezoid"
+            },
+            {
+              "id": "set4",
+              "label": "Analyst",
+              "shape": "diamond"
+            }
+          ],
+          "regions": {
+            "set1_only": "P",
+            "set1_set2": "Q",
+            "set2_only": "R",
+            "set2_set3": "S",
+            "set3_only": "T",
+            "set3_set4": "U",
+            "set4_only": "V",
+            "set1_set4": "W",
+            "outside": "X"
+          }
+        },
+        "options": [
+          {
+            "label": "A",
+            "text": "Letter W",
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "text": "Letter P",
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "text": "Letter V",
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "text": "Letter Q",
+            "order_index": 4
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The question needs an employee with manager (inside the pentagon) and analyst (inside the diamond) competencies, but outside the oval (designer) and trapezoid (developer). Letter P is inside the pentagon only — missing analyst. Letter V is inside the diamond only — missing manager. Letter Q is where the pentagon and oval overlap — that includes designer, which is excluded. Letter W sits where the pentagon and diamond overlap, outside both the oval and trapezoid — matching every condition. Option A.",
         "order_index": 28
-      },
-      {
-        "id": "dm4r-029-prob",
-        "title": "Medical Screening Accuracy",
-        "type": "probabilistic",
-        "difficulty": "normal",
-        "stem": "A rapid blood test for a condition is 92% accurate when the condition is present (it correctly identifies 92% of people who have the condition) and 88% accurate when the condition is absent (it correctly identifies 88% of people who do not have the condition). The test is described as 95% precise because it gives the same result 95 out of 100 times when repeated.\n\nDr. Shah claims that the test is more accurate at detecting the condition than at ruling it out.\n\nWhich of the following is the best response to Dr. Shah's claim?",
-        "options": [
-          {"label": "A", "text": "Yes; the test correctly identifies 92% of people with the condition, which is higher than the 88% accuracy for those without it."},
-          {"label": "B", "text": "Yes; the 95% precision means the test consistently gives the correct result."},
-          {"label": "C", "text": "No; accuracy and precision are the same thing, so the 95% precision applies equally to both."},
-          {"label": "D", "text": "No; the 88% figure refers to precision, not accuracy."}
-        ],
-        "correct_answer": "A",
-        "answer_reason": "The test has 92% accuracy at detecting the condition (sensitivity) and 88% accuracy at ruling it out (specificity). Since 92% is higher than 88%, Dr. Shah's claim is correct. Option A identifies this comparison correctly. Option B confuses precision (consistency of repeated results) with accuracy (correctness of results) — they are different concepts. Option C incorrectly claims accuracy and precision are the same thing. Option D wrongly reclassifies the 88% as precision when it is actually the accuracy rate for ruling out the condition.",
-        "order_index": 29
-      },
-      {
-        "id": "dm4r-030-prob",
-        "title": "Coloured Marble Draw",
-        "type": "probabilistic",
-        "difficulty": "normal",
-        "stem": "A bag contains 6 red marbles, 4 blue marbles, and 2 green marbles. Two marbles are drawn one after the other without replacement.\n\nWhat is the probability that both marbles drawn are red?",
-        "options": [
-          {"label": "A", "text": "1/4"},
-          {"label": "B", "text": "5/22"},
-          {"label": "C", "text": "1/6"},
-          {"label": "D", "text": "5/12"}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "There are 12 marbles in total. The probability of drawing a red marble first is 6/12 = 1/2. After removing one red marble, 5 red remain out of 11 total. The probability of a second red is 5/11. Multiplying: 1/2 × 5/11 = 5/22. Option A (1/4) incorrectly multiplies 6/12 × 6/12, treating the draws as if with replacement. Option C (1/6) is not based on a valid calculation. Option D (5/12) incorrectly uses 5/12 instead of 5/11 for the second draw.",
-        "order_index": 30
-      },
-      {
-        "id": "dm4r-031-prob",
-        "title": "Bus Punctuality",
-        "type": "probabilistic",
-        "difficulty": "normal",
-        "stem": "A survey found that Bus Route A arrives on time 80% of the time and Bus Route B arrives on time 75% of the time. The two routes operate independently.\n\nWhat is the probability that at least one of the two buses is late on a given day?",
-        "options": [
-          {"label": "A", "text": "5%"},
-          {"label": "B", "text": "40%"},
-          {"label": "C", "text": "45%"},
-          {"label": "D", "text": "20%"}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "The easiest approach is to find the probability that both are on time and subtract from 1. Both on time = 0.80 × 0.75 = 0.60 = 60%. At least one late = 1 − 0.60 = 0.40 = 40%. Option A (5%) is the probability that both are late (0.20 × 0.25 = 0.05). Option C (45%) incorrectly adds the late probabilities (20% + 25%). Option D (20%) only considers Route A's late probability.",
-        "order_index": 31
-      },
-      {
-        "id": "dm4r-032-prob",
-        "title": "Six-Sided Die Rolls",
-        "type": "probabilistic",
-        "difficulty": "normal",
-        "stem": "A fair six-sided die is rolled twice. What is the probability of rolling a number greater than 4 on at least one of the two rolls?",
-        "options": [
-          {"label": "A", "text": "1/3"},
-          {"label": "B", "text": "2/3"},
-          {"label": "C", "text": "5/9"},
-          {"label": "D", "text": "1/9"}
-        ],
-        "correct_answer": "C",
-        "answer_reason": "Numbers greater than 4 are 5 and 6, so the probability on a single roll is 2/6 = 1/3. The probability of NOT rolling greater than 4 is 2/3. The probability of failing on both rolls is 2/3 × 2/3 = 4/9. Therefore, the probability of at least one success is 1 − 4/9 = 5/9. Option A (1/3) is the probability for a single roll only. Option B (2/3) incorrectly doubles the single-roll probability. Option D (1/9) is the probability of rolling greater than 4 on both rolls (1/3 × 1/3).",
-        "order_index": 32
-      },
-      {
-        "id": "dm4r-033-prob",
-        "title": "Factory Widget Defect Rate",
-        "type": "probabilistic",
-        "difficulty": "hard",
-        "stem": "A factory produces two types of widget. Type X has a defect rate of 3% and Type Y has a defect rate of 5%. The factory produces Type X and Type Y in a ratio of 3:2.\n\nA widget is selected at random from the production line. What is the probability that the widget is defective?",
-        "options": [
-          {"label": "A", "text": "3.8%"},
-          {"label": "B", "text": "4.0%"},
-          {"label": "C", "text": "8.0%"},
-          {"label": "D", "text": "3.0%"}
-        ],
-        "correct_answer": "A",
-        "answer_reason": "In a 3:2 production ratio, Type X accounts for 3/5 = 60% and Type Y for 2/5 = 40% of production. The overall defect probability is a weighted average: (0.60 × 3%) + (0.40 × 5%) = 1.8% + 2.0% = 3.8%. Option B (4.0%) incorrectly uses a simple average of 3% and 5% without weighting by production ratio. Option C (8.0%) incorrectly adds the two defect rates. Option D (3.0%) only considers Type X's defect rate, ignoring Type Y.",
-        "order_index": 33
-      },
-      {
-        "id": "dm4r-034-prob",
-        "title": "Spinner Probability",
-        "type": "probabilistic",
-        "difficulty": "normal",
-        "stem": "A spinner is divided into 8 equal sections numbered 1 to 8. The spinner is spun once.\n\nWhat is the probability of landing on a prime number or a number greater than 6?",
-        "options": [
-          {"label": "A", "text": "3/4"},
-          {"label": "B", "text": "5/8"},
-          {"label": "C", "text": "1/2"},
-          {"label": "D", "text": "3/8"}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "The prime numbers from 1 to 8 are 2, 3, 5, and 7 (four numbers). The numbers greater than 6 are 7 and 8 (two numbers). The union of these sets is {2, 3, 5, 7, 8} — five numbers (note that 7 appears in both conditions but is counted only once). The probability is 5 out of 8 sections = 5/8. Option A (3/4 = 6/8) overcounts by including an extra number. Option C (1/2 = 4/8) only counts the prime numbers without including 8. Option D (3/8) undercounts the favourable outcomes.",
-        "order_index": 34
-      },
-      {
-        "id": "dm4r-035-prob",
-        "title": "Chocolate Box Selection",
-        "type": "probabilistic",
-        "difficulty": "hard",
-        "stem": "A box contains 10 chocolates: 4 milk, 3 dark, and 3 white. Two chocolates are selected at random without replacement.\n\nGiven that the first chocolate selected is dark, what is the probability that the second chocolate is also dark?",
-        "options": [
-          {"label": "A", "text": "3/10"},
-          {"label": "B", "text": "2/9"},
-          {"label": "C", "text": "1/3"},
-          {"label": "D", "text": "1/5"}
-        ],
-        "correct_answer": "B",
-        "answer_reason": "After selecting one dark chocolate, there are 2 dark chocolates remaining out of 9 total chocolates left. The conditional probability is 2/9. Option A (3/10) uses the original count of dark chocolates and the original total, ignoring that one dark chocolate has already been removed. Option C (1/3 = 3/9) adjusts the total to 9 but forgets to subtract one from the dark count. Option D (1/5 = 2/10) correctly subtracts from the dark count but uses the original total of 10 instead of 9.",
-        "order_index": 35
       }
     ]
   }
