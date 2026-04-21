@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { bake } from '../src/utils/venn/bake.js';
+import { computeLayout } from '../src/utils/venn/layout.js';
 import { stableHash, seedPositions } from '../src/utils/venn/topologies.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -34,8 +34,8 @@ for (const q of data) {
   const innerVariant = combo.inner;
   const externalSide = combo.external;
   let nat = '?', pix = '?';
-  try { const b = bake(cfg); nat = `${b.canvas.width}x${b.canvas.height}`; } catch (e) { nat = 'THROW'; }
-  try { const b = bake(cfg, { targetWidthPx: TARGET }); pix = `${b.canvas.width}x${b.canvas.height}`; } catch (e) { pix = 'THROW'; }
+  try { const b = computeLayout(cfg); nat = `${b.canvas.width}x${b.canvas.height}`; } catch (e) { nat = 'THROW'; }
+  try { const b = computeLayout(cfg, { targetWidthPx: TARGET }); pix = `${b.canvas.width}x${b.canvas.height}`; } catch (e) { pix = 'THROW'; }
   console.log(
     `${q.title.padEnd(30)} | ${String(cfg.sets.length).padStart(4)} | ${innerVariant.padEnd(8)} | ${externalSide.padEnd(7)} | ${nat.padEnd(14)} | ${pix}`,
   );

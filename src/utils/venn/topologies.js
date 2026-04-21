@@ -204,6 +204,45 @@ function seed_all_separate(ids) {
   return ids.map((id, i) => asShape(id, i * SEPARATE_D, 0));
 }
 
+// n-shape cycle (any n ≥ 5). Each adjacent pair in `order` overlaps; non-
+// adjacent pairs do not. Shapes are placed on a regular polygon ring so each
+// shape is equidistant from its neighbours at OVERLAP_D.
+function seed_n_cycle(ids, cycleOrder) {
+  const n = cycleOrder.length;
+  // Ring radius such that adjacent centres are exactly OVERLAP_D apart:
+  //   2 * ringR * sin(π/n) = OVERLAP_D
+  const ringR = OVERLAP_D / (2 * Math.sin(Math.PI / n));
+  // Spoke size: small enough that non-adjacent shapes don't overlap,
+  // large enough that adjacent shapes do. Non-adjacent nearest distance is
+  // 2*ringR*sin(2π/n). We pick spokeR at the midpoint between the two bounds.
+  const maxSpokeR = ringR * Math.sin(2 * Math.PI / n);
+  const minSpokeR = OVERLAP_D / 2;
+  // Bias toward larger shapes (0.82 lerp) so overlap regions are large
+  // enough for readable labels. Adjacent-pair intersections are deep;
+  // non-adjacent pairs stay separated (safety gap ~9–11 % of OVERLAP_D).
+  const spokeR = minSpokeR + 0.82 * (maxSpokeR - minSpokeR);
+  const spokeW = spokeR * 2;
+
+  const byId = {};
+  for (let i = 0; i < n; i++) {
+    const angle = (2 * Math.PI * i) / n - Math.PI / 2; // first spoke at 12-o'clock
+    byId[cycleOrder[i]] = asShape(cycleOrder[i], ringR * Math.cos(angle), ringR * Math.sin(angle), spokeW, spokeW);
+  }
+  return ids.map(id => byId[id]);
+}
+
+// 4-set dense (K4 or near-K4): 5 or 6 overlap pairs. Place in a tight 2×2
+// grid so all horizontal, vertical, and diagonal pairs overlap.
+function seed_four_dense(ids) {
+  const d = OVERLAP_D / 2;
+  return [
+    asShape(ids[0], -d, -d),
+    asShape(ids[1],  d, -d),
+    asShape(ids[2], -d,  d),
+    asShape(ids[3],  d,  d),
+  ];
+}
+
 // n-shape chain (any n ≥ 5). Each adjacent pair in `order` overlaps; non-
 // adjacent pairs do not. Visually identical structure to seed_four_linear,
 // generalised so 5/6/7-shape chains render as a clean horizontal sequence
@@ -574,6 +613,18 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
     }
   }
 
+  // n-cycle (any n ≥ 5): n overlap pairs where every node has degree 2 (ring).
+  // Distinct from the n=4 four_cycle which is handled in the n===4 block.
+  if (n >= 5 && pairs.length === n) {
+    const deg = Object.fromEntries(allSetIds.map(id => [id, 0]));
+    for (const [a, b] of pairs) { deg[a]++; deg[b]++; }
+    const allDeg2 = allSetIds.every(id => deg[id] === 2);
+    if (allDeg2) {
+      const cycleOrder = walkCycle(allSetIds, pairs);
+      if (cycleOrder && cycleOrder.length === n) return seed_n_cycle(allSetIds, cycleOrder);
+    }
+  }
+
   // n-chain (any n ≥ 5): n-1 overlap pairs forming a path with two endpoints.
   // (n=4 chain is handled by seed_four_linear in the n===4 block below.)
   if (n >= 5 && pairs.length === n - 1) {
@@ -631,6 +682,10 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
   }
 
   if (n === 4) {
+    // four_dense: 5 or 6 overlap pairs — K4 or near-K4, tight 2×2 grid
+    if (pairs.length >= 5) {
+      return seed_four_dense(allSetIds);
+    }
     // four_two_pairs: 2 overlap pairs, no shared set
     if (pairs.length === 2) {
       const [p1, p2] = pairs;

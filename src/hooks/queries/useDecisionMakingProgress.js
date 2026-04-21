@@ -22,6 +22,8 @@ export function useDecisionMakingProgress() {
           map[questionId] = 'completed';
         }
         setProgressMap(map);
+      } else {
+        setProgressMap({});
       }
     } catch (err) {
       reportError('useDecisionMakingProgress', err, { level: 'warning', extra: { note: 'load failed' } });

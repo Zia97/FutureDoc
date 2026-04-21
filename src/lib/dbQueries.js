@@ -86,6 +86,7 @@ class DatabaseService {
           label,
           option_text,
           option_data,
+          venn_geometry,
           order_index
         ),
         decision_making_question_statements (
@@ -249,7 +250,7 @@ class DatabaseService {
 
     const { data: questions, error: questionsError } = await supabase
       .from('timed_decision_making_questions')
-      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, correct_answer, answer_reason, order_index, hide_labels, difficulty')
+      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, venn_geometry, correct_answer, answer_reason, order_index, hide_labels, difficulty')
       .in('test_id', testIds)
       .order('order_index', { ascending: true });
     if (questionsError) throw questionsError;
@@ -258,7 +259,7 @@ class DatabaseService {
 
     const { data: options, error: optionsError } = await supabase
       .from('timed_decision_making_question_options')
-      .select('id, question_id, label, option_text, option_data, order_index')
+      .select('id, question_id, label, option_text, option_data, venn_geometry, order_index')
       .in('question_id', questionIds)
       .order('order_index', { ascending: true });
     if (optionsError) throw optionsError;

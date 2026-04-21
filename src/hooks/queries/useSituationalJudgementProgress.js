@@ -14,9 +14,7 @@ export function useSituationalJudgementProgress() {
   const load = useCallback(async () => {
     try {
       const raw = await AsyncStorage.getItem(SJ_PROGRESS_CACHE_KEY);
-      if (raw) {
-        setProgressMap(JSON.parse(raw));
-      }
+      setProgressMap(raw ? JSON.parse(raw) : {});
     } catch {
       // ignore cache errors
     }

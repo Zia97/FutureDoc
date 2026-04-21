@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View } from 'react-native';
 import Svg, {
   Circle,
   Rect,
@@ -8,12 +8,9 @@ import Svg, {
   Text as SvgText,
 } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
-import { bakeCached } from '../../utils/venn/bake';
+import { getLayout, getLayoutAdaptive } from '../../utils/venn/layout';
 
 const STROKE_WIDTH = 2;
-// Cap on rendered diagram height as a fraction of the screen height so a tall
-// natural canvas never scrolls off-screen even when the user has scrolled to it.
-const MAX_HEIGHT_FRACTION = 0.55;
 
 function ShapeMark({ shape, stroke }) {
   const props = { stroke, strokeWidth: STROKE_WIDTH, fill: 'none' };
@@ -35,8 +32,8 @@ export function getCanvasSize(_layoutName, vennConfig, widthPx) {
   if (!vennConfig) return { width: 240, height: 200 };
   try {
     const baked = widthPx
-      ? bakeCached(vennConfig, { targetWidthPx: widthPx })
-      : bakeCached(vennConfig);
+      ? getLayout(vennConfig, { targetWidthPx: widthPx })
+      : getLayout(vennConfig);
     return baked.canvas;
   } catch {
     return { width: widthPx || 240, height: 200 };
@@ -45,65 +42,50 @@ export function getCanvasSize(_layoutName, vennConfig, widthPx) {
 
 // Props:
 //   vennConfig — required, the abstract spec
-//   widthPx    — preferred. The pixel width the diagram should occupy on
-//                screen. Baker scales shapes to fit; font sizes are real
-//                display pixels (no shrinkage at render time).
+//   widthPx    — maximum display width. The adaptive baker finds the minimum
+//                width at which all labels reach 12 px, up to this cap.
+//                Simple diagrams stay compact; dense ones grow to the cap.
 //   scale      — legacy. Used only when widthPx is not provided.
-//
-// When `widthPx` is provided we try a strict pixel-targeted bake first. Some
-// dense topologies (e.g. 5+ set diagrams with triple-overlap regions) can't
-// satisfy the 12 px label floor at narrow on-screen widths; in that case we
-// fall back to the natural-scale bake and shrink-fit it to widthPx (same
-// behaviour as before). The user can still tap-to-expand to read tight labels.
-export default function VennDiagramRenderer({ vennConfig, widthPx, scale = 1 }) {
+export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry, scale = 1 }) {
   const { practiceTheme: t } = useTheme();
-  const { height: screenHeight } = useWindowDimensions();
-  const maxHeightPx = screenHeight * MAX_HEIGHT_FRACTION;
 
   const baked = useMemo(() => {
+    if (bakedGeometry) return bakedGeometry;
     if (widthPx) {
       try {
-        return { entry: bakeCached(vennConfig, { targetWidthPx: widthPx }), fitMode: 'pixel' };
-      } catch {
-        // Fall through to natural-scale fallback
+        return getLayoutAdaptive(vennConfig, { maxWidthPx: widthPx });
+      } catch (err) {
+        if (typeof __DEV__ !== 'undefined' && __DEV__) {
+          console.warn('[VennDiagramRenderer] adaptive bake failed:', err.message);
+        }
       }
     }
     try {
-      return { entry: bakeCached(vennConfig), fitMode: widthPx ? 'fallback' : 'scale' };
+      return getLayout(vennConfig);
     } catch (err) {
       if (typeof __DEV__ !== 'undefined' && __DEV__) {
         console.warn('[VennDiagramRenderer] bake failed:', err.message);
       }
       return null;
     }
-  }, [vennConfig, widthPx]);
+  }, [vennConfig, widthPx, bakedGeometry]);
 
   if (!baked) return null;
-  const { entry, fitMode } = baked;
-  const { canvas, shapes, labels } = entry;
+  const { canvas, shapes, labels } = baked;
 
-  // Display dimensions:
-  //   pixel    → canvas already in display px; cap height to viewport
-  //   fallback → shrink natural canvas to widthPx, also cap height
-  //   scale    → legacy scale prop
-  let w, h;
-  if (fitMode === 'pixel') {
-    w = canvas.width;
-    h = canvas.height;
-    if (h > maxHeightPx) {
-      const heightScale = maxHeightPx / h;
-      w = w * heightScale;
-      h = maxHeightPx;
-    }
-  } else if (fitMode === 'fallback') {
-    const widthScale  = Math.min(1, widthPx / canvas.width);
-    const heightScale = Math.min(1, maxHeightPx / canvas.height);
-    const fitScale    = Math.min(widthScale, heightScale);
-    w = canvas.width * fitScale;
-    h = canvas.height * fitScale;
-  } else {
-    w = canvas.width  * scale;
-    h = canvas.height * scale;
+  // Render at the exact canvas dimensions the baker produced — height grows
+  // freely so labels stay at the size the adaptive bake calculated.
+  // Only cap width (never exceed the available panel width).
+  let w = canvas.width;
+  let h = canvas.height;
+  if (widthPx && w > widthPx) {
+    const s = widthPx / w;
+    w = widthPx;
+    h = h * s;
+  }
+  if (!widthPx) {
+    w = w * scale;
+    h = h * scale;
   }
 
   return (

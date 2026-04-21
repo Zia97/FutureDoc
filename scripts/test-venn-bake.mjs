@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import polygonClipping from 'polygon-clipping';
 
-import { bake, MIN_FONT_SIZE } from '../src/utils/venn/bake.js';
+import { computeLayout, MIN_FONT_SIZE } from '../src/utils/venn/layout.js';
 import { shapeToPolygon } from '../src/utils/venn/shapes.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -19,7 +19,6 @@ const ROOT = path.resolve(__dirname, '..');
 const FILES = [
   'src/dev/preview-dm-timed.json',
   'src/dev/preview-dm.json',
-  'src/dev/_batch-1-dm.json',
 ];
 
 // Re-implement a small distance-to-outline check for testing.
@@ -136,7 +135,7 @@ function run() {
         total++;
         const naturalTitle = `${relPath} :: ${q.title || q.id} :: ${role} :: natural`;
         try {
-          const baked = bake(vennConfig);
+          const baked = computeLayout(vennConfig);
           if (assertLabelClearances(baked, naturalTitle, { strict: false })) passed++;
           else failed++;
         } catch (err) {
@@ -148,7 +147,7 @@ function run() {
         // are expected on dense topologies and tracked separately to show how
         // often the renderer must fall back.
         try {
-          const baked = bake(vennConfig, { targetWidthPx: PIXEL_TARGET_PX });
+          const baked = computeLayout(vennConfig, { targetWidthPx: PIXEL_TARGET_PX });
           if (assertLabelClearances(baked, `${relPath} :: ${q.title || q.id} :: ${role} :: pixel@${PIXEL_TARGET_PX}`, { strict: true })) {
             pixelFitOk++;
           } else {

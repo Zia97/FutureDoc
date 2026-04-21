@@ -1,14 +1,14 @@
 [
   {
-    "id": "dmp-venn-001",
-    "title": "Science Electives",
+    "id": "dm1r-023-venn",
+    "title": "Sports Centre Memberships",
     "type": "venn_diagram",
     "difficulty": "normal",
-    "stem": "A class of 50 first-year science students each chose to study some combination of Biology, Chemistry, and Physics this term, or none of them.\n\n8 students study only Biology. 6 study only Chemistry. 7 study only Physics. 4 students study Biology and Chemistry but not Physics. 3 study Biology and Physics but not Chemistry. 5 study Chemistry and Physics but not Biology. 2 students study all three subjects. The remaining students study none of these subjects.\n\nWhich of the following diagrams best represents the data?",
+    "stem": "A sports centre has 80 members. 38 play tennis, 30 play badminton, and 25 play squash. 12 play both tennis and badminton. 10 play both tennis and squash. 8 play both badminton and squash. 5 play all three sports. 12 members play none of these sports.\n\nWhich of the following diagrams best represents the data?",
     "stimulus_diagram": null,
     "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "Biology only = 8, Chemistry only = 6, Physics only = 7, Biology and Chemistry only = 4, Biology and Physics only = 3, Chemistry and Physics only = 5, all three = 2 (subtotal 35). With 50 students total, 15 study none. Only option A matches every region. Option B swaps Biology only and Chemistry only. Option C swaps the Biology+Chemistry and Biology+Physics overlap counts. Option D shows 4 in the all-three region instead of 2.",
+    "correct_answer": "C",
+    "answer_reason": "The stem gives you two values to read directly: 5 play all three sports, and 12 play none. Scan the options — B shows 8 in the centre, not 5, so eliminate B. D shows 10 outside, not 12, so eliminate D. That leaves A and C. The stem says 12 play both tennis and badminton; 5 of those also play squash, so the tennis-and-badminton-only area = 12 − 5 = 7. A shows 5 there — wrong. C shows 7 — correct.",
     "order_index": 1,
     "decision_making_question_options": [
       {
@@ -17,14 +17,14 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
-            { "id": "set2", "label": "Chemistry", "shape": "oval" },
-            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
+            { "id": "set1", "label": "Tennis",   "shape": "hexagon" },
+            { "id": "set2", "label": "Badminton", "shape": "pentagon" },
+            { "id": "set3", "label": "Squash",    "shape": "trapezoid" }
           ],
           "regions": {
-            "set1_only": 8, "set2_only": 6, "set3_only": 7,
-            "set1_set2": 4, "set1_set3": 3, "set2_set3": 5,
-            "set1_set2_set3": 2, "outside": 15
+            "set1_only": 21, "set2_only": 15, "set3_only": 12,
+            "set1_set2": 5,  "set1_set3": 7,  "set2_set3": 3,
+            "set1_set2_set3": 5, "outside": 12
           }
         },
         "order_index": 1
@@ -35,14 +35,14 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
-            { "id": "set2", "label": "Chemistry", "shape": "oval" },
-            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
+            { "id": "set1", "label": "Tennis",   "shape": "hexagon" },
+            { "id": "set2", "label": "Badminton", "shape": "pentagon" },
+            { "id": "set3", "label": "Squash",    "shape": "trapezoid" }
           ],
           "regions": {
-            "set1_only": 6, "set2_only": 8, "set3_only": 7,
-            "set1_set2": 4, "set1_set3": 3, "set2_set3": 5,
-            "set1_set2_set3": 2, "outside": 15
+            "set1_only": 21, "set2_only": 15, "set3_only": 12,
+            "set1_set2": 7,  "set1_set3": 5,  "set2_set3": 3,
+            "set1_set2_set3": 8, "outside": 9
           }
         },
         "order_index": 2
@@ -53,14 +53,14 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
-            { "id": "set2", "label": "Chemistry", "shape": "oval" },
-            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
+            { "id": "set1", "label": "Tennis",   "shape": "hexagon" },
+            { "id": "set2", "label": "Badminton", "shape": "pentagon" },
+            { "id": "set3", "label": "Squash",    "shape": "trapezoid" }
           ],
           "regions": {
-            "set1_only": 8, "set2_only": 6, "set3_only": 7,
-            "set1_set2": 3, "set1_set3": 4, "set2_set3": 5,
-            "set1_set2_set3": 2, "outside": 15
+            "set1_only": 21, "set2_only": 15, "set3_only": 12,
+            "set1_set2": 7,  "set1_set3": 5,  "set2_set3": 3,
+            "set1_set2_set3": 5, "outside": 12
           }
         },
         "order_index": 3
@@ -71,31 +71,32 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Biology",   "shape": "hexagon" },
-            { "id": "set2", "label": "Chemistry", "shape": "oval" },
-            { "id": "set3", "label": "Physics",   "shape": "isosceles_triangle" }
+            { "id": "set1", "label": "Tennis",   "shape": "hexagon" },
+            { "id": "set2", "label": "Badminton", "shape": "pentagon" },
+            { "id": "set3", "label": "Squash",    "shape": "trapezoid" }
           ],
           "regions": {
-            "set1_only": 8, "set2_only": 6, "set3_only": 7,
-            "set1_set2": 4, "set1_set3": 3, "set2_set3": 5,
-            "set1_set2_set3": 4, "outside": 13
+            "set1_only": 21, "set2_only": 15, "set3_only": 12,
+            "set1_set2": 7,  "set1_set3": 5,  "set2_set3": 5,
+            "set1_set2_set3": 5, "outside": 10
           }
         },
         "order_index": 4
       }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-002",
-    "title": "Music School Grades",
+    "id": "dm1r-024-venn",
+    "title": "Warehouse Safety Qualifications",
     "type": "venn_diagram",
     "difficulty": "normal",
-    "stem": "A music school enrols 83 pupils. Each pupil studies one or two of the following grades: Grade 1, Grade 2, Grade 3, Grade 4.\n\n22 pupils study only Grade 1. 18 study only Grade 2. 15 study only Grade 3. 10 study only Grade 4. 6 pupils study Grade 1 and Grade 2. 5 pupils study Grade 2 and Grade 3. 4 pupils study Grade 3 and Grade 4. The remaining pupils are temporarily withdrawn from all grades.\n\nWhich of the following diagrams best represents the data?",
+    "stem": "A logistics company employs 80 warehouse staff. 30 hold a forklift licence, 20 have hazardous-goods certification, 15 hold a first-aid certificate, and 25 have a height-safety qualification. 10 staff hold both a forklift licence and hazardous-goods certification. 8 hold both a first-aid certificate and a height-safety qualification. No staff member holds qualifications from both pairs simultaneously. 8 staff hold none of these qualifications.\n\nWhich of the following diagrams best represents the data?",
     "stimulus_diagram": null,
     "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "Single-grade pupils: 22 + 18 + 15 + 10 = 65. Pair pupils: 6 + 5 + 4 = 15. Subtotal 80. Withdrawn: 83 - 80 = 3. Only option A matches every value. Option B shifts pupils from Grade 1 only into the Grade 1 + Grade 2 overlap. Option C swaps the Grade 3 only and Grade 4 only counts. Option D balances the three overlap counts to 5 each, which contradicts the stated values.",
+    "correct_answer": "B",
+    "answer_reason": "The stem gives you three values to read straight into any diagram: the forklift-and-hazardous overlap = 10, the first-aid-and-height-safety overlap = 8, and none = 8. Scan the options — D shows overlaps of 12 and 6 instead of 10 and 8, so eliminate D. C shows forklift-only = 22, but forklift total is 30 and the overlap is 10, so forklift-only = 30 − 10 = 20, not 22 — eliminate C. That leaves A and B. The difference is in the first-aid-only and height-safety-only areas. First-aid-only = 15 − 8 = 7. A shows 9 there — wrong. B shows 7 — correct.",
     "order_index": 2,
     "decision_making_question_options": [
       {
@@ -104,15 +105,15 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
-            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
-            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
-            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+            { "id": "set1", "label": "Forklift",      "shape": "circle" },
+            { "id": "set2", "label": "Hazardous",     "shape": "diamond" },
+            { "id": "set3", "label": "First aid",     "shape": "oval" },
+            { "id": "set4", "label": "Height safety", "shape": "star" }
           ],
           "regions": {
-            "set1_only": 22, "set2_only": 18, "set3_only": 15, "set4_only": 10,
-            "set1_set2": 6, "set2_set3": 5, "set3_set4": 4,
-            "outside": 3
+            "set1_only": 20, "set2_only": 10, "set3_only": 9, "set4_only": 15,
+            "set1_set2": 10, "set3_set4": 8,
+            "outside": 8
           }
         },
         "order_index": 1
@@ -123,15 +124,15 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
-            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
-            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
-            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+            { "id": "set1", "label": "Forklift",      "shape": "circle" },
+            { "id": "set2", "label": "Hazardous",     "shape": "diamond" },
+            { "id": "set3", "label": "First aid",     "shape": "oval" },
+            { "id": "set4", "label": "Height safety", "shape": "star" }
           ],
           "regions": {
-            "set1_only": 20, "set2_only": 18, "set3_only": 15, "set4_only": 10,
-            "set1_set2": 8, "set2_set3": 5, "set3_set4": 4,
-            "outside": 3
+            "set1_only": 20, "set2_only": 10, "set3_only": 7, "set4_only": 17,
+            "set1_set2": 10, "set3_set4": 8,
+            "outside": 8
           }
         },
         "order_index": 2
@@ -142,15 +143,15 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
-            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
-            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
-            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+            { "id": "set1", "label": "Forklift",      "shape": "circle" },
+            { "id": "set2", "label": "Hazardous",     "shape": "diamond" },
+            { "id": "set3", "label": "First aid",     "shape": "oval" },
+            { "id": "set4", "label": "Height safety", "shape": "star" }
           ],
           "regions": {
-            "set1_only": 22, "set2_only": 18, "set3_only": 10, "set4_only": 15,
-            "set1_set2": 6, "set2_set3": 5, "set3_set4": 4,
-            "outside": 3
+            "set1_only": 22, "set2_only": 8,  "set3_only": 7, "set4_only": 17,
+            "set1_set2": 10, "set3_set4": 8,
+            "outside": 8
           }
         },
         "order_index": 3
@@ -161,32 +162,33 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Grade 1", "shape": "rectangle" },
-            { "id": "set2", "label": "Grade 2", "shape": "parallelogram" },
-            { "id": "set3", "label": "Grade 3", "shape": "trapezoid" },
-            { "id": "set4", "label": "Grade 4", "shape": "diamond" }
+            { "id": "set1", "label": "Forklift",      "shape": "circle" },
+            { "id": "set2", "label": "Hazardous",     "shape": "diamond" },
+            { "id": "set3", "label": "First aid",     "shape": "oval" },
+            { "id": "set4", "label": "Height safety", "shape": "star" }
           ],
           "regions": {
-            "set1_only": 22, "set2_only": 18, "set3_only": 15, "set4_only": 10,
-            "set1_set2": 5, "set2_set3": 5, "set3_set4": 5,
-            "outside": 3
+            "set1_only": 20, "set2_only": 10, "set3_only": 7, "set4_only": 17,
+            "set1_set2": 12, "set3_set4": 6,
+            "outside": 8
           }
         },
         "order_index": 4
       }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-003",
-    "title": "Fitness Class Crossover",
+    "id": "dm1r-025-venn",
+    "title": "Aviary Bird Traits",
     "type": "venn_diagram",
     "difficulty": "normal",
-    "stem": "A studio runs three weekly fitness classes: Yoga, Pilates, and HIIT. 70 members are on the register.\n\n18 members attend only Yoga. 12 attend only Pilates. 14 attend only HIIT. 6 members attend both Yoga and Pilates. 8 members attend both Yoga and HIIT. 12 members are currently on a break and attend none of the classes.\n\nWhich of the following diagrams best represents the data?",
+    "stem": "An aviary has 40 birds. 18 are colourful, 13 can mimic sounds, and 9 are nocturnal. 5 are both colourful and can mimic sounds. 3 are both colourful and are nocturnal. No bird that can mimic sounds is nocturnal. 8 birds exhibit none of these traits.\n\nWhich diagram is consistent with the data?",
     "stimulus_diagram": null,
     "table_data": null,
     "correct_answer": "A",
-    "answer_reason": "Single-class members: 18 + 12 + 14 = 44. Yoga and Pilates = 6, Yoga and HIIT = 8 (subtotal 58). On a break = 12. Total = 70. The stem does not mention any Pilates and HIIT crossover, so that overlap is 0 and is omitted. Only option A matches every stated value. Option B swaps the Yoga only and Pilates only counts. Option C swaps the two overlap counts. Option D shifts 2 members between the Yoga only and the overlap regions.",
+    "answer_reason": "The stem tells you none of these traits = 8. D shows outside = 10 — eliminate D. The stem also says no bird that can mimic sounds is nocturnal, so those two categories never overlap. The central shape (the one that touches both others) must therefore represent Colourful, the only category that overlaps with both. Now check Mimic: the stem says 13 birds can mimic, so Mimic = its solo area + its overlap with Colourful. In B, that overlap is 3 → Mimic total = 8 + 3 = 11, not 13 — eliminate B. In C, the solo area of the second shape is 6 → Mimic total = 6 + 5 = 11, not 13 — eliminate C. In A, the overlap with Colourful is 5 → Mimic = 8 + 5 = 13 ✓. Option A.",
     "order_index": 3,
     "decision_making_question_options": [
       {
@@ -195,14 +197,14 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
-            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
-            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+            { "id": "set1", "label": "Colourful", "shape": "rectangle" },
+            { "id": "set2", "label": "Mimic",     "shape": "pentagon" },
+            { "id": "set3", "label": "Nocturnal", "shape": "vertical_oval" }
           ],
           "regions": {
-            "set1_only": 18, "set2_only": 12, "set3_only": 14,
-            "set1_set2": 6, "set1_set3": 8,
-            "outside": 12
+            "set1_only": 10, "set2_only": 8, "set3_only": 6,
+            "set1_set2": 5,  "set1_set3": 3,
+            "outside": 8
           }
         },
         "order_index": 1
@@ -213,14 +215,14 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
-            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
-            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+            { "id": "set1", "label": "Colourful", "shape": "rectangle" },
+            { "id": "set2", "label": "Mimic",     "shape": "pentagon" },
+            { "id": "set3", "label": "Nocturnal", "shape": "vertical_oval" }
           ],
           "regions": {
-            "set1_only": 12, "set2_only": 18, "set3_only": 14,
-            "set1_set2": 6, "set1_set3": 8,
-            "outside": 12
+            "set1_only": 10, "set2_only": 8, "set3_only": 6,
+            "set1_set2": 3,  "set1_set3": 5,
+            "outside": 8
           }
         },
         "order_index": 2
@@ -231,14 +233,14 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
-            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
-            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+            { "id": "set1", "label": "Colourful", "shape": "rectangle" },
+            { "id": "set2", "label": "Mimic",     "shape": "pentagon" },
+            { "id": "set3", "label": "Nocturnal", "shape": "vertical_oval" }
           ],
           "regions": {
-            "set1_only": 18, "set2_only": 12, "set3_only": 14,
-            "set1_set2": 8, "set1_set3": 6,
-            "outside": 12
+            "set1_only": 10, "set2_only": 6, "set3_only": 8,
+            "set1_set2": 5,  "set1_set3": 3,
+            "outside": 8
           }
         },
         "order_index": 3
@@ -249,35 +251,36 @@
         "option_data": {
           "diagramLayout": "auto",
           "sets": [
-            { "id": "set1", "label": "Yoga",    "shape": "hexagon" },
-            { "id": "set2", "label": "Pilates", "shape": "vertical_oval" },
-            { "id": "set3", "label": "HIIT",    "shape": "octagon" }
+            { "id": "set1", "label": "Colourful", "shape": "rectangle" },
+            { "id": "set2", "label": "Mimic",     "shape": "pentagon" },
+            { "id": "set3", "label": "Nocturnal", "shape": "vertical_oval" }
           ],
           "regions": {
-            "set1_only": 16, "set2_only": 12, "set3_only": 14,
-            "set1_set2": 7, "set1_set3": 9,
-            "outside": 12
+            "set1_only": 8, "set2_only": 8, "set3_only": 6,
+            "set1_set2": 5, "set1_set3": 3,
+            "outside": 10
           }
         },
         "order_index": 4
       }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": true
   },
   {
-    "id": "dmp-venn-004",
-    "title": "Heart Disease Risk by Age",
+    "id": "dm1r-026-venn",
+    "title": "University Course Properties",
     "type": "venn_diagram",
-    "difficulty": "hard",
-    "stem": "A GP clinic classifies adult patients by age band (20–39, 40–59, 60–79, 80+) and separately records whether each patient has been assessed as being at risk of heart disease.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a patient aged 60–79 who has also been assessed as being at risk of heart disease?",
+    "difficulty": "normal",
+    "stem": "The diagram categorises university courses using five properties: has a laboratory component, is mandatory for first-year students, requires an external placement, offers summer school access, and is assessed by portfolio only. Each letter marks a different region.\n\nWhich letter represents a course that has a laboratory component and is mandatory for first-year students, but does not require an external placement, has no summer school access, and is not assessed by portfolio?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
-        { "id": "set1", "label": "At risk of heart disease", "shape": "pentagon" },
-        { "id": "set2", "label": "Aged 20–39",               "shape": "circle" },
-        { "id": "set3", "label": "Aged 40–59",               "shape": "hexagon" },
-        { "id": "set4", "label": "Aged 60–79",               "shape": "diamond" },
-        { "id": "set5", "label": "Aged 80+",                 "shape": "square" }
+        { "id": "set1", "label": "Laboratory",      "shape": "circle" },
+        { "id": "set2", "label": "Mandatory yr 1",  "shape": "diamond" },
+        { "id": "set3", "label": "Ext. placement",  "shape": "hexagon" },
+        { "id": "set4", "label": "Summer school",   "shape": "oval" },
+        { "id": "set5", "label": "Portfolio",       "shape": "star" }
       ],
       "regions": {
         "set1_only": "P",
@@ -292,222 +295,496 @@
         "outside":   "Y"
       }
     },
-    "table_data": null,
     "correct_answer": "C",
-    "answer_reason": "A patient aged 60–79 who is at risk of heart disease lies inside both the Aged 60–79 shape and the At risk of heart disease shape, but outside every other age band. That region is marked W. Letter S marks patients aged 60–79 who are not at risk. Letter V marks patients aged 40–59 who are at risk. Letter X marks patients aged 80+ who are at risk.",
+    "answer_reason": "The question needs both Laboratory and Mandatory yr 1, with nothing else. Letter P is Laboratory only — no Mandatory. Letter Q is Mandatory only — no Laboratory. Letter V is Laboratory plus External placement — wrong second property. That leaves Letter U, the region where just Laboratory and Mandatory yr 1 overlap, outside all other categories. Option C.",
     "order_index": 4,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter S", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter V", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter W", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter X", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter P", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter Q", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter U", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter V", "option_data": null, "order_index": 4 }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-005",
-    "title": "Year Group Bridging",
+    "id": "dm1r-027-venn",
+    "title": "Research Grant Applications",
     "type": "venn_diagram",
     "difficulty": "hard",
-    "stem": "A primary school enrols every pupil in one of Years 1 to 5. A small number of pupils are bridging two consecutive year groups this term while they finish content from the lower year before joining the next.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a pupil who is bridging Year 3 and Year 4?",
+    "stem": "The diagram shows research grant applications to a university categorised by five properties: clinical relevance, industry partnership, patient involvement, multi-site collaboration, and ethical approval. Each letter marks a different region.\n\nWhich letter represents an application that has industry partnership and patient involvement, but lacks clinical relevance?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
-        { "id": "set1", "label": "Year 1", "shape": "octagon" },
-        { "id": "set2", "label": "Year 2", "shape": "circle" },
-        { "id": "set3", "label": "Year 3", "shape": "hexagon" },
-        { "id": "set4", "label": "Year 4", "shape": "diamond" },
-        { "id": "set5", "label": "Year 5", "shape": "vertical_oval" }
+        { "id": "set1", "label": "Clinical relevance",        "shape": "hexagon" },
+        { "id": "set2", "label": "Industry partnership",      "shape": "diamond" },
+        { "id": "set3", "label": "Patient involvement",       "shape": "circle" },
+        { "id": "set4", "label": "Multi-site collaboration",  "shape": "octagon" },
+        { "id": "set5", "label": "Ethical approval",          "shape": "star" }
       ],
       "regions": {
-        "set1_only": "P",
-        "set2_only": "Q",
-        "set3_only": "R",
-        "set4_only": "S",
-        "set5_only": "T",
-        "set1_set2": "U",
-        "set2_set3": "V",
-        "set3_set4": "W",
-        "set4_set5": "X",
-        "outside":   "Y"
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set1_set2": "F",
+        "set2_set3": "G",
+        "set3_set4": "H",
+        "set4_set5": "J",
+        "set1_set5": "K",
+        "outside":   "L"
       }
     },
-    "table_data": null,
-    "correct_answer": "B",
-    "answer_reason": "A pupil bridging Year 3 and Year 4 lies inside both the Year 3 shape and the Year 4 shape, but outside every other year. That region is marked W. Letter R marks pupils who are only in Year 3. Letter V marks pupils bridging Year 2 and Year 3. Letter X marks pupils bridging Year 4 and Year 5.",
+    "correct_answer": "C",
+    "answer_reason": "The question needs Industry partnership and Patient involvement, but not Clinical relevance. Letter B is Industry partnership alone — no Patient involvement. Letter F is where Clinical relevance and Industry partnership meet — includes Clinical relevance, which is excluded. Letter H is where Patient involvement and Multi-site collaboration meet — no Industry partnership. That leaves Letter G, the region where Industry partnership and Patient involvement overlap, sitting entirely outside Clinical relevance. Option C.",
     "order_index": 5,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter R", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter V", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter X", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter B", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter F", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter G", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter H", "option_data": null, "order_index": 4 }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-006",
-    "title": "Specialist Referrals",
+    "id": "dm1r-028-venn",
+    "title": "Supermarket Product Properties",
     "type": "venn_diagram",
     "difficulty": "hard",
-    "stem": "A community clinic logs each appointment by which specialty the patient attended. Patients attend exactly one specialty per appointment. Separately, each appointment is recorded as having been booked via a specialist referral or as a routine self-booking.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents an appointment in Cardiology that was booked via a specialist referral?",
+    "stem": "The diagram shows supermarket products categorised by six properties: organic-certified, locally sourced, vegetarian, gluten-free, low-sugar, and fair-trade. Each letter marks a different region.\n\nWhich letter represents a product that is gluten-free and low-sugar, but is not organic-certified, locally sourced, vegetarian, or fair-trade?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
-        { "id": "set1", "label": "Specialist referral", "shape": "circle" },
-        { "id": "set2", "label": "Paediatrics",         "shape": "triangle" },
-        { "id": "set3", "label": "Geriatrics",          "shape": "diamond" },
-        { "id": "set4", "label": "Cardiology",          "shape": "hexagon" },
-        { "id": "set5", "label": "Dermatology",         "shape": "pentagon" },
-        { "id": "set6", "label": "Psychiatry",          "shape": "square" }
+        { "id": "set1", "label": "Organic",      "shape": "circle" },
+        { "id": "set2", "label": "Local",         "shape": "pentagon" },
+        { "id": "set3", "label": "Vegetarian",    "shape": "trapezoid" },
+        { "id": "set4", "label": "Gluten-free",   "shape": "octagon" },
+        { "id": "set5", "label": "Low-sugar",     "shape": "parallelogram" },
+        { "id": "set6", "label": "Fair-trade",    "shape": "vertical_oval" }
       ],
       "regions": {
-        "set2_only": "P",
-        "set3_only": "Q",
-        "set4_only": "R",
-        "set5_only": "S",
-        "set6_only": "T",
-        "set1_set2": "U",
-        "set1_set3": "V",
-        "set1_set4": "W",
-        "set1_set5": "X",
-        "set1_set6": "Y",
-        "outside":   "Z"
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set6_only": "F",
+        "set1_set2": "G",
+        "set2_set3": "H",
+        "set3_set4": "J",
+        "set4_set5": "K",
+        "set5_set6": "L",
+        "outside":   "M"
       }
     },
-    "table_data": null,
-    "correct_answer": "B",
-    "answer_reason": "An appointment in Cardiology booked via a specialist referral lies inside both the Cardiology shape and the Specialist referral shape. That region is marked W. Letter R marks Cardiology appointments that were self-booked rather than referred. Letter V marks Geriatrics appointments booked via referral. Letter X marks Dermatology appointments booked via referral.",
+    "correct_answer": "D",
+    "answer_reason": "The question needs Gluten-free and Low-sugar only — none of the other four categories. Letter D is Gluten-free alone — no Low-sugar. Letter J is Vegetarian and Gluten-free — includes Vegetarian, which is excluded. Letter L is Low-sugar and Fair-trade — includes Fair-trade, which is excluded. That leaves Letter K, the region where Gluten-free and Low-sugar overlap, outside all other categories. Option D.",
     "order_index": 6,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter R", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter V", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter X", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter D", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter J", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter L", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter K", "option_data": null, "order_index": 4 }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-007",
-    "title": "Music School Grades",
+    "id": "dm2r-023-venn",
+    "title": "Library Membership Tiers",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A library has 75 members. 60 are registered members. 40 have an online account. 18 are premium members. All premium members have an online account. All online account holders are registered members.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "Two values are almost immediate: premium = 18 (stated directly, sits in the innermost ring) and none = 75 − 60 = 15 (one subtraction). Scan the options — B shows 22 in the innermost ring, not 18, so eliminate B. D shows 20 outside, not 15, so eliminate D. That leaves A and C. Both have innermost = 18 and outside = 15; they differ in which ring shows 20 and which shows 22. The middle ring = online holders who aren't premium = 40 − 18 = 22. The outer ring = registered members with no online account = 60 − 40 = 20. A has those two rings showing 20 then 22 — swapped. C shows 22 then 20 — correct.",
+    "order_index": 1,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Premium",        "shape": "diamond" },
+            { "id": "set2", "label": "Online account", "shape": "pentagon" },
+            { "id": "set3", "label": "Registered",     "shape": "hexagon" }
+          ],
+          "regions": {
+            "set3_only": 22,
+            "set2_set3": 20,
+            "set1_set2_set3": 18,
+            "outside": 15
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Premium",        "shape": "diamond" },
+            { "id": "set2", "label": "Online account", "shape": "pentagon" },
+            { "id": "set3", "label": "Registered",     "shape": "hexagon" }
+          ],
+          "regions": {
+            "set3_only": 20,
+            "set2_set3": 18,
+            "set1_set2_set3": 22,
+            "outside": 15
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Premium",        "shape": "diamond" },
+            { "id": "set2", "label": "Online account", "shape": "pentagon" },
+            { "id": "set3", "label": "Registered",     "shape": "hexagon" }
+          ],
+          "regions": {
+            "set3_only": 20,
+            "set2_set3": 22,
+            "set1_set2_set3": 18,
+            "outside": 15
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Premium",        "shape": "diamond" },
+            { "id": "set2", "label": "Online account", "shape": "pentagon" },
+            { "id": "set3", "label": "Registered",     "shape": "hexagon" }
+          ],
+          "regions": {
+            "set3_only": 15,
+            "set2_set3": 22,
+            "set1_set2_set3": 18,
+            "outside": 20
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": null,
+    "hide_labels": false
+  },
+  {
+    "id": "dm2r-024-venn",
+    "title": "Recruitment Applicant Attributes",
     "type": "venn_diagram",
     "difficulty": "hard",
-    "stem": "A music school registers every pupil for at least one of the following six grades. A small number of pupils are studying two consecutive grades at the same time while they prepare to move up.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a pupil who is studying both Grade 5 and Grade 6?",
+    "stem": "A recruitment firm assessed 80 applicants for a management role. 25 have prior management experience, 30 hold a relevant degree, 20 have industry certifications, and 18 have strong references. 8 applicants have both prior management experience and a relevant degree. 6 have both a relevant degree and industry certifications. 4 have both industry certifications and strong references. 5 have both strong references and prior management experience. No applicant has both prior management experience and industry certifications, or both a relevant degree and strong references. 10 applicants have none of these attributes.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "B",
+    "answer_reason": "The stem gives you four overlap values and the none count directly: management+degree = 8, degree+certifications = 6, certifications+references = 4, references+management = 5, none = 10. Scan the options — D swaps the degree+certifications and certifications+references overlaps (showing 4 and 6 instead of 6 and 4), so eliminate D. C shows the references+management overlap as 7 instead of 5, so eliminate C. That leaves A and B. Both have all overlaps and the none count correct; they differ only in management-only and degree-only. Management-only = 25 − 8 − 5 = 12. A shows 14 — wrong. B shows 12 — correct. Option B.",
+    "order_index": 2,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Mgmt experience", "shape": "circle" },
+            { "id": "set2", "label": "Relevant degree",  "shape": "hexagon" },
+            { "id": "set3", "label": "Certifications",   "shape": "octagon" },
+            { "id": "set4", "label": "References",       "shape": "pentagon" }
+          ],
+          "regions": {
+            "set1_only": 14, "set2_only": 14, "set3_only": 10, "set4_only": 9,
+            "set1_set2": 8,  "set2_set3": 6,  "set3_set4": 4,  "set1_set4": 5,
+            "outside": 10
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Mgmt experience", "shape": "circle" },
+            { "id": "set2", "label": "Relevant degree",  "shape": "hexagon" },
+            { "id": "set3", "label": "Certifications",   "shape": "octagon" },
+            { "id": "set4", "label": "References",       "shape": "pentagon" }
+          ],
+          "regions": {
+            "set1_only": 12, "set2_only": 16, "set3_only": 10, "set4_only": 9,
+            "set1_set2": 8,  "set2_set3": 6,  "set3_set4": 4,  "set1_set4": 5,
+            "outside": 10
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Mgmt experience", "shape": "circle" },
+            { "id": "set2", "label": "Relevant degree",  "shape": "hexagon" },
+            { "id": "set3", "label": "Certifications",   "shape": "octagon" },
+            { "id": "set4", "label": "References",       "shape": "pentagon" }
+          ],
+          "regions": {
+            "set1_only": 12, "set2_only": 16, "set3_only": 10, "set4_only": 7,
+            "set1_set2": 8,  "set2_set3": 6,  "set3_set4": 4,  "set1_set4": 7,
+            "outside": 10
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Mgmt experience", "shape": "circle" },
+            { "id": "set2", "label": "Relevant degree",  "shape": "hexagon" },
+            { "id": "set3", "label": "Certifications",   "shape": "octagon" },
+            { "id": "set4", "label": "References",       "shape": "pentagon" }
+          ],
+          "regions": {
+            "set1_only": 12, "set2_only": 16, "set3_only": 10, "set4_only": 9,
+            "set1_set2": 8,  "set2_set3": 4,  "set3_set4": 6,  "set1_set4": 5,
+            "outside": 10
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": null,
+    "hide_labels": false
+  },
+  {
+    "id": "dm2r-025-venn",
+    "title": "Film Festival Screenings",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A film festival has 60 screenings. 28 are documentary films, 22 are international films, and 18 are award-nominated. 8 screenings are both documentary and international. 6 screenings are both documentary and award-nominated. 5 screenings are both international and award-nominated. 3 screenings belong to all three categories. 8 screenings belong to none of these categories.\n\nWhich of the following diagrams is consistent with the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "Two values to check immediately: 3 screenings belong to all three categories (the centre), and 8 belong to none (outside). B shows 5 in the centre — the stem says 3 — eliminate B. A, C, and D all have outside = 8 and centre = 3. D has one of the single-category counts showing 19 — Documentary should be 28 − 5 − 3 − 3 = 17, not 19 — eliminate D. That leaves A and C, which share the same single-category counts (17, 12, 10) but differ in the paired overlaps. Documentary-and-International only = 8 − 3 = 5. A shows that pair as 2 — wrong. C shows 5 — correct. Option C.",
+    "order_index": 3,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Documentary",      "shape": "circle" },
+            { "id": "set2", "label": "International",    "shape": "octagon" },
+            { "id": "set3", "label": "Award-nominated",  "shape": "trapezoid" }
+          ],
+          "regions": {
+            "set1_only": 17, "set2_only": 12, "set3_only": 10,
+            "set1_set2": 2,  "set1_set3": 3,  "set2_set3": 5,
+            "set1_set2_set3": 3, "outside": 8
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Documentary",      "shape": "circle" },
+            { "id": "set2", "label": "International",    "shape": "octagon" },
+            { "id": "set3", "label": "Award-nominated",  "shape": "trapezoid" }
+          ],
+          "regions": {
+            "set1_only": 17, "set2_only": 12, "set3_only": 8,
+            "set1_set2": 5,  "set1_set3": 3,  "set2_set3": 2,
+            "set1_set2_set3": 5, "outside": 8
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Documentary",      "shape": "circle" },
+            { "id": "set2", "label": "International",    "shape": "octagon" },
+            { "id": "set3", "label": "Award-nominated",  "shape": "trapezoid" }
+          ],
+          "regions": {
+            "set1_only": 17, "set2_only": 12, "set3_only": 10,
+            "set1_set2": 5,  "set1_set3": 3,  "set2_set3": 2,
+            "set1_set2_set3": 3, "outside": 8
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            { "id": "set1", "label": "Documentary",      "shape": "circle" },
+            { "id": "set2", "label": "International",    "shape": "octagon" },
+            { "id": "set3", "label": "Award-nominated",  "shape": "trapezoid" }
+          ],
+          "regions": {
+            "set1_only": 19, "set2_only": 10, "set3_only": 10,
+            "set1_set2": 5,  "set1_set3": 3,  "set2_set3": 2,
+            "set1_set2_set3": 3, "outside": 8
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": null,
+    "hide_labels": true
+  },
+  {
+    "id": "dm2r-026-venn",
+    "title": "Online Course Features",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram classifies online courses by five features: certified (can award a certificate), self-paced, live sessions, has assignments, and includes premium content. Each letter marks a different region.\n\nWhich letter represents courses that offer live sessions and are certified, but are not self-paced, do not have assignments, and do not include premium content?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
-        { "id": "set1", "label": "Grade 3", "shape": "hexagon" },
-        { "id": "set2", "label": "Grade 4", "shape": "pentagon" },
-        { "id": "set3", "label": "Grade 5", "shape": "circle" },
-        { "id": "set4", "label": "Grade 6", "shape": "diamond" },
-        { "id": "set5", "label": "Grade 7", "shape": "square" },
-        { "id": "set6", "label": "Grade 8", "shape": "octagon" }
+        { "id": "set1", "label": "Certified",       "shape": "circle" },
+        { "id": "set2", "label": "Self-paced",      "shape": "hexagon" },
+        { "id": "set3", "label": "Live sessions",   "shape": "vertical_oval" },
+        { "id": "set4", "label": "Assignments",     "shape": "oval" },
+        { "id": "set5", "label": "Premium content", "shape": "pentagon" }
       ],
       "regions": {
-        "set1_only": "P",
-        "set2_only": "Q",
-        "set3_only": "R",
-        "set4_only": "S",
-        "set5_only": "T",
-        "set6_only": "U",
-        "set1_set2": "V",
-        "set2_set3": "W",
-        "set3_set4": "X",
-        "set4_set5": "Y",
-        "set5_set6": "Z"
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set1_set2": "F",
+        "set1_set3": "G",
+        "set1_set4": "H",
+        "set1_set5": "J",
+        "outside":   "K"
       }
     },
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "A pupil studying both Grade 5 and Grade 6 lies inside both the Grade 5 shape and the Grade 6 shape, but outside every other grade. That region is marked X. Letter W marks pupils studying both Grade 4 and Grade 5. Letter Y marks pupils studying both Grade 6 and Grade 7. Letter R marks pupils registered only for Grade 5.",
-    "order_index": 7,
+    "correct_answer": "B",
+    "answer_reason": "The question needs Certified and Live sessions, with nothing else. The four options each pair Certified with a different feature: F is Certified and Self-paced, G is Certified and Live sessions, H is Certified and Assignments, J is Certified and Premium content. Only Live sessions matches. That's Letter G, Option B.",
+    "order_index": 4,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter X", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter Y", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter R", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter F", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter G", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter H", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter J", "option_data": null, "order_index": 4 }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-008",
-    "title": "Hospital Patient Care",
+    "id": "dm2r-027-venn",
+    "title": "Academic Programme Levels",
     "type": "venn_diagram",
     "difficulty": "hard",
-    "stem": "The diagram classifies a hospital's currently admitted patients by their care status. A separate group of visiting outpatients attend day clinics on the ward but are not admitted to the hospital.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents an admitted patient who is post-operative and has a chronic illness, but is not on Medication X, not aged 65 or over, does not require isolation, and is not a visiting outpatient?",
+    "stem": "The diagram classifies academic programmes at a university by qualification level. Each letter marks a different region.\n\nWhich letter represents programmes that span both Bachelor's and Master's levels but do not include Certificate, Foundation, or Doctoral components?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
-        { "id": "set1", "label": "Admitted patients",   "shape": "rectangle" },
-        { "id": "set2", "label": "Post-operative",      "shape": "circle" },
-        { "id": "set3", "label": "Chronic illness",     "shape": "square" },
-        { "id": "set4", "label": "On Medication X",     "shape": "pentagon" },
-        { "id": "set5", "label": "Aged 65+",            "shape": "hexagon" },
-        { "id": "set6", "label": "Requires isolation",  "shape": "diamond" },
-        { "id": "set7", "label": "Visiting outpatients","shape": "star" }
+        { "id": "set1", "label": "Certificate",      "shape": "square" },
+        { "id": "set2", "label": "Foundation Degree", "shape": "oval" },
+        { "id": "set3", "label": "Bachelor's Degree", "shape": "parallelogram" },
+        { "id": "set4", "label": "Master's Degree",   "shape": "diamond" },
+        { "id": "set5", "label": "Doctoral Degree",   "shape": "hexagon" }
       ],
       "regions": {
-        "set1_only":      "P",
-        "set1_set2":      "Q",
-        "set1_set3":      "R",
-        "set1_set4":      "S",
-        "set1_set5":      "T",
-        "set1_set6":      "U",
-        "set1_set2_set3": "V",
-        "set1_set3_set4": "W",
-        "set7_only":      "X",
-        "outside":        "Y"
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set1_set2": "F",
+        "set2_set3": "G",
+        "set3_set4": "H",
+        "set4_set5": "J",
+        "outside":   "K"
       }
     },
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "A patient who is post-operative and has a chronic illness but is not on Medication X, not aged 65+, not requiring isolation, and not a visiting outpatient lies inside the Admitted patients rectangle, inside the Post-operative and Chronic illness shapes, and outside every other shape. That region is marked V. Letter W marks chronically ill patients who are also on Medication X. Letter Q marks post-operative patients only. Letter T marks elderly patients only.",
-    "order_index": 8,
+    "correct_answer": "B",
+    "answer_reason": "The question needs Bachelor's and Master's only — no Certificate, Foundation, or Doctoral. Letter G is Foundation and Bachelor's — includes Foundation, which is excluded. Letter J is Master's and Doctoral — includes Doctoral, which is excluded. Letter C is Bachelor's alone — no Master's. That leaves Letter H, the overlap between Bachelor's and Master's with nothing else. Option B.",
+    "order_index": 5,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter V", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter W", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter Q", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter T", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter G", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter H", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter J", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter C", "option_data": null, "order_index": 4 }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   },
   {
-    "id": "dmp-venn-009",
-    "title": "Leisure Centre Passes",
+    "id": "dm2r-028-venn",
+    "title": "Community Initiative Focus Areas",
     "type": "venn_diagram",
     "difficulty": "hard",
-    "stem": "A leisure centre classifies its registered members by which facility passes they hold: Swimming pool, Gym, and Sauna. Members may hold any combination of the three. The centre also receives day-visit guests on a pay-per-entry basis, and tournament athletes from external clubs who train at the centre during competitions but are not registered members.\n\nEach letter marks a different region of the diagram.\n\nWhich letter represents a registered member who holds passes for the Swimming pool, the Gym and the Sauna?",
+    "stem": "The diagram classifies community initiative projects by focus area: Environment, Healthcare, Education, Housing, Employment, and Transport. Each letter marks a different region.\n\nWhich letter represents projects that focus exclusively on both Transport and Environment, with no other focus area?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
-        { "id": "set1", "label": "Swimming pool pass",   "shape": "circle" },
-        { "id": "set2", "label": "Gym pass",             "shape": "hexagon" },
-        { "id": "set3", "label": "Sauna pass",           "shape": "pentagon" },
-        { "id": "set4", "label": "Day-visit guests",     "shape": "oval" },
-        { "id": "set5", "label": "Tournament athletes",  "shape": "triangle" }
+        { "id": "set1", "label": "Environment", "shape": "hexagon" },
+        { "id": "set2", "label": "Healthcare",  "shape": "circle" },
+        { "id": "set3", "label": "Education",   "shape": "diamond" },
+        { "id": "set4", "label": "Housing",     "shape": "pentagon" },
+        { "id": "set5", "label": "Employment",  "shape": "square" },
+        { "id": "set6", "label": "Transport",   "shape": "octagon" }
       ],
       "regions": {
-        "set1_only":      "P",
-        "set2_only":      "Q",
-        "set3_only":      "R",
-        "set1_set2":      "S",
-        "set1_set3":      "T",
-        "set2_set3":      "U",
-        "set1_set2_set3": "V",
-        "set4_only":      "W",
-        "set5_only":      "X",
-        "outside":        "Y"
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set6_only": "F",
+        "set1_set2": "G",
+        "set2_set3": "H",
+        "set3_set4": "J",
+        "set4_set5": "K",
+        "set5_set6": "L",
+        "set1_set6": "M",
+        "outside":   "N"
       }
     },
-    "table_data": null,
     "correct_answer": "A",
-    "answer_reason": "A member who holds all three passes lies inside the Swimming pool, Gym and Sauna shapes simultaneously. That region is marked V. Letter S marks members with only the Swimming pool and Gym passes. Letter T marks members with only the Swimming pool and Sauna passes. Letter U marks members with only the Gym and Sauna passes.",
-    "order_index": 9,
+    "answer_reason": "The question needs Transport and Environment only — no other focus areas. Letter G is Environment and Healthcare — includes Healthcare, which is excluded. Letter F is Transport alone — no Environment. Letter L is Employment and Transport — includes Employment, which is excluded. That leaves Letter M, the overlap between Transport and Environment, outside all four remaining focus areas. Option A.",
+    "order_index": 6,
     "decision_making_question_options": [
-      { "label": "A", "option_text": "Letter V", "option_data": null, "order_index": 1 },
-      { "label": "B", "option_text": "Letter S", "option_data": null, "order_index": 2 },
-      { "label": "C", "option_text": "Letter T", "option_data": null, "order_index": 3 },
-      { "label": "D", "option_text": "Letter U", "option_data": null, "order_index": 4 }
+      { "label": "A", "option_text": "Letter M", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter G", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter F", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter L", "option_data": null, "order_index": 4 }
     ],
-    "decision_making_question_statements": []
+    "decision_making_question_statements": null,
+    "hide_labels": false
   }
 ]

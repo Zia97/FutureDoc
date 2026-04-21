@@ -17,7 +17,7 @@ function mapQuestion(q) {
     options: q.timed_decision_making_question_options
       ? [...q.timed_decision_making_question_options]
           .sort((a, b) => a.order_index - b.order_index)
-          .map((o) => ({ label: o.label, text: o.option_text, option_data: o.option_data ?? null }))
+          .map((o) => ({ label: o.label, text: o.option_text, option_data: o.option_data ?? null, vennGeometry: o.venn_geometry ?? null }))
       : (q.options ?? []),
     statements: q.timed_decision_making_question_statements
       ? [...q.timed_decision_making_question_statements]
@@ -30,6 +30,7 @@ function mapQuestion(q) {
           : []),
     tableData: q.table_data,
     stimulusDiagram: q.stimulus_diagram,
+    stimulusVennGeometry: q.venn_geometry ?? null,
     hideLabels: q.hideLabels ?? q.hide_labels ?? false,
     answer: q.correct_answer,
     answeringReason: q.answer_reason,

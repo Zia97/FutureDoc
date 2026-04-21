@@ -15,9 +15,7 @@ export function useVerbalReasoningProgress() {
   const load = useCallback(async () => {
     try {
       const raw = await AsyncStorage.getItem(VR_PROGRESS_CACHE_KEY);
-      if (raw) {
-        setProgressMap(JSON.parse(raw));
-      }
+      setProgressMap(raw ? JSON.parse(raw) : {});
     } catch {
       // ignore cache errors
     }

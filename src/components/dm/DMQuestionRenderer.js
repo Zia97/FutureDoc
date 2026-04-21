@@ -33,9 +33,7 @@ function useQuestionMeta(question, screenWidth) {
     ? (stimDiagram?.sets ?? question.options?.[0]?.vennConfig?.sets ?? question.options?.[0]?.option_data?.sets ?? null)
     : null;
   const contentWidth     = screenWidth - 40;
-  // Pixel widths handed straight to the baker — diagrams render 1:1 at these
-  // sizes with real-pixel font sizes (no shrink-at-render).
-  const stimulusWidthPx  = contentWidth;               // vennStimulus card has no horizontal padding
+  const stimulusWidthPx  = contentWidth;
   const expandedWidthPx  = screenWidth  - 80;          // modal padding ~40 each side
   return { isYesNo, isMCQ, isVenn, isSelectVenn, isInterpVenn, vennKeySets, stimDiagram, contentWidth, stimulusWidthPx, expandedWidthPx };
 }
@@ -63,7 +61,13 @@ export function DMStemContent({ question, showLabel = true }) {
             onPress={() => setDiagramExpanded(true)}
             activeOpacity={0.85}
           >
-            <VennDiagramRenderer vennConfig={stimDiagram} widthPx={stimulusWidthPx} />
+            {__DEV__ && console.log(
+              '[venn]', question.title, 'stimulus',
+              'hasBaked=', !!question.stimulusVennGeometry,
+              'canvas=', question.stimulusVennGeometry?.canvas,
+              'outsideLbl=', question.stimulusVennGeometry?.labels?.find((l) => l.region === 'outside'),
+            )}
+            <VennDiagramRenderer vennConfig={stimDiagram} widthPx={stimulusWidthPx} bakedGeometry={question.stimulusVennGeometry} />
             <Text style={[styles.tapHint, { color: t.accent }]}>Tap to expand</Text>
           </TouchableOpacity>
 
@@ -80,7 +84,7 @@ export function DMStemContent({ question, showLabel = true }) {
             >
               <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
                 <ZoomableView maxZoom={4}>
-                  <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} />
+                  <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} bakedGeometry={question.stimulusVennGeometry} />
                 </ZoomableView>
                 <Text style={[styles.modalDismiss, { color: t.accent }]}>Tap anywhere to close</Text>
               </View>
@@ -109,8 +113,9 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
   const optionsLabel = showLabel ? <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>{isYesNo ? 'QUESTIONS' : 'OPTIONS'}</Text> : null;
 
   if (isSelectVenn) {
-    // Each option card spans the full content width; diagram inside the card
-    // fits within `contentWidth - 2 * paddingHorizontal(12) = contentWidth - 24`.
+    // Pass the full available content width as the maximum to the adaptive baker.
+    // The baker grows each diagram only as wide as needed for 12px labels,
+    // so simple diagrams stay compact while dense 5-set ones use the full width.
     const optionWidthPx = contentWidth - 24;
 
     return (
@@ -131,7 +136,18 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
               disabled={submitted}
             >
               <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
-              <VennDiagramRenderer vennConfig={cfg} widthPx={optionWidthPx} />
+              {(() => {
+                if (__DEV__) {
+                  console.log(
+                    '[venn]', question.title, 'opt', opt.label,
+                    'hasBaked=', !!opt.vennGeometry,
+                    'canvas=', opt.vennGeometry?.canvas,
+                    'outsideLbl=', opt.vennGeometry?.labels?.find((l) => l.region === 'outside'),
+                  );
+                }
+                return null;
+              })()}
+              <VennDiagramRenderer vennConfig={cfg} widthPx={optionWidthPx} bakedGeometry={opt.vennGeometry} />
             </TouchableOpacity>
           );
         })}

@@ -1,8 +1,8 @@
 // Abstract vennConfig -> concrete geometry + region label positions.
 //
-// The contract: if bake() returns without throwing, every labelled region has
+// The contract: if computeLayout() returns without throwing, every labelled region has
 // polylabel clearance >= MIN_LABEL_DIST, and every font size is >= MIN_FONT_SIZE.
-// If a topology can't satisfy this after MAX_SCALE_ATTEMPTS, bake throws —
+// If a topology can't satisfy this after MAX_SCALE_ATTEMPTS, computeLayout throws —
 // which is a generator-side bug, caught here rather than at render time.
 
 import polygonClipping from 'polygon-clipping';
@@ -134,12 +134,12 @@ function minDistFor(textLen) {
 }
 
 // ---------------------------------------------------------------------------
-// Bake
+// computeLayout
 // ---------------------------------------------------------------------------
 
-export function bake(vennConfig, options = {}) {
+export function computeLayout(vennConfig, options = {}) {
   if (!vennConfig || !vennConfig.sets || !vennConfig.regions) {
-    throw new Error('bake: vennConfig missing sets or regions');
+    throw new Error('computeLayout: vennConfig missing sets or regions');
   }
 
   const allSetIds = vennConfig.sets.map(s => s.id);
@@ -160,11 +160,11 @@ export function bake(vennConfig, options = {}) {
 
   // ---- Pixel-targeted mode ----
   // Caller passes the on-screen pixel width the diagram should occupy.
-  // The baker scales shapes to fit that width, computes label clearances in
+  // The layout scales shapes to fit that width, computes label clearances in
   // display pixels, and either succeeds (font sizes are real pixel sizes) or
   // throws because the topology can't fit at the requested size.
   if (options.targetWidthPx) {
-    return bakeAtPixelWidth({
+    return layoutAtPixelWidth({
       seedShapes, idToShape, idToSet, allSetIds, activeRegions,
       topologyName, hash, targetWidthPx: options.targetWidthPx,
     });
@@ -188,7 +188,7 @@ export function bake(vennConfig, options = {}) {
   if (!result.ok) {
     // Only failure mode now is structurally-empty regions (geometric impossibility).
     throw new Error(
-      `bake: topology="${topologyName}" produces empty region "${result.worstRegion}" ` +
+      `computeLayout: topology="${topologyName}" produces empty region "${result.worstRegion}" ` +
       `(${result.reason || 'no clearance'}) — region key is geometrically inconsistent with the topology`,
     );
   }
@@ -202,13 +202,13 @@ export function bake(vennConfig, options = {}) {
   });
 }
 
-function bakeAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, topologyName, hash, targetWidthPx }) {
+function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, topologyName, hash, targetWidthPx }) {
   // Compute the natural shape bbox at unit scale (no margin yet).
   const naturalBbox = computeBBox(seedShapes.map(s => ({ ...s, shape: idToShape[s.id] })));
   const naturalShapeWidth = naturalBbox.maxX - naturalBbox.minX;
   const availableShapeWidth = targetWidthPx - 2 * CANVAS_MARGIN;
   if (availableShapeWidth <= 0) {
-    throw new Error(`bake: targetWidthPx=${targetWidthPx} too small for canvas margin`);
+    throw new Error(`computeLayout: targetWidthPx=${targetWidthPx} too small for canvas margin`);
   }
   const pixelScale = availableShapeWidth / naturalShapeWidth;
 
@@ -225,7 +225,7 @@ function bakeAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeReg
   const result = tryLayout(placed, activeRegions, allSetIds);
   if (!result.ok) {
     throw new Error(
-      `bake: cannot fit topology="${topologyName}" in ${targetWidthPx}px width. ` +
+      `computeLayout: cannot fit topology="${topologyName}" in ${targetWidthPx}px width. ` +
       `Region "${result.worstRegion}" only has ${(result.worstDist || 0).toFixed(1)}px clearance ` +
       `(needs >= ${MIN_LABEL_DIST}px). Reduce regions or render in a wider container.`,
     );
@@ -399,8 +399,93 @@ function computeBBox(placed) {
 }
 
 // ---------------------------------------------------------------------------
-// Cache — bake() is deterministic, so we memoize by JSON hash. The renderer
-// mounts frequently (carousel of options), so caching matters.
+// Adaptive width layout — finds the minimum canvas width at which all region
+// labels reach MIN_FONT_SIZE. Simple diagrams stay compact; dense 5-set ones
+// grow as wide as needed up to maxWidthPx.
+// ---------------------------------------------------------------------------
+
+function scaleShapesToWidth(seedShapes, idToShape, targetWidthPx) {
+  const naturalBbox = computeBBox(seedShapes.map(s => ({ ...s, shape: idToShape[s.id] })));
+  const naturalShapeWidth = naturalBbox.maxX - naturalBbox.minX;
+  const availableShapeWidth = targetWidthPx - 2 * CANVAS_MARGIN;
+  if (availableShapeWidth <= 0) return null;
+  const pixelScale = availableShapeWidth / naturalShapeWidth;
+  return seedShapes.map(s => ({
+    id: s.id,
+    shape: idToShape[s.id],
+    cx: s.cx * pixelScale,
+    cy: s.cy * pixelScale,
+    w:  s.w  * pixelScale,
+    h:  s.h  * pixelScale,
+  }));
+}
+
+// Best-effort layout at an exact pixel width. Never throws; returns null on structural failure.
+function layoutWidthBestEffort({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, targetWidthPx }) {
+  const placed = scaleShapesToWidth(seedShapes, idToShape, targetWidthPx);
+  if (!placed) return null;
+  const result = tryLayout(placed, activeRegions, allSetIds, { strict: false });
+  if (!result.ok) return null;
+  return assembleCanvas({ placed: result.placed, labels: result.labels, activeRegions, idToSet, fixedWidth: targetWidthPx });
+}
+
+function entryAllLabelsOk(entry) {
+  return entry.labels.every(l => l.region === 'outside' || l.fontSize >= MIN_FONT_SIZE);
+}
+
+// Find the minimum width where all labels reach MIN_FONT_SIZE, up to maxWidthPx.
+// If the topology can't satisfy even at maxWidthPx, returns the best-effort max result.
+export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 230, maxWidthPx, minHeightPx = 180 }) {
+  const allSetIds     = vennConfig.sets.map(s => s.id);
+  const idToShape     = Object.fromEntries(vennConfig.sets.map(s => [s.id, s.shape || 'circle']));
+  const idToSet       = Object.fromEntries(vennConfig.sets.map(s => [s.id, s]));
+  const hash          = stableHash({ sets: vennConfig.sets, regions: vennConfig.regions });
+  const seedShapes    = seedPositions(allSetIds, vennConfig.regions, hash, vennConfig.layoutVariant);
+  const activeRegions = Object.entries(vennConfig.regions)
+    .filter(([, v]) => v !== undefined && v !== null && v !== 0 && v !== '')
+    .map(([key, value]) => ({ key, value: String(value) }));
+
+  // Raise minWidthPx if the topology's aspect ratio means that width would produce
+  // a canvas shorter than minHeightPx. Canvas height ≈ naturalH * pixelScale + 2*CANVAS_MARGIN,
+  // where pixelScale = (targetWidthPx - 2*CANVAS_MARGIN) / naturalW.
+  const naturalBbox = computeBBox(seedShapes.map(s => ({ ...s, shape: idToShape[s.id] })));
+  const naturalW = naturalBbox.maxX - naturalBbox.minX;
+  const naturalH = naturalBbox.maxY - naturalBbox.minY;
+  if (naturalW > 0 && naturalH > 0) {
+    const widthForMinHeight = Math.ceil(
+      (minHeightPx - 2 * CANVAS_MARGIN) * (naturalW / naturalH) + 2 * CANVAS_MARGIN,
+    );
+    minWidthPx = Math.min(maxWidthPx, Math.max(minWidthPx, widthForMinHeight));
+  }
+
+  const args = { seedShapes, idToShape, idToSet, allSetIds, activeRegions };
+
+  // Fast path: min width already satisfies all labels
+  const atMin = layoutWidthBestEffort({ ...args, targetWidthPx: minWidthPx });
+  if (atMin && entryAllLabelsOk(atMin)) return atMin;
+
+  const atMax = layoutWidthBestEffort({ ...args, targetWidthPx: maxWidthPx });
+  if (!atMax) return computeLayout(vennConfig);        // structural failure → natural-scale fallback
+  if (!entryAllLabelsOk(atMax)) return atMax;          // can't satisfy even at max → best effort
+
+  // Binary search for minimum satisfying width (4 px precision)
+  let lo = minWidthPx, hi = maxWidthPx, best = atMax;
+  while (hi - lo > 4) {
+    const mid = Math.round((lo + hi) / 2);
+    const result = layoutWidthBestEffort({ ...args, targetWidthPx: mid });
+    if (result && entryAllLabelsOk(result)) {
+      best = result;
+      hi = mid;
+    } else {
+      lo = mid;
+    }
+  }
+  return best;
+}
+
+// ---------------------------------------------------------------------------
+// Cache — computeLayout() is deterministic, so we memoize by JSON hash. The
+// renderer mounts frequently (carousel of options), so caching matters.
 // ---------------------------------------------------------------------------
 
 const _cache = new Map();
@@ -415,16 +500,33 @@ function cacheKey(vennConfig, options) {
   });
 }
 
-export function bakeCached(vennConfig, options = {}) {
+export function getLayout(vennConfig, options = {}) {
   const key = cacheKey(vennConfig, options);
   let entry = _cache.get(key);
   if (!entry) {
-    entry = bake(vennConfig, options);
+    entry = computeLayout(vennConfig, options);
     _cache.set(key, entry);
   }
   return entry;
 }
 
-export function clearBakeCache() {
+export function getLayoutAdaptive(vennConfig, { maxWidthPx, minHeightPx = 180 }) {
+  const key = stableHash({
+    sets:       vennConfig.sets,
+    regions:    vennConfig.regions,
+    variant:    vennConfig.layoutVariant || null,
+    adaptive:   true,
+    maxWidthPx,
+    minHeightPx,
+  });
+  let entry = _cache.get(key);
+  if (!entry) {
+    entry = findOptimalLayoutWidth(vennConfig, { maxWidthPx, minHeightPx });
+    _cache.set(key, entry);
+  }
+  return entry;
+}
+
+export function clearLayoutCache() {
   _cache.clear();
 }

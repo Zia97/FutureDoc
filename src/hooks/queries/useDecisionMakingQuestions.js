@@ -15,6 +15,7 @@ function mapQuestions(data) {
     isFree: q.is_free ?? q.isFree ?? false,
     tableData: q.table_data,
     stimulusDiagram: q.stimulus_diagram,
+    stimulusVennGeometry: q.venn_geometry ?? null,
     hideLabels: q.hideLabels ?? q.hide_labels ?? false,
     answer: q.correct_answer,
     answeringReason: q.answer_reason,
@@ -29,6 +30,7 @@ function mapQuestions(data) {
         label: o.label,
         text: o.option_text,
         vennConfig: o.option_data,
+        vennGeometry: o.venn_geometry ?? null,
       })),
     statements: [...(q.decision_making_question_statements || [])]
       .sort((a, b) => a.order_index - b.order_index)

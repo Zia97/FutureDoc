@@ -3,10 +3,10 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle, Rect, Polygon, Ellipse } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 
-const SIZE = 20;
+const SIZE = 30;
 const MID = SIZE / 2;
-const R = 8;
-const STROKE_W = 1.5;
+const R = 12;
+const STROKE_W = 2;
 
 function KeyShape({ shape, stroke }) {
   const props = { stroke, strokeWidth: STROKE_W, fill: 'none' };
@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
     borderWidth: 1,
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    gap: 6,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    gap: 8,
   },
   keyLabel: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.8,
@@ -117,15 +117,15 @@ const styles = StyleSheet.create({
   items: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 14,
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 8,
   },
   itemLabel: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '500',
   },
 });
