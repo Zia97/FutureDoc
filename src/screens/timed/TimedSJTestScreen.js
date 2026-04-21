@@ -31,6 +31,9 @@ export default function TimedSJTestScreen({ route, navigation }) {
   const { test } = route.params;
   const { practiceTheme: t } = useTheme();
 
+  const testNumMatch = test.title?.match(/\d+/);
+  const headerTitle = testNumMatch ? `Situational Judgement Test ${testNumMatch[0]}` : 'Situational Judgement';
+
   const onExpireRef = useRef(null);
   const secondsLeftRef = useRef(test.timeMinutes * 60);
   const endExamCalledRef = useRef(false);
@@ -139,6 +142,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
         onEndTest={endExam}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
+        title={headerTitle}
       />
     );
   }
@@ -148,7 +152,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
 
       <View style={styles.timedHeader}>
-        <Text style={styles.timedHeaderTitle}>Situational Judgement</Text>
+        <Text style={styles.timedHeaderTitle}>{headerTitle}</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
           <Text style={styles.timerText}>{timerDisplay}</Text>
         </View>

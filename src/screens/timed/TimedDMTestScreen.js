@@ -30,6 +30,9 @@ export default function TimedDMTestScreen({ route, navigation }) {
   const { practiceTheme: t } = useTheme();
   const { submitExam } = useTimedDMExamProgress();
 
+  const testNumMatch = test.title?.match(/\d+/);
+  const headerTitle = testNumMatch ? `Decision Making Test ${testNumMatch[0]}` : 'Decision Making';
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [seenQuestions, setSeenQuestions] = useState(new Set());
@@ -158,7 +161,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
         onEndTest={() => endExam(false)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
-        title="Decision Making"
+        title={headerTitle}
       />
     );
   }
@@ -169,7 +172,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
 
       {/* Timed header — title + timer */}
       <View style={styles.timedHeader}>
-        <Text style={styles.timedHeaderTitle}>Decision Making</Text>
+        <Text style={styles.timedHeaderTitle}>{headerTitle}</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
           <Text style={styles.timerText}>{timerDisplay}</Text>
         </View>

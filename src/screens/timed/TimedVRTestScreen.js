@@ -31,6 +31,9 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const { practiceTheme: t } = useTheme();
   const { submitExam } = useTimedVRExamProgress();
 
+  const testNumMatch = test.title?.match(/\d+/);
+  const headerTitle = testNumMatch ? `Verbal Reasoning Test ${testNumMatch[0]}` : 'Verbal Reasoning';
+
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
   const [notes, setNotes] = useState('');
@@ -170,7 +173,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
         onEndTest={() => handleExamEnd(false)}
         timerDisplay={timerDisplay}
         isUrgent={isUrgent}
-        title="Verbal Reasoning"
+        title={headerTitle}
       />
     );
   }
@@ -180,7 +183,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
       <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
 
       <View style={styles.timedHeader}>
-        <Text style={styles.timedHeaderTitle}>Verbal Reasoning</Text>
+        <Text style={styles.timedHeaderTitle}>{headerTitle}</Text>
         <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
           <Text style={styles.timerText}>{timerDisplay}</Text>
         </View>
