@@ -151,7 +151,7 @@ export function computeLayout(vennConfig, options = {}) {
   // gets the same render for every user. Optional `layoutVariant` field on the
   // vennConfig overrides the hash-picked variant.
   const hash = stableHash({ sets: vennConfig.sets, regions: vennConfig.regions });
-  const seedShapes = seedPositions(allSetIds, vennConfig.regions, hash, vennConfig.layoutVariant);
+  const seedShapes = seedPositions(allSetIds, vennConfig.regions, hash, vennConfig.layoutVariant, idToShape);
 
   // Active region keys = those with a value present (0 counts are omitted)
   const activeRegions = Object.entries(vennConfig.regions)
@@ -182,6 +182,7 @@ export function computeLayout(vennConfig, options = {}) {
     cy: s.cy,
     w:  s.w,
     h:  s.h,
+    rotation: s.rotation || 0,
   }));
 
   const result = tryLayout(placed, activeRegions, allSetIds, { strict: false });
@@ -213,6 +214,7 @@ function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeR
   const pixelScale = availableShapeWidth / naturalShapeWidth;
 
   // Apply pixelScale to all positions and sizes — now everything is in display px.
+  // Rotation is angular — unaffected by scaling.
   const placed = seedShapes.map(s => ({
     id: s.id,
     shape: idToShape[s.id],
@@ -220,6 +222,7 @@ function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeR
     cy: s.cy * pixelScale,
     w:  s.w  * pixelScale,
     h:  s.h  * pixelScale,
+    rotation: s.rotation || 0,
   }));
 
   const result = tryLayout(placed, activeRegions, allSetIds);
@@ -243,20 +246,38 @@ function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeR
 
 function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, diagnostics }) {
   const bbox = computeBBox(placed);
-  const naturalW = bbox.maxX - bbox.minX + 2 * CANVAS_MARGIN;
-  const naturalH = bbox.maxY - bbox.minY + 2 * CANVAS_MARGIN;
+  const shapeW = bbox.maxX - bbox.minX;
+  const shapeH = bbox.maxY - bbox.minY;
+
+  // Reserve extra vertical padding for the outside-label corner so a container
+  // shape flush against the canvas edge never swallows the label. Horizontal
+  // padding is left at CANVAS_MARGIN so the width stays within the caller's
+  // budget; vertical padding is allowed to grow the canvas taller (not wider)
+  // so the shapes stay the same horizontal size.
+  const outsideEntry = activeRegions.find(r => r.key === 'outside');
+  const outsideFontSize = outsideEntry
+    ? Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, 14))
+    : 0;
+  const outsideTextLen = outsideEntry ? String(outsideEntry.value).length : 0;
+  const outsideHalfW = outsideEntry ? CHAR_WIDTH_RATIO * outsideFontSize * outsideTextLen / 2 : 0;
+  const outsideHalfH = outsideEntry ? outsideFontSize / 2 : 0;
+  const vPad = outsideEntry
+    ? Math.max(CANVAS_MARGIN, OUTSIDE_CORNER_MARGIN + outsideHalfH + PADDING + 4)
+    : CANVAS_MARGIN;
+
+  const naturalW = shapeW + 2 * CANVAS_MARGIN;
+  const naturalH = shapeH + 2 * vPad;
   const canvas = {
     width:  Math.ceil(fixedWidth || naturalW),
     height: Math.ceil(naturalH),
   };
-  // Centre shapes within the canvas (when fixedWidth is wider than natural)
-  const offsetX = -bbox.minX + (canvas.width - (bbox.maxX - bbox.minX)) / 2;
-  const offsetY = -bbox.minY + CANVAS_MARGIN;
+  const offsetX = -bbox.minX + (canvas.width - shapeW) / 2;
+  const offsetY = -bbox.minY + (canvas.height - shapeH) / 2;
 
   const shapes = placed.map(p => ({
     id: p.id,
     label: idToSet[p.id]?.label,
-    ...shapeToSvgSpec(p.shape, p.cx + offsetX, p.cy + offsetY, p.w, p.h),
+    ...shapeToSvgSpec(p.shape, p.cx + offsetX, p.cy + offsetY, p.w, p.h, p.rotation || 0),
   }));
 
   const finalLabels = labels.map(l => ({
@@ -268,17 +289,12 @@ function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, di
   // Outside label goes in whichever canvas corner has the most clearance
   // from any shape outline. Fixed top-left placement collides with shapes
   // (e.g. rect/square) whose corners sit flush against the canvas margin.
-  const outsideEntry = activeRegions.find(r => r.key === 'outside');
   if (outsideEntry) {
-    const fontSize = Math.max(MIN_FONT_SIZE, Math.min(MAX_FONT_SIZE, 14));
-    const textLen = String(outsideEntry.value).length;
-    const halfW = CHAR_WIDTH_RATIO * fontSize * textLen / 2;
-    const halfH = fontSize / 2;
     const rings = placed.map(p =>
-      ringClosed(shapeToPolygon(p.shape, p.cx + offsetX, p.cy + offsetY, p.w, p.h))
+      ringClosed(shapeToPolygon(p.shape, p.cx + offsetX, p.cy + offsetY, p.w, p.h, p.rotation || 0))
     );
-    const cx = [OUTSIDE_CORNER_MARGIN + halfW, canvas.width  - OUTSIDE_CORNER_MARGIN - halfW];
-    const cy = [OUTSIDE_CORNER_MARGIN + halfH, canvas.height - OUTSIDE_CORNER_MARGIN - halfH];
+    const cx = [OUTSIDE_CORNER_MARGIN + outsideHalfW, canvas.width  - OUTSIDE_CORNER_MARGIN - outsideHalfW];
+    const cy = [OUTSIDE_CORNER_MARGIN + outsideHalfH, canvas.height - OUTSIDE_CORNER_MARGIN - outsideHalfH];
     let best = { x: cx[0], y: cy[0], dist: -Infinity };
     for (const x of cx) for (const y of cy) {
       const dist = minDistPointToRings(x, y, rings);
@@ -289,7 +305,7 @@ function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, di
       text: outsideEntry.value,
       x: best.x,
       y: best.y,
-      fontSize,
+      fontSize: outsideFontSize,
     });
   }
 
@@ -304,7 +320,7 @@ function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, di
 //   small labels rather than blowing the canvas up to fit them.
 function tryLayout(placed, activeRegions, allSetIds, { strict = true } = {}) {
   // Build polygons for each shape (in MultiPolygon form for polygon-clipping)
-  const shapePolys = placed.map(p => ringToMultiPolygon(shapeToPolygon(p.shape, p.cx, p.cy, p.w, p.h)));
+  const shapePolys = placed.map(p => ringToMultiPolygon(shapeToPolygon(p.shape, p.cx, p.cy, p.w, p.h, p.rotation || 0)));
   const idToPoly = Object.fromEntries(placed.map((p, i) => [p.id, shapePolys[i]]));
 
   const labels = [];
@@ -387,7 +403,7 @@ function tryLayout(placed, activeRegions, allSetIds, { strict = true } = {}) {
 function computeBBox(placed) {
   let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
   for (const p of placed) {
-    const ring = shapeToPolygon(p.shape, p.cx, p.cy, p.w, p.h);
+    const ring = shapeToPolygon(p.shape, p.cx, p.cy, p.w, p.h, p.rotation || 0);
     for (const [x, y] of ring) {
       if (x < minX) minX = x;
       if (y < minY) minY = y;
@@ -417,6 +433,7 @@ function scaleShapesToWidth(seedShapes, idToShape, targetWidthPx) {
     cy: s.cy * pixelScale,
     w:  s.w  * pixelScale,
     h:  s.h  * pixelScale,
+    rotation: s.rotation || 0,
   }));
 }
 
@@ -435,12 +452,18 @@ function entryAllLabelsOk(entry) {
 
 // Find the minimum width where all labels reach MIN_FONT_SIZE, up to maxWidthPx.
 // If the topology can't satisfy even at maxWidthPx, returns the best-effort max result.
-export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 230, maxWidthPx, minHeightPx = 180 }) {
+// minWidthPx floor of 300 ensures tight-aspect topologies (wide-container + top
+// external, long chains) always bake with enough horizontal room that corner
+// labels ("outside") and edge-hugging region labels clear shape outlines. If
+// maxWidthPx is smaller than 300 (e.g. a narrow option card), this caps at
+// maxWidthPx so we never exceed the caller's budget.
+export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 300, maxWidthPx, minHeightPx = 180 }) {
+  minWidthPx = Math.min(minWidthPx, maxWidthPx);
   const allSetIds     = vennConfig.sets.map(s => s.id);
   const idToShape     = Object.fromEntries(vennConfig.sets.map(s => [s.id, s.shape || 'circle']));
   const idToSet       = Object.fromEntries(vennConfig.sets.map(s => [s.id, s]));
   const hash          = stableHash({ sets: vennConfig.sets, regions: vennConfig.regions });
-  const seedShapes    = seedPositions(allSetIds, vennConfig.regions, hash, vennConfig.layoutVariant);
+  const seedShapes    = seedPositions(allSetIds, vennConfig.regions, hash, vennConfig.layoutVariant, idToShape);
   const activeRegions = Object.entries(vennConfig.regions)
     .filter(([, v]) => v !== undefined && v !== null && v !== 0 && v !== '')
     .map(([key, value]) => ({ key, value: String(value) }));

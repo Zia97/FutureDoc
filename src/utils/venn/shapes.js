@@ -1,7 +1,8 @@
 // Shape -> polygon (array of [x,y] vertices, closed implicitly by repeating
 // first point when handed to polygon-clipping). All shapes share a common
-// interface: centre (cx, cy) + width/height (w, h). Circles and ovals are
-// sampled to CIRCLE_SAMPLES points so boolean clipping treats them as polygons.
+// interface: centre (cx, cy) + width/height (w, h) + optional rotation (rad).
+// Circles and ovals are sampled to CIRCLE_SAMPLES points so boolean clipping
+// treats them as polygons.
 
 const CIRCLE_SAMPLES = 48;
 
@@ -44,64 +45,137 @@ function rect(cx, cy, w, h) {
   ];
 }
 
+// Block arrow pointing right (or left when reflected). 7 vertices:
+// rectangular body (middle band) + triangular arrowhead.
+function rightArrow(cx, cy, w, h) {
+  const hw = w / 2, hh = h / 2;
+  const bodyEndX = cx + w * 0.15;    // where body meets arrowhead
+  const bodyHalfH = h * 0.28;         // body thickness / 2
+  return [
+    [cx - hw,     cy - bodyHalfH],    // top-left of body
+    [bodyEndX,    cy - bodyHalfH],    // top-right of body
+    [bodyEndX,    cy - hh],           // top of arrowhead flare
+    [cx + hw,     cy],                // arrowhead tip
+    [bodyEndX,    cy + hh],           // bottom of arrowhead flare
+    [bodyEndX,    cy + bodyHalfH],    // bottom-right of body
+    [cx - hw,     cy + bodyHalfH],    // bottom-left of body
+  ];
+}
+
+function leftArrow(cx, cy, w, h) {
+  return rightArrow(cx, cy, w, h).map(([x, y]) => [2 * cx - x, y]);
+}
+
+function rotatePoints(points, cx, cy, rotation) {
+  if (!rotation) return points;
+  const cos = Math.cos(rotation);
+  const sin = Math.sin(rotation);
+  return points.map(([x, y]) => {
+    const dx = x - cx;
+    const dy = y - cy;
+    return [cx + dx * cos - dy * sin, cy + dx * sin + dy * cos];
+  });
+}
+
 // Returns a ring: array of [x,y] points (open — last point is NOT duplicated).
-export function shapeToPolygon(shape, cx, cy, w, h) {
+export function shapeToPolygon(shape, cx, cy, w, h, rotation = 0) {
   const r = Math.min(w, h) / 2;
+  let pts;
   switch (shape) {
     case 'circle':
-      return sampleEllipse(cx, cy, r, r);
+      pts = sampleEllipse(cx, cy, r, r);
+      break;
     case 'oval':
-      return sampleEllipse(cx, cy, r, r * 0.65);
+      pts = sampleEllipse(cx, cy, r, r * 0.65);
+      break;
     case 'vertical_oval':
-      return sampleEllipse(cx, cy, r * 0.65, r);
+      pts = sampleEllipse(cx, cy, r * 0.65, r);
+      break;
     case 'square':
     case 'rectangle':
-      return rect(cx, cy, w, h);
+      pts = rect(cx, cy, w, h);
+      break;
+    case 'horizontal_strip':
+      pts = rect(cx, cy, w * 1.4, h * 0.45);
+      break;
+    case 'vertical_strip':
+      pts = rect(cx, cy, w * 0.45, h * 1.4);
+      break;
     case 'triangle':
-      return [[cx, cy - r], [cx - r, cy + r], [cx + r, cy + r]];
+      pts = [[cx, cy - r], [cx - r, cy + r], [cx + r, cy + r]];
+      break;
     case 'isosceles_triangle':
-      return [[cx, cy - r], [cx - r * 0.5, cy + r], [cx + r * 0.5, cy + r]];
+      pts = [[cx, cy - r], [cx - r * 0.5, cy + r], [cx + r * 0.5, cy + r]];
+      break;
     case 'diamond':
-      return [[cx, cy - r], [cx + r, cy], [cx, cy + r], [cx - r, cy]];
+      pts = [[cx, cy - r], [cx + r, cy], [cx, cy + r], [cx - r, cy]];
+      break;
     case 'pentagon':
-      return regularPolygon(cx, cy, r, 5);
+      pts = regularPolygon(cx, cy, r, 5);
+      break;
     case 'hexagon':
-      return regularPolygon(cx, cy, r, 6);
+      pts = regularPolygon(cx, cy, r, 6);
+      break;
     case 'octagon':
-      return regularPolygon(cx, cy, r, 8);
+      pts = regularPolygon(cx, cy, r, 8);
+      break;
     case 'star':
-      return starPoly(cx, cy, r, 0.4);
+      pts = starPoly(cx, cy, r, 0.4);
+      break;
     case 'trapezoid':
-      return [
+      pts = [
         [cx - r * 0.55, cy - r],
         [cx + r * 0.55, cy - r],
         [cx + r, cy + r],
         [cx - r, cy + r],
       ];
+      break;
     case 'parallelogram': {
       const sk = r * 0.25;
-      return [
+      pts = [
         [cx - r * 0.85 + sk, cy - r * 0.6],
         [cx + r * 0.85 + sk, cy - r * 0.6],
         [cx + r * 0.85 - sk, cy + r * 0.6],
         [cx - r * 0.85 - sk, cy + r * 0.6],
       ];
+      break;
     }
+    case 'right_arrow':
+      pts = rightArrow(cx, cy, w, h);
+      break;
+    case 'left_arrow':
+      pts = leftArrow(cx, cy, w, h);
+      break;
     default:
-      return rect(cx, cy, w, h);
+      pts = rect(cx, cy, w, h);
   }
+  return rotation ? rotatePoints(pts, cx, cy, rotation) : pts;
 }
 
 // SVG rendering spec — what the renderer needs to draw this shape (not the
-// clipping polygon). Circles and ovals stay as native SVG elements.
-export function shapeToSvgSpec(shape, cx, cy, w, h) {
+// clipping polygon). Circles stay as native SVG elements. Ellipses and rects
+// fall back to polygon when rotated, so the renderer doesn't need transform
+// logic.
+export function shapeToSvgSpec(shape, cx, cy, w, h, rotation = 0) {
   const r = Math.min(w, h) / 2;
+  const hasRotation = Math.abs(rotation) > 1e-6;
+
   if (shape === 'circle') return { kind: 'circle', cx, cy, r };
-  if (shape === 'oval') return { kind: 'ellipse', cx, cy, rx: r, ry: r * 0.65 };
-  if (shape === 'vertical_oval') return { kind: 'ellipse', cx, cy, rx: r * 0.65, ry: r };
-  if (shape === 'square' || shape === 'rectangle') {
-    return { kind: 'rect', x: cx - w / 2, y: cy - h / 2, width: w, height: h };
+
+  if (!hasRotation) {
+    if (shape === 'oval') return { kind: 'ellipse', cx, cy, rx: r, ry: r * 0.65 };
+    if (shape === 'vertical_oval') return { kind: 'ellipse', cx, cy, rx: r * 0.65, ry: r };
+    if (shape === 'square' || shape === 'rectangle') {
+      return { kind: 'rect', x: cx - w / 2, y: cy - h / 2, width: w, height: h };
+    }
+    if (shape === 'horizontal_strip') {
+      return { kind: 'rect', x: cx - w * 0.7, y: cy - h * 0.225, width: w * 1.4, height: h * 0.45 };
+    }
+    if (shape === 'vertical_strip') {
+      return { kind: 'rect', x: cx - w * 0.225, y: cy - h * 0.7, width: w * 0.45, height: h * 1.4 };
+    }
   }
-  const pts = shapeToPolygon(shape, cx, cy, w, h);
+
+  const pts = shapeToPolygon(shape, cx, cy, w, h, rotation);
   return { kind: 'polygon', points: pts };
 }

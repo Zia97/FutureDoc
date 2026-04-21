@@ -61,12 +61,6 @@ export function DMStemContent({ question, showLabel = true }) {
             onPress={() => setDiagramExpanded(true)}
             activeOpacity={0.85}
           >
-            {__DEV__ && console.log(
-              '[venn]', question.title, 'stimulus',
-              'hasBaked=', !!question.stimulusVennGeometry,
-              'canvas=', question.stimulusVennGeometry?.canvas,
-              'outsideLbl=', question.stimulusVennGeometry?.labels?.find((l) => l.region === 'outside'),
-            )}
             <VennDiagramRenderer vennConfig={stimDiagram} widthPx={stimulusWidthPx} bakedGeometry={question.stimulusVennGeometry} />
             <Text style={[styles.tapHint, { color: t.accent }]}>Tap to expand</Text>
           </TouchableOpacity>
@@ -136,17 +130,6 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
               disabled={submitted}
             >
               <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
-              {(() => {
-                if (__DEV__) {
-                  console.log(
-                    '[venn]', question.title, 'opt', opt.label,
-                    'hasBaked=', !!opt.vennGeometry,
-                    'canvas=', opt.vennGeometry?.canvas,
-                    'outsideLbl=', opt.vennGeometry?.labels?.find((l) => l.region === 'outside'),
-                  );
-                }
-                return null;
-              })()}
               <VennDiagramRenderer vennConfig={cfg} widthPx={optionWidthPx} bakedGeometry={opt.vennGeometry} />
             </TouchableOpacity>
           );

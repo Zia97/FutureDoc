@@ -1,556 +1,109 @@
 [
   {
-    "id": "dm3r-023-venn",
-    "title": "Library Catalogue",
-    "type": "venn_diagram",
+    "id": "dmp-039-prob",
+    "title": "Accuracy vs Precision",
+    "type": "probabilistic",
     "difficulty": "normal",
-    "stem": "A library holds 80 books. 30 are hardbacks, 38 are fiction, and 22 are children's books. 12 are both hardback and fiction. 8 are both hardback and children's. 10 are both fiction and children's. 4 books fall into all three categories. 16 books fit none of these categories.\n\nWhich of the following diagrams best represents the data?",
-    "stimulus_diagram": null,
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "Two freebies: 4 books are in all three categories (the centre) and 16 fit none (outside). Scan — B shows 6 in the centre, stem says 4 — eliminate B. C shows 10 outside, stem says 16 — eliminate C. That leaves A and D. The stem says 12 are both hardback and fiction; 4 of those are also children's, so hardback-and-fiction only = 12 − 4 = 8. A shows 8 ✓. D shows 12 — eliminate D. Answer: A.",
+    "stem": "Two laboratory pH meters are compared. Meter 1 gives the true pH correctly in 85 out of 100 tests. Meter 2 gives the true pH correctly in 92 out of 100 tests. When each meter is used to re-test the same sample 50 times, Meter 1 returns the same reading 49 times and Meter 2 returns the same reading 42 times.\n\nWhich statement best compares the two meters?",
+    "correct_answer": "B",
+    "answer_reason": "Accuracy = how often the reading is correct. Meter 1 = 85%, Meter 2 = 92% — Meter 2 is more accurate. Precision = how consistent repeated readings are. Meter 1 = 49/50 = 98%, Meter 2 = 42/50 = 84% — Meter 1 is more precise. So Meter 2 is more accurate but Meter 1 is more precise.",
     "order_index": 1,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Hardback",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Fiction",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Children's",
-              "shape": "oval"
-            }
-          ],
-          "regions": {
-            "set1_only": 14,
-            "set2_only": 20,
-            "set3_only": 8,
-            "set1_set2": 8,
-            "set1_set3": 4,
-            "set2_set3": 6,
-            "set1_set2_set3": 4,
-            "outside": 16
-          }
-        },
+        "option_text": "Meter 1 is more accurate but Meter 2 is more precise.",
+        "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Hardback",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Fiction",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Children's",
-              "shape": "oval"
-            }
-          ],
-          "regions": {
-            "set1_only": 14,
-            "set2_only": 20,
-            "set3_only": 8,
-            "set1_set2": 8,
-            "set1_set3": 4,
-            "set2_set3": 6,
-            "set1_set2_set3": 6,
-            "outside": 14
-          }
-        },
+        "option_text": "Meter 2 is more accurate but Meter 1 is more precise.",
+        "option_data": null,
         "order_index": 2
       },
       {
         "label": "C",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Hardback",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Fiction",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Children's",
-              "shape": "oval"
-            }
-          ],
-          "regions": {
-            "set1_only": 20,
-            "set2_only": 20,
-            "set3_only": 8,
-            "set1_set2": 8,
-            "set1_set3": 4,
-            "set2_set3": 6,
-            "set1_set2_set3": 4,
-            "outside": 10
-          }
-        },
+        "option_text": "Meter 2 is both more accurate and more precise.",
+        "option_data": null,
         "order_index": 3
       },
       {
         "label": "D",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Hardback",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Fiction",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Children's",
-              "shape": "oval"
-            }
-          ],
-          "regions": {
-            "set1_only": 14,
-            "set2_only": 20,
-            "set3_only": 8,
-            "set1_set2": 12,
-            "set1_set3": 8,
-            "set2_set3": 10,
-            "set1_set2_set3": 4,
-            "outside": 4
-          }
-        },
+        "option_text": "Meter 1 is both more accurate and more precise.",
+        "option_data": null,
         "order_index": 4
       }
     ],
     "decision_making_question_statements": []
   },
   {
-    "id": "dm3r-024-venn",
-    "title": "Bootcamp Student Skills",
-    "type": "venn_diagram",
-    "difficulty": "normal",
-    "stem": "A coding bootcamp tracks 50 students by their skill areas. 15 are strong in Frontend, 14 in Backend, 13 in Database, and 14 in DevOps. 4 students are strong in both Frontend and Backend. 3 are strong in both Backend and Database. 4 are strong in both Database and DevOps. 5 students are not strong in any of these areas.\n\nWhich of the following diagrams best represents the data?",
-    "stimulus_diagram": null,
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "Four values are freebies — the overlap counts 4, 3, 4 and the 5 students outside. Scan — C shows 1 outside (stem says 5) — eliminate C. B shows 3 in the Frontend-and-Backend overlap (stem says 4) — eliminate B. That leaves A and D, which differ in the Frontend-only and DevOps-only values. Frontend total = 15, minus the 4 also strong in Backend, leaves 11 Frontend-only. D shows 10 there — eliminate D. A shows 11 — correct. Answer: A.",
+    "id": "dmp-030-logic",
+    "title": "Detentions Average",
+    "type": "logic_puzzle",
+    "difficulty": "hard",
+    "stem": "In a class of ten pupils, the average number of detentions per pupil this term is 3.6. Four pupils received three detentions each, three pupils received two detentions each, and one pupil received one detention. Of the remaining two pupils, Aisha received three more detentions than Ben.\n\nHow many detentions did Ben receive?",
+    "correct_answer": "C",
+    "answer_reason": "Total detentions = 10 × 3.6 = 36. Known detentions = (4 × 3) + (3 × 2) + 1 = 12 + 6 + 1 = 19. Aisha and Ben share 36 − 19 = 17 detentions. Aisha = Ben + 3, so Ben + (Ben + 3) = 17 ⇒ 2 × Ben = 14 ⇒ Ben = 7.",
     "order_index": 2,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Frontend",
-              "shape": "diamond"
-            },
-            {
-              "id": "set2",
-              "label": "Backend",
-              "shape": "circle"
-            },
-            {
-              "id": "set3",
-              "label": "Database",
-              "shape": "square"
-            },
-            {
-              "id": "set4",
-              "label": "DevOps",
-              "shape": "triangle"
-            }
-          ],
-          "regions": {
-            "set1_only": 11,
-            "set2_only": 7,
-            "set3_only": 6,
-            "set4_only": 10,
-            "set1_set2": 4,
-            "set2_set3": 3,
-            "set3_set4": 4,
-            "outside": 5
-          }
-        },
+        "option_text": "5",
+        "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Frontend",
-              "shape": "diamond"
-            },
-            {
-              "id": "set2",
-              "label": "Backend",
-              "shape": "circle"
-            },
-            {
-              "id": "set3",
-              "label": "Database",
-              "shape": "square"
-            },
-            {
-              "id": "set4",
-              "label": "DevOps",
-              "shape": "triangle"
-            }
-          ],
-          "regions": {
-            "set1_only": 11,
-            "set2_only": 7,
-            "set3_only": 6,
-            "set4_only": 10,
-            "set1_set2": 3,
-            "set2_set3": 4,
-            "set3_set4": 4,
-            "outside": 5
-          }
-        },
+        "option_text": "6",
+        "option_data": null,
         "order_index": 2
       },
       {
         "label": "C",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Frontend",
-              "shape": "diamond"
-            },
-            {
-              "id": "set2",
-              "label": "Backend",
-              "shape": "circle"
-            },
-            {
-              "id": "set3",
-              "label": "Database",
-              "shape": "square"
-            },
-            {
-              "id": "set4",
-              "label": "DevOps",
-              "shape": "triangle"
-            }
-          ],
-          "regions": {
-            "set1_only": 15,
-            "set2_only": 7,
-            "set3_only": 6,
-            "set4_only": 10,
-            "set1_set2": 4,
-            "set2_set3": 3,
-            "set3_set4": 4,
-            "outside": 1
-          }
-        },
+        "option_text": "7",
+        "option_data": null,
         "order_index": 3
       },
       {
         "label": "D",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Frontend",
-              "shape": "diamond"
-            },
-            {
-              "id": "set2",
-              "label": "Backend",
-              "shape": "circle"
-            },
-            {
-              "id": "set3",
-              "label": "Database",
-              "shape": "square"
-            },
-            {
-              "id": "set4",
-              "label": "DevOps",
-              "shape": "triangle"
-            }
-          ],
-          "regions": {
-            "set1_only": 10,
-            "set2_only": 7,
-            "set3_only": 6,
-            "set4_only": 11,
-            "set1_set2": 4,
-            "set2_set3": 3,
-            "set3_set4": 4,
-            "outside": 5
-          }
-        },
+        "option_text": "10",
+        "option_data": null,
         "order_index": 4
       }
     ],
     "decision_making_question_statements": []
   },
   {
-    "id": "dm3r-025-venn",
-    "title": "Greenhouse Plants",
-    "type": "venn_diagram",
+    "id": "dmp-031-logic",
+    "title": "Conference Seating",
+    "type": "logic_puzzle",
     "difficulty": "normal",
-    "stem": "A school greenhouse has 40 plants, each classified as succulent, flowering, or trailing. 12 plants are succulent, 18 are flowering, and 14 are trailing. 5 plants are both succulent and flowering. 6 plants are both flowering and trailing. 7 plants are none of these types.\n\nWhich of the following diagrams is consistent with the data?",
-    "stimulus_diagram": null,
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "The category totals are Succulent 12, Flowering 18, Trailing 14, and only flowering overlaps with the other two — so one shape must total 18 and overlap with both sides. Work out each shape's total in every option. Option C has the middle shape totalling 10 + 5 + 6 = 21 — no category has that total — eliminate C. Option D has side shapes totalling 7 + 6 = 13 and 8 + 5 = 13 — neither matches Succulent 12 or Trailing 14 — eliminate D. Option B has sides totalling 8 + 5 = 13 and 7 + 6 = 13 — same problem — eliminate B. Only Option A has sides totalling 7 + 5 = 12 (Succulent) and 8 + 6 = 14 (Trailing), with the middle shape at 7 + 5 + 6 = 18 (Flowering). Answer: A.",
+    "stem": "Six delegates sit in a row of six chairs numbered 1 to 6 (left to right). Farah sits in chair 3. George sits immediately to the right of Farah. Hana sits in chair 1 or chair 6. Iqbal sits somewhere to the left of George but not in the chair directly next to Farah. Jasper and Kim take the remaining chairs. Kim does not sit directly next to Hana.\n\nWhich of the following seating arrangements, listed from chair 1 to chair 6, is consistent with all the constraints?",
+    "correct_answer": "B",
+    "answer_reason": "Farah = chair 3 and George = chair 4. Iqbal is left of George but not directly next to Farah, so Iqbal = chair 1 (chair 2 would be next to Farah). Hana is in chair 1 or 6; chair 1 is taken, so Hana = chair 6. Jasper and Kim take chairs 2 and 5. Kim cannot be directly next to Hana (chair 6), so Kim ≠ chair 5, meaning Kim = 2 and Jasper = 5. Order: Iqbal, Kim, Farah, George, Jasper, Hana — option B.",
     "order_index": 3,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Succulent",
-              "shape": "star"
-            },
-            {
-              "id": "set2",
-              "label": "Flowering",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Trailing",
-              "shape": "octagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 7,
-            "set2_only": 7,
-            "set3_only": 8,
-            "set1_set2": 5,
-            "set2_set3": 6,
-            "outside": 7
-          }
-        },
-        "order_index": 1
-      },
-      {
-        "label": "B",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Succulent",
-              "shape": "star"
-            },
-            {
-              "id": "set2",
-              "label": "Flowering",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Trailing",
-              "shape": "octagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 8,
-            "set2_only": 7,
-            "set3_only": 7,
-            "set1_set2": 5,
-            "set2_set3": 6,
-            "outside": 7
-          }
-        },
-        "order_index": 2
-      },
-      {
-        "label": "C",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Succulent",
-              "shape": "star"
-            },
-            {
-              "id": "set2",
-              "label": "Flowering",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Trailing",
-              "shape": "octagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 7,
-            "set2_only": 10,
-            "set3_only": 8,
-            "set1_set2": 5,
-            "set2_set3": 6,
-            "outside": 4
-          }
-        },
-        "order_index": 3
-      },
-      {
-        "label": "D",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Succulent",
-              "shape": "star"
-            },
-            {
-              "id": "set2",
-              "label": "Flowering",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set3",
-              "label": "Trailing",
-              "shape": "octagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 7,
-            "set2_only": 7,
-            "set3_only": 8,
-            "set1_set2": 6,
-            "set2_set3": 5,
-            "outside": 7
-          }
-        },
-        "order_index": 4
-      }
-    ],
-    "decision_making_question_statements": [],
-    "hide_labels": true
-  },
-  {
-    "id": "dm3r-026-venn",
-    "title": "Office Task Classification",
-    "type": "venn_diagram",
-    "difficulty": "normal",
-    "stem": "The diagram shows office tasks categorised by five attributes. Each letter marks a different region.\n\nWhich letter represents a task that is urgent and requires approval, but is not recurring, does not need a manager, and is not automated?",
-    "stimulus_diagram": {
-      "diagramLayout": "auto",
-      "sets": [
-        {
-          "id": "set1",
-          "label": "Urgent",
-          "shape": "rectangle"
-        },
-        {
-          "id": "set2",
-          "label": "Approval",
-          "shape": "pentagon"
-        },
-        {
-          "id": "set3",
-          "label": "Recurring",
-          "shape": "diamond"
-        },
-        {
-          "id": "set4",
-          "label": "Manager",
-          "shape": "hexagon"
-        },
-        {
-          "id": "set5",
-          "label": "Automated",
-          "shape": "star"
-        }
-      ],
-      "regions": {
-        "set1_only": "V",
-        "set1_set2": "P",
-        "set1_set3": "Q",
-        "set1_set4": "R",
-        "set1_set5": "S",
-        "set2_only": "T",
-        "set3_only": "U",
-        "set4_only": "W",
-        "set5_only": "X",
-        "outside": "Y"
-      }
-    },
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "The question needs a task that is urgent (inside the rectangle) and requires approval (inside the pentagon), but outside the diamond (recurring), hexagon (manager), and star (automated). Letter T sits in the pentagon only — missing urgent. Letter V sits in the rectangle only — missing approval. Letter R sits where the rectangle and hexagon overlap — that includes the manager, which is excluded. Letter P sits where the rectangle and pentagon overlap, outside every other shape — matching every condition. Option A.",
-    "order_index": 4,
-    "decision_making_question_options": [
-      {
-        "label": "A",
-        "option_text": "Letter P",
+        "option_text": "Iqbal, Jasper, Farah, George, Kim, Hana",
         "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "Letter T",
+        "option_text": "Iqbal, Kim, Farah, George, Jasper, Hana",
         "option_data": null,
         "order_index": 2
       },
       {
         "label": "C",
-        "option_text": "Letter V",
+        "option_text": "Jasper, Iqbal, Farah, George, Kim, Hana",
         "option_data": null,
         "order_index": 3
       },
       {
         "label": "D",
-        "option_text": "Letter R",
+        "option_text": "Hana, Iqbal, Farah, George, Jasper, Kim",
         "option_data": null,
         "order_index": 4
       }
@@ -558,47 +111,130 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "dm3r-027-venn",
-    "title": "Employee Training Records",
+    "id": "dmp-025-info",
+    "title": "Gym Class Attendance",
+    "type": "interpreting_info",
+    "difficulty": "normal",
+    "stem": "The table shows the number of attendees at four fitness classes over three months at a community gym.",
+    "table_data": {
+      "headers": [
+        "Class",
+        "January",
+        "February",
+        "March"
+      ],
+      "rows": [
+        [
+          "Yoga",
+          "84",
+          "92",
+          "110"
+        ],
+        [
+          "Spin",
+          "120",
+          "118",
+          "126"
+        ],
+        [
+          "Pilates",
+          "60",
+          "65",
+          "72"
+        ],
+        [
+          "HIIT",
+          "45",
+          "58",
+          "70"
+        ]
+      ]
+    },
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Spin had the highest total attendance over the three months.",
+        "correct_answer": "Yes",
+        "answer_reason": "Spin totals 120 + 118 + 126 = 364. Yoga totals 286, Pilates 197, HIIT 173. Spin is the highest.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Every class saw attendance rise between February and March.",
+        "correct_answer": "Yes",
+        "answer_reason": "Yoga 92→110, Spin 118→126, Pilates 65→72, HIIT 58→70. Every class grew from February to March.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "HIIT will attract more attendees than Yoga in April.",
+        "correct_answer": "No",
+        "answer_reason": "The data does not extend to April. Extrapolating future trends from past data is not supported.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Pilates attendance grew by more than 20 percent from January to March.",
+        "correct_answer": "No",
+        "answer_reason": "Pilates went from 60 to 72 — an increase of 12. 12 / 60 = 0.20, so the growth is exactly 20%, not more than 20%.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Spin attendance dropped between January and February.",
+        "correct_answer": "Yes",
+        "answer_reason": "Spin went from 120 in January to 118 in February — a drop of 2.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "Yes",
+      "1": "Yes",
+      "2": "No",
+      "3": "No",
+      "4": "Yes"
+    },
+    "answer_reason": null,
+    "order_index": 4,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-003-venn",
+    "title": "Airport Passenger Profile",
     "type": "venn_diagram",
-    "difficulty": "hard",
-    "stem": "The diagram shows 150 workers at a company, categorised by employment type and training records. Every completed induction and every safety certification belongs to a full-time staff member. Contract staff are not full-time and hold neither induction nor safety certification. Each letter marks a different region.\n\nWhich letter represents a full-time staff member who has completed induction, but has not completed safety certification and is not contract staff?",
+    "difficulty": "normal",
+    "stem": "The diagram categorises passengers passing through an airport terminal on a weekend. Each letter marks a different region.\n\nWhich letter represents a weekend arrival who is a frequent flyer with checked baggage but is not a minor travelling alone?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
         {
           "id": "set1",
-          "label": "Full-time staff",
-          "shape": "rectangle"
+          "label": "Weekend arrival",
+          "shape": "horizontal_strip"
         },
         {
           "id": "set2",
-          "label": "Induction done",
-          "shape": "circle"
+          "label": "Checked baggage",
+          "shape": "rectangle"
         },
         {
           "id": "set3",
-          "label": "Safety certified",
+          "label": "Frequent flyer",
           "shape": "pentagon"
         },
         {
           "id": "set4",
-          "label": "Contract staff",
-          "shape": "diamond"
+          "label": "Minor alone",
+          "shape": "triangle"
         }
       ],
       "regions": {
         "set1_only": "P",
         "set1_set2": "Q",
-        "set1_set2_set3": "R",
-        "set1_set3": "S",
-        "set4_only": "T",
-        "outside": "U"
+        "set1_set3": "R",
+        "set1_set2_set3": "S",
+        "set1_set4": "T",
+        "outside": "V"
       }
     },
     "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "The question needs a full-time staff member (inside the rectangle) who has completed induction (inside the circle), but has not completed safety certification (outside the pentagon) and is not contract staff (outside the diamond). Letter R sits where the rectangle, circle, and pentagon all overlap — that includes safety certified, which is excluded. Letter P is inside the rectangle only — missing induction. Letter T is inside the diamond, outside the rectangle — not full-time staff at all. Letter Q sits inside the rectangle and circle but outside the pentagon and diamond — matching every condition. Option A.",
+    "correct_answer": "C",
+    "answer_reason": "Weekend arrival is the outer category; every labelled passenger sits inside it. The question asks for a passenger inside weekend arrival, checked baggage, and frequent flyer, but outside minor alone. Letter P is inside weekend arrival only. Letter Q is inside weekend arrival and checked baggage but not frequent flyer. Letter R is inside weekend arrival and frequent flyer but not checked baggage. Letter T is inside weekend arrival and minor alone — includes minor alone, which is excluded. Letter S is inside weekend arrival, checked baggage, and frequent flyer, and outside minor alone — that is the region we want. Answer: Letter S.",
     "order_index": 5,
     "decision_making_question_options": [
       {
@@ -615,7 +251,7 @@
       },
       {
         "label": "C",
-        "option_text": "Letter P",
+        "option_text": "Letter S",
         "option_data": null,
         "order_index": 3
       },
@@ -629,63 +265,36 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "dm3r-028-venn",
-    "title": "Engineer Certification Hierarchy",
-    "type": "venn_diagram",
+    "id": "dmp-037-prob",
+    "title": "Coloured Marbles",
+    "type": "probabilistic",
     "difficulty": "normal",
-    "stem": "The diagram shows the engineering staff at a firm. All senior engineers are engineers. All principal engineers are senior engineers. Each letter marks a different region.\n\nWhich letter represents an engineer who is senior but not principal?",
-    "stimulus_diagram": {
-      "diagramLayout": "auto",
-      "sets": [
-        {
-          "id": "set1",
-          "label": "Engineer",
-          "shape": "octagon"
-        },
-        {
-          "id": "set2",
-          "label": "Senior engineer",
-          "shape": "square"
-        },
-        {
-          "id": "set3",
-          "label": "Principal engineer",
-          "shape": "circle"
-        }
-      ],
-      "regions": {
-        "set1_only": "P",
-        "set1_set2": "Q",
-        "set1_set2_set3": "R",
-        "outside": "S"
-      }
-    },
-    "table_data": null,
-    "correct_answer": "B",
-    "answer_reason": "The diagram shows three nested shapes: the octagon (engineers) contains the square (senior engineers), which contains the circle (principal engineers). A senior engineer who is not principal sits in the ring between the square and the circle. Letter P is inside the octagon but outside the square — an engineer who is not senior. Letter R is inside all three — a principal engineer, which the question excludes. Letter S is outside all three — not an engineer at all. Letter Q is inside the octagon and square but outside the circle — matching the description. Option B.",
+    "stem": "A bag contains 5 red marbles, 4 blue marbles and 3 green marbles. Two marbles are drawn at random, one after the other, without replacement.\n\nWhat is the probability that both marbles are blue?",
+    "correct_answer": "A",
+    "answer_reason": "Total marbles = 12. P(first blue) = 4/12 = 1/3. After one blue is removed, 3 blues remain in 11 marbles. P(second blue | first blue) = 3/11. P(both blue) = (1/3) × (3/11) = 3/33 = 1/11.",
     "order_index": 6,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "Letter P",
+        "option_text": "1/11",
         "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "Letter Q",
+        "option_text": "2/33",
         "option_data": null,
         "order_index": 2
       },
       {
         "label": "C",
-        "option_text": "Letter R",
+        "option_text": "1/12",
         "option_data": null,
         "order_index": 3
       },
       {
         "label": "D",
-        "option_text": "Letter S",
+        "option_text": "1/9",
         "option_data": null,
         "order_index": 4
       }
@@ -693,15 +302,15 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "dm4r-023-venn",
-    "title": "Magazine Subscriptions",
+    "id": "dmp-001-venn",
+    "title": "Morning Shift Deliveries",
     "type": "venn_diagram",
     "difficulty": "normal",
-    "stem": "A newsagent stocks 90 magazine titles. 42 are weekly editions, 36 have a digital format, and 30 cover environmental topics. 15 are both weekly and digital. 12 are both weekly and environmental. 10 are both digital and environmental. 6 magazines are all three. 13 magazines fit none of these categories.\n\nWhich of the following diagrams best represents the data?",
+    "stem": "A courier logs 90 deliveries one day. 42 are classed as priority, 35 are oversized, 30 fall within the morning shift window.\n\n14 deliveries are both priority and oversized. 12 priority deliveries fall within the morning shift window. 10 oversized deliveries fall within the morning shift window. 6 deliveries are all three. 17 deliveries are none of these three.\n\nWhich of the following diagrams best represents the data?",
     "stimulus_diagram": null,
     "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "Two values are freebies: 6 magazines are all three (the centre) and 13 fit none (outside). Scan — B shows 8 in the centre (stem says 6) — eliminate B. C shows 10 outside (stem says 13) — eliminate C. That leaves A and D. The stem says 15 are both weekly and digital; 6 of those are also environmental, so the weekly-and-digital-only area = 15 − 6 = 9. D shows 4 there — eliminate D. A shows 9 — correct. Answer: A.",
+    "correct_answer": "C",
+    "answer_reason": "Freebies: 6 deliveries are in all three and 17 are outside. Scan — A shows 4 in the centre — eliminate A. B shows 22 outside — eliminate B. That leaves C and D. The stem says 14 are priority and oversized, and 6 of those are also morning shift, so priority-and-oversized only = 14 − 6 = 8. C shows 8 ✓. D shows 12 — eliminate D. Answer: C.",
     "order_index": 7,
     "decision_making_question_options": [
       {
@@ -712,188 +321,29 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Weekly",
-              "shape": "vertical_oval"
+              "label": "Priority",
+              "shape": "star"
             },
             {
               "id": "set2",
-              "label": "Digital",
+              "label": "Oversized",
               "shape": "hexagon"
             },
             {
               "id": "set3",
-              "label": "Environmental",
-              "shape": "pentagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 21,
-            "set2_only": 17,
-            "set3_only": 14,
-            "set1_set2": 9,
-            "set1_set3": 6,
-            "set2_set3": 4,
-            "set1_set2_set3": 6,
-            "outside": 13
-          }
-        },
-        "order_index": 1
-      },
-      {
-        "label": "B",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Weekly",
-              "shape": "vertical_oval"
-            },
-            {
-              "id": "set2",
-              "label": "Digital",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set3",
-              "label": "Environmental",
-              "shape": "pentagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 21,
-            "set2_only": 17,
-            "set3_only": 14,
-            "set1_set2": 9,
-            "set1_set3": 6,
-            "set2_set3": 4,
-            "set1_set2_set3": 8,
-            "outside": 11
-          }
-        },
-        "order_index": 2
-      },
-      {
-        "label": "C",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Weekly",
-              "shape": "vertical_oval"
-            },
-            {
-              "id": "set2",
-              "label": "Digital",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set3",
-              "label": "Environmental",
-              "shape": "pentagon"
+              "label": "Morning shift",
+              "shape": "circle"
             }
           ],
           "regions": {
             "set1_only": 24,
             "set2_only": 17,
             "set3_only": 14,
-            "set1_set2": 9,
-            "set1_set3": 6,
-            "set2_set3": 4,
-            "set1_set2_set3": 6,
-            "outside": 10
-          }
-        },
-        "order_index": 3
-      },
-      {
-        "label": "D",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Weekly",
-              "shape": "vertical_oval"
-            },
-            {
-              "id": "set2",
-              "label": "Digital",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set3",
-              "label": "Environmental",
-              "shape": "pentagon"
-            }
-          ],
-          "regions": {
-            "set1_only": 21,
-            "set2_only": 17,
-            "set3_only": 14,
-            "set1_set2": 4,
-            "set1_set3": 6,
-            "set2_set3": 9,
-            "set1_set2_set3": 6,
-            "outside": 13
-          }
-        },
-        "order_index": 4
-      }
-    ],
-    "decision_making_question_statements": []
-  },
-  {
-    "id": "dm4r-024-venn",
-    "title": "Restaurant Dishes",
-    "type": "venn_diagram",
-    "difficulty": "normal",
-    "stem": "A restaurant lists 70 dishes. 20 are spicy, 14 are vegetarian, 18 contain nuts, and 20 are gluten-free. 8 dishes are both spicy and vegetarian. 6 dishes both contain nuts and are gluten-free. 12 dishes fit none of these descriptions.\n\nWhich of the following diagrams best represents the data?",
-    "stimulus_diagram": null,
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "Three values are freebies: 8 spicy-and-vegetarian, 6 nuts-and-gluten-free, and 12 outside. Scan — B shows 6 in the spicy-and-vegetarian overlap and 8 in the nuts-and-gluten-free overlap (swapped) — eliminate B. C shows 10 outside (stem says 12) — eliminate C. That leaves A and D. Vegetarian total = 14, with 8 also spicy, so vegetarian-only = 14 − 8 = 6. D shows 12 there — eliminate D. A shows 6 — correct. Answer: A.",
-    "order_index": 8,
-    "decision_making_question_options": [
-      {
-        "label": "A",
-        "option_text": "",
-        "option_data": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Spicy",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Vegetarian",
-              "shape": "star"
-            },
-            {
-              "id": "set3",
-              "label": "Contains nuts",
-              "shape": "square"
-            },
-            {
-              "id": "set4",
-              "label": "Gluten-free",
-              "shape": "oval"
-            }
-          ],
-          "regions": {
-            "set1_only": 12,
-            "set2_only": 6,
-            "set1_set2": 8,
-            "set3_only": 12,
-            "set4_only": 14,
-            "set3_set4": 6,
-            "outside": 12
+            "set1_set2": 10,
+            "set1_set3": 8,
+            "set2_set3": 6,
+            "set1_set2_set3": 4,
+            "outside": 7
           }
         },
         "order_index": 1
@@ -906,33 +356,29 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Spicy",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Vegetarian",
+              "label": "Priority",
               "shape": "star"
             },
             {
-              "id": "set3",
-              "label": "Contains nuts",
-              "shape": "square"
+              "id": "set2",
+              "label": "Oversized",
+              "shape": "hexagon"
             },
             {
-              "id": "set4",
-              "label": "Gluten-free",
-              "shape": "oval"
+              "id": "set3",
+              "label": "Morning shift",
+              "shape": "circle"
             }
           ],
           "regions": {
-            "set1_only": 12,
-            "set2_only": 6,
-            "set1_set2": 6,
+            "set1_only": 22,
+            "set2_only": 15,
             "set3_only": 12,
-            "set4_only": 14,
-            "set3_set4": 8,
-            "outside": 12
+            "set1_set2": 8,
+            "set1_set3": 6,
+            "set2_set3": 4,
+            "set1_set2_set3": 6,
+            "outside": 22
           }
         },
         "order_index": 2
@@ -945,33 +391,29 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Spicy",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Vegetarian",
+              "label": "Priority",
               "shape": "star"
             },
             {
-              "id": "set3",
-              "label": "Contains nuts",
-              "shape": "square"
+              "id": "set2",
+              "label": "Oversized",
+              "shape": "hexagon"
             },
             {
-              "id": "set4",
-              "label": "Gluten-free",
-              "shape": "oval"
+              "id": "set3",
+              "label": "Morning shift",
+              "shape": "circle"
             }
           ],
           "regions": {
-            "set1_only": 14,
-            "set2_only": 6,
+            "set1_only": 22,
+            "set2_only": 17,
+            "set3_only": 14,
             "set1_set2": 8,
-            "set3_only": 12,
-            "set4_only": 14,
-            "set3_set4": 6,
-            "outside": 10
+            "set1_set3": 6,
+            "set2_set3": 4,
+            "set1_set2_set3": 6,
+            "outside": 17
           }
         },
         "order_index": 3
@@ -984,33 +426,29 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Spicy",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set2",
-              "label": "Vegetarian",
+              "label": "Priority",
               "shape": "star"
             },
             {
-              "id": "set3",
-              "label": "Contains nuts",
-              "shape": "square"
+              "id": "set2",
+              "label": "Oversized",
+              "shape": "hexagon"
             },
             {
-              "id": "set4",
-              "label": "Gluten-free",
-              "shape": "oval"
+              "id": "set3",
+              "label": "Morning shift",
+              "shape": "circle"
             }
           ],
           "regions": {
-            "set1_only": 12,
-            "set2_only": 12,
-            "set1_set2": 8,
-            "set3_only": 6,
-            "set4_only": 14,
-            "set3_set4": 6,
-            "outside": 12
+            "set1_only": 20,
+            "set2_only": 15,
+            "set3_only": 12,
+            "set1_set2": 12,
+            "set1_set3": 6,
+            "set2_set3": 4,
+            "set1_set2_set3": 6,
+            "outside": 19
           }
         },
         "order_index": 4
@@ -1019,15 +457,91 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "dm4r-025-venn",
-    "title": "Classroom Clubs",
+    "id": "dmp-010-venn",
+    "title": "Exam Pipeline",
     "type": "venn_diagram",
     "difficulty": "normal",
-    "stem": "A school records which clubs 80 students belong to. 30 are in music, 24 are in drama, and 18 are in art. 10 students are in both music and drama. 7 are in both music and art. 6 are in both drama and art. 3 students are in all three clubs. 28 students are in none of these clubs.\n\nWhich of the following diagrams is consistent with the data?",
+    "stem": "The diagram shows candidates progressing through five stages of an exam pipeline: registered, screening, written test, oral test, and practical. Each letter marks a different region.\n\nWhich letter represents a candidate who reached the written test and the oral test, but not the practical and not any earlier stage?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Registered",
+          "shape": "rectangle"
+        },
+        {
+          "id": "set2",
+          "label": "Screening",
+          "shape": "hexagon"
+        },
+        {
+          "id": "set3",
+          "label": "Written test",
+          "shape": "pentagon"
+        },
+        {
+          "id": "set4",
+          "label": "Oral test",
+          "shape": "diamond"
+        },
+        {
+          "id": "set5",
+          "label": "Practical",
+          "shape": "trapezoid"
+        }
+      ],
+      "regions": {
+        "set1_only": "P",
+        "set1_set2": "Q",
+        "set2_set3": "R",
+        "set3_set4": "S",
+        "set4_set5": "T",
+        "outside": "U"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "Consecutive stages overlap in the diagram; non-consecutive stages do not. The question asks for the region inside the written test and the oral test but outside the practical and outside every earlier stage. Letter P is registered only. Letter Q is registered and at screening. Letter R is at screening and the written test — not the oral test. Letter S is at the written test and the oral test, and outside every other stage — that is the region we want. Answer: Letter S.",
+    "order_index": 8,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Letter P",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Letter R",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Letter S",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "Letter T",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-004-venn",
+    "title": "Commute Pipeline",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "160 commuters were surveyed on three legs of their morning commute: local train, tube, and office bus. No one takes the tube without also taking the local train, and no one takes the office bus without also taking the tube.\n\n48 commuters took the local train only. 24 took both the local train and the tube but not the office bus. 18 took both the tube and the office bus. 52 took none of the three legs.\n\nWhich of the following diagrams best represents the data?",
     "stimulus_diagram": null,
     "table_data": null,
     "correct_answer": "A",
-    "answer_reason": "One shape must total 30 (music), another 24 (drama), the third 18 (art). The centre should be 3, and the pair overlaps 10, 7, and 6. Check each option's shape totals. Option B has a centre of 5 and shape totals 32, 26, 20 — none match — eliminate B. Option C has centre 3 but one shape totals 16+10+7+3 = 36 (forgot to subtract the triple from the pair overlaps) — eliminate C. Option D has one shape totalling 8+7+4+3 = 22 — no match — eliminate D. Only Option A works: shape totals are 16+7+4+3 = 30 (music), 11+7+3+3 = 24 (drama), and 8+4+3+3 = 18 (art), with centre 3. Answer: A.",
+    "answer_reason": "Freebies: 52 took none of the three and 18 took office bus + tube + local train. Scan — B shows 45 outside — eliminate B. D shows 12 in the triple overlap — eliminate D. That leaves A and C. The stem says 18 took tube and office bus; all of those also took the local train (per the consecutive-legs rule) — so tube-and-office-bus-only = 18 − 18 = 0, and that region should be omitted. A has no tube-and-office-bus-only region ✓. C has a tube-and-office-bus-only region of 6, which would mean 6 commuters took the office bus without the local train — violates the consecutive rule. Eliminate C. Answer: A.",
     "order_index": 9,
     "decision_making_question_options": [
       {
@@ -1038,29 +552,25 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Music",
-              "shape": "circle"
+              "label": "Local train",
+              "shape": "rectangle"
             },
             {
               "id": "set2",
-              "label": "Drama",
-              "shape": "diamond"
+              "label": "Tube",
+              "shape": "hexagon"
             },
             {
               "id": "set3",
-              "label": "Art",
-              "shape": "triangle"
+              "label": "Office bus",
+              "shape": "right_arrow"
             }
           ],
           "regions": {
-            "set1_only": 16,
-            "set2_only": 11,
-            "set3_only": 8,
-            "set1_set2": 7,
-            "set1_set3": 4,
-            "set2_set3": 3,
-            "set1_set2_set3": 3,
-            "outside": 28
+            "set1_only": 48,
+            "set1_set2": 24,
+            "set1_set2_set3": 18,
+            "outside": 52
           }
         },
         "order_index": 1
@@ -1073,29 +583,25 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Music",
-              "shape": "circle"
+              "label": "Local train",
+              "shape": "rectangle"
             },
             {
               "id": "set2",
-              "label": "Drama",
-              "shape": "diamond"
+              "label": "Tube",
+              "shape": "hexagon"
             },
             {
               "id": "set3",
-              "label": "Art",
-              "shape": "triangle"
+              "label": "Office bus",
+              "shape": "right_arrow"
             }
           ],
           "regions": {
-            "set1_only": 16,
-            "set2_only": 11,
-            "set3_only": 8,
-            "set1_set2": 7,
-            "set1_set3": 4,
-            "set2_set3": 3,
-            "set1_set2_set3": 5,
-            "outside": 26
+            "set1_only": 48,
+            "set1_set2": 30,
+            "set1_set2_set3": 18,
+            "outside": 45
           }
         },
         "order_index": 2
@@ -1108,29 +614,26 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Music",
-              "shape": "circle"
+              "label": "Local train",
+              "shape": "rectangle"
             },
             {
               "id": "set2",
-              "label": "Drama",
-              "shape": "diamond"
+              "label": "Tube",
+              "shape": "hexagon"
             },
             {
               "id": "set3",
-              "label": "Art",
-              "shape": "triangle"
+              "label": "Office bus",
+              "shape": "right_arrow"
             }
           ],
           "regions": {
-            "set1_only": 16,
-            "set2_only": 11,
-            "set3_only": 8,
-            "set1_set2": 10,
-            "set1_set3": 7,
+            "set1_only": 42,
+            "set1_set2": 24,
             "set2_set3": 6,
-            "set1_set2_set3": 3,
-            "outside": 19
+            "set1_set2_set3": 18,
+            "outside": 52
           }
         },
         "order_index": 3
@@ -1143,111 +646,218 @@
           "sets": [
             {
               "id": "set1",
-              "label": "Music",
-              "shape": "circle"
+              "label": "Local train",
+              "shape": "rectangle"
             },
             {
               "id": "set2",
-              "label": "Drama",
-              "shape": "diamond"
+              "label": "Tube",
+              "shape": "hexagon"
             },
             {
               "id": "set3",
-              "label": "Art",
-              "shape": "triangle"
+              "label": "Office bus",
+              "shape": "right_arrow"
             }
           ],
           "regions": {
-            "set1_only": 8,
-            "set2_only": 11,
-            "set3_only": 16,
-            "set1_set2": 7,
-            "set1_set3": 4,
-            "set2_set3": 3,
-            "set1_set2_set3": 3,
-            "outside": 28
+            "set1_only": 48,
+            "set1_set2": 24,
+            "set1_set2_set3": 12,
+            "outside": 58
           }
         },
         "order_index": 4
       }
     ],
-    "decision_making_question_statements": [],
-    "hide_labels": true
+    "decision_making_question_statements": []
   },
   {
-    "id": "dm4r-026-venn",
-    "title": "Library Book Handling Stages",
+    "id": "dmp-005-venn",
+    "title": "Bookshop Orders",
     "type": "venn_diagram",
-    "difficulty": "hard",
-    "stem": "The diagram shows 120 library books categorised by five handling stages. Each letter marks a different region.\n\nWhich letter represents a book that has been shelved and wrapped, but has not been catalogued, stamped, or tagged?",
-    "stimulus_diagram": {
-      "diagramLayout": "auto",
-      "sets": [
-        {
-          "id": "set1",
-          "label": "Catalogued",
-          "shape": "trapezoid"
-        },
-        {
-          "id": "set2",
-          "label": "Stamped",
-          "shape": "pentagon"
-        },
-        {
-          "id": "set3",
-          "label": "Shelved",
-          "shape": "oval"
-        },
-        {
-          "id": "set4",
-          "label": "Wrapped",
-          "shape": "hexagon"
-        },
-        {
-          "id": "set5",
-          "label": "Tagged",
-          "shape": "square"
-        }
-      ],
-      "regions": {
-        "set1_only": "P",
-        "set1_set2": "Q",
-        "set2_only": "R",
-        "set2_set3": "S",
-        "set3_only": "T",
-        "set3_set4": "U",
-        "set4_only": "V",
-        "set4_set5": "W",
-        "set5_only": "X",
-        "outside": "Y"
-      }
-    },
+    "difficulty": "normal",
+    "stem": "An online bookshop processes 140 orders one week across three categories: gift-wrapped, dispatched by first-class post, and placed by members.\n\n38 orders are gift-wrapped, 52 are dispatched by first-class post, and 60 are placed by members. 12 orders are both gift-wrapped and dispatched by first-class post. 22 orders are both dispatched by first-class post and placed by members. 14 orders are both gift-wrapped and placed by members. 6 orders fall into all three categories. 14 orders are none of the three.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
     "table_data": null,
-    "correct_answer": "B",
-    "answer_reason": "The question needs a book that is shelved (inside the oval) and wrapped (inside the hexagon), but outside the trapezoid (catalogued), pentagon (stamped), and square (tagged). Letter S sits where the pentagon and oval overlap — that includes stamped, which is excluded. Letter T sits in the oval only — missing wrapped. Letter W sits where the hexagon and square overlap — that includes tagged, which is excluded. Letter U sits where the oval and hexagon overlap, outside every other shape — matching every condition. Option B.",
+    "correct_answer": "A",
+    "answer_reason": "Freebies: 6 orders are in all three categories and 14 are outside. Scan — C shows 10 in the centre — eliminate C. D shows 20 outside — eliminate D. That leaves A and B. The stem says 12 orders are gift-wrapped and dispatched by first-class post; 6 of those are also members, so gift-wrapped-and-first-class only = 12 − 6 = 6. A shows 6 ✓. B shows 10 — eliminate B. Answer: A.",
     "order_index": 10,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "Letter S",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Gift-wrapped",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set2",
+              "label": "First-class",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set3",
+              "label": "Members",
+              "shape": "oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 18,
+            "set2_only": 24,
+            "set3_only": 30,
+            "set1_set2": 6,
+            "set1_set3": 8,
+            "set2_set3": 16,
+            "set1_set2_set3": 6,
+            "outside": 14
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Gift-wrapped",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set2",
+              "label": "First-class",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set3",
+              "label": "Members",
+              "shape": "oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 14,
+            "set2_only": 20,
+            "set3_only": 28,
+            "set1_set2": 10,
+            "set1_set3": 8,
+            "set2_set3": 18,
+            "set1_set2_set3": 6,
+            "outside": 14
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Gift-wrapped",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set2",
+              "label": "First-class",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set3",
+              "label": "Members",
+              "shape": "oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 16,
+            "set2_only": 22,
+            "set3_only": 26,
+            "set1_set2": 6,
+            "set1_set3": 8,
+            "set2_set3": 16,
+            "set1_set2_set3": 10,
+            "outside": 14
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Gift-wrapped",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set2",
+              "label": "First-class",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set3",
+              "label": "Members",
+              "shape": "oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 15,
+            "set2_only": 20,
+            "set3_only": 27,
+            "set1_set2": 6,
+            "set1_set3": 8,
+            "set2_set3": 18,
+            "set1_set2_set3": 6,
+            "outside": 20
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-038-prob",
+    "title": "Rare Disease Test",
+    "type": "probabilistic",
+    "difficulty": "hard",
+    "stem": "A rare disease affects 1 in 2,000 adults. A screening test is 98% sensitive (correctly identifies 98% of people who have the disease) and 95% specific (correctly identifies 95% of people who do not have the disease).\n\nIf an adult from this population tests positive, roughly what is the probability they actually have the disease?",
+    "correct_answer": "A",
+    "answer_reason": "Imagine 100,000 adults: 50 have the disease, 99,950 do not. True positives ≈ 98% × 50 = 49. False positives = 5% × 99,950 ≈ 4,998. Total positives ≈ 5,047. P(disease | positive) ≈ 49 / 5,047 ≈ 1%. The high test accuracy does not overcome the very low base rate.",
+    "order_index": 11,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Around 1%",
         "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "Letter U",
+        "option_text": "Around 25%",
         "option_data": null,
         "order_index": 2
       },
       {
         "label": "C",
-        "option_text": "Letter T",
+        "option_text": "Around 50%",
         "option_data": null,
         "order_index": 3
       },
       {
         "label": "D",
-        "option_text": "Letter W",
+        "option_text": "Around 95%",
         "option_data": null,
         "order_index": 4
       }
@@ -1255,71 +865,63 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "dm4r-027-venn",
-    "title": "Festival Programming",
+    "id": "dmp-006-venn",
+    "title": "Hobby Club Membership",
     "type": "venn_diagram",
-    "difficulty": "hard",
-    "stem": "The diagram shows 200 festival activities. All music acts, comedy acts, and family-friendly acts take place on the main stage. Food stalls and free-entry activities do not take place on the main stage and do not overlap with the staged acts. Each letter marks a different region.\n\nWhich letter represents a main-stage act that is both comedy and family-friendly, but is not a music act?",
+    "difficulty": "normal",
+    "stem": "The diagram shows members of a hobby club categorised by five activities: chess, baking, hiking, pottery, and drama. Each letter marks a different region.\n\nWhich letter represents a member who takes part in baking and hiking but neither chess, pottery, nor drama?",
     "stimulus_diagram": {
       "diagramLayout": "auto",
       "sets": [
         {
           "id": "set1",
-          "label": "Main stage",
-          "shape": "rectangle"
+          "label": "Chess",
+          "shape": "diamond"
         },
         {
           "id": "set2",
-          "label": "Music",
-          "shape": "circle"
-        },
-        {
-          "id": "set3",
-          "label": "Comedy",
+          "label": "Baking",
           "shape": "pentagon"
         },
         {
-          "id": "set4",
-          "label": "Family-friendly",
-          "shape": "star"
-        },
-        {
-          "id": "set5",
-          "label": "Food stall",
+          "id": "set3",
+          "label": "Hiking",
           "shape": "hexagon"
         },
         {
-          "id": "set6",
-          "label": "Free entry",
-          "shape": "diamond"
+          "id": "set4",
+          "label": "Pottery",
+          "shape": "rectangle"
+        },
+        {
+          "id": "set5",
+          "label": "Drama",
+          "shape": "star"
         }
       ],
       "regions": {
-        "set1_only": "V",
-        "set1_set2": "P",
-        "set1_set2_set3": "Q",
-        "set1_set3": "R",
-        "set1_set3_set4": "S",
-        "set1_set4": "T",
-        "set5_only": "U",
-        "set6_only": "W",
-        "outside": "Y"
+        "set1_only": "P",
+        "set1_set2": "Q",
+        "set2_set3": "R",
+        "set3_set4": "S",
+        "set4_set5": "T",
+        "outside": "V"
       }
     },
     "table_data": null,
-    "correct_answer": "B",
-    "answer_reason": "The question needs an act on the main stage (inside the rectangle), that is comedy (inside the pentagon) and family-friendly (inside the star), but not music (outside the circle). Letter Q sits where the rectangle, circle, and pentagon overlap — that includes music, which is excluded. Letter R is where the rectangle and pentagon overlap only — missing family-friendly. Letter T is where the rectangle and star overlap only — missing comedy. Letter S sits where the rectangle, pentagon, and star overlap, outside every other shape — matching every condition. Option B.",
-    "order_index": 11,
+    "correct_answer": "C",
+    "answer_reason": "Consecutive activities overlap in the diagram; non-consecutive activities do not, because no one takes a later activity without taking every earlier one. The question asks for the region inside baking and hiking but outside chess, pottery, and drama. Letter P sits inside chess only. Letter Q sits inside chess and baking — includes chess, which is excluded. Letter S sits inside hiking and pottery — includes pottery, which is excluded. Letter R sits inside baking and hiking, outside chess, pottery, and drama — that is the region we want. Answer: Letter R.",
+    "order_index": 12,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "Letter Q",
+        "option_text": "Letter P",
         "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "Letter S",
+        "option_text": "Letter Q",
         "option_data": null,
         "order_index": 2
       },
@@ -1331,7 +933,7 @@
       },
       {
         "label": "D",
-        "option_text": "Letter T",
+        "option_text": "Letter S",
         "option_data": null,
         "order_index": 4
       }
@@ -1339,73 +941,1109 @@
     "decision_making_question_statements": []
   },
   {
-    "id": "dm4r-028-venn",
-    "title": "Employee Competency Network",
-    "type": "venn_diagram",
+    "id": "dmp-034-arg",
+    "title": "Later School Start",
+    "type": "recognising_assumptions",
     "difficulty": "normal",
-    "stem": "The diagram shows 80 employees categorised by job role competencies. Each letter marks a different region.\n\nWhich letter represents an employee who has both manager and analyst competencies but is neither a designer nor a developer?",
-    "stimulus_diagram": {
-      "diagramLayout": "auto",
-      "sets": [
-        {
-          "id": "set1",
-          "label": "Manager",
-          "shape": "pentagon"
-        },
-        {
-          "id": "set2",
-          "label": "Designer",
-          "shape": "oval"
-        },
-        {
-          "id": "set3",
-          "label": "Developer",
-          "shape": "trapezoid"
-        },
-        {
-          "id": "set4",
-          "label": "Analyst",
-          "shape": "diamond"
-        }
-      ],
-      "regions": {
-        "set1_only": "P",
-        "set1_set2": "Q",
-        "set2_only": "R",
-        "set2_set3": "S",
-        "set3_only": "T",
-        "set3_set4": "U",
-        "set4_only": "V",
-        "set1_set4": "W",
-        "outside": "X"
-      }
-    },
-    "table_data": null,
-    "correct_answer": "A",
-    "answer_reason": "The question needs an employee with manager (inside the pentagon) and analyst (inside the diamond) competencies, but outside the oval (designer) and trapezoid (developer). Letter P is inside the pentagon only — missing analyst. Letter V is inside the diamond only — missing manager. Letter Q is where the pentagon and oval overlap — that includes designer, which is excluded. Letter W sits where the pentagon and diamond overlap, outside both the oval and trapezoid — matching every condition. Option A.",
-    "order_index": 12,
+    "stem": "Should secondary schools in the UK move the start of the school day from 08:45 to 10:00 to improve student academic performance?",
+    "correct_answer": "B",
+    "answer_reason": "B connects the action (later start) to the outcome (academic performance) with study evidence. A addresses preference, not performance. C addresses logistics, not performance. D assumes teaching quality is the only relevant factor and doesn't address whether a later start could still help.",
+    "order_index": 13,
     "decision_making_question_options": [
       {
         "label": "A",
-        "option_text": "Letter W",
+        "option_text": "Yes; teenagers tend to get up late at the weekend, so they would prefer a later start.",
         "option_data": null,
         "order_index": 1
       },
       {
         "label": "B",
-        "option_text": "Letter P",
+        "option_text": "Yes; multiple controlled studies have shown that moving start times to after 09:30 increases average exam scores by around 4% in secondary-age students, directly improving academic performance.",
         "option_data": null,
         "order_index": 2
       },
       {
         "label": "C",
-        "option_text": "Letter V",
+        "option_text": "No; parents of younger children would need to rearrange school runs, causing logistical problems.",
         "option_data": null,
         "order_index": 3
       },
       {
         "label": "D",
+        "option_text": "No; academic performance depends on teaching quality, which a later start will not change.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-023-syl",
+    "title": "Only Pilots",
+    "type": "syllogism",
+    "difficulty": "normal",
+    "stem": "Only qualified pilots may land at the private airstrip. Every qualified pilot has passed the medical review. Some people who have passed the medical review are instructors. No instructor uses the short runway.",
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Anyone who lands at the private airstrip has passed the medical review.",
+        "correct_answer": "Yes",
+        "answer_reason": "Only qualified pilots may land there, and all qualified pilots have passed the medical review — so anyone landing has passed.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "All instructors are qualified pilots.",
+        "correct_answer": "No",
+        "answer_reason": "The premises say some people who passed the medical are instructors, not that all instructors are pilots. Instructors might not be pilots at all.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Some qualified pilots are instructors.",
+        "correct_answer": "No",
+        "answer_reason": "We know some medical-reviewed people are instructors, but those instructors are not guaranteed to be pilots — being a pilot is a stricter category.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "No instructor may land at the private airstrip.",
+        "correct_answer": "No",
+        "answer_reason": "Some instructors could also be qualified pilots — the premises do not forbid it, so we cannot rule out instructors landing.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Every person who uses the short runway is not an instructor.",
+        "correct_answer": "Yes",
+        "answer_reason": "No instructor uses the short runway, so everyone using it must be a non-instructor.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "Yes",
+      "1": "No",
+      "2": "No",
+      "3": "No",
+      "4": "Yes"
+    },
+    "answer_reason": null,
+    "order_index": 14,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-032-logic",
+    "title": "Team Pairing",
+    "type": "logic_puzzle",
+    "difficulty": "normal",
+    "stem": "A manager must pair four new hires (Priya, Quinn, Ravi, Sam) with four mentors (Wren, Xia, Yousef, Zane) for a six-month programme. Each mentor takes exactly one new hire. Wren mentors Sam. Xia will only mentor Ravi. Yousef refuses to mentor Quinn.\n\nWhich of the following pairings of new hires with mentors is consistent with all the constraints?",
+    "correct_answer": "A",
+    "answer_reason": "Wren mentors Sam and Xia mentors Ravi. That leaves Yousef and Zane to pair with Priya and Quinn. Yousef refuses Quinn, so Yousef = Priya and Zane = Quinn. Final pairing: Priya-Yousef, Quinn-Zane, Ravi-Xia, Sam-Wren — option A. Option B swaps Yousef and Zane, breaking the Yousef/Quinn constraint. Option C places Priya with Xia (only Ravi allowed). Option D puts Quinn with Wren and Sam with Zane, breaking Wren=Sam.",
+    "order_index": 15,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Priya-Yousef, Quinn-Zane, Ravi-Xia, Sam-Wren",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Priya-Zane, Quinn-Yousef, Ravi-Xia, Sam-Wren",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Priya-Xia, Quinn-Zane, Ravi-Wren, Sam-Yousef",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "Priya-Yousef, Quinn-Wren, Ravi-Xia, Sam-Zane",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-033-arg",
+    "title": "Cycle Helmet Law",
+    "type": "recognising_assumptions",
+    "difficulty": "normal",
+    "stem": "Should it be made compulsory for all adult cyclists to wear helmets to reduce head injuries on UK roads?",
+    "correct_answer": "A",
+    "answer_reason": "A directly links the action (mandatory helmets) to the outcome (reduced head injuries) with specific evidence. B addresses practicality but not head injuries. C is opinion-based and narrow. D addresses a tangential outcome (physical activity) rather than head injuries. A is the strongest.",
+    "order_index": 16,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; a 2022 review of UK hospital data found cyclists wearing helmets had 45% fewer serious head injuries than those without, so a legal requirement would directly reduce head injuries.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; helmets are inexpensive and most cyclists already carry one.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; some cyclists find helmets uncomfortable on long rides.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; mandatory helmet laws discourage some people from cycling, which reduces physical activity across the population.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-022-syl",
+    "title": "Lab Access",
+    "type": "syllogism",
+    "difficulty": "normal",
+    "stem": "A key card cannot unlock the laboratory unless it has been registered this month. Every key card registered this month shows a green indicator light. Only senior staff may register more than one key card. No visitor is senior staff.",
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Every key card that can unlock the laboratory shows a green indicator light.",
+        "correct_answer": "Yes",
+        "answer_reason": "A card can only unlock the lab if it has been registered this month, and every registered card shows a green indicator. So any unlocking card must show green.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "If a key card shows a green indicator light, it must have been registered this month.",
+        "correct_answer": "No",
+        "answer_reason": "The premise is one-way: registered → green. Other cards could also display green for unrelated reasons, so green does not guarantee registration.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "No visitor may register more than one key card.",
+        "correct_answer": "Yes",
+        "answer_reason": "Only senior staff may register more than one card, and no visitor is senior staff, so no visitor has that privilege.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Every visitor has been issued a key card that unlocks the laboratory.",
+        "correct_answer": "No",
+        "answer_reason": "The premises say nothing about whether visitors are issued unlocking cards. Unmentioned = No.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "If a key card has not been registered this month, it cannot unlock the laboratory.",
+        "correct_answer": "Yes",
+        "answer_reason": "This is the contrapositive of the \"unless\" rule: unlocking requires registration, so failing to register means the card cannot unlock the lab.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "Yes",
+      "1": "No",
+      "2": "Yes",
+      "3": "No",
+      "4": "Yes"
+    },
+    "answer_reason": null,
+    "order_index": 17,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-026-info",
+    "title": "Remote Working Study",
+    "type": "interpreting_info",
+    "difficulty": "hard",
+    "stem": "A management consultancy reports that teams who adopted fully remote working in 2023 saw a 12% rise in self-reported productivity. Critics note the same teams also reported higher rates of burnout and that the productivity measure relied on self-assessment rather than objective output metrics. The consultancy acknowledges these limitations but argues the results still support remote working.",
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Remote working caused a 12% rise in productivity for the teams studied.",
+        "correct_answer": "No",
+        "answer_reason": "The passage reports a rise coinciding with remote working — not a proven causal link. Correlation is not causation.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "The productivity measure in the study was based on self-assessment.",
+        "correct_answer": "Yes",
+        "answer_reason": "The passage explicitly states the productivity measure relied on self-assessment rather than objective output metrics.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "The teams studied reported higher burnout after adopting remote working.",
+        "correct_answer": "Yes",
+        "answer_reason": "Directly stated by the critics cited in the passage.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "The consultancy considers remote working unsuitable for all teams.",
+        "correct_answer": "No",
+        "answer_reason": "The consultancy still argues the results support remote working, not that it is unsuitable for all teams.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Objective productivity data would show the same 12% rise.",
+        "correct_answer": "No",
+        "answer_reason": "No objective data is reported; the passage says the measure was self-assessment. We cannot predict what objective data would show.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "No",
+      "1": "Yes",
+      "2": "Yes",
+      "3": "No",
+      "4": "No"
+    },
+    "answer_reason": null,
+    "order_index": 18,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-008-venn",
+    "title": "UK Export Orders",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A manufacturer ships 100 orders. 45 are exported, 40 are bulk orders, 55 are dispatched from within the UK region.\n\nAmong exported orders, 20 are also bulk. Among bulk orders, 25 are dispatched from within the UK region. Among exported orders, 22 are dispatched from within the UK region. 12 orders fall into all three categories. 18 orders are none of these three.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "B",
+    "answer_reason": "Freebies: 12 orders are in all three categories and 18 are outside. Scan — A shows 15 in the centre — eliminate A. D shows 25 outside — eliminate D. That leaves B and C. The stem says 20 are exported and bulk, and 12 of those are also inside UK, so exported-and-bulk only = 20 − 12 = 8. B shows 8 ✓. C shows 10 — eliminate C. Answer: B.",
+    "order_index": 19,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Exported",
+              "shape": "left_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Bulk",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set3",
+              "label": "Inside UK",
+              "shape": "horizontal_strip"
+            }
+          ],
+          "regions": {
+            "set1_only": 15,
+            "set2_only": 7,
+            "set3_only": 20,
+            "set1_set2": 6,
+            "set1_set3": 8,
+            "set2_set3": 11,
+            "set1_set2_set3": 15,
+            "outside": 18
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Exported",
+              "shape": "left_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Bulk",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set3",
+              "label": "Inside UK",
+              "shape": "horizontal_strip"
+            }
+          ],
+          "regions": {
+            "set1_only": 15,
+            "set2_only": 7,
+            "set3_only": 20,
+            "set1_set2": 8,
+            "set1_set3": 10,
+            "set2_set3": 13,
+            "set1_set2_set3": 12,
+            "outside": 15
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Exported",
+              "shape": "left_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Bulk",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set3",
+              "label": "Inside UK",
+              "shape": "horizontal_strip"
+            }
+          ],
+          "regions": {
+            "set1_only": 13,
+            "set2_only": 5,
+            "set3_only": 18,
+            "set1_set2": 10,
+            "set1_set3": 12,
+            "set2_set3": 13,
+            "set1_set2_set3": 12,
+            "outside": 17
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Exported",
+              "shape": "left_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Bulk",
+              "shape": "hexagon"
+            },
+            {
+              "id": "set3",
+              "label": "Inside UK",
+              "shape": "horizontal_strip"
+            }
+          ],
+          "regions": {
+            "set1_only": 13,
+            "set2_only": 7,
+            "set3_only": 17,
+            "set1_set2": 8,
+            "set1_set3": 10,
+            "set2_set3": 13,
+            "set1_set2_set3": 12,
+            "outside": 20
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-040-prob",
+    "title": "Independent Alarms",
+    "type": "probabilistic",
+    "difficulty": "normal",
+    "stem": "A warehouse has two independent smoke alarms. Alarm X correctly triggers in 90% of fires. Alarm Y correctly triggers in 80% of fires.\n\nWhat is the probability that at least one alarm triggers in the event of a fire?",
+    "correct_answer": "C",
+    "answer_reason": "P(neither triggers) = P(X fails) × P(Y fails) = 0.10 × 0.20 = 0.02. P(at least one triggers) = 1 − 0.02 = 0.98 = 98%.",
+    "order_index": 20,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "72%",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "85%",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "98%",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "100%",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-024-syl",
+    "title": "Sterile Kits",
+    "type": "syllogism",
+    "difficulty": "hard",
+    "stem": "A surgical kit is safe to use if and only if it has been sterilised and sealed. All sealed kits carry a blue tag. Sterilisation is necessary for a kit to be reused. Some kits without blue tags have been opened.",
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Every safe-to-use kit carries a blue tag.",
+        "correct_answer": "Yes",
+        "answer_reason": "Safe to use requires sealing, and every sealed kit carries a blue tag — therefore every safe kit carries a blue tag.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "A kit without a blue tag cannot be reused.",
+        "correct_answer": "No",
+        "answer_reason": "Reuse requires sterilisation, not sealing. A kit could be sterilised but not sealed — so it might lack a blue tag yet still meet the reuse condition.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Some opened kits have not been sealed.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some kits without blue tags have been opened. Every sealed kit has a blue tag, so a no-blue-tag kit is not sealed. These opened, no-tag kits are therefore unsealed.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "If a kit has been sterilised, it is safe to use.",
+        "correct_answer": "No",
+        "answer_reason": "Safe to use requires BOTH sterilisation AND sealing. Sterilisation alone is not enough.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Every safe-to-use kit can be reused.",
+        "correct_answer": "No",
+        "answer_reason": "Sterilisation is a necessary condition for reuse, not a sufficient one. A safe kit meets the sterilisation requirement but may fail other reuse requirements the premises do not list.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "Yes",
+      "1": "No",
+      "2": "Yes",
+      "3": "No",
+      "4": "No"
+    },
+    "answer_reason": null,
+    "order_index": 21,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-035-arg",
+    "title": "Sugar Tax on Snacks",
+    "type": "recognising_assumptions",
+    "difficulty": "hard",
+    "stem": "Should the government extend the sugar tax from soft drinks to all packaged snack foods to reduce childhood obesity?",
+    "correct_answer": "B",
+    "answer_reason": "B links the action (tax on snacks) to the outcome (childhood obesity) with specific evidence and NHS modelling. A assumes transfer between categories without evidence. C addresses tax revenue, not obesity. D makes a sweeping assumption that contradicts established evidence and ignores diet as a factor.",
+    "order_index": 22,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; households with young children already buy fewer sugary soft drinks since the 2018 tax, so extending it will make them buy fewer snacks too.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; data from the UK soft drink levy shows a 10% reduction in sugar consumption among children since 2018, and NHS modelling predicts a similar tax on snacks would cut childhood obesity rates by 5–7% over ten years.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; food manufacturers would simply reformulate products to avoid the tax, so the tax would collect little revenue.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; childhood obesity is caused by low physical activity, not by diet.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-002-venn",
+    "title": "Import Warehouse",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A warehouse receives 120 consignments in a month. 55 are imported, 48 are perishable, and 40 require cold storage. 18 are imported and perishable, 14 are imported and requiring cold storage, and 22 are perishable and requiring cold storage. 8 fall into all three categories. 35 do not fall into any of these three categories.\n\nWhich of the following diagrams best represents the data?",
+    "stimulus_diagram": null,
+    "table_data": null,
+    "correct_answer": "A",
+    "answer_reason": "Two freebies: 8 consignments are in all three categories and 35 fall outside all three. Scan — C shows 12 in the centre, stem says 8 — eliminate C. D shows 40 outside, stem says 35 — eliminate D. That leaves A and B. The stem says 18 are imported and perishable, 8 of those are also cold storage, so imported-and-perishable only = 18 − 8 = 10. A shows 10 ✓. B shows 14 — eliminate B. Answer: A.",
+    "order_index": 23,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Imported",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Perishable",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set3",
+              "label": "Cold storage",
+              "shape": "vertical_oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 31,
+            "set2_only": 16,
+            "set3_only": 12,
+            "set1_set2": 10,
+            "set1_set3": 6,
+            "set2_set3": 14,
+            "set1_set2_set3": 8,
+            "outside": 35
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Imported",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Perishable",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set3",
+              "label": "Cold storage",
+              "shape": "vertical_oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 27,
+            "set2_only": 12,
+            "set3_only": 8,
+            "set1_set2": 14,
+            "set1_set3": 6,
+            "set2_set3": 14,
+            "set1_set2_set3": 8,
+            "outside": 35
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Imported",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Perishable",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set3",
+              "label": "Cold storage",
+              "shape": "vertical_oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 29,
+            "set2_only": 14,
+            "set3_only": 10,
+            "set1_set2": 8,
+            "set1_set3": 4,
+            "set2_set3": 12,
+            "set1_set2_set3": 12,
+            "outside": 35
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "diagramLayout": "auto",
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Imported",
+              "shape": "right_arrow"
+            },
+            {
+              "id": "set2",
+              "label": "Perishable",
+              "shape": "pentagon"
+            },
+            {
+              "id": "set3",
+              "label": "Cold storage",
+              "shape": "vertical_oval"
+            }
+          ],
+          "regions": {
+            "set1_only": 26,
+            "set2_only": 11,
+            "set3_only": 7,
+            "set1_set2": 10,
+            "set1_set3": 6,
+            "set2_set3": 14,
+            "set1_set2_set3": 8,
+            "outside": 40
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-027-info",
+    "title": "Delivery Vehicles",
+    "type": "interpreting_info",
+    "difficulty": "normal",
+    "stem": "A courier company runs 80 vehicles. 50 are vans and the rest are motorbikes. Every motorbike is electric. None of the red vehicles are motorbikes. Half of the vans are white.",
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Every red vehicle is a van.",
+        "correct_answer": "Yes",
+        "answer_reason": "The fleet is vans or motorbikes. No motorbike is red, so any red vehicle must be a van.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Some motorbikes are red.",
+        "correct_answer": "No",
+        "answer_reason": "The passage says none of the red vehicles are motorbikes — so no motorbike is red.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "All electric vehicles in the fleet are motorbikes.",
+        "correct_answer": "No",
+        "answer_reason": "Every motorbike is electric, but vans could also be electric — we have no information ruling that out.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "There are exactly 25 white vans in the fleet.",
+        "correct_answer": "Yes",
+        "answer_reason": "Half of the 50 vans are white, which is 25 vans.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "There are more white vehicles than red vehicles in the fleet.",
+        "correct_answer": "No",
+        "answer_reason": "We know 25 vans are white, but we do not know the number of red vehicles (only that none are motorbikes). The comparison cannot be made.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "Yes",
+      "1": "No",
+      "2": "No",
+      "3": "Yes",
+      "4": "No"
+    },
+    "answer_reason": null,
+    "order_index": 24,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-028-info",
+    "title": "Regional Rainfall",
+    "type": "interpreting_info",
+    "difficulty": "normal",
+    "stem": "The table shows average monthly rainfall (mm) in four UK regions over four months in 2024.",
+    "table_data": {
+      "headers": [
+        "Region",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul"
+      ],
+      "rows": [
+        [
+          "North West",
+          "92",
+          "78",
+          "64",
+          "58"
+        ],
+        [
+          "South East",
+          "52",
+          "48",
+          "42",
+          "38"
+        ],
+        [
+          "Midlands",
+          "65",
+          "60",
+          "55",
+          "48"
+        ],
+        [
+          "Scotland",
+          "110",
+          "95",
+          "84",
+          "70"
+        ]
+      ]
+    },
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Scotland had the highest rainfall in every month shown.",
+        "correct_answer": "Yes",
+        "answer_reason": "Scotland 110 > NW 92, SE 52, Mid 65 in April; Scotland 95 > others in May; Scotland 84 > others in June; Scotland 70 > others in July.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Rainfall fell in every region between April and July.",
+        "correct_answer": "Yes",
+        "answer_reason": "NW 92→58, SE 52→38, Mid 65→48, Scotland 110→70. Every region saw rainfall fall.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "The South East had less than half the rainfall of Scotland in April.",
+        "correct_answer": "Yes",
+        "answer_reason": "Half of 110 is 55. The South East had 52, which is less than 55.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "The Midlands typically has a drier climate than the South East.",
+        "correct_answer": "No",
+        "answer_reason": "The table shows the opposite — Midlands rainfall exceeds South East rainfall in every month shown. \"Typically\" also extrapolates beyond the four months of data.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "The North West recorded exactly 292 mm of rainfall across the four months.",
+        "correct_answer": "Yes",
+        "answer_reason": "92 + 78 + 64 + 58 = 292 mm.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "Yes",
+      "1": "Yes",
+      "2": "Yes",
+      "3": "No",
+      "4": "Yes"
+    },
+    "answer_reason": null,
+    "order_index": 25,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-021-syl",
+    "title": "Bloons and Grems",
+    "type": "syllogism",
+    "difficulty": "hard",
+    "stem": "All bloons are grems. Some grems are sprocks. No sprocks are doofs. Most doofs are nims.",
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Some bloons are sprocks.",
+        "correct_answer": "No",
+        "answer_reason": "Bloons are grems, and only some grems are sprocks. The bloons could all fall among the non-sprock grems, so we cannot guarantee any bloon is a sprock.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Some grems are not doofs.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some grems are sprocks, and no sprocks are doofs. So those sprock-grems are not doofs — at least some grems are not doofs.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "No bloons are doofs.",
+        "correct_answer": "No",
+        "answer_reason": "We know nothing about whether bloons are doofs. Bloons are grems, but grems are not restricted from being doofs.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Most nims are doofs.",
+        "correct_answer": "No",
+        "answer_reason": "Reverse inference. \"Most doofs are nims\" does not mean most nims are doofs — the nim population could be much larger.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "All bloons are grems.",
+        "correct_answer": "Yes",
+        "answer_reason": "Directly stated in the premises.",
+        "order_index": 5
+      }
+    ],
+    "correct_answer": {
+      "0": "No",
+      "1": "Yes",
+      "2": "No",
+      "3": "No",
+      "4": "Yes"
+    },
+    "answer_reason": null,
+    "order_index": 26,
+    "decision_making_question_options": []
+  },
+  {
+    "id": "dmp-029-logic",
+    "title": "Booking Order",
+    "type": "logic_puzzle",
+    "difficulty": "normal",
+    "stem": "Five consecutive appointments on Monday morning were booked by Aisha, Ben, Chloe, Dan, and Ellie (not necessarily in that order). Dan was booked immediately before Ellie. Aisha was booked before Ben, with at least one other person between them. Chloe was not the first or last appointment. Ben was not the last appointment.\n\nWhich of the following lists the appointments in order, from first to last, in a way that is consistent with all the constraints?",
+    "correct_answer": "A",
+    "answer_reason": "Dan is immediately before Ellie, so Dan-Ellie occupy consecutive positions. Ben is not last, so Ellie must be last — placing Dan-Ellie at positions 4-5. That leaves positions 1, 2, 3 for Aisha, Ben, Chloe. Chloe cannot be first or last, so Chloe is in position 2. Aisha is before Ben with at least one person between them, so Aisha = 1 and Ben = 3 (with Chloe between them). Order: Aisha, Chloe, Ben, Dan, Ellie — option A.",
+    "order_index": 27,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Aisha, Chloe, Ben, Dan, Ellie",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Chloe, Aisha, Dan, Ellie, Ben",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Aisha, Dan, Ellie, Chloe, Ben",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "Aisha, Chloe, Dan, Ellie, Ben",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-036-arg",
+    "title": "Plastic Cutlery Ban",
+    "type": "recognising_assumptions",
+    "difficulty": "normal",
+    "stem": "Should single-use plastic cutlery be banned nationwide to reduce marine plastic pollution?",
+    "correct_answer": "A",
+    "answer_reason": "A connects the action (ban) to the outcome (marine pollution) with evidence that cutlery is a significant source. B addresses preference, not pollution. C addresses business cost, not pollution. D deflects by comparing sources but does not address whether banning cutlery would still reduce pollution.",
+    "order_index": 28,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; a recent beach survey found plastic cutlery in the top five items recovered from UK coastlines, and a national ban would remove this source of marine litter.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; plastic cutlery is unpleasant to use compared with wooden alternatives.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; many small takeaways rely on plastic cutlery and would find replacements expensive.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; most marine plastic pollution comes from fishing gear, not cutlery.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-007-venn",
+    "title": "Workforce Profile",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram categorises a company's workforce by employment attributes. Each letter marks a different region.\n\nWhich letter represents a part-time remote worker who is neither a graduate trainee nor a contractor?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Workforce",
+          "shape": "oval"
+        },
+        {
+          "id": "set2",
+          "label": "Remote worker",
+          "shape": "rectangle"
+        },
+        {
+          "id": "set3",
+          "label": "Graduate trainee",
+          "shape": "pentagon"
+        },
+        {
+          "id": "set4",
+          "label": "Part-time",
+          "shape": "triangle"
+        },
+        {
+          "id": "set5",
+          "label": "Contractor",
+          "shape": "right_arrow"
+        }
+      ],
+      "regions": {
+        "set1_only": "P",
+        "set1_set2": "Q",
+        "set1_set2_set3": "R",
+        "set1_set2_set4": "S",
+        "set1_set4": "T",
+        "set1_set5": "U",
+        "outside": "V"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "The question asks for a person inside workforce, remote worker, and part-time, but outside graduate trainee and contractor. Letter P is only in the workforce, no attribute. Letter Q is in the workforce and remote worker but not part-time. Letter R is in the workforce, remote worker, and graduate trainee — includes graduate trainee, which is excluded. Letter S is in the workforce, remote worker, and part-time, and outside graduate trainee and contractor — that is the region we want. Answer: Letter S.",
+    "order_index": 29,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Letter P",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Letter R",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Letter S",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "Letter U",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dmp-009-venn",
+    "title": "Staff Benefits Portal",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram shows how company staff are registered for the staff benefits portal. Each letter marks a different region.\n\nWhich letter represents a staff member who is registered on the portal and takes up the travel pass benefit but no other benefit?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Registered",
+          "shape": "circle"
+        },
+        {
+          "id": "set2",
+          "label": "Cycle-to-work",
+          "shape": "triangle"
+        },
+        {
+          "id": "set3",
+          "label": "Dental plan",
+          "shape": "pentagon"
+        },
+        {
+          "id": "set4",
+          "label": "Childcare",
+          "shape": "diamond"
+        },
+        {
+          "id": "set5",
+          "label": "Gym",
+          "shape": "star"
+        },
+        {
+          "id": "set6",
+          "label": "Travel pass",
+          "shape": "right_arrow"
+        }
+      ],
+      "regions": {
+        "set1_only": "P",
+        "set1_set2": "Q",
+        "set1_set3": "R",
+        "set1_set4": "S",
+        "set1_set5": "T",
+        "set1_set6": "U",
+        "outside": "V"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "D",
+    "answer_reason": "The question asks for staff inside registered AND travel pass, and outside every other benefit. Letter P is registered only, no benefit. Letter Q is registered and cycle-to-work, not travel pass. Letter R is registered and on the dental plan, not travel pass. Letter U is inside registered and travel pass, and outside every other benefit — that is the region we want. Answer: Letter U.",
+    "order_index": 30,
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Letter P",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
         "option_text": "Letter Q",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Letter R",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "Letter U",
         "option_data": null,
         "order_index": 4
       }

@@ -40,11 +40,84 @@ export function stableHash(obj) {
 }
 
 function asShape(id, cx, cy, w = W, h = H) {
-  return { id, cx, cy, w, h };
+  return { id, cx, cy, w, h, rotation: 0 };
 }
 
 function inOrder(ids, byIdMap) {
   return ids.map(id => byIdMap[id]);
+}
+
+// ---------------------------------------------------------------------------
+// Deterministic pseudo-randomness for layout jitter. Same hash + same index
+// always produces the same "random" value, so a given vennConfig renders
+// identically for every user while still looking organic (varied Y positions,
+// subtle rotations, slight size differences — not the old robotic flat rows).
+// ---------------------------------------------------------------------------
+
+function hashedRand(hash, index) {
+  let h = (hash ^ ((index + 1) * 2654435761)) >>> 0;
+  h = Math.imul(h ^ (h >>> 16), 2246822507);
+  h = Math.imul(h ^ (h >>> 13), 3266489909);
+  h = (h ^ (h >>> 16)) >>> 0;
+  return h / 4294967296;
+}
+
+// Shapes where rotation is visually a no-op (rotationally symmetric). No point
+// paying the polygon-clipping cost of rotating them — the rendered outline is
+// identical.
+const SYMMETRIC_SHAPES = new Set(['circle']);
+
+// Shapes where rotation would look absurd (ovals shouldn't be tilted 15° — it
+// reads as a mistake, not a design choice).
+const LIGHT_ROTATION_SHAPES = new Set(['oval', 'vertical_oval']);
+
+function rotationAmpFor(shape, baseAmp) {
+  if (SYMMETRIC_SHAPES.has(shape)) return 0;
+  if (LIGHT_ROTATION_SHAPES.has(shape)) return baseAmp * 0.35;
+  return baseAmp;
+}
+
+// Apply hash-seeded jitter to a set of seeded shape positions.
+//   yAmp       — vertical offset in units of R (0.20 = ±0.20R, so ±10px in unit space)
+//   sizeRange  — [lo, hi] multiplier for w/h (e.g. [0.92, 1.10])
+//   rotAmp     — rotation amplitude in radians (e.g. 0.20 ≈ ±11.5°)
+// Rotation is attenuated/zeroed for rotation-inappropriate shapes. yAmp is
+// bounded by the caller so adjacent-overlap constraints in chain topologies
+// still hold (>0.25R starts breaking 1.10R-spaced chains).
+// Probability that any given shape receives a full rotation when rotAmp > 0.
+// Shapes that lose the lottery render effectively upright (a tiny epsilon
+// rotation is applied to avoid axis-aligned polygon-clipping degeneracies —
+// invisible to the eye, but prevents the clipper from choking on perfectly
+// co-linear edges between adjacent shapes).
+const ROTATION_PROBABILITY = 0.5;
+const UPRIGHT_EPSILON = 0.008; // ~0.46°, visually indistinguishable from 0
+
+function applyJitter(shapes, idToShape, hash, opts = {}) {
+  const { yAmp = 0, sizeRange = null, rotAmp = 0 } = opts;
+  return shapes.map((s, i) => {
+    const shape = (idToShape && idToShape[s.id]) || 'circle';
+    const yOff = yAmp ? (hashedRand(hash, i * 7 + 11) - 0.5) * 2 * yAmp * R : 0;
+    const sk = sizeRange
+      ? sizeRange[0] + hashedRand(hash, i * 7 + 13) * (sizeRange[1] - sizeRange[0])
+      : 1;
+    const rAmp = rotationAmpFor(shape, rotAmp);
+    let rot = 0;
+    if (rAmp) {
+      const rotGate = hashedRand(hash, i * 7 + 19);
+      if (rotGate < ROTATION_PROBABILITY) {
+        rot = (hashedRand(hash, i * 7 + 17) - 0.5) * 2 * rAmp;
+      } else if (!SYMMETRIC_SHAPES.has(shape)) {
+        rot = (hashedRand(hash, i * 7 + 23) - 0.5) * 2 * UPRIGHT_EPSILON;
+      }
+    }
+    return {
+      ...s,
+      cy: s.cy + yOff,
+      w: s.w * sk,
+      h: s.h * sk,
+      rotation: (s.rotation || 0) + rot,
+    };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -243,6 +316,31 @@ function seed_four_dense(ids) {
   ];
 }
 
+// n-shape dense "pile" — used when 4–6 sets all heavily overlap but don't
+// match a clean hub/chain/cycle. Shapes sit on a small ring with hash-seeded
+// radial + angular jitter so the cluster looks organic (matches UCAT's
+// "shapes piled at varied heights" aesthetic rather than a neat ring). The
+// ring radius is small enough that every shape overlaps every other shape —
+// polygon-clipping then carves out whichever regions the region keys ask for.
+function seed_n_pile(ids, hash = 0) {
+  const n = ids.length;
+  const ringR = 0.55 * R;
+  const shapeR = R * 1.10;
+  // Ring jitter must stay bounded — shapes on the ring must all mutually
+  // overlap for n_pile to carve arbitrary region keys. (2π/n)/5 angular
+  // and 10% radial keeps the pile visually organic without separating shapes.
+  const angleJitterMax = (2 * Math.PI) / n / 5;
+  const radialJitterMax = 0.10 * ringR;
+  return ids.map((id, i) => {
+    const baseAngle = (2 * Math.PI * i) / n - Math.PI / 2;
+    const dA = (hashedRand(hash, 301 + i) - 0.5) * 2 * angleJitterMax;
+    const dR = (hashedRand(hash, 401 + i) - 0.5) * 2 * radialJitterMax;
+    const angle = baseAngle + dA;
+    const rad = ringR + dR;
+    return asShape(id, rad * Math.cos(angle), rad * Math.sin(angle), shapeR * 2, shapeR * 2);
+  });
+}
+
 // n-shape chain (any n ≥ 5). Each adjacent pair in `order` overlaps; non-
 // adjacent pairs do not. Visually identical structure to seed_four_linear,
 // generalised so 5/6/7-shape chains render as a clean horizontal sequence
@@ -260,8 +358,10 @@ function seed_n_chain(ids, order) {
 // n-shape hub (any n ≥ 4). One central "hub" set overlaps every "spoke" set;
 // spokes do not overlap each other. Spokes are arranged radially around the
 // hub. Spoke radii shrink as the spoke count grows so that adjacent spokes
-// don't touch each other while still each overlapping the hub.
-function seed_n_hub(ids, hubId, spokeIds) {
+// don't touch each other while still each overlapping the hub. Hash-seeded
+// angle jitter breaks the mechanical "perfect ring" look without ever
+// collapsing two spokes into each other.
+function seed_n_hub(ids, hubId, spokeIds, hash = 0) {
   const k = spokeIds.length;
   // Geometry tuned per spoke count so spokes overlap the hub but not each
   // other. Constraints (treating shapes as circles of given radii):
@@ -280,10 +380,22 @@ function seed_n_hub(ids, hubId, spokeIds) {
   const positions = {};
   positions[hubId] = asShape(hubId, 0, 0, hubR * 2, hubR * 2);
   const spokeW = spokeR * 2;
+  // Angular jitter must stay well below half the gap to the next spoke so the
+  // hub-spoke intersection lens (where the per-spoke label lives) never
+  // shrinks below the area floor. (2π/k)/6 is a conservative fraction —
+  // enough visible asymmetry without risking the region guarantees.
+  const angleJitterMax = (2 * Math.PI) / k / 6;
+  // Small radial jitter (±4% of d) gives subtle "some spokes jut further"
+  // variety without shrinking hub-spoke intersections noticeably.
+  const radialJitterMax = 0.04 * d;
   for (let i = 0; i < k; i++) {
-    const angle = (2 * Math.PI * i) / k - Math.PI / 2; // first spoke at 12 o'clock
-    const x = d * Math.cos(angle);
-    const y = d * Math.sin(angle);
+    const baseAngle = (2 * Math.PI * i) / k - Math.PI / 2; // first spoke at 12 o'clock
+    const dA = (hashedRand(hash, 101 + i) - 0.5) * 2 * angleJitterMax;
+    const dR = (hashedRand(hash, 211 + i) - 0.5) * 2 * radialJitterMax;
+    const angle = baseAngle + dA;
+    const rad = d + dR;
+    const x = rad * Math.cos(angle);
+    const y = rad * Math.sin(angle);
     positions[spokeIds[i]] = asShape(spokeIds[i], x, y, spokeW, spokeW);
   }
   return inOrder(ids, positions);
@@ -550,7 +662,49 @@ function orderWithOverlapsAdjacent(ids, overlapPairs) {
 // Structure classifier — picks the topology family for a given region set
 // ---------------------------------------------------------------------------
 
-export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverride = null) {
+// Per-topology jitter profiles. Keys match the topology family name chosen
+// by the classifier. Values configure applyJitter():
+//   yAmp      — vertical jitter amplitude (units of R). 0 disables.
+//   sizeRange — [lo, hi] multiplier on shape w/h. null disables.
+//   rotAmp    — rotation amplitude in radians. 0 disables.
+// Tight geometries (three_nested, n_cycle, four_cycle) get minimal or no
+// jitter because the topology relies on exact positioning to produce the
+// intended regions; anything more and polygon-clipping stops yielding them.
+// Jitter amplitudes tuned to preserve region guarantees. Every topology
+// relies on polygon-clipping producing non-trivial intersection areas for
+// every declared region — aggressive jitter (yAmp > 0.15, rotAmp > 0.18,
+// size variance > ±7%) can collapse marginal overlaps (triple intersections,
+// diagonal pairs in dense 4-set grids) below the 4 px² area floor and throw
+// at bake time. The values below are as high as we can push while keeping
+// every existing preview-dm test green. Rotation is the primary visual
+// payoff — it's safe to keep wherever we can.
+const JITTER_PROFILES = {
+  three_all_overlap:         { yAmp: 0.04, sizeRange: [0.97, 1.04], rotAmp: 0.06 },
+  three_linear:              { yAmp: 0.14, sizeRange: [0.95, 1.07], rotAmp: 0.09 },
+  three_one_separate:        { yAmp: 0.14, sizeRange: [0.95, 1.07], rotAmp: 0.09 },
+  three_nested:              { yAmp: 0,    sizeRange: null,         rotAmp: 0    },
+  three_nested_one_separate: { yAmp: 0.08, sizeRange: [0.97, 1.04], rotAmp: 0.06 },
+  three_separate:            { yAmp: 0.18, sizeRange: [0.92, 1.10], rotAmp: 0.10 },
+  four_linear:               { yAmp: 0.10, sizeRange: [0.95, 1.06], rotAmp: 0.07 },
+  four_two_pairs:            { yAmp: 0.12, sizeRange: [0.94, 1.08], rotAmp: 0.08 },
+  four_cycle:                { yAmp: 0,    sizeRange: [0.98, 1.03], rotAmp: 0.05 },
+  four_dense:                { yAmp: 0,    sizeRange: [0.98, 1.03], rotAmp: 0.04 },
+  n_chain:                   { yAmp: 0.08, sizeRange: [0.96, 1.04], rotAmp: 0.06 },
+  n_cycle:                   { yAmp: 0,    sizeRange: [0.98, 1.02], rotAmp: 0.04 },
+  n_hub:                     { yAmp: 0,    sizeRange: null,         rotAmp: 0.06 },
+  n_pile:                    { yAmp: 0.05, sizeRange: [0.96, 1.05], rotAmp: 0.06 },
+  all_separate:              { yAmp: 0.22, sizeRange: [0.88, 1.15], rotAmp: 0.11 },
+  main_plus_separate:        { yAmp: 0.10, sizeRange: [0.95, 1.06], rotAmp: 0.07 },
+  container:                 { yAmp: 0,    sizeRange: null,         rotAmp: 0    },
+  fallback:                  { yAmp: 0.10, sizeRange: [0.95, 1.07], rotAmp: 0.07 },
+};
+
+function jitter(shapes, idToShape, hash, profileName) {
+  const profile = JITTER_PROFILES[profileName] || JITTER_PROFILES.fallback;
+  return applyJitter(shapes, idToShape, hash, profile);
+}
+
+export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverride = null, idToShape = {}) {
   const n = allSetIds.length;
   const { overlapPairs, mentions } = analyzeRegions(allSetIds, regions);
   const nestings = findNestings(allSetIds, mentions);
@@ -576,31 +730,53 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
       .map(([inner]) => inner);
     const mainOthers = mainIds.filter(id => id !== containerId && !innerIds.includes(id));
     const externalIds = [...mainOthers, ...separateIds];
-    return seed_container(allSetIds, containerId, innerIds, externalIds, regions, hash, layoutVariantOverride);
+    const raw = seed_container(allSetIds, containerId, innerIds, externalIds, regions, hash, layoutVariantOverride);
+    // Container geometry is tight — apply a tiny per-shape rotation to inner
+    // + external shapes but skip Y-jitter (would push shapes out of the
+    // container or break external gap).
+    return applyJitter(raw, idToShape, hash, {
+      yAmp: 0,
+      sizeRange: null,
+      rotAmp: 0.08,
+    }).map(s =>
+      // The container set itself must NOT rotate — it's a bounding rect and
+      // rotating it breaks the visual "box around inners".
+      s.id === containerId ? { ...s, rotation: 0 } : s
+    );
   }
 
   // If we have both main + separate and the main is handleable on its own,
   // layout main, then tack separates to the right.
   if (separateIds.length > 0 && mainIds.length > 0) {
-    const mainLayout = seedPositions(mainIds, regions, hash, layoutVariantOverride);
+    const mainLayout = seedPositions(mainIds, regions, hash, layoutVariantOverride, idToShape);
     const maxX = Math.max(...mainLayout.map(s => s.cx + s.w / 2));
     const minY = Math.min(...mainLayout.map(s => s.cy - s.h / 2));
     const maxY = Math.max(...mainLayout.map(s => s.cy + s.h / 2));
 
     const positions = {};
-    for (const s of mainLayout) positions[s.id] = { cx: s.cx, cy: s.cy, w: s.w, h: s.h };
+    for (const s of mainLayout) {
+      positions[s.id] = { cx: s.cx, cy: s.cy, w: s.w, h: s.h, rotation: s.rotation || 0 };
+    }
 
     let exX = maxX + SEPARATE_D / 2 + R;
     for (const id of separateIds) {
-      positions[id] = { cx: exX, cy: (minY + maxY) / 2, w: W, h: H };
+      positions[id] = { cx: exX, cy: (minY + maxY) / 2, w: W, h: H, rotation: 0 };
       exX += W + SEPARATE_D * 0.4;
     }
+
+    // Only jitter the separate tail — the main cluster was already jittered
+    // by its own recursive seedPositions call.
+    const tail = separateIds.map(id => ({ id, ...positions[id] }));
+    const jitteredTail = jitter(tail, idToShape, hash ^ 0x9E3779B1, 'main_plus_separate');
+    for (const s of jitteredTail) positions[s.id] = s;
 
     return allSetIds.map(id => ({ id, ...positions[id] }));
   }
 
   // All separate
-  if (separateIds.length === n) return seed_all_separate(allSetIds);
+  if (separateIds.length === n) {
+    return jitter(seed_all_separate(allSetIds), idToShape, hash, 'all_separate');
+  }
 
   // Hub-and-spoke (any n ≥ 4): one set has degree n-1, every other set degree 1.
   if (n >= 4) {
@@ -609,24 +785,24 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
     const hubId = allSetIds.find(id => deg[id] === n - 1);
     if (hubId && allSetIds.every(id => id === hubId || deg[id] === 1)) {
       const spokes = allSetIds.filter(id => id !== hubId);
-      return seed_n_hub(allSetIds, hubId, spokes);
+      return jitter(seed_n_hub(allSetIds, hubId, spokes, hash), idToShape, hash, 'n_hub');
     }
   }
 
   // n-cycle (any n ≥ 5): n overlap pairs where every node has degree 2 (ring).
-  // Distinct from the n=4 four_cycle which is handled in the n===4 block.
   if (n >= 5 && pairs.length === n) {
     const deg = Object.fromEntries(allSetIds.map(id => [id, 0]));
     for (const [a, b] of pairs) { deg[a]++; deg[b]++; }
     const allDeg2 = allSetIds.every(id => deg[id] === 2);
     if (allDeg2) {
       const cycleOrder = walkCycle(allSetIds, pairs);
-      if (cycleOrder && cycleOrder.length === n) return seed_n_cycle(allSetIds, cycleOrder);
+      if (cycleOrder && cycleOrder.length === n) {
+        return jitter(seed_n_cycle(allSetIds, cycleOrder), idToShape, hash, 'n_cycle');
+      }
     }
   }
 
   // n-chain (any n ≥ 5): n-1 overlap pairs forming a path with two endpoints.
-  // (n=4 chain is handled by seed_four_linear in the n===4 block below.)
   if (n >= 5 && pairs.length === n - 1) {
     const deg = Object.fromEntries(allSetIds.map(id => [id, 0]));
     for (const [a, b] of pairs) { deg[a]++; deg[b]++; }
@@ -634,8 +810,20 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
     const middle    = allSetIds.filter(id => deg[id] === 2);
     if (endpoints.length === 2 && endpoints.length + middle.length === n) {
       const order = walkChain(allSetIds, pairs, endpoints[0]);
-      if (order.length === n) return seed_n_chain(allSetIds, order);
+      if (order.length === n) {
+        return jitter(seed_n_chain(allSetIds, order), idToShape, hash, 'n_chain');
+      }
     }
+  }
+
+  // n-pile (n ≥ 5): dense cluster where overlap pattern doesn't match
+  // hub/cycle/chain — many pairs, often most or all pairs. Shapes stack on a
+  // small ring so they all intersect each other; polygon-clipping carves out
+  // whichever regions the region keys request. Matches the UCAT "big pile of
+  // shapes at varied heights" aesthetic. (n=4 dense is handled by
+  // seed_four_dense below; n_pile would otherwise short-circuit it.)
+  if (n >= 5 && pairs.length >= n) {
+    return jitter(seed_n_pile(allSetIds, hash), idToShape, hash, 'n_pile');
   }
 
   // ---- "Main-only" families (3+ sets only — UCAT venn questions never use 2 sets) ----
@@ -649,7 +837,9 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
         const outermost = outers[0];
         const mid = nestings.find(([, o]) => o === outermost)?.[0];
         const inner = mid ? nestings.find(([, o]) => o === mid)?.[0] : null;
-        if (mid && inner) return seed_three_nested(allSetIds, inner, mid, outermost);
+        if (mid && inner) {
+          return jitter(seed_three_nested(allSetIds, inner, mid, outermost), idToShape, hash, 'three_nested');
+        }
       }
     }
     // Single nesting + lone
@@ -659,38 +849,48 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
       const loneOverlaps =
         overlapPairs.has([lone, inner].sort().join('|')) ||
         overlapPairs.has([lone, outer].sort().join('|'));
-      if (!loneOverlaps) return seed_three_nested_one_separate(allSetIds, inner, outer, lone);
+      if (!loneOverlaps) {
+        return jitter(seed_three_nested_one_separate(allSetIds, inner, outer, lone), idToShape, hash, 'three_nested_one_separate');
+      }
     }
 
-    if (pairs.length === 3) return seed_three_all_overlap(allSetIds);
+    if (pairs.length === 3) {
+      return jitter(seed_three_all_overlap(allSetIds), idToShape, hash, 'three_all_overlap');
+    }
 
     if (pairs.length === 2) {
       const count = Object.fromEntries(allSetIds.map(id => [id, 0]));
       for (const [x, y] of pairs) { count[x]++; count[y]++; }
       const mid = allSetIds.find(id => count[id] === 2);
       const sides = allSetIds.filter(id => count[id] === 1);
-      if (mid && sides.length === 2) return seed_three_linear(allSetIds, mid, sides[0], sides[1]);
+      if (mid && sides.length === 2) {
+        return jitter(seed_three_linear(allSetIds, mid, sides[0], sides[1]), idToShape, hash, 'three_linear');
+      }
     }
 
     if (pairs.length === 1) {
       const [pa, pb] = pairs[0];
       const lone = allSetIds.find(id => id !== pa && id !== pb);
-      return seed_three_one_separate(allSetIds, pa, pb, lone);
+      return jitter(seed_three_one_separate(allSetIds, pa, pb, lone), idToShape, hash, 'three_one_separate');
     }
 
-    if (pairs.length === 0) return seed_three_separate(allSetIds);
+    if (pairs.length === 0) {
+      return jitter(seed_three_separate(allSetIds), idToShape, hash, 'three_separate');
+    }
   }
 
   if (n === 4) {
     // four_dense: 5 or 6 overlap pairs — K4 or near-K4, tight 2×2 grid
     if (pairs.length >= 5) {
-      return seed_four_dense(allSetIds);
+      return jitter(seed_four_dense(allSetIds), idToShape, hash, 'four_dense');
     }
     // four_two_pairs: 2 overlap pairs, no shared set
     if (pairs.length === 2) {
       const [p1, p2] = pairs;
       const shared = p1.some(x => p2.includes(x));
-      if (!shared) return seed_four_two_pairs(allSetIds, p1[0], p1[1], p2[0], p2[1]);
+      if (!shared) {
+        return jitter(seed_four_two_pairs(allSetIds, p1[0], p1[1], p2[0], p2[1]), idToShape, hash, 'four_two_pairs');
+      }
     }
     // four_linear: 3 overlap pairs forming a chain (two degree-1 endpoints)
     if (pairs.length === 3) {
@@ -699,7 +899,9 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
       const endpoints = allSetIds.filter(id => deg[id] === 1);
       if (endpoints.length === 2) {
         const order = walkChain(allSetIds, pairs, endpoints[0]);
-        if (order.length === 4) return seed_four_linear(allSetIds, order);
+        if (order.length === 4) {
+          return jitter(seed_four_linear(allSetIds, order), idToShape, hash, 'four_linear');
+        }
       }
     }
     // four_cycle: 4 overlap pairs, all degree 2
@@ -709,14 +911,17 @@ export function seedPositions(allSetIds, regions, hash = 0, layoutVariantOverrid
       const allDeg2 = allSetIds.every(id => deg[id] === 2);
       if (allDeg2) {
         const cycleOrder = walkCycle(allSetIds, pairs);
-        if (cycleOrder && cycleOrder.length === 4) return seed_four_cycle(allSetIds, cycleOrder);
+        if (cycleOrder && cycleOrder.length === 4) {
+          return jitter(seed_four_cycle(allSetIds, cycleOrder), idToShape, hash, 'four_cycle');
+        }
       }
     }
   }
 
   // Fallback for unrecognized shapes: place in a row and let the scale loop
   // try to make it work.
-  return allSetIds.map((id, i) => asShape(id, (i - (n - 1) / 2) * OVERLAP_D, 0));
+  const fallback = allSetIds.map((id, i) => asShape(id, (i - (n - 1) / 2) * OVERLAP_D, 0));
+  return jitter(fallback, idToShape, hash, 'fallback');
 }
 
 function walkChain(ids, pairs, startId) {
