@@ -136,6 +136,7 @@ class DatabaseService {
           id,
           statement_text,
           correct_answer,
+          answer_reason,
           order_index
         )
       `)
@@ -173,6 +174,7 @@ class DatabaseService {
           id,
           statement_text,
           correct_answer,
+          answer_reason,
           order_index
         )
       `)
