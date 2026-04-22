@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
+import SyncBanner from '../../components/SyncBanner';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 import { useSituationalJudgementProgress } from '../../hooks/queries/useSituationalJudgementProgress';
 import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
@@ -29,7 +30,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function SJScenarioListScreen({ navigation }) {
-  const { scenarios, flatQuestions, loading, error } = useSituationalJudgementScenarios();
+  const { scenarios, flatQuestions, loading, error, syncing, syncProgress } = useSituationalJudgementScenarios();
   const { progressMap, reload } = useSituationalJudgementProgress();
   const { localAnswers } = useSituationalJudgementAttempts();
   const { theme: t } = useTheme();
@@ -95,6 +96,7 @@ export default function SJScenarioListScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
+      <SyncBanner visible={syncing} progress={syncProgress} />
       <View style={styles.filterWrapper}>
         <Text style={[styles.countLabel, { color: t.textSecondary }]} numberOfLines={1}>
           {countLabel}

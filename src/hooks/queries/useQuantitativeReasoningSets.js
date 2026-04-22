@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -26,15 +26,18 @@ function mapSets(data) {
   }));
 }
 
-async function fetchFromDB() {
-  const data = await db.fetchQRSets();
-  return mapSets(data);
-}
-
 export function useQuantitativeReasoningSets() {
   const [sets, setSets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -53,39 +56,46 @@ export function useQuantitativeReasoningSets() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
+      if (hasValidCache) {
+        setSets(cached.data);
+        setLoading(false);
+      }
+
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (hasValidCache) {
-          setSets(cached.data);
-        } else {
-          setError(versionError);
-        }
+        if (!hasValidCache) setError(versionError);
         setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
-        setSets(cached.data);
         setLoading(false);
         return;
       }
 
+      if (!isMounted.current) return;
+      setSyncing(true);
+      setSyncProgress({ loaded: 0, total: null });
+
       try {
-        const fresh = await withRetry(() => fetchFromDB(), {
-          shouldRetry: (result) => result.length === 0,
+        let pagesLoaded = 0;
+        const raw = await db.fetchAllQRSetsPaginated(() => {
+          pagesLoaded++;
+          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
         });
-        setSets(fresh);
+        const fresh = mapSets(raw);
+        if (isMounted.current) setSets(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
-        if (hasValidCache) {
-          setSets(cached.data);
-        } else {
-          setError(err);
-        }
+        if (!hasValidCache && isMounted.current) setError(err);
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setSyncing(false);
+          setSyncProgress(null);
+          setLoading(false);
+        }
       }
     }
 
@@ -94,5 +104,5 @@ export function useQuantitativeReasoningSets() {
 
   const flatQuestions = useMemo(() => flattenQRSets(sets), [sets]);
 
-  return { sets, flatQuestions, loading, error };
+  return { sets, flatQuestions, loading, error, syncing, syncProgress };
 }

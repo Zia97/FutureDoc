@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -43,15 +43,18 @@ function mapQuestions(data) {
   }));
 }
 
-async function fetchFromDB() {
-  const data = await db.fetchDMQuestions();
-  return mapQuestions(data);
-}
-
 export function useDecisionMakingQuestions() {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -70,44 +73,54 @@ export function useDecisionMakingQuestions() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
+      // Serve stale cache immediately so the user can start practising
+      if (hasValidCache) {
+        setQuestions(cached.data);
+        setLoading(false);
+      }
+
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (hasValidCache) {
-          setQuestions(cached.data);
-        } else {
-          setError(versionError);
-        }
+        if (!hasValidCache) setError(versionError);
         setLoading(false);
         return;
       }
 
+      // Cache is current — nothing to do
       if (hasValidCache && cached.version === versionRow.version) {
-        setQuestions(cached.data);
         setLoading(false);
         return;
       }
+
+      // Background refresh with paginated fetch
+      if (!isMounted.current) return;
+      setSyncing(true);
+      setSyncProgress({ loaded: 0, total: null });
 
       try {
-        const fresh = await withRetry(() => fetchFromDB(), {
-          shouldRetry: (result) => result.length === 0,
+        let pagesLoaded = 0;
+        const raw = await db.fetchAllDMQuestionsPaginated(() => {
+          pagesLoaded++;
+          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
         });
-        setQuestions(fresh);
+        const fresh = mapQuestions(raw);
+        if (isMounted.current) setQuestions(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
-        if (hasValidCache) {
-          setQuestions(cached.data);
-        } else {
-          setError(err);
-        }
+        if (!hasValidCache && isMounted.current) setError(err);
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setSyncing(false);
+          setSyncProgress(null);
+          setLoading(false);
+        }
       }
     }
 
     load();
   }, []);
 
-  return { questions, loading, error };
+  return { questions, loading, error, syncing, syncProgress };
 }

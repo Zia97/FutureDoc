@@ -59,6 +59,48 @@ class DatabaseService {
     return data;
   }
 
+  /**
+   * Fetches VR passages in pages. Returns { data, hasMore }.
+   * page is 0-indexed. pageSize defaults to 20.
+   */
+  async fetchVRPassagesPage(page = 0, pageSize = 20, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('verbal_reasoning_passages')
+      .select(`
+        id,
+        title,
+        body,
+        is_free,
+        verbal_reasoning_questions (
+          id,
+          question_text,
+          options,
+          correct_answer,
+          answer_reason,
+          order_index
+        )
+      `)
+      .order('created_at', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllVRPassagesPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchVRPassagesPage(page, 20, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Decision Making
   // ─────────────────────────────────────────────────────────────────────────────
@@ -102,6 +144,57 @@ class DatabaseService {
     return data;
   }
 
+  async fetchDMQuestionsPage(page = 0, pageSize = 20, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('decision_making_questions')
+      .select(`
+        id,
+        title,
+        type,
+        difficulty,
+        stem,
+        table_data,
+        stimulus_diagram,
+        hide_labels,
+        correct_answer,
+        answer_reason,
+        is_free,
+        decision_making_question_options (
+          id,
+          label,
+          option_text,
+          option_data,
+          venn_geometry,
+          order_index
+        ),
+        decision_making_question_statements (
+          id,
+          statement_text,
+          correct_answer,
+          order_index
+        )
+      `)
+      .order('order_index', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllDMQuestionsPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchDMQuestionsPage(page, 20, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Quantitative Reasoning
   // ─────────────────────────────────────────────────────────────────────────────
@@ -132,6 +225,44 @@ class DatabaseService {
     return data;
   }
 
+  async fetchQRSetsPage(page = 0, pageSize = 20, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('quantitative_reasoning_sets')
+      .select(`
+        id,
+        title,
+        stimulus,
+        is_free,
+        quantitative_reasoning_questions (
+          id,
+          question_text,
+          options,
+          correct_answer,
+          answer_reason,
+          order_index
+        )
+      `)
+      .order('created_at', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllQRSetsPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchQRSetsPage(page, 20, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Situational Judgement
   // ─────────────────────────────────────────────────────────────────────────────
@@ -159,6 +290,43 @@ class DatabaseService {
       .order('created_at', { ascending: true });
     if (error) throw error;
     return data ?? [];
+  }
+
+  async fetchSJScenariosPage(page = 0, pageSize = 20, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('situational_judgement_scenarios')
+      .select(`
+        id,
+        body,
+        is_free,
+        situational_judgement_questions (
+          id,
+          question_text,
+          correct_answer,
+          answer_reason,
+          order_index,
+          label_set
+        )
+      `)
+      .order('created_at', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllSJScenariosPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchSJScenariosPage(page, 20, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -197,6 +365,50 @@ class DatabaseService {
     return data;
   }
 
+  async fetchTimedSJTestsPage(page = 0, pageSize = 5, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('timed_situational_judgement_tests')
+      .select(`
+        id,
+        title,
+        time_minutes,
+        is_free,
+        timed_situational_judgement_scenarios (
+          id,
+          body,
+          created_at,
+          timed_situational_judgement_questions (
+            id,
+            question_text,
+            correct_answer,
+            answer_reason,
+            order_index,
+            label_set,
+            difficulty
+          )
+        )
+      `)
+      .order('id', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllTimedSJTestsPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchTimedSJTestsPage(page, 5, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Timed Verbal Reasoning
   // ─────────────────────────────────────────────────────────────────────────────
@@ -231,6 +443,51 @@ class DatabaseService {
       .order('id', { ascending: true });
     if (error) throw error;
     return data;
+  }
+
+  async fetchTimedVRTestsPage(page = 0, pageSize = 5, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('timed_verbal_reasoning_tests')
+      .select(`
+        id,
+        title,
+        time_minutes,
+        is_free,
+        timed_verbal_reasoning_passages (
+          id,
+          title,
+          body,
+          order_index,
+          timed_verbal_reasoning_questions (
+            id,
+            question_text,
+            options,
+            correct_answer,
+            answer_reason,
+            order_index,
+            difficulty
+          )
+        )
+      `)
+      .order('id', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllTimedVRTestsPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchTimedVRTestsPage(page, 5, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -296,6 +553,83 @@ class DatabaseService {
     }));
   }
 
+  async fetchTimedDMTestsPage(page = 0, pageSize = 5, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data: tests, error: testsError } = await supabase
+      .from('timed_decision_making_tests')
+      .select('id, title, time_minutes, is_free')
+      .order('id', { ascending: true })
+      .range(from, to);
+    if (testsError) throw testsError;
+    if (!tests?.length) {
+      onProgress?.();
+      return { data: [], hasMore: false };
+    }
+
+    const testIds = tests.map((t) => t.id);
+
+    const { data: questions, error: questionsError } = await supabase
+      .from('timed_decision_making_questions')
+      .select('id, test_id, title, type, stem, table_data, stimulus_diagram, venn_geometry, correct_answer, answer_reason, order_index, hide_labels, difficulty')
+      .in('test_id', testIds)
+      .order('order_index', { ascending: true });
+    if (questionsError) throw questionsError;
+
+    const questionIds = questions.map((q) => q.id);
+
+    const { data: options, error: optionsError } = await supabase
+      .from('timed_decision_making_question_options')
+      .select('id, question_id, label, option_text, option_data, venn_geometry, order_index')
+      .in('question_id', questionIds)
+      .order('order_index', { ascending: true });
+    if (optionsError) throw optionsError;
+
+    const { data: statements, error: statementsError } = await supabase
+      .from('timed_decision_making_question_statements')
+      .select('id, question_id, statement_text, correct_answer, answer_reason, order_index')
+      .in('question_id', questionIds)
+      .order('order_index', { ascending: true });
+    if (statementsError) throw statementsError;
+
+    const optionsByQuestion = (options ?? []).reduce((acc, o) => {
+      (acc[o.question_id] ??= []).push(o);
+      return acc;
+    }, {});
+    const statementsByQuestion = (statements ?? []).reduce((acc, s) => {
+      (acc[s.question_id] ??= []).push(s);
+      return acc;
+    }, {});
+    const questionsByTest = questions.reduce((acc, q) => {
+      (acc[q.test_id] ??= []).push({
+        ...q,
+        timed_decision_making_question_options: optionsByQuestion[q.id] ?? [],
+        timed_decision_making_question_statements: statementsByQuestion[q.id] ?? [],
+      });
+      return acc;
+    }, {});
+
+    const data = tests.map((t) => ({
+      ...t,
+      timed_decision_making_questions: questionsByTest[t.id] ?? [],
+    }));
+
+    onProgress?.();
+    return { data, hasMore: tests.length === pageSize };
+  }
+
+  async fetchAllTimedDMTestsPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchTimedDMTestsPage(page, 5, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
+  }
+
   // ─────────────────────────────────────────────────────────────────────────────
   // Timed Quantitative Reasoning
   // ─────────────────────────────────────────────────────────────────────────────
@@ -332,6 +666,52 @@ class DatabaseService {
       .order('id', { ascending: true });
     if (error) throw error;
     return data;
+  }
+
+  async fetchTimedQRTestsPage(page = 0, pageSize = 5, onProgress) {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error } = await supabase
+      .from('timed_quantitative_reasoning_tests')
+      .select(`
+        id,
+        title,
+        time_minutes,
+        is_free,
+        timed_quantitative_reasoning_sets (
+          id,
+          set_ref,
+          title,
+          stimulus,
+          order_index,
+          timed_quantitative_reasoning_questions (
+            id,
+            stem,
+            options,
+            correct_answer,
+            answer_reason,
+            order_index,
+            difficulty
+          )
+        )
+      `)
+      .order('id', { ascending: true })
+      .range(from, to);
+    if (error) throw error;
+    onProgress?.();
+    return { data: data ?? [], hasMore: data?.length === pageSize };
+  }
+
+  async fetchAllTimedQRTestsPaginated(onProgress) {
+    const all = [];
+    let page = 0;
+    while (true) {
+      const { data, hasMore } = await this.fetchTimedQRTestsPage(page, 5, onProgress);
+      all.push(...data);
+      if (!hasMore) break;
+      page++;
+    }
+    return all;
   }
 
   // ─────────────────────────────────────────────────────────────────────────────

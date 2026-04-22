@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -25,15 +25,18 @@ function mapPassages(data) {
   }));
 }
 
-async function fetchFromDB() {
-  const data = await db.fetchVRPassages();
-  return mapPassages(data);
-}
-
 export function useVerbalReasoningPassages() {
   const [passages, setPassages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -52,39 +55,46 @@ export function useVerbalReasoningPassages() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
+      if (hasValidCache) {
+        setPassages(cached.data);
+        setLoading(false);
+      }
+
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (hasValidCache) {
-          setPassages(cached.data);
-        } else {
-          setError(versionError);
-        }
+        if (!hasValidCache) setError(versionError);
         setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
-        setPassages(cached.data);
         setLoading(false);
         return;
       }
 
+      if (!isMounted.current) return;
+      setSyncing(true);
+      setSyncProgress({ loaded: 0, total: null });
+
       try {
-        const fresh = await withRetry(() => fetchFromDB(), {
-          shouldRetry: (result) => result.length === 0,
+        let pagesLoaded = 0;
+        const raw = await db.fetchAllVRPassagesPaginated(() => {
+          pagesLoaded++;
+          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
         });
-        setPassages(fresh);
+        const fresh = mapPassages(raw);
+        if (isMounted.current) setPassages(fresh);
         await saveCache(SECTION, versionRow.version, fresh);
       } catch (err) {
-        if (hasValidCache) {
-          setPassages(cached.data);
-        } else {
-          setError(err);
-        }
+        if (!hasValidCache && isMounted.current) setError(err);
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setSyncing(false);
+          setSyncProgress(null);
+          setLoading(false);
+        }
       }
     }
 
@@ -93,5 +103,5 @@ export function useVerbalReasoningPassages() {
 
   const flatQuestions = useMemo(() => flattenVRPassages(passages), [passages]);
 
-  return { passages, flatQuestions, loading, error };
+  return { passages, flatQuestions, loading, error, syncing, syncProgress };
 }

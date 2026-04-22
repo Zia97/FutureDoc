@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
+import SyncBanner from '../../components/SyncBanner';
 import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 import { useVerbalReasoningProgress } from '../../hooks/queries/useVerbalReasoningProgress';
 import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReasoningAttempts';
@@ -29,7 +30,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function VRQuestionListScreen({ navigation }) {
-  const { passages, flatQuestions, loading, error } = useVerbalReasoningPassages();
+  const { passages, flatQuestions, loading, error, syncing, syncProgress } = useVerbalReasoningPassages();
   const { progressMap, reload } = useVerbalReasoningProgress();
   const { localAnswers } = useVerbalReasoningAttempts();
   const { theme: t } = useTheme();
@@ -96,6 +97,7 @@ export default function VRQuestionListScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
+      <SyncBanner visible={syncing} progress={syncProgress} />
       <View style={styles.filterWrapper}>
         <Text style={[styles.countLabel, { color: t.textSecondary }]} numberOfLines={1}>
           {countLabel}

@@ -25,6 +25,7 @@ import {
   getQRScaledScore,
   scoreColor as scaledScoreColor,
 } from '../../lib/ucatScoring';
+import SyncBanner from '../../components/SyncBanner';
 
 // Score formatter shared across the four sections. VR/DM/QR show their
 // estimated UCAT scaled score (300–900). UK SJ is intentionally left as
@@ -63,27 +64,27 @@ const REVIEW_ROUTE = {
 // Section-specific wrappers. Each calls only the hook pair for its own
 // section so opening the DM list doesn't fan out queries to VR/QR/SJ.
 function VRList(props) {
-  const { tests, loading, error } = useTimedVRTests();
+  const { tests, loading, error, syncing, syncProgress } = useTimedVRTests();
   const progress = useTimedVRExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
 }
 
 function DMList(props) {
-  const { tests, loading, error } = useTimedDMTests();
+  const { tests, loading, error, syncing, syncProgress } = useTimedDMTests();
   const progress = useTimedDMExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
 }
 
 function QRList(props) {
-  const { tests, loading, error } = useTimedQRTests();
+  const { tests, loading, error, syncing, syncProgress } = useTimedQRTests();
   const progress = useTimedQRExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
 }
 
 function SJList(props) {
-  const { tests, loading, error } = useTimedSJTests();
+  const { tests, loading, error, syncing, syncProgress } = useTimedSJTests();
   const progress = useTimedSJExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
 }
 
 const SECTION_COMPONENT = {
@@ -99,7 +100,7 @@ export default function TimedTestListScreen({ navigation, route }) {
   return <Component navigation={navigation} section={section} title={title} />;
 }
 
-function TimedListBody({ navigation, section, title, tests, loading, error, progress }) {
+function TimedListBody({ navigation, section, title, tests, loading, error, progress, syncing, syncProgress }) {
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
   const color = t.accent;
@@ -149,6 +150,7 @@ function TimedListBody({ navigation, section, title, tests, loading, error, prog
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
+      <SyncBanner visible={syncing} progress={syncProgress} label="Updating tests..." />
       <FlatList
         data={tests}
         keyExtractor={(item) => item.id}

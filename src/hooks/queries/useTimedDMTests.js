@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -59,6 +59,14 @@ export function useTimedDMTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -77,37 +85,51 @@ export function useTimedDMTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
+      if (hasValidCache) {
+        setTests(cached.data);
+        setLoading(false);
+      }
+
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (e) {
         reportError('DM', e, { level: 'warning', extra: { note: 'getContentVersion failed' } });
-        if (hasValidCache) setTests(cached.data);
         setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
-        setTests(cached.data);
         setLoading(false);
         return;
       }
 
+      if (!isMounted.current) return;
+      setSyncing(true);
+      setSyncProgress({ loaded: 0, total: null });
+
       try {
-        const fresh = await withRetry(() => db.fetchTimedDMTests());
-        const mapped = mapTests(fresh);
+        let pagesLoaded = 0;
+        const raw = await db.fetchAllTimedDMTestsPaginated(() => {
+          pagesLoaded++;
+          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+        });
+        const mapped = mapTests(raw);
         await saveCache(SECTION, versionRow.version, mapped);
-        setTests(mapped);
+        if (isMounted.current) setTests(mapped);
       } catch (e) {
         reportError('DM', e, { level: 'warning', extra: { note: 'fetchTimedDMTests failed' } });
-        if (hasValidCache) setTests(cached.data);
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setSyncing(false);
+          setSyncProgress(null);
+          setLoading(false);
+        }
       }
     }
 
     load();
   }, []);
 
-  return { tests, loading, error };
+  return { tests, loading, error, syncing, syncProgress };
 }

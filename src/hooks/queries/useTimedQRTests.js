@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -39,7 +39,7 @@ function mapDevTests(data) {
   });
 }
 
-// Maps DB rows (from timed_quantitative_reasoning_tests with nested sets and questions) into the app data shape.
+// Maps DB rows into the app data shape.
 //
 // NB: setId MUST be the UUID s.id, not the human-readable s.set_ref.
 // The DB column timed_quantitative_reasoning_question_answers.set_id is a
@@ -89,6 +89,14 @@ export function useTimedQRTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -107,45 +115,51 @@ export function useTimedQRTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
+      if (hasValidCache) {
+        setTests(cached.data.map(addFlatQuestions));
+        setLoading(false);
+      }
+
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch (versionError) {
-        if (hasValidCache) {
-          setTests(cached.data.map(addFlatQuestions));
-        } else {
-          setError(versionError);
-        }
+        if (!hasValidCache) setError(versionError);
         setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
-        setTests(cached.data.map(addFlatQuestions));
         setLoading(false);
         return;
       }
 
+      if (!isMounted.current) return;
+      setSyncing(true);
+      setSyncProgress({ loaded: 0, total: null });
+
       try {
-        const rows = await withRetry(() => db.fetchTimedQRTests(), {
-          shouldRetry: (result) => result.length === 0,
+        let pagesLoaded = 0;
+        const rows = await db.fetchAllTimedQRTestsPaginated(() => {
+          pagesLoaded++;
+          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
         });
         const mapped = mapDBTests(rows);
-        setTests(mapped);
+        if (isMounted.current) setTests(mapped);
         await saveCache(SECTION, versionRow.version, mapped);
       } catch (err) {
-        if (hasValidCache) {
-          setTests(cached.data.map(addFlatQuestions));
-        } else {
-          setError(err);
-        }
+        if (!hasValidCache && isMounted.current) setError(err);
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setSyncing(false);
+          setSyncProgress(null);
+          setLoading(false);
+        }
       }
     }
 
     load();
   }, []);
 
-  return { tests, loading, error };
+  return { tests, loading, error, syncing, syncProgress };
 }

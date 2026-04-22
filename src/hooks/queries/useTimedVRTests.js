@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -69,10 +69,22 @@ function mapTests(data) {
   });
 }
 
+function ensureFlatQuestions(t) {
+  return t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) };
+}
+
 export function useTimedVRTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -91,59 +103,50 @@ export function useTimedVRTests() {
       const cached = await getCached(SECTION);
       const hasValidCache = cached?.data?.length > 0;
 
+      if (hasValidCache) {
+        setTests(cached.data.map(ensureFlatQuestions));
+        setLoading(false);
+      }
+
       let versionRow;
       try {
         versionRow = await withRetry(() => db.getContentVersion(SECTION));
       } catch {
-        // Offline / version check failed — fall back to cache if available
-        if (hasValidCache) {
-          setTests(
-            cached.data.map((t) =>
-              t.flatQuestions
-                ? t
-                : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) },
-            ),
-          );
-        }
         setLoading(false);
         return;
       }
 
       if (hasValidCache && cached.version === versionRow.version) {
-        setTests(
-          cached.data.map((t) =>
-            t.flatQuestions
-              ? t
-              : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) },
-          ),
-        );
         setLoading(false);
         return;
       }
 
+      if (!isMounted.current) return;
+      setSyncing(true);
+      setSyncProgress({ loaded: 0, total: null });
+
       try {
-        const rows = await withRetry(() => db.fetchTimedVRTests());
+        let pagesLoaded = 0;
+        const rows = await db.fetchAllTimedVRTestsPaginated(() => {
+          pagesLoaded++;
+          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+        });
         const mapped = mapTestsFromNested(rows);
         await saveCache(SECTION, versionRow.version, mapped);
-        setTests(mapped);
+        if (isMounted.current) setTests(mapped);
       } catch (fetchErr) {
         reportError('useTimedVRTests', fetchErr, { level: 'warning', extra: { note: 'fetch failed' } });
-        if (hasValidCache) {
-          setTests(
-            cached.data.map((t) =>
-              t.flatQuestions
-                ? t
-                : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) },
-            ),
-          );
-        }
       } finally {
-        setLoading(false);
+        if (isMounted.current) {
+          setSyncing(false);
+          setSyncProgress(null);
+          setLoading(false);
+        }
       }
     }
 
     load();
   }, []);
 
-  return { tests, loading, error };
+  return { tests, loading, error, syncing, syncProgress };
 }

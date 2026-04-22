@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
+import SyncBanner from '../../components/SyncBanner';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningProgress } from '../../hooks/queries/useQuantitativeReasoningProgress';
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
@@ -29,7 +30,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function QRQuestionListScreen({ navigation }) {
-  const { sets, flatQuestions, loading, error } = useQuantitativeReasoningSets();
+  const { sets, flatQuestions, loading, error, syncing, syncProgress } = useQuantitativeReasoningSets();
   const { progressMap, reload } = useQuantitativeReasoningProgress();
   const { localAnswers } = useQuantitativeReasoningAttempts();
   const { theme: t } = useTheme();
@@ -94,6 +95,7 @@ export default function QRQuestionListScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgInput }]}>
+      <SyncBanner visible={syncing} progress={syncProgress} />
       <View style={styles.filterWrapper}>
         <Text style={[styles.countLabel, { color: t.textSecondary }]} numberOfLines={1}>
           {countLabel}
