@@ -24,7 +24,12 @@ function regularPolygon(cx, cy, r, sides) {
   return pts;
 }
 
-function starPoly(cx, cy, r, innerRatio = 0.4) {
+// innerRatio bumped from 0.4 to 0.5 — a thinner star reads more dramatically
+// but its narrow inner vertices carved deep notches out of adjacent-pair
+// overlap lenses in chain / cycle / container topologies, squeezing labels
+// under 12 px. 0.5 keeps the star visually distinct while giving the shape
+// a chunkier body that preserves lens area with its neighbours.
+function starPoly(cx, cy, r, innerRatio = 0.5) {
   const innerR = r * innerRatio;
   const pts = [];
   for (let i = 0; i < 10; i++) {
@@ -127,7 +132,7 @@ export function shapeToPolygon(shape, cx, cy, w, h, rotation = 0) {
       pts = regularPolygon(cx, cy, r, 8);
       break;
     case 'star':
-      pts = starPoly(cx, cy, r, 0.4);
+      pts = starPoly(cx, cy, r);
       break;
     case 'trapezoid':
       pts = [
@@ -183,7 +188,8 @@ export function shapeToSvgSpec(shape, cx, cy, w, h, rotation = 0) {
       return { kind: 'rect', x: cx - w * 0.7, y: cy - h * 0.225, width: w * 1.4, height: h * 0.45 };
     }
     if (shape === 'vertical_strip') {
-      return { kind: 'rect', x: cx - w * 0.225, y: cy - h * 0.75, width: w * 0.45, height: h * 1.4 };
+      // half-height = (h * 1.4) / 2 = h * 0.7 — must match shapeToPolygon's rect() above.
+      return { kind: 'rect', x: cx - w * 0.225, y: cy - h * 0.7, width: w * 0.45, height: h * 1.4 };
     }
   }
 

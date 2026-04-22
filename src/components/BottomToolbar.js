@@ -13,7 +13,7 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
           onPress={onPause}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: fg }]}>⏸ Pause</Text>
+          <Text style={[styles.buttonText, { color: fg }]}>⏸</Text>
         </TouchableOpacity>
       )}
 
@@ -22,7 +22,7 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
         onPress={onNotes}
         activeOpacity={0.8}
       >
-        <Text style={[styles.buttonText, { color: fg }]}>✎ Notes</Text>
+        <Text style={[styles.buttonText, { color: fg }]}>✎</Text>
       </TouchableOpacity>
 
       {onCalculator && (
@@ -31,7 +31,7 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
           onPress={onCalculator}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: fg }]}>⊞ Calc</Text>
+          <Text style={[styles.buttonText, { color: fg }]}>⊞</Text>
         </TouchableOpacity>
       )}
 
@@ -41,7 +41,7 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
           onPress={onNavigator}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: fg }]}>☰ Navigator</Text>
+          <Text style={[styles.buttonText, { color: fg }]}>☰</Text>
         </TouchableOpacity>
       )}
     </View>

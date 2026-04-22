@@ -130,7 +130,12 @@ function parseRegionKey(regionKey, allSetIds) {
     const re = new RegExp(`(?:^|_)${id}(?:_|$)`);
     return re.test(regionKey);
   });
-  if (mentioned.length === 0) return { insideIds: allSetIds, outsideIds: [] };
+  // When the key mentions no set in allSetIds, it references sets outside this
+  // analysis scope (e.g. recursing into mainIds while regions still contains
+  // separate-set keys like "set6_only"). Treat as unrelated — do NOT fall
+  // back to "all sets in", which would spuriously add overlap pairs across
+  // every mainId and corrupt topology detection.
+  if (mentioned.length === 0) return { insideIds: [], outsideIds: allSetIds };
   return {
     insideIds: mentioned,
     outsideIds: allSetIds.filter(id => !mentioned.includes(id)),
@@ -193,10 +198,17 @@ function seed_three_all_overlap(ids) {
 }
 
 function seed_three_linear(ids, mid, leftId, rightId) {
+  // Mid shape scaled up slightly so its "only" strip (the narrow band between
+  // its two adjacent-pair overlaps) is wide enough to hold a 2-digit count.
+  // Without this, shapes with narrow bodies (star, isosceles_triangle) in the
+  // middle position leave a sliver too thin for the middle-only label.
+  const spread = 1.12 * OVERLAP_D;
+  const midW = 1.15 * W;
+  const midH = 1.15 * H;
   const m = {
-    [leftId]:  asShape(leftId,  -OVERLAP_D, 0),
-    [mid]:     asShape(mid,      0,         0),
-    [rightId]: asShape(rightId,  OVERLAP_D, 0),
+    [leftId]:  asShape(leftId,  -spread, 0),
+    [mid]:     asShape(mid,      0,      0, midW, midH),
+    [rightId]: asShape(rightId,  spread, 0),
   };
   return inOrder(ids, m);
 }
@@ -260,14 +272,23 @@ function seed_four_two_pairs(ids, p1a, p1b, p2a, p2b) {
 }
 
 // 4-cycle: 1-2-3-4-1 (arranged as a diamond so adjacent pairs overlap)
+// r at 0.65 * OVERLAP_D pulled shapes too close to origin — the opposite
+// shape's body reached into the adjacent-pair overlap lens, leaving only a
+// thin sliver where the "set1_set2 only" label had to sit. 0.82 is the
+// sweet spot: far enough apart that the bottom shape clears the top-pair
+// lens, close enough that adjacent pairs still intersect in a lens wide
+// enough to hold a 2-digit count. Shapes are scaled up to 1.25× so each
+// pair-lens has enough inscribed radius to hold a 12 px label.
 function seed_four_cycle(ids, cycleOrder) {
-  const r = 0.65 * OVERLAP_D;
+  const r = 0.85 * OVERLAP_D;
+  const shapeW = 1.35 * W;
+  const shapeH = 1.35 * H;
   const [a, b, c, d] = cycleOrder;
   const m = {
-    [a]: asShape(a, 0,  -r),
-    [b]: asShape(b, r,   0),
-    [c]: asShape(c, 0,   r),
-    [d]: asShape(d, -r,  0),
+    [a]: asShape(a, 0,  -r, shapeW, shapeH),
+    [b]: asShape(b, r,   0, shapeW, shapeH),
+    [c]: asShape(c, 0,   r, shapeW, shapeH),
+    [d]: asShape(d, -r,  0, shapeW, shapeH),
   };
   return inOrder(ids, m);
 }
@@ -345,12 +366,22 @@ function seed_n_pile(ids, hash = 0) {
 // adjacent pairs do not. Visually identical structure to seed_four_linear,
 // generalised so 5/6/7-shape chains render as a clean horizontal sequence
 // rather than falling through to the unrecognised-row fallback.
+//
+// For 6+ chains the shapes are 8% smaller and spaced closer (1.00 R
+// instead of OVERLAP_D = 1.10 R). The natural canvas drops from 7.5 R to
+// 6.85 R wide, which means the pixel scaler reaches a larger per-shape
+// size when fitting the chain into a phone-width option card (~340 px).
+// Non-adjacent shapes still clear each other: 1-3 centres 2.0 R apart with
+// 1.85 R-wide shapes leaves a 0.15 R gap.
 function seed_n_chain(ids, order) {
   const positions = {};
   const k = order.length;
+  const shapeW = k >= 6 ? 1.85 * R : W;
+  const shapeH = k >= 6 ? 1.85 * R : H;
+  const spacing = k >= 6 ? 1.00 * R : OVERLAP_D;
   for (let i = 0; i < k; i++) {
-    const x = (i - (k - 1) / 2) * OVERLAP_D;
-    positions[order[i]] = asShape(order[i], x, 0);
+    const x = (i - (k - 1) / 2) * spacing;
+    positions[order[i]] = asShape(order[i], x, 0, shapeW, shapeH);
   }
   return inOrder(ids, positions);
 }
@@ -373,9 +404,9 @@ function seed_n_hub(ids, hubId, spokeIds, hash = 0) {
   // lens — which is where the per-spoke labels sit.
   let d, spokeR, hubR;
   if (k <= 3)      { d = 1.10 * R; spokeR = R;        hubR = R;        }
-  else if (k === 4){ d = 1.30 * R; spokeR = 0.85 * R; hubR = 1.15 * R; }
-  else if (k === 5){ d = 1.40 * R; spokeR = 0.75 * R; hubR = 1.15 * R; }
-  else             { d = 1.50 * R; spokeR = 0.65 * R; hubR = 1.20 * R; } // k = 6+
+  else if (k === 4){ d = 1.30 * R; spokeR = 0.85 * R; hubR = 1.25 * R; }
+  else if (k === 5){ d = 1.40 * R; spokeR = 0.75 * R; hubR = 1.28 * R; }
+  else             { d = 1.50 * R; spokeR = 0.65 * R; hubR = 1.32 * R; } // k = 6+
 
   const positions = {};
   positions[hubId] = asShape(hubId, 0, 0, hubR * 2, hubR * 2);
