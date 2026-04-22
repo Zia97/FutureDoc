@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import SyncBanner from '../../components/SyncBanner';
+import OfflineRetry from '../../components/OfflineRetry';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingProgress } from '../../hooks/queries/useDecisionMakingProgress';
 import { useTheme } from '../../context/ThemeContext';
@@ -43,7 +44,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function DMQuestionListScreen({ navigation }) {
-  const { questions, loading, error, syncing, syncProgress } = useDecisionMakingQuestions();
+  const { questions, loading, error, syncing, syncProgress, refetch } = useDecisionMakingQuestions();
   const { progressMap, reload } = useDecisionMakingProgress();
   const { theme: t } = useTheme();
   const insets = useSafeAreaInsets();
@@ -121,6 +122,9 @@ export default function DMQuestionListScreen({ navigation }) {
   }
 
   if (error) {
+    if (error?.isOffline) {
+      return <OfflineRetry onRetry={refetch} message="Connect to the internet to load questions." />;
+    }
     return (
       <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
         <Text style={styles.errorText}>{JSON.stringify(error)}</Text>

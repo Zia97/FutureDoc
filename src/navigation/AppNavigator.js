@@ -9,7 +9,6 @@ import { useTheme } from '../context/ThemeContext';
 import { useContentVersionCheck } from '../services/contentUpdateService';
 import { checkForceUpdate } from '../services/appVersionGate';
 import { useTimedExamSyncOnForeground } from '../hooks/useTimedExamSyncOnForeground';
-import OfflineBanner from '../components/OfflineBanner';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
@@ -189,7 +188,6 @@ export default function AppNavigator() {
   return (
     <NavigationContainer>
       {getStack()}
-      <OfflineBanner />
     </NavigationContainer>
   );
 }

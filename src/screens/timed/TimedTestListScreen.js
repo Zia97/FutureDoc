@@ -26,6 +26,7 @@ import {
   scoreColor as scaledScoreColor,
 } from '../../lib/ucatScoring';
 import SyncBanner from '../../components/SyncBanner';
+import OfflineRetry from '../../components/OfflineRetry';
 
 // Score formatter shared across the four sections. VR/DM/QR show their
 // estimated UCAT scaled score (300–900). UK SJ is intentionally left as
@@ -64,27 +65,27 @@ const REVIEW_ROUTE = {
 // Section-specific wrappers. Each calls only the hook pair for its own
 // section so opening the DM list doesn't fan out queries to VR/QR/SJ.
 function VRList(props) {
-  const { tests, loading, error, syncing, syncProgress } = useTimedVRTests();
+  const { tests, loading, error, syncing, syncProgress, refetch } = useTimedVRTests();
   const progress = useTimedVRExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} refetch={refetch} />;
 }
 
 function DMList(props) {
-  const { tests, loading, error, syncing, syncProgress } = useTimedDMTests();
+  const { tests, loading, error, syncing, syncProgress, refetch } = useTimedDMTests();
   const progress = useTimedDMExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} refetch={refetch} />;
 }
 
 function QRList(props) {
-  const { tests, loading, error, syncing, syncProgress } = useTimedQRTests();
+  const { tests, loading, error, syncing, syncProgress, refetch } = useTimedQRTests();
   const progress = useTimedQRExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} refetch={refetch} />;
 }
 
 function SJList(props) {
-  const { tests, loading, error, syncing, syncProgress } = useTimedSJTests();
+  const { tests, loading, error, syncing, syncProgress, refetch } = useTimedSJTests();
   const progress = useTimedSJExamProgress();
-  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} />;
+  return <TimedListBody {...props} tests={tests} loading={loading} error={error} progress={progress} syncing={syncing} syncProgress={syncProgress} refetch={refetch} />;
 }
 
 const SECTION_COMPONENT = {
@@ -100,7 +101,7 @@ export default function TimedTestListScreen({ navigation, route }) {
   return <Component navigation={navigation} section={section} title={title} />;
 }
 
-function TimedListBody({ navigation, section, title, tests, loading, error, progress, syncing, syncProgress }) {
+function TimedListBody({ navigation, section, title, tests, loading, error, progress, syncing, syncProgress, refetch }) {
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
   const color = t.accent;
@@ -133,6 +134,9 @@ function TimedListBody({ navigation, section, title, tests, loading, error, prog
   }
 
   if (error) {
+    if (error?.isOffline) {
+      return <OfflineRetry onRetry={refetch} message="Connect to the internet to load timed tests." />;
+    }
     return (
       <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
         <Text style={styles.errorText}>{JSON.stringify(error)}</Text>

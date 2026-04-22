@@ -13,6 +13,7 @@ import {
 import { useRef, useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
+import { useNetwork } from '../context/NetworkContext';
 
 export default function AITutorModal({ visible, onClose, questionContext, tutorState, inputText, setInputText, creditsRemaining, isPro, onCreditUsed }) {
   const { messages, streamingContent, isStreaming, error, sendMessage: rawSendMessage } = tutorState;
@@ -26,6 +27,24 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
   const flatListRef = useRef(null);
   const insets = useSafeAreaInsets();
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  const { isOnline } = useNetwork();
+  const [connectionPill, setConnectionPill] = useState(null); // 'offline' | 'online' | null
+  const wasOfflineRef = useRef(false);
+  useEffect(() => {
+    if (!isOnline) {
+      wasOfflineRef.current = true;
+      setConnectionPill('offline');
+      return;
+    }
+    if (!wasOfflineRef.current) return;
+    setConnectionPill('online');
+    const timer = setTimeout(() => {
+      setConnectionPill(null);
+      wasOfflineRef.current = false;
+    }, 1800);
+    return () => clearTimeout(timer);
+  }, [isOnline]);
 
   useEffect(() => {
     const showEvent = Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow';
@@ -47,7 +66,7 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
 
   function handleSend() {
     const text = inputText.trim();
-    if (!text || isStreaming) return;
+    if (!text || isStreaming || !isOnline) return;
     setInputText('');
     sendMessage(text);
   }
@@ -105,24 +124,34 @@ export default function AITutorModal({ visible, onClose, questionContext, tutorS
           {/* Error banner */}
           {error && <ErrorBanner error={error} onUpgrade={onClose} />}
 
+          {/* Connection pill */}
+          {!error && connectionPill && (
+            <View style={[styles.connectionPill, connectionPill === 'online' ? styles.connectionPillOnline : styles.connectionPillOffline]}>
+              <Text style={styles.connectionPillText}>
+                {connectionPill === 'online' ? 'Back online' : 'Offline — reconnect to ask questions'}
+              </Text>
+            </View>
+          )}
+
           {/* Input */}
           {!error && (
             <View style={styles.inputRow}>
               <TextInput
-                style={styles.input}
+                style={[styles.input, !isOnline && styles.inputDisabled]}
                 value={inputText}
                 onChangeText={setInputText}
-                placeholder="Ask a question..."
+                placeholder={isOnline ? 'Ask a question...' : 'Offline'}
                 placeholderTextColor="#718096"
                 multiline
                 maxLength={500}
                 onSubmitEditing={handleSend}
                 submitBehavior="blurAndSubmit"
+                editable={isOnline}
               />
               <TouchableOpacity
-                style={[styles.sendBtn, (!inputText.trim() || isStreaming) && styles.sendBtnDisabled]}
+                style={[styles.sendBtn, (!inputText.trim() || isStreaming || !isOnline) && styles.sendBtnDisabled]}
                 onPress={handleSend}
-                disabled={!inputText.trim() || isStreaming}
+                disabled={!inputText.trim() || isStreaming || !isOnline}
               >
                 {isStreaming ? (
                   <ActivityIndicator size="small" color="#fff" />
@@ -478,5 +507,25 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     marginTop: 4,
+  },
+  connectionPill: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+  },
+  connectionPillOffline: {
+    backgroundColor: '#7f1d1d',
+  },
+  connectionPillOnline: {
+    backgroundColor: '#166534',
+  },
+  connectionPillText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+  },
+  inputDisabled: {
+    opacity: 0.5,
   },
 });

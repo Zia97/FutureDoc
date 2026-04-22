@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import SyncBanner from '../../components/SyncBanner';
+import OfflineRetry from '../../components/OfflineRetry';
 import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 import { useVerbalReasoningProgress } from '../../hooks/queries/useVerbalReasoningProgress';
 import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReasoningAttempts';
@@ -30,7 +31,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function VRQuestionListScreen({ navigation }) {
-  const { passages, flatQuestions, loading, error, syncing, syncProgress } = useVerbalReasoningPassages();
+  const { passages, flatQuestions, loading, error, syncing, syncProgress, refetch } = useVerbalReasoningPassages();
   const { progressMap, reload } = useVerbalReasoningProgress();
   const { localAnswers } = useVerbalReasoningAttempts();
   const { theme: t } = useTheme();
@@ -88,6 +89,9 @@ export default function VRQuestionListScreen({ navigation }) {
   }
 
   if (error) {
+    if (error?.isOffline) {
+      return <OfflineRetry onRetry={refetch} message="Connect to the internet to load passages." />;
+    }
     return (
       <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
         <Text style={styles.errorText}>{JSON.stringify(error)}</Text>

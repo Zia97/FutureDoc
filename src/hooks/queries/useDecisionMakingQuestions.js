@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -56,71 +56,76 @@ export function useDecisionMakingQuestions() {
     return () => { isMounted.current = false; };
   }, []);
 
-  useEffect(() => {
-    async function load() {
-      if (__DEV__) {
-        const enabled = await isPreviewEnabled('dm');
-        if (enabled) {
-          const data = require('../../dev/preview-dm.json');
-          if (data?.length > 0) {
-            setQuestions(mapQuestions(data));
-            setLoading(false);
-            return;
-          }
-        }
-      }
-
-      const cached = await getCached(SECTION);
-      const hasValidCache = cached?.data?.length > 0;
-
-      // Serve stale cache immediately so the user can start practising
-      if (hasValidCache) {
-        setQuestions(cached.data);
-        setLoading(false);
-      }
-
-      let versionRow;
-      try {
-        versionRow = await withRetry(() => db.getContentVersion(SECTION));
-      } catch (versionError) {
-        if (!hasValidCache) setError(versionError);
-        setLoading(false);
-        return;
-      }
-
-      // Cache is current — nothing to do
-      if (hasValidCache && cached.version === versionRow.version) {
-        setLoading(false);
-        return;
-      }
-
-      // Background refresh with paginated fetch
-      if (!isMounted.current) return;
-      setSyncing(true);
-      setSyncProgress({ loaded: 0, total: null });
-
-      try {
-        let pagesLoaded = 0;
-        const raw = await db.fetchAllDMQuestionsPaginated(() => {
-          pagesLoaded++;
-          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
-        });
-        const fresh = mapQuestions(raw);
-        if (isMounted.current) setQuestions(fresh);
-        await saveCache(SECTION, versionRow.version, fresh);
-      } catch (err) {
-        if (!hasValidCache && isMounted.current) setError(err);
-      } finally {
-        if (isMounted.current) {
-          setSyncing(false);
-          setSyncProgress(null);
+  const load = useCallback(async () => {
+    if (__DEV__) {
+      const enabled = await isPreviewEnabled('dm');
+      if (enabled) {
+        const data = require('../../dev/preview-dm.json');
+        if (data?.length > 0) {
+          setQuestions(mapQuestions(data));
           setLoading(false);
+          return;
         }
       }
     }
 
-    load();
+    const cached = await getCached(SECTION);
+    const hasValidCache = cached?.data?.length > 0;
+
+    if (hasValidCache) {
+      setQuestions(cached.data);
+      setLoading(false);
+    }
+
+    let versionRow;
+    try {
+      versionRow = await withRetry(() => db.getContentVersion(SECTION));
+    } catch (versionError) {
+      if (!hasValidCache) setError(versionError);
+      setLoading(false);
+      return;
+    }
+
+    if (hasValidCache && cached.version === versionRow.version) {
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    if (!isMounted.current) return;
+    setSyncing(true);
+    setSyncProgress({ loaded: 0, total: null });
+
+    try {
+      let pagesLoaded = 0;
+      const raw = await db.fetchAllDMQuestionsPaginated(() => {
+        pagesLoaded++;
+        if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+      });
+      const fresh = mapQuestions(raw);
+      if (isMounted.current) {
+        setQuestions(fresh);
+        setError(null);
+      }
+      await saveCache(SECTION, versionRow.version, fresh);
+    } catch (err) {
+      if (!hasValidCache && isMounted.current) setError(err);
+    } finally {
+      if (isMounted.current) {
+        setSyncing(false);
+        setSyncProgress(null);
+        setLoading(false);
+      }
+    }
   }, []);
 
-  return { questions, loading, error, syncing, syncProgress };
+  const refetch = useCallback(async () => {
+    setError(null);
+    setLoading(true);
+    await load();
+  }, [load]);
+
+  useEffect(() => { load(); }, [load]);
+
+  return { questions, loading, error, syncing, syncProgress, refetch };
 }

@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import SyncBanner from '../../components/SyncBanner';
+import OfflineRetry from '../../components/OfflineRetry';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningProgress } from '../../hooks/queries/useQuantitativeReasoningProgress';
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
@@ -30,7 +31,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function QRQuestionListScreen({ navigation }) {
-  const { sets, flatQuestions, loading, error, syncing, syncProgress } = useQuantitativeReasoningSets();
+  const { sets, flatQuestions, loading, error, syncing, syncProgress, refetch } = useQuantitativeReasoningSets();
   const { progressMap, reload } = useQuantitativeReasoningProgress();
   const { localAnswers } = useQuantitativeReasoningAttempts();
   const { theme: t } = useTheme();
@@ -86,6 +87,9 @@ export default function QRQuestionListScreen({ navigation }) {
   }
 
   if (error) {
+    if (error?.isOffline) {
+      return <OfflineRetry onRetry={refetch} message="Connect to the internet to load questions." />;
+    }
     return (
       <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
         <Text style={styles.errorText}>{JSON.stringify(error)}</Text>

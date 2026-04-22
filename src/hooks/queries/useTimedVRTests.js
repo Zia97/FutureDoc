@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { db } from '../../lib/dbQueries';
 import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
@@ -76,7 +76,7 @@ function ensureFlatQuestions(t) {
 export function useTimedVRTests() {
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error] = useState(null);
+  const [error, setError] = useState(null);
   const [syncing, setSyncing] = useState(false);
   const [syncProgress, setSyncProgress] = useState(null);
   const isMounted = useRef(true);
@@ -86,67 +86,77 @@ export function useTimedVRTests() {
     return () => { isMounted.current = false; };
   }, []);
 
-  useEffect(() => {
-    async function load() {
-      if (__DEV__) {
-        const enabled = await isPreviewEnabled('vr');
-        if (enabled) {
-          const data = require('../../dev/preview-vr-timed.json');
-          if (data?.length > 0) {
-            setTests(mapTests(data));
-            setLoading(false);
-            return;
-          }
-        }
-      }
-
-      const cached = await getCached(SECTION);
-      const hasValidCache = cached?.data?.length > 0;
-
-      if (hasValidCache) {
-        setTests(cached.data.map(ensureFlatQuestions));
-        setLoading(false);
-      }
-
-      let versionRow;
-      try {
-        versionRow = await withRetry(() => db.getContentVersion(SECTION));
-      } catch {
-        setLoading(false);
-        return;
-      }
-
-      if (hasValidCache && cached.version === versionRow.version) {
-        setLoading(false);
-        return;
-      }
-
-      if (!isMounted.current) return;
-      setSyncing(true);
-      setSyncProgress({ loaded: 0, total: null });
-
-      try {
-        let pagesLoaded = 0;
-        const rows = await db.fetchAllTimedVRTestsPaginated(() => {
-          pagesLoaded++;
-          if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
-        });
-        const mapped = mapTestsFromNested(rows);
-        await saveCache(SECTION, versionRow.version, mapped);
-        if (isMounted.current) setTests(mapped);
-      } catch (fetchErr) {
-        reportError('useTimedVRTests', fetchErr, { level: 'warning', extra: { note: 'fetch failed' } });
-      } finally {
-        if (isMounted.current) {
-          setSyncing(false);
-          setSyncProgress(null);
+  const load = useCallback(async () => {
+    if (__DEV__) {
+      const enabled = await isPreviewEnabled('vr');
+      if (enabled) {
+        const data = require('../../dev/preview-vr-timed.json');
+        if (data?.length > 0) {
+          setTests(mapTests(data));
           setLoading(false);
+          return;
         }
       }
     }
 
-    load();
+    const cached = await getCached(SECTION);
+    const hasValidCache = cached?.data?.length > 0;
+
+    if (hasValidCache) {
+      setTests(cached.data.map(ensureFlatQuestions));
+      setLoading(false);
+    }
+
+    let versionRow;
+    try {
+      versionRow = await withRetry(() => db.getContentVersion(SECTION));
+    } catch (versionError) {
+      if (!hasValidCache) setError(versionError);
+      setLoading(false);
+      return;
+    }
+
+    if (hasValidCache && cached.version === versionRow.version) {
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    if (!isMounted.current) return;
+    setSyncing(true);
+    setSyncProgress({ loaded: 0, total: null });
+
+    try {
+      let pagesLoaded = 0;
+      const rows = await db.fetchAllTimedVRTestsPaginated(() => {
+        pagesLoaded++;
+        if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+      });
+      const mapped = mapTestsFromNested(rows);
+      await saveCache(SECTION, versionRow.version, mapped);
+      if (isMounted.current) {
+        setTests(mapped);
+        setError(null);
+      }
+    } catch (fetchErr) {
+      reportError('useTimedVRTests', fetchErr, { level: 'warning', extra: { note: 'fetch failed' } });
+      if (!hasValidCache && isMounted.current) setError(fetchErr);
+    } finally {
+      if (isMounted.current) {
+        setSyncing(false);
+        setSyncProgress(null);
+        setLoading(false);
+      }
+    }
   }, []);
 
-  return { tests, loading, error, syncing, syncProgress };
+  const refetch = useCallback(async () => {
+    setError(null);
+    setLoading(true);
+    await load();
+  }, [load]);
+
+  useEffect(() => { load(); }, [load]);
+
+  return { tests, loading, error, syncing, syncProgress, refetch };
 }

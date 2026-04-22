@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
 import SectionQuestionList from '../../components/SectionQuestionList';
 import SyncBanner from '../../components/SyncBanner';
+import OfflineRetry from '../../components/OfflineRetry';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 import { useSituationalJudgementProgress } from '../../hooks/queries/useSituationalJudgementProgress';
 import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
@@ -30,7 +31,7 @@ const indicator = StyleSheet.create({
 });
 
 export default function SJScenarioListScreen({ navigation }) {
-  const { scenarios, flatQuestions, loading, error, syncing, syncProgress } = useSituationalJudgementScenarios();
+  const { scenarios, flatQuestions, loading, error, syncing, syncProgress, refetch } = useSituationalJudgementScenarios();
   const { progressMap, reload } = useSituationalJudgementProgress();
   const { localAnswers } = useSituationalJudgementAttempts();
   const { theme: t } = useTheme();
@@ -87,6 +88,9 @@ export default function SJScenarioListScreen({ navigation }) {
   }
 
   if (error) {
+    if (error?.isOffline) {
+      return <OfflineRetry onRetry={refetch} message="Connect to the internet to load scenarios." />;
+    }
     return (
       <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
         <Text style={styles.errorText}>{JSON.stringify(error)}</Text>
