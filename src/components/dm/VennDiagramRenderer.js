@@ -99,9 +99,10 @@ export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry
             key={`${lbl.region}-${i}`}
             x={lbl.x}
             y={lbl.y}
-            fill={t.text}
+            fill={lbl.kind === 'set' ? t.textSecondary : t.text}
             fontSize={lbl.fontSize}
-            fontWeight="600"
+            fontWeight={lbl.kind === 'set' ? '500' : '600'}
+            fontStyle={lbl.kind === 'set' ? 'italic' : 'normal'}
             textAnchor="middle"
             alignmentBaseline="central"
           >

@@ -2,79 +2,57 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle, Rect, Polygon, Ellipse } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { shapeToSvgSpec } from '../../utils/venn/shapes';
 
 const SIZE = 30;
 const MID = SIZE / 2;
-const R = 12;
 const STROKE_W = 2;
 
-function KeyShape({ shape, stroke }) {
-  const props = { stroke, strokeWidth: STROKE_W, fill: 'none' };
-
+// Per-shape (w, h) to pass into `shapeToSvgSpec` so the key swatch renders the
+// shape at its natural visual aspect inside a `SIZE × SIZE` box. Shapes with
+// internal stretching inside `shapeToSvgSpec` / `shapeToPolygon` (strips,
+// rectangle, parallelogram, arrows) are handed a roughly square input — the
+// stretch is applied inside those helpers so the same factor is used in the
+// diagram and the key. Inputs are scaled down from SIZE so the stretched
+// result still fits within the SIZE × SIZE swatch.
+function keyDims(shape) {
   switch (shape) {
-    case 'circle':
-      return <Circle cx={MID} cy={MID} r={R} {...props} />;
-    case 'oval':
-      return <Ellipse cx={MID} cy={MID} rx={R} ry={R * 0.65} {...props} />;
-    case 'square':
-      return <Rect x={MID - R} y={MID - R} width={R * 2} height={R * 2} {...props} />;
-    case 'rectangle':
-      return <Rect x={MID - R * 1.2} y={MID - R * 0.7} width={R * 2.4} height={R * 1.4} {...props} />;
-    case 'triangle': {
-      const pts = `${MID},${MID - R} ${MID - R},${MID + R} ${MID + R},${MID + R}`;
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'isosceles_triangle': {
-      const pts = `${MID},${MID - R} ${MID - R * 0.5},${MID + R} ${MID + R * 0.5},${MID + R}`;
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'diamond': {
-      const pts = `${MID},${MID - R} ${MID + R},${MID} ${MID},${MID + R} ${MID - R},${MID}`;
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'trapezoid': {
-      const tw = R * 0.55;
-      const bw = R;
-      const pts = `${MID - tw},${MID - R} ${MID + tw},${MID - R} ${MID + bw},${MID + R} ${MID - bw},${MID + R}`;
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'parallelogram': {
-      const sk = R * 0.25;
-      const w = R * 0.85;
-      const pts = `${MID - w + sk},${MID - R} ${MID + w + sk},${MID - R} ${MID + w - sk},${MID + R} ${MID - w - sk},${MID + R}`;
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'star': {
-      const pts = Array.from({ length: 10 }, (_, i) => {
-        const angle = (i * Math.PI) / 5 - Math.PI / 2;
-        const rad = i % 2 === 0 ? R : R * 0.4;
-        return `${MID + rad * Math.cos(angle)},${MID + rad * Math.sin(angle)}`;
-      }).join(' ');
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'pentagon': {
-      const pts = Array.from({ length: 5 }, (_, i) => {
-        const angle = (i * 2 * Math.PI) / 5 - Math.PI / 2;
-        return `${MID + R * Math.cos(angle)},${MID + R * Math.sin(angle)}`;
-      }).join(' ');
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'hexagon': {
-      const pts = Array.from({ length: 6 }, (_, i) => {
-        const angle = (i * 2 * Math.PI) / 6 - Math.PI / 2;
-        return `${MID + R * Math.cos(angle)},${MID + R * Math.sin(angle)}`;
-      }).join(' ');
-      return <Polygon points={pts} {...props} />;
-    }
-    case 'octagon': {
-      const pts = Array.from({ length: 8 }, (_, i) => {
-        const angle = (i * 2 * Math.PI) / 8 - Math.PI / 2;
-        return `${MID + R * Math.cos(angle)},${MID + R * Math.sin(angle)}`;
-      }).join(' ');
-      return <Polygon points={pts} {...props} />;
-    }
+    case 'horizontal_strip':
+      return { w: SIZE / 1.4, h: SIZE };
+    case 'vertical_strip':
+      return { w: SIZE, h: SIZE / 1.4 };
+    case 'right_arrow':
+    case 'left_arrow':
+      return { w: SIZE * 0.95, h: SIZE * 0.8 };
     default:
-      return <Circle cx={MID} cy={MID} r={R} {...props} />;
+      // `rectangle` relies on shapeToSvgSpec applying its 0.63 height squash;
+      // `parallelogram` relies on shapeToPolygon's internal ±0.85/±0.6 skew.
+      return { w: SIZE * 0.9, h: SIZE * 0.9 };
+  }
+}
+
+// Draws the same shape the baker drew, reusing `shapeToSvgSpec` so the key and
+// diagram can never drift. Any shape supported by `shapeToPolygon`/
+// `shapeToSvgSpec` in `src/utils/venn/shapes.js` is automatically supported
+// here.
+function KeyShape({ shape, stroke }) {
+  const { w, h } = keyDims(shape);
+  const spec = shapeToSvgSpec(shape, MID, MID, w, h, 0);
+  const props = { stroke, strokeWidth: STROKE_W, fill: 'none' };
+  switch (spec.kind) {
+    case 'circle':
+      return <Circle cx={spec.cx} cy={spec.cy} r={spec.r} {...props} />;
+    case 'ellipse':
+      return <Ellipse cx={spec.cx} cy={spec.cy} rx={spec.rx} ry={spec.ry} {...props} />;
+    case 'rect':
+      return <Rect x={spec.x} y={spec.y} width={spec.width} height={spec.height} {...props} />;
+    case 'polygon':
+      return <Polygon points={spec.points.map(p => `${p[0]},${p[1]}`).join(' ')} {...props} />;
+    default:
+      if (typeof __DEV__ !== 'undefined' && __DEV__) {
+        console.warn(`[VennDiagramKey] unsupported shape "${shape}" — falling back to circle`);
+      }
+      return <Circle cx={MID} cy={MID} r={SIZE * 0.4} {...props} />;
   }
 }
 
@@ -82,6 +60,13 @@ export default function VennDiagramKey({ sets }) {
   const { practiceTheme: t } = useTheme();
 
   if (!sets || sets.length === 0) return null;
+
+  // When every set uses the same shape (e.g. three circles), the legend adds
+  // no information — the student can't tell the circles apart via the key.
+  // In this case the diagram itself carries per-shape labels (handled by the
+  // baker), and the legend is suppressed.
+  const shapes = sets.map((s) => s.shape || 'circle');
+  if (shapes.length > 1 && new Set(shapes).size === 1) return null;
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgCard, borderColor: t.border }]}>

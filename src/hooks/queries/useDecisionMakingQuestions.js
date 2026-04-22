@@ -11,6 +11,7 @@ function mapQuestions(data) {
     id: q.id,
     title: q.title,
     type: q.type,
+    difficulty: q.difficulty ?? null,
     stem: q.stem,
     isFree: q.is_free ?? q.isFree ?? false,
     tableData: q.table_data,

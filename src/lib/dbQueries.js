@@ -74,6 +74,7 @@ class DatabaseService {
         id,
         title,
         type,
+        difficulty,
         stem,
         table_data,
         stimulus_diagram,

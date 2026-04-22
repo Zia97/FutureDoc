@@ -10,7 +10,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useSubscription } from '../context/SubscriptionContext';
 
-export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, getIsFree, routeName, navigation }) {
+export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, getIsFree, routeName, navigation, extraNavParams }) {
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
 
@@ -34,7 +34,7 @@ export default function SectionQuestionList({ items, getTitle, getStatus, getInd
                   navigation.navigate('Paywall');
                   return;
                 }
-                navigation.navigate(routeName, { index: navIndex });
+                navigation.navigate(routeName, { index: navIndex, ...(extraNavParams || {}) });
               }}
               activeOpacity={0.75}
             >

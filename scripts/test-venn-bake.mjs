@@ -12,6 +12,20 @@ import polygonClipping from 'polygon-clipping';
 import { computeLayout, MIN_FONT_SIZE } from '../src/utils/venn/layout.js';
 import { shapeToPolygon } from '../src/utils/venn/shapes.js';
 
+// Every shape supported by the baker + the VennDiagramKey. The key reuses
+// `shapeToSvgSpec` from shapes.js so there is ONE source of truth, but the
+// SUPPORTED_SHAPES list below is enumerated explicitly so a typo in a
+// vennConfig (e.g. "hexagn") fails fast instead of silently rendering as a
+// rectangle via the shapeToPolygon default branch.
+const SUPPORTED_SHAPES = new Set([
+  'circle', 'oval', 'vertical_oval',
+  'square', 'rectangle', 'horizontal_strip', 'vertical_strip',
+  'triangle', 'isosceles_triangle',
+  'diamond', 'trapezoid', 'parallelogram',
+  'pentagon', 'hexagon', 'octagon', 'star',
+  'right_arrow', 'left_arrow',
+]);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const ROOT = path.resolve(__dirname, '..');
@@ -55,7 +69,10 @@ function assertLabelClearances(baked, title, { strict }) {
       return shapeToPolygon(shape, s.cx, s.cy, w, h);
     }
     if (s.kind === 'rect') {
-      return shapeToPolygon('rectangle', s.x + s.width / 2, s.y + s.height / 2, s.width, s.height);
+      // Reconstruct using 'square' — a plain rect of the stored width/height.
+      // Using 'rectangle' would double-apply the 0.63 height squash that
+      // shapeToSvgSpec already baked in when the baker emitted this spec.
+      return shapeToPolygon('square', s.x + s.width / 2, s.y + s.height / 2, s.width, s.height);
     }
     if (s.kind === 'polygon') return s.points;
     return [];
@@ -64,6 +81,9 @@ function assertLabelClearances(baked, title, { strict }) {
   const issues = [];
   for (const lbl of baked.labels) {
     if (lbl.region === 'outside') continue;
+    // Set labels sit above each shape by design — they have no clearance
+    // from the shape outline because they're anchored to the top edge.
+    if (lbl.kind === 'set') continue;
     if (strict && lbl.fontSize < MIN_FONT_SIZE) {
       issues.push(`  label "${lbl.text}" (${lbl.region}) font ${lbl.fontSize} < ${MIN_FONT_SIZE}`);
     }
@@ -130,6 +150,25 @@ function run() {
       if (q.type !== 'venn_diagram') continue;
       const configs = findVennConfigs(q);
       for (const { vennConfig, role } of configs) {
+        // Shape parity: every shape used must be in the authoritative set so
+        // the key (VennDiagramKey) renders it the same way the baker does. An
+        // unknown shape would silently fall through to a rectangle and the key
+        // would draw a circle — the exact "legend doesn't match the diagram"
+        // bug this guard prevents.
+        for (const s of vennConfig.sets || []) {
+          const shape = s.shape || 'circle';
+          if (!SUPPORTED_SHAPES.has(shape)) {
+            total++;
+            failed++;
+            console.error(
+              `SHAPE: ${relPath} :: ${q.title || q.id} :: ${role}\n` +
+              `  set ${s.id} uses unsupported shape "${shape}" — ` +
+              `key and diagram would disagree. ` +
+              `Allowed: ${[...SUPPORTED_SHAPES].join(', ')}`,
+            );
+          }
+        }
+
         // Natural fallback bake — must always succeed, labels may be small,
         // but text must never sit *on* a shape outline.
         total++;

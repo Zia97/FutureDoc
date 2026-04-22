@@ -21,6 +21,26 @@ const MIN_LABEL_DIST = 14;          // polylabel distance floor (supports 12 px 
 const CANVAS_MARGIN = 12;
 const OUTSIDE_CORNER_MARGIN = 12;
 
+// Per-shape "set labels" — drawn above each shape when the vennConfig uses
+// duplicate shape strings (e.g. three circles). The student can't tell which
+// circle is which from the legend when shapes repeat, so we tag each shape
+// directly. Reserve vertical space above the shape bbox for the label.
+const SET_LABEL_FONT_SIZE = 12;
+const SET_LABEL_CLEARANCE = SET_LABEL_FONT_SIZE + PADDING * 2 + 4; // ~20 px
+
+// Returns whether the vennConfig has any duplicate shape strings, and whether
+// every set uses the same shape. The first triggers per-shape set labels on
+// the diagram; the second additionally suppresses the legend key.
+export function detectShapeAmbiguity(sets) {
+  if (!sets || sets.length < 2) return { hasDuplicates: false, allIdentical: false };
+  const shapes = sets.map(s => s.shape || 'circle');
+  const uniqueCount = new Set(shapes).size;
+  return {
+    hasDuplicates: uniqueCount < shapes.length,
+    allIdentical: uniqueCount === 1,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Region key parsing — same semantics as the old renderer.
 // ---------------------------------------------------------------------------
@@ -146,6 +166,7 @@ export function computeLayout(vennConfig, options = {}) {
   const topologyName = vennConfig.diagramLayout || vennConfig.topology || 'auto';
   const idToShape = Object.fromEntries(vennConfig.sets.map(s => [s.id, s.shape || 'circle']));
   const idToSet = Object.fromEntries(vennConfig.sets.map(s => [s.id, s]));
+  const ambiguity = detectShapeAmbiguity(vennConfig.sets);
 
   // Deterministic content hash → picks layout variant. Same question always
   // gets the same render for every user. Optional `layoutVariant` field on the
@@ -166,7 +187,7 @@ export function computeLayout(vennConfig, options = {}) {
   if (options.targetWidthPx) {
     return layoutAtPixelWidth({
       seedShapes, idToShape, idToSet, allSetIds, activeRegions,
-      topologyName, hash, targetWidthPx: options.targetWidthPx,
+      topologyName, hash, targetWidthPx: options.targetWidthPx, ambiguity,
     });
   }
 
@@ -199,11 +220,12 @@ export function computeLayout(vennConfig, options = {}) {
     labels: result.labels,
     activeRegions,
     idToSet,
+    ambiguity,
     diagnostics: { mode: 'natural', topology: topologyName, hash },
   });
 }
 
-function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, topologyName, hash, targetWidthPx }) {
+function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, topologyName, hash, targetWidthPx, ambiguity }) {
   // Compute the natural shape bbox at unit scale (no margin yet).
   const naturalBbox = computeBBox(seedShapes.map(s => ({ ...s, shape: idToShape[s.id] })));
   const naturalShapeWidth = naturalBbox.maxX - naturalBbox.minX;
@@ -239,12 +261,13 @@ function layoutAtPixelWidth({ seedShapes, idToShape, idToSet, allSetIds, activeR
     labels: result.labels,
     activeRegions,
     idToSet,
+    ambiguity,
     fixedWidth: targetWidthPx,
     diagnostics: { mode: 'pixel', topology: topologyName, targetWidthPx, pixelScale, hash },
   });
 }
 
-function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, diagnostics }) {
+function assembleCanvas({ placed, labels, activeRegions, idToSet, ambiguity, fixedWidth, diagnostics }) {
   const bbox = computeBBox(placed);
   const shapeW = bbox.maxX - bbox.minX;
   const shapeH = bbox.maxY - bbox.minY;
@@ -265,14 +288,44 @@ function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, di
     ? Math.max(CANVAS_MARGIN, OUTSIDE_CORNER_MARGIN + outsideHalfH + PADDING + 4)
     : CANVAS_MARGIN;
 
-  const naturalW = shapeW + 2 * CANVAS_MARGIN;
-  const naturalH = shapeH + 2 * vPad;
+  // When two or more sets share the same shape string, the legend can't tell
+  // the student which shape instance is which — we draw per-shape labels
+  // anchored outside each shape, choosing a side (top / bottom / left / right)
+  // that doesn't sit inside any other shape in the diagram.
+  const needsSetLabels = !!ambiguity?.hasDuplicates;
+  const setLabelsRaw = [];
+  if (needsSetLabels) {
+    for (const p of placed) {
+      const setObj = idToSet[p.id];
+      const text = setObj?.label || p.id;
+      const pos = pickSetLabelAnchor(p, placed, text.length);
+      setLabelsRaw.push({ id: p.id, text, x: pos.x, y: pos.y });
+    }
+  }
+
+  // Extend the bbox to include the text bounds of each set label. This lets
+  // the canvas grow in whichever direction labels end up (not just up).
+  let extMinX = bbox.minX, extMaxX = bbox.maxX;
+  let extMinY = bbox.minY, extMaxY = bbox.maxY;
+  for (const l of setLabelsRaw) {
+    const halfW = CHAR_WIDTH_RATIO * SET_LABEL_FONT_SIZE * l.text.length / 2;
+    const halfH = SET_LABEL_FONT_SIZE / 2;
+    if (l.x - halfW < extMinX) extMinX = l.x - halfW;
+    if (l.x + halfW > extMaxX) extMaxX = l.x + halfW;
+    if (l.y - halfH < extMinY) extMinY = l.y - halfH;
+    if (l.y + halfH > extMaxY) extMaxY = l.y + halfH;
+  }
+  const extW = extMaxX - extMinX;
+  const extH = extMaxY - extMinY;
+
+  const naturalW = extW + 2 * CANVAS_MARGIN;
+  const naturalH = extH + 2 * vPad;
   const canvas = {
     width:  Math.ceil(fixedWidth || naturalW),
     height: Math.ceil(naturalH),
   };
-  const offsetX = -bbox.minX + (canvas.width - shapeW) / 2;
-  const offsetY = -bbox.minY + (canvas.height - shapeH) / 2;
+  const offsetX = -extMinX + (canvas.width - extW) / 2;
+  const offsetY = -extMinY + (canvas.height - extH) / 2;
 
   const shapes = placed.map(p => ({
     id: p.id,
@@ -309,7 +362,26 @@ function assembleCanvas({ placed, labels, activeRegions, idToSet, fixedWidth, di
     });
   }
 
-  return { canvas, shapes, labels: finalLabels, diagnostics };
+  // Per-shape set labels — already positioned (above/below/left/right of each
+  // shape) before canvas assembly; just shift by the computed offsets.
+  for (const l of setLabelsRaw) {
+    finalLabels.push({
+      region: `set_${l.id}`,
+      kind: 'set',
+      text: l.text,
+      x: l.x + offsetX,
+      y: l.y + offsetY,
+      fontSize: SET_LABEL_FONT_SIZE,
+    });
+  }
+
+  return {
+    canvas,
+    shapes,
+    labels: finalLabels,
+    ambiguity: ambiguity || { hasDuplicates: false, allIdentical: false },
+    diagnostics,
+  };
 }
 
 // strict=true (default): every region must satisfy MIN_LABEL_DIST or layout fails.
@@ -414,6 +486,62 @@ function computeBBox(placed) {
   return { minX, minY, maxX, maxY };
 }
 
+// Ray-cast point-in-polygon test. ring is an open polyline (first ≠ last).
+function pointInPolygon(x, y, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    const intersect = ((yi > y) !== (yj > y)) &&
+      (x < ((xj - xi) * (y - yi)) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+function pointInAnyOtherShape(x, y, allPlaced, selfId) {
+  for (const q of allPlaced) {
+    if (q.id === selfId) continue;
+    const ring = shapeToPolygon(q.shape, q.cx, q.cy, q.w, q.h, q.rotation || 0);
+    if (pointInPolygon(x, y, ring)) return true;
+  }
+  return false;
+}
+
+// Pick an anchor point for a per-shape set label: try top, bottom, left, right
+// in that order and return the first position that does not sit inside any
+// other shape. Ensures labels for shapes in three_all_overlap etc. don't land
+// inside their overlapping neighbours.
+function pickSetLabelAnchor(p, allPlaced, textLen) {
+  const ring = shapeToPolygon(p.shape, p.cx, p.cy, p.w, p.h, p.rotation || 0);
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const [x, y] of ring) {
+    if (x < minX) minX = x;
+    if (x > maxX) maxX = x;
+    if (y < minY) minY = y;
+    if (y > maxY) maxY = y;
+  }
+
+  const halfTextW = CHAR_WIDTH_RATIO * SET_LABEL_FONT_SIZE * textLen / 2;
+  const halfTextH = SET_LABEL_FONT_SIZE / 2;
+  const vGap = PADDING + halfTextH + 2;
+  const hGap = PADDING + 2;
+
+  const candidates = [
+    { x: p.cx, y: minY - vGap },                         // top centre
+    { x: p.cx, y: maxY + vGap },                         // bottom centre
+    { x: minX - hGap - halfTextW, y: p.cy },             // left centre
+    { x: maxX + hGap + halfTextW, y: p.cy },             // right centre
+  ];
+
+  for (const c of candidates) {
+    if (!pointInAnyOtherShape(c.x, c.y, allPlaced, p.id)) {
+      return c;
+    }
+  }
+  return candidates[0]; // fallback: top centre even if it overlaps
+}
+
 // ---------------------------------------------------------------------------
 // Adaptive width layout — finds the minimum canvas width at which all region
 // labels reach MIN_FONT_SIZE. Simple diagrams stay compact; dense 5-set ones
@@ -438,12 +566,12 @@ function scaleShapesToWidth(seedShapes, idToShape, targetWidthPx) {
 }
 
 // Best-effort layout at an exact pixel width. Never throws; returns null on structural failure.
-function layoutWidthBestEffort({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, targetWidthPx }) {
+function layoutWidthBestEffort({ seedShapes, idToShape, idToSet, allSetIds, activeRegions, ambiguity, targetWidthPx }) {
   const placed = scaleShapesToWidth(seedShapes, idToShape, targetWidthPx);
   if (!placed) return null;
   const result = tryLayout(placed, activeRegions, allSetIds, { strict: false });
   if (!result.ok) return null;
-  return assembleCanvas({ placed: result.placed, labels: result.labels, activeRegions, idToSet, fixedWidth: targetWidthPx });
+  return assembleCanvas({ placed: result.placed, labels: result.labels, activeRegions, idToSet, ambiguity, fixedWidth: targetWidthPx });
 }
 
 function entryAllLabelsOk(entry) {
@@ -464,6 +592,7 @@ export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 300, maxWidthP
   const idToSet       = Object.fromEntries(vennConfig.sets.map(s => [s.id, s]));
   const hash          = stableHash({ sets: vennConfig.sets, regions: vennConfig.regions });
   const seedShapes    = seedPositions(allSetIds, vennConfig.regions, hash, vennConfig.layoutVariant, idToShape);
+  const ambiguity     = detectShapeAmbiguity(vennConfig.sets);
   const activeRegions = Object.entries(vennConfig.regions)
     .filter(([, v]) => v !== undefined && v !== null && v !== 0 && v !== '')
     .map(([key, value]) => ({ key, value: String(value) }));
@@ -481,7 +610,7 @@ export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 300, maxWidthP
     minWidthPx = Math.min(maxWidthPx, Math.max(minWidthPx, widthForMinHeight));
   }
 
-  const args = { seedShapes, idToShape, idToSet, allSetIds, activeRegions };
+  const args = { seedShapes, idToShape, idToSet, allSetIds, activeRegions, ambiguity };
 
   // Fast path: min width already satisfies all labels
   const atMin = layoutWidthBestEffort({ ...args, targetWidthPx: minWidthPx });

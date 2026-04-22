@@ -76,7 +76,7 @@ function buildVennAIContext(question) {
 }
 
 export default function DMQuestionScreen({ route }) {
-  const { index: initialIndex = 0 } = route?.params ?? {};
+  const { index: initialIndex = 0, filteredIndices = null } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState({});
@@ -96,19 +96,29 @@ export default function DMQuestionScreen({ route }) {
     }
   }, [cacheLoading]);
 
+  const navList = filteredIndices && filteredIndices.length > 0
+    ? filteredIndices
+    : questions.map((_, i) => i);
+  const navPosition = navList.indexOf(currentIndex);
+  const safePosition = navPosition === -1 ? 0 : navPosition;
+
   const question = questions[currentIndex];
-  const isFirst = currentIndex === 0;
-  const isLast = currentIndex === questions.length - 1;
+  const isFirst = safePosition <= 0;
+  const isLast = safePosition >= navList.length - 1;
 
   function goPrev() {
-    const prev = questions[currentIndex - 1];
-    if (!isFirst && prev && !canAccess(prev)) return;
-    if (!isFirst) setCurrentIndex((i) => i - 1);
+    if (isFirst) return;
+    const prevAbs = navList[safePosition - 1];
+    const prev = questions[prevAbs];
+    if (prev && !canAccess(prev)) return;
+    setCurrentIndex(prevAbs);
   }
   function goNext() {
-    const next = questions[currentIndex + 1];
-    if (!isLast && next && !canAccess(next)) return;
-    if (!isLast) setCurrentIndex((i) => i + 1);
+    if (isLast) return;
+    const nextAbs = navList[safePosition + 1];
+    const next = questions[nextAbs];
+    if (next && !canAccess(next)) return;
+    setCurrentIndex(nextAbs);
   }
 
   const panHandlers = useSwipeGesture(
@@ -151,7 +161,7 @@ export default function DMQuestionScreen({ route }) {
 
       <ScreenNavBar
         title={question.title}
-        meta={`Question ${currentIndex + 1} of ${questions.length}`}
+        meta={`Question ${safePosition + 1} of ${navList.length}`}
         onPrev={goPrev}
         onNext={goNext}
         isFirst={isFirst}

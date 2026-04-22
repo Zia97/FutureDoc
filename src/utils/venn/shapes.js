@@ -92,8 +92,15 @@ export function shapeToPolygon(shape, cx, cy, w, h, rotation = 0) {
       pts = sampleEllipse(cx, cy, r * 0.65, r);
       break;
     case 'square':
-    case 'rectangle':
       pts = rect(cx, cy, w, h);
+      break;
+    case 'rectangle':
+      // Stretch horizontally so a declared `rectangle` reads as a rectangle,
+      // not as a square — same visual aspect the key swatch draws. Keeping
+      // width = w means adjacent overlaps in chain/hub topologies still
+      // reach neighbouring shapes; squashing height to 0.63h makes the
+      // rectangle identity visually obvious vs `square` and vs polygons.
+      pts = rect(cx, cy, w, h * 0.75);
       break;
     case 'horizontal_strip':
       pts = rect(cx, cy, w * 1.4, h * 0.45);
@@ -165,14 +172,18 @@ export function shapeToSvgSpec(shape, cx, cy, w, h, rotation = 0) {
   if (!hasRotation) {
     if (shape === 'oval') return { kind: 'ellipse', cx, cy, rx: r, ry: r * 0.65 };
     if (shape === 'vertical_oval') return { kind: 'ellipse', cx, cy, rx: r * 0.65, ry: r };
-    if (shape === 'square' || shape === 'rectangle') {
+    if (shape === 'square') {
       return { kind: 'rect', x: cx - w / 2, y: cy - h / 2, width: w, height: h };
+    }
+    if (shape === 'rectangle') {
+      const rh = h * 0.75; // keep in sync with the rectangle case in shapeToPolygon above
+      return { kind: 'rect', x: cx - w / 2, y: cy - rh / 2, width: w, height: rh };
     }
     if (shape === 'horizontal_strip') {
       return { kind: 'rect', x: cx - w * 0.7, y: cy - h * 0.225, width: w * 1.4, height: h * 0.45 };
     }
     if (shape === 'vertical_strip') {
-      return { kind: 'rect', x: cx - w * 0.225, y: cy - h * 0.7, width: w * 0.45, height: h * 1.4 };
+      return { kind: 'rect', x: cx - w * 0.225, y: cy - h * 0.75, width: w * 0.45, height: h * 1.4 };
     }
   }
 
