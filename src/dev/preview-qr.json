@@ -1,32 +1,1953 @@
 [
   {
-    "id": "b2c3d4e5-0002-0002-0001-000000000003",
-    "title": "A&E Average Waiting Times",
+    "id": "practice-qr-set-01",
+    "title": "GP Training Region Allocations",
     "stimulus": {
       "type": "table",
+      "context": "1,800 applicants applied for GP training posts last year. The cross-tabulation below shows each applicant's home deanery (rows) and the deanery they were actually placed in (columns).",
       "data": {
-        "headers": ["Hospital", "Q1 (mins)", "Q2 (mins)", "Q3 (mins)"],
+        "headers": ["Home \\ Placement", "London", "Midlands", "North", "South West", "Home Total"],
         "rows": [
-          ["Northfield General", "84", "97", "112"],
-          ["St. Clare's", "76", "82", "79"],
-          ["Moorfield Royal", "103", "98", "91"],
-          ["Eastbrook Community", "68", "71", "88"]
+          ["London", "380", "60", "40", "20", "500"],
+          ["Midlands", "80", "290", "90", "40", "500"],
+          ["North", "20", "80", "360", "40", "500"],
+          ["South West", "20", "70", "10", "200", "300"],
+          ["Placement Total", "500", "500", "500", "300", "1800"]
         ]
       }
     },
     "quantitative_reasoning_questions": [
       {
-        "id": "b2c3d4e5-0002-0002-0002-000000000004",
-        "question_text": "What was the percentage increase in average A&E waiting time at Northfield General between Q1 and Q3?",
+        "id": "practice-qr-set-01-q1",
+        "question_text": "How many applicants from London were placed in the Midlands deanery?",
         "options": [
-          { "label": "A", "text": "25.0%" },
-          { "label": "B", "text": "28.0%" },
-          { "label": "C", "text": "33.3%" },
-          { "label": "D", "text": "36.4%" }
+          { "label": "A", "text": "40" },
+          { "label": "B", "text": "60" },
+          { "label": "C", "text": "80" },
+          { "label": "D", "text": "90" },
+          { "label": "E", "text": "290" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Find the London row (home deanery), then move across to the Midlands column (placement). The cell where they meet shows 60. The answer is 60.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-01-q2",
+        "question_text": "What percentage of trainees placed in the North come from a home deanery other than the North, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "18.0%" },
+          { "label": "B", "text": "26.0%" },
+          { "label": "C", "text": "28.0%" },
+          { "label": "D", "text": "72.0%" },
+          { "label": "E", "text": "77.8%" }
         ],
         "correct_answer": "C",
-        "answer_reason": "Percentage increase = (112 − 84) ÷ 84 × 100 = 28 ÷ 84 × 100 ≈ 33.3%. Option A (25%) results from incorrectly dividing by the Q3 value. Option B (28%) treats the raw difference as a percentage directly.",
-        "order_index": 0
+        "answer_reason": "Look at the North placement column. The total placed in North is 500, and 360 of those came from North themselves, so trainees who moved in from elsewhere = 500 − 360 = 140.\n\nStep 1: Non-North trainees placed in North = 500 − 360 = 140.\n\nStep 2: Percentage = 140 ÷ 500 × 100 = 28.0%.\n\nThe answer is 28.0%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-01-q3",
+        "question_text": "Which home deanery retained the highest percentage of its applicants in their own region?",
+        "options": [
+          { "label": "A", "text": "London" },
+          { "label": "B", "text": "Midlands" },
+          { "label": "C", "text": "North" },
+          { "label": "D", "text": "South West" },
+          { "label": "E", "text": "All four are equal" }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Retention rate = diagonal cell ÷ Home Total for each deanery.\n\nStep 1: London = 380 ÷ 500 = 76.0%.\n\nStep 2: Midlands = 290 ÷ 500 = 58.0%.\n\nStep 3: North = 360 ÷ 500 = 72.0%.\n\nStep 4: South West = 200 ÷ 300 = 66.7%.\n\nLondon has the highest retention rate at 76.0%. The answer is London.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-01-q4",
+        "question_text": "The deanery plans to add 150 new training posts to South West next year, filled by applicants in the same home-region proportions as this year's South West placement column. How many of the 150 posts would go to applicants from the Midlands?",
+        "options": [
+          { "label": "A", "text": "10" },
+          { "label": "B", "text": "15" },
+          { "label": "C", "text": "20" },
+          { "label": "D", "text": "30" },
+          { "label": "E", "text": "35" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The new posts follow the same home-region split as the current South West placement column.\n\nStep 1: From the South West column, the Midlands cell = 40 and the column total = 300.\n\nStep 2: Midlands proportion = 40 ÷ 300 = 2/15.\n\nStep 3: Apply to 150 new posts: 150 × 2/15 = 20.\n\nThe answer is 20.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-02",
+    "title": "Weekly GP Appointments by Age Group",
+    "stimulus": {
+      "type": "bar_chart",
+      "data": {
+        "title": "Weekly Appointments at Southgate Surgery (March 2026)",
+        "labels": ["0–17", "18–39", "40–64", "65+"],
+        "series": [
+          { "name": "Routine", "values": [140, 220, 280, 360] },
+          { "name": "Urgent", "values": [35, 55, 80, 120] }
+        ],
+        "yAxisLabel": "Number of Appointments",
+        "unit": ""
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-02-q1",
+        "question_text": "How many urgent appointments were recorded for patients aged 40–64?",
+        "options": [
+          { "label": "A", "text": "55" },
+          { "label": "B", "text": "65" },
+          { "label": "C", "text": "80" },
+          { "label": "D", "text": "120" },
+          { "label": "E", "text": "280" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Read the Urgent series at the 40–64 age group. The bar sits at 80. The answer is 80.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-02-q2",
+        "question_text": "What was the total number of appointments (routine + urgent) for the 18–39 age group?",
+        "options": [
+          { "label": "A", "text": "55" },
+          { "label": "B", "text": "220" },
+          { "label": "C", "text": "240" },
+          { "label": "D", "text": "275" },
+          { "label": "E", "text": "340" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Read both bars at the 18–39 age group and add them together: Routine = 220 and Urgent = 55, so total = 220 + 55 = 275. The answer is 275.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-02-q3",
+        "question_text": "What percentage of all routine appointments were for patients aged 65+, to the nearest whole percent?",
+        "options": [
+          { "label": "A", "text": "28%" },
+          { "label": "B", "text": "30%" },
+          { "label": "C", "text": "33%" },
+          { "label": "D", "text": "36%" },
+          { "label": "E", "text": "40%" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Step 1: Add up all routine appointments: 140 + 220 + 280 + 360 = 1,000.\n\nStep 2: 65+ routine appointments = 360.\n\nStep 3: Percentage = 360 ÷ 1,000 × 100 = 36%.\n\nThe answer is 36%.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-02-q4",
+        "question_text": "Which age group has the highest ratio of urgent to routine appointments?",
+        "options": [
+          { "label": "A", "text": "0–17" },
+          { "label": "B", "text": "18–39" },
+          { "label": "C", "text": "40–64" },
+          { "label": "D", "text": "65+" },
+          { "label": "E", "text": "0–17 and 18–39 equally" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Work out urgent ÷ routine for each age group.\n\nStep 1: 0–17 = 35 ÷ 140 = 0.250.\n\nStep 2: 18–39 = 55 ÷ 220 = 0.250.\n\nStep 3: 40–64 = 80 ÷ 280 = 0.286.\n\nStep 4: 65+ = 120 ÷ 360 = 0.333.\n\nThe 65+ group has the highest ratio. The answer is 65+.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-03",
+    "title": "HbA1c Levels Over Six Months",
+    "stimulus": {
+      "type": "line_graph",
+      "context": "HbA1c values are reported in mmol/mol. The NHS diabetes treatment target for most adults is below 48 mmol/mol.",
+      "data": {
+        "title": "HbA1c by Patient (Jan–Jun 2026)",
+        "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        "series": [
+          { "name": "Patient A", "values": [72, 68, 65, 60, 58, 55] },
+          { "name": "Patient B", "values": [85, 80, 78, 75, 72, 70] },
+          { "name": "Patient C", "values": [58, 60, 62, 64, 66, 68] }
+        ],
+        "yAxisLabel": "HbA1c (mmol/mol)",
+        "unit": ""
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-03-q1",
+        "question_text": "What was Patient A's HbA1c in April?",
+        "options": [
+          { "label": "A", "text": "55" },
+          { "label": "B", "text": "58" },
+          { "label": "C", "text": "60" },
+          { "label": "D", "text": "65" },
+          { "label": "E", "text": "75" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Read the Patient A line at April directly from the graph. The value is 60 mmol/mol. The answer is 60.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-03-q2",
+        "question_text": "By how much did Patient B's HbA1c fall between January and June?",
+        "options": [
+          { "label": "A", "text": "5" },
+          { "label": "B", "text": "10" },
+          { "label": "C", "text": "15" },
+          { "label": "D", "text": "17" },
+          { "label": "E", "text": "20" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Read the two endpoints on the Patient B line: January = 85 and June = 70. Fall = 85 − 70 = 15. The answer is 15.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-03-q3",
+        "question_text": "What was the percentage change in Patient C's HbA1c between January and June, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "10.0%" },
+          { "label": "B", "text": "14.7%" },
+          { "label": "C", "text": "17.2%" },
+          { "label": "D", "text": "20.0%" },
+          { "label": "E", "text": "47.2%" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Percentage change uses the original value as the denominator: (new − old) ÷ old × 100.\n\nStep 1: Patient C starts at 58 in January and ends at 68 in June.\n\nStep 2: (68 − 58) ÷ 58 × 100 = 10 ÷ 58 × 100 = 17.2%.\n\nThe answer is 17.2%.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-03-q4",
+        "question_text": "In which month was the gap between Patient A's and Patient C's HbA1c greatest?",
+        "options": [
+          { "label": "A", "text": "January" },
+          { "label": "B", "text": "February" },
+          { "label": "C", "text": "March" },
+          { "label": "D", "text": "May" },
+          { "label": "E", "text": "June" }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Work out |Patient A − Patient C| for each listed month.\n\nStep 1: January = |72 − 58| = 14.\n\nStep 2: February = |68 − 60| = 8.\n\nStep 3: March = |65 − 62| = 3.\n\nStep 4: May = |58 − 66| = 8.\n\nStep 5: June = |55 − 68| = 13.\n\nJanuary has the largest gap at 14. The answer is January.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-04",
+    "title": "UK Household Energy Sources (2025)",
+    "stimulus": {
+      "type": "pie_chart",
+      "data": {
+        "title": "UK Household Energy Mix 2025 (% of total)",
+        "segments": [
+          { "label": "Natural Gas", "value": 42 },
+          { "label": "Electricity", "value": 28 },
+          { "label": "Heating Oil", "value": 12 },
+          { "label": "Renewables", "value": 10 },
+          { "label": "Other", "value": 8 }
+        ],
+        "unit": "%"
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-04-q1",
+        "question_text": "What percentage of UK household energy in 2025 came from Natural Gas?",
+        "options": [
+          { "label": "A", "text": "8%" },
+          { "label": "B", "text": "12%" },
+          { "label": "C", "text": "28%" },
+          { "label": "D", "text": "42%" },
+          { "label": "E", "text": "58%" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Read the Natural Gas segment directly from the legend — 42%. The answer is 42%.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-04-q2",
+        "question_text": "In its simplest form, what is the ratio of Electricity to Renewables?",
+        "options": [
+          { "label": "A", "text": "5 : 14" },
+          { "label": "B", "text": "10 : 28" },
+          { "label": "C", "text": "14 : 5" },
+          { "label": "D", "text": "28 : 10" },
+          { "label": "E", "text": "42 : 10" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Electricity = 28 and Renewables = 10, so the ratio is 28 : 10. Divide both sides by 2 to simplify: 14 : 5. The stem names Electricity first, so it goes first. The answer is 14 : 5.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-04-q3",
+        "question_text": "If UK households used 250 TWh of energy in total in 2025, how much energy came from Heating Oil and Renewables combined?",
+        "options": [
+          { "label": "A", "text": "22 TWh" },
+          { "label": "B", "text": "30 TWh" },
+          { "label": "C", "text": "44 TWh" },
+          { "label": "D", "text": "55 TWh" },
+          { "label": "E", "text": "105 TWh" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Step 1: Add the two percentages: 12% + 10% = 22%.\n\nStep 2: Apply to the total: 22% of 250 TWh = 0.22 × 250 = 55 TWh.\n\nThe answer is 55 TWh.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-04-q4",
+        "question_text": "Suppose total household consumption falls by 8% by 2030 (from 250 TWh) while the Heating Oil share of the mix drops from 12% to 9%. To the nearest 0.1 TWh, how much energy will come from Heating Oil in 2030?",
+        "options": [
+          { "label": "A", "text": "18.8 TWh" },
+          { "label": "B", "text": "20.7 TWh" },
+          { "label": "C", "text": "22.5 TWh" },
+          { "label": "D", "text": "27.6 TWh" },
+          { "label": "E", "text": "30.0 TWh" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: 2030 total consumption = 250 × (1 − 0.08) = 250 × 0.92 = 230 TWh.\n\nStep 2: Heating Oil in 2030 = 9% of 230 = 0.09 × 230 = 20.7 TWh.\n\nThe answer is 20.7 TWh.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-05",
+    "title": "Weekday Ward Bed Occupancy",
+    "stimulus": {
+      "type": "table",
+      "context": "The table shows the number of occupied beds per ward, Monday to Friday. The weekly mean ICU occupancy for the week was 16 beds.",
+      "data": {
+        "headers": ["Ward", "Mon", "Tue", "Wed", "Thu", "Fri", "Capacity"],
+        "rows": [
+          ["Cardiology", "24", "22", "25", "23", "21", "30"],
+          ["ICU", "14", "16", "15", "?", "18", "20"],
+          ["Maternity", "18", "17", "19", "20", "16", "24"],
+          ["Oncology", "22", "24", "23", "25", "26", "28"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-05-q1",
+        "question_text": "How many Cardiology beds were occupied on Wednesday?",
+        "options": [
+          { "label": "A", "text": "19" },
+          { "label": "B", "text": "21" },
+          { "label": "C", "text": "23" },
+          { "label": "D", "text": "25" },
+          { "label": "E", "text": "30" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Find the Cardiology row, then the Wed column. The cell value is 25. The answer is 25.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-05-q2",
+        "question_text": "On which day was Oncology occupancy closest to its capacity (as a percentage)?",
+        "options": [
+          { "label": "A", "text": "Monday" },
+          { "label": "B", "text": "Tuesday" },
+          { "label": "C", "text": "Wednesday" },
+          { "label": "D", "text": "Thursday" },
+          { "label": "E", "text": "Friday" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Oncology capacity is 28. Work out occupancy ÷ 28 as a percentage for each day.\n\nStep 1: Mon = 22 ÷ 28 = 78.6%.\n\nStep 2: Tue = 24 ÷ 28 = 85.7%.\n\nStep 3: Wed = 23 ÷ 28 = 82.1%.\n\nStep 4: Thu = 25 ÷ 28 = 89.3%.\n\nStep 5: Fri = 26 ÷ 28 = 92.9%.\n\nFriday is the highest. The answer is Friday.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-05-q3",
+        "question_text": "What was the ICU occupancy on Thursday?",
+        "options": [
+          { "label": "A", "text": "13" },
+          { "label": "B", "text": "15" },
+          { "label": "C", "text": "17" },
+          { "label": "D", "text": "19" },
+          { "label": "E", "text": "20" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "This is a mean back-calculation: the missing value = (mean × number of days) − sum of the known days.\n\nStep 1: Total occupancy for the week = 16 × 5 = 80.\n\nStep 2: Sum of the known days = 14 + 16 + 15 + 18 = 63.\n\nStep 3: Thursday = 80 − 63 = 17.\n\nThe answer is 17.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-05-q4",
+        "question_text": "On Monday, what was total occupancy as a percentage of total capacity across all four wards, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "22.3%" },
+          { "label": "B", "text": "31.8%" },
+          { "label": "C", "text": "64.0%" },
+          { "label": "D", "text": "76.5%" },
+          { "label": "E", "text": "82.4%" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Step 1: Add up Monday occupancies across all four wards: 24 + 14 + 18 + 22 = 78.\n\nStep 2: Add up the capacities: 30 + 20 + 24 + 28 = 102.\n\nStep 3: Percentage = 78 ÷ 102 × 100 = 76.5%.\n\nThe answer is 76.5%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-06",
+    "title": "Gym Membership Tiers",
+    "stimulus": {
+      "type": "text",
+      "text": "A gym offers three membership tiers: Basic at £25 per month, Plus at £40 per month, and Elite at £65 per month. Every new member also pays a one-off joining fee of £30. Members who pay 12 months upfront receive a 15% discount on their monthly fees (but the joining fee is charged in full). All prices shown already include VAT at 20%."
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-06-q1",
+        "question_text": "Lisa joins the Plus tier and pays monthly. What is her total cost for her first 12 months?",
+        "options": [
+          { "label": "A", "text": "£480" },
+          { "label": "B", "text": "£498" },
+          { "label": "C", "text": "£510" },
+          { "label": "D", "text": "£528" },
+          { "label": "E", "text": "£540" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Twelve months at £40 = 12 × £40 = £480.\n\nStep 2: Add the one-off joining fee: £480 + £30 = £510.\n\nThe answer is £510.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-06-q2",
+        "question_text": "What is the VAT-exclusive monthly cost of the Elite tier, to the nearest penny?",
+        "options": [
+          { "label": "A", "text": "£52.00" },
+          { "label": "B", "text": "£54.17" },
+          { "label": "C", "text": "£55.00" },
+          { "label": "D", "text": "£57.20" },
+          { "label": "E", "text": "£78.00" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "This is a reverse percentage — the £65 already includes 20% VAT, so you divide by 1.2 to strip the VAT out. £65 ÷ 1.2 = £54.1667, which rounds to £54.17. The answer is £54.17.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-06-q3",
+        "question_text": "Tom pays 12 months upfront for the Basic tier. How much does he pay in total in his first year?",
+        "options": [
+          { "label": "A", "text": "£255" },
+          { "label": "B", "text": "£270" },
+          { "label": "C", "text": "£285" },
+          { "label": "D", "text": "£300" },
+          { "label": "E", "text": "£345" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Apply the 15% discount to the monthly rate: £25 × (1 − 0.15) = £25 × 0.85 = £21.25.\n\nStep 2: Twelve months at the discounted rate = 12 × £21.25 = £255.\n\nStep 3: Add the joining fee (not discounted): £255 + £30 = £285.\n\nThe answer is £285.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-06-q4",
+        "question_text": "Over 24 months, how much does a Plus member save by paying annually upfront (both years) compared to paying monthly throughout?",
+        "options": [
+          { "label": "A", "text": "£72" },
+          { "label": "B", "text": "£96" },
+          { "label": "C", "text": "£108" },
+          { "label": "D", "text": "£144" },
+          { "label": "E", "text": "£180" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "The joining fee is £30 in both cases, so it cancels — only the monthly-fee total differs.\n\nStep 1: Monthly route over 24 months = 24 × £40 = £960.\n\nStep 2: Upfront route (paying annually for both years) = 2 × (12 × £40 × 0.85) = 2 × £408 = £816.\n\nStep 3: Saving = £960 − £816 = £144.\n\nThe answer is £144.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-07",
+    "title": "UK Income Tax Bands",
+    "stimulus": {
+      "type": "table",
+      "context": "Income tax bands for the 2025/26 UK tax year. National Insurance is not included. Taxable income is income after any pension contributions have been deducted.",
+      "data": {
+        "headers": ["Taxable Income", "Rate", "Band Name"],
+        "rows": [
+          ["£0 – £12,570", "0%", "Personal Allowance"],
+          ["£12,571 – £50,270", "20%", "Basic Rate"],
+          ["£50,271 – £125,140", "40%", "Higher Rate"],
+          ["Over £125,140", "45%", "Additional Rate"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-07-q1",
+        "question_text": "Alice earns £38,500 in taxable income. How much income tax does she pay for the year?",
+        "options": [
+          { "label": "A", "text": "£4,000" },
+          { "label": "B", "text": "£5,186" },
+          { "label": "C", "text": "£7,700" },
+          { "label": "D", "text": "£12,000" },
+          { "label": "E", "text": "£15,400" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: The first £12,570 is tax-free, so the taxable amount in the Basic band = £38,500 − £12,570 = £25,930.\n\nStep 2: All of this falls in the 20% band (the ceiling is £50,270), so tax = £25,930 × 0.20 = £5,186.\n\nThe answer is £5,186.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-07-q2",
+        "question_text": "Ben earns £75,000 in taxable income. How much income tax does he pay for the year?",
+        "options": [
+          { "label": "A", "text": "£15,000" },
+          { "label": "B", "text": "£16,792" },
+          { "label": "C", "text": "£17,432" },
+          { "label": "D", "text": "£25,270" },
+          { "label": "E", "text": "£30,000" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Apply each band's rate only to the slice of income that sits inside that band.\n\nStep 1: Basic band — 20% on the slice from £12,571 to £50,270: (£50,270 − £12,570) × 0.20 = £37,700 × 0.20 = £7,540.\n\nStep 2: Higher band — 40% on the slice from £50,271 to £75,000: (£75,000 − £50,270) × 0.40 = £24,730 × 0.40 = £9,892.\n\nStep 3: Total tax = £7,540 + £9,892 = £17,432.\n\nThe answer is £17,432.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-07-q3",
+        "question_text": "Carol's salary rises from £48,000 to £53,000. How much extra income tax does she pay on the £5,000 rise?",
+        "options": [
+          { "label": "A", "text": "£1,000" },
+          { "label": "B", "text": "£1,092" },
+          { "label": "C", "text": "£1,546" },
+          { "label": "D", "text": "£2,000" },
+          { "label": "E", "text": "£2,250" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The rise crosses the £50,270 threshold, so part of the £5,000 is taxed at 20% and part at 40%.\n\nStep 1: From £48,000 up to £50,270 = £2,270 taxed at 20% = £2,270 × 0.20 = £454.\n\nStep 2: From £50,270 up to £53,000 = £2,730 taxed at 40% = £2,730 × 0.40 = £1,092.\n\nStep 3: Extra tax on the rise = £454 + £1,092 = £1,546.\n\nThe answer is £1,546.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-07-q4",
+        "question_text": "Dan earns £130,000 in taxable income. What percentage of his income does he pay in income tax, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "22.4%" },
+          { "label": "B", "text": "26.0%" },
+          { "label": "C", "text": "30.5%" },
+          { "label": "D", "text": "40.0%" },
+          { "label": "E", "text": "45.0%" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Dan's income crosses all four bands, so work through each one in turn.\n\nStep 1: Basic band — £37,700 × 0.20 = £7,540.\n\nStep 2: Higher band — (£125,140 − £50,270) × 0.40 = £74,870 × 0.40 = £29,948.\n\nStep 3: Additional band — (£130,000 − £125,140) × 0.45 = £4,860 × 0.45 = £2,187.\n\nStep 4: Total tax = £7,540 + £29,948 + £2,187 = £39,675.\n\nStep 5: Effective rate = £39,675 ÷ £130,000 × 100 = 30.5%.\n\nThe answer is 30.5%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-08",
+    "title": "Quarterly Revenue and Net Profit/Loss",
+    "stimulus": {
+      "type": "bar_chart",
+      "context": "Profit margin (%) = Net Profit ÷ Revenue × 100.",
+      "data": {
+        "title": "Quarterly Revenue and Net P/L (£000s)",
+        "labels": ["Q1", "Q2", "Q3", "Q4", "Q5"],
+        "series": [
+          { "name": "Revenue", "values": [120, 95, 140, 160, 180] },
+          { "name": "Net P/L", "values": [15, -8, 20, -5, 35] }
+        ],
+        "yAxisLabel": "Amount (£000s)",
+        "unit": "£"
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-08-q1",
+        "question_text": "What was the revenue in Q3?",
+        "options": [
+          { "label": "A", "text": "£95,000" },
+          { "label": "B", "text": "£120,000" },
+          { "label": "C", "text": "£140,000" },
+          { "label": "D", "text": "£160,000" },
+          { "label": "E", "text": "£180,000" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Read the Revenue bar at Q3. It reaches 140 on the £000s scale, which means £140,000. The answer is £140,000.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-08-q2",
+        "question_text": "In which quarter did the business record its largest loss?",
+        "options": [
+          { "label": "A", "text": "Q1" },
+          { "label": "B", "text": "Q2" },
+          { "label": "C", "text": "Q3" },
+          { "label": "D", "text": "Q4" },
+          { "label": "E", "text": "Q5" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Losses show as bars below the zero line on the Net P/L series. Q2 is −£8,000 and Q4 is −£5,000; the other quarters are in profit. |−8| > |−5|, so Q2 is the larger loss. The answer is Q2.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-08-q3",
+        "question_text": "What was the profit margin in Q5, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "5.1%" },
+          { "label": "B", "text": "19.4%" },
+          { "label": "C", "text": "21.9%" },
+          { "label": "D", "text": "35.0%" },
+          { "label": "E", "text": "57.1%" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Use the formula given under the chart: profit margin = profit ÷ revenue × 100. Q5 profit = 35 and Q5 revenue = 180 (both in £000s, so the ratio is unit-free). 35 ÷ 180 × 100 = 19.4%. The answer is 19.4%.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-08-q4",
+        "question_text": "Across all five quarters, what was the cumulative net profit/loss as a percentage of cumulative revenue, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "4.3%" },
+          { "label": "B", "text": "8.2%" },
+          { "label": "C", "text": "10.0%" },
+          { "label": "D", "text": "11.9%" },
+          { "label": "E", "text": "13.5%" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: Add all five quarters' Net P/L, keeping the signs: 15 + (−8) + 20 + (−5) + 35 = 57 (£000s).\n\nStep 2: Add all five quarters' Revenue: 120 + 95 + 140 + 160 + 180 = 695 (£000s).\n\nStep 3: Cumulative margin = 57 ÷ 695 × 100 = 8.2%.\n\nThe answer is 8.2%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-09",
+    "title": "Two-Year Fixed-Rate Mortgage Products",
+    "stimulus": {
+      "type": "multi",
+      "items": [
+        {
+          "type": "text",
+          "text": "A borrower is comparing three 2-year fixed-rate mortgage products. Interest is compounded annually — each year's interest is calculated on the balance at the start of that year and added to the balance. Assume interest-only (no capital repayments) over the 2-year fix. Compound formula: Final balance = Initial × (1 + rate)^years."
+        },
+        {
+          "type": "table",
+          "data": {
+            "headers": ["Product", "Annual Rate", "Arrangement Fee"],
+            "rows": [
+              ["Alpha Fixed 2", "4.50%", "£999"],
+              ["Beta Fixed 2", "4.25%", "£1,499"],
+              ["Gamma Fixed 2", "4.80%", "£499"]
+            ]
+          }
+        }
+      ]
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-09-q1",
+        "question_text": "On a £200,000 loan taken on Alpha Fixed 2, what is the outstanding balance after 2 years (before the arrangement fee), to the nearest £1?",
+        "options": [
+          { "label": "A", "text": "£209,000" },
+          { "label": "B", "text": "£218,000" },
+          { "label": "C", "text": "£218,405" },
+          { "label": "D", "text": "£218,450" },
+          { "label": "E", "text": "£220,900" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Use the compound formula from above the table: Final = Initial × (1 + rate)^years.\n\nStep 1: 1.045² = 1.092025.\n\nStep 2: 200,000 × 1.092025 = £218,405.\n\nThe answer is £218,405.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-09-q2",
+        "question_text": "How much more is Beta's arrangement fee than Alpha's?",
+        "options": [
+          { "label": "A", "text": "£250" },
+          { "label": "B", "text": "£500" },
+          { "label": "C", "text": "£1,000" },
+          { "label": "D", "text": "£1,499" },
+          { "label": "E", "text": "£2,498" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Read the two fees from the table: Beta = £1,499 and Alpha = £999. Difference = £1,499 − £999 = £500. The answer is £500.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-09-q3",
+        "question_text": "On a £180,000 loan using Gamma Fixed 2, what is the outstanding balance after 2 years (before the arrangement fee), to the nearest £1?",
+        "options": [
+          { "label": "A", "text": "£196,560" },
+          { "label": "B", "text": "£197,280" },
+          { "label": "C", "text": "£197,695" },
+          { "label": "D", "text": "£198,360" },
+          { "label": "E", "text": "£199,080" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Apply the compound formula: Final = 180,000 × 1.048².\n\nStep 1: 1.048² = 1.098304.\n\nStep 2: 180,000 × 1.098304 = £197,694.72, which rounds to £197,695.\n\nThe answer is £197,695.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-09-q4",
+        "question_text": "On a £150,000 loan over 2 years, which product has the lowest total cost (outstanding balance after 2 years plus the arrangement fee)?",
+        "options": [
+          { "label": "A", "text": "Alpha Fixed 2" },
+          { "label": "B", "text": "Beta Fixed 2" },
+          { "label": "C", "text": "Gamma Fixed 2" },
+          { "label": "D", "text": "Alpha and Beta equally" },
+          { "label": "E", "text": "Can't Tell" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Work out the balance + fee for each product on a £150,000 loan.\n\nStep 1: Alpha = 150,000 × 1.045² + 999 = 163,803.75 + 999 = £164,802.75.\n\nStep 2: Beta = 150,000 × 1.0425² + 1,499 = 163,020.94 + 1,499 = £164,519.94.\n\nStep 3: Gamma = 150,000 × 1.048² + 499 = 164,745.60 + 499 = £165,244.60.\n\nBeta is the cheapest, about £283 less than Alpha. The answer is Beta Fixed 2.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-10",
+    "title": "Compound Interest Savings Account",
+    "stimulus": {
+      "type": "text",
+      "text": "A savings account pays interest at an Annual Equivalent Rate (AER) of 4.00%. Interest compounds annually — each year's interest is calculated on the new balance. A customer deposits £5,000 on 1 January and makes no further deposits or withdrawals. Compound formula: Final balance = Initial × (1 + rate)^years."
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-10-q1",
+        "question_text": "How much interest does the account earn in the first full year?",
+        "options": [
+          { "label": "A", "text": "£100" },
+          { "label": "B", "text": "£150" },
+          { "label": "C", "text": "£200" },
+          { "label": "D", "text": "£400" },
+          { "label": "E", "text": "£500" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Year 1 interest = balance × rate = £5,000 × 4% = £5,000 × 0.04 = £200. The answer is £200.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-10-q2",
+        "question_text": "What is the balance at the end of year 3, to the nearest £1?",
+        "options": [
+          { "label": "A", "text": "£5,400" },
+          { "label": "B", "text": "£5,600" },
+          { "label": "C", "text": "£5,624" },
+          { "label": "D", "text": "£5,640" },
+          { "label": "E", "text": "£6,000" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Apply the compound formula: balance = 5,000 × 1.04³.\n\nStep 1: 1.04³ = 1.124864.\n\nStep 2: 5,000 × 1.124864 = £5,624.32, which rounds to £5,624.\n\nThe answer is £5,624.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-10-q3",
+        "question_text": "Over 5 years, by how much does the compound-interest return exceed the simple-interest return on this account, to the nearest £1?",
+        "options": [
+          { "label": "A", "text": "£20" },
+          { "label": "B", "text": "£50" },
+          { "label": "C", "text": "£83" },
+          { "label": "D", "text": "£125" },
+          { "label": "E", "text": "£250" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Simple interest over 5 years = 5,000 × 0.04 × 5 = £1,000.\n\nStep 2: Compound balance = 5,000 × 1.04⁵ = 5,000 × 1.2166529 = £6,083.26, so compound interest = £6,083.26 − £5,000 = £1,083.26.\n\nStep 3: Difference = £1,083.26 − £1,000 = £83.26, which rounds to £83.\n\nThe answer is £83.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-10-q4",
+        "question_text": "After how many complete years does the balance first exceed £6,000?",
+        "options": [
+          { "label": "A", "text": "3 years" },
+          { "label": "B", "text": "4 years" },
+          { "label": "C", "text": "5 years" },
+          { "label": "D", "text": "6 years" },
+          { "label": "E", "text": "10 years" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Grow £5,000 by 1.04 each year until the balance crosses £6,000.\n\nStep 1: Year 1 = 5,000 × 1.04 = £5,200.\n\nStep 2: Year 2 = 5,200 × 1.04 = £5,408.\n\nStep 3: Year 3 = 5,408 × 1.04 = £5,624.32.\n\nStep 4: Year 4 = 5,624.32 × 1.04 = £5,849.29.\n\nStep 5: Year 5 = 5,849.29 × 1.04 = £6,083.26 — first time above £6,000.\n\nThe answer is 5 years.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-11",
+    "title": "UK Rail Fares from London",
+    "stimulus": {
+      "type": "table",
+      "data": {
+        "headers": ["Destination", "Distance (miles)", "Anytime Return (£)", "Off-Peak Return (£)", "Advance Single from (£)"],
+        "rows": [
+          ["Birmingham", "121", "220", "98", "34"],
+          ["Manchester", "202", "386", "152", "55"],
+          ["Edinburgh", "393", "510", "210", "65"],
+          ["Bristol", "118", "245", "110", "42"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-11-q1",
+        "question_text": "What is the Off-Peak Return fare to Manchester?",
+        "options": [
+          { "label": "A", "text": "£55" },
+          { "label": "B", "text": "£98" },
+          { "label": "C", "text": "£152" },
+          { "label": "D", "text": "£220" },
+          { "label": "E", "text": "£386" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Find the Manchester row, then the Off-Peak Return column. The cell reads £152. The answer is £152.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-11-q2",
+        "question_text": "What percentage saving does the Off-Peak Return give on Edinburgh versus the Anytime Return, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "41.2%" },
+          { "label": "B", "text": "52.4%" },
+          { "label": "C", "text": "58.8%" },
+          { "label": "D", "text": "71.4%" },
+          { "label": "E", "text": "142.9%" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Percentage saving = (Anytime − Off-Peak) ÷ Anytime × 100, using the original Anytime price as the denominator.\n\nStep 1: Saving in £ = 510 − 210 = 300.\n\nStep 2: Percentage = 300 ÷ 510 × 100 = 58.8%.\n\nThe answer is 58.8%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-11-q3",
+        "question_text": "A family of 2 adults and 2 children travel London to Bristol and back on Off-Peak Returns. Children pay half the adult Off-Peak Return fare. What is the total fare for the family?",
+        "options": [
+          { "label": "A", "text": "£220" },
+          { "label": "B", "text": "£275" },
+          { "label": "C", "text": "£330" },
+          { "label": "D", "text": "£385" },
+          { "label": "E", "text": "£440" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Adult Off-Peak Return to Bristol = £110.\n\nStep 2: Two adults: 2 × £110 = £220.\n\nStep 3: Child fare = £110 ÷ 2 = £55, and two children = 2 × £55 = £110.\n\nStep 4: Total = £220 + £110 = £330.\n\nThe answer is £330.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-11-q4",
+        "question_text": "For Edinburgh, how much cheaper per mile is an Advance Single than half an Anytime Return (the one-way equivalent), to the nearest 0.1p per mile?",
+        "options": [
+          { "label": "A", "text": "11.2p per mile" },
+          { "label": "B", "text": "16.5p per mile" },
+          { "label": "C", "text": "48.4p per mile" },
+          { "label": "D", "text": "64.9p per mile" },
+          { "label": "E", "text": "81.4p per mile" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Anytime one-way = £510 ÷ 2 = £255.\n\nStep 2: Anytime per mile = 255 ÷ 393 = £0.6489 = 64.9p per mile.\n\nStep 3: Advance Single per mile = 65 ÷ 393 = £0.1654 = 16.5p per mile.\n\nStep 4: Difference = 64.9 − 16.5 = 48.4p per mile.\n\nThe answer is 48.4p per mile.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-12",
+    "title": "Multi-Leg Drive: Norwich to Aberystwyth",
+    "stimulus": {
+      "type": "text",
+      "text": "Maria drives from Norwich to Aberystwyth via Birmingham. The first leg, Norwich to Birmingham, is 180 miles and she averages 60 mph. She takes a 30-minute lunch break in Birmingham. The second leg, Birmingham to Aberystwyth, is 140 miles and she averages 35 mph. [1 mile = 1.6 km]"
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-12-q1",
+        "question_text": "How long does the Norwich to Birmingham leg take?",
+        "options": [
+          { "label": "A", "text": "2 h 30 m" },
+          { "label": "B", "text": "3 h 00 m" },
+          { "label": "C", "text": "3 h 15 m" },
+          { "label": "D", "text": "3 h 30 m" },
+          { "label": "E", "text": "3 h 45 m" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Time = distance ÷ speed = 180 ÷ 60 = 3.0 hours, which is exactly 3 h 00 m. The answer is 3 h 00 m.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-12-q2",
+        "question_text": "What is the total driving distance of the two legs combined, in kilometres?",
+        "options": [
+          { "label": "A", "text": "320 km" },
+          { "label": "B", "text": "410 km" },
+          { "label": "C", "text": "480 km" },
+          { "label": "D", "text": "512 km" },
+          { "label": "E", "text": "640 km" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Step 1: Total miles = 180 + 140 = 320.\n\nStep 2: Convert using the stated 1 mile = 1.6 km: 320 × 1.6 = 512 km.\n\nThe answer is 512 km.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-12-q3",
+        "question_text": "What is Maria's total journey time from leaving Norwich to arriving in Aberystwyth?",
+        "options": [
+          { "label": "A", "text": "6 h 30 m" },
+          { "label": "B", "text": "6 h 50 m" },
+          { "label": "C", "text": "7 h 00 m" },
+          { "label": "D", "text": "7 h 15 m" },
+          { "label": "E", "text": "7 h 30 m" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Step 1: Leg 1 time = 180 ÷ 60 = 3.0 h.\n\nStep 2: Lunch break = 30 m = 0.5 h.\n\nStep 3: Leg 2 time = 140 ÷ 35 = 4.0 h.\n\nStep 4: Total = 3.0 + 0.5 + 4.0 = 7.5 h = 7 h 30 m.\n\nThe answer is 7 h 30 m.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-12-q4",
+        "question_text": "What is Maria's average driving speed across the two legs (ignoring the break), to the nearest mph?",
+        "options": [
+          { "label": "A", "text": "43 mph" },
+          { "label": "B", "text": "46 mph" },
+          { "label": "C", "text": "47.5 mph" },
+          { "label": "D", "text": "48 mph" },
+          { "label": "E", "text": "50 mph" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Average speed must use total distance ÷ total driving time (never the mean of the two speeds).\n\nStep 1: Total distance = 180 + 140 = 320 miles.\n\nStep 2: Total driving time = 3.0 + 4.0 = 7.0 hours (the lunch break is excluded).\n\nStep 3: Average speed = 320 ÷ 7.0 = 45.7 mph, which rounds to 46 mph.\n\nThe answer is 46 mph.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-13",
+    "title": "Daily Commute Times",
+    "stimulus": {
+      "type": "line_graph",
+      "data": {
+        "title": "Commute Time by Day (minutes)",
+        "labels": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+        "series": [
+          { "name": "Emma", "values": [35, 48, 42, 55, 38] },
+          { "name": "Jake", "values": [52, 45, 50, 48, 46] }
+        ],
+        "yAxisLabel": "Minutes",
+        "unit": ""
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-13-q1",
+        "question_text": "What was Emma's commute time on Wednesday?",
+        "options": [
+          { "label": "A", "text": "35 min" },
+          { "label": "B", "text": "38 min" },
+          { "label": "C", "text": "42 min" },
+          { "label": "D", "text": "48 min" },
+          { "label": "E", "text": "55 min" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Read the Emma line at Wednesday directly — 42 minutes. The answer is 42 min.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-13-q2",
+        "question_text": "What was Jake's mean commute time across the five days?",
+        "options": [
+          { "label": "A", "text": "42.0 min" },
+          { "label": "B", "text": "46.0 min" },
+          { "label": "C", "text": "48.2 min" },
+          { "label": "D", "text": "50.0 min" },
+          { "label": "E", "text": "55.0 min" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Mean = sum of values ÷ number of values.\n\nStep 1: Sum Jake's times: 52 + 45 + 50 + 48 + 46 = 241.\n\nStep 2: Mean = 241 ÷ 5 = 48.2 minutes.\n\nThe answer is 48.2 min.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-13-q3",
+        "question_text": "On how many of the five days was Emma's commute longer than Jake's?",
+        "options": [
+          { "label": "A", "text": "0 days" },
+          { "label": "B", "text": "1 day" },
+          { "label": "C", "text": "2 days" },
+          { "label": "D", "text": "3 days" },
+          { "label": "E", "text": "4 days" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Compare Emma's and Jake's times day by day.\n\nStep 1: Mon — Emma 35 vs Jake 52 → no.\n\nStep 2: Tue — Emma 48 vs Jake 45 → yes.\n\nStep 3: Wed — Emma 42 vs Jake 50 → no.\n\nStep 4: Thu — Emma 55 vs Jake 48 → yes.\n\nStep 5: Fri — Emma 38 vs Jake 46 → no.\n\nEmma's commute was longer on two days (Tuesday and Thursday). The answer is 2 days.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-13-q4",
+        "question_text": "By what percentage did Emma's commute time change from Monday to Thursday, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "36.4%" },
+          { "label": "B", "text": "57.1%" },
+          { "label": "C", "text": "63.6%" },
+          { "label": "D", "text": "133.3%" },
+          { "label": "E", "text": "157.1%" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Percentage change uses the original value (Monday) as the denominator: (new − old) ÷ old × 100.\n\nStep 1: Change = 55 − 35 = 20 minutes.\n\nStep 2: Percentage = 20 ÷ 35 × 100 = 57.1%.\n\nThe answer is 57.1%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-14",
+    "title": "Car Fuel Efficiency Comparison",
+    "stimulus": {
+      "type": "multi",
+      "items": [
+        {
+          "type": "text",
+          "text": "Combined miles per gallon (mpg) measures a car's fuel efficiency. [1 UK gallon = 4.546 litres]"
+        },
+        {
+          "type": "table",
+          "data": {
+            "headers": ["Model", "Engine Size", "Combined mpg", "CO₂ (g/km)"],
+            "rows": [
+              ["Zephyr 1.5", "1.5 L", "48", "125"],
+              ["Gale 2.0", "2.0 L", "36", "155"],
+              ["Mistral Hybrid", "1.6 L", "62", "90"],
+              ["Breeze 1.2", "1.2 L", "55", "110"]
+            ]
+          }
+        }
+      ]
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-14-q1",
+        "question_text": "Which car has the highest combined mpg?",
+        "options": [
+          { "label": "A", "text": "Zephyr 1.5" },
+          { "label": "B", "text": "Gale 2.0" },
+          { "label": "C", "text": "Mistral Hybrid" },
+          { "label": "D", "text": "Breeze 1.2" },
+          { "label": "E", "text": "Mistral Hybrid and Breeze 1.2 equally" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Scan the Combined mpg column for the largest value: Zephyr 48, Gale 36, Mistral 62, Breeze 55. Mistral Hybrid is highest at 62 mpg. The answer is Mistral Hybrid.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-14-q2",
+        "question_text": "How many litres of fuel does the Gale 2.0 use over 180 miles?",
+        "options": [
+          { "label": "A", "text": "5.0 L" },
+          { "label": "B", "text": "15.0 L" },
+          { "label": "C", "text": "22.7 L" },
+          { "label": "D", "text": "28.1 L" },
+          { "label": "E", "text": "50.0 L" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Gallons used = miles ÷ mpg = 180 ÷ 36 = 5.0 gallons.\n\nStep 2: Convert to litres using 1 gallon = 4.546 L: 5.0 × 4.546 = 22.73 L.\n\nThe answer is 22.7 L.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-14-q3",
+        "question_text": "A Zephyr 1.5 driver travels 240 miles. Fuel costs £1.45 per litre. What is the journey fuel cost, to the nearest penny?",
+        "options": [
+          { "label": "A", "text": "£12.60" },
+          { "label": "B", "text": "£28.50" },
+          { "label": "C", "text": "£32.96" },
+          { "label": "D", "text": "£40.20" },
+          { "label": "E", "text": "£72.55" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Gallons used = 240 ÷ 48 = 5.0 gallons.\n\nStep 2: Litres used = 5.0 × 4.546 = 22.73 L.\n\nStep 3: Fuel cost = 22.73 × £1.45 = £32.9585, which rounds to £32.96.\n\nThe answer is £32.96.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-14-q4",
+        "question_text": "How many more miles per litre does the Mistral Hybrid cover compared with the Breeze 1.2, to the nearest 0.1 mile?",
+        "options": [
+          { "label": "A", "text": "0.8 miles" },
+          { "label": "B", "text": "1.5 miles" },
+          { "label": "C", "text": "3.2 miles" },
+          { "label": "D", "text": "7.0 miles" },
+          { "label": "E", "text": "15.4 miles" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Convert each mpg to miles per litre by dividing by 4.546, then take the difference.\n\nStep 1: Mistral = 62 ÷ 4.546 = 13.64 miles per litre.\n\nStep 2: Breeze = 55 ÷ 4.546 = 12.10 miles per litre.\n\nStep 3: Difference = 13.64 − 12.10 = 1.54, which rounds to 1.5 miles.\n\nThe answer is 1.5 miles.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-15",
+    "title": "London to Dubai Flight",
+    "stimulus": {
+      "type": "text",
+      "text": "A commercial aircraft flies from London to Dubai, a distance of 3,414 miles. The full flight takes 7 hours 15 minutes — this includes taxi, climb, cruise, descent and landing. The cruise phase alone accounts for 85% of total flight time, during which the aircraft holds a steady speed of 480 mph. [1 mile = 1.6 km; 1 nautical mile = 1.852 km]"
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-15-q1",
+        "question_text": "What is the London to Dubai distance in kilometres, to the nearest km?",
+        "options": [
+          { "label": "A", "text": "2,134 km" },
+          { "label": "B", "text": "5,462 km" },
+          { "label": "C", "text": "6,324 km" },
+          { "label": "D", "text": "8,534 km" },
+          { "label": "E", "text": "10,924 km" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Multiply miles by the stated conversion factor 1.6: 3,414 × 1.6 = 5,462.4 km, which rounds to 5,462 km. The answer is 5,462 km.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-15-q2",
+        "question_text": "How long is the cruise phase, in hours and minutes (to the nearest minute)?",
+        "options": [
+          { "label": "A", "text": "5 h 55 m" },
+          { "label": "B", "text": "6 h 10 m" },
+          { "label": "C", "text": "6 h 30 m" },
+          { "label": "D", "text": "7 h 00 m" },
+          { "label": "E", "text": "7 h 15 m" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: Total flight = 7 h 15 m = 435 minutes.\n\nStep 2: Cruise time = 85% × 435 = 0.85 × 435 = 369.75 minutes.\n\nStep 3: Convert to hours and minutes: 369.75 ÷ 60 = 6.1625 hours = 6 h 9.75 m, which rounds to 6 h 10 m.\n\nThe answer is 6 h 10 m.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-15-q3",
+        "question_text": "How many miles does the aircraft cover during the cruise phase alone (at 480 mph), to the nearest mile?",
+        "options": [
+          { "label": "A", "text": "2,834 miles" },
+          { "label": "B", "text": "2,958 miles" },
+          { "label": "C", "text": "3,280 miles" },
+          { "label": "D", "text": "3,414 miles" },
+          { "label": "E", "text": "3,472 miles" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: Cruise time in hours = 85% × 7.25 = 6.1625 hours.\n\nStep 2: Distance = speed × time = 480 × 6.1625 = 2,958 miles.\n\nThe answer is 2,958 miles.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-15-q4",
+        "question_text": "Convert the full 3,414-mile route to nautical miles, to the nearest nautical mile.",
+        "options": [
+          { "label": "A", "text": "1,843 nm" },
+          { "label": "B", "text": "2,950 nm" },
+          { "label": "C", "text": "3,162 nm" },
+          { "label": "D", "text": "3,951 nm" },
+          { "label": "E", "text": "6,324 nm" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: Convert miles to km: 3,414 × 1.6 = 5,462.4 km.\n\nStep 2: Convert km to nautical miles using 1 nm = 1.852 km: 5,462.4 ÷ 1.852 = 2,949.5, which rounds to 2,950 nm.\n\nThe answer is 2,950 nm.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-16",
+    "title": "Year 13 Mock Exam Scores",
+    "stimulus": {
+      "type": "table",
+      "context": "End-of-year mock exam scores for five Year 13 students, shown as percentages out of 100.",
+      "data": {
+        "headers": ["Student", "Maths (%)", "Biology (%)", "Chemistry (%)", "English (%)", "Art (%)"],
+        "rows": [
+          ["Alex", "68", "75", "72", "82", "90"],
+          ["Bella", "85", "88", "82", "70", "65"],
+          ["Chen", "92", "95", "90", "78", "72"],
+          ["Dani", "55", "62", "48", "75", "88"],
+          ["Emir", "78", "70", "85", "88", "55"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-16-q1",
+        "question_text": "What was Chen's Biology score?",
+        "options": [
+          { "label": "A", "text": "78%" },
+          { "label": "B", "text": "88%" },
+          { "label": "C", "text": "90%" },
+          { "label": "D", "text": "92%" },
+          { "label": "E", "text": "95%" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Find the Chen row, then the Biology column. The value is 95%. The answer is 95%.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-16-q2",
+        "question_text": "What was Bella's mean score across all five subjects?",
+        "options": [
+          { "label": "A", "text": "70%" },
+          { "label": "B", "text": "76%" },
+          { "label": "C", "text": "78%" },
+          { "label": "D", "text": "82%" },
+          { "label": "E", "text": "88%" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Mean = sum ÷ count.\n\nStep 1: Sum Bella's scores: 85 + 88 + 82 + 70 + 65 = 390.\n\nStep 2: Mean = 390 ÷ 5 = 78%.\n\nThe answer is 78%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-16-q3",
+        "question_text": "Which student has the largest range (highest minus lowest) across Maths, Biology, Chemistry and English?",
+        "options": [
+          { "label": "A", "text": "Alex" },
+          { "label": "B", "text": "Bella" },
+          { "label": "C", "text": "Chen" },
+          { "label": "D", "text": "Dani" },
+          { "label": "E", "text": "Emir" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Range = highest − lowest, using only the four subjects the stem names (Maths, Biology, Chemistry, English — not Art).\n\nStep 1: Alex = 82 − 68 = 14.\n\nStep 2: Bella = 88 − 70 = 18.\n\nStep 3: Chen = 95 − 78 = 17.\n\nStep 4: Dani = 75 − 48 = 27.\n\nStep 5: Emir = 88 − 70 = 18.\n\nDani has the largest range at 27. The answer is Dani.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-16-q4",
+        "question_text": "What was the overall class mean in Chemistry, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "70.0%" },
+          { "label": "B", "text": "72.0%" },
+          { "label": "C", "text": "74.8%" },
+          { "label": "D", "text": "75.4%" },
+          { "label": "E", "text": "80.0%" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Step 1: Sum the Chemistry column: 72 + 82 + 90 + 48 + 85 = 377.\n\nStep 2: Mean = 377 ÷ 5 = 75.4%.\n\nThe answer is 75.4%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-17",
+    "title": "Revision Hours vs Exam Score",
+    "stimulus": {
+      "type": "scatter_plot",
+      "data": {
+        "title": "Revision Hours vs Exam Score (6 students)",
+        "xAxisLabel": "Revision Hours",
+        "yAxisLabel": "Score (%)",
+        "series": [
+          {
+            "name": "Students",
+            "points": [
+              { "x": 5, "y": 42, "label": "A" },
+              { "x": 10, "y": 58, "label": "B" },
+              { "x": 15, "y": 65, "label": "C" },
+              { "x": 20, "y": 78, "label": "D" },
+              { "x": 25, "y": 85, "label": "E" },
+              { "x": 30, "y": 72, "label": "F" }
+            ]
+          }
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-17-q1",
+        "question_text": "Which student scored highest on the exam?",
+        "options": [
+          { "label": "A", "text": "Student A" },
+          { "label": "B", "text": "Student C" },
+          { "label": "C", "text": "Student D" },
+          { "label": "D", "text": "Student E" },
+          { "label": "E", "text": "Student F" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Look for the highest point on the y-axis. Student E is at 85%, which is the top of the plot. The answer is Student E.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-17-q2",
+        "question_text": "Which student revised for the most hours?",
+        "options": [
+          { "label": "A", "text": "Student A" },
+          { "label": "B", "text": "Student C" },
+          { "label": "C", "text": "Student D" },
+          { "label": "D", "text": "Student E" },
+          { "label": "E", "text": "Student F" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Look for the rightmost point on the x-axis. Student F is at 30 hours, the furthest right. The answer is Student F.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-17-q3",
+        "question_text": "Students A–E form an upward-trending pattern. Which student breaks that pattern (is the outlier)?",
+        "options": [
+          { "label": "A", "text": "Student A" },
+          { "label": "B", "text": "Student B" },
+          { "label": "C", "text": "Student D" },
+          { "label": "D", "text": "Student E" },
+          { "label": "E", "text": "Student F" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Students A to E show scores rising steadily with hours (42 → 58 → 65 → 78 → 85). Student F has the most hours (30) but scores only 72% — lower than Student E already managed with fewer hours. That breaks the upward pattern. The answer is Student F.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-17-q4",
+        "question_text": "What is the mean \"score per hour revised\" across Students A to E (excluding outlier F), to the nearest 0.1?",
+        "options": [
+          { "label": "A", "text": "2.4" },
+          { "label": "B", "text": "3.4" },
+          { "label": "C", "text": "5.2" },
+          { "label": "D", "text": "6.5" },
+          { "label": "E", "text": "8.4" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Work out score ÷ hours for each of the five students, then take the mean of those ratios.\n\nStep 1: A = 42 ÷ 5 = 8.4.\n\nStep 2: B = 58 ÷ 10 = 5.8.\n\nStep 3: C = 65 ÷ 15 = 4.333.\n\nStep 4: D = 78 ÷ 20 = 3.9.\n\nStep 5: E = 85 ÷ 25 = 3.4.\n\nStep 6: Mean = (8.4 + 5.8 + 4.333 + 3.9 + 3.4) ÷ 5 = 25.833 ÷ 5 = 5.17, which rounds to 5.2.\n\nThe answer is 5.2.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-18",
+    "title": "Sixth-Form Attendance Rates",
+    "stimulus": {
+      "type": "text",
+      "text": "A sixth-form college records attendance across its five A-level subject groups during a month of 20 teaching days. Attendance rates by subject were: Biology 96%, Chemistry 92%, Physics 88%, Mathematics 94%, Further Mathematics 84%. Enrolment: Biology 125 students, Chemistry 98, Physics 72, Mathematics 140, Further Mathematics 45."
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-18-q1",
+        "question_text": "How many student-days of attendance did Biology record across the month?",
+        "options": [
+          { "label": "A", "text": "1,920" },
+          { "label": "B", "text": "2,100" },
+          { "label": "C", "text": "2,400" },
+          { "label": "D", "text": "2,500" },
+          { "label": "E", "text": "2,604" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Possible student-days = students × teaching days = 125 × 20 = 2,500.\n\nStep 2: Attended = 96% of 2,500 = 0.96 × 2,500 = 2,400.\n\nThe answer is 2,400.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-18-q2",
+        "question_text": "Which subject had the lowest attendance rate?",
+        "options": [
+          { "label": "A", "text": "Biology" },
+          { "label": "B", "text": "Chemistry" },
+          { "label": "C", "text": "Physics" },
+          { "label": "D", "text": "Mathematics" },
+          { "label": "E", "text": "Further Mathematics" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Scan the attendance rates: Biology 96%, Chemistry 92%, Physics 88%, Mathematics 94%, Further Mathematics 84%. Further Mathematics is lowest at 84%. The answer is Further Mathematics.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-18-q3",
+        "question_text": "How many student-days of absence were recorded in Physics across the month?",
+        "options": [
+          { "label": "A", "text": "86" },
+          { "label": "B", "text": "144" },
+          { "label": "C", "text": "173" },
+          { "label": "D", "text": "288" },
+          { "label": "E", "text": "345" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Possible student-days for Physics = 72 × 20 = 1,440.\n\nStep 2: Absence rate = 100% − 88% = 12%.\n\nStep 3: Absent student-days = 12% × 1,440 = 0.12 × 1,440 = 172.8, which rounds to 173.\n\nThe answer is 173.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-18-q4",
+        "question_text": "What was the overall attendance rate across all five subjects combined, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "88.0%" },
+          { "label": "B", "text": "90.8%" },
+          { "label": "C", "text": "92.3%" },
+          { "label": "D", "text": "92.8%" },
+          { "label": "E", "text": "94.0%" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The overall rate must be weighted by enrolment — you can't just average the five rates, because the subjects have different numbers of students.\n\nStep 1: Possible student-days overall = 20 × (125 + 98 + 72 + 140 + 45) = 20 × 480 = 9,600.\n\nStep 2: Attended student-days per subject — Biology 2,400; Chemistry 0.92 × 1,960 = 1,803.2; Physics 0.88 × 1,440 = 1,267.2; Maths 0.94 × 2,800 = 2,632; Further Maths 0.84 × 900 = 756.\n\nStep 3: Total attended = 2,400 + 1,803.2 + 1,267.2 + 2,632 + 756 = 8,858.4.\n\nStep 4: Overall rate = 8,858.4 ÷ 9,600 × 100 = 92.3%.\n\nThe answer is 92.3%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-19",
+    "title": "Departmental Enrolment (3-Year)",
+    "stimulus": {
+      "type": "table",
+      "context": "Student enrolment by university department across three academic years. The final column is the three-year total. Data for Sciences 2025 was not yet published — only the three-year total is known.",
+      "data": {
+        "headers": ["Department", "2023", "2024", "2025", "2023–2025 Total"],
+        "rows": [
+          ["Mathematics", "240", "260", "280", "780"],
+          ["Sciences", "180", "195", "?", "585"],
+          ["Humanities", "120", "115", "110", "345"],
+          ["Arts", "95", "100", "105", "300"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-19-q1",
+        "question_text": "How many students enrolled in Mathematics in 2024?",
+        "options": [
+          { "label": "A", "text": "240" },
+          { "label": "B", "text": "250" },
+          { "label": "C", "text": "260" },
+          { "label": "D", "text": "280" },
+          { "label": "E", "text": "780" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Find the Mathematics row, then the 2024 column. The cell reads 260. The answer is 260.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-19-q2",
+        "question_text": "What was the total enrolment across all four departments in 2023?",
+        "options": [
+          { "label": "A", "text": "550" },
+          { "label": "B", "text": "610" },
+          { "label": "C", "text": "635" },
+          { "label": "D", "text": "670" },
+          { "label": "E", "text": "780" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Sum the 2023 column: 240 + 180 + 120 + 95 = 635. The answer is 635.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-19-q3",
+        "question_text": "What was the Sciences enrolment in 2025?",
+        "options": [
+          { "label": "A", "text": "180" },
+          { "label": "B", "text": "190" },
+          { "label": "C", "text": "200" },
+          { "label": "D", "text": "210" },
+          { "label": "E", "text": "225" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "The three-year total is fixed, so the missing value = total − sum of the known years.\n\nStep 1: Sciences three-year total = 585.\n\nStep 2: Known years = 180 + 195 = 375.\n\nStep 3: 2025 = 585 − 375 = 210.\n\nThe answer is 210.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-19-q4",
+        "question_text": "What was the percentage change in Humanities enrolment from 2023 to 2025?",
+        "options": [
+          { "label": "A", "text": "4.2% decrease" },
+          { "label": "B", "text": "8.3% decrease" },
+          { "label": "C", "text": "8.3% increase" },
+          { "label": "D", "text": "9.1% decrease" },
+          { "label": "E", "text": "9.1% increase" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Percentage change uses the original (2023) as the denominator: (new − old) ÷ old × 100.\n\nStep 1: Change = 110 − 120 = −10.\n\nStep 2: Percentage = −10 ÷ 120 × 100 = −8.3%, which is an 8.3% decrease.\n\nThe answer is 8.3% decrease.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-20",
+    "title": "L-Shaped Classroom Floor",
+    "stimulus": {
+      "type": "geometry_diagram",
+      "data": {
+        "title": "Classroom Floor Plan (plan view, dimensions in metres)",
+        "viewBox": { "width": 300, "height": 220 },
+        "shapes": [
+          {
+            "type": "polygon",
+            "points": [[40, 40], [120, 40], [120, 80], [240, 80], [240, 160], [40, 160]],
+            "fill": "none",
+            "stroke": "#2d3748"
+          }
+        ],
+        "dimensions": [
+          { "from": [40, 25], "to": [120, 25], "label": "4 m", "side": "top" },
+          { "from": [130, 40], "to": [130, 80], "label": "2 m", "side": "right" },
+          { "from": [40, 180], "to": [240, 180], "label": "10 m", "side": "bottom" },
+          { "from": [35, 40], "to": [35, 160], "label": "6 m", "side": "left" }
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-20-q1",
+        "question_text": "What is the total floor area of the classroom, in square metres?",
+        "options": [
+          { "label": "A", "text": "24 m²" },
+          { "label": "B", "text": "36 m²" },
+          { "label": "C", "text": "48 m²" },
+          { "label": "D", "text": "52 m²" },
+          { "label": "E", "text": "60 m²" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Split the L-shape into two rectangles and add their areas.\n\nStep 1: Left column = 4 m wide × 6 m tall = 24 m².\n\nStep 2: Lower extension (the strip to the right of the column) = 6 m wide × 4 m tall = 24 m².\n\nStep 3: Total area = 24 + 24 = 48 m².\n\nThe answer is 48 m².",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-20-q2",
+        "question_text": "What is the perimeter of the classroom floor?",
+        "options": [
+          { "label": "A", "text": "28 m" },
+          { "label": "B", "text": "30 m" },
+          { "label": "C", "text": "32 m" },
+          { "label": "D", "text": "36 m" },
+          { "label": "E", "text": "38 m" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Trace the outer boundary all the way round: 4 m (top) + 2 m (step down) + 6 m (step across) + 4 m (right side) + 10 m (bottom) + 6 m (left side) = 32 m. The answer is 32 m.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-20-q3",
+        "question_text": "Carpet for the whole floor costs £22 per m². What is the total carpet cost?",
+        "options": [
+          { "label": "A", "text": "£528" },
+          { "label": "B", "text": "£792" },
+          { "label": "C", "text": "£1,056" },
+          { "label": "D", "text": "£1,200" },
+          { "label": "E", "text": "£1,320" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Cost = area × rate = 48 × £22 = £1,056. The answer is £1,056.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-20-q4",
+        "question_text": "A skirting board runs along the full perimeter except for a 1.2 m-wide doorway. The skirting costs £4.50 per metre (cut to exact length). What is the total skirting cost?",
+        "options": [
+          { "label": "A", "text": "£126.00" },
+          { "label": "B", "text": "£138.60" },
+          { "label": "C", "text": "£144.00" },
+          { "label": "D", "text": "£150.00" },
+          { "label": "E", "text": "£162.00" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: Skirting length = perimeter − doorway = 32 − 1.2 = 30.8 m.\n\nStep 2: Cost = 30.8 × £4.50 = £138.60.\n\nThe answer is £138.60.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-21",
+    "title": "Monthly Rainfall in Two UK Cities",
+    "stimulus": {
+      "type": "line_graph",
+      "data": {
+        "title": "Monthly Rainfall 2025 (mm)",
+        "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        "series": [
+          { "name": "Manchester", "values": [98, 85, 72, 64, 55, 68] },
+          { "name": "Plymouth", "values": [112, 95, 80, 60, 48, 52] }
+        ],
+        "yAxisLabel": "Rainfall (mm)",
+        "unit": ""
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-21-q1",
+        "question_text": "What was Manchester's rainfall in March?",
+        "options": [
+          { "label": "A", "text": "64 mm" },
+          { "label": "B", "text": "68 mm" },
+          { "label": "C", "text": "72 mm" },
+          { "label": "D", "text": "80 mm" },
+          { "label": "E", "text": "85 mm" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Read the Manchester line at March directly — 72 mm. The answer is 72 mm.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-21-q2",
+        "question_text": "What was the total rainfall in Plymouth across the six months shown?",
+        "options": [
+          { "label": "A", "text": "420 mm" },
+          { "label": "B", "text": "447 mm" },
+          { "label": "C", "text": "460 mm" },
+          { "label": "D", "text": "480 mm" },
+          { "label": "E", "text": "520 mm" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Sum the Plymouth values across all six months: 112 + 95 + 80 + 60 + 48 + 52 = 447 mm. The answer is 447 mm.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-21-q3",
+        "question_text": "In which month was the difference between Manchester and Plymouth rainfall greatest?",
+        "options": [
+          { "label": "A", "text": "January" },
+          { "label": "B", "text": "March" },
+          { "label": "C", "text": "April" },
+          { "label": "D", "text": "May" },
+          { "label": "E", "text": "June" }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Work out |Manchester − Plymouth| for each listed month.\n\nStep 1: January = |98 − 112| = 14.\n\nStep 2: March = |72 − 80| = 8.\n\nStep 3: April = |64 − 60| = 4.\n\nStep 4: May = |55 − 48| = 7.\n\nStep 5: June = |68 − 52| = 16.\n\nJune has the largest gap at 16 mm. The answer is June.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-21-q4",
+        "question_text": "By what percentage did Manchester's rainfall fall from January to May, to the nearest 0.1%?",
+        "options": [
+          { "label": "A", "text": "34.5%" },
+          { "label": "B", "text": "43.9%" },
+          { "label": "C", "text": "55.1%" },
+          { "label": "D", "text": "56.1%" },
+          { "label": "E", "text": "78.2%" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Percentage decrease = (old − new) ÷ old × 100, using January (the original) as the denominator.\n\nStep 1: Fall = 98 − 55 = 43.\n\nStep 2: Percentage = 43 ÷ 98 × 100 = 43.9%.\n\nThe answer is 43.9%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-22",
+    "title": "Local Council Waste Disposal (2025)",
+    "stimulus": {
+      "type": "pie_chart",
+      "context": "Breakdown of household waste disposal methods for a local council in 2025. The Landfill segment value was not reported directly but the five segments sum to 100%.",
+      "data": {
+        "title": "Household Waste Disposal by Method 2025",
+        "segments": [
+          { "label": "Recycled", "value": 45 },
+          { "label": "Composted", "value": 15 },
+          { "label": "Incinerated", "value": 20 },
+          { "label": "Landfill", "value": null },
+          { "label": "Other", "value": 5 }
+        ],
+        "total": 100,
+        "unit": "%"
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-22-q1",
+        "question_text": "What percentage of household waste was recycled?",
+        "options": [
+          { "label": "A", "text": "15%" },
+          { "label": "B", "text": "20%" },
+          { "label": "C", "text": "30%" },
+          { "label": "D", "text": "45%" },
+          { "label": "E", "text": "55%" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Read the Recycled segment directly from the legend — 45%. The answer is 45%.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-22-q2",
+        "question_text": "In its simplest form, what is the ratio of Recycled to Incinerated waste?",
+        "options": [
+          { "label": "A", "text": "2 : 1" },
+          { "label": "B", "text": "4 : 9" },
+          { "label": "C", "text": "9 : 1" },
+          { "label": "D", "text": "9 : 4" },
+          { "label": "E", "text": "20 : 45" }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Recycled = 45 and Incinerated = 20, so the ratio is 45 : 20. Divide both sides by 5 to simplify: 9 : 4. The stem names Recycled first, so it goes first. The answer is 9 : 4.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-22-q3",
+        "question_text": "What percentage of household waste went to landfill?",
+        "options": [
+          { "label": "A", "text": "10%" },
+          { "label": "B", "text": "15%" },
+          { "label": "C", "text": "20%" },
+          { "label": "D", "text": "25%" },
+          { "label": "E", "text": "35%" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "The segments sum to 100%, so the missing segment = 100 − sum of the known segments.\n\nStep 1: Sum of the known segments = 45 + 15 + 20 + 5 = 85.\n\nStep 2: Landfill = 100 − 85 = 15%.\n\nThe answer is 15%.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-22-q4",
+        "question_text": "The council processes 1,800 tonnes of household waste per month. How many tonnes per year are sent to landfill?",
+        "options": [
+          { "label": "A", "text": "2,160 tonnes" },
+          { "label": "B", "text": "2,700 tonnes" },
+          { "label": "C", "text": "3,240 tonnes" },
+          { "label": "D", "text": "3,960 tonnes" },
+          { "label": "E", "text": "9,720 tonnes" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Step 1: Annual waste = 1,800 × 12 = 21,600 tonnes.\n\nStep 2: Landfill share = 15% (from the previous question).\n\nStep 3: Annual landfill = 21,600 × 0.15 = 3,240 tonnes.\n\nThe answer is 3,240 tonnes.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-23",
+    "title": "Cylindrical Water Tank",
+    "stimulus": {
+      "type": "text",
+      "text": "A cylindrical water tank has an internal diameter of 2.4 metres and a height of 3.0 metres. It is being filled from a tap with a steady flow rate of 18 litres per minute. Use π = 3.14. [1 m³ = 1,000 litres]"
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-23-q1",
+        "question_text": "What is the volume of the tank, in cubic metres, to the nearest 0.01 m³?",
+        "options": [
+          { "label": "A", "text": "6.78 m³" },
+          { "label": "B", "text": "13.56 m³" },
+          { "label": "C", "text": "18.08 m³" },
+          { "label": "D", "text": "21.70 m³" },
+          { "label": "E", "text": "54.26 m³" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Volume of a cylinder = πr²h. You need the radius, not the diameter.\n\nStep 1: Radius = diameter ÷ 2 = 2.4 ÷ 2 = 1.2 m.\n\nStep 2: Volume = 3.14 × 1.2² × 3.0 = 3.14 × 1.44 × 3.0 = 13.5648, which rounds to 13.56 m³.\n\nThe answer is 13.56 m³.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-23-q2",
+        "question_text": "How many litres does the tank hold when full, to the nearest litre?",
+        "options": [
+          { "label": "A", "text": "1,357 L" },
+          { "label": "B", "text": "6,782 L" },
+          { "label": "C", "text": "13,565 L" },
+          { "label": "D", "text": "18,086 L" },
+          { "label": "E", "text": "54,259 L" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Using the stated 1 m³ = 1,000 L, multiply the volume by 1,000: 13.5648 × 1,000 = 13,564.8 L, which rounds to 13,565 L. The answer is 13,565 L.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-23-q3",
+        "question_text": "Starting from empty, how long does it take to fill the tank completely, in hours and minutes (to the nearest minute)?",
+        "options": [
+          { "label": "A", "text": "11 h 15 m" },
+          { "label": "B", "text": "12 h 34 m" },
+          { "label": "C", "text": "12 h 55 m" },
+          { "label": "D", "text": "13 h 10 m" },
+          { "label": "E", "text": "14 h 05 m" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: Time = volume ÷ flow rate = 13,564.8 ÷ 18 = 753.6 minutes.\n\nStep 2: Convert to hours and minutes: 753.6 ÷ 60 = 12.56 hours = 12 h 33.6 m, which rounds to 12 h 34 m.\n\nThe answer is 12 h 34 m.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-23-q4",
+        "question_text": "If the flow rate doubles to 36 litres per minute, how long does the tank take to fill from empty?",
+        "options": [
+          { "label": "A", "text": "5 h 03 m" },
+          { "label": "B", "text": "6 h 17 m" },
+          { "label": "C", "text": "7 h 28 m" },
+          { "label": "D", "text": "8 h 42 m" },
+          { "label": "E", "text": "9 h 10 m" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Doubling the flow rate halves the fill time, because time is inversely proportional to rate.\n\nStep 1: Time = 13,564.8 ÷ 36 = 376.8 minutes.\n\nStep 2: Convert to hours and minutes: 376.8 ÷ 60 = 6.28 hours = 6 h 16.8 m, which rounds to 6 h 17 m.\n\nThe answer is 6 h 17 m.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-24",
+    "title": "UK Carbon Emissions by Sector",
+    "stimulus": {
+      "type": "table",
+      "context": "Annual carbon emissions in megatonnes of CO₂ (MtCO₂) by UK economic sector. The 2030 Target column shows the government's stated reduction target.",
+      "data": {
+        "headers": ["Sector", "2015 (MtCO₂)", "2020 (MtCO₂)", "2025 (MtCO₂)", "2030 Target (MtCO₂)"],
+        "rows": [
+          ["Energy", "140", "100", "75", "55"],
+          ["Transport", "120", "105", "95", "70"],
+          ["Industry", "95", "80", "68", "50"],
+          ["Buildings", "85", "72", "60", "45"],
+          ["Agriculture", "60", "58", "56", "50"]
+        ]
+      }
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-24-q1",
+        "question_text": "Which sector had the highest emissions in 2025?",
+        "options": [
+          { "label": "A", "text": "Energy" },
+          { "label": "B", "text": "Transport" },
+          { "label": "C", "text": "Industry" },
+          { "label": "D", "text": "Buildings" },
+          { "label": "E", "text": "Agriculture" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Scan the 2025 column for the largest value: Energy 75, Transport 95, Industry 68, Buildings 60, Agriculture 56. Transport at 95 is highest. The answer is Transport.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-24-q2",
+        "question_text": "What was the total UK emissions across all five sectors in 2025?",
+        "options": [
+          { "label": "A", "text": "305 MtCO₂" },
+          { "label": "B", "text": "328 MtCO₂" },
+          { "label": "C", "text": "354 MtCO₂" },
+          { "label": "D", "text": "378 MtCO₂" },
+          { "label": "E", "text": "400 MtCO₂" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Sum the 2025 column: 75 + 95 + 68 + 60 + 56 = 354 MtCO₂. The answer is 354 MtCO₂.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-24-q3",
+        "question_text": "What was the percentage change in Energy sector emissions from 2015 to 2025?",
+        "options": [
+          { "label": "A", "text": "30.5% decrease" },
+          { "label": "B", "text": "38.1% decrease" },
+          { "label": "C", "text": "46.4% decrease" },
+          { "label": "D", "text": "53.6% decrease" },
+          { "label": "E", "text": "65.0% decrease" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Percentage change = (new − old) ÷ old × 100, using 2015 as the denominator.\n\nStep 1: Change = 75 − 140 = −65.\n\nStep 2: Percentage = −65 ÷ 140 × 100 = −46.4%, which is a 46.4% decrease.\n\nThe answer is 46.4% decrease.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-24-q4",
+        "question_text": "If Transport emissions continue to fall by the same absolute amount per 5-year period as they did between 2020 and 2025, what would Transport emissions be in 2030?",
+        "options": [
+          { "label": "A", "text": "70 MtCO₂" },
+          { "label": "B", "text": "80 MtCO₂" },
+          { "label": "C", "text": "85 MtCO₂" },
+          { "label": "D", "text": "90 MtCO₂" },
+          { "label": "E", "text": "95 MtCO₂" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Project forward using the same absolute fall as the previous 5-year period.\n\nStep 1: Change 2020 → 2025 = 105 − 95 = 10 MtCO₂.\n\nStep 2: 2030 projection = 95 − 10 = 85 MtCO₂.\n\nThe answer is 85 MtCO₂.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "practice-qr-set-25",
+    "title": "Neighbouring District Population Densities",
+    "stimulus": {
+      "type": "text",
+      "text": "Three neighbouring districts have the following populations and areas: District A has 48,000 residents in 12 km²; District B has 84,000 residents in 28 km²; District C has 36,000 residents in 6 km²."
+    },
+    "quantitative_reasoning_questions": [
+      {
+        "id": "practice-qr-set-25-q1",
+        "question_text": "What is the population density of District A, in people per km²?",
+        "options": [
+          { "label": "A", "text": "2,000" },
+          { "label": "B", "text": "3,500" },
+          { "label": "C", "text": "4,000" },
+          { "label": "D", "text": "5,000" },
+          { "label": "E", "text": "8,000" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Population density = population ÷ area = 48,000 ÷ 12 = 4,000 people per km². The answer is 4,000.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-25-q2",
+        "question_text": "Which district has the highest population density?",
+        "options": [
+          { "label": "A", "text": "District A" },
+          { "label": "B", "text": "District B" },
+          { "label": "C", "text": "District C" },
+          { "label": "D", "text": "Districts A and B equally" },
+          { "label": "E", "text": "Can't Tell" }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Work out the density for each district.\n\nStep 1: A = 48,000 ÷ 12 = 4,000.\n\nStep 2: B = 84,000 ÷ 28 = 3,000.\n\nStep 3: C = 36,000 ÷ 6 = 6,000.\n\nDistrict C has the highest density. The answer is District C.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "practice-qr-set-25-q3",
+        "question_text": "What is the combined population density across all three districts, to the nearest whole person per km²?",
+        "options": [
+          { "label": "A", "text": "3,500" },
+          { "label": "B", "text": "3,652" },
+          { "label": "C", "text": "3,800" },
+          { "label": "D", "text": "4,000" },
+          { "label": "E", "text": "4,333" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Combined density must use total people ÷ total area, not the average of the three separate densities.\n\nStep 1: Total population = 48,000 + 84,000 + 36,000 = 168,000.\n\nStep 2: Total area = 12 + 28 + 6 = 46 km².\n\nStep 3: Density = 168,000 ÷ 46 = 3,652.17, which rounds to 3,652.\n\nThe answer is 3,652.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "practice-qr-set-25-q4",
+        "question_text": "A new housing development adds 12,000 residents to District A and expands its area by 3 km². What will District A's new population density be, to the nearest whole person per km²?",
+        "options": [
+          { "label": "A", "text": "3,636" },
+          { "label": "B", "text": "4,000" },
+          { "label": "C", "text": "4,167" },
+          { "label": "D", "text": "4,800" },
+          { "label": "E", "text": "5,200" }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Step 1: New population = 48,000 + 12,000 = 60,000.\n\nStep 2: New area = 12 + 3 = 15 km².\n\nStep 3: New density = 60,000 ÷ 15 = 4,000 people per km² (unchanged, because both population and area grew by 25%).\n\nThe answer is 4,000.",
+        "order_index": 3,
+        "difficulty": "hard"
       }
     ]
   }

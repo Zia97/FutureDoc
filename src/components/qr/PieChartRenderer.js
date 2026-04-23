@@ -2,11 +2,11 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 
-const VW = 360;
-const VH = 220;
-const CX = 95;
-const CY = 100;
-const R = 82;
+const VW = 420;
+const VH = 260;
+const CX = 110;
+const CY = 118;
+const R = 96;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4', '#76e4f7'];
 
@@ -62,7 +62,7 @@ export default function PieChartRenderer({ data }) {
       : '#2d3748',
   }));
 
-  const ROW_H = 40;
+  const ROW_H = 44;
   const legendStartY = Math.max(14, (VH - legendItems.length * ROW_H) / 2);
 
   return (
@@ -93,12 +93,12 @@ export default function PieChartRenderer({ data }) {
           const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
           const valText = isNull ? '?' : (unit.length > 1 ? `${unit} ${fmtVal}` : `${unit}${fmtVal}`);
           return (
-            <G key={i} x={200} y={ly}>
-              <Rect x={0} y={0} width={13} height={13} fill={seg.color} rx={3} />
-              <SvgText x={19} y={11} fontSize={12} fill={t.text} fontWeight="600">
+            <G key={i} x={228} y={ly}>
+              <Rect x={0} y={0} width={14} height={14} fill={seg.color} rx={3} />
+              <SvgText x={20} y={12} fontSize={13} fill={t.text} fontWeight="600">
                 {seg.label}
               </SvgText>
-              <SvgText x={19} y={27} fontSize={11} fill={t.text}>
+              <SvgText x={20} y={29} fontSize={12} fill={t.text}>
                 {valText} ({pct}%)
               </SvgText>
             </G>

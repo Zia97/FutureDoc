@@ -3,13 +3,89 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Polyline, Circle, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 
-const VW = 360;
-const VH = 240;
-const M = { top: 20, right: 20, bottom: 62, left: 54 };
+const VW = 420;
+const VH = 320;
+const M = { top: 32, right: 22, bottom: 68, left: 62 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
+
+const LH = 14; // label pill height
+const LABEL_PAD = 6; // minimum gap between labels
+
+function collides(r, placed) {
+  return placed.some(
+    (p) =>
+      r.x < p.x + p.w + LABEL_PAD &&
+      r.x + r.w > p.x - LABEL_PAD &&
+      r.y < p.y + p.h + LABEL_PAD &&
+      r.y + r.h > p.y - LABEL_PAD
+  );
+}
+
+// Greedy column-by-column placement.
+// Within each x-column, series are sorted top-of-chart first (smallest py).
+// Every label prefers above its dot. When a higher line has already claimed
+// the above slot, the lower line falls back to below — exactly matching the
+// visual rule "lines always label above; the lower line goes below on clash".
+function placeValueLabels(series, xPosFn, yPosFn, unit, CW) {
+  const placed = [];
+  const result = [];
+  const numPoints = series[0]?.values.length ?? 0;
+
+  const DOT_R = 5;
+
+  for (let i = 0; i < numPoints; i++) {
+    // Sort series at this x-position by pixel y ascending = top of chart first
+    const column = series
+      .map((s, si) => ({ si, v: s.values[i] }))
+      .filter(({ v }) => v != null)
+      .sort((a, b) => yPosFn(a.v) - yPosFn(b.v));
+
+    for (const { si, v } of column) {
+      const px = xPosFn(i);
+      const py = yPosFn(v);
+      const txt = `${unit}${v}`;
+      const lw = txt.length * 6.5 + 8;
+      const lx = Math.max(lw / 2, Math.min(CW - lw / 2, px));
+
+      // Temporarily add other series' dots at this column as obstacles
+      const tempDots = series
+        .filter((_, osi) => osi !== si)
+        .map((os) => os.values[i])
+        .filter((ov) => ov != null)
+        .map((ov) => {
+          const cy = yPosFn(ov);
+          return { x: px - DOT_R, y: cy - DOT_R, w: DOT_R * 2, h: DOT_R * 2 };
+        });
+      const obstacles = [...placed, ...tempDots];
+
+      const aboveY = py - 8 - LH;
+      const belowY = py + 8;
+      // All prefer above; lower line falls back to below then nudges if clash
+      const candidates = [aboveY, belowY, aboveY - 18, belowY + 18, aboveY - 36];
+
+      let ly = aboveY;
+      let settled = false;
+      for (const cy of candidates) {
+        const r = { x: lx - lw / 2, y: cy, w: lw, h: LH };
+        if (!collides(r, obstacles)) {
+          ly = cy;
+          placed.push(r);
+          settled = true;
+          break;
+        }
+      }
+      if (!settled) {
+        placed.push({ x: lx - lw / 2, y: ly, w: lw, h: LH });
+      }
+
+      result.push({ key: `lv-${si}-${i}`, x: lx, y: ly, w: lw, txt, color: COLORS[si % COLORS.length] });
+    }
+  }
+  return result;
+}
 
 function computeYAxis(allValues, tickCount = 5) {
   const dataMin = Math.min(...allValues);
@@ -21,7 +97,7 @@ function computeYAxis(allValues, tickCount = 5) {
   return { yMin: rawMin, yMax: rawMax, tickStep };
 }
 
-export default function LineGraphRenderer({ data }) {
+export default function LineGraphRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
   const [selected, setSelected] = useState(null);
   const [svgWidth, setSvgWidth] = useState(VW);
@@ -40,6 +116,10 @@ export default function LineGraphRenderer({ data }) {
   function yPos(val) {
     return CH - ((val - yMin) / range) * CH;
   }
+
+  // Precompute collision-free label positions. Must come after xPos/yPos
+  // dependencies (range, yMin) are defined.
+  const labelPositions = showValues ? placeValueLabels(series, xPos, yPos, unit, CW) : [];
 
   function handleTap(e) {
     const { locationX, locationY } = e.nativeEvent;
@@ -85,7 +165,7 @@ export default function LineGraphRenderer({ data }) {
                     x1={0} y1={y} x2={CW} y2={y}
                     stroke={t.border} strokeWidth={0.7}
                   />
-                  <SvgText x={-5} y={y + 4} fontSize={11} fill={t.text} textAnchor="end">
+                  <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
                     {unit}{Math.round(val)}
                   </SvgText>
                 </G>
@@ -95,19 +175,28 @@ export default function LineGraphRenderer({ data }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-40} y={CH / 2} fontSize={10} fill={t.text}
+                x={-48} y={CH / 2} fontSize={12} fill={t.text}
                 textAnchor="middle" rotation="-90"
-                originX={-40} originY={CH / 2}
+                originX={-48} originY={CH / 2}
               >
                 {yAxisLabel}
               </SvgText>
             )}
 
+            {/* Vertical gridlines at each data point column */}
+            {labels.map((_, i) => (
+              <Line
+                key={`vg-${i}`}
+                x1={xPos(i)} y1={0} x2={xPos(i)} y2={CH}
+                stroke="rgba(255,255,255,0.25)" strokeWidth={0.8} strokeDasharray="3 4"
+              />
+            ))}
+
             {/* X-axis labels */}
             {labels.map((label, i) => (
               <SvgText
-                key={i} x={xPos(i)} y={CH + 16}
-                fontSize={11} fill={t.text} textAnchor="middle"
+                key={i} x={xPos(i)} y={CH + 18}
+                fontSize={13} fill={t.text} textAnchor="middle"
               >
                 {label}
               </SvgText>
@@ -143,6 +232,16 @@ export default function LineGraphRenderer({ data }) {
               );
             })}
 
+            {/* Value labels — rendered after all series so they sit on top */}
+            {labelPositions.map(({ key, x, y, w, txt, color }) => (
+              <G key={key}>
+                <Rect x={x - w / 2} y={y} width={w} height={LH} rx={3} fill={color} opacity={0.92} />
+                <SvgText x={x} y={y + LH - 3} fontSize={11} fill="#fff" textAnchor="middle" fontWeight="700">
+                  {txt}
+                </SvgText>
+              </G>
+            ))}
+
             {/* Axes */}
             <Line x1={0} y1={0} x2={0} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
             <Line x1={0} y1={CH} x2={CW} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
@@ -173,7 +272,7 @@ export default function LineGraphRenderer({ data }) {
             const gap = 14;
             const items = series.map((s) => ({
               name: s.name,
-              width: 20 + s.name.length * 6.2,
+              width: 22 + s.name.length * 7,
             }));
             const totalW = items.reduce((sum, it) => sum + it.width, 0) + gap * (items.length - 1);
             let cx = Math.max(8, (VW - totalW) / 2);
@@ -185,7 +284,7 @@ export default function LineGraphRenderer({ data }) {
                 <G key={series[si].name} x={x} y={VH - 10}>
                   <Line x1={0} y1={-4} x2={16} y2={-4} stroke={color} strokeWidth={2} />
                   <Circle cx={8} cy={-4} r={5} fill={color} />
-                  <SvgText x={20} y={0} fontSize={11} fill={t.text}>
+                  <SvgText x={22} y={0} fontSize={13} fill={t.text}>
                     {item.name}
                   </SvgText>
                 </G>

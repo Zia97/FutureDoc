@@ -3,13 +3,101 @@ import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 
-const VW = 360;
-const VH = 240;
-const M = { top: 20, right: 20, bottom: 62, left: 54 };
+const VW = 420;
+const VH = 320;
+const M = { top: 32, right: 22, bottom: 68, left: 62 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
+
+const SLH = 13; // scatter label pill height
+const SLABEL_PAD = 6;
+
+function scatterCollides(r, placed) {
+  return placed.some(
+    (p) =>
+      r.x < p.x + p.w + SLABEL_PAD &&
+      r.x + r.w > p.x - SLABEL_PAD &&
+      r.y < p.y + p.h + SLABEL_PAD &&
+      r.y + r.h > p.y - SLABEL_PAD
+  );
+}
+
+// Process points sorted by x so nearby dots are handled together.
+// For each point, try below → above → below-further → above-further.
+// Letter labels (already rendered at cx+7, cy-16 to cy-6) are seeded
+// into `placed` first so coordinate labels don't overlap them.
+function placeScatterLabels(series, xPosFn, yPosFn, CW) {
+  const placed = [];
+  const result = [];
+
+  const DOT_R = 4;
+
+  // Seed placed with letter label rects to avoid overlapping them
+  series.forEach((s) => {
+    s.points.forEach((p) => {
+      if (!p.label) return;
+      const cx = xPosFn(p.x);
+      const cy = yPosFn(p.y);
+      const lw = p.label.length * 7 + 4;
+      placed.push({ x: cx + 7, y: cy - 16, w: lw, h: 12 });
+    });
+  });
+
+  // Collect all points across series, sort by py ascending = top of chart first.
+  // All prefer above; a lower point falls back to below on clash.
+  const allPoints = [];
+  series.forEach((s, si) => {
+    s.points.forEach((p, pi) => {
+      allPoints.push({ p, si, pi, color: COLORS[si % COLORS.length] });
+    });
+  });
+  allPoints.sort((a, b) => yPosFn(a.p.y) - yPosFn(b.p.y));
+
+  allPoints.forEach(({ p, si, pi, color }) => {
+    const cx = xPosFn(p.x);
+    const cy = yPosFn(p.y);
+    const txt = `${p.x}, ${p.y}`;
+    const lw = txt.length * 5.8 + 8;
+    const lx = Math.max(lw / 2, Math.min(CW - lw / 2, cx));
+
+    // Add other series' dots near this point as obstacles
+    const tempDots = series
+      .filter((_, osi) => osi !== si)
+      .flatMap((os) => os.points)
+      .map((op) => {
+        const ox = xPosFn(op.x);
+        const oy = yPosFn(op.y);
+        return { x: ox - DOT_R, y: oy - DOT_R, w: DOT_R * 2, h: DOT_R * 2 };
+      });
+    const obstacles = [...placed, ...tempDots];
+
+    const aboveY = cy - SLH - 22; // above the letter label
+    const belowY = cy + 8;
+    // All prefer above; lower point falls back to below on clash
+    const candidates = [aboveY, belowY, aboveY - 18, belowY + 18];
+
+    let ly = aboveY;
+    let settled = false;
+    for (const candidateY of candidates) {
+      const r = { x: lx - lw / 2, y: candidateY, w: lw, h: SLH };
+      if (!scatterCollides(r, obstacles)) {
+        ly = candidateY;
+        placed.push(r);
+        settled = true;
+        break;
+      }
+    }
+    if (!settled) {
+      placed.push({ x: lx - lw / 2, y: ly, w: lw, h: SLH });
+    }
+
+    result.push({ key: `sv-${si}-${pi}`, x: lx, y: ly, w: lw, txt, color });
+  });
+
+  return result;
+}
 
 function niceAxis(min, max, tickCount = 5) {
   const span = max - min || max || 1;
@@ -19,7 +107,7 @@ function niceAxis(min, max, tickCount = 5) {
   return { axisMin: rawMin, axisMax: rawMax, step };
 }
 
-export default function ScatterPlotRenderer({ data }) {
+export default function ScatterPlotRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
   const [selected, setSelected] = useState(null);
   const [svgWidth, setSvgWidth] = useState(VW);
@@ -49,6 +137,8 @@ export default function ScatterPlotRenderer({ data }) {
   function yPos(val) {
     return CH - ((val - yMin) / yRange) * CH;
   }
+
+  const labelPositions = showValues ? placeScatterLabels(series, xPos, yPos, CW) : [];
 
   function handleTap(e) {
     const { locationX, locationY } = e.nativeEvent;
@@ -90,7 +180,7 @@ export default function ScatterPlotRenderer({ data }) {
               return (
                 <G key={`yt-${i}`}>
                   <Line x1={0} y1={y} x2={CW} y2={y} stroke={t.border} strokeWidth={0.7} />
-                  <SvgText x={-5} y={y + 4} fontSize={11} fill={t.text} textAnchor="end">
+                  <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
                     {Math.round(val)}
                   </SvgText>
                 </G>
@@ -104,7 +194,7 @@ export default function ScatterPlotRenderer({ data }) {
               return (
                 <G key={`xt-${i}`}>
                   <Line x1={x} y1={0} x2={x} y2={CH} stroke={t.border} strokeWidth={0.7} />
-                  <SvgText x={x} y={CH + 16} fontSize={11} fill={t.text} textAnchor="middle">
+                  <SvgText x={x} y={CH + 18} fontSize={13} fill={t.text} textAnchor="middle">
                     {Math.round(val)}
                   </SvgText>
                 </G>
@@ -114,9 +204,9 @@ export default function ScatterPlotRenderer({ data }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-40} y={CH / 2} fontSize={10} fill={t.text}
+                x={-48} y={CH / 2} fontSize={12} fill={t.text}
                 textAnchor="middle" rotation="-90"
-                originX={-40} originY={CH / 2}
+                originX={-48} originY={CH / 2}
               >
                 {yAxisLabel}
               </SvgText>
@@ -125,13 +215,13 @@ export default function ScatterPlotRenderer({ data }) {
             {/* X-axis label */}
             {xAxisLabel && (
               <SvgText
-                x={CW / 2} y={CH + 36} fontSize={10} fill={t.text} textAnchor="middle"
+                x={CW / 2} y={CH + 42} fontSize={12} fill={t.text} textAnchor="middle"
               >
                 {xAxisLabel}
               </SvgText>
             )}
 
-            {/* Data points with optional labels */}
+            {/* Data points with letter labels */}
             {series.map((s, si) => {
               const color = COLORS[si % COLORS.length];
               return s.points.map((p, pi) => {
@@ -141,7 +231,7 @@ export default function ScatterPlotRenderer({ data }) {
                   <G key={`${si}-${pi}`}>
                     <Circle cx={cx} cy={cy} r={4} fill={color} stroke={t.bgCard} strokeWidth={1} />
                     {p.label && (
-                      <SvgText x={cx + 7} y={cy - 6} fontSize={10} fontWeight="700" fill={t.text}>
+                      <SvgText x={cx + 8} y={cy - 7} fontSize={12} fontWeight="700" fill={t.text}>
                         {p.label}
                       </SvgText>
                     )}
@@ -149,6 +239,16 @@ export default function ScatterPlotRenderer({ data }) {
                 );
               });
             })}
+
+            {/* Value labels — rendered after points so they sit on top */}
+            {labelPositions.map(({ key, x, y, w, txt, color }) => (
+              <G key={key}>
+                <Rect x={x - w / 2} y={y} width={w} height={SLH} rx={2} fill={color} opacity={0.88} />
+                <SvgText x={x} y={y + SLH - 3} fontSize={10} fill="#fff" textAnchor="middle" fontWeight="600">
+                  {txt}
+                </SvgText>
+              </G>
+            ))}
 
             {/* Axes */}
             <Line x1={0} y1={0} x2={0} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
@@ -179,9 +279,9 @@ export default function ScatterPlotRenderer({ data }) {
           {/* Legend */}
           {series.length > 1 &&
             series.map((s, si) => (
-              <G key={s.name} x={M.left + si * 110} y={VH - 10}>
-                <Circle cx={5} cy={-5} r={4} fill={COLORS[si % COLORS.length]} stroke={t.bgCard} strokeWidth={1} />
-                <SvgText x={14} y={0} fontSize={11} fill={t.text}>
+              <G key={s.name} x={M.left + si * 120} y={VH - 10}>
+                <Circle cx={5} cy={-5} r={5} fill={COLORS[si % COLORS.length]} stroke={t.bgCard} strokeWidth={1} />
+                <SvgText x={16} y={0} fontSize={13} fill={t.text}>
                   {s.name}
                 </SvgText>
               </G>

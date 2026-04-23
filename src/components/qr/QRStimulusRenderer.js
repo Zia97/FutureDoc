@@ -10,6 +10,26 @@ import DataTable from '../dm/DataTable';
 import ZoomableView from '../ZoomableView';
 import { useTheme } from '../../context/ThemeContext';
 
+function ChartWithToggle({ renderChart }) {
+  const [showValues, setShowValues] = useState(false);
+  const { practiceTheme: t } = useTheme();
+  return (
+    <View>
+      <View style={styles.toggleRow}>
+        <TouchableOpacity
+          onPress={() => setShowValues((v) => !v)}
+          style={[styles.toggleBtn, { borderColor: showValues ? t.accent : t.border }]}
+        >
+          <Text style={[styles.toggleText, { color: showValues ? t.accent : t.textSecondary }]}>
+            {showValues ? 'Hide values' : 'Show values'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <ChartWithExpand>{renderChart(showValues)}</ChartWithExpand>
+    </View>
+  );
+}
+
 function ChartWithExpand({ children }) {
   const [expanded, setExpanded] = useState(false);
   const { width: screenWidth } = useWindowDimensions();
@@ -75,11 +95,11 @@ export default function QRStimulusRenderer({ stimulus }) {
     case 'bar_chart':
       content = <ChartWithExpand><BarChartRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'line_graph':
-      content = <ChartWithExpand><LineGraphRenderer data={stimulus.data} /></ChartWithExpand>; break;
+      content = <ChartWithToggle renderChart={(sv) => <LineGraphRenderer data={stimulus.data} showValues={sv} />} />; break;
     case 'pie_chart':
       content = <ChartWithExpand><PieChartRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'scatter_plot':
-      content = <ChartWithExpand><ScatterPlotRenderer data={stimulus.data} /></ChartWithExpand>; break;
+      content = <ChartWithToggle renderChart={(sv) => <ScatterPlotRenderer data={stimulus.data} showValues={sv} />} />; break;
     case 'network_diagram':
       content = <ChartWithExpand><NetworkDiagramRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'geometry_diagram':
@@ -107,6 +127,9 @@ const styles = StyleSheet.create({
   withContext: { gap: 8 },
   context: { fontSize: 13, lineHeight: 20, fontStyle: 'italic' },
   text: { fontSize: 14, lineHeight: 22 },
+  toggleRow: { alignItems: 'flex-end', marginBottom: 4 },
+  toggleBtn: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3 },
+  toggleText: { fontSize: 11, fontWeight: '600' },
   tapHintBtn: { alignItems: 'center' },
   tapHint: { fontSize: 11, marginTop: 6, opacity: 0.7 },
   modalOverlay: {

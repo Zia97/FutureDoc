@@ -2,9 +2,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 
-const VW = 360;
-const VH = 300;
-const M = { top: 24, right: 16, bottom: 90, left: 54 };
+const VW = 420;
+const VH = 340;
+const M = { top: 28, right: 20, bottom: 96, left: 62 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
@@ -112,7 +112,7 @@ export default function BarChartRenderer({ data }) {
                   stroke={val === 0 && hasNegative ? t.borderStrong : t.border}
                   strokeWidth={val === 0 && hasNegative ? 1.2 : 0.7}
                 />
-                <SvgText x={-5} y={y + 4} fontSize={12} fill={t.text} textAnchor="end">
+                <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
                   {tickLabel}
                 </SvgText>
               </G>
@@ -122,9 +122,9 @@ export default function BarChartRenderer({ data }) {
           {/* Y-axis label */}
           {yAxisLabel && (
             <SvgText
-              x={-40} y={CH / 2} fontSize={11} fill={t.text}
+              x={-48} y={CH / 2} fontSize={12} fill={t.text}
               textAnchor="middle" rotation="-90"
-              originX={-40} originY={CH / 2}
+              originX={-48} originY={CH / 2}
             >
               {yAxisLabel}
             </SvgText>
@@ -158,11 +158,11 @@ export default function BarChartRenderer({ data }) {
                       <SvgText
                         x={barCx}
                         y={labelY}
-                        fontSize={10}
+                        fontSize={11}
                         fill={t.text}
                         textAnchor="middle"
                       >
-                        {Math.abs(val)}
+                        {val}
                       </SvgText>
                     </G>
                   );
@@ -171,8 +171,8 @@ export default function BarChartRenderer({ data }) {
                   <SvgText
                     key={li}
                     x={lx}
-                    y={CH + 22 + li * 13}
-                    fontSize={11}
+                    y={CH + 24 + li * 14}
+                    fontSize={12}
                     fill={t.text}
                     textAnchor="middle"
                   >
@@ -197,7 +197,7 @@ export default function BarChartRenderer({ data }) {
           const gap = 14;
           const items = series.map((s) => ({
             name: s.name,
-            width: 18 + s.name.length * 6.4,
+            width: 20 + s.name.length * 7,
           }));
           const totalW = items.reduce((sum, it) => sum + it.width, 0) + gap * (items.length - 1);
           let cx = Math.max(8, (VW - totalW) / 2);
@@ -206,8 +206,8 @@ export default function BarChartRenderer({ data }) {
             cx += item.width + gap;
             return (
               <G key={series[si].name} x={x} y={VH - 14}>
-                <Rect x={0} y={-10} width={12} height={12} fill={COLORS[si % COLORS.length]} rx={2} />
-                <SvgText x={18} y={0} fontSize={12} fill={t.text}>
+                <Rect x={0} y={-11} width={13} height={13} fill={COLORS[si % COLORS.length]} rx={2} />
+                <SvgText x={20} y={0} fontSize={13} fill={t.text}>
                   {item.name}
                 </SvgText>
               </G>
