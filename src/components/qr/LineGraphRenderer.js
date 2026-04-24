@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Polyline, Circle, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { formatWithUnit } from './formatUnit';
 
 const VW = 420;
 const VH = 320;
-const M = { top: 32, right: 22, bottom: 80, left: 72 };
+const M = { top: 32, right: 22, bottom: 80, left: 84 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
@@ -46,7 +47,7 @@ function placeValueLabels(series, xPosFn, yPosFn, unit, CW) {
     for (const { si, v } of column) {
       const px = xPosFn(i);
       const py = yPosFn(v);
-      const txt = `${unit}${v}`;
+      const txt = formatWithUnit(v, unit);
       const lw = txt.length * 6.5 + 8;
       const lx = Math.max(lw / 2, Math.min(CW - lw / 2, px));
 
@@ -179,7 +180,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
                     stroke={t.border} strokeWidth={0.7}
                   />
                   <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
-                    {unit}{Math.round(val)}
+                    {formatWithUnit(Math.round(val), unit)}
                   </SvgText>
                 </G>
               );
@@ -188,9 +189,9 @@ export default function LineGraphRenderer({ data, showValues = false }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-48} y={CH / 2} fontSize={12} fill={t.text}
+                x={-64} y={CH / 2} fontSize={12} fill={t.text}
                 textAnchor="middle" rotation="-90"
-                originX={-48} originY={CH / 2}
+                originX={-64} originY={CH / 2}
               >
                 {yAxisLabel}
               </SvgText>
@@ -272,7 +273,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
 
             {/* Tooltip */}
             {selected && (() => {
-              const text = `${unit}${selected.val.toLocaleString()}`;
+              const text = formatWithUnit(selected.val.toLocaleString(), unit);
               const tw = Math.max(38, text.length * 8 + 14);
               const th = 24;
               const above = selected.cy > th + 14;

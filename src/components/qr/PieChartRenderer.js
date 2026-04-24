@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { isPrefixUnit } from './formatUnit';
 
 const VW = 420;
 const VH = 260;
@@ -91,7 +92,13 @@ export default function PieChartRenderer({ data }) {
           const isNull = seg.value == null;
           const pct = isNull ? '?' : ((seg.value / computedTotal) * 100).toFixed(1);
           const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
-          const valText = isNull ? '?' : (unit.length > 1 ? `${unit} ${fmtVal}` : `${unit}${fmtVal}`);
+          const valText = isNull
+            ? '?'
+            : isPrefixUnit(unit)
+              ? `${unit}${fmtVal}`
+              : unit
+                ? `${fmtVal}${unit}`
+                : `${fmtVal}`;
           return (
             <G key={i} x={228} y={ly}>
               <Rect x={0} y={0} width={14} height={14} fill={seg.color} rx={3} />

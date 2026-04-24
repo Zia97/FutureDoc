@@ -12058,57 +12058,47 @@
   },
   {
     "id": "practice-qr-set-77",
-    "title": "Restaurant Ratings vs Monthly Revenue",
+    "title": "Advertising Spend vs Online Sales",
     "stimulus": {
       "type": "scatter_plot",
-      "context": "Customer rating (out of 5) and monthly revenue (£000s) for eight independent restaurants in one city last month. All eight restaurants pay an annual business rates tax of £8,000.",
+      "context": "Weekly advertising spend (£000s) and monthly online sales (£000s) for six independent online stores last month. Each store pays a fixed platform fee of £500 per month in addition to its advertising costs.",
       "data": {
-        "title": "Rating vs Monthly Revenue",
-        "xAxisLabel": "Customer Rating (out of 5)",
-        "yAxisLabel": "Monthly Revenue (£000s)",
+        "title": "Advertising Spend vs Monthly Online Sales",
+        "xAxisLabel": "Weekly Advertising Spend (£000s)",
+        "yAxisLabel": "Monthly Online Sales (£000s)",
         "series": [
           {
-            "name": "Restaurants",
+            "name": "Stores",
             "points": [
               {
-                "x": 3.2,
-                "y": 28,
-                "label": "Alba"
+                "x": 2,
+                "y": 15,
+                "label": "Aria"
               },
               {
-                "x": 3.5,
-                "y": 35,
-                "label": "Gio"
+                "x": 6,
+                "y": 30,
+                "label": "Cove"
               },
               {
-                "x": 3.8,
-                "y": 42,
-                "label": "Brio"
+                "x": 9,
+                "y": 45,
+                "label": "Dune"
               },
               {
-                "x": 4,
-                "y": 38,
-                "label": "Cala"
+                "x": 15,
+                "y": 70,
+                "label": "Fern"
               },
               {
-                "x": 4.2,
-                "y": 55,
-                "label": "Duro"
+                "x": 18,
+                "y": 85,
+                "label": "Glen"
               },
               {
-                "x": 4.5,
-                "y": 62,
-                "label": "Enso"
-              },
-              {
-                "x": 4.7,
-                "y": 80,
-                "label": "Finn"
-              },
-              {
-                "x": 4.8,
-                "y": 95,
-                "label": "Hana"
+                "x": 22,
+                "y": 100,
+                "label": "Holt"
               }
             ]
           }
@@ -12118,121 +12108,121 @@
     "quantitative_reasoning_questions": [
       {
         "id": "practice-qr-set-77-q1",
-        "question_text": "What is Cala's monthly revenue?",
+        "question_text": "What are Dune's monthly online sales?",
         "options": [
           {
             "label": "A",
-            "text": "£28,000"
+            "text": "£22,000"
           },
           {
             "label": "B",
-            "text": "£35,000"
+            "text": "£30,000"
           },
           {
             "label": "C",
-            "text": "£38,000"
+            "text": "£45,000"
           },
           {
             "label": "D",
-            "text": "£42,000"
+            "text": "£55,000"
           },
           {
             "label": "E",
-            "text": "£55,000"
+            "text": "£70,000"
           }
         ],
         "correct_answer": "C",
-        "answer_reason": "Find the point labelled Cala on the scatter plot: it sits at a rating of 4.0 with a revenue value of 38 on the y-axis. The axis is in £000s, so this is £38,000. The answer is £38,000.",
+        "answer_reason": "Find the point labelled Dune on the scatter plot: it sits at an x-value of 9 with a y-value of 45. The y-axis is in £000s, so this is £45,000. The answer is £45,000.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
         "id": "practice-qr-set-77-q2",
-        "question_text": "What is the difference between the highest and lowest monthly revenue across the eight restaurants?",
+        "question_text": "What is the difference between the highest and lowest monthly online sales across the six stores?",
         "options": [
           {
             "label": "A",
-            "text": "£53,000"
+            "text": "£75,000"
           },
           {
             "label": "B",
-            "text": "£60,000"
+            "text": "£80,000"
           },
           {
             "label": "C",
-            "text": "£67,000"
+            "text": "£85,000"
           },
           {
             "label": "D",
-            "text": "£72,000"
+            "text": "£90,000"
           },
           {
             "label": "E",
-            "text": "£80,000"
+            "text": "£95,000"
           }
         ],
         "correct_answer": "C",
-        "answer_reason": "From the scatter plot, the highest revenue is Hana at 95 and the lowest is Alba at 28 (both read in £000s on the y-axis). Difference = 95 − 28 = 67, which is £67,000. The answer is £67,000.",
+        "answer_reason": "From the scatter plot, the highest sales are Holt at 100 and the lowest are Aria at 15 (both read in £000s on the y-axis). Difference = 100 − 15 = 85, which is £85,000. The answer is £85,000.",
         "order_index": 1,
         "difficulty": "normal"
       },
       {
         "id": "practice-qr-set-77-q3",
-        "question_text": "What is the mean monthly revenue across the eight restaurants?",
+        "question_text": "What are the mean monthly online sales across the six stores?",
         "options": [
           {
             "label": "A",
-            "text": "£48,125"
+            "text": "£52,500"
           },
           {
             "label": "B",
-            "text": "£51,250"
+            "text": "£55,000"
           },
           {
             "label": "C",
-            "text": "£54,375"
-          },
-          {
-            "label": "D",
             "text": "£57,500"
           },
           {
+            "label": "D",
+            "text": "£60,000"
+          },
+          {
             "label": "E",
-            "text": "£60,625"
+            "text": "£62,500"
           }
         ],
         "correct_answer": "C",
-        "answer_reason": "Step 1: Read the y-values of all eight labelled points (in £000s): Alba 28, Gio 35, Brio 42, Cala 38, Duro 55, Enso 62, Finn 80, Hana 95.\n\nStep 2: Sum them: 28 + 35 + 42 + 38 + 55 + 62 + 80 + 95 = 435.\n\nStep 3: Mean = 435 ÷ 8 = 54.375, which is £54,375.\n\nThe answer is £54,375.",
+        "answer_reason": "Step 1: Read the y-values of all six labelled points (in £000s): Aria 15, Cove 30, Dune 45, Fern 70, Glen 85, Holt 100.\n\nStep 2: Sum them: 15 + 30 + 45 + 70 + 85 + 100 = 345.\n\nStep 3: Mean = 345 ÷ 6 = 57.5, which is £57,500.\n\nThe answer is £57,500.",
         "order_index": 2,
         "difficulty": "hard"
       },
       {
         "id": "practice-qr-set-77-q4",
-        "question_text": "How many of the eight restaurants have a customer rating of 4.0 or higher?",
+        "question_text": "How many of the six stores have a weekly advertising spend of £10,000 or more?",
         "options": [
           {
             "label": "A",
-            "text": "3"
+            "text": "1"
           },
           {
             "label": "B",
-            "text": "4"
+            "text": "2"
           },
           {
             "label": "C",
-            "text": "5"
+            "text": "3"
           },
           {
             "label": "D",
-            "text": "6"
+            "text": "4"
           },
           {
             "label": "E",
-            "text": "7"
+            "text": "5"
           }
         ],
         "correct_answer": "C",
-        "answer_reason": "Count the labelled points with an x-value of 4.0 or greater: Cala (4.0), Duro (4.2), Enso (4.5), Finn (4.7), Hana (4.8). That gives 5 restaurants. The answer is 5.",
+        "answer_reason": "The x-axis is in £000s, so £10,000 corresponds to an x-value of 10. Count the labelled points with an x-value of 10 or greater: Fern (15), Glen (18), Holt (22). That gives 3 stores. The answer is 3.",
         "order_index": 3,
         "difficulty": "normal"
       }
@@ -13163,16 +13153,14 @@
     "title": "University Library Study Room Bookings",
     "stimulus": {
       "type": "table",
-      "context": "Bookings made for each study room type across four time slots during the last week of term. The Max Capacity column shows the maximum number of students permitted per booking in each room type.",
+      "context": "Bookings made for each study room type across three time slots during the last week of term.",
       "data": {
         "headers": [
           "Room Type \\ Slot",
           "Morning",
           "Afternoon",
           "Evening",
-          "Night",
-          "Total Bookings",
-          "Max Capacity"
+          "Total Bookings"
         ],
         "rows": [
           [
@@ -13180,45 +13168,35 @@
             "45",
             "60",
             "75",
-            "20",
-            "200",
-            "4"
+            "180"
           ],
           [
             "Group Study",
             "30",
             "55",
             "80",
-            "15",
-            "180",
-            "8"
+            "165"
           ],
           [
             "Media Room",
             "10",
             "25",
             "40",
-            "5",
-            "80",
-            "6"
+            "75"
           ],
           [
             "PhD Pods",
             "15",
             "20",
             "35",
-            "10",
-            "80",
-            "2"
+            "70"
           ],
           [
             "Slot Total",
             "100",
             "160",
             "230",
-            "50",
-            "540",
-            "—"
+            "490"
           ]
         ]
       }
@@ -13260,27 +13238,27 @@
         "options": [
           {
             "label": "A",
-            "text": "18.5%"
+            "text": "32.7%"
           },
           {
             "label": "B",
-            "text": "29.6%"
+            "text": "40.8%"
           },
           {
             "label": "C",
-            "text": "34.8%"
+            "text": "46.9%"
           },
           {
             "label": "D",
-            "text": "42.6%"
+            "text": "53.1%"
           },
           {
             "label": "E",
-            "text": "50.0%"
+            "text": "57.1%"
           }
         ],
-        "correct_answer": "D",
-        "answer_reason": "The whole week is the denominator here, so divide the Evening total by the grand total.\n\nStep 1: From the Slot Total row, Evening bookings = 230 and the grand total = 540.\n\nStep 2: 230 ÷ 540 × 100 = 42.592…%, which rounds to 42.6%.\n\nThe answer is 42.6%.",
+        "correct_answer": "C",
+        "answer_reason": "The whole week is the denominator here, so divide the Evening total by the grand total.\n\nStep 1: From the Slot Total row, Evening bookings = 230 and the grand total = 490.\n\nStep 2: 230 ÷ 490 × 100 = 46.938…%, which rounds to 46.9%.\n\nThe answer is 46.9%.",
         "order_index": 1,
         "difficulty": "normal"
       },
@@ -13290,15 +13268,15 @@
         "options": [
           {
             "label": "A",
-            "text": "3/20"
-          },
-          {
-            "label": "B",
             "text": "1/4"
           },
           {
+            "label": "B",
+            "text": "2/7"
+          },
+          {
             "label": "C",
-            "text": "3/10"
+            "text": "1/3"
           },
           {
             "label": "D",
@@ -13306,11 +13284,11 @@
           },
           {
             "label": "E",
-            "text": "2/5"
+            "text": "5/12"
           }
         ],
         "correct_answer": "C",
-        "answer_reason": "The Silent Study row total is the denominator because the question is about Silent Study bookings.\n\nStep 1: Silent Study Afternoon bookings = 60 and total Silent Study bookings = 200.\n\nStep 2: Write as a fraction and simplify: 60/200 = 6/20 = 3/10.\n\nThe answer is 3/10.",
+        "answer_reason": "The Silent Study row total is the denominator because the question is about Silent Study bookings.\n\nStep 1: Silent Study Afternoon bookings = 60 and total Silent Study bookings = 180.\n\nStep 2: Write as a fraction and simplify: 60/180 = 6/18 = 1/3.\n\nThe answer is 1/3.",
         "order_index": 2,
         "difficulty": "normal"
       },
@@ -13320,27 +13298,27 @@
         "options": [
           {
             "label": "A",
-            "text": "32.6%"
+            "text": "41.4%"
           },
           {
             "label": "B",
-            "text": "46.9%"
+            "text": "48.3%"
           },
           {
             "label": "C",
-            "text": "53.1%"
+            "text": "51.7%"
           },
           {
             "label": "D",
-            "text": "57.8%"
+            "text": "55.2%"
           },
           {
             "label": "E",
-            "text": "67.4%"
+            "text": "58.6%"
           }
         ],
-        "correct_answer": "C",
-        "answer_reason": "Combine the two room types first, then work out the share that falls outside Evening.\n\nStep 1: Total Specialist bookings = Media Room total + PhD Pods total = 80 + 80 = 160.\n\nStep 2: Specialist Evening bookings = 40 + 35 = 75, so Specialist bookings outside the Evening slot = 160 − 75 = 85.\n\nStep 3: 85 ÷ 160 × 100 = 53.125%, which rounds to 53.1%.\n\nThe answer is 53.1%.",
+        "correct_answer": "B",
+        "answer_reason": "Combine the two room types first, then work out the share that falls outside Evening.\n\nStep 1: Total Specialist bookings = Media Room total + PhD Pods total = 75 + 70 = 145.\n\nStep 2: Specialist Evening bookings = 40 + 35 = 75, so Specialist bookings outside the Evening slot = 145 − 75 = 70.\n\nStep 3: 70 ÷ 145 × 100 = 48.275…%, which rounds to 48.3%.\n\nThe answer is 48.3%.",
         "order_index": 3,
         "difficulty": "hard"
       }
