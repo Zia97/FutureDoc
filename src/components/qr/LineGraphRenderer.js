@@ -5,7 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 const VW = 420;
 const VH = 320;
-const M = { top: 32, right: 22, bottom: 68, left: 62 };
+const M = { top: 32, right: 22, bottom: 80, left: 72 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
@@ -81,7 +81,8 @@ function placeValueLabels(series, xPosFn, yPosFn, unit, CW) {
         placed.push({ x: lx - lw / 2, y: ly, w: lw, h: LH });
       }
 
-      result.push({ key: `lv-${si}-${i}`, x: lx, y: ly, w: lw, txt, color: COLORS[si % COLORS.length] });
+      const colorIndex = series[si].originalIndex ?? si;
+      result.push({ key: `lv-${colorIndex}-${i}`, x: lx, y: ly, w: lw, txt, color: COLORS[colorIndex % COLORS.length] });
     }
   }
   return result;
@@ -101,10 +102,23 @@ export default function LineGraphRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
   const [selected, setSelected] = useState(null);
   const [svgWidth, setSvgWidth] = useState(VW);
+  const [hiddenSeries, setHiddenSeries] = useState(new Set());
   const { labels, series, yAxisLabel, unit = '' } = data;
+
+  function toggleSeries(si) {
+    setHiddenSeries((prev) => {
+      const next = new Set(prev);
+      if (next.has(si)) next.delete(si);
+      else next.add(si);
+      return next;
+    });
+  }
   const numPoints = labels.length;
 
-  const allValues = series.flatMap((s) => s.values).filter((v) => v != null);
+  const visibleSeries = series
+    .map((s, si) => ({ ...s, originalIndex: si }))
+    .filter((_, si) => !hiddenSeries.has(si));
+  const allValues = (visibleSeries.length ? visibleSeries : series).flatMap((s) => s.values).filter((v) => v != null);
   const { yMin, yMax, tickStep } = computeYAxis(allValues);
   const range = yMax - yMin;
   const tickCount = Math.round(range / tickStep);
@@ -117,9 +131,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
     return CH - ((val - yMin) / range) * CH;
   }
 
-  // Precompute collision-free label positions. Must come after xPos/yPos
-  // dependencies (range, yMin) are defined.
-  const labelPositions = showValues ? placeValueLabels(series, xPos, yPos, unit, CW) : [];
+  const labelPositions = showValues ? placeValueLabels(visibleSeries, xPos, yPos, unit, CW) : [];
 
   function handleTap(e) {
     const { locationX, locationY } = e.nativeEvent;
@@ -130,6 +142,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
     let closest = null;
     let minDist = 30 / scale;
     series.forEach((s, si) => {
+      if (hiddenSeries.has(si)) return;
       s.values.forEach((v, i) => {
         if (v == null) return;
         const px = xPos(i);
@@ -192,18 +205,29 @@ export default function LineGraphRenderer({ data, showValues = false }) {
               />
             ))}
 
-            {/* X-axis labels */}
-            {labels.map((label, i) => (
-              <SvgText
-                key={i} x={xPos(i)} y={CH + 18}
-                fontSize={13} fill={t.text} textAnchor="middle"
-              >
-                {label}
-              </SvgText>
-            ))}
+            {/* X-axis labels — rotated to avoid overlap on dense datasets */}
+            {labels.map((label, i) => {
+              const px = xPos(i);
+              return (
+                <SvgText
+                  key={i}
+                  x={px}
+                  y={CH + 14}
+                  fontSize={11}
+                  fill={t.text}
+                  textAnchor="end"
+                  rotation="-40"
+                  originX={px}
+                  originY={CH + 14}
+                >
+                  {label}
+                </SvgText>
+              );
+            })}
 
             {/* Lines & data points */}
             {series.map((s, si) => {
+              if (hiddenSeries.has(si)) return null;
               const color = COLORS[si % COLORS.length];
               const segments = [];
               let seg = [];
@@ -267,7 +291,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
             })()}
           </G>
 
-          {/* Legend — dynamic width, centered so long names don't clip */}
+          {/* Legend — tap to toggle line visibility */}
           {series.length > 1 && (() => {
             const gap = 14;
             const items = series.map((s) => ({
@@ -275,13 +299,16 @@ export default function LineGraphRenderer({ data, showValues = false }) {
               width: 22 + s.name.length * 7,
             }));
             const totalW = items.reduce((sum, it) => sum + it.width, 0) + gap * (items.length - 1);
-            let cx = Math.max(8, (VW - totalW) / 2);
+            let startX = Math.max(8, (VW - totalW) / 2);
             return items.map((item, si) => {
               const color = COLORS[si % COLORS.length];
-              const x = cx;
-              cx += item.width + gap;
+              const hidden = hiddenSeries.has(si);
+              const x = startX;
+              startX += item.width + gap;
               return (
-                <G key={series[si].name} x={x} y={VH - 10}>
+                <G key={series[si].name} x={x} y={VH - 10} opacity={hidden ? 0.3 : 1}
+                   onPress={() => toggleSeries(si)}>
+                  <Rect x={-4} y={-16} width={item.width + 4} height={20} fill="transparent" />
                   <Line x1={0} y1={-4} x2={16} y2={-4} stroke={color} strokeWidth={2} />
                   <Circle cx={8} cy={-4} r={5} fill={color} />
                   <SvgText x={22} y={0} fontSize={13} fill={t.text}>

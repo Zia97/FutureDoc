@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
@@ -10,6 +11,9 @@ const CH = VH - M.top - M.bottom;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
 
+const LH = 14;
+const LABEL_PAD = 4;
+
 function niceStep(range, tickCount) {
   const raw = range / tickCount;
   const mag = Math.pow(10, Math.floor(Math.log10(raw)));
@@ -18,8 +22,6 @@ function niceStep(range, tickCount) {
   return nice * mag;
 }
 
-// Split a label into up to 2 lines on the space nearest the midpoint.
-// Single-word labels return as-is.
 function wrapLabel(label) {
   if (!label || !label.includes(' ')) return [label];
   const mid = label.length / 2;
@@ -38,20 +40,71 @@ function wrapLabel(label) {
   return [label.slice(0, bestSpace), label.slice(bestSpace + 1)];
 }
 
-export default function BarChartRenderer({ data }) {
+function collides(r, placed) {
+  return placed.some(
+    (p) =>
+      r.x < p.x + p.w + LABEL_PAD &&
+      r.x + r.w > p.x - LABEL_PAD &&
+      r.y < p.y + p.h + LABEL_PAD &&
+      r.y + r.h > p.y - LABEL_PAD
+  );
+}
+
+// For each bar in a group, try above then below to avoid overlaps.
+function placeBarLabels(groups) {
+  const placed = [];
+  const result = [];
+
+  for (const { barCx, barTop, barBottom, val, color, key, unit } of groups) {
+    const txt = `${unit}${val}`;
+    const lw = txt.length * 6.5 + 8;
+    const lx = barCx;
+
+    // Candidate positions: above bar first, then below bar top (inside), then further up
+    const aboveY = barTop - LH - 3;
+    const belowY = barBottom + 3;
+    const candidates = [aboveY, belowY, aboveY - LH - 2, belowY + LH + 2, aboveY - (LH + 2) * 2];
+
+    let ly = aboveY;
+    for (const cy of candidates) {
+      const r = { x: lx - lw / 2, y: cy, w: lw, h: LH };
+      if (!collides(r, placed)) {
+        ly = cy;
+        placed.push(r);
+        break;
+      }
+    }
+
+    result.push({ key, x: lx, y: ly, w: lw, txt, color });
+  }
+  return result;
+}
+
+export default function BarChartRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
+  const [hiddenSeries, setHiddenSeries] = useState(new Set());
   const { labels, series, yAxisLabel, unit = '' } = data;
   const numGroups = labels.length;
-  const numSeries = series.length;
 
-  const allValues = series.flatMap((s) => s.values).filter((v) => v != null);
+  function toggleSeries(si) {
+    setHiddenSeries((prev) => {
+      const next = new Set(prev);
+      if (next.has(si)) next.delete(si);
+      else next.add(si);
+      return next;
+    });
+  }
+
+  const visibleSeries = series.filter((_, si) => !hiddenSeries.has(si));
+  const allValues = (visibleSeries.length ? visibleSeries : series)
+    .flatMap((s) => s.values)
+    .filter((v) => v != null);
+
   const rawMin = Math.min(0, ...allValues);
   const rawMax = Math.max(0, ...allValues);
-
   const hasNegative = rawMin < 0;
   const tickCount = 5;
 
-  // Calculate nice axis bounds — always leave ≥1 tick of headroom beyond data
   let axisMin, axisMax, step;
   if (hasNegative) {
     step = niceStep(rawMax - rawMin, tickCount);
@@ -70,24 +123,45 @@ export default function BarChartRenderer({ data }) {
   }
 
   const axisRange = axisMax - axisMin;
-
+  const numSeries = series.length;
   const groupWidth = CW / numGroups;
   const barPad = groupWidth * 0.14;
   const groupInner = groupWidth - barPad * 2;
   const barW = Math.max(4, groupInner / numSeries - 1.5);
 
-  // Zero line position (where value=0 sits in chart coordinates)
   const zeroY = ((axisMax - 0) / axisRange) * CH;
 
   function yPos(val) {
     return ((axisMax - val) / axisRange) * CH;
   }
 
-  // Generate tick values
   const ticks = [];
   for (let v = axisMin; v <= axisMax + step * 0.01; v += step) {
-    ticks.push(Math.round(v * 1000) / 1000); // avoid float drift
+    ticks.push(Math.round(v * 1000) / 1000);
   }
+
+  // Build label placement input across all groups
+  const labelInputs = [];
+  labels.forEach((label, gi) => {
+    const gx = gi * groupWidth + barPad;
+    series.forEach((s, si) => {
+      if (hiddenSeries.has(si)) return;
+      const val = s.values[gi];
+      if (val == null) return;
+      const barTop = yPos(Math.max(val, 0));
+      const barBottom = yPos(Math.min(val, 0));
+      const barX = gx + si * (barW + 1.5);
+      const barCx = barX + barW / 2;
+      labelInputs.push({
+        key: `lbl-${gi}-${si}`,
+        barCx, barTop, barBottom, val,
+        color: COLORS[si % COLORS.length],
+        unit,
+      });
+    });
+  });
+
+  const labelPositions = showValues ? placeBarLabels(labelInputs) : [];
 
   return (
     <View>
@@ -137,34 +211,23 @@ export default function BarChartRenderer({ data }) {
             return (
               <G key={label}>
                 {series.map((s, si) => {
+                  if (hiddenSeries.has(si)) return null;
                   const val = s.values[gi];
                   if (val == null) return null;
                   const barTop = yPos(Math.max(val, 0));
                   const barBottom = yPos(Math.min(val, 0));
                   const bh = barBottom - barTop;
                   const barX = gx + si * (barW + 1.5);
-                  const barCx = barX + barW / 2;
-                  const labelY = val >= 0 ? barTop - 4 : barBottom + 12;
                   return (
-                    <G key={s.name}>
-                      <Rect
-                        x={barX}
-                        y={barTop}
-                        width={barW}
-                        height={Math.max(bh, 1)}
-                        fill={COLORS[si % COLORS.length]}
-                        rx={2}
-                      />
-                      <SvgText
-                        x={barCx}
-                        y={labelY}
-                        fontSize={11}
-                        fill={t.text}
-                        textAnchor="middle"
-                      >
-                        {val}
-                      </SvgText>
-                    </G>
+                    <Rect
+                      key={s.name}
+                      x={barX}
+                      y={barTop}
+                      width={barW}
+                      height={Math.max(bh, 1)}
+                      fill={COLORS[si % COLORS.length]}
+                      rx={2}
+                    />
                   );
                 })}
                 {wrapLabel(label).map((line, li) => (
@@ -183,16 +246,25 @@ export default function BarChartRenderer({ data }) {
             );
           })}
 
+          {/* Value label pills — rendered on top of all bars */}
+          {labelPositions.map(({ key, x, y, w, txt, color }) => (
+            <G key={key}>
+              <Rect x={x - w / 2} y={y} width={w} height={LH} rx={3} fill={color} opacity={0.92} />
+              <SvgText x={x} y={y + LH - 3} fontSize={11} fill="#fff" textAnchor="middle" fontWeight="700">
+                {txt}
+              </SvgText>
+            </G>
+          ))}
+
           {/* Axes */}
           <Line x1={0} y1={0} x2={0} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
           <Line x1={0} y1={CH} x2={CW} y2={CH} stroke={t.borderStrong} strokeWidth={1} />
-          {/* Zero line for negative charts */}
           {hasNegative && (
             <Line x1={0} y1={zeroY} x2={CW} y2={zeroY} stroke={t.borderStrong} strokeWidth={1.2} />
           )}
         </G>
 
-        {/* Legend — dynamic width, centered so long names don't clip */}
+        {/* Legend — tap to toggle series */}
         {numSeries > 1 && (() => {
           const gap = 14;
           const items = series.map((s) => ({
@@ -204,8 +276,11 @@ export default function BarChartRenderer({ data }) {
           return items.map((item, si) => {
             const x = cx;
             cx += item.width + gap;
+            const hidden = hiddenSeries.has(si);
             return (
-              <G key={series[si].name} x={x} y={VH - 14}>
+              <G key={series[si].name} x={x} y={VH - 14} opacity={hidden ? 0.3 : 1}
+                 onPress={() => toggleSeries(si)}>
+                <Rect x={-4} y={-16} width={item.width + 8} height={20} fill="transparent" />
                 <Rect x={0} y={-11} width={13} height={13} fill={COLORS[si % COLORS.length]} rx={2} />
                 <SvgText x={20} y={0} fontSize={13} fill={t.text}>
                   {item.name}

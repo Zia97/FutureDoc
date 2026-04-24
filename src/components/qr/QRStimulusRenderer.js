@@ -73,6 +73,71 @@ function ChartWithExpand({ children }) {
   );
 }
 
+function FormulaText({ text, color }) {
+  const parts = text.split(/\^([^\s^]+)/);
+  return (
+    <View style={styles.formulaRow}>
+      {parts.map((part, i) =>
+        i % 2 === 1 ? (
+          <View key={i} style={styles.superscriptWrap}>
+            <Text style={[styles.superscriptText, { color }]}>{part}</Text>
+          </View>
+        ) : (
+          <Text key={i} style={[styles.formula, { color }]}>{part}</Text>
+        )
+      )}
+    </View>
+  );
+}
+
+// Returns true if a line is a formula or unit conversion that should render italic.
+function isFormulaLine(line) {
+  const t = line.trim();
+  if (!t) return false;
+  if (t.startsWith('[') && t.endsWith(']')) return true;
+  if (/^Use\s+π/i.test(t)) return true;
+  if (/^Compound formula:/i.test(t)) return true;
+  if (/^[A-Za-z][\w\s()/%²³]+=\s/.test(t)) return true;
+  return false;
+}
+
+// Lines wrapped in *...* (single asterisks) are authored markup for italic formula/conversion lines.
+function stripItalicMarkers(line) {
+  const t = line.trim();
+  if (t.length > 2 && t.startsWith('*') && t.endsWith('*') && !t.startsWith('**')) {
+    return t.slice(1, -1);
+  }
+  return null;
+}
+
+// Renders stem text, detecting embedded formula/conversion lines and italicising them.
+function StemText({ text, color }) {
+  if (!text) return null;
+  const segments = text.split('\n\n');
+  return (
+    <View style={styles.stemBlock}>
+      {segments.map((seg, si) => {
+        const lines = seg.split('\n');
+        return (
+          <View key={si} style={si > 0 ? styles.stemPara : undefined}>
+            {lines.map((line, li) => {
+              const stripped = stripItalicMarkers(line);
+              if (stripped !== null) {
+                return <Text key={li} style={[styles.formula, { color }]}>{stripped}</Text>;
+              }
+              return isFormulaLine(line) ? (
+                <Text key={li} style={[styles.formula, { color }]}>{line}</Text>
+              ) : (
+                <Text key={li} style={[styles.text, { color }]}>{line}</Text>
+              );
+            })}
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 export default function QRStimulusRenderer({ stimulus }) {
   const { practiceTheme: t } = useTheme();
 
@@ -93,7 +158,7 @@ export default function QRStimulusRenderer({ stimulus }) {
   let content;
   switch (stimulus.type) {
     case 'bar_chart':
-      content = <ChartWithExpand><BarChartRenderer data={stimulus.data} /></ChartWithExpand>; break;
+      content = <ChartWithToggle renderChart={(sv) => <BarChartRenderer data={stimulus.data} showValues={sv} />} />; break;
     case 'line_graph':
       content = <ChartWithToggle renderChart={(sv) => <LineGraphRenderer data={stimulus.data} showValues={sv} />} />; break;
     case 'pie_chart':
@@ -107,7 +172,9 @@ export default function QRStimulusRenderer({ stimulus }) {
     case 'table':
       content = <DataTable tableData={stimulus.data} />; break;
     case 'text':
-      content = <Text style={[styles.text, { color: t.textSecondary }]}>{stimulus.text}</Text>; break;
+      content = <StemText text={stimulus.text} color={t.textSecondary} />; break;
+    case 'formula':
+      content = <FormulaText text={stimulus.text} color={t.textSecondary} />; break;
     default:
       return null;
   }
@@ -116,7 +183,10 @@ export default function QRStimulusRenderer({ stimulus }) {
 
   return (
     <View style={styles.withContext}>
-      <Text style={[styles.context, { color: t.textSecondary }]}>{context}</Text>
+      <StemText text={context} color={t.textSecondary} />
+      {stimulus.formula && (
+        <FormulaText text={stimulus.formula} color={t.textSecondary} />
+      )}
       {content}
     </View>
   );
@@ -125,8 +195,13 @@ export default function QRStimulusRenderer({ stimulus }) {
 const styles = StyleSheet.create({
   multi: { gap: 16 },
   withContext: { gap: 8 },
-  context: { fontSize: 13, lineHeight: 20, fontStyle: 'italic' },
-  text: { fontSize: 14, lineHeight: 22 },
+  stemBlock: { gap: 4 },
+  stemPara: { marginTop: 6 },
+  text: { fontSize: 13, lineHeight: 20 },
+  formulaRow: { flexDirection: 'row', alignItems: 'flex-end', flexWrap: 'wrap' },
+  formula: { fontSize: 14, lineHeight: 22, fontStyle: 'italic' },
+  superscriptWrap: { marginBottom: 6 },
+  superscriptText: { fontSize: 10, lineHeight: 12, fontStyle: 'italic' },
   toggleRow: { alignItems: 'flex-end', marginBottom: 4 },
   toggleBtn: { borderWidth: 1, borderRadius: 12, paddingHorizontal: 10, paddingVertical: 3 },
   toggleText: { fontSize: 11, fontWeight: '600' },

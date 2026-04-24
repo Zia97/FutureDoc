@@ -75,25 +75,34 @@ function placeScatterLabels(series, xPosFn, yPosFn, CW) {
 
     const aboveY = cy - SLH - 22; // above the letter label
     const belowY = cy + 8;
-    // All prefer above; lower point falls back to below on clash
-    const candidates = [aboveY, belowY, aboveY - 18, belowY + 18];
+    // Offsets to try horizontally when vertical slots are full
+    const xShifts = [0, lw * 0.7, -lw * 0.7, lw * 1.4, -lw * 1.4];
+    const ySlots = [aboveY, belowY, aboveY - 18, belowY + 18, aboveY - 36];
 
     let ly = aboveY;
+    let finalLx = lx;
     let settled = false;
-    for (const candidateY of candidates) {
-      const r = { x: lx - lw / 2, y: candidateY, w: lw, h: SLH };
-      if (!scatterCollides(r, obstacles)) {
-        ly = candidateY;
-        placed.push(r);
-        settled = true;
-        break;
+    outer: for (const dy of ySlots) {
+      // Skip slots that go off the top of the chart area
+      if (dy < -SLH) continue;
+      for (const dx of xShifts) {
+        const tx = Math.max(lw / 2, Math.min(CW - lw / 2, cx + dx));
+        const r = { x: tx - lw / 2, y: dy, w: lw, h: SLH };
+        if (!scatterCollides(r, obstacles)) {
+          ly = dy;
+          finalLx = tx;
+          placed.push(r);
+          settled = true;
+          break outer;
+        }
       }
     }
     if (!settled) {
-      placed.push({ x: lx - lw / 2, y: ly, w: lw, h: SLH });
+      placed.push({ x: finalLx - lw / 2, y: ly, w: lw, h: SLH });
     }
 
-    result.push({ key: `sv-${si}-${pi}`, x: lx, y: ly, w: lw, txt, color });
+    const displaced = true;
+    result.push({ key: `sv-${si}-${pi}`, x: finalLx, y: ly, w: lw, txt, color, dotX: cx, dotY: cy, displaced });
   });
 
   return result;
@@ -241,8 +250,16 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
             })}
 
             {/* Value labels — rendered after points so they sit on top */}
-            {labelPositions.map(({ key, x, y, w, txt, color }) => (
+            {labelPositions.map(({ key, x, y, w, txt, color, dotX, dotY, displaced }) => (
               <G key={key}>
+                {displaced && (
+                  <Line
+                    x1={x} y1={y + SLH / 2}
+                    x2={dotX} y2={dotY}
+                    stroke={color} strokeWidth={0.8} opacity={0.6}
+                    strokeDasharray="2 2"
+                  />
+                )}
                 <Rect x={x - w / 2} y={y} width={w} height={SLH} rx={2} fill={color} opacity={0.88} />
                 <SvgText x={x} y={y + SLH - 3} fontSize={10} fill="#fff" textAnchor="middle" fontWeight="600">
                   {txt}
