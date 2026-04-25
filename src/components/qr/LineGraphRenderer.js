@@ -25,33 +25,35 @@ function collides(r, placed) {
   );
 }
 
-// Greedy column-by-column placement.
-// Within each x-column, series are sorted top-of-chart first (smallest py).
-// Every label prefers above its dot. When a higher line has already claimed
-// the above slot, the lower line falls back to below — exactly matching the
-// visual rule "lines always label above; the lower line goes below on clash".
+// Process labels in data-y descending order (highest first). Each label
+// prefers above its dot; on collision it falls back to below the dot, then
+// nudges further down until clear. Because we always push DOWN (never up),
+// labels for higher data values can never end up below labels for lower
+// values — y order is preserved by construction.
 function placeValueLabels(series, xPosFn, yPosFn, unit, CW) {
   const placed = [];
   const result = [];
   const numPoints = series[0]?.values.length ?? 0;
-
   const DOT_R = 5;
+  const NUDGE = 4;
+  const MAX_NUDGES = 80;
 
   for (let i = 0; i < numPoints; i++) {
-    // Sort series at this x-position by pixel y ascending = top of chart first
     const column = series
       .map((s, si) => ({ si, v: s.values[i] }))
       .filter(({ v }) => v != null)
-      .sort((a, b) => yPosFn(a.v) - yPosFn(b.v));
+      .sort((a, b) => b.v - a.v);
 
-    for (const { si, v } of column) {
+    if (column.length === 0) continue;
+
+    column.forEach(({ si, v }) => {
       const px = xPosFn(i);
       const py = yPosFn(v);
       const txt = formatWithUnit(v, unit);
       const lw = txt.length * 6.5 + 8;
       const lx = Math.max(lw / 2, Math.min(CW - lw / 2, px));
+      const colorIndex = series[si].originalIndex ?? si;
 
-      // Temporarily add other series' dots at this column as obstacles
       const tempDots = series
         .filter((_, osi) => osi !== si)
         .map((os) => os.values[i])
@@ -62,29 +64,28 @@ function placeValueLabels(series, xPosFn, yPosFn, unit, CW) {
         });
       const obstacles = [...placed, ...tempDots];
 
-      const aboveY = py - 8 - LH;
-      const belowY = py + 8;
-      // All prefer above; lower line falls back to below then nudges if clash
-      const candidates = [aboveY, belowY, aboveY - 18, belowY + 18, aboveY - 36];
+      let ly = py - 8 - LH;
+      const rect = () => ({ x: lx - lw / 2, y: ly, w: lw, h: LH });
 
-      let ly = aboveY;
-      let settled = false;
-      for (const cy of candidates) {
-        const r = { x: lx - lw / 2, y: cy, w: lw, h: LH };
-        if (!collides(r, obstacles)) {
-          ly = cy;
-          placed.push(r);
-          settled = true;
-          break;
+      if (collides(rect(), obstacles)) {
+        ly = py + 8;
+        let attempts = 0;
+        while (collides(rect(), obstacles) && attempts < MAX_NUDGES) {
+          ly += NUDGE;
+          attempts++;
         }
       }
-      if (!settled) {
-        placed.push({ x: lx - lw / 2, y: ly, w: lw, h: LH });
-      }
 
-      const colorIndex = series[si].originalIndex ?? si;
-      result.push({ key: `lv-${colorIndex}-${i}`, x: lx, y: ly, w: lw, txt, color: COLORS[colorIndex % COLORS.length] });
-    }
+      placed.push({ x: lx - lw / 2, y: ly, w: lw, h: LH });
+      result.push({
+        key: `lv-${colorIndex}-${i}`,
+        x: lx,
+        y: ly,
+        w: lw,
+        txt,
+        color: COLORS[colorIndex % COLORS.length],
+      });
+    });
   }
   return result;
 }
@@ -279,11 +280,12 @@ export default function LineGraphRenderer({ data, showValues = false }) {
               const above = selected.cy > th + 14;
               const tx = Math.max(tw / 2, Math.min(CW - tw / 2, selected.cx));
               const ty = above ? selected.cy - 12 - th : selected.cy + 12;
+              const tooltipColor = COLORS[selected.si % COLORS.length];
               return (
                 <G>
                   <Rect x={tx - tw / 2} y={ty} width={tw} height={th} rx={6}
-                        fill={t.bgCard} stroke={t.borderStrong} strokeWidth={0.8} />
-                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={12} fill={t.text}
+                        fill={tooltipColor} stroke={tooltipColor} strokeWidth={0.8} />
+                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={12} fill="#fff"
                            textAnchor="middle" fontWeight="600">
                     {text}
                   </SvgText>

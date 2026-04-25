@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, ScrollView, useWindowDimensions } from 'react-native';
 import BarChartRenderer from './BarChartRenderer';
 import LineGraphRenderer from './LineGraphRenderer';
 import PieChartRenderer from './PieChartRenderer';
@@ -170,7 +170,11 @@ export default function QRStimulusRenderer({ stimulus }) {
     case 'geometry_diagram':
       content = <ChartWithExpand><GeometryDiagramRenderer data={stimulus.data} /></ChartWithExpand>; break;
     case 'table':
-      content = <DataTable tableData={stimulus.data} />; break;
+      content = (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tableScroll}>
+          <DataTable tableData={stimulus.data} />
+        </ScrollView>
+      ); break;
     case 'text':
       content = <StemText text={stimulus.text} color={t.textSecondary} />; break;
     case 'formula':
@@ -207,6 +211,7 @@ const styles = StyleSheet.create({
   toggleText: { fontSize: 11, fontWeight: '600' },
   tapHintBtn: { alignItems: 'center' },
   tapHint: { fontSize: 11, marginTop: 6, opacity: 0.7 },
+  tableScroll: { width: '100%' },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.82)',

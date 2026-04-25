@@ -24,17 +24,19 @@ function scatterCollides(r, placed) {
   );
 }
 
-// Process points sorted by x so nearby dots are handled together.
-// For each point, try below → above → below-further → above-further.
-// Letter labels (already rendered at cx+7, cy-16 to cy-6) are seeded
-// into `placed` first so coordinate labels don't overlap them.
+// Process points in data-y descending order (highest first). Each label
+// prefers above its dot; on collision it falls back to below the dot, then
+// nudges further down until clear. Because we always push DOWN (never up),
+// labels for higher data-y points can never end up below labels for lower
+// data-y points — y order is preserved by construction.
 function placeScatterLabels(series, xPosFn, yPosFn, CW) {
   const placed = [];
   const result = [];
-
   const DOT_R = 4;
+  const NUDGE = 3;
+  const MAX_NUDGES = 100;
 
-  // Seed placed with letter label rects to avoid overlapping them
+  // Seed placed with letter label rects so coordinate labels avoid them
   series.forEach((s) => {
     s.points.forEach((p) => {
       if (!p.label) return;
@@ -45,15 +47,13 @@ function placeScatterLabels(series, xPosFn, yPosFn, CW) {
     });
   });
 
-  // Collect all points across series, sort by py ascending = top of chart first.
-  // All prefer above; a lower point falls back to below on clash.
   const allPoints = [];
   series.forEach((s, si) => {
     s.points.forEach((p, pi) => {
       allPoints.push({ p, si, pi, color: COLORS[si % COLORS.length] });
     });
   });
-  allPoints.sort((a, b) => yPosFn(a.p.y) - yPosFn(b.p.y));
+  allPoints.sort((a, b) => b.p.y - a.p.y);
 
   allPoints.forEach(({ p, si, pi, color }) => {
     const cx = xPosFn(p.x);
@@ -62,7 +62,6 @@ function placeScatterLabels(series, xPosFn, yPosFn, CW) {
     const lw = txt.length * 5.8 + 8;
     const lx = Math.max(lw / 2, Math.min(CW - lw / 2, cx));
 
-    // Add other series' dots near this point as obstacles
     const tempDots = series
       .filter((_, osi) => osi !== si)
       .flatMap((os) => os.points)
@@ -73,36 +72,22 @@ function placeScatterLabels(series, xPosFn, yPosFn, CW) {
       });
     const obstacles = [...placed, ...tempDots];
 
-    const aboveY = cy - SLH - 22; // above the letter label
-    const belowY = cy + 8;
-    // Offsets to try horizontally when vertical slots are full
-    const xShifts = [0, lw * 0.7, -lw * 0.7, lw * 1.4, -lw * 1.4];
-    const ySlots = [aboveY, belowY, aboveY - 18, belowY + 18, aboveY - 36];
+    const initialLy = cy - SLH - 22;
+    let ly = initialLy;
+    const rect = () => ({ x: lx - lw / 2, y: ly, w: lw, h: SLH });
 
-    let ly = aboveY;
-    let finalLx = lx;
-    let settled = false;
-    outer: for (const dy of ySlots) {
-      // Skip slots that go off the top of the chart area
-      if (dy < -SLH) continue;
-      for (const dx of xShifts) {
-        const tx = Math.max(lw / 2, Math.min(CW - lw / 2, cx + dx));
-        const r = { x: tx - lw / 2, y: dy, w: lw, h: SLH };
-        if (!scatterCollides(r, obstacles)) {
-          ly = dy;
-          finalLx = tx;
-          placed.push(r);
-          settled = true;
-          break outer;
-        }
+    if (scatterCollides(rect(), obstacles)) {
+      ly = cy + 8;
+      let attempts = 0;
+      while (scatterCollides(rect(), obstacles) && attempts < MAX_NUDGES) {
+        ly += NUDGE;
+        attempts++;
       }
     }
-    if (!settled) {
-      placed.push({ x: finalLx - lw / 2, y: ly, w: lw, h: SLH });
-    }
 
-    const displaced = true;
-    result.push({ key: `sv-${si}-${pi}`, x: finalLx, y: ly, w: lw, txt, color, dotX: cx, dotY: cy, displaced });
+    placed.push({ x: lx - lw / 2, y: ly, w: lw, h: SLH });
+    const displaced = ly !== initialLy;
+    result.push({ key: `sv-${si}-${pi}`, x: lx, y: ly, w: lw, txt, color, dotX: cx, dotY: cy, displaced });
   });
 
   return result;

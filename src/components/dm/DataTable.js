@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 
 // Two-tier sizing. Each tier is tried in order — the first one whose
@@ -60,40 +60,35 @@ function layoutAtTier(headers, rows, tier, containerW) {
 export default function DataTable({ tableData }) {
   const { practiceTheme: t } = useTheme();
   const { headers, rows } = tableData;
-  const [containerW, setContainerW] = useState(0);
-  const onLayout = (e) => setContainerW(e.nativeEvent.layout.width);
+  const { width: screenWidth } = useWindowDimensions();
+  const targetW = screenWidth - 48;
 
-  // Wait for layout before computing anything — otherwise we'd pick a tier
-  // against a zero container width and always fall through to the floor.
-  if (containerW === 0) {
-    return <View onLayout={onLayout} />;
-  }
-
-  // Pick the first tier whose natural widths fit. If none fit, the loop exits
-  // with `tier`/`layout` set to the last (compact) tier — the floor.
-  let tier;
-  let layout;
+  // Pick the first tier whose natural widths fit. If none fit, use compact as floor.
+  let tier, layout;
   for (const candidate of TIERS) {
-    layout = layoutAtTier(headers, rows, candidate, containerW);
+    layout = layoutAtTier(headers, rows, candidate, targetW);
     tier = candidate;
     if (layout.fits) break;
   }
 
-  // Distribute leftover space proportionally so the table fills the container.
+  // When content fits, distribute leftover space so the table fills targetW.
+  // When it doesn't fit, use min widths and let the parent ScrollView handle overflow.
   let colWidths = layout.colMinWidths;
+  let tableWidth = layout.totalMinW;
   if (layout.fits && layout.totalMinW > 0) {
-    const extra = containerW - layout.totalMinW;
+    const extra = targetW - layout.totalMinW;
     colWidths = layout.colMinWidths.map(
       (w) => w + Math.floor((extra * w) / layout.totalMinW)
     );
     const used = colWidths.reduce((a, b) => a + b, 0);
-    colWidths[colWidths.length - 1] += containerW - used; // absorb rounding
+    colWidths[colWidths.length - 1] += targetW - used;
+    tableWidth = targetW;
   }
 
   const cellPadH = tier.hPad / 2;
 
   const renderRow = (cells, key, isHeader, bg) => (
-    <View key={key} style={[styles.row, { backgroundColor: bg }]}>
+    <View key={key} style={[styles.row, { backgroundColor: bg, width: tableWidth }]}>
       {cells.map((cell, ci) => {
         const isFirst = ci === 0;
         return (
@@ -128,7 +123,7 @@ export default function DataTable({ tableData }) {
   );
 
   return (
-    <View onLayout={onLayout} style={[styles.container, { borderColor: t.borderStrong }]}>
+    <View style={[styles.container, { borderColor: t.borderStrong, width: tableWidth }]}>
       {renderRow(headers, 'header', true, t.accentDim)}
       {rows.map((row, ri) =>
         renderRow(row, ri, false, ri % 2 === 1 ? t.bgInput : t.bgCard)

@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
-import { formatWithUnit, isPrefixUnit } from './formatUnit';
+import { formatWithUnit, formatNegativeWithUnit } from './formatUnit';
 
 const VW = 420;
 const VH = 400;
-const M = { top: 28, right: 20, bottom: 80, left: 80 };
+const M = { top: 28, right: 20, bottom: 90, left: 80 };
 const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
@@ -161,7 +161,9 @@ export default function BarChartRenderer({ data, showValues = false }) {
         const barX = gx + si * (barW + 1.5);
         const barCx = barX + barW / 2;
         const txt = formatWithUnit(val, unit);
-        const ty = Math.max(LH, barTop - 4);
+        const ty = val < 0
+          ? Math.min(CH - 2, yPos(val) + LH + 4)
+          : Math.max(LH, barTop - 4);
         out.push({ key: `lbl-${gi}-${si}`, x: barCx, y: ty, txt, color: COLORS[si % COLORS.length] });
       });
     });
@@ -188,7 +190,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
               const absVal = Math.abs(val);
               const fmtNum = Number.isInteger(absVal) ? absVal : absVal.toFixed(1);
               const tickLabel = val < 0
-                ? (isPrefixUnit(unit) ? `-${unit}${fmtNum}` : `-${fmtNum}${unit}`)
+                ? formatNegativeWithUnit(fmtNum, unit)
                 : formatWithUnit(fmtNum, unit);
               return (
                 <G key={i}>
@@ -247,7 +249,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
                     <SvgText
                       key={li}
                       x={lx}
-                      y={CH + 18 + li * 15}
+                      y={CH + 26 + li * 15}
                       fontSize={12}
                       fill={t.text}
                       textAnchor="middle"
