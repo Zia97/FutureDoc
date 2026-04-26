@@ -14,6 +14,7 @@ import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
+import SetDisplayNameScreen from '../screens/auth/SetDisplayNameScreen';
 import ToSAcceptanceScreen, { TOS_FLAG_KEY } from '../screens/onboarding/ToSAcceptanceScreen';
 import ForceUpdateScreen from '../screens/onboarding/ForceUpdateScreen';
 import HeaderAuthButton from '../components/HeaderAuthButton';
@@ -73,9 +74,9 @@ function AppStack() {
   return (
     <Stack.Navigator initialRouteName="Home" screenOptions={screenOptions}>
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="PracticeMode" component={PracticeModeScreen} options={{ title: 'Practice' }} />
-      <Stack.Screen name="PracticeSections" component={PracticeSectionsScreen} options={{ title: 'Normal Practice' }} />
-      <Stack.Screen name="TimedPracticeSections" component={TimedPracticeSectionsScreen} options={{ title: 'Timed Practice' }} />
+      <Stack.Screen name="PracticeMode" component={PracticeModeScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="PracticeSections" component={PracticeSectionsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="TimedPracticeSections" component={TimedPracticeSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TimedTestList" component={TimedTestListScreen} options={({ route }) => ({ title: route.params?.title ?? 'Timed Tests' })} />
       <Stack.Screen name="VRInstruction" component={VRInstructionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="DMInstruction" component={DMInstructionScreen} options={{ headerShown: false }} />
@@ -123,8 +124,16 @@ function RecoveryStack() {
   );
 }
 
+function DisplayNameStack() {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="SetDisplayName" component={SetDisplayNameScreen} />
+    </Stack.Navigator>
+  );
+}
+
 export default function AppNavigator() {
-  const { user, loading, passwordRecovery } = useAuth();
+  const { user, loading, passwordRecovery, displayName, displayNameLoading } = useAuth();
   const { theme: t } = useTheme();
   const [tosAccepted, setTosAccepted] = useState(null); // null = unknown (loading)
   const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
@@ -180,8 +189,15 @@ export default function AppNavigator() {
     return <ToSAcceptanceScreen onAccepted={() => setTosAccepted(true)} />;
   }
 
+  // Real (non-anonymous) users must have a display_name set before entering the
+  // app. Email signups stage it in user_metadata and AuthContext promotes it
+  // to user_profiles on first verified sign-in; OAuth users hit this screen.
+  const needsDisplayName =
+    user && !user.is_anonymous && !displayNameLoading && !displayName;
+
   const getStack = () => {
     if (passwordRecovery) return <RecoveryStack />;
+    if (needsDisplayName) return <DisplayNameStack />;
     return <AppStack />;
   };
 

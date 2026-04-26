@@ -3,8 +3,9 @@ import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Linking from 'expo-linking';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../lib/supabase';
-import { clearLocalUserData } from '../services/localUserData';
+import { clearLocalUserData, DISPLAY_NAME_CACHE_KEY } from '../services/localUserData';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,6 +24,71 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [passwordRecovery, setPasswordRecovery] = useState(false);
+  const [displayName, setDisplayNameState] = useState(null);
+  const [displayNameLoading, setDisplayNameLoading] = useState(false);
+
+  // Mirror every display_name change to AsyncStorage so cold-start renders
+  // can show the name immediately, before the network fetch resolves. The
+  // cache is keyed by user.id to prevent leakage across accounts on the
+  // same device.
+  const setDisplayName = (name, userId) => {
+    setDisplayNameState(name);
+    const id = userId ?? user?.id;
+    if (!id) return;
+    if (name) {
+      AsyncStorage.setItem(DISPLAY_NAME_CACHE_KEY, JSON.stringify({ userId: id, name })).catch(() => {});
+    } else {
+      AsyncStorage.removeItem(DISPLAY_NAME_CACHE_KEY).catch(() => {});
+    }
+  };
+
+  // Fetch display_name whenever the signed-in user changes. Hydrates from
+  // AsyncStorage first so cold starts don't flash the gate screen, then
+  // verifies against the DB and updates if it has changed.
+  const refreshDisplayName = async (u) => {
+    const target = u ?? user;
+    if (!target || target.is_anonymous) {
+      setDisplayName(null, target?.id);
+      return null;
+    }
+    setDisplayNameLoading(true);
+    try {
+      const cached = await AsyncStorage.getItem(DISPLAY_NAME_CACHE_KEY);
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed?.userId === target.id && parsed?.name) {
+          setDisplayNameState(parsed.name);
+        }
+      }
+    } catch {}
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('display_name')
+      .eq('user_id', target.id)
+      .maybeSingle();
+    setDisplayNameLoading(false);
+    if (error) return null;
+    const name = data?.display_name ?? null;
+    setDisplayName(name, target.id);
+    return name;
+  };
+
+  useEffect(() => {
+    (async () => {
+      const name = await refreshDisplayName(user);
+      // Promote a name staged at signup into user_profiles on first verified sign-in.
+      if (user && !user.is_anonymous && !name) {
+        const pending = user.user_metadata?.pending_display_name;
+        if (pending && pending.trim()) {
+          await supabase
+            .from('user_profiles')
+            .update({ display_name: pending.trim() })
+            .eq('user_id', user.id);
+          setDisplayName(pending.trim());
+        }
+      }
+    })();
+  }, [user?.id, user?.is_anonymous]);
 
   useEffect(() => {
     // Anonymous-by-default: if there's no session on startup, silently create
@@ -96,8 +162,34 @@ export function AuthProvider({ children }) {
   // anon creates a brand-new user and fires the "Confirm sign up" email (not
   // "Change email"). The orphaned anon user is harmless — local practice
   // progress lives in device-scoped AsyncStorage and survives the swap.
-  const signUp = (email, password) =>
-    supabase.auth.signUp({ email, password });
+  // pendingDisplayName is staged in user_metadata so we can persist it to
+  // user_profiles after the user verifies their email and signs in.
+  const signUp = (email, password, pendingDisplayName) =>
+    supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { pending_display_name: pendingDisplayName } },
+    });
+
+  const saveDisplayName = async (name) => {
+    const trimmed = (name ?? '').trim();
+    if (!trimmed) return { error: new Error('Display name cannot be blank.') };
+    if (!user?.id) return { error: new Error('Not signed in.') };
+    // Upsert in case the auto-trigger row is missing for any reason; select
+    // the result back so we can confirm the value was actually written
+    // before flipping the gate state.
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .upsert({ user_id: user.id, display_name: trimmed }, { onConflict: 'user_id' })
+      .select('display_name')
+      .single();
+    if (error) return { error };
+    setDisplayName(data?.display_name ?? trimmed);
+    return { error: null };
+  };
+
+  const resendVerificationEmail = (email) =>
+    supabase.auth.resend({ type: 'signup', email });
 
   const signInAnonymously = () => supabase.auth.signInAnonymously();
 
@@ -178,7 +270,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery }}>
+    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery, displayName, displayNameLoading, refreshDisplayName, saveDisplayName, resendVerificationEmail }}>
       {children}
     </AuthContext.Provider>
   );

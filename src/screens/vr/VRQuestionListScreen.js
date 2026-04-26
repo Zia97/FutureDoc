@@ -1,58 +1,24 @@
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from '@react-navigation/native';
-import SectionQuestionList from '../../components/SectionQuestionList';
-import SyncBanner from '../../components/SyncBanner';
+
 import OfflineRetry from '../../components/OfflineRetry';
+import PremiumQuestionListScreen from '../../components/premium/PremiumQuestionListScreen';
 import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 import { useVerbalReasoningProgress } from '../../hooks/queries/useVerbalReasoningProgress';
 import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReasoningAttempts';
 import { getTargetFlatIndex } from '../../lib/flattenQuestions';
-import { useTheme } from '../../context/ThemeContext';
 
 const CACHE_KEYS = ['vr_attempts', 'vr_passage_progress'];
-
-const FILTERS = [
-  { label: 'All',         value: 'all' },
-  { label: 'Not Started', value: 'not_started' },
-  { label: 'In Progress', value: 'in_progress' },
-  { label: 'Completed',   value: 'completed' },
-];
-
-function StatusIndicator({ value, color }) {
-  const char = value === 'completed' ? '●' : value === 'in_progress' ? '◑' : value === 'not_started' ? '○' : null;
-  return <Text style={[indicator.circle, { color }]}>{char}</Text>;
-}
-
-const indicator = StyleSheet.create({
-  circle: { fontSize: 22, marginRight: 10, width: 26 },
-});
 
 export default function VRQuestionListScreen({ navigation }) {
   const { passages, flatQuestions, loading, error, syncing, syncProgress, refetch } = useVerbalReasoningPassages();
   const { progressMap, reload } = useVerbalReasoningProgress();
   const { localAnswers } = useVerbalReasoningAttempts();
-  const { theme: t } = useTheme();
-  const insets = useSafeAreaInsets();
-
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [activeFilter, setActiveFilter] = useState('all');
   const [deleting, setDeleting] = useState(false);
 
   useFocusEffect(useCallback(() => { reload(); }, [reload]));
-
-  const handleDeleteProgress = () => {
-    Alert.alert(
-      'Delete Progress',
-      'This will permanently delete all your Verbal Reasoning progress and answers. This cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: deleteProgress },
-      ],
-    );
-  };
 
   const deleteProgress = async () => {
     setDeleting(true);
@@ -66,140 +32,42 @@ export default function VRQuestionListScreen({ navigation }) {
     }
   };
 
-  const filteredPassages = passages
-    .filter((p) => {
-      if (activeFilter === 'all') return true;
-      const status = progressMap[p.id] ?? null;
-      if (activeFilter === 'not_started') return status === null;
-      return status === activeFilter;
-    });
-
-  const activeFilterLabel = FILTERS.find((f) => f.value === activeFilter)?.label;
-  const countLabel = activeFilter === 'all'
-    ? `${passages.length} ${passages.length === 1 ? 'passage' : 'passages'}`
-    : `${filteredPassages.length} of ${passages.length} · ${activeFilterLabel}`;
-
-  if (loading) {
-    return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <ActivityIndicator size="large" color={t.accent} />
-        <Text style={[styles.loadingText, { color: t.textSecondary }]}>Loading questions...</Text>
-      </View>
+  const handleDeleteProgress = () => {
+    Alert.alert(
+      'Delete Progress',
+      'This will permanently delete all your Verbal Reasoning progress and answers. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Delete', style: 'destructive', onPress: deleteProgress },
+      ],
     );
-  }
+  };
 
-  if (error) {
-    if (error?.isOffline) {
-      return <OfflineRetry onRetry={refetch} message="Connect to the internet to load passages." />;
-    }
-    return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={styles.errorText}>{JSON.stringify(error)}</Text>
-      </View>
-    );
+  if (error?.isOffline) {
+    return <OfflineRetry onRetry={refetch} message="Connect to the internet to load passages." />;
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: t.bgInput }]}>
-      <SyncBanner visible={syncing} progress={syncProgress} />
-      <View style={styles.filterWrapper}>
-        <Text style={[styles.countLabel, { color: t.textSecondary }]} numberOfLines={1}>
-          {countLabel}
-        </Text>
-        <TouchableOpacity
-          style={[styles.filterButton, { backgroundColor: t.bgCard, borderColor: activeFilter !== 'all' ? t.sectionVR : t.border }]}
-          onPress={() => setDropdownOpen((o) => !o)}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.filterIcon, { color: t.sectionVR }]}>≡</Text>
-        </TouchableOpacity>
-
-        {dropdownOpen && (
-          <View style={[styles.dropdownMenu, { backgroundColor: t.bgCard, borderColor: t.sectionVR }]}>
-            {FILTERS.map((f) => (
-              <TouchableOpacity
-                key={f.value}
-                style={[styles.dropdownItem, { borderBottomColor: t.border }, f.value === activeFilter && { backgroundColor: t.accentDim }]}
-                onPress={() => { setActiveFilter(f.value); setDropdownOpen(false); }}
-                activeOpacity={0.75}
-              >
-                <StatusIndicator value={f.value} color={t.sectionVR} />
-                <Text style={[styles.dropdownItemText, { color: t.textSecondary }, f.value === activeFilter && { color: t.text, fontWeight: '600' }]}>
-                  {f.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-      </View>
-
-      <SectionQuestionList
-        items={filteredPassages}
-        getTitle={(item) => item.title}
-        getStatus={(item) => progressMap[item.id] ?? null}
-        getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
-        getIsFree={(item) => item.isFree}
-        routeName="VRPassage"
-        navigation={navigation}
-      />
-
-      <View style={[styles.bottomPanel, { backgroundColor: t.headerBg, paddingBottom: insets.bottom + 12 }]}>
-        <TouchableOpacity
-          style={[styles.deleteBtn, { borderColor: t.danger }]}
-          onPress={handleDeleteProgress}
-          disabled={deleting}
-          activeOpacity={0.8}
-        >
-          {deleting
-            ? <ActivityIndicator size="small" color={t.danger} />
-            : <Text style={[styles.deleteBtnText, { color: t.danger }]}>Reset Progress</Text>
-          }
-        </TouchableOpacity>
-      </View>
-    </View>
+    <PremiumQuestionListScreen
+      title="Verbal Reasoning"
+      items={passages}
+      singularLabel="passage"
+      pluralLabel="passages"
+      searchPlaceholder="Search passages..."
+      getTitle={(item) => item.title}
+      getSearchText={(item) => item.resource}
+      getStatus={(item) => progressMap[item.id] ?? null}
+      getIndex={(item) => getTargetFlatIndex(item.id, flatQuestions, localAnswers)}
+      getIsFree={(item) => item.isFree}
+      getItemKey={(item) => item.id}
+      routeName="VRPassage"
+      navigation={navigation}
+      loading={loading}
+      error={error}
+      syncing={syncing}
+      syncProgress={syncProgress}
+      deleting={deleting}
+      onReset={handleDeleteProgress}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
-  loadingText: { marginTop: 12, fontSize: 14 },
-  errorText: { color: 'red', textAlign: 'center' },
-  filterWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 24,
-    paddingTop: 12,
-    zIndex: 10,
-  },
-  countLabel: { fontSize: 13, fontWeight: '500', flex: 1, marginRight: 12 },
-  filterButton: {
-    width: 34, height: 34, borderRadius: 17,
-    borderWidth: 1, justifyContent: 'center', alignItems: 'center',
-  },
-  filterIcon: { fontSize: 20 },
-  dropdownMenu: {
-    position: 'absolute', top: 46, right: 0, width: 180,
-    borderRadius: 8, borderWidth: 1, overflow: 'hidden',
-  },
-  dropdownItem: {
-    flexDirection: 'row', alignItems: 'center',
-    paddingHorizontal: 14, paddingVertical: 11,
-    borderBottomWidth: 1,
-  },
-  dropdownItemText: { fontSize: 14 },
-  bottomPanel: {
-    paddingTop: 14,
-    paddingHorizontal: 24,
-    alignItems: 'flex-end',
-  },
-  deleteBtn: {
-    paddingVertical: 7,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  deleteBtnText: { fontSize: 12, fontWeight: '600' },
-});

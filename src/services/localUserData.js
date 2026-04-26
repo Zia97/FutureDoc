@@ -18,7 +18,12 @@ const USER_DATA_KEYS = [
   'timed_sj_completed_attempts',
   // Pending sync queue
   'timed_exam_sync_queue',
+  // Profile cache (cleared on account deletion so a different user
+  // signing in on the same device doesn't see the old name flash).
+  'display_name_cache',
 ];
+
+export const DISPLAY_NAME_CACHE_KEY = 'display_name_cache';
 
 // Wipes all user-scoped local data. Called on account deletion so a
 // subsequent sign-in on the same device doesn't inherit the deleted

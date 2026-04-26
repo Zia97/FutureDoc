@@ -30,12 +30,14 @@ const AppleIcon = ({ size = 22, color = '#fff' }) => (
 );
 
 export default function LoginScreen({ navigation }) {
-  const { signIn, signInWithGoogle, signInWithApple } = useAuth();
+  const { signIn, signInWithGoogle, signInWithApple, resendVerificationEmail } = useAuth();
   const { theme: t } = useTheme();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(null);
+  const [showResend, setShowResend] = useState(false);
+  const [resending, setResending] = useState(false);
 
   const dismissToHome = () => {
     if (navigation.canGoBack()) navigation.goBack();
@@ -51,10 +53,28 @@ export default function LoginScreen({ navigation }) {
     const { error } = await signIn(email, password);
     setLoading(false);
     if (error) {
+      const isUnverified = /verify your email/i.test(error.message);
+      setShowResend(isUnverified);
       Alert.alert('Login failed', error.message);
       return;
     }
+    setShowResend(false);
     dismissToHome();
+  };
+
+  const handleResend = async () => {
+    if (!email) {
+      Alert.alert('Error', 'Enter your email first.');
+      return;
+    }
+    setResending(true);
+    const { error } = await resendVerificationEmail(email);
+    setResending(false);
+    if (error) {
+      Alert.alert('Could not resend', error.message);
+      return;
+    }
+    Alert.alert('Email sent', 'Check your inbox for the new confirmation link.');
   };
 
   const handleGoogle = async () => {
@@ -153,6 +173,16 @@ export default function LoginScreen({ navigation }) {
           )}
         </TouchableOpacity>
       </View>
+
+      {showResend && (
+        <TouchableOpacity onPress={handleResend} disabled={resending}>
+          {resending ? (
+            <ActivityIndicator color={t.accent} style={{ marginTop: 8 }} />
+          ) : (
+            <Text style={[styles.link, { color: t.accent }]}>Resend verification email</Text>
+          )}
+        </TouchableOpacity>
+      )}
 
       <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
         <Text style={[styles.link, { color: t.textMuted }]}>Forgot your password?</Text>

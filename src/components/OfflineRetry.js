@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme } from '../context/ThemeContext';
+import PremiumIcon from './premium/PremiumIcon';
 
 const COOLDOWN_MS = 3000;
 
@@ -21,7 +21,7 @@ export default function OfflineRetry({ onRetry, message }) {
 
   return (
     <View style={[styles.wrap, { backgroundColor: t.bgInput }]}>
-      <MaterialCommunityIcons name="wifi-off" size={40} color={t.textSecondary} />
+      <PremiumIcon name="wifi-off" size={42} color={t.textSecondary} />
       <Text style={[styles.title, { color: t.textSecondary }]}>No internet connection</Text>
       <Text style={[styles.body, { color: t.textSecondary }]}>
         {message ?? 'Connect to the internet to load the latest content.'}
@@ -36,7 +36,7 @@ export default function OfflineRetry({ onRetry, message }) {
           <ActivityIndicator size="small" color="#fff" />
         ) : (
           <>
-            <MaterialCommunityIcons name="refresh" size={18} color="#fff" />
+            <PremiumIcon name="refresh" size={18} color="#fff" />
             <Text style={styles.btnText}>Retry</Text>
           </>
         )}

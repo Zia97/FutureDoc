@@ -17,11 +17,17 @@ import { useTheme } from '../../context/ThemeContext';
 export default function SignUpScreen({ navigation }) {
   const { signUp } = useAuth();
   const { theme: t } = useTheme();
+  const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    const trimmedName = displayName.trim();
+    if (!trimmedName) {
+      Alert.alert('Error', 'Please enter a display name.');
+      return;
+    }
     if (!email || !password) {
       Alert.alert('Error', 'Please enter your email and password.');
       return;
@@ -31,7 +37,7 @@ export default function SignUpScreen({ navigation }) {
       return;
     }
     setLoading(true);
-    const { error } = await signUp(email, password);
+    const { error } = await signUp(email, password, trimmedName);
     setLoading(false);
     if (error) {
       Alert.alert('Sign up failed', error.message);
@@ -53,6 +59,15 @@ export default function SignUpScreen({ navigation }) {
         <Text style={[styles.title, { color: t.text }]}>UCAT Genius</Text>
         <Text style={[styles.subtitle, { color: t.textMuted }]}>Create your account</Text>
 
+        <TextInput
+          style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
+          placeholder="Display name"
+          placeholderTextColor={t.textMuted}
+          value={displayName}
+          onChangeText={setDisplayName}
+          autoCapitalize="words"
+          maxLength={40}
+        />
         <TextInput
           style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
           placeholder="Email"

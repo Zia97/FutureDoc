@@ -1,120 +1,106 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTheme } from '../../context/ThemeContext';
+import { Animated, StatusBar, StyleSheet, Text } from 'react-native';
+
+import {
+  AppHeader,
+  PremiumFooter,
+  PremiumScreen,
+  PremiumScrollView,
+  SectionSelectionCard,
+  premiumColors,
+  useFadeSlide,
+  useStaggeredFade,
+} from '../../components/premium/PremiumPracticeUI';
 
 const SECTIONS = [
   {
     id: 'VR',
     title: 'Verbal Reasoning',
-    description: 'Reading comprehension & analysis',
-    icon: 'book-open-page-variant',
+    description: 'Reading comprehension and critical analysis',
+    icon: 'book',
+    accent: premiumColors.blue,
+    route: 'VRQuestionList',
   },
   {
     id: 'DM',
     title: 'Decision Making',
-    description: 'Logic puzzles & diagrams',
-    icon: 'head-cog-outline',
+    description: 'Logic puzzles, arguments and diagrams',
+    icon: 'person-cog',
+    accent: premiumColors.teal,
+    route: 'DMQuestionList',
   },
   {
     id: 'QR',
     title: 'Quantitative Reasoning',
-    description: 'Numerical problem solving',
-    icon: 'calculator-variant',
+    description: 'Numerical problem solving and data interpretation',
+    icon: 'calculator',
+    accent: premiumColors.purple,
+    route: 'QRQuestionList',
   },
   {
     id: 'SJ',
     title: 'Situational Judgement',
-    description: 'Clinical scenario judgement',
+    description: 'Professional scenarios and ethical judgement',
     icon: 'stethoscope',
+    accent: premiumColors.mint,
+    route: 'SJScenarioList',
   },
 ];
 
 export default function PracticeSectionsScreen({ navigation }) {
-  const { theme: t } = useTheme();
+  const introAnim = useFadeSlide(0);
+  const cardAnims = useStaggeredFade(SECTIONS.length, 100, 70);
+  const footerAnim = useFadeSlide(430);
 
   return (
-    <View style={[styles.container, { backgroundColor: t.bgInput }]}>
-      <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
+    <PremiumScreen>
+      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <AppHeader navigation={navigation} title="Normal Practice" />
 
-      <Text style={[styles.heading, { color: t.text }]}>Select Section</Text>
-      <Text style={[styles.subheading, { color: t.textSecondary }]}>Choose a section to practice</Text>
+      <PremiumScrollView>
+        <Animated.View style={[styles.intro, introAnim]}>
+          <Text style={styles.heading}>Select Section</Text>
+          <Text style={styles.subtitle}>Choose a UCAT section to practise</Text>
+        </Animated.View>
 
-      <View style={styles.grid}>
-        {SECTIONS.map((section) => (
-          <TouchableOpacity
-            key={section.id}
-            style={[styles.card, { backgroundColor: t.bgCard, borderLeftColor: t.accent, borderColor: t.border }]}
-            activeOpacity={0.8}
-            onPress={() => {
-              if (section.id === 'VR') navigation.navigate('VRQuestionList');
-              if (section.id === 'SJ') navigation.navigate('SJScenarioList');
-              if (section.id === 'DM') navigation.navigate('DMQuestionList');
-              if (section.id === 'QR') navigation.navigate('QRQuestionList');
-            }}
-          >
-            <View style={[styles.badge, { backgroundColor: t.accent }]}>
-              <MaterialCommunityIcons name={section.icon} size={26} color="#ffffff" />
-            </View>
-            <View style={styles.cardText}>
-              <Text style={[styles.cardTitle, { color: t.text }]}>{section.title}</Text>
-              <Text style={[styles.cardDescription, { color: t.textSecondary }]}>{section.description}</Text>
-            </View>
-          </TouchableOpacity>
+        {SECTIONS.map((section, index) => (
+          <Animated.View key={section.id} style={cardAnims[index]}>
+            <SectionSelectionCard
+              title={section.title}
+              description={section.description}
+              icon={section.icon}
+              accent={section.accent}
+              onPress={() => navigation.navigate(section.route)}
+            />
+          </Animated.View>
         ))}
-      </View>
-    </View>
+
+        <Animated.View style={footerAnim}>
+          <PremiumFooter style={styles.footer} />
+        </Animated.View>
+      </PremiumScrollView>
+    </PremiumScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 60,
+  intro: {
+    paddingTop: 6,
+    paddingBottom: 24,
   },
   heading: {
-    fontSize: 32,
-    fontWeight: '800',
+    color: premiumColors.text,
+    fontSize: 36,
+    lineHeight: 42,
+    fontWeight: '900',
   },
-  subheading: {
-    fontSize: 14,
-    marginTop: 6,
-    marginBottom: 36,
+  subtitle: {
+    color: premiumColors.textSecondary,
+    fontSize: 16,
+    lineHeight: 24,
+    marginTop: 8,
   },
-  grid: {
-    gap: 16,
-  },
-  card: {
-    borderRadius: 14,
-    borderLeftWidth: 4,
-    borderWidth: 1,
-    padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-  },
-  badge: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  cardText: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  cardDescription: {
-    fontSize: 13,
-    marginTop: 3,
+  footer: {
+    marginTop: 18,
   },
 });

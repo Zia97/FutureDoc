@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
   Alert,
   ScrollView,
   ActivityIndicator,
   Switch,
+  Modal,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
@@ -25,12 +29,62 @@ const PRACTICE_SECTIONS = [
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const { user, signOut, deleteAccount, isAnonymous } = useAuth();
+  const { user, signOut, deleteAccount, isAnonymous, displayName, updatePassword, saveDisplayName } = useAuth();
   const { theme: t, isDark, toggleDark } = useTheme();
   const { isPro, presentCustomerCenter } = useSubscription();
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
+  const [pwModalVisible, setPwModalVisible] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [pwSaving, setPwSaving] = useState(false);
+  const [nameModalVisible, setNameModalVisible] = useState(false);
+  const [nameDraft, setNameDraft] = useState('');
+  const [nameSaving, setNameSaving] = useState(false);
+
+  const openNameModal = () => {
+    setNameDraft(displayName ?? '');
+    setNameModalVisible(true);
+  };
+
+  const handleSaveDisplayName = async () => {
+    const trimmed = nameDraft.trim();
+    if (!trimmed) {
+      Alert.alert('Error', 'Display name cannot be blank.');
+      return;
+    }
+    setNameSaving(true);
+    const { error } = await saveDisplayName(trimmed);
+    setNameSaving(false);
+    if (error) {
+      Alert.alert('Could not save', error.message);
+      return;
+    }
+    setNameModalVisible(false);
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters.');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+    setPwSaving(true);
+    const { error } = await updatePassword(newPassword);
+    setPwSaving(false);
+    if (error) {
+      Alert.alert('Could not update password', error.message);
+      return;
+    }
+    setPwModalVisible(false);
+    setNewPassword('');
+    setConfirmPassword('');
+    Alert.alert('Password updated', 'Your password has been changed.');
+  };
 
   useEffect(() => {
     if (!__DEV__) return;
@@ -123,8 +177,10 @@ export default function ProfileScreen() {
     );
   };
 
-  const emailInitial = isAnonymous ? 'G' : (user?.email?.[0]?.toUpperCase() ?? '?');
+  const initialSource = isAnonymous ? 'G' : (displayName?.[0] ?? user?.email?.[0] ?? '?');
+  const emailInitial = initialSource.toUpperCase();
   const emailLabel = isAnonymous ? 'Guest — progress saved on this device' : user?.email;
+  const isPasswordUser = !isAnonymous && user?.app_metadata?.provider === 'email';
 
   return (
     <ScrollView
@@ -136,7 +192,15 @@ export default function ProfileScreen() {
         <View style={[styles.avatar, { backgroundColor: t.accent }]}>
           <Text style={styles.avatarText}>{emailInitial}</Text>
         </View>
-        <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{emailLabel}</Text>
+        <View style={{ flex: 1 }}>
+          {!isAnonymous && displayName ? (
+            <TouchableOpacity onPress={openNameModal} activeOpacity={0.7} style={styles.nameRow}>
+              <Text style={[styles.toggleTitle, { color: t.text }]} numberOfLines={1}>{displayName}</Text>
+              <Text style={[styles.editLink, { color: t.accent }]}>Edit</Text>
+            </TouchableOpacity>
+          ) : null}
+          <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{emailLabel}</Text>
+        </View>
       </View>
 
       {isAnonymous && (
@@ -303,6 +367,20 @@ export default function ProfileScreen() {
         </TouchableOpacity>
       </View>
 
+      {isPasswordUser && (
+        <>
+          <Text style={[styles.sectionHeading, { color: t.text }]}>Security</Text>
+          <TouchableOpacity
+            style={[styles.manageButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
+            onPress={() => setPwModalVisible(true)}
+            activeOpacity={0.8}
+          >
+            <Text style={[styles.manageButtonText, { color: t.text }]}>Change Password</Text>
+            <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'›'}</Text>
+          </TouchableOpacity>
+        </>
+      )}
+
       {!isAnonymous && (
         <TouchableOpacity
           style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
@@ -328,6 +406,108 @@ export default function ProfileScreen() {
           )}
         </TouchableOpacity>
       )}
+
+      <Modal
+        visible={nameModalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setNameModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalBackdrop}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+            <Text style={[styles.modalTitle, { color: t.text }]}>Edit Display Name</Text>
+            <TextInput
+              style={[styles.modalInput, { backgroundColor: t.bgInput, color: t.text, borderColor: t.border }]}
+              placeholder="Display name"
+              placeholderTextColor={t.textMuted}
+              value={nameDraft}
+              onChangeText={setNameDraft}
+              autoCapitalize="words"
+              maxLength={40}
+              autoFocus
+            />
+            <View style={styles.modalRow}>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: t.bgInput, borderColor: t.border, borderWidth: 1 }]}
+                onPress={() => setNameModalVisible(false)}
+                disabled={nameSaving}
+              >
+                <Text style={[styles.modalButtonText, { color: t.text }]}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: t.accent }]}
+                onPress={handleSaveDisplayName}
+                disabled={nameSaving}
+              >
+                {nameSaving ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={[styles.modalButtonText, { color: '#fff' }]}>Save</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
+
+      <Modal
+        visible={pwModalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => setPwModalVisible(false)}
+      >
+        <KeyboardAvoidingView
+          style={styles.modalBackdrop}
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        >
+          <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+            <Text style={[styles.modalTitle, { color: t.text }]}>Change Password</Text>
+            <TextInput
+              style={[styles.modalInput, { backgroundColor: t.bgInput, color: t.text, borderColor: t.border }]}
+              placeholder="New password"
+              placeholderTextColor={t.textMuted}
+              secureTextEntry
+              value={newPassword}
+              onChangeText={setNewPassword}
+            />
+            <TextInput
+              style={[styles.modalInput, { backgroundColor: t.bgInput, color: t.text, borderColor: t.border }]}
+              placeholder="Confirm new password"
+              placeholderTextColor={t.textMuted}
+              secureTextEntry
+              value={confirmPassword}
+              onChangeText={setConfirmPassword}
+            />
+            <View style={styles.modalRow}>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: t.bgInput, borderColor: t.border, borderWidth: 1 }]}
+                onPress={() => {
+                  setPwModalVisible(false);
+                  setNewPassword('');
+                  setConfirmPassword('');
+                }}
+                disabled={pwSaving}
+              >
+                <Text style={[styles.modalButtonText, { color: t.text }]}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.modalButton, { backgroundColor: t.accent }]}
+                onPress={handleChangePassword}
+                disabled={pwSaving}
+              >
+                {pwSaving ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={[styles.modalButtonText, { color: '#fff' }]}>Update</Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
     </ScrollView>
   );
 }
@@ -505,6 +685,55 @@ const styles = StyleSheet.create({
   },
   deleteText: {
     fontSize: 16,
+    fontWeight: '600',
+  },
+
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    paddingHorizontal: 24,
+  },
+  modalCard: {
+    borderRadius: 14,
+    borderWidth: 1,
+    padding: 20,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    marginBottom: 16,
+  },
+  modalInput: {
+    width: '100%',
+    borderRadius: 10,
+    padding: 14,
+    fontSize: 16,
+    marginBottom: 12,
+    borderWidth: 1,
+  },
+  modalRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  modalButton: {
+    flex: 1,
+    borderRadius: 10,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  editLink: {
+    fontSize: 13,
     fontWeight: '600',
   },
 });

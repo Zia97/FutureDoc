@@ -1,11 +1,24 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, StatusBar, Alert } from 'react-native';
+import { Alert, Animated, StatusBar, StyleSheet, Text } from 'react-native';
+
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
+import {
+  AppHeader,
+  PracticeModeCard,
+  PremiumFooter,
+  PremiumScreen,
+  PremiumScrollView,
+  premiumColors,
+  useFadeSlide,
+} from '../../components/premium/PremiumPracticeUI';
 
 export default function PracticeModeScreen({ navigation }) {
-  const { theme: t } = useTheme();
   const { isAnonymous } = useAuth();
+
+  const introAnim = useFadeSlide(0);
+  const card1Anim = useFadeSlide(110);
+  const card2Anim = useFadeSlide(190);
+  const footerAnim = useFadeSlide(280);
 
   const handleTimedPractice = () => {
     if (isAnonymous) {
@@ -19,129 +32,71 @@ export default function PracticeModeScreen({ navigation }) {
       );
       return;
     }
+
     navigation.navigate('TimedPracticeSections');
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: t.bgInput }]}>
-      <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
+    <PremiumScreen>
+      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <AppHeader navigation={navigation} title="Practice" />
 
-      <Text style={[styles.heading, { color: t.text }]}>How do you want to practice?</Text>
-      <Text style={[styles.subheading, { color: t.textSecondary }]}>Choose a practice mode</Text>
+      <PremiumScrollView>
+        <Animated.View style={[styles.intro, introAnim]}>
+          <Text style={styles.heading}>How do you want to practise?</Text>
+          <Text style={styles.subtitle}>Choose a practice mode that fits your goals.</Text>
+        </Animated.View>
 
-      <View style={styles.grid}>
-        <TouchableOpacity
-          style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: t.accent }]}
-          activeOpacity={0.8}
-          onPress={() => navigation.navigate('PracticeSections')}
-        >
-          <View style={[styles.iconBox, { backgroundColor: t.accent }]}>
-            <Text style={styles.iconText}>✎</Text>
-          </View>
-          <View style={styles.cardText}>
-            <Text style={[styles.cardTitle, { color: t.text }]}>Normal Practice</Text>
-            <Text style={[styles.cardDescription, { color: t.textSecondary }]}>
-              Browse and attempt questions at your own pace
-            </Text>
-          </View>
-        </TouchableOpacity>
+        <Animated.View style={card1Anim}>
+          <PracticeModeCard
+            title="Normal Practice"
+            description="Browse and attempt questions at your own pace."
+            icon="pencil"
+            accent={premiumColors.cyan}
+            highlighted
+            onPress={() => navigation.navigate('PracticeSections')}
+          />
+        </Animated.View>
 
-        <TouchableOpacity
-          style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border, borderLeftColor: '#e11d48' }]}
-          activeOpacity={0.8}
-          onPress={handleTimedPractice}
-        >
-          <View style={[styles.iconBox, { backgroundColor: '#e11d48' }]}>
-            <Text style={styles.iconText}>⏱</Text>
-          </View>
-          <View style={styles.cardText}>
-            <View style={styles.cardTitleRow}>
-              <Text style={[styles.cardTitle, { color: t.text }]}>Timed Practice</Text>
-              {isAnonymous && (
-                <View style={[styles.lockBadge, { borderColor: t.border, backgroundColor: t.bgInput }]}>
-                  <Text style={[styles.lockBadgeText, { color: t.textMuted }]}>Account required</Text>
-                </View>
-              )}
-            </View>
-            <Text style={[styles.cardDescription, { color: t.textSecondary }]}>
-              Sit timed tests under real UCAT conditions
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    </View>
+        <Animated.View style={card2Anim}>
+          <PracticeModeCard
+            title="Timed Practice"
+            description="Sit timed tests under real UCAT conditions."
+            icon="timer"
+            accent={premiumColors.red}
+            badge={isAnonymous ? 'Account required' : null}
+            onPress={handleTimedPractice}
+          />
+        </Animated.View>
+
+        <Animated.View style={footerAnim}>
+          <PremiumFooter style={styles.footer} />
+        </Animated.View>
+      </PremiumScrollView>
+    </PremiumScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingHorizontal: 24,
-    paddingTop: 60,
+  intro: {
+    paddingTop: 6,
+    paddingBottom: 26,
   },
   heading: {
-    fontSize: 28,
-    fontWeight: '800',
+    color: premiumColors.text,
+    fontSize: 34,
+    lineHeight: 41,
+    fontWeight: '900',
+    maxWidth: 330,
   },
-  subheading: {
-    fontSize: 14,
-    marginTop: 6,
-    marginBottom: 36,
+  subtitle: {
+    color: premiumColors.textSecondary,
+    fontSize: 16,
+    lineHeight: 24,
+    marginTop: 10,
+    maxWidth: 320,
   },
-  grid: {
-    gap: 16,
-  },
-  card: {
-    borderRadius: 14,
-    borderLeftWidth: 4,
-    borderWidth: 1,
-    padding: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 6,
-  },
-  iconBox: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  iconText: {
-    color: '#ffffff',
-    fontSize: 20,
-  },
-  cardText: {
-    flex: 1,
-  },
-  cardTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  cardTitle: {
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  lockBadge: {
-    borderRadius: 6,
-    borderWidth: 1,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-  },
-  lockBadgeText: {
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  cardDescription: {
-    fontSize: 13,
-    marginTop: 3,
-    lineHeight: 19,
+  footer: {
+    marginTop: 24,
   },
 });

@@ -1,9 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import * as Font from 'expo-font';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { SubscriptionProvider } from './src/context/SubscriptionContext';
@@ -33,16 +29,6 @@ Sentry.init({
 });
 
 export default Sentry.wrap(function App() {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
-
-  useEffect(() => {
-    Font.loadAsync(MaterialCommunityIcons.font).then(() => setFontsLoaded(true));
-  }, []);
-
-  if (!fontsLoaded) {
-    return <View style={{ flex: 1, backgroundColor: '#0b1120' }} />;
-  }
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
