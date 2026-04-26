@@ -1,6 +1,7 @@
 import React from 'react';
 import { Animated, StatusBar, StyleSheet, Text } from 'react-native';
 
+import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
   PremiumFooter,
@@ -11,6 +12,7 @@ import {
   useFadeSlide,
   useStaggeredFade,
 } from '../../components/premium/PremiumPracticeUI';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const SECTIONS = [
   {
@@ -19,6 +21,7 @@ const SECTIONS = [
     description: '44 questions - 22 minutes',
     icon: 'book',
     accent: premiumColors.blue,
+    accentKey: 'blue',
   },
   {
     id: 'DM',
@@ -26,6 +29,7 @@ const SECTIONS = [
     description: '35 questions - 37 minutes',
     icon: 'person-cog',
     accent: premiumColors.teal,
+    accentKey: 'teal',
   },
   {
     id: 'QR',
@@ -33,6 +37,7 @@ const SECTIONS = [
     description: '36 questions - 26 minutes',
     icon: 'calculator',
     accent: premiumColors.purple,
+    accentKey: 'purple',
   },
   {
     id: 'SJ',
@@ -40,23 +45,26 @@ const SECTIONS = [
     description: '69 questions - 26 minutes',
     icon: 'stethoscope',
     accent: premiumColors.mint,
+    accentKey: 'mint',
   },
 ];
 
 export default function TimedPracticeSectionsScreen({ navigation }) {
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
   const introAnim = useFadeSlide(0);
   const cardAnims = useStaggeredFade(SECTIONS.length, 100, 70);
   const footerAnim = useFadeSlide(430);
 
   return (
     <PremiumScreen>
-      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
       <AppHeader navigation={navigation} title="Timed Practice" />
 
       <PremiumScrollView>
         <Animated.View style={[styles.intro, introAnim]}>
-          <Text style={styles.heading}>Timed Practice</Text>
-          <Text style={styles.subtitle}>Select a section to view timed tests</Text>
+          <Text style={[styles.heading, { color: colors.text }]}>Timed Practice</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Select a section to view timed tests</Text>
         </Animated.View>
 
         {SECTIONS.map((section, index) => (
@@ -65,7 +73,7 @@ export default function TimedPracticeSectionsScreen({ navigation }) {
               title={section.title}
               description={section.description}
               icon={section.icon}
-              accent={section.accent}
+              accent={colors[section.accentKey] ?? section.accent}
               onPress={() => navigation.navigate('TimedTestList', { section: section.id, title: section.title })}
             />
           </Animated.View>

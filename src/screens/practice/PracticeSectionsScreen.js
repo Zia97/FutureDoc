@@ -1,6 +1,7 @@
 import React from 'react';
 import { Animated, StatusBar, StyleSheet, Text } from 'react-native';
 
+import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
   PremiumFooter,
@@ -11,6 +12,7 @@ import {
   useFadeSlide,
   useStaggeredFade,
 } from '../../components/premium/PremiumPracticeUI';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const SECTIONS = [
   {
@@ -19,6 +21,7 @@ const SECTIONS = [
     description: 'Reading comprehension and critical analysis',
     icon: 'book',
     accent: premiumColors.blue,
+    accentKey: 'blue',
     route: 'VRQuestionList',
   },
   {
@@ -27,6 +30,7 @@ const SECTIONS = [
     description: 'Logic puzzles, arguments and diagrams',
     icon: 'person-cog',
     accent: premiumColors.teal,
+    accentKey: 'teal',
     route: 'DMQuestionList',
   },
   {
@@ -35,6 +39,7 @@ const SECTIONS = [
     description: 'Numerical problem solving and data interpretation',
     icon: 'calculator',
     accent: premiumColors.purple,
+    accentKey: 'purple',
     route: 'QRQuestionList',
   },
   {
@@ -43,24 +48,27 @@ const SECTIONS = [
     description: 'Professional scenarios and ethical judgement',
     icon: 'stethoscope',
     accent: premiumColors.mint,
+    accentKey: 'mint',
     route: 'SJScenarioList',
   },
 ];
 
 export default function PracticeSectionsScreen({ navigation }) {
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
   const introAnim = useFadeSlide(0);
   const cardAnims = useStaggeredFade(SECTIONS.length, 100, 70);
   const footerAnim = useFadeSlide(430);
 
   return (
     <PremiumScreen>
-      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
       <AppHeader navigation={navigation} title="Normal Practice" />
 
       <PremiumScrollView>
         <Animated.View style={[styles.intro, introAnim]}>
-          <Text style={styles.heading}>Select Section</Text>
-          <Text style={styles.subtitle}>Choose a UCAT section to practise</Text>
+          <Text style={[styles.heading, { color: colors.text }]}>Select Section</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Choose a UCAT section to practise</Text>
         </Animated.View>
 
         {SECTIONS.map((section, index) => (
@@ -69,7 +77,7 @@ export default function PracticeSectionsScreen({ navigation }) {
               title={section.title}
               description={section.description}
               icon={section.icon}
-              accent={section.accent}
+              accent={colors[section.accentKey] ?? section.accent}
               onPress={() => navigation.navigate(section.route)}
             />
           </Animated.View>

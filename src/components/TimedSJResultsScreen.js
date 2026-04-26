@@ -3,12 +3,16 @@ import {
   View,
   Text,
   ScrollView,
-  TouchableOpacity,
-  StyleSheet,
   StatusBar,
+  Platform,
+  StyleSheet,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useTheme } from '../context/ThemeContext';
+import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
+import { PremiumScreen } from './premium/PremiumPracticeUI';
 import { LABEL_SETS } from '../constants/sjLabelSets';
 import AnswerOptionButton from './AnswerOptionButton';
 import FeedbackBox from './FeedbackBox';
@@ -17,10 +21,19 @@ import {
   SCORE_UNCERTAINTY,
   UCAT_SCORE_DISCLAIMER_SHORT,
 } from '../lib/ucatScoring';
+import {
+  ResultsHeader,
+  ScoreOverviewCard,
+  QuestionBreakdownRow,
+  DoneBottomBar,
+  ReviewHeader,
+  ReviewStemCard,
+  ReviewQuestionCard,
+  ReviewNavBar,
+  resultsStyles,
+} from './premium/PremiumResultsUI';
 
-// ── UCAT SJ scoring helpers ───────────────────────────────────────────────────
-// Mark scheme: 4 marks (exact), 2 marks (1 position off), 0 marks (2+ off / unanswered)
-// Source: widely-cited UCAT SJT marking scheme used by official prep resources.
+// UCAT SJ mark scheme: 4 (exact), 2 (1 off), 0 (2+ off / unanswered)
 function sjMarkForQuestion(selected, correct, labelSet) {
   if (!selected) return 0;
   const si = labelSet.indexOf(selected);
@@ -32,22 +45,32 @@ function sjMarkForQuestion(selected, correct, labelSet) {
   return 0;
 }
 
-// ANZ uses a 300–900 scaled score for SJ (UK uses bands). Without
-// section-specific anchor data we keep the linear estimate; ANZ has its
-// own annual statistics that we don't track separately yet.
 function getANZScaledScore(rawPct) {
   return Math.round(300 + (rawPct / 100) * 600);
 }
-// ─────────────────────────────────────────────────────────────────────────────
+
+function deriveScenarioTitle(stem, fallback) {
+  if (!stem) return fallback;
+  const trimmed = stem.trim();
+  // Take up to first sentence terminator or 60 chars.
+  const sentenceEnd = trimmed.search(/[.!?](\s|$)/);
+  const slice = sentenceEnd > 0 && sentenceEnd <= 70
+    ? trimmed.slice(0, sentenceEnd)
+    : trimmed.slice(0, 60);
+  if (trimmed.length > slice.length) return `${slice}…`;
+  return slice;
+}
 
 export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test, onDone }) {
-  const { practiceTheme: t } = useTheme();
-  const insets = useSafeAreaInsets();
-  const [reviewItem, setReviewItem] = useState(null); // null | { passageIndex, questionIndex }
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const accent = colors.mint;
+  const [reviewItem, setReviewItem] = useState(null);
 
   const flatQuestions = useMemo(() => {
     const list = [];
     scenarios.forEach((s, sIdx) => {
+      const scenarioTitle = deriveScenarioTitle(s.stem, `Scenario ${sIdx + 1}`);
       s.items.forEach((item, iIdx) => {
         const selected = getAnswer(s.scenarioId, item.itemId);
         const answered = !!selected;
@@ -58,6 +81,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
           passageIndex: sIdx,
           questionIndex: iIdx,
           questionId: item.itemId,
+          scenarioTitle,
           result,
           flagged: flags.has(item.itemId),
         });
@@ -66,7 +90,6 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
     return list;
   }, [scenarios, getAnswer, flags]);
 
-  // Raw UCAT mark totals
   const { rawScore, maxRawScore } = useMemo(() => {
     let raw = 0;
     let max = 0;
@@ -91,7 +114,6 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
   const total = flatQuestions.length;
   const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
 
-  // ── Question review mode ──────────────────────────────────────────
   if (reviewItem !== null) {
     const { passageIndex, questionIndex } = reviewItem;
     const scenario = scenarios[passageIndex];
@@ -124,476 +146,222 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
     };
 
     return (
-      <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]}>
-        <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
+      <PremiumScreen>
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+        <SafeAreaView style={resultsStyles.safeArea} edges={['top', 'left', 'right']}>
+          <ReviewHeader
+            onBack={() => setReviewItem(null)}
+            label={`Q${currentGlobal + 1}`}
+            sublabel={deriveScenarioTitle(scenario.stem, `Scenario ${passageIndex + 1}`)}
+            accent={accent}
+            colors={colors}
+            isDark={isDark}
+          />
 
-        <View style={[styles.reviewHeader, { backgroundColor: '#1e3a8a' }]}>
-          <TouchableOpacity
-            onPress={() => setReviewItem(null)}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          <ScrollView
+            contentContainerStyle={resultsStyles.reviewContent}
+            showsVerticalScrollIndicator={false}
           >
-            <Text style={styles.reviewBackText}>← Results</Text>
-          </TouchableOpacity>
-          <Text style={styles.reviewHeaderTitle}>
-            Q{currentGlobal + 1} · Scenario {passageIndex + 1}
-          </Text>
-          <View style={{ width: 70 }} />
-        </View>
+            <ReviewStemCard label="SCENARIO" accent={accent} colors={colors} isDark={isDark}>
+              <Text style={[resultsStyles.stemText, { color: colors.textSecondary }]}>
+                {scenario.stem}
+              </Text>
+            </ReviewStemCard>
 
-        <ScrollView
-          contentContainerStyle={styles.reviewContent}
-          showsVerticalScrollIndicator={false}
-        >
-          <View
-            style={[
-              styles.stemCard,
-              { backgroundColor: t.bgCard, borderLeftColor: t.sectionSJ, borderColor: t.border },
-            ]}
-          >
-            <Text style={[styles.stemLabel, { color: t.sectionSJ }]}>SCENARIO</Text>
-            <Text style={[styles.stemText, { color: t.textSecondary }]}>{scenario.stem}</Text>
-          </View>
+            <ReviewQuestionCard colors={colors} isDark={isDark}>
+              <Text style={[resultsStyles.questionText, { color: colors.text }]}>{item.text}</Text>
+              <View style={resultsStyles.optionsContainer}>
+                {labelSet.map((opt) => (
+                  <AnswerOptionButton
+                    key={opt}
+                    label={opt}
+                    state={getOptionState(opt)}
+                    onPress={() => {}}
+                  />
+                ))}
+              </View>
+              <FeedbackBox
+                isCorrect={isCorrect}
+                correctAnswer={item.answer}
+                reason={item.answeringReason}
+                showReason
+                questionContext={questionContext}
+              />
+            </ReviewQuestionCard>
+          </ScrollView>
 
-          <View
-            style={[styles.questionCard, { backgroundColor: t.bgCard, borderColor: t.border }]}
-          >
-            <Text style={[styles.questionText, { color: t.text }]}>{item.text}</Text>
-            <View style={styles.optionsContainer}>
-              {labelSet.map((opt) => (
-                <AnswerOptionButton
-                  key={opt}
-                  label={opt}
-                  state={getOptionState(opt)}
-                  onPress={() => {}}
-                />
-              ))}
-            </View>
-            <FeedbackBox
-              isCorrect={isCorrect}
-              correctAnswer={item.answer}
-              reason={item.answeringReason}
-              showReason
-              questionContext={questionContext}
-            />
-          </View>
-        </ScrollView>
-
-        <View
-          style={[
-            styles.reviewNavBar,
-            { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 4 },
-          ]}
-        >
-          <TouchableOpacity
-            style={[
-              styles.reviewNavBtn,
-              { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-              !prev && styles.reviewNavBtnDisabled,
-            ]}
-            onPress={() =>
-              prev && setReviewItem({ passageIndex: prev.passageIndex, questionIndex: prev.questionIndex })
-            }
-            disabled={!prev}
-          >
-            <Text style={[styles.reviewNavBtnText, { color: t.text }]}>← Prev</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.reviewNavBtn,
-              { backgroundColor: t.bgInput, borderColor: t.borderStrong },
-              !next && styles.reviewNavBtnDisabled,
-            ]}
-            onPress={() =>
-              next && setReviewItem({ passageIndex: next.passageIndex, questionIndex: next.questionIndex })
-            }
-            disabled={!next}
-          >
-            <Text style={[styles.reviewNavBtnText, { color: t.text }]}>Next →</Text>
-          </TouchableOpacity>
-        </View>
-      </SafeAreaView>
+          <ReviewNavBar
+            onPrev={prev ? () => setReviewItem({ passageIndex: prev.passageIndex, questionIndex: prev.questionIndex }) : null}
+            onNext={next ? () => setReviewItem({ passageIndex: next.passageIndex, questionIndex: next.questionIndex }) : null}
+            accent={accent}
+            colors={colors}
+            isDark={isDark}
+          />
+        </SafeAreaView>
+      </PremiumScreen>
     );
   }
 
-  // ── Results summary mode ──────────────────────────────────────────
-  const resultColor = {
-    correct: t.correct,
-    incorrect: t.danger,
-    unanswered: t.textSecondary,
-  };
-  const resultLabel = {
-    correct: 'Correct',
-    incorrect: 'Incorrect',
-    unanswered: 'Unanswered',
-  };
-
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]}>
-      <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
+    <PremiumScreen>
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+      <SafeAreaView style={resultsStyles.safeArea} edges={['top', 'left', 'right']}>
+        <ResultsHeader title={test.title} accent={accent} colors={colors} />
 
-      <View style={[styles.header, { backgroundColor: '#1e3a8a' }]}>
-        <Text style={styles.headerTitle}>{test.title} — Results</Text>
-      </View>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={resultsStyles.scrollContent}
+        >
+          <ScoreOverviewCard
+            pct={pct}
+            correctCount={correctCount}
+            incorrectCount={incorrectCount}
+            unansweredCount={unansweredCount}
+            total={total}
+            accent={accent}
+            colors={colors}
+            isDark={isDark}
+          />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Score card */}
-        <View style={[styles.scoreCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <Text style={[styles.scorePercent, { color: t.text }]}>{pct}%</Text>
-          <Text style={[styles.scoreSubLabel, { color: t.textSecondary }]}>
-            {correctCount} of {total} correct
+          <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>UCAT SCORE</Text>
+          <View style={sjStyles.ucatRow}>
+            <SJScoreCard
+              region="UK"
+              badgeText={`Band ${ukBand.band}`}
+              raw={`${rawScore} / ${maxRawScore} marks`}
+              description={ukBand.description}
+              disclaimer="* Approximate — official band thresholds vary each year"
+              bandColor={ukBand.color}
+              colors={colors}
+              isDark={isDark}
+            />
+            <SJScoreCard
+              region="AU / NZ"
+              badgeText={`${anzScore} ±${SCORE_UNCERTAINTY}`}
+              raw={`${rawScore} / ${maxRawScore} marks`}
+              description={`Band ${ukBand.band} · ${ukBand.description}`}
+              disclaimer={`* ${UCAT_SCORE_DISCLAIMER_SHORT}`}
+              bandColor={ukBand.color}
+              colors={colors}
+              isDark={isDark}
+            />
+          </View>
+
+          <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>
+            QUESTION BREAKDOWN
           </Text>
 
-          <View style={styles.scoreStats}>
-            <View style={styles.scoreStat}>
-              <Text style={[styles.scoreStatNum, { color: t.correct }]}>{correctCount}</Text>
-              <Text style={[styles.scoreStatLabel, { color: t.textSecondary }]}>Correct</Text>
-            </View>
-            <View style={[styles.scoreStatDivider, { backgroundColor: t.border }]} />
-            <View style={styles.scoreStat}>
-              <Text style={[styles.scoreStatNum, { color: t.danger }]}>{incorrectCount}</Text>
-              <Text style={[styles.scoreStatLabel, { color: t.textSecondary }]}>Incorrect</Text>
-            </View>
-            <View style={[styles.scoreStatDivider, { backgroundColor: t.border }]} />
-            <View style={styles.scoreStat}>
-              <Text style={[styles.scoreStatNum, { color: t.textSecondary }]}>{unansweredCount}</Text>
-              <Text style={[styles.scoreStatLabel, { color: t.textSecondary }]}>Unanswered</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* UCAT Score */}
-        <Text style={[styles.sectionHeader, { color: t.textSecondary }]}>UCAT SCORE</Text>
-        <View style={[styles.ucatRow, { borderColor: t.border }]}>
-          {/* UK Band */}
-          <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            <Text style={[styles.ucatCardRegion, { color: t.textSecondary }]}>UK</Text>
-            <View style={[styles.bandBadge, { backgroundColor: ukBand.color + '22' }]}>
-              <Text style={[styles.bandBadgeText, { color: ukBand.color }]}>Band {ukBand.band}</Text>
-            </View>
-            <Text style={[styles.ucatRaw, { color: t.textSecondary }]}>
-              {rawScore} / {maxRawScore} marks
-            </Text>
-            <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>{ukBand.description}</Text>
-            <Text style={[styles.ucatDisclaimer, { color: t.textSecondary }]}>
-              * Approximate — official band thresholds vary each year
-            </Text>
+          <View style={resultsStyles.breakdownList}>
+            {flatQuestions.map((q) => (
+              <QuestionBreakdownRow
+                key={q.questionId}
+                number={q.globalIndex + 1}
+                title={q.scenarioTitle}
+                result={q.result}
+                flagged={q.flagged}
+                onPress={() => setReviewItem({ passageIndex: q.passageIndex, questionIndex: q.questionIndex })}
+                accent={accent}
+                colors={colors}
+                isDark={isDark}
+              />
+            ))}
           </View>
 
-          {/* ANZ Score */}
-          <View style={[styles.ucatCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            <Text style={[styles.ucatCardRegion, { color: t.textSecondary }]}>AU / NZ</Text>
-            <View style={[styles.bandBadge, { backgroundColor: ukBand.color + '22' }]}>
-              <Text style={[styles.bandBadgeText, { color: ukBand.color }]}>
-                {anzScore} ±{SCORE_UNCERTAINTY}
-              </Text>
-            </View>
-            <Text style={[styles.ucatRaw, { color: t.textSecondary }]}>
-              {rawScore} / {maxRawScore} marks
-            </Text>
-            <Text style={[styles.ucatDesc, { color: t.textSecondary }]}>Band {ukBand.band} · {ukBand.description}</Text>
-            <Text style={[styles.ucatDisclaimer, { color: t.textSecondary }]}>
-              * {UCAT_SCORE_DISCLAIMER_SHORT}
-            </Text>
-          </View>
-        </View>
+          <View style={{ height: 8 }} />
+        </ScrollView>
 
-        {/* Question breakdown */}
-        <Text style={[styles.sectionHeader, { color: t.textSecondary }]}>QUESTION BREAKDOWN</Text>
-
-        {flatQuestions.map((q, idx) => (
-          <TouchableOpacity
-            key={q.questionId}
-            style={[
-              styles.questionRow,
-              {
-                backgroundColor: idx % 2 === 0 ? t.bgCard : (t.bgSecondary ?? t.bg),
-                borderBottomColor: t.border,
-              },
-            ]}
-            onPress={() =>
-              setReviewItem({ passageIndex: q.passageIndex, questionIndex: q.questionIndex })
-            }
-            activeOpacity={0.7}
-          >
-            <View style={styles.questionRowLeft}>
-              <Text style={[styles.qNumber, { color: t.text }]}>Q{q.globalIndex + 1}</Text>
-              <Text style={[styles.qScenario, { color: t.textSecondary }]}>
-                Scenario {q.passageIndex + 1}
-              </Text>
-            </View>
-            <View style={styles.questionRowRight}>
-              {q.flagged && <Text style={styles.flaggedBadge}>⚑</Text>}
-              <View
-                style={[
-                  styles.resultBadge,
-                  { backgroundColor: resultColor[q.result] + '22' },
-                ]}
-              >
-                <Text style={[styles.resultBadgeText, { color: resultColor[q.result] }]}>
-                  {resultLabel[q.result]}
-                </Text>
-              </View>
-              <Text style={[styles.rowChevron, { color: t.textSecondary }]}>›</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-
-        <View style={{ height: 24 }} />
-      </ScrollView>
-
-      <View
-        style={[
-          styles.bottomBar,
-          { backgroundColor: t.bgCard, borderTopColor: t.border, paddingBottom: insets.bottom + 8 },
-        ]}
-      >
-        <TouchableOpacity
-          style={[styles.doneButton, { backgroundColor: '#1e3a8a' }]}
-          onPress={onDone}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.doneButtonText}>Done</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        <DoneBottomBar onDone={onDone} accent={accent} colors={colors} isDark={isDark} />
+      </SafeAreaView>
+    </PremiumScreen>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1 },
-  // ── Summary header ──
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  headerTitle: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
-  },
-  // ── Score card ──
-  scoreCard: {
-    margin: 16,
-    borderRadius: 16,
-    padding: 24,
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  scorePercent: {
-    fontSize: 56,
-    fontWeight: '800',
-    lineHeight: 64,
-  },
-  scoreSubLabel: {
-    fontSize: 14,
-    marginTop: 4,
-    marginBottom: 20,
-  },
-  scoreStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
-  },
-  scoreStat: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  scoreStatNum: {
-    fontSize: 26,
-    fontWeight: '800',
-  },
-  scoreStatLabel: {
-    fontSize: 12,
-    marginTop: 2,
-  },
-  scoreStatDivider: {
-    width: 1,
-    height: 36,
-  },
-  // ── Question list ──
-  sectionHeader: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginHorizontal: 16,
-    marginBottom: 4,
-  },
-  questionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  questionRowLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  questionRowRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  qNumber: {
-    fontSize: 14,
-    fontWeight: '700',
-    minWidth: 36,
-  },
-  qScenario: {
-    fontSize: 13,
-  },
-  flaggedBadge: {
-    fontSize: 16,
-    color: '#d97706',
-  },
-  resultBadge: {
-    borderRadius: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-  },
-  resultBadgeText: {
-    fontSize: 12,
-    fontWeight: '700',
-  },
-  rowChevron: {
-    fontSize: 20,
-    fontWeight: '300',
-  },
-  // ── UCAT score section ──
+function SJScoreCard({ region, badgeText, raw, description, disclaimer, bandColor, colors, isDark }) {
+  return (
+    <View style={[sjStyles.cardWrap, { shadowColor: bandColor }]}>
+      <LinearGradient
+        colors={
+          isDark
+            ? ['rgba(18, 35, 64, 0.96)', 'rgba(8, 22, 43, 0.96)']
+            : ['rgba(255, 255, 255, 0.98)', 'rgba(246, 250, 255, 0.98)']
+        }
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[sjStyles.card, { borderColor: hexToRgba(bandColor, 0.32) }]}
+      >
+        <Text style={[sjStyles.region, { color: colors.textMuted }]}>{region}</Text>
+        <View
+          style={[
+            sjStyles.bandBadge,
+            {
+              backgroundColor: hexToRgba(bandColor, isDark ? 0.18 : 0.12),
+              borderColor: hexToRgba(bandColor, 0.42),
+            },
+          ]}
+        >
+          <Text style={[sjStyles.bandText, { color: bandColor }]}>{badgeText}</Text>
+        </View>
+        <Text style={[sjStyles.raw, { color: colors.textSecondary }]}>{raw}</Text>
+        <Text style={[sjStyles.desc, { color: colors.textSecondary }]}>{description}</Text>
+        <Text style={[sjStyles.disclaimer, { color: colors.textMuted }]}>{disclaimer}</Text>
+      </LinearGradient>
+    </View>
+  );
+}
+
+const sjStyles = StyleSheet.create({
   ucatRow: {
     flexDirection: 'row',
     gap: 10,
-    marginHorizontal: 16,
-    marginBottom: 20,
+    marginBottom: 18,
   },
-  ucatCard: {
+  cardWrap: {
     flex: 1,
-    borderRadius: 14,
+    borderRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.2 : 0,
+    shadowRadius: 14,
+  },
+  card: {
+    flex: 1,
+    borderRadius: 16,
     borderWidth: 1,
     padding: 14,
     gap: 6,
+    overflow: 'hidden',
   },
-  ucatCardRegion: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1,
+  region: {
+    fontSize: 10,
+    fontWeight: '900',
+    letterSpacing: 1.4,
   },
   bandBadge: {
     alignSelf: 'flex-start',
-    borderRadius: 8,
+    borderRadius: 10,
+    borderWidth: 1,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 7,
     marginVertical: 2,
   },
-  bandBadgeText: {
-    fontSize: 20,
-    fontWeight: '800',
+  bandText: {
+    fontSize: 18,
+    fontWeight: '900',
+    letterSpacing: 0.3,
+    fontVariant: ['tabular-nums'],
   },
-  ucatRaw: {
+  raw: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
-  ucatDesc: {
+  desc: {
     fontSize: 12,
     lineHeight: 17,
+    fontWeight: '600',
   },
-  ucatDisclaimer: {
+  disclaimer: {
     fontSize: 10,
     fontStyle: 'italic',
-    opacity: 0.6,
+    lineHeight: 14,
     marginTop: 2,
-  },
-  // ── Bottom bar ──
-  bottomBar: {
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    borderTopWidth: 1,
-  },
-  doneButton: {
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  doneButtonText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '700',
-  },
-  // ── Review header ──
-  reviewHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  reviewBackText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  reviewHeaderTitle: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '700',
-  },
-  // ── Review content ──
-  reviewContent: {
-    padding: 16,
-    gap: 12,
-  },
-  stemCard: {
-    borderRadius: 14,
-    padding: 16,
-    borderLeftWidth: 3,
-    borderWidth: 1,
-  },
-  stemLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  stemText: {
-    fontSize: 14,
-    lineHeight: 22,
-  },
-  questionCard: {
-    borderRadius: 14,
-    padding: 16,
-    borderWidth: 1,
-  },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  optionsContainer: {
-    gap: 10,
-  },
-  // ── Review nav ──
-  reviewNavBar: {
-    flexDirection: 'row',
-    gap: 12,
-    paddingHorizontal: 16,
-    paddingTop: 10,
-    borderTopWidth: 1,
-  },
-  reviewNavBtn: {
-    flex: 1,
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    borderWidth: 1.5,
-  },
-  reviewNavBtnDisabled: {
-    opacity: 0.3,
-  },
-  reviewNavBtnText: {
-    fontSize: 14,
-    fontWeight: '600',
   },
 });

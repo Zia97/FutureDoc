@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Platform,
   StatusBar,
@@ -15,10 +16,11 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 
 import { useSubscription } from '../../context/SubscriptionContext';
-import { hexToRgba, premiumColors } from '../../theme/premiumTheme';
+import { useTheme } from '../../context/ThemeContext';
+import { getPremiumTheme, hexToRgba, premiumColors } from '../../theme/premiumTheme';
 import SyncBanner from '../SyncBanner';
 import PremiumIcon from './PremiumIcon';
-import { PremiumScreen } from './PremiumPracticeUI';
+import { AppHeader, PremiumScreen } from './PremiumPracticeUI';
 
 const STATUS_META = {
   not_started: {
@@ -99,7 +101,7 @@ function StatusMark({ status, size = 34 }) {
   );
 }
 
-function StatsCard({ status, count }) {
+function StatsCard({ status, count, colors }) {
   const meta = STATUS_META[status];
 
   return (
@@ -118,7 +120,7 @@ function StatsCard({ status, count }) {
           {count}
         </Text>
       </View>
-      <Text style={styles.statLabel} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.82}>
+      <Text style={[styles.statLabel, { color: colors.textSecondary }]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.82}>
         {meta.label}
       </Text>
     </View>
@@ -135,27 +137,38 @@ function ListHeader({
   openFilterKey,
   setOpenFilterKey,
   onControlsLayout,
+  colors,
+  isDark,
 }) {
   const hasExtraFilters = filterControls.length > 1;
 
   return (
     <View style={styles.headerWrap}>
       <View style={styles.statsRow}>
-        <StatsCard status="not_started" count={stats.notStarted} />
-        <StatsCard status="in_progress" count={stats.inProgress} />
-        <StatsCard status="completed" count={stats.completed} />
+        <StatsCard status="not_started" count={stats.notStarted} colors={colors} />
+        <StatsCard status="in_progress" count={stats.inProgress} colors={colors} />
+        <StatsCard status="completed" count={stats.completed} colors={colors} />
       </View>
 
       <View style={hasExtraFilters ? styles.controlsStack : styles.controlsRow} onLayout={onControlsLayout}>
-        <View style={[styles.searchBox, hasExtraFilters && styles.searchBoxWide]}>
-          <PremiumIcon name="search" size={24} color={premiumColors.textSecondary} strokeWidth={2.1} />
+        <View
+          style={[
+            styles.searchBox,
+            {
+              borderColor: isDark ? hexToRgba('#9BB8E6', 0.38) : hexToRgba('#455E8C', 0.22),
+              backgroundColor: isDark ? 'rgba(2, 8, 18, 0.52)' : 'rgba(255, 255, 255, 0.82)',
+            },
+            hasExtraFilters && styles.searchBoxWide,
+          ]}
+        >
+          <PremiumIcon name="search" size={24} color={colors.textSecondary} strokeWidth={2.1} />
           <TextInput
             value={searchText}
             onChangeText={setSearchText}
             onFocus={() => setOpenFilterKey(null)}
             placeholder={searchPlaceholder}
-            placeholderTextColor={hexToRgba(premiumColors.textSecondary, 0.72)}
-            style={styles.searchInput}
+            placeholderTextColor={hexToRgba(colors.textSecondary, 0.72)}
+            style={[styles.searchInput, { color: colors.text }]}
             returnKeyType="search"
             autoCorrect={false}
           />
@@ -169,19 +182,24 @@ function ListHeader({
               activeOpacity={0.84}
               style={[
                 styles.filterButton,
+                {
+                  borderColor: hexToRgba(colors.blue, 0.62),
+                  backgroundColor: isDark ? 'rgba(7, 19, 39, 0.86)' : 'rgba(255, 255, 255, 0.86)',
+                },
                 hasExtraFilters && styles.filterButtonCompact,
                 control.active && styles.filterButtonActive,
+                control.active && { backgroundColor: hexToRgba(colors.blue, isDark ? 0.12 : 0.1) },
               ]}
               accessibilityRole="button"
             >
-              <PremiumIcon name="filter" size={hasExtraFilters ? 20 : 23} color={premiumColors.text} strokeWidth={2.2} />
-              <Text style={styles.filterText} numberOfLines={1}>
+              <PremiumIcon name="filter" size={hasExtraFilters ? 20 : 23} color={colors.text} strokeWidth={2.2} />
+              <Text style={[styles.filterText, { color: colors.text }]} numberOfLines={1}>
                 {control.label}
               </Text>
               <PremiumIcon
                 name="chevron-down"
                 size={hasExtraFilters ? 17 : 19}
-                color={openFilterKey === control.key ? premiumColors.cyan : premiumColors.blue}
+                color={openFilterKey === control.key ? colors.cyan : colors.blue}
                 strokeWidth={2.5}
               />
             </TouchableOpacity>
@@ -192,14 +210,25 @@ function ListHeader({
   );
 }
 
-function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey }) {
+function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey, colors, isDark }) {
   return (
     <TouchableOpacity
       activeOpacity={1}
       onPress={() => setOpenFilterKey(null)}
       style={styles.dropdownOverlay}
     >
-      <View style={[styles.dropdownMenu, { top }]} pointerEvents="box-none">
+      <View
+        style={[
+          styles.dropdownMenu,
+          {
+            top,
+            borderColor: hexToRgba(colors.blue, isDark ? 0.56 : 0.32),
+            backgroundColor: isDark ? 'rgba(5, 15, 32, 0.98)' : 'rgba(255, 255, 255, 0.98)',
+            shadowColor: colors.blue,
+          },
+        ]}
+        pointerEvents="box-none"
+      >
         {control.options.map((option) => {
           const selected = option.value === control.activeValue;
           const meta = STATUS_META[option.value];
@@ -211,19 +240,25 @@ function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey }) {
                 setOpenFilterKey(null);
               }}
               activeOpacity={0.78}
-              style={[styles.dropdownItem, selected && styles.dropdownItemSelected]}
+              style={[
+                styles.dropdownItem,
+                { borderBottomColor: hexToRgba(colors.blue, isDark ? 0.12 : 0.1) },
+                selected && styles.dropdownItemSelected,
+                selected && { backgroundColor: hexToRgba(colors.blue, isDark ? 0.13 : 0.09) },
+              ]}
             >
               {option.value === 'all' ? (
-                <PremiumIcon name="filter" size={17} color={premiumColors.blue} strokeWidth={2} />
+                <PremiumIcon name="filter" size={17} color={colors.blue} strokeWidth={2} />
               ) : meta ? (
                 <StatusMark status={option.value} size={18} />
               ) : (
-                <View style={styles.dropdownDot} />
+                <View style={[styles.dropdownDot, { backgroundColor: colors.cyan }]} />
               )}
               <Text
                 style={[
                   styles.dropdownText,
-                  selected && { color: meta?.color ?? premiumColors.blue },
+                  { color: colors.textSecondary },
+                  selected && { color: meta?.color ?? colors.blue },
                 ]}
                 numberOfLines={1}
               >
@@ -237,21 +272,27 @@ function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey }) {
   );
 }
 
-function ResetButton({ deleting, onReset }) {
+function ResetButton({ deleting, onReset, colors, isDark }) {
   return (
     <TouchableOpacity
       activeOpacity={0.84}
       onPress={onReset}
       disabled={deleting}
-      style={styles.resetButton}
+      style={[
+        styles.resetButton,
+        {
+          borderColor: colors.red,
+          backgroundColor: isDark ? 'rgba(7, 8, 18, 0.38)' : 'rgba(255, 255, 255, 0.78)',
+        },
+      ]}
       accessibilityRole="button"
     >
       {deleting ? (
-        <ActivityIndicator size="small" color={premiumColors.red} />
+        <ActivityIndicator size="small" color={colors.red} />
       ) : (
         <>
-          <PremiumIcon name="refresh" size={24} color={premiumColors.red} strokeWidth={2.5} />
-          <Text style={styles.resetText}>Reset Section Progress</Text>
+          <PremiumIcon name="refresh" size={24} color={colors.red} strokeWidth={2.5} />
+          <Text style={[styles.resetText, { color: colors.red }]}>Reset Section Progress</Text>
         </>
       )}
     </TouchableOpacity>
@@ -259,6 +300,7 @@ function ResetButton({ deleting, onReset }) {
 }
 
 export default function PremiumQuestionListScreen({
+  title,
   items,
   pluralLabel,
   searchPlaceholder,
@@ -279,14 +321,26 @@ export default function PremiumQuestionListScreen({
   syncProgress,
   deleting,
   onReset,
+  onResetItem,
+  resetItemLabel = 'this question',
 }) {
   const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
   const [searchText, setSearchText] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
   const [extraFilterValues, setExtraFilterValues] = useState({});
   const [openFilterKey, setOpenFilterKey] = useState(null);
   const [filterMenuTop, setFilterMenuTop] = useState(236);
+  const [headerHeight, setHeaderHeight] = useState(0);
+  const headerTitle = title ?? pluralLabel;
+
+  const screenHeader = (
+    <View onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height)}>
+      <AppHeader navigation={navigation} title={headerTitle} />
+    </View>
+  );
 
   const indexedItems = useMemo(() => (
     (items ?? []).map((item, originalIndex) => {
@@ -372,9 +426,12 @@ export default function PremiumQuestionListScreen({
     const isFree = getIsFree ? getIsFree(item, entry.originalIndex) : true;
     const isLocked = !isFree && !isPro;
     const meta = STATUS_META[entry.status] ?? STATUS_META.not_started;
-    const rowColor = isLocked ? premiumColors.amber : meta.color;
+    const rowColor = isLocked ? colors.amber : meta.color;
     const navIndex = getIndex ? getIndex(item, entry.originalIndex) : entry.originalIndex;
     const badgeLabel = getBadgeLabel?.(item, entry.originalIndex);
+    const rowGradient = isDark
+      ? [hexToRgba(rowColor, 0.16), 'rgba(7, 20, 39, 0.94)', 'rgba(4, 10, 24, 0.98)']
+      : [hexToRgba(rowColor, 0.08), 'rgba(255, 255, 255, 0.98)', 'rgba(247, 250, 255, 0.98)'];
 
     return (
       <TouchableOpacity
@@ -390,11 +447,7 @@ export default function PremiumQuestionListScreen({
         accessibilityRole="button"
       >
         <LinearGradient
-          colors={[
-            hexToRgba(rowColor, 0.16),
-            'rgba(7, 20, 39, 0.94)',
-            'rgba(4, 10, 24, 0.98)',
-          ]}
+          colors={rowGradient}
           start={{ x: 0, y: 0.5 }}
           end={{ x: 1, y: 0.5 }}
           style={[
@@ -411,12 +464,12 @@ export default function PremiumQuestionListScreen({
           </Text>
           <View style={[styles.rowDivider, { backgroundColor: hexToRgba(rowColor, 0.22) }]} />
           <View style={styles.rowCopy}>
-            <Text style={styles.rowTitle} numberOfLines={2}>
+            <Text style={[styles.rowTitle, { color: colors.text }]} numberOfLines={2}>
               {entry.title}
             </Text>
             {badgeLabel ? (
-              <View style={styles.typeBadge}>
-                <Text style={styles.typeBadgeText} numberOfLines={1}>
+              <View style={[styles.typeBadge, { borderColor: hexToRgba(colors.cyan, 0.38), backgroundColor: hexToRgba(colors.cyan, 0.1) }]}>
+                <Text style={[styles.typeBadgeText, { color: colors.cyan }]} numberOfLines={1}>
                   {badgeLabel}
                 </Text>
               </View>
@@ -424,11 +477,36 @@ export default function PremiumQuestionListScreen({
           </View>
           <View style={styles.rowStatusCluster}>
             {isLocked ? (
-              <PremiumIcon name="lock" size={30} color={premiumColors.amber} strokeWidth={1.9} />
+              <PremiumIcon name="lock" size={30} color={colors.amber} strokeWidth={1.9} />
             ) : (
               <StatusMark status={entry.status} size={34} />
             )}
-            <PremiumIcon name="more-vertical" size={22} color={premiumColors.textMuted} />
+            {!isLocked && onResetItem && entry.status !== 'not_started' ? (
+              <TouchableOpacity
+                onPress={(event) => {
+                  event.stopPropagation?.();
+                  Alert.alert(
+                    'Reset Progress',
+                    `Reset your progress for ${resetItemLabel}? This cannot be undone.`,
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Reset',
+                        style: 'destructive',
+                        onPress: () => onResetItem(item, entry.originalIndex),
+                      },
+                    ],
+                  );
+                }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                accessibilityRole="button"
+                accessibilityLabel="Reset progress for this item"
+              >
+                <PremiumIcon name="more-vertical" size={22} color={colors.textMuted} />
+              </TouchableOpacity>
+            ) : (
+              <PremiumIcon name="more-vertical" size={22} color={colors.textMuted} />
+            )}
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -438,10 +516,12 @@ export default function PremiumQuestionListScreen({
   if (loading) {
     return (
       <PremiumScreen>
-        <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+        {screenHeader}
+        <SyncBanner visible={syncing} progress={syncProgress} />
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color={premiumColors.blue} />
-          <Text style={styles.loadingText}>Loading {pluralLabel}...</Text>
+          <ActivityIndicator size="large" color={colors.blue} />
+          <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading {pluralLabel}...</Text>
         </View>
       </PremiumScreen>
     );
@@ -450,10 +530,12 @@ export default function PremiumQuestionListScreen({
   if (error) {
     return (
       <PremiumScreen>
-        <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+        <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+        {screenHeader}
+        <SyncBanner visible={syncing} progress={syncProgress} />
         <View style={styles.centered}>
-          <Text style={styles.errorTitle}>Something went wrong</Text>
-          <Text style={styles.errorText}>{JSON.stringify(error)}</Text>
+          <Text style={[styles.errorTitle, { color: colors.text }]}>Something went wrong</Text>
+          <Text style={[styles.errorText, { color: colors.textSecondary }]}>{JSON.stringify(error)}</Text>
         </View>
       </PremiumScreen>
     );
@@ -461,7 +543,8 @@ export default function PremiumQuestionListScreen({
 
   return (
     <PremiumScreen>
-      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+      {screenHeader}
       <SyncBanner visible={syncing} progress={syncProgress} />
       <FlatList
         data={visibleItems}
@@ -470,7 +553,9 @@ export default function PremiumQuestionListScreen({
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[
           styles.listContent,
-          { paddingBottom: Math.max(insets.bottom, 8) + 100 },
+          {
+            paddingBottom: Math.max(insets.bottom, 8) + 100,
+          },
         ]}
         ListHeaderComponent={(
           <ListHeader
@@ -482,14 +567,16 @@ export default function PremiumQuestionListScreen({
             filterControls={filterControls}
             openFilterKey={openFilterKey}
             setOpenFilterKey={setOpenFilterKey}
-            onControlsLayout={(event) => setFilterMenuTop(event.nativeEvent.layout.y + (filterControls.length > 1 ? 112 : 62))}
+            onControlsLayout={(event) => setFilterMenuTop(headerHeight + event.nativeEvent.layout.y + (filterControls.length > 1 ? 112 : 62))}
+            colors={colors}
+            isDark={isDark}
           />
         )}
         renderItem={renderItem}
         ListEmptyComponent={(
           <View style={styles.emptyState}>
-            <Text style={styles.emptyTitle}>No {pluralLabel} found</Text>
-            <Text style={styles.emptyBody}>Try changing the search or filter.</Text>
+            <Text style={[styles.emptyTitle, { color: colors.text }]}>No {pluralLabel} found</Text>
+            <Text style={[styles.emptyBody, { color: colors.textSecondary }]}>Try changing the search or filter.</Text>
           </View>
         )}
       />
@@ -499,15 +586,17 @@ export default function PremiumQuestionListScreen({
           control={openControl}
           setFilterValue={setFilterValue}
           setOpenFilterKey={setOpenFilterKey}
+          colors={colors}
+          isDark={isDark}
         />
       ) : null}
       <LinearGradient
         pointerEvents="none"
-        colors={['rgba(2, 5, 12, 0)', 'rgba(2, 5, 12, 0.96)']}
+        colors={isDark ? ['rgba(2, 5, 12, 0)', 'rgba(2, 5, 12, 0.96)'] : ['rgba(231, 238, 248, 0)', 'rgba(231, 238, 248, 0.96)']}
         style={styles.resetFade}
       />
       <View style={[styles.resetPanel, { paddingBottom: Math.max(insets.bottom, 8) + 10 }]}>
-        <ResetButton deleting={deleting} onReset={onReset} />
+        <ResetButton deleting={deleting} onReset={onReset} colors={colors} isDark={isDark} />
       </View>
     </PremiumScreen>
   );
@@ -542,8 +631,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
   },
   headerWrap: {
-    paddingTop: 10,
-    paddingBottom: 14,
+    paddingTop: 0,
+    paddingBottom: 10,
     zIndex: 20,
   },
   statsRow: {
@@ -725,10 +814,10 @@ const styles = StyleSheet.create({
     width: 3,
   },
   rowNumber: {
-    width: 34,
+    width: 40,
     textAlign: 'center',
-    fontSize: 26,
-    lineHeight: 30,
+    fontSize: 20,
+    lineHeight: 24,
     fontWeight: '900',
   },
   rowDivider: {

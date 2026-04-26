@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert, Animated, StatusBar, StyleSheet, Text } from 'react-native';
 
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
   PracticeModeCard,
@@ -11,9 +12,12 @@ import {
   premiumColors,
   useFadeSlide,
 } from '../../components/premium/PremiumPracticeUI';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 
 export default function PracticeModeScreen({ navigation }) {
   const { isAnonymous } = useAuth();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
 
   const introAnim = useFadeSlide(0);
   const card1Anim = useFadeSlide(110);
@@ -38,13 +42,13 @@ export default function PracticeModeScreen({ navigation }) {
 
   return (
     <PremiumScreen>
-      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
       <AppHeader navigation={navigation} title="Practice" />
 
       <PremiumScrollView>
         <Animated.View style={[styles.intro, introAnim]}>
-          <Text style={styles.heading}>How do you want to practise?</Text>
-          <Text style={styles.subtitle}>Choose a practice mode that fits your goals.</Text>
+          <Text style={[styles.heading, { color: colors.text }]}>How do you want to practise?</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Choose a practice mode that fits your goals.</Text>
         </Animated.View>
 
         <Animated.View style={card1Anim}>
@@ -52,7 +56,7 @@ export default function PracticeModeScreen({ navigation }) {
             title="Normal Practice"
             description="Browse and attempt questions at your own pace."
             icon="pencil"
-            accent={premiumColors.cyan}
+            accent={colors.cyan}
             highlighted
             onPress={() => navigation.navigate('PracticeSections')}
           />
@@ -63,7 +67,7 @@ export default function PracticeModeScreen({ navigation }) {
             title="Timed Practice"
             description="Sit timed tests under real UCAT conditions."
             icon="timer"
-            accent={premiumColors.red}
+            accent={colors.red}
             badge={isAnonymous ? 'Account required' : null}
             onPress={handleTimedPractice}
           />

@@ -1,23 +1,34 @@
 import { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
   ScrollView,
-  TouchableOpacity,
   StyleSheet,
-  StatusBar,
+  View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
 import { useFlatNavigation } from '../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../hooks/ui/usePremiumGate';
 import { useTheme } from '../context/ThemeContext';
+import { getPremiumTheme } from '../theme/premiumTheme';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
 import NotesModal from './NotesModal';
 import BottomToolbar from './BottomToolbar';
+import {
+  PremiumQuestionScaffold,
+  QuestionTopBar,
+  QuestionPanel,
+  SectionLabel,
+  QuestionText,
+  PrimaryQuestionButton,
+} from './premium/PremiumQuestionScreenUI';
+
+const SECTION_TITLE = {
+  vr: 'Verbal Reasoning',
+  sj: 'Situational Judgement',
+};
 
 export default function PassageLayout({
   flatQuestions,
@@ -32,7 +43,9 @@ export default function PassageLayout({
   section = 'vr',
   getItemIsFree = null,
 }) {
-  const { practiceTheme: t } = useTheme();
+  const navigation = useNavigation();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
 
   const { index, item, isFirst, isLast, goNext: rawGoNext, goPrev: rawGoPrev } =
     useFlatNavigation(flatQuestions, initialIndex);
@@ -52,7 +65,6 @@ export default function PassageLayout({
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [pendingAnswer, setPendingAnswer] = useState(null);
   const [notesVisible, setNotesVisible] = useState(false);
-  const [notes, setNotes] = useState('');
 
   const qid = item.question.questionId ?? item.question.id;
   const selectedAnswer = getAnswer(item.stemId, qid);
@@ -84,11 +96,17 @@ export default function PassageLayout({
     onAnswerCommit?.(item, pendingAnswer);
   }
 
-  const sectionColor = section === 'sj' ? t.sectionSJ : t.sectionVR;
+  const sectionColor = section === 'sj' ? colors.mint : colors.blue;
+  const screenTitle = SECTION_TITLE[section] ?? 'Practice';
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
-      <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
+    <PremiumQuestionScaffold panHandlers={panHandlers}>
+      <QuestionTopBar
+        title={screenTitle}
+        subtitle="Practice"
+        accent={sectionColor}
+        onExit={() => navigation.goBack()}
+      />
 
       <ScreenNavBar
         title={getTitle(item)}
@@ -104,49 +122,48 @@ export default function PassageLayout({
       <ScrollView
         key={item.stemId + qid}
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator
+        showsVerticalScrollIndicator={false}
       >
-        <Text style={[styles.resourceLabel, { color: sectionColor }]}>{itemLabel.toUpperCase()}</Text>
-        <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
+        <QuestionPanel>
+          <SectionLabel accent={sectionColor}>{itemLabel}</SectionLabel>
+          <QuestionText muted>{item.resource}</QuestionText>
+        </QuestionPanel>
 
-        <View style={[styles.divider, { backgroundColor: t.border }]} />
+        <QuestionPanel>
+          <SectionLabel accent={sectionColor}>Question</SectionLabel>
+          <QuestionText>{item.question.questionText}</QuestionText>
 
-        <Text style={[styles.questionLabel, { color: sectionColor }]}>QUESTION</Text>
-        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
+          <View style={styles.optionsContainer}>
+            {renderOptions({ item, question: item.question, getOptionState, onAnswer })}
+          </View>
 
-        <View style={styles.optionsContainer}>
-          {renderOptions({ item, question: item.question, getOptionState, onAnswer })}
-        </View>
+          {pendingAnswer && !hasAnswered ? (
+            <PrimaryQuestionButton accent={sectionColor} onPress={handleCheckAnswer}>
+              Check Answer
+            </PrimaryQuestionButton>
+          ) : null}
 
-        {pendingAnswer && !hasAnswered && (
-          <TouchableOpacity
-            style={[styles.checkButton, { backgroundColor: sectionColor }]}
-            onPress={handleCheckAnswer}
-          >
-            <Text style={styles.checkButtonText}>Check Answer</Text>
-          </TouchableOpacity>
-        )}
-
-        {hasAnswered && (
-          <FeedbackBox
-            isCorrect={isCorrect}
-            correctAnswer={item.question.answer}
-            reason={item.question.answeringReason}
-            showReason
-            questionContext={{
-              questionId: qid,
-              question: item.question.questionText,
-              questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
-              section,
-              passage: item.resource ?? undefined,
-              options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,
-              correctAnswer: item.question.answer,
-              userAnswer: selectedAnswer,
-              explanation: item.question.answeringReason,
-              isTimed: false,
-            }}
-          />
-        )}
+          {hasAnswered ? (
+            <FeedbackBox
+              isCorrect={isCorrect}
+              correctAnswer={item.question.answer}
+              reason={item.question.answeringReason}
+              showReason={alwaysShowReason || true}
+              questionContext={{
+                questionId: qid,
+                question: item.question.questionText,
+                questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
+                section,
+                passage: item.resource ?? undefined,
+                options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,
+                correctAnswer: item.question.answer,
+                userAnswer: selectedAnswer,
+                explanation: item.question.answeringReason,
+                isTimed: false,
+              }}
+            />
+          ) : null}
+        </QuestionPanel>
       </ScrollView>
 
       <BottomToolbar
@@ -156,61 +173,21 @@ export default function PassageLayout({
 
       <NotesModal
         visible={notesVisible}
-        notes={notes}
-        onChangeNotes={setNotes}
-        onClear={() => setNotes('')}
+        sectionKey={section}
         onClose={() => setNotesVisible(false)}
       />
-    </SafeAreaView>
+    </PremiumQuestionScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   scrollContent: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  divider: {
-    height: 1,
-    marginVertical: 20,
-  },
-  resourceLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  resourceText: {
-    fontSize: 14,
-    lineHeight: 22,
-  },
-  questionLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
-    marginBottom: 16,
+    paddingHorizontal: 8,
+    paddingBottom: 26,
+    gap: 14,
   },
   optionsContainer: {
     gap: 10,
-  },
-  checkButton: {
-    marginTop: 14,
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  checkButtonText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '700',
+    marginTop: 16,
   },
 });

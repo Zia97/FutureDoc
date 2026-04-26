@@ -1,6 +1,6 @@
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import PassageLayout from '../../components/PassageLayout';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
+import { PremiumQuestionLoading } from '../../components/premium/PremiumQuestionScreenUI';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
@@ -11,11 +11,7 @@ export default function SJScenarioScreen({ route }) {
   const { submitAttempt, localAnswers, cacheLoading } = useSituationalJudgementAttempts();
 
   if (loading || cacheLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <PremiumQuestionLoading label="Loading scenario..." />;
   }
 
   function handleAnswerCommit(item, selectedAnswer) {
@@ -53,6 +49,3 @@ export default function SJScenarioScreen({ route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text, View, ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet } from 'react-native';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
@@ -11,6 +10,14 @@ import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakin
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
 import { useTheme } from '../../context/ThemeContext';
 import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
+import { getPremiumTheme } from '../../theme/premiumTheme';
+import {
+  PremiumQuestionScaffold,
+  PremiumQuestionLoading,
+  QuestionTopBar,
+  QuestionPanel,
+  PrimaryQuestionButton,
+} from '../../components/premium/PremiumQuestionScreenUI';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
@@ -46,7 +53,7 @@ function buildVennAIContext(question) {
       const setLabels = {};
       sets.forEach((s) => { setLabels[s.id] = s.label || s.id; });
       const shapesDesc = sets.map((s) => `${s.label || s.id} (${s.shape || 'circle'})`).join(', ');
-      lines.push(`Option ${opt.label} — layout: ${diagramLayout}, shapes: ${shapesDesc}`);
+      lines.push(`Option ${opt.label} - layout: ${diagramLayout}, shapes: ${shapesDesc}`);
       Object.entries(regions).forEach(([key, value]) => {
         lines.push(`  • ${regionKeyToHuman(key, setLabels)}: ${value}`);
       });
@@ -75,15 +82,15 @@ function buildVennAIContext(question) {
   return '';
 }
 
-export default function DMQuestionScreen({ route }) {
+export default function DMQuestionScreen({ route, navigation }) {
   const { index: initialIndex = 0, filteredIndices = null } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState({});
   const [calcVisible, setCalcVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
-  const [notes, setNotes] = useState('');
-  const { practiceTheme: t } = useTheme();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
 
   const { questions, loading } = useDecisionMakingQuestions();
   const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
@@ -127,11 +134,7 @@ export default function DMQuestionScreen({ route }) {
   );
 
   if (loading || cacheLoading || !question) {
-    return (
-      <View style={[styles.centered, { backgroundColor: t.bg }]}>
-        <ActivityIndicator size="large" color={t.accent} />
-      </View>
-    );
+    return <PremiumQuestionLoading label="Loading question..." />;
   }
 
   const isYesNo = YES_NO_TYPES.includes(question.type);
@@ -155,9 +158,16 @@ export default function DMQuestionScreen({ route }) {
     currentAnswer &&
     question.statements.every((_, i) => currentAnswer[i] !== undefined);
 
+  const sectionColor = colors.teal;
+
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
-      <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
+    <PremiumQuestionScaffold panHandlers={panHandlers}>
+      <QuestionTopBar
+        title="Decision Making"
+        subtitle="Practice"
+        accent={sectionColor}
+        onExit={() => navigation.goBack()}
+      />
 
       <ScreenNavBar
         title={question.title}
@@ -166,7 +176,7 @@ export default function DMQuestionScreen({ route }) {
         onNext={goNext}
         isFirst={isFirst}
         isLast={isLast}
-        color={t.sectionDM}
+        color={sectionColor}
         report={{ questionId: question.id, section: 'dm' }}
       />
 
@@ -177,98 +187,74 @@ export default function DMQuestionScreen({ route }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <DMQuestionRenderer
-          question={question}
-          answer={currentAnswer}
-          onAnswer={handleAnswer}
-          submitted={isSubmitted}
-          questionContext={isSubmitted ? {
-            questionId: question.id,
-            question: question.stem,
-            questionType: question.type,
-            section: 'dm',
-            options: isYesNo
-              ? question.statements?.map((s, i) => `${i + 1}. ${s.text}`)
-              : question.subtype === 'select_diagram'
-              ? undefined
-              : question.options?.map((o) => `${o.label}. ${o.text}`),
-            correctAnswer: isYesNo
-              ? undefined
-              : typeof question.answer === 'object'
-              ? JSON.stringify(question.answer)
-              : question.answer,
-            userAnswer: isYesNo
-              ? undefined
-              : typeof currentAnswer === 'object'
-              ? JSON.stringify(currentAnswer)
-              : (currentAnswer ?? ''),
-            explanation: isYesNo ? undefined : question.answeringReason,
-            stimulusData: question.tableData ?? undefined,
-            vennDiagrams: question.type === 'venn_diagram'
-              ? buildVennAIContext(question)
-              : undefined,
-            isTimed: false,
-          } : undefined}
-        />
+        <QuestionPanel>
+          <DMQuestionRenderer
+            question={question}
+            answer={currentAnswer}
+            onAnswer={handleAnswer}
+            submitted={isSubmitted}
+            questionContext={isSubmitted ? {
+              questionId: question.id,
+              question: question.stem,
+              questionType: question.type,
+              section: 'dm',
+              options: isYesNo
+                ? question.statements?.map((s, i) => `${i + 1}. ${s.text}`)
+                : question.subtype === 'select_diagram'
+                ? undefined
+                : question.options?.map((o) => `${o.label}. ${o.text}`),
+              correctAnswer: isYesNo
+                ? undefined
+                : typeof question.answer === 'object'
+                ? JSON.stringify(question.answer)
+                : question.answer,
+              userAnswer: isYesNo
+                ? undefined
+                : typeof currentAnswer === 'object'
+                ? JSON.stringify(currentAnswer)
+                : (currentAnswer ?? ''),
+              explanation: isYesNo ? undefined : question.answeringReason,
+              stimulusData: question.tableData ?? undefined,
+              vennDiagrams: question.type === 'venn_diagram'
+                ? buildVennAIContext(question)
+                : undefined,
+              isTimed: false,
+            } : undefined}
+          />
 
-        {!isSubmitted && currentAnswer !== undefined && currentAnswer !== null && (
-          <TouchableOpacity
-            style={[
-              styles.checkButton,
-              { backgroundColor: t.sectionDM },
-              (isYesNo && !allStatementsAnswered) && { backgroundColor: t.borderStrong, opacity: 0.5 },
-            ]}
-            onPress={handleCheckAnswers}
-            disabled={isYesNo && !allStatementsAnswered}
-          >
-            <Text style={styles.checkButtonText}>Check Answer</Text>
-          </TouchableOpacity>
-        )}
+          {!isSubmitted && currentAnswer !== undefined && currentAnswer !== null ? (
+            <PrimaryQuestionButton
+              accent={sectionColor}
+              onPress={handleCheckAnswers}
+              disabled={isYesNo && !allStatementsAnswered}
+            >
+              Check Answer
+            </PrimaryQuestionButton>
+          ) : null}
+        </QuestionPanel>
       </ScrollView>
 
       <BottomToolbar
         onNotes={() => setNotesVisible(true)}
         onCalculator={() => setCalcVisible(true)}
-        sectionColor={t.sectionDM}
+        sectionColor={sectionColor}
       />
 
       <NotesModal
         visible={notesVisible}
-        notes={notes}
-        onChangeNotes={setNotes}
-        onClear={() => setNotes('')}
+        sectionKey="dm"
         onClose={() => setNotesVisible(false)}
       />
-    </SafeAreaView>
+    </PremiumQuestionScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  container: {
-    flex: 1,
-  },
   scroll: {
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 32,
-  },
-  checkButton: {
-    marginTop: 20,
-    borderRadius: 12,
-    paddingVertical: 15,
-    alignItems: 'center',
-  },
-  checkButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '700',
+    paddingHorizontal: 8,
+    paddingBottom: 28,
   },
 });

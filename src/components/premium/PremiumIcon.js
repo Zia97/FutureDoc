@@ -35,8 +35,54 @@ export default function PremiumIcon({
         );
       case 'chevron-right':
         return <Path d="M9 5l7 7-7 7" {...filledStrokeProps} />;
+      case 'chevron-left':
+        return <Path d="m15 5-7 7 7 7" {...filledStrokeProps} />;
       case 'chevron-down':
         return <Path d="m6 9 6 6 6-6" {...filledStrokeProps} />;
+      case 'x':
+        return (
+          <G {...strokeProps} fill="none">
+            <Line x1="6.5" y1="6.5" x2="17.5" y2="17.5" />
+            <Line x1="17.5" y1="6.5" x2="6.5" y2="17.5" />
+          </G>
+        );
+      case 'pause':
+        return (
+          <G fill={color}>
+            <Rect x="7" y="5" width="3.2" height="14" rx="1.1" />
+            <Rect x="13.8" y="5" width="3.2" height="14" rx="1.1" />
+          </G>
+        );
+      case 'play':
+        return <Path d="M8 5.5v13l10-6.5-10-6.5Z" fill={color} />;
+      case 'notes':
+        return (
+          <G {...strokeProps} fill="none">
+            <Path d="M6 4.5h9.2L19 8.3v11.2H6V4.5Z" />
+            <Path d="M15 4.8V8h3.2" />
+            <Path d="M8.8 11.2h6.4" />
+            <Path d="M8.8 14.5h6.4" />
+            <Path d="M8.8 17.8h3.6" />
+          </G>
+        );
+      case 'list':
+        return (
+          <G {...strokeProps} fill="none">
+            <Path d="M8 6h12" />
+            <Path d="M8 12h12" />
+            <Path d="M8 18h12" />
+            <Circle cx="4.5" cy="6" r="0.7" fill={color} stroke="none" />
+            <Circle cx="4.5" cy="12" r="0.7" fill={color} stroke="none" />
+            <Circle cx="4.5" cy="18" r="0.7" fill={color} stroke="none" />
+          </G>
+        );
+      case 'flag':
+        return (
+          <G {...strokeProps} fill="none">
+            <Path d="M6 20V5.2" />
+            <Path d="M6 5.5h10.2l-1.5 4 1.5 4H6" />
+          </G>
+        );
       case 'search':
         return (
           <G {...strokeProps} fill="none">

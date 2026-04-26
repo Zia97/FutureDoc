@@ -160,18 +160,27 @@ export default function PaywallScreen({ navigation }) {
         pointerEvents="none"
       />
 
+      {/* Close button \u2014 fixed top-right so it's always reachable */}
+      <TouchableOpacity
+        style={[
+          styles.closeButton,
+          {
+            backgroundColor: t.bgCard,
+            borderColor: t.border,
+          },
+        ]}
+        onPress={() => navigation.goBack()}
+        hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+        accessibilityRole="button"
+        accessibilityLabel="Close"
+      >
+        <Text style={[styles.closeText, { color: t.text }]}>{'\u2715'}</Text>
+      </TouchableOpacity>
+
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        {/* Close button */}
-        <TouchableOpacity
-          style={styles.closeButton}
-          onPress={() => navigation.goBack()}
-          hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
-        >
-          <Text style={[styles.closeText, { color: t.textMuted }]}>{'\u2715'}</Text>
-        </TouchableOpacity>
 
         {/* Header */}
         <View style={styles.header}>
@@ -284,17 +293,25 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
   },
   closeButton: {
-    alignSelf: 'flex-end',
-    marginTop: 8,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    position: 'absolute',
+    top: 12,
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 20,
+    elevation: 4,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    shadowColor: '#000',
   },
   closeText: {
-    fontSize: 20,
-    fontWeight: '400',
+    fontSize: 18,
+    fontWeight: '700',
   },
 
   // Header

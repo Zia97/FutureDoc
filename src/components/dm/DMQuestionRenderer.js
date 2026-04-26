@@ -17,6 +17,7 @@ import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/ai/useAITutor';
 import { useAICredits } from '../../hooks/ai/useAICredits';
 import { useTheme } from '../../context/ThemeContext';
+import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 const MCQ_TYPES    = ['logic_puzzle', 'recognising_assumptions', 'strongest_argument', 'probabilistic'];
@@ -41,14 +42,16 @@ function useQuestionMeta(question, screenWidth) {
 // Renders the stem, data table, diagram stimulus — everything except the answer inputs
 export function DMStemContent({ question, showLabel = true }) {
   const { width: screenWidth } = useWindowDimensions();
-  const { practiceTheme: t } = useTheme();
+  const { practiceTheme: t, isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const sectionColor = colors.teal;
   const [diagramExpanded, setDiagramExpanded] = useState(false);
   const { isInterpVenn, vennKeySets, stimDiagram, stimulusWidthPx, expandedWidthPx } = useQuestionMeta(question, screenWidth);
 
   return (
     <View style={styles.container}>
-      {showLabel && <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>STEM</Text>}
-      <Text style={[styles.stem, { color: t.text }]}>{question.stem}</Text>
+      {showLabel && <Text style={[styles.sectionLabel, { color: sectionColor }]}>STEM</Text>}
+      <Text style={[styles.stem, { color: colors.text }]}>{question.stem}</Text>
 
       {vennKeySets && !question.hideLabels && <VennDiagramKey sets={vennKeySets} />}
 
@@ -57,12 +60,18 @@ export function DMStemContent({ question, showLabel = true }) {
       {isInterpVenn && (
         <>
           <TouchableOpacity
-            style={[styles.vennStimulus, { backgroundColor: t.bgCard, borderColor: t.border }]}
+            style={[
+              styles.vennStimulus,
+              {
+                backgroundColor: isDark ? 'rgba(9, 22, 43, 0.72)' : 'rgba(255, 255, 255, 0.82)',
+                borderColor: colors.border,
+              },
+            ]}
             onPress={() => setDiagramExpanded(true)}
             activeOpacity={0.85}
           >
             <VennDiagramRenderer vennConfig={stimDiagram} widthPx={stimulusWidthPx} bakedGeometry={question.stimulusVennGeometry} />
-            <Text style={[styles.tapHint, { color: t.accent }]}>Tap to expand</Text>
+            <Text style={[styles.tapHint, { color: sectionColor }]}>Tap to expand</Text>
           </TouchableOpacity>
 
           <Modal
@@ -76,11 +85,11 @@ export function DMStemContent({ question, showLabel = true }) {
               onPress={() => setDiagramExpanded(false)}
               activeOpacity={1}
             >
-              <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+              <View style={[styles.modalCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
                 <ZoomableView maxZoom={4}>
                   <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} bakedGeometry={question.stimulusVennGeometry} />
                 </ZoomableView>
-                <Text style={[styles.modalDismiss, { color: t.accent }]}>Tap anywhere to close</Text>
+                <Text style={[styles.modalDismiss, { color: sectionColor }]}>Tap anywhere to close</Text>
               </View>
             </TouchableOpacity>
           </Modal>
@@ -93,7 +102,9 @@ export function DMStemContent({ question, showLabel = true }) {
 // Renders only the answer inputs (MCQ options, yes/no statements, venn option grid)
 export function DMOptionsContent({ question, answer, onAnswer, submitted, timedMode = false, onTeachMe, showLabel = true }) {
   const { width: screenWidth } = useWindowDimensions();
-  const { practiceTheme: t } = useTheme();
+  const { practiceTheme: t, isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const sectionColor = colors.teal;
   const { isYesNo, isMCQ, isSelectVenn, isInterpVenn, contentWidth } = useQuestionMeta(question, screenWidth);
 
   function mcqOptionState(label) {
@@ -104,7 +115,7 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
     return 'idle';
   }
 
-  const optionsLabel = showLabel ? <Text style={[styles.sectionLabel, { color: t.sectionDM }]}>{isYesNo ? 'QUESTIONS' : 'OPTIONS'}</Text> : null;
+  const optionsLabel = showLabel ? <Text style={[styles.sectionLabel, { color: sectionColor }]}>{isYesNo ? 'QUESTIONS' : 'OPTIONS'}</Text> : null;
 
   if (isSelectVenn) {
     // Pass the full available content width as the maximum to the adaptive baker.
@@ -116,20 +127,26 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
       <View style={styles.vennGrid}>
         {optionsLabel}
         {question.options.map((opt) => {
-          let borderColor = t.borderStrong;
+          let borderColor = colors.border;
           if (!timedMode && submitted && opt.label === question.answer) borderColor = t.correct;
           else if (!timedMode && submitted && opt.label === answer)     borderColor = t.incorrect;
-          else if (opt.label === answer)                                borderColor = t.accent;
+          else if (opt.label === answer)                                borderColor = sectionColor;
           const cfg = opt.vennConfig ?? opt.option_data;
           return (
             <TouchableOpacity
               key={opt.label}
-              style={[styles.vennOption, { backgroundColor: t.bgCard, borderColor }]}
+              style={[
+                styles.vennOption,
+                {
+                  backgroundColor: isDark ? 'rgba(9, 22, 43, 0.72)' : 'rgba(255, 255, 255, 0.82)',
+                  borderColor,
+                },
+              ]}
               onPress={() => !submitted && onAnswer(opt.label)}
               activeOpacity={0.8}
               disabled={submitted}
             >
-              <Text style={[styles.vennOptionLabel, { color: t.accent }]}>{opt.label}</Text>
+              <Text style={[styles.vennOptionLabel, { color: sectionColor }]}>{opt.label}</Text>
               <VennDiagramRenderer vennConfig={cfg} widthPx={optionWidthPx} bakedGeometry={opt.vennGeometry} />
             </TouchableOpacity>
           );
@@ -174,7 +191,9 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
 }
 
 export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
-  const { practiceTheme: t } = useTheme();
+  const { practiceTheme: t, isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const sectionColor = colors.teal;
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
   const [activeTutorContext, setActiveTutorContext] = useState(null);
@@ -221,15 +240,21 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
       />
 
       {submitted && !timedMode && !isYesNo && (
-        <View style={[styles.explanation, { backgroundColor: t.bgCard, borderLeftColor: t.sectionDM }]}>
-          <Text style={[styles.explanationLabel, { color: t.accent }]}>Explanation</Text>
-          <Text style={[styles.explanationText, { color: t.textSecondary }]}>{question.answeringReason}</Text>
+        <View style={[styles.explanation, { backgroundColor: hexToRgba(sectionColor, isDark ? 0.12 : 0.08), borderLeftColor: sectionColor }]}>
+          <Text style={[styles.explanationLabel, { color: sectionColor }]}>Explanation</Text>
+          <Text style={[styles.explanationText, { color: colors.textSecondary }]}>{question.answeringReason}</Text>
           {questionContext && (
             <TouchableOpacity
-              style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
+              style={[
+                styles.teachMeBtn,
+                {
+                  backgroundColor: isDark ? 'rgba(9, 22, 43, 0.86)' : 'rgba(255, 255, 255, 0.92)',
+                  borderColor: colors.border,
+                },
+              ]}
               onPress={handleMCQTeachMe}
             >
-              <Text style={[styles.teachMeBtnText, { color: t.text }]}>Teach Me</Text>
+              <Text style={[styles.teachMeBtnText, { color: colors.text }]}>Teach Me</Text>
             </TouchableOpacity>
           )}
         </View>

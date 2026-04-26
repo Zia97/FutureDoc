@@ -1,70 +1,79 @@
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { useTheme } from '../context/ThemeContext';
+import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
+import PremiumIcon from './premium/PremiumIcon';
 
 export default function BottomToolbar({ onNotes, onCalculator, onPause, onNavigator, sectionColor }) {
-  const { practiceTheme: t } = useTheme();
-  const fg = '#ffffff';
+  const insets = useSafeAreaInsets();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const accent = sectionColor ?? colors.blue;
+  const iconColor = isDark ? '#FFFFFF' : '#0F172A';
+
+  const actions = [
+    onPause ? { key: 'pause', icon: 'pause', onPress: onPause, label: 'Pause test' } : null,
+    onNotes ? { key: 'notes', icon: 'notes', onPress: onNotes, label: 'Open notes' } : null,
+    onCalculator ? { key: 'calculator', icon: 'calculator', onPress: onCalculator, label: 'Open calculator' } : null,
+    onNavigator ? { key: 'navigator', icon: 'list', onPress: onNavigator, label: 'Open question navigator' } : null,
+  ].filter(Boolean);
 
   return (
-    <View style={[styles.bar, { backgroundColor: t.headerBg, borderColor: t.headerBg }]}>
-      {onPause && (
-        <TouchableOpacity
-          style={[styles.button, { borderColor: fg }]}
-          onPress={onPause}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.buttonText, { color: fg }]}>⏸</Text>
-        </TouchableOpacity>
-      )}
-
-      <TouchableOpacity
-        style={[styles.button, { borderColor: fg }]}
-        onPress={onNotes}
-        activeOpacity={0.8}
+    <View style={[styles.wrap, { paddingBottom: Math.max(insets.bottom, 8) + 8 }]}>
+      <View
+        style={[
+          styles.bar,
+          {
+            backgroundColor: isDark ? 'rgba(7, 19, 39, 0.86)' : 'rgba(255, 255, 255, 0.88)',
+            borderColor: colors.border,
+          },
+        ]}
       >
-        <Text style={[styles.buttonText, { color: fg }]}>✎</Text>
-      </TouchableOpacity>
-
-      {onCalculator && (
-        <TouchableOpacity
-          style={[styles.button, { borderColor: fg }]}
-          onPress={onCalculator}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.buttonText, { color: fg }]}>⊞</Text>
-        </TouchableOpacity>
-      )}
-
-      {onNavigator && (
-        <TouchableOpacity
-          style={[styles.button, { borderColor: fg }]}
-          onPress={onNavigator}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.buttonText, { color: fg }]}>☰</Text>
-        </TouchableOpacity>
-      )}
+        {actions.map((action) => (
+          <TouchableOpacity
+            key={action.key}
+            style={[
+              styles.button,
+              {
+                borderColor: hexToRgba(accent, 0.34),
+                backgroundColor: hexToRgba(accent, isDark ? 0.12 : 0.08),
+              },
+            ]}
+            onPress={action.onPress}
+            activeOpacity={0.8}
+            accessibilityRole="button"
+            accessibilityLabel={action.label}
+          >
+            <PremiumIcon name={action.icon} size={21} color={iconColor} strokeWidth={2.2} />
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  wrap: {
+    paddingHorizontal: 18,
+    paddingTop: 8,
+  },
   bar: {
+    minHeight: 58,
+    borderRadius: 18,
+    borderWidth: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
     paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderTopWidth: 1,
+    gap: 10,
   },
   button: {
+    width: 42,
+    height: 42,
+    borderRadius: 21,
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
-    borderRadius: 6,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  buttonText: {
-    fontSize: 12,
-    fontWeight: '700',
   },
 });

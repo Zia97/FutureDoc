@@ -6,19 +6,34 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-  ScrollView,
   ActivityIndicator,
   Switch,
   Modal,
   KeyboardAvoidingView,
   Platform,
+  StatusBar,
+  Animated,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
+import {
+  AppHeader,
+  GlassMenuCard,
+  PremiumFooter,
+  PremiumScreen,
+  PremiumScrollView,
+  RichIconBox,
+  PremiumIcon,
+  hexToRgba,
+  useFadeSlide,
+} from '../../components/premium/PremiumPracticeUI';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const PRACTICE_SECTIONS = [
   { id: 'vr', label: 'Verbal Reasoning' },
@@ -30,8 +45,10 @@ const PRACTICE_SECTIONS = [
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const { user, signOut, deleteAccount, isAnonymous, displayName, updatePassword, saveDisplayName } = useAuth();
-  const { theme: t, isDark, toggleDark } = useTheme();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
   const { isPro, presentCustomerCenter } = useSubscription();
+
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
   const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
@@ -42,6 +59,13 @@ export default function ProfileScreen() {
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const [nameSaving, setNameSaving] = useState(false);
+
+  const heroAnim = useFadeSlide(0);
+  const subAnim = useFadeSlide(90);
+  const contentAnim = useFadeSlide(170);
+  const legalAnim = useFadeSlide(250);
+  const dangerAnim = useFadeSlide(320);
+  const footerAnim = useFadeSlide(400);
 
   const openNameModal = () => {
     setNameDraft(displayName ?? '');
@@ -122,8 +146,7 @@ export default function ProfileScreen() {
   };
 
   const dismissToHome = () => {
-    if (navigation.canGoBack()) navigation.popToTop();
-    else navigation.navigate('Home');
+    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
   };
 
   const handleSignOut = () => {
@@ -178,238 +201,302 @@ export default function ProfileScreen() {
   };
 
   const initialSource = isAnonymous ? 'G' : (displayName?.[0] ?? user?.email?.[0] ?? '?');
-  const emailInitial = initialSource.toUpperCase();
+  const heroInitial = initialSource.toUpperCase();
   const emailLabel = isAnonymous ? 'Guest — progress saved on this device' : user?.email;
   const isPasswordUser = !isAnonymous && user?.app_metadata?.provider === 'email';
 
+  const proAccent = colors.mint;
+  const accountAccent = colors.cyan;
+  const contentAccent = colors.blue;
+  const securityAccent = colors.purple;
+  const legalAccent = colors.teal;
+
   return (
-    <ScrollView
-      style={[styles.container, { backgroundColor: t.bgInput }]}
-      contentContainerStyle={styles.content}
-    >
-      {/* Avatar */}
-      <View style={styles.avatarRow}>
-        <View style={[styles.avatar, { backgroundColor: t.accent }]}>
-          <Text style={styles.avatarText}>{emailInitial}</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          {!isAnonymous && displayName ? (
-            <TouchableOpacity onPress={openNameModal} activeOpacity={0.7} style={styles.nameRow}>
-              <Text style={[styles.toggleTitle, { color: t.text }]} numberOfLines={1}>{displayName}</Text>
-              <Text style={[styles.editLink, { color: t.accent }]}>Edit</Text>
-            </TouchableOpacity>
-          ) : null}
-          <Text style={[styles.email, { color: t.textSecondary }]} numberOfLines={1}>{emailLabel}</Text>
-        </View>
-      </View>
+    <PremiumScreen>
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+      <AppHeader navigation={navigation} title="Profile" />
 
-      {isAnonymous && (
-        <>
-          <Text style={[styles.sectionHeading, { color: t.text }]}>Account</Text>
-          <TouchableOpacity
-            style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.accent }]}
-            onPress={() => navigation.navigate('SignUp')}
-            activeOpacity={0.8}
+      <PremiumScrollView>
+        {/* Hero card */}
+        <Animated.View style={heroAnim}>
+          <LinearGradient
+            colors={[
+              hexToRgba(accountAccent, isDark ? 0.18 : 0.1),
+              isDark ? 'rgba(8, 22, 43, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+              isDark ? 'rgba(4, 10, 23, 0.98)' : 'rgba(235, 243, 255, 0.98)',
+            ]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={[styles.heroCard, { borderColor: colors.border, shadowColor: accountAccent }]}
           >
-            <View style={styles.subscriptionRow}>
-              <View style={styles.subscriptionInfo}>
-                <Text style={[styles.subscriptionPlan, { color: t.text }]}>Save your progress</Text>
-                <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
-                  Add an email to sync across devices and avoid losing progress if you reinstall.
+            <View style={[styles.heroAccentStripe, { backgroundColor: accountAccent }]} />
+
+            <View style={styles.heroTopRow}>
+              <View
+                style={[
+                  styles.avatar,
+                  {
+                    backgroundColor: isDark ? '#172D68' : '#DBEAFE',
+                    borderColor: hexToRgba(accountAccent, 0.45),
+                  },
+                ]}
+              >
+                <Text style={[styles.avatarText, { color: isDark ? '#C5E4FF' : accountAccent }]}>
+                  {heroInitial}
                 </Text>
               </View>
-              <View style={[styles.upgradeBadge, { backgroundColor: t.accent }]}>
-                <Text style={styles.upgradeBadgeText}>Save</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.manageButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
-            onPress={() => navigation.navigate('Login')}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.manageButtonText, { color: t.text }]}>Already have an account? Sign in</Text>
-            <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
-          </TouchableOpacity>
-        </>
-      )}
 
-      {/* Subscription */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Subscription</Text>
-      {isPro ? (
-        <>
-          <View style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.correct ?? '#38a169' }]}>
-            <View style={styles.subscriptionRow}>
-              <View style={styles.subscriptionInfo}>
-                <Text style={[styles.subscriptionPlan, { color: t.text }]}>Premium Plan</Text>
-                <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
-                  All features unlocked
+              <View style={styles.heroIdentity}>
+                {!isAnonymous && displayName ? (
+                  <Text style={[styles.heroName, { color: colors.text }]} numberOfLines={1}>
+                    {displayName}
+                  </Text>
+                ) : (
+                  <Text style={[styles.heroName, { color: colors.text }]} numberOfLines={1}>
+                    {isAnonymous ? 'Guest' : 'Account'}
+                  </Text>
+                )}
+                <Text style={[styles.heroEmail, { color: colors.textSecondary }]} numberOfLines={1}>
+                  {emailLabel}
                 </Text>
               </View>
-              <View style={[styles.upgradeBadge, { backgroundColor: t.correct ?? '#38a169' }]}>
-                <Text style={styles.upgradeBadgeText}>Active</Text>
+            </View>
+
+            <View style={styles.heroPills}>
+              <View
+                style={[
+                  styles.pill,
+                  {
+                    borderColor: hexToRgba(isPro ? proAccent : accountAccent, 0.4),
+                    backgroundColor: hexToRgba(isPro ? proAccent : accountAccent, 0.12),
+                  },
+                ]}
+              >
+                <PremiumIcon
+                  name={isPro ? 'shield-heart' : 'lock'}
+                  size={14}
+                  color={isPro ? proAccent : accountAccent}
+                />
+                <Text style={[styles.pillText, { color: isPro ? proAccent : accountAccent }]}>
+                  {isPro ? 'Premium' : 'Free Plan'}
+                </Text>
               </View>
-            </View>
-          </View>
-          <TouchableOpacity
-            style={[styles.manageButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
-            onPress={presentCustomerCenter}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.manageButtonText, { color: t.text }]}>Manage Subscription</Text>
-            <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
-          </TouchableOpacity>
-        </>
-      ) : (
-        <TouchableOpacity
-          style={[styles.subscriptionCard, { backgroundColor: t.bgCard, borderColor: t.accent }]}
-          onPress={() => navigation.navigate('Paywall')}
-          activeOpacity={0.8}
-        >
-          <View style={styles.subscriptionRow}>
-            <View style={styles.subscriptionInfo}>
-              <Text style={[styles.subscriptionPlan, { color: t.text }]}>Free Plan</Text>
-              <Text style={[styles.subscriptionDesc, { color: t.textMuted }]}>
-                Limited questions & AI Tutor usage
-              </Text>
-            </View>
-            <View style={[styles.upgradeBadge, { backgroundColor: t.accent }]}>
-              <Text style={styles.upgradeBadgeText}>Upgrade</Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-      )}
 
-      {/* Appearance */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Appearance</Text>
-      <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <View style={styles.toggleRow}>
-          <View style={styles.toggleLabel}>
-            <Text style={[styles.toggleTitle, { color: t.text }]}>Dark Mode</Text>
-            <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
-              Switch between light and dark theme
-            </Text>
-          </View>
-          <Switch
-            value={isDark}
-            onValueChange={toggleDark}
-            trackColor={{ false: t.border, true: t.accent }}
-            thumbColor="#ffffff"
-          />
-        </View>
-      </View>
+              {!isAnonymous && displayName ? (
+                <TouchableOpacity
+                  onPress={openNameModal}
+                  activeOpacity={0.8}
+                  style={[
+                    styles.pill,
+                    {
+                      borderColor: hexToRgba(colors.blue, 0.32),
+                      backgroundColor: hexToRgba(colors.blue, 0.1),
+                    },
+                  ]}
+                >
+                  <PremiumIcon name="pencil" size={14} color={colors.blue} />
+                  <Text style={[styles.pillText, { color: colors.blue }]}>Edit name</Text>
+                </TouchableOpacity>
+              ) : null}
+            </View>
+          </LinearGradient>
+        </Animated.View>
 
-      {/* Content */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Content</Text>
-      <TouchableOpacity
-        style={[styles.updateButton, { backgroundColor: t.bgCard, borderColor: t.accent }]}
-        onPress={handleCheckForUpdates}
-        disabled={checkingUpdates}
-        activeOpacity={0.8}
-      >
-        {checkingUpdates ? (
-          <ActivityIndicator size="small" color={t.accent} />
-        ) : (
-          <Text style={[styles.updateButtonText, { color: t.accent }]}>Check for Updates</Text>
+        {/* Anonymous CTA */}
+        {isAnonymous && (
+          <Animated.View style={[styles.section, subAnim]}>
+            <Text style={[styles.sectionHeading, { color: colors.text }]}>Account</Text>
+            <GlassMenuCard
+              title="Save your progress"
+              description="Add an email to sync across devices and avoid losing progress if you reinstall."
+              icon="shield-heart"
+              accent={accountAccent}
+              highlighted
+              badge="Save"
+              onPress={() => navigation.navigate('SignUp')}
+            />
+            <GlassMenuCard
+              title="Already have an account?"
+              description="Sign in to restore your progress and unlock cross-device sync."
+              icon="person-cog"
+              accent={colors.blue}
+              onPress={() => navigation.navigate('Login')}
+            />
+          </Animated.View>
         )}
-      </TouchableOpacity>
 
-      {/* Developer (DEV only) */}
-      {__DEV__ && (
-        <>
-          <Text style={[styles.sectionHeading, { color: t.text }]}>Developer</Text>
-          <Text style={[styles.bodyWarning, { color: t.textMuted }]}>
-            Load questions from a local JSON file instead of the database. Reload the app after placing content in src/dev/.
-          </Text>
-          <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            {PRACTICE_SECTIONS.map((section, index) => (
-              <React.Fragment key={section.id}>
-                {index > 0 && <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />}
-                <View style={styles.toggleRow}>
-                  <View style={styles.toggleLabel}>
-                    <Text style={[styles.toggleTitle, { color: t.text }]}>{section.label}</Text>
-                    <Text style={[styles.toggleSubtitle, { color: t.textMuted }]}>
-                      preview-{section.id}.json
-                    </Text>
-                  </View>
-                  <Switch
-                    value={previewToggles[section.id] ?? false}
-                    onValueChange={(val) => handlePreviewToggle(section.id, val)}
-                    trackColor={{ false: t.border, true: '#f59e0b' }}
-                    thumbColor="#ffffff"
-                  />
-                </View>
-              </React.Fragment>
-            ))}
-          </View>
-        </>
-      )}
-
-      {/* Legal */}
-      <Text style={[styles.sectionHeading, { color: t.text }]}>Legal</Text>
-      <View style={[styles.toggleCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-        <TouchableOpacity
-          style={styles.linkRow}
-          onPress={() => navigation.navigate('PrivacyPolicy')}
-          activeOpacity={0.7}
-        >
-          <Text style={[styles.linkText, { color: t.text }]}>Privacy Policy</Text>
-          <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
-        </TouchableOpacity>
-        <View style={[styles.toggleDivider, { backgroundColor: t.border }]} />
-        <TouchableOpacity
-          style={styles.linkRow}
-          onPress={() => navigation.navigate('TermsOfService')}
-          activeOpacity={0.7}
-        >
-          <Text style={[styles.linkText, { color: t.text }]}>Terms of Service</Text>
-          <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'\u203A'}</Text>
-        </TouchableOpacity>
-      </View>
-
-      {isPasswordUser && (
-        <>
-          <Text style={[styles.sectionHeading, { color: t.text }]}>Security</Text>
-          <TouchableOpacity
-            style={[styles.manageButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
-            onPress={() => setPwModalVisible(true)}
-            activeOpacity={0.8}
-          >
-            <Text style={[styles.manageButtonText, { color: t.text }]}>Change Password</Text>
-            <Text style={[styles.linkChevron, { color: t.textMuted }]}>{'›'}</Text>
-          </TouchableOpacity>
-        </>
-      )}
-
-      {!isAnonymous && (
-        <TouchableOpacity
-          style={[styles.signOutButton, { backgroundColor: t.bgCard, borderColor: t.borderStrong }]}
-          onPress={handleSignOut}
-          activeOpacity={0.8}
-        >
-          <Text style={[styles.signOutText, { color: t.textSecondary }]}>Sign Out</Text>
-        </TouchableOpacity>
-      )}
-
-      {/* Delete Account */}
-      {!isAnonymous && (
-        <TouchableOpacity
-          style={[styles.deleteButton, { borderColor: t.danger ?? '#dc2626' }]}
-          onPress={handleDeleteAccount}
-          activeOpacity={0.8}
-          disabled={deleting}
-        >
-          {deleting ? (
-            <ActivityIndicator size="small" color={t.danger ?? '#dc2626'} />
+        {/* Subscription */}
+        <Animated.View style={[styles.section, subAnim]}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>Subscription</Text>
+          {isPro ? (
+            <>
+              <GlassMenuCard
+                title="Premium Plan"
+                description="Premium plan active. Thank you for your support!"
+                icon="shield-heart"
+                accent={proAccent}
+                highlighted
+                badge="Active"
+                showChevron={false}
+              />
+              <GlassMenuCard
+                title="Manage Subscription"
+                description="Manage your purchases"
+                icon="person-cog"
+                accent={colors.blue}
+                onPress={presentCustomerCenter}
+                showChevron={false}
+              />
+            </>
           ) : (
-            <Text style={[styles.deleteText, { color: t.danger ?? '#dc2626' }]}>Delete Account</Text>
+            <GlassMenuCard
+              title="Upgrade to Premium"
+              description="Unlock the full question bank, AI Tutor and timed mocks."
+              icon="shield-heart"
+              accent={proAccent}
+              highlighted
+              badge="Upgrade"
+              onPress={() => navigation.navigate('Paywall')}
+            />
           )}
-        </TouchableOpacity>
-      )}
+        </Animated.View>
 
+        {/* Content */}
+        <Animated.View style={[styles.section, contentAnim]}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>Content</Text>
+          <GlassMenuCard
+            title={checkingUpdates ? 'Checking for updates…' : 'Check for Updates'}
+            description="Pull the latest questions, mocks and explanations from the cloud."
+            icon="refresh"
+            accent={contentAccent}
+            onPress={checkingUpdates ? undefined : handleCheckForUpdates}
+          />
+        </Animated.View>
+
+        {/* Security */}
+        {isPasswordUser && (
+          <Animated.View style={[styles.section, contentAnim]}>
+            <Text style={[styles.sectionHeading, { color: colors.text }]}>Security</Text>
+            <GlassMenuCard
+              title="Change Password"
+              description="Update the password used to sign in to UCAT Genius."
+              icon="lock"
+              accent={securityAccent}
+              onPress={() => setPwModalVisible(true)}
+            />
+          </Animated.View>
+        )}
+
+        {/* Developer */}
+        {__DEV__ && (
+          <Animated.View style={[styles.section, contentAnim]}>
+            <Text style={[styles.sectionHeading, { color: colors.text }]}>Developer</Text>
+            <Text style={[styles.helperText, { color: colors.textMuted }]}>
+              Load questions from a local JSON file instead of the database. Reload the app after placing content in src/dev/.
+            </Text>
+            <View
+              style={[
+                styles.devCard,
+                {
+                  backgroundColor: isDark ? 'rgba(8, 22, 43, 0.85)' : 'rgba(255, 255, 255, 0.95)',
+                  borderColor: colors.border,
+                  shadowColor: colors.amber,
+                },
+              ]}
+            >
+              {PRACTICE_SECTIONS.map((section, index) => (
+                <React.Fragment key={section.id}>
+                  {index > 0 && (
+                    <View style={[styles.devDivider, { backgroundColor: colors.border }]} />
+                  )}
+                  <View style={styles.devRow}>
+                    <RichIconBox icon="pulse" accent={colors.amber} size={40} iconSize={20} />
+                    <View style={styles.devLabel}>
+                      <Text style={[styles.devTitle, { color: colors.text }]}>{section.label}</Text>
+                      <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>
+                        preview-{section.id}.json
+                      </Text>
+                    </View>
+                    <Switch
+                      value={previewToggles[section.id] ?? false}
+                      onValueChange={(val) => handlePreviewToggle(section.id, val)}
+                      trackColor={{ false: colors.border, true: colors.amber }}
+                      thumbColor="#ffffff"
+                    />
+                  </View>
+                </React.Fragment>
+              ))}
+            </View>
+          </Animated.View>
+        )}
+
+        {/* Legal */}
+        <Animated.View style={[styles.section, legalAnim]}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>Legal</Text>
+          <GlassMenuCard
+            title="Privacy Policy"
+            description="How we collect, store and use your data."
+            icon="notes"
+            accent={legalAccent}
+            onPress={() => navigation.navigate('PrivacyPolicy')}
+          />
+          <GlassMenuCard
+            title="Terms of Service"
+            description="The rules and conditions for using UCAT Genius."
+            icon="book"
+            accent={legalAccent}
+            onPress={() => navigation.navigate('TermsOfService')}
+          />
+        </Animated.View>
+
+        {/* Account actions */}
+        {!isAnonymous && (
+          <Animated.View style={[styles.section, dangerAnim]}>
+            <TouchableOpacity
+              style={[
+                styles.actionButton,
+                {
+                  backgroundColor: isDark ? 'rgba(8, 22, 43, 0.7)' : 'rgba(255, 255, 255, 0.9)',
+                  borderColor: colors.border,
+                },
+              ]}
+              onPress={handleSignOut}
+              activeOpacity={0.85}
+            >
+              <Text style={[styles.actionText, { color: colors.textSecondary }]}>Sign Out</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.actionButton,
+                styles.dangerButton,
+                {
+                  borderColor: hexToRgba(colors.red, 0.6),
+                  backgroundColor: hexToRgba(colors.red, isDark ? 0.08 : 0.06),
+                },
+              ]}
+              onPress={handleDeleteAccount}
+              activeOpacity={0.85}
+              disabled={deleting}
+            >
+              {deleting ? (
+                <ActivityIndicator size="small" color={colors.red} />
+              ) : (
+                <Text style={[styles.actionText, { color: colors.red }]}>Delete Account</Text>
+              )}
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+
+        <Animated.View style={footerAnim}>
+          <PremiumFooter style={styles.footer} />
+        </Animated.View>
+      </PremiumScrollView>
+
+      {/* Edit name modal */}
       <Modal
         visible={nameModalVisible}
-        animationType="slide"
+        animationType="fade"
         transparent
         onRequestClose={() => setNameModalVisible(false)}
       >
@@ -417,28 +504,71 @@ export default function ProfileScreen() {
           style={styles.modalBackdrop}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            <Text style={[styles.modalTitle, { color: t.text }]}>Edit Display Name</Text>
-            <TextInput
-              style={[styles.modalInput, { backgroundColor: t.bgInput, color: t.text, borderColor: t.border }]}
-              placeholder="Display name"
-              placeholderTextColor={t.textMuted}
-              value={nameDraft}
-              onChangeText={setNameDraft}
-              autoCapitalize="words"
-              maxLength={40}
-              autoFocus
+          <View
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: isDark ? '#0B1A33' : '#FFFFFF',
+                borderColor: colors.border,
+                shadowColor: colors.blue,
+              },
+            ]}
+          >
+            <LinearGradient
+              pointerEvents="none"
+              colors={[
+                hexToRgba(colors.blue, isDark ? 0.22 : 0.12),
+                hexToRgba(colors.blue, 0),
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
             />
+            <View style={[styles.modalAccentStripe, { backgroundColor: colors.blue }]} />
+
+            <View style={styles.modalHeader}>
+              <RichIconBox icon="pencil" accent={colors.blue} size={48} iconSize={24} />
+              <View style={styles.modalHeaderText}>
+                <Text style={[styles.modalTitle, { color: colors.text }]}>Edit Display Name</Text>
+                <Text style={[styles.modalSubtitle, { color: colors.textSecondary }]}>
+                  This is how you'll appear across UCAT Genius.
+                </Text>
+              </View>
+            </View>
+
+            <Text style={[styles.modalFieldLabel, { color: colors.textMuted }]}>Display name</Text>
+            <View
+              style={[
+                styles.modalInputWrap,
+                {
+                  backgroundColor: isDark ? '#040A17' : '#F1F5FB',
+                  borderColor: colors.border,
+                },
+              ]}
+            >
+              <PremiumIcon name="person-cog" size={18} color={colors.textMuted} />
+              <TextInput
+                style={[styles.modalInputField, { color: colors.text }]}
+                placeholder="Your name"
+                placeholderTextColor={colors.textMuted}
+                value={nameDraft}
+                onChangeText={setNameDraft}
+                autoCapitalize="words"
+                maxLength={40}
+                autoFocus
+              />
+            </View>
+
             <View style={styles.modalRow}>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: t.bgInput, borderColor: t.border, borderWidth: 1 }]}
+                style={[styles.modalButton, styles.modalButtonGhost, { borderColor: colors.border }]}
                 onPress={() => setNameModalVisible(false)}
                 disabled={nameSaving}
               >
-                <Text style={[styles.modalButtonText, { color: t.text }]}>Cancel</Text>
+                <Text style={[styles.modalButtonText, { color: colors.text }]}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: t.accent }]}
+                style={[styles.modalButton, { backgroundColor: colors.blue, shadowColor: colors.blue }]}
                 onPress={handleSaveDisplayName}
                 disabled={nameSaving}
               >
@@ -453,9 +583,10 @@ export default function ProfileScreen() {
         </KeyboardAvoidingView>
       </Modal>
 
+      {/* Change password modal */}
       <Modal
         visible={pwModalVisible}
-        animationType="slide"
+        animationType="fade"
         transparent
         onRequestClose={() => setPwModalVisible(false)}
       >
@@ -463,27 +594,83 @@ export default function ProfileScreen() {
           style={styles.modalBackdrop}
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         >
-          <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            <Text style={[styles.modalTitle, { color: t.text }]}>Change Password</Text>
-            <TextInput
-              style={[styles.modalInput, { backgroundColor: t.bgInput, color: t.text, borderColor: t.border }]}
-              placeholder="New password"
-              placeholderTextColor={t.textMuted}
-              secureTextEntry
-              value={newPassword}
-              onChangeText={setNewPassword}
+          <View
+            style={[
+              styles.modalCard,
+              {
+                backgroundColor: isDark ? '#0B1A33' : '#FFFFFF',
+                borderColor: colors.border,
+                shadowColor: securityAccent,
+              },
+            ]}
+          >
+            <LinearGradient
+              pointerEvents="none"
+              colors={[
+                hexToRgba(securityAccent, isDark ? 0.22 : 0.12),
+                hexToRgba(securityAccent, 0),
+              ]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
             />
-            <TextInput
-              style={[styles.modalInput, { backgroundColor: t.bgInput, color: t.text, borderColor: t.border }]}
-              placeholder="Confirm new password"
-              placeholderTextColor={t.textMuted}
-              secureTextEntry
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
+            <View style={[styles.modalAccentStripe, { backgroundColor: securityAccent }]} />
+
+            <View style={styles.modalHeader}>
+              <RichIconBox icon="lock" accent={securityAccent} size={48} iconSize={24} />
+              <View style={styles.modalHeaderText}>
+                <Text style={[styles.modalTitle, { color: colors.text }]}>Change Password</Text>
+                <Text style={[styles.modalSubtitle, { color: colors.textSecondary }]}>
+                  Pick a new password with at least 6 characters.
+                </Text>
+              </View>
+            </View>
+
+            <Text style={[styles.modalFieldLabel, { color: colors.textMuted }]}>New password</Text>
+            <View
+              style={[
+                styles.modalInputWrap,
+                {
+                  backgroundColor: isDark ? '#040A17' : '#F1F5FB',
+                  borderColor: colors.border,
+                },
+              ]}
+            >
+              <PremiumIcon name="lock" size={18} color={colors.textMuted} />
+              <TextInput
+                style={[styles.modalInputField, { color: colors.text }]}
+                placeholder="••••••••"
+                placeholderTextColor={colors.textMuted}
+                secureTextEntry
+                value={newPassword}
+                onChangeText={setNewPassword}
+              />
+            </View>
+
+            <Text style={[styles.modalFieldLabel, { color: colors.textMuted }]}>Confirm password</Text>
+            <View
+              style={[
+                styles.modalInputWrap,
+                {
+                  backgroundColor: isDark ? '#040A17' : '#F1F5FB',
+                  borderColor: colors.border,
+                },
+              ]}
+            >
+              <PremiumIcon name="check" size={18} color={colors.textMuted} />
+              <TextInput
+                style={[styles.modalInputField, { color: colors.text }]}
+                placeholder="••••••••"
+                placeholderTextColor={colors.textMuted}
+                secureTextEntry
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+              />
+            </View>
+
             <View style={styles.modalRow}>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: t.bgInput, borderColor: t.border, borderWidth: 1 }]}
+                style={[styles.modalButton, styles.modalButtonGhost, { borderColor: colors.border }]}
                 onPress={() => {
                   setPwModalVisible(false);
                   setNewPassword('');
@@ -491,249 +678,271 @@ export default function ProfileScreen() {
                 }}
                 disabled={pwSaving}
               >
-                <Text style={[styles.modalButtonText, { color: t.text }]}>Cancel</Text>
+                <Text style={[styles.modalButtonText, { color: colors.text }]}>Cancel</Text>
               </TouchableOpacity>
               <TouchableOpacity
-                style={[styles.modalButton, { backgroundColor: t.accent }]}
+                style={[styles.modalButton, { backgroundColor: securityAccent, shadowColor: securityAccent }]}
                 onPress={handleChangePassword}
                 disabled={pwSaving}
               >
                 {pwSaving ? (
                   <ActivityIndicator color="#fff" />
                 ) : (
-                  <Text style={[styles.modalButtonText, { color: '#fff' }]}>Update</Text>
+                  <Text style={[styles.modalButtonText, { color: '#fff' }]}>Update Password</Text>
                 )}
               </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>
       </Modal>
-    </ScrollView>
+    </PremiumScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    paddingHorizontal: 24,
-    paddingTop: 28,
-    paddingBottom: 48,
-  },
-  avatarRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 28,
-  },
-  avatar: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 14,
-  },
-  avatarText: {
-    color: '#ffffff',
-    fontSize: 22,
-    fontWeight: '700',
-  },
-  email: {
-    fontSize: 15,
-    flex: 1,
-  },
-
-  sectionHeading: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginTop: 8,
-    marginBottom: 10,
-  },
-  subscriptionCard: {
-    borderRadius: 12,
+  heroCard: {
+    borderRadius: 24,
     borderWidth: 1,
-    padding: 16,
-    marginBottom: 16,
-  },
-  subscriptionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  subscriptionInfo: {
-    flex: 1,
-    marginRight: 12,
-  },
-  subscriptionPlan: {
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 3,
-  },
-  subscriptionDesc: {
-    fontSize: 13,
-    lineHeight: 18,
-  },
-  upgradeBadge: {
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 9,
-  },
-  upgradeBadgeText: {
-    color: '#ffffff',
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  bodyWarning: {
-    fontSize: 13,
-    marginBottom: 12,
-    lineHeight: 18,
-  },
-
-  // Appearance toggles
-  toggleCard: {
-    borderRadius: 12,
-    borderWidth: 1,
-    marginBottom: 16,
+    paddingVertical: 22,
+    paddingHorizontal: 22,
     overflow: 'hidden',
+    shadowOffset: { width: 0, height: 14 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.22 : 0,
+    shadowRadius: 22,
   },
-  toggleRow: {
+  heroAccentStripe: {
+    position: 'absolute',
+    left: 0,
+    top: 22,
+    bottom: 22,
+    width: 4,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+  },
+  heroTopRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    justifyContent: 'space-between',
     gap: 16,
   },
-  toggleLabel: {
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+  },
+  avatarText: {
+    fontSize: 26,
+    fontWeight: '900',
+  },
+  heroIdentity: {
     flex: 1,
+    minWidth: 0,
   },
-  toggleTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    marginBottom: 3,
-  },
-  toggleSubtitle: {
-    fontSize: 12,
-    lineHeight: 17,
-  },
-  toggleDivider: {
-    height: 1,
-    marginHorizontal: 18,
-  },
-
-  updateButton: {
-    borderRadius: 12,
-    paddingVertical: 16,
-    alignItems: 'center',
-    borderWidth: 1,
-    marginBottom: 16,
-  },
-  updateButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  linkRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-  },
-  linkText: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  linkChevron: {
+  heroName: {
     fontSize: 22,
-    fontWeight: '300',
+    lineHeight: 28,
+    fontWeight: '900',
   },
-
-  manageButton: {
+  heroEmail: {
+    fontSize: 14,
+    lineHeight: 20,
+    marginTop: 4,
+  },
+  heroPills: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginTop: 18,
+  },
+  pill: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    borderRadius: 12,
+    gap: 6,
+    borderRadius: 999,
     borderWidth: 1,
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-    marginBottom: 16,
+    paddingHorizontal: 11,
+    paddingVertical: 6,
   },
-  manageButtonText: {
+  pillText: {
+    fontSize: 12,
+    fontWeight: '800',
+    letterSpacing: 0.2,
+  },
+
+  section: {
+    marginTop: 26,
+    gap: 12,
+  },
+  sectionHeading: {
+    fontSize: 13,
+    fontWeight: '900',
+    letterSpacing: 1.4,
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+  helperText: {
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: 4,
+  },
+
+  devCard: {
+    borderRadius: 20,
+    borderWidth: 1,
+    paddingVertical: 6,
+    overflow: 'hidden',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.18 : 0,
+    shadowRadius: 18,
+  },
+  devRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    gap: 14,
+  },
+  devLabel: {
+    flex: 1,
+    minWidth: 0,
+  },
+  devTitle: {
     fontSize: 15,
-    fontWeight: '600',
+    fontWeight: '700',
   },
-  signOutButton: {
-    marginTop: 12,
-    borderRadius: 12,
-    paddingVertical: 16,
+  devSubtitle: {
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 2,
+  },
+  devDivider: {
+    height: 1,
+    marginHorizontal: 16,
+  },
+
+  actionButton: {
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    borderRadius: 16,
     borderWidth: 1,
-  },
-  signOutText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  deleteButton: {
-    marginTop: 12,
-    borderRadius: 12,
     paddingVertical: 16,
-    alignItems: 'center',
-    borderWidth: 1,
-    backgroundColor: 'transparent',
-    marginBottom: 8,
   },
-  deleteText: {
-    fontSize: 16,
-    fontWeight: '600',
+  dangerButton: {
+    marginTop: 4,
+  },
+  actionText: {
+    fontSize: 15,
+    fontWeight: '800',
+    letterSpacing: 0.4,
+  },
+
+  footer: {
+    marginTop: 30,
   },
 
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(2, 5, 12, 0.72)',
     justifyContent: 'center',
-    paddingHorizontal: 24,
+    paddingHorizontal: 22,
   },
   modalCard: {
-    borderRadius: 14,
+    borderRadius: 22,
     borderWidth: 1,
-    padding: 20,
+    paddingVertical: 22,
+    paddingHorizontal: 22,
+    overflow: 'hidden',
+    shadowOffset: { width: 0, height: 18 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.4 : 0,
+    shadowRadius: 26,
+  },
+  modalAccentStripe: {
+    position: 'absolute',
+    left: 0,
+    top: 22,
+    bottom: 22,
+    width: 4,
+    borderTopRightRadius: 4,
+    borderBottomRightRadius: 4,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+    marginBottom: 20,
+  },
+  modalHeaderText: {
+    flex: 1,
+    minWidth: 0,
   },
   modalTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 16,
+    fontSize: 20,
+    fontWeight: '900',
+  },
+  modalSubtitle: {
+    fontSize: 13,
+    lineHeight: 18,
+    marginTop: 4,
+  },
+  modalFieldLabel: {
+    fontSize: 11,
+    fontWeight: '800',
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+    marginBottom: 6,
+    marginTop: 4,
   },
   modalInput: {
     width: '100%',
-    borderRadius: 10,
-    padding: 14,
-    fontSize: 16,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 13,
+    fontSize: 15,
     marginBottom: 12,
     borderWidth: 1,
+  },
+  modalInputWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    width: '100%',
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 12,
+    borderWidth: 1,
+  },
+  modalInputField: {
+    flex: 1,
+    fontSize: 15,
+    paddingVertical: 0,
   },
   modalRow: {
     flexDirection: 'row',
     gap: 12,
-    marginTop: 8,
+    marginTop: 12,
   },
   modalButton: {
     flex: 1,
-    borderRadius: 10,
+    borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
+    justifyContent: 'center',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.32 : 0,
+    shadowRadius: 14,
+  },
+  modalButtonGhost: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    shadowOpacity: 0,
   },
   modalButtonText: {
     fontSize: 15,
-    fontWeight: '600',
-  },
-  nameRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  editLink: {
-    fontSize: 13,
-    fontWeight: '600',
+    fontWeight: '800',
   },
 });

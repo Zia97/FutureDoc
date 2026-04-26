@@ -4,9 +4,11 @@ import AITutorModal from './AITutorModal';
 import { useAITutor } from '../hooks/ai/useAITutor';
 import { useAICredits } from '../hooks/ai/useAICredits';
 import { useTheme } from '../context/ThemeContext';
+import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 
 export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
-  const { practiceTheme: t } = useTheme();
+  const { practiceTheme: t, isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
 
@@ -22,26 +24,32 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
       <View style={[
         styles.box,
         isCorrect
-          ? { backgroundColor: t.correctBg, borderColor: t.correct }
-          : { backgroundColor: t.incorrectBg, borderColor: t.incorrect },
+          ? { backgroundColor: hexToRgba(t.correct, isDark ? 0.14 : 0.1), borderColor: t.correct }
+          : { backgroundColor: hexToRgba(t.incorrect, isDark ? 0.14 : 0.1), borderColor: t.incorrect },
       ]}>
-        <Text style={[styles.title, { color: t.text }]}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
         {(!isCorrect || showReason) && (
           <>
             {!isCorrect && (
-              <Text style={[styles.correctAnswer, { color: t.textSecondary }]}>
+              <Text style={[styles.correctAnswer, { color: colors.textSecondary }]}>
                 Correct answer: {correctAnswer}
               </Text>
             )}
-            <Text style={[styles.reason, { color: t.textSecondary }]}>{reason}</Text>
+            <Text style={[styles.reason, { color: colors.textSecondary }]}>{reason}</Text>
           </>
         )}
         {questionContext && (
           <TouchableOpacity
-            style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}
+            style={[
+              styles.teachMeBtn,
+              {
+                backgroundColor: isDark ? 'rgba(9, 22, 43, 0.86)' : 'rgba(255, 255, 255, 0.92)',
+                borderColor: colors.border,
+              },
+            ]}
             onPress={() => setTutorVisible(true)}
           >
-            <Text style={[styles.teachMeBtnText, { color: t.text }]}>Teach Me</Text>
+            <Text style={[styles.teachMeBtnText, { color: colors.text }]}>Teach Me</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -66,13 +74,13 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
 const styles = StyleSheet.create({
   box: {
     marginTop: 16,
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 16,
-    borderWidth: 1.5,
+    borderWidth: 1,
   },
   title: {
-    fontSize: 15,
-    fontWeight: '700',
+    fontSize: 16,
+    fontWeight: '900',
     marginBottom: 6,
   },
   correctAnswer: {
@@ -86,7 +94,7 @@ const styles = StyleSheet.create({
   teachMeBtn: {
     marginTop: 14,
     alignSelf: 'flex-end',
-    borderRadius: 8,
+    borderRadius: 12,
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderWidth: 1,

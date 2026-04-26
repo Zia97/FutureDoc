@@ -35,6 +35,7 @@ import {
   premiumColors,
   useFadeSlide,
 } from '../../components/premium/PremiumPracticeUI';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -49,7 +50,7 @@ function getDisplayName(user, profileDisplayName) {
   return name.split(/[ ._-]/)[0] || 'Alex';
 }
 
-function DoctorHeroArt() {
+function DoctorHeroArt({ colors = premiumColors, isDark = true }) {
   return (
     <Svg width="100%" height="100%" viewBox="0 0 245 320" preserveAspectRatio="xMidYMid meet">
       <Defs>
@@ -68,19 +69,19 @@ function DoctorHeroArt() {
         </SvgLinearGradient>
       </Defs>
 
-      <Circle cx="134" cy="154" r="102" stroke={premiumColors.blue} strokeWidth="2" opacity="0.22" fill="none" />
-      <Circle cx="134" cy="154" r="78" stroke={premiumColors.cyan} strokeWidth="1.4" opacity="0.09" fill="none" />
-      <Path d="M54 155c25-53 78-82 141-76" stroke={premiumColors.blue} strokeWidth="4" strokeLinecap="round" opacity="0.38" fill="none" />
+      <Circle cx="134" cy="154" r="102" stroke={colors.blue} strokeWidth="2" opacity={isDark ? 0.22 : 0.18} fill="none" />
+      <Circle cx="134" cy="154" r="78" stroke={colors.cyan} strokeWidth="1.4" opacity={isDark ? 0.09 : 0.14} fill="none" />
+      <Path d="M54 155c25-53 78-82 141-76" stroke={colors.blue} strokeWidth="4" strokeLinecap="round" opacity={isDark ? 0.38 : 0.22} fill="none" />
       <Polyline
         points="25 165 50 165 61 143 76 188 93 157 108 165 135 165"
-        stroke={premiumColors.cyan}
+        stroke={colors.cyan}
         strokeWidth="2"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
         opacity="0.12"
       />
-      <G opacity="0.12" stroke={premiumColors.blue} strokeWidth="1.5" fill="none">
+      <G opacity={isDark ? 0.12 : 0.16} stroke={colors.blue} strokeWidth="1.5" fill="none">
         <Path d="M66 86c-10-8-8-24 6-26 4-12 20-11 25-2 11-1 18 10 15 20 9 6 5 21-7 23H77c-4 0-8-5-11-15Z" />
         <Path d="M82 61v39M97 61v38M69 76h42M73 91h35" />
       </G>
@@ -111,10 +112,10 @@ function DoctorHeroArt() {
         <Path
           d="M63 205c0-6 5-10 11-9l94 16c6 1 9 6 7 12l-16 69c-1 6-6 9-12 8L55 282c-6-1-9-6-8-12l16-65Z"
           fill="url(#tablet)"
-          stroke={hexToRgba(premiumColors.blue, 0.45)}
+          stroke={hexToRgba(colors.blue, 0.45)}
           strokeWidth="2"
         />
-        <Circle cx="112" cy="249" r="9" fill={hexToRgba(premiumColors.blue, 0.1)} />
+        <Circle cx="112" cy="249" r="9" fill={hexToRgba(colors.blue, 0.1)} />
         <Path d="M87 213c-18-4-31 6-35 20" stroke="#9FB8E8" strokeWidth="8" strokeLinecap="round" opacity="0.55" fill="none" />
         <Path d="M72 214c-9 2-13 9-12 17" stroke="#D6E6FF" strokeWidth="6" strokeLinecap="round" opacity="0.45" fill="none" />
       </G>
@@ -122,16 +123,16 @@ function DoctorHeroArt() {
   );
 }
 
-function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile }) {
+function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colors }) {
   const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.header, { paddingTop: Math.max(insets.top, 12) + 8 }]}>
       <View style={styles.logoRow}>
-        <PremiumIcon name="caduceus" size={48} color={premiumColors.blue} />
+        <PremiumIcon name="caduceus" size={48} color={colors.blue} />
         <View style={styles.logoCopy}>
-          <Text style={styles.logoTitle} numberOfLines={1}>UCAT Genius</Text>
-          <Text style={styles.logoSubtitle} numberOfLines={1}>PREP SMARTER</Text>
+          <Text style={[styles.logoTitle, { color: colors.text }]} numberOfLines={1}>UCAT Genius</Text>
+          <Text style={[styles.logoSubtitle, { color: colors.textMuted }]} numberOfLines={1}>PREP SMARTER</Text>
         </View>
       </View>
 
@@ -139,20 +140,35 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile }) {
         <TouchableOpacity
           activeOpacity={0.84}
           onPress={toggleDark}
-          style={styles.headerCircle}
+          style={[
+            styles.headerCircle,
+            {
+              backgroundColor: isDark ? 'rgba(18, 33, 58, 0.92)' : 'rgba(255, 255, 255, 0.86)',
+              borderColor: isDark ? 'rgba(113, 146, 199, 0.2)' : 'rgba(69, 94, 140, 0.18)',
+              shadowColor: colors.blue,
+            },
+          ]}
           accessibilityRole="button"
           accessibilityLabel="Toggle theme"
         >
-          <PremiumIcon name={isDark ? 'moon' : 'sun'} size={23} color="#DDEAFF" />
+          <PremiumIcon name={isDark ? 'moon' : 'sun'} size={23} color={isDark ? '#DDEAFF' : colors.amber} />
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.86}
           onPress={() => navigation.navigate(showProfile ? 'Profile' : 'Login')}
-          style={[styles.headerCircle, styles.avatarCircle]}
+          style={[
+            styles.headerCircle,
+            styles.avatarCircle,
+            {
+              backgroundColor: isDark ? '#172E71' : '#DBEAFE',
+              borderColor: hexToRgba(colors.blue, isDark ? 0.34 : 0.28),
+              shadowColor: colors.blue,
+            },
+          ]}
           accessibilityRole="button"
           accessibilityLabel={showProfile ? 'Open profile' : 'Log in'}
         >
-          <Text style={styles.avatarText}>{initial}</Text>
+          <Text style={[styles.avatarText, { color: isDark ? '#BDE2FF' : colors.blue }]}>{initial}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -163,6 +179,7 @@ export default function HomeScreen({ navigation }) {
   const { user, isAnonymous, displayName: profileDisplayName } = useAuth();
   const { isDark, toggleDark } = useTheme();
   const { isPro } = useSubscription();
+  const { colors, gradients } = getPremiumTheme(isDark);
 
   const showProfile = !!user && !isAnonymous;
   const initial = showProfile ? user?.email?.[0]?.toUpperCase() ?? 'A' : 'A';
@@ -177,7 +194,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <PremiumScreen>
-      <StatusBar barStyle="light-content" backgroundColor={premiumColors.bgTop} />
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
       <Animated.View style={headerAnim}>
         <HomeHeader
           navigation={navigation}
@@ -185,39 +202,40 @@ export default function HomeScreen({ navigation }) {
           toggleDark={toggleDark}
           initial={initial}
           showProfile={showProfile}
+          colors={colors}
         />
       </Animated.View>
 
       <PremiumScrollView contentContainerStyle={styles.scrollContent}>
         <Animated.View style={heroAnim}>
           <LinearGradient
-            colors={['rgba(17, 35, 66, 0.98)', 'rgba(8, 24, 50, 0.98)', 'rgba(5, 11, 24, 1)']}
+            colors={gradients.hero}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={styles.heroCard}
+            style={[styles.heroCard, { borderColor: colors.border, shadowColor: colors.blue }]}
           >
             <View style={styles.heroArt}>
-              <DoctorHeroArt />
+              <DoctorHeroArt colors={colors} isDark={isDark} />
             </View>
 
             <View style={styles.heroCopy}>
-              <Text style={styles.greeting}>{getGreeting()}, {displayName}</Text>
-              <Text style={styles.heroTitle}>Focus today.</Text>
-              <Text style={styles.heroTitle}>
-                <Text style={styles.heroTitleAccent}>Excel</Text> tomorrow.
+              <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text>
+              <Text style={[styles.heroTitle, { color: colors.text }]}>Focus today.</Text>
+              <Text style={[styles.heroTitle, { color: colors.text }]}>
+                <Text style={[styles.heroTitleAccent, { color: colors.cyan }]}>Excel</Text> tomorrow.
               </Text>
-              <Text style={styles.heroSubtitle}>
+              <Text style={[styles.heroSubtitle, { color: colors.textSecondary }]}>
                 Sharpen your thinking. Strengthen your skills. Secure your future.
               </Text>
 
-              <View style={styles.streakRow}>
+              <View style={[styles.streakRow, { borderColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)', backgroundColor: isDark ? 'rgba(5, 12, 26, 0.5)' : 'rgba(255, 255, 255, 0.64)' }]}>
                 <View style={styles.streakPill}>
-                  <PremiumIcon name="refresh" size={21} color={premiumColors.teal} strokeWidth={2.4} />
-                  <Text style={styles.streakText}>7 Day Streak</Text>
+                  <PremiumIcon name="refresh" size={21} color={colors.teal} strokeWidth={2.4} />
+                  <Text style={[styles.streakText, { color: colors.teal }]}>7 Day Streak</Text>
                 </View>
-                <View style={styles.firePill}>
-                  <PremiumIcon name="flame" size={20} color={premiumColors.amber} />
-                  <Text style={styles.fireText}>7</Text>
+                <View style={[styles.firePill, { borderLeftColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)' }]}>
+                  <PremiumIcon name="flame" size={20} color={colors.amber} />
+                  <Text style={[styles.fireText, { color: colors.text }]}>7</Text>
                 </View>
               </View>
             </View>
@@ -225,18 +243,18 @@ export default function HomeScreen({ navigation }) {
             <TouchableOpacity
               activeOpacity={0.86}
               onPress={() => navigation.navigate('PracticeMode')}
-              style={styles.continuePanel}
+              style={[styles.continuePanel, { borderColor: isDark ? 'rgba(88, 126, 184, 0.18)' : 'rgba(69, 94, 140, 0.16)', backgroundColor: isDark ? 'rgba(5, 12, 25, 0.58)' : 'rgba(255, 255, 255, 0.72)' }]}
               accessibilityRole="button"
             >
-              <RichIconBox icon="target" accent={premiumColors.blue} size={62} iconSize={31} />
+              <RichIconBox icon="target" accent={colors.blue} size={62} iconSize={31} />
               <View style={styles.continueCopy}>
-                <Text style={styles.continueTitle}>Continue where you left off</Text>
-                <Text style={styles.continueMeta}>Verbal Reasoning  |  Mini Test 3</Text>
+                <Text style={[styles.continueTitle, { color: colors.text }]}>Continue where you left off</Text>
+                <Text style={[styles.continueMeta, { color: colors.textSecondary }]}>Verbal Reasoning  |  Mini Test 3</Text>
               </View>
               <View style={styles.progressColumn}>
-                <Text style={styles.progressText}>82% complete</Text>
-                <View style={styles.progressTrack}>
-                  <View style={styles.progressFill} />
+                <Text style={[styles.progressText, { color: colors.blue }]}>82% complete</Text>
+                <View style={[styles.progressTrack, { backgroundColor: hexToRgba(colors.blue, 0.18) }]}>
+                  <View style={[styles.progressFill, { backgroundColor: colors.blue }]} />
                 </View>
               </View>
             </TouchableOpacity>
@@ -248,7 +266,7 @@ export default function HomeScreen({ navigation }) {
             title="Start Practising"
             description="Adaptive practice across all UCAT subtests."
             icon="target"
-            accent={premiumColors.blue}
+            accent={colors.blue}
             highlighted
             onPress={() => navigation.navigate('PracticeMode')}
             style={styles.actionCard}
@@ -260,7 +278,7 @@ export default function HomeScreen({ navigation }) {
             title="Performance Analytics"
             description="Track progress, strengths, and areas to improve."
             icon="chart"
-            accent={premiumColors.teal}
+            accent={colors.teal}
             onPress={() => (isPro ? navigation.navigate('PerformanceAnalytics') : navigation.navigate('Paywall'))}
             style={styles.actionCard}
           />
@@ -271,7 +289,7 @@ export default function HomeScreen({ navigation }) {
             title="About the UCAT"
             description="Understand the exam and prepare with confidence."
             icon="book"
-            accent={premiumColors.purple}
+            accent={colors.purple}
             onPress={() => navigation.navigate('AboutUCAT')}
             style={styles.actionCard}
           />

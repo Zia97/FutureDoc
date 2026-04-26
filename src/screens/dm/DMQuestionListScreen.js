@@ -64,6 +64,24 @@ export default function DMQuestionListScreen({ navigation }) {
     );
   };
 
+  const resetItemProgress = async (item) => {
+    try {
+      const raw = await AsyncStorage.getItem('dm_attempts');
+      if (!raw) return;
+      const attempts = JSON.parse(raw);
+      if (attempts[item.id] === undefined) return;
+      delete attempts[item.id];
+      if (Object.keys(attempts).length === 0) {
+        await AsyncStorage.removeItem('dm_attempts');
+      } else {
+        await AsyncStorage.setItem('dm_attempts', JSON.stringify(attempts));
+      }
+      reload();
+    } catch {
+      Alert.alert('Error', 'Could not reset progress. Please try again.');
+    }
+  };
+
   if (error?.isOffline) {
     return <OfflineRetry onRetry={refetch} message="Connect to the internet to load questions." />;
   }
@@ -101,6 +119,8 @@ export default function DMQuestionListScreen({ navigation }) {
       syncProgress={syncProgress}
       deleting={deleting}
       onReset={handleDeleteProgress}
+      onResetItem={resetItemProgress}
+      resetItemLabel="this question"
     />
   );
 }

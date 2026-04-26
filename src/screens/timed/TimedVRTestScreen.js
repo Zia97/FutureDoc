@@ -1,16 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   View,
-  Text,
   ScrollView,
-  TouchableOpacity,
   StyleSheet,
-  StatusBar,
-  Modal,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
@@ -25,24 +21,34 @@ import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedVRResultsScreen from '../../components/TimedVRResultsScreen';
+import {
+  PremiumQuestionScaffold,
+  QuestionTopBar,
+  QuestionPanel,
+  SectionLabel,
+  QuestionText,
+  QuestionDivider,
+  FlagButton,
+  PremiumPauseModal,
+} from '../../components/premium/PremiumQuestionScreenUI';
 
 export default function TimedVRTestScreen({ route, navigation }) {
   const { test } = route.params;
-  const { practiceTheme: t } = useTheme();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
   const { submitExam } = useTimedVRExamProgress();
+  const sectionColor = colors.blue;
 
   const testNumMatch = test.title?.match(/\d+/);
   const headerTitle = testNumMatch ? `Verbal Reasoning Test ${testNumMatch[0]}` : 'Verbal Reasoning';
 
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
-  const [notes, setNotes] = useState('');
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
 
-  // Block accidental exits while the test is in progress.
   useExitWarning(navigation, !showResults);
 
   const secondsLeftRef = useRef(null);
@@ -52,7 +58,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
     () => handleExamEnd(true),
   );
 
-  // Keep a ref to secondsLeft so handleExamEnd can read it without stale closure
   useEffect(() => {
     secondsLeftRef.current = secondsLeft;
   }, [secondsLeft]);
@@ -65,9 +70,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const scrollRef = useRef(null);
   const prevStemId = useRef(item.stemId);
 
-  // Per-question time tracking. Active only while the user is genuinely
-  // engaged with a question — paused state, end-of-test review modal, and
-  // results screen all stop the clock.
   const getQuestionTimes = useQuestionTimeTracker(
     qid,
     !isPaused && !showReview && !showResults,
@@ -82,7 +84,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
 
   const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
-  const sectionColor = t.sectionVR;
   const isFlagged = flags.has(qid);
 
   useEffect(() => {
@@ -100,9 +101,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
   );
 
   async function handleExamEnd(timerExpired = false) {
-    // Snapshot per-question times BEFORE we flip to the results screen,
-    // otherwise the tracker unmounts and the in-flight question loses its
-    // last few seconds.
     const timeMsByQid = getQuestionTimes();
     await submitExam({
       test,
@@ -140,7 +138,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
     return 'Unseen';
   }
 
-  // Normalised passages for results screen
   const passages = test.passages.map((p) => ({
     ...p,
     id: p.id,
@@ -179,18 +176,18 @@ export default function TimedVRTestScreen({ route, navigation }) {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
-      <StatusBar barStyle="light-content" backgroundColor="#1e3a8a" />
-
-      <View style={styles.timedHeader}>
-        <Text style={styles.timedHeaderTitle}>{headerTitle}</Text>
-        <View style={[styles.timerBadge, { backgroundColor: isUrgent ? '#dc2626' : '#1d4ed8' }]}>
-          <Text style={styles.timerText}>{timerDisplay}</Text>
-        </View>
-      </View>
+    <PremiumQuestionScaffold panHandlers={panHandlers}>
+      <QuestionTopBar
+        title={headerTitle}
+        subtitle="Timed practice"
+        timerDisplay={timerDisplay}
+        isUrgent={isUrgent}
+        accent={sectionColor}
+        onExit={() => navigation.goBack()}
+      />
 
       <ScreenNavBar
-        title={item.stemTitle?.replace(/^Passage\s+\d+[\s:–\-]*/i, '') || item.stemTitle}
+        title={item.stemTitle?.replace(/^Passage\s+\d+[\s:\u2013-]*/i, '') || item.stemTitle}
         meta={`Question ${index + 1} of ${test.flatQuestions.length}`}
         onPrev={goPrev}
         onNext={isLast ? () => setShowReview(true) : goNext}
@@ -207,35 +204,29 @@ export default function TimedVRTestScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={[styles.sectionLabel, { color: sectionColor }]}>PASSAGE</Text>
-        <Text style={[styles.resourceText, { color: t.textSecondary }]}>{item.resource}</Text>
+        <QuestionPanel>
+          <SectionLabel accent={sectionColor}>Passage</SectionLabel>
+          <QuestionText muted>{item.resource}</QuestionText>
 
-        <View style={[styles.divider, { backgroundColor: t.border }]} />
+          <QuestionDivider />
 
-        <View style={styles.questionHeader}>
-          <Text style={[styles.sectionLabel, { color: sectionColor }]}>QUESTION</Text>
-          <TouchableOpacity
-            style={[styles.flagButton, isFlagged && { backgroundColor: '#dbeafe' }]}
-            onPress={() => toggleFlag(qid)}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <Text style={[styles.flagIcon, { color: isFlagged ? '#2563eb' : t.textSecondary }]}>
-              {isFlagged ? '⚑' : '⚐'}
-            </Text>
-          </TouchableOpacity>
-        </View>
+          <View style={styles.questionHeader}>
+            <SectionLabel accent={sectionColor}>Question</SectionLabel>
+            <FlagButton active={isFlagged} onPress={() => toggleFlag(qid)} accent={colors.amber} />
+          </View>
 
-        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
-        <View style={styles.optionsContainer}>
-          {item.question.options.map((opt) => (
-            <AnswerOptionButton
-              key={opt}
-              label={opt}
-              state={getOptionState(opt)}
-              onPress={() => onAnswer(opt)}
-            />
-          ))}
-        </View>
+          <QuestionText>{item.question.questionText}</QuestionText>
+          <View style={styles.optionsContainer}>
+            {item.question.options.map((opt) => (
+              <AnswerOptionButton
+                key={opt}
+                label={opt}
+                state={getOptionState(opt)}
+                onPress={() => onAnswer(opt)}
+              />
+            ))}
+          </View>
+        </QuestionPanel>
       </ScrollView>
 
       <BottomToolbar
@@ -247,25 +238,11 @@ export default function TimedVRTestScreen({ route, navigation }) {
 
       <NotesModal
         visible={notesVisible}
-        notes={notes}
-        onChangeNotes={setNotes}
-        onClear={() => setNotes('')}
+        sectionKey="vr"
         onClose={() => setNotesVisible(false)}
       />
 
-      <Modal visible={isPaused} transparent animationType="fade" statusBarTranslucent>
-        <View style={styles.pauseOverlay}>
-          <View style={styles.pauseCard}>
-            <Text style={styles.pauseIcon}>⏸</Text>
-            <Text style={styles.pauseTitle}>Test Paused</Text>
-            <Text style={styles.pauseSubtitle}>Timer has stopped. Resume when you're ready.</Text>
-            <Text style={styles.pauseReminder}>[Reminder: You will not be able to pause in the real UCAT exam!]</Text>
-            <TouchableOpacity style={styles.resumeButton} onPress={resume} activeOpacity={0.85}>
-              <Text style={styles.resumeButtonText}>▶  Resume Test</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      <PremiumPauseModal visible={isPaused} onResume={resume} />
 
       <TestNavigatorModal
         visible={navigatorVisible}
@@ -275,74 +252,18 @@ export default function TimedVRTestScreen({ route, navigation }) {
         onNavigateTo={(flatIndex) => { goTo(flatIndex); setNavigatorVisible(false); }}
         onClose={() => setNavigatorVisible(false)}
       />
-    </SafeAreaView>
+    </PremiumQuestionScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  timedHeader: {
-    backgroundColor: '#1e3a8a',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-  },
-  timedHeaderTitle: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
-  timerBadge: { paddingHorizontal: 12, paddingVertical: 5, borderRadius: 20 },
-  timerText: { color: '#ffffff', fontWeight: '800', fontSize: 14, fontVariant: ['tabular-nums'] },
   scroll: { flex: 1 },
-  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
-  sectionLabel: { fontSize: 11, fontWeight: '700', letterSpacing: 1.2 },
-  resourceText: { fontSize: 14, lineHeight: 22 },
-  divider: { height: 1, marginVertical: 4 },
-  questionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  questionText: { fontSize: 16, fontWeight: '600', lineHeight: 24 },
-  flagButton: { borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2 },
-  flagIcon: { fontSize: 20 },
-  optionsContainer: { gap: 10 },
-  pauseOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(10, 15, 30, 0.92)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 32,
+  scrollContent: { paddingHorizontal: 8, paddingBottom: 28 },
+  questionHeader: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
   },
-  pauseCard: {
-    backgroundColor: '#1e2a4a',
-    borderRadius: 20,
-    paddingVertical: 40,
-    paddingHorizontal: 32,
-    alignItems: 'center',
-    width: '100%',
-    maxWidth: 340,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.1)',
-  },
-  pauseIcon: { fontSize: 48, marginBottom: 16 },
-  pauseTitle: { color: '#ffffff', fontSize: 22, fontWeight: '800', marginBottom: 10 },
-  pauseSubtitle: {
-    color: 'rgba(255,255,255,0.55)',
-    fontSize: 14,
-    textAlign: 'center',
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-  pauseReminder: {
-    color: 'rgba(255,255,255,0.35)',
-    fontSize: 12,
-    textAlign: 'center',
-    fontStyle: 'italic',
-    marginBottom: 28,
-  },
-  resumeButton: {
-    backgroundColor: '#1d4ed8',
-    borderRadius: 14,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    width: '100%',
-    alignItems: 'center',
-  },
-  resumeButtonText: { color: '#ffffff', fontSize: 16, fontWeight: '700' },
+  optionsContainer: { gap: 10, marginTop: 16 },
 });

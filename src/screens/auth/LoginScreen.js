@@ -1,18 +1,32 @@
 import React, { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Alert,
+  Animated,
+  KeyboardAvoidingView,
+  Platform,
+  StatusBar,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
+  View,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Path } from 'react-native-svg';
+
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import {
+  AppHeader,
+  PremiumIcon,
+  PremiumScreen,
+  PremiumScrollView,
+  hexToRgba,
+  premiumColors,
+  useFadeSlide,
+} from '../../components/premium/PremiumPracticeUI';
+import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const GoogleIcon = ({ size = 20 }) => (
   <Svg width={size} height={size} viewBox="0 0 533.5 544.3">
@@ -31,13 +45,20 @@ const AppleIcon = ({ size = 22, color = '#fff' }) => (
 
 export default function LoginScreen({ navigation }) {
   const { signIn, signInWithGoogle, signInWithApple, resendVerificationEmail } = useAuth();
-  const { theme: t } = useTheme();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState(null);
   const [showResend, setShowResend] = useState(false);
   const [resending, setResending] = useState(false);
+
+  const heroAnim = useFadeSlide(0);
+  const formAnim = useFadeSlide(120);
+  const socialAnim = useFadeSlide(220);
+  const linksAnim = useFadeSlide(300);
 
   const dismissToHome = () => {
     if (navigation.canGoBack()) navigation.goBack();
@@ -106,168 +127,287 @@ export default function LoginScreen({ navigation }) {
     }
   };
 
+  const inputStyle = {
+    backgroundColor: isDark ? 'rgba(8, 18, 36, 0.78)' : 'rgba(255, 255, 255, 0.92)',
+    color: colors.text,
+    borderColor: hexToRgba(colors.blue, 0.28),
+  };
+
   return (
-    <KeyboardAvoidingView
-      style={[styles.container, { backgroundColor: t.bg }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <Text style={[styles.title, { color: t.text }]}>UCAT Genius</Text>
-      <Text style={[styles.subtitle, { color: t.textMuted }]}>Sign in to continue</Text>
+    <PremiumScreen>
+      <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
+      <AppHeader navigation={navigation} title="Sign In" />
 
-      <TextInput
-        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
-        placeholder="Email"
-        placeholderTextColor={t.textMuted}
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={[styles.input, { backgroundColor: t.bgCard, color: t.text, borderColor: t.border }]}
-        placeholder="Password"
-        placeholderTextColor={t.textMuted}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
+      <KeyboardAvoidingView
+        style={styles.keyboard}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <PremiumScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll}>
+          <Animated.View style={[styles.hero, heroAnim]}>
+            <View style={[styles.logoBadge, { borderColor: hexToRgba(colors.blue, 0.42) }]}>
+              <LinearGradient
+                colors={[hexToRgba(colors.blue, isDark ? 0.22 : 0.16), isDark ? 'rgba(8, 17, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.logoFill}
+              >
+                <PremiumIcon name="caduceus" size={36} color={colors.blue} secondaryColor={colors.cyan} />
+              </LinearGradient>
+            </View>
+            <Text style={[styles.heading, { color: colors.text }]}>Welcome back</Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+              Sign in to continue your UCAT preparation.
+            </Text>
+          </Animated.View>
 
-      <TouchableOpacity style={[styles.button, { backgroundColor: t.accent }]} onPress={handleLogin} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign In</Text>}
-      </TouchableOpacity>
+          <Animated.View style={formAnim}>
+            <View style={styles.fieldGroup}>
+              <Text style={[styles.fieldLabel, { color: colors.textMuted }]}>Email</Text>
+              <TextInput
+                style={[styles.input, inputStyle]}
+                placeholder="you@example.com"
+                placeholderTextColor={colors.textMuted}
+                value={email}
+                onChangeText={setEmail}
+                autoCapitalize="none"
+                autoCorrect={false}
+                keyboardType="email-address"
+              />
+            </View>
 
-      <View style={styles.dividerRow}>
-        <View style={[styles.dividerLine, { backgroundColor: t.border }]} />
-        <Text style={[styles.dividerText, { color: t.textMuted }]}>or</Text>
-        <View style={[styles.dividerLine, { backgroundColor: t.border }]} />
-      </View>
+            <View style={styles.fieldGroup}>
+              <Text style={[styles.fieldLabel, { color: colors.textMuted }]}>Password</Text>
+              <TextInput
+                style={[styles.input, inputStyle]}
+                placeholder="••••••••"
+                placeholderTextColor={colors.textMuted}
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            </View>
 
-      <View style={styles.socialRow}>
-        <TouchableOpacity
-          style={[styles.socialButton, { backgroundColor: t.bgCard, borderColor: t.border, borderWidth: 1 }]}
-          onPress={handleGoogle}
-          disabled={socialLoading !== null}
-        >
-          {socialLoading === 'google' ? (
-            <ActivityIndicator color={t.text} />
-          ) : (
-            <>
-              <GoogleIcon size={20} />
-              <Text style={[styles.socialButtonText, { color: t.text }]}>Google</Text>
-            </>
-          )}
-        </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.88}
+              onPress={handleLogin}
+              disabled={loading}
+              style={styles.primaryButtonShadow}
+            >
+              <LinearGradient
+                colors={[colors.blue, colors.cyan]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.primaryButton}
+              >
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.primaryButtonText}>Sign In</Text>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+          </Animated.View>
 
-        <TouchableOpacity
-          style={[styles.socialButton, { backgroundColor: '#000' }]}
-          onPress={handleApple}
-          disabled={socialLoading !== null}
-        >
-          {socialLoading === 'apple' ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <>
-              <AppleIcon size={22} color="#fff" />
-              <Text style={[styles.socialButtonText, { color: '#fff' }]}>Apple</Text>
-            </>
-          )}
-        </TouchableOpacity>
-      </View>
+          <Animated.View style={socialAnim}>
+            <View style={styles.dividerRow}>
+              <View style={[styles.dividerLine, { backgroundColor: hexToRgba(colors.blue, 0.22) }]} />
+              <Text style={[styles.dividerText, { color: colors.textMuted }]}>or continue with</Text>
+              <View style={[styles.dividerLine, { backgroundColor: hexToRgba(colors.blue, 0.22) }]} />
+            </View>
 
-      {showResend && (
-        <TouchableOpacity onPress={handleResend} disabled={resending}>
-          {resending ? (
-            <ActivityIndicator color={t.accent} style={{ marginTop: 8 }} />
-          ) : (
-            <Text style={[styles.link, { color: t.accent }]}>Resend verification email</Text>
-          )}
-        </TouchableOpacity>
-      )}
+            <View style={styles.socialRow}>
+              <TouchableOpacity
+                activeOpacity={0.88}
+                style={[
+                  styles.socialButton,
+                  {
+                    backgroundColor: isDark ? 'rgba(8, 18, 36, 0.78)' : '#FFFFFF',
+                    borderColor: hexToRgba(colors.blue, 0.32),
+                  },
+                ]}
+                onPress={handleGoogle}
+                disabled={socialLoading !== null}
+              >
+                {socialLoading === 'google' ? (
+                  <ActivityIndicator color={colors.text} />
+                ) : (
+                  <>
+                    <GoogleIcon size={20} />
+                    <Text style={[styles.socialButtonText, { color: colors.text }]}>Google</Text>
+                  </>
+                )}
+              </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
-        <Text style={[styles.link, { color: t.textMuted }]}>Forgot your password?</Text>
-      </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.88}
+                style={[styles.socialButton, { backgroundColor: '#000', borderColor: 'rgba(255,255,255,0.12)' }]}
+                onPress={handleApple}
+                disabled={socialLoading !== null}
+              >
+                {socialLoading === 'apple' ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <>
+                    <AppleIcon size={22} color="#fff" />
+                    <Text style={[styles.socialButtonText, { color: '#fff' }]}>Apple</Text>
+                  </>
+                )}
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
 
-      <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
-        <Text style={[styles.link, { color: t.accent }]}>Don't have an account? Sign up</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
+          <Animated.View style={[styles.linkBlock, linksAnim]}>
+            {showResend ? (
+              <TouchableOpacity onPress={handleResend} disabled={resending} style={styles.linkButton}>
+                {resending ? (
+                  <ActivityIndicator color={colors.cyan} />
+                ) : (
+                  <Text style={[styles.linkAccent, { color: colors.cyan }]}>Resend verification email</Text>
+                )}
+              </TouchableOpacity>
+            ) : null}
+
+            <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')} style={styles.linkButton}>
+              <Text style={[styles.linkMuted, { color: colors.textSecondary }]}>Forgot your password?</Text>
+            </TouchableOpacity>
+
+            <View style={[styles.signupRow, { borderColor: hexToRgba(colors.blue, 0.18) }]}>
+              <Text style={[styles.signupMuted, { color: colors.textMuted }]}>New to UCAT Genius?</Text>
+              <TouchableOpacity onPress={() => navigation.replace('SignUp')}>
+                <Text style={[styles.signupLink, { color: colors.blue }]}>Create an account</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </PremiumScrollView>
+      </KeyboardAvoidingView>
+    </PremiumScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  keyboard: { flex: 1 },
+  scroll: { paddingBottom: 36 },
+  hero: {
+    alignItems: 'center',
+    paddingTop: 8,
+    paddingBottom: 30,
+  },
+  logoBadge: {
+    width: 76,
+    height: 76,
+    borderRadius: 22,
+    borderWidth: 1,
+    overflow: 'hidden',
+    marginBottom: 18,
+  },
+  logoFill: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 24,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-    marginBottom: 8,
+  heading: {
+    color: premiumColors.text,
+    fontSize: 30,
+    lineHeight: 36,
+    fontWeight: '900',
+    textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
-    marginBottom: 40,
+    color: premiumColors.textSecondary,
+    fontSize: 15,
+    lineHeight: 22,
+    marginTop: 8,
+    textAlign: 'center',
+    maxWidth: 320,
+  },
+  fieldGroup: { marginBottom: 16 },
+  fieldLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+    marginBottom: 8,
+    marginLeft: 4,
   },
   input: {
     width: '100%',
-    borderRadius: 10,
-    padding: 14,
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: Platform.OS === 'ios' ? 16 : 12,
     fontSize: 16,
-    marginBottom: 14,
     borderWidth: 1,
   },
-  button: {
-    width: '100%',
-    borderRadius: 10,
-    padding: 16,
-    alignItems: 'center',
+  primaryButtonShadow: {
+    borderRadius: 16,
     marginTop: 8,
-    marginBottom: 20,
+    shadowColor: premiumColors.blue,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.32 : 0,
+    shadowRadius: 18,
   },
-  buttonText: {
-    color: '#ffffff',
+  primaryButton: {
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primaryButtonText: {
+    color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '800',
+    letterSpacing: 0.2,
   },
   dividerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
+    marginTop: 26,
+    marginBottom: 18,
   },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-  },
+  dividerLine: { flex: 1, height: 1 },
   dividerText: {
     marginHorizontal: 12,
-    fontSize: 14,
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
   socialRow: {
     flexDirection: 'row',
-    width: '100%',
     gap: 12,
-    marginBottom: 12,
   },
   socialButton: {
     flex: 1,
     flexDirection: 'row',
-    borderRadius: 10,
+    borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    height: 52,
+    height: 54,
+    borderWidth: 1,
   },
   socialButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
   },
-  link: {
-    fontSize: 14,
+  linkBlock: {
+    marginTop: 24,
+    alignItems: 'center',
+    gap: 12,
+  },
+  linkButton: { paddingVertical: 4 },
+  linkAccent: { fontSize: 14, fontWeight: '700' },
+  linkMuted: { fontSize: 14, fontWeight: '500' },
+  signupRow: {
     marginTop: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    width: '100%',
+    justifyContent: 'center',
   },
+  signupMuted: { fontSize: 14 },
+  signupLink: { fontSize: 14, fontWeight: '800' },
 });

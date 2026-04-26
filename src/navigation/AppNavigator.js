@@ -77,7 +77,7 @@ function AppStack() {
       <Stack.Screen name="PracticeMode" component={PracticeModeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="PracticeSections" component={PracticeSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TimedPracticeSections" component={TimedPracticeSectionsScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="TimedTestList" component={TimedTestListScreen} options={({ route }) => ({ title: route.params?.title ?? 'Timed Tests' })} />
+      <Stack.Screen name="TimedTestList" component={TimedTestListScreen} options={{ headerShown: false }} />
       <Stack.Screen name="VRInstruction" component={VRInstructionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="DMInstruction" component={DMInstructionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="QRInstruction" component={QRInstructionScreen} options={{ headerShown: false }} />
@@ -95,19 +95,19 @@ function AppStack() {
       <Stack.Screen name="QRAnalytics" component={QRAnalyticsScreen} options={{ title: 'QR Performance' }} />
       <Stack.Screen name="DMAnalytics" component={DMAnalyticsScreen} options={{ title: 'DM Performance' }} />
       <Stack.Screen name="SJAnalytics" component={SJAnalyticsScreen} options={{ title: 'SJ Performance' }} />
-      <Stack.Screen name="VRQuestionList" component={VRQuestionListScreen} options={{ title: 'Verbal Reasoning' }} />
+      <Stack.Screen name="VRQuestionList" component={VRQuestionListScreen} options={{ headerShown: false }} />
       <Stack.Screen name="VRPassage" component={VRPassageScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="SJScenarioList" component={SJScenarioListScreen} options={{ title: 'Situational Judgement' }} />
+      <Stack.Screen name="SJScenarioList" component={SJScenarioListScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SJScenario" component={SJScenarioScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="DMQuestionList" component={DMQuestionListScreen} options={{ title: 'Decision Making' }} />
+      <Stack.Screen name="DMQuestionList" component={DMQuestionListScreen} options={{ headerShown: false }} />
       <Stack.Screen name="DMQuestion" component={DMQuestionScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="QRQuestionList" component={QRQuestionListScreen} options={{ title: 'Quantitative Reasoning' }} />
+      <Stack.Screen name="QRQuestionList" component={QRQuestionListScreen} options={{ headerShown: false }} />
       <Stack.Screen name="QRQuestion" component={QRQuestionScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Profile" component={ProfileScreen} options={{ title: 'Profile', headerRight: undefined }} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
       <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ title: 'About the UCAT' }} />
       <Stack.Screen name="Paywall" component={PaywallScreen} options={{ headerShown: false, presentation: 'modal' }} />
-      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ title: 'Privacy Policy' }} />
-      <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ title: 'Terms of Service' }} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
       {/* Reachable from Profile for anonymous users who want to link an account or sign in. */}
       <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />

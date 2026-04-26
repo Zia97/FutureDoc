@@ -127,20 +127,11 @@ export function flattenTimedSJScenarios(scenarios) {
 }
 
 /**
- * Find the flat index to navigate to when a stem is tapped in the list screen.
- * Returns the first unanswered question's flat index, or the stem's first question
- * if all are answered.
- *
- * @param {string} stemId
- * @param {Array} flatQuestions
- * @param {Object} localAnswers  — shape: { [stemId]: { [questionId]: selectedAnswer } }
- * @param {Function} getQuestionId  — (question) => id string
+ * Returns the flat index of the first question in a stem.
+ * Used by non-timed practice list screens so tapping a stem always opens
+ * its first question rather than jumping to the first unanswered one.
  */
-export function getTargetFlatIndex(stemId, flatQuestions, localAnswers, getQuestionId = (q) => q.questionId ?? q.itemId) {
-  const stemItems = flatQuestions.filter((fq) => fq.stemId === stemId);
-  if (stemItems.length === 0) return 0;
-
-  const stemAnswers = localAnswers[stemId] ?? {};
-  const firstUnanswered = stemItems.find((fq) => !stemAnswers[getQuestionId(fq.question)]);
-  return firstUnanswered ? firstUnanswered.flatIndex : stemItems[0].flatIndex;
+export function getFirstFlatIndex(stemId, flatQuestions) {
+  const first = flatQuestions.find((fq) => fq.stemId === stemId);
+  return first ? first.flatIndex : 0;
 }

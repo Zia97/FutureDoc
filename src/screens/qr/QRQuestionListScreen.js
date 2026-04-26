@@ -7,15 +7,13 @@ import OfflineRetry from '../../components/OfflineRetry';
 import PremiumQuestionListScreen from '../../components/premium/PremiumQuestionListScreen';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningProgress } from '../../hooks/queries/useQuantitativeReasoningProgress';
-import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
-import { getTargetFlatIndex } from '../../lib/flattenQuestions';
+import { getFirstFlatIndex } from '../../lib/flattenQuestions';
 
 const CACHE_KEYS = ['qr_attempts', 'qr_set_progress'];
 
 export default function QRQuestionListScreen({ navigation }) {
   const { sets, flatQuestions, loading, error, syncing, syncProgress, refetch } = useQuantitativeReasoningSets();
   const { progressMap, reload } = useQuantitativeReasoningProgress();
-  const { localAnswers } = useQuantitativeReasoningAttempts();
   const [deleting, setDeleting] = useState(false);
 
   useFocusEffect(useCallback(() => { reload(); }, [reload]));
@@ -43,6 +41,47 @@ export default function QRQuestionListScreen({ navigation }) {
     );
   };
 
+  const resetItemProgress = async (item) => {
+    try {
+      const setId = item.setId;
+      const attemptsRaw = await AsyncStorage.getItem('qr_attempts');
+      if (attemptsRaw) {
+        const attempts = JSON.parse(attemptsRaw);
+        let changed = false;
+        for (const [questionId, value] of Object.entries(attempts)) {
+          if (value?.setId === setId) {
+            delete attempts[questionId];
+            changed = true;
+          }
+        }
+        if (changed) {
+          if (Object.keys(attempts).length === 0) {
+            await AsyncStorage.removeItem('qr_attempts');
+          } else {
+            await AsyncStorage.setItem('qr_attempts', JSON.stringify(attempts));
+          }
+        }
+      }
+
+      const progressRaw = await AsyncStorage.getItem('qr_set_progress');
+      if (progressRaw) {
+        const progress = JSON.parse(progressRaw);
+        if (progress[setId] !== undefined) {
+          delete progress[setId];
+          if (Object.keys(progress).length === 0) {
+            await AsyncStorage.removeItem('qr_set_progress');
+          } else {
+            await AsyncStorage.setItem('qr_set_progress', JSON.stringify(progress));
+          }
+        }
+      }
+
+      reload();
+    } catch {
+      Alert.alert('Error', 'Could not reset progress. Please try again.');
+    }
+  };
+
   if (error?.isOffline) {
     return <OfflineRetry onRetry={refetch} message="Connect to the internet to load questions." />;
   }
@@ -57,7 +96,7 @@ export default function QRQuestionListScreen({ navigation }) {
       getTitle={(item, index) => item.title ?? `Set ${index + 1}`}
       getSearchText={(item) => item.stimulus?.title}
       getStatus={(item) => progressMap[item.setId] ?? null}
-      getIndex={(item) => getTargetFlatIndex(item.setId, flatQuestions, localAnswers)}
+      getIndex={(item) => getFirstFlatIndex(item.setId, flatQuestions)}
       getIsFree={(item) => item.isFree}
       getItemKey={(item) => item.id ?? item.setId}
       routeName="QRQuestion"
@@ -68,6 +107,8 @@ export default function QRQuestionListScreen({ navigation }) {
       syncProgress={syncProgress}
       deleting={deleting}
       onReset={handleDeleteProgress}
+      onResetItem={resetItemProgress}
+      resetItemLabel="this set"
     />
   );
 }

@@ -1,14 +1,9 @@
 import { useState, useEffect } from 'react';
 import {
   View,
-  Text,
   ScrollView,
-  TouchableOpacity,
   StyleSheet,
-  StatusBar,
-  ActivityIndicator,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
@@ -24,12 +19,25 @@ import CalculatorModal from '../../components/CalculatorModal';
 import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
 import { useTheme } from '../../context/ThemeContext';
+import { getPremiumTheme } from '../../theme/premiumTheme';
+import {
+  PremiumQuestionScaffold,
+  PremiumQuestionLoading,
+  QuestionTopBar,
+  QuestionPanel,
+  SectionLabel,
+  QuestionText,
+  QuestionDivider,
+  PrimaryQuestionButton,
+} from '../../components/premium/PremiumQuestionScreenUI';
 
-export default function QRQuestionScreen({ route }) {
+export default function QRQuestionScreen({ route, navigation }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const { flatQuestions, loading } = useQuantitativeReasoningSets();
   const { submitAttempt, localAnswers, cacheLoading } = useQuantitativeReasoningAttempts();
-  const { practiceTheme: t } = useTheme();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const sectionColor = colors.purple;
 
   const { index, item, isFirst, isLast, goNext: rawGoNext, goPrev: rawGoPrev } =
     useFlatNavigation(flatQuestions, initialIndex);
@@ -49,7 +57,6 @@ export default function QRQuestionScreen({ route }) {
   const { handleAnswer, getAnswer, resetAnswers } = useAnswers();
   const [calcVisible, setCalcVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
-  const [notes, setNotes] = useState('');
   const [pendingAnswer, setPendingAnswer] = useState(null);
 
   useEffect(() => {
@@ -64,11 +71,7 @@ export default function QRQuestionScreen({ route }) {
   );
 
   if (loading || cacheLoading || flatQuestions.length === 0) {
-    return (
-      <View style={[styles.centered, { backgroundColor: t.bg }]}>
-        <ActivityIndicator size="large" color={t.accent} />
-      </View>
-    );
+    return <PremiumQuestionLoading label="Loading question..." />;
   }
 
   const qid = item.question.questionId;
@@ -100,8 +103,13 @@ export default function QRQuestionScreen({ route }) {
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bg }]} {...panHandlers}>
-      <StatusBar barStyle={t.statusBar} backgroundColor={t.headerBg} />
+    <PremiumQuestionScaffold panHandlers={panHandlers}>
+      <QuestionTopBar
+        title="Quantitative Reasoning"
+        subtitle="Practice"
+        accent={sectionColor}
+        onExit={() => navigation.goBack()}
+      />
 
       <ScreenNavBar
         title={item.stemTitle}
@@ -110,7 +118,7 @@ export default function QRQuestionScreen({ route }) {
         onNext={goNext}
         isFirst={isFirst}
         isLast={isLast}
-        color={t.sectionQR}
+        color={sectionColor}
         report={{ questionId: qid, section: 'qr' }}
       />
 
@@ -122,102 +130,71 @@ export default function QRQuestionScreen({ route }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={[styles.sectionLabel, { color: t.sectionQR }]}>STEM</Text>
-        <QRStimulusRenderer stimulus={item.stimulus} />
+        <QuestionPanel>
+          <SectionLabel accent={sectionColor}>Stem</SectionLabel>
+          <QRStimulusRenderer stimulus={item.stimulus} />
 
-        <View style={[styles.divider, { backgroundColor: t.border }]} />
+          <QuestionDivider />
 
-        <Text style={[styles.sectionLabel, { color: t.sectionQR }]}>QUESTION</Text>
-        <Text style={[styles.questionText, { color: t.text }]}>{item.question.questionText}</Text>
-        <View style={styles.options}>
-          {item.question.options.map((opt) => (
-            <AnswerOptionButton
-              key={opt.label}
-              label={`${opt.label}.  ${opt.text}`}
-              state={getOptionState(opt.label)}
-              onPress={() => onAnswer(opt.label)}
+          <SectionLabel accent={sectionColor}>Question</SectionLabel>
+          <QuestionText>{item.question.questionText}</QuestionText>
+          <View style={styles.options}>
+            {item.question.options.map((opt) => (
+              <AnswerOptionButton
+                key={opt.label}
+                label={`${opt.label}.  ${opt.text}`}
+                state={getOptionState(opt.label)}
+                onPress={() => onAnswer(opt.label)}
+              />
+            ))}
+          </View>
+
+          {pendingAnswer && !hasAnswered ? (
+            <PrimaryQuestionButton accent={sectionColor} onPress={handleCheckAnswer}>
+              Check Answer
+            </PrimaryQuestionButton>
+          ) : null}
+
+          {hasAnswered ? (
+            <FeedbackBox
+              isCorrect={isCorrect}
+              correctAnswer={item.question.answer}
+              reason={item.question.answeringReason}
+              showReason
+              questionContext={{
+                questionId: item.question.questionId ?? item.question.id,
+                question: item.question.questionText,
+                questionType: item.stimulus?.type ?? 'quantitative_reasoning',
+                section: 'qr',
+                options: item.question.options.map((o) => `${o.label}. ${o.text}`),
+                correctAnswer: item.question.answer,
+                userAnswer: selectedAnswer,
+                explanation: item.question.answeringReason,
+                stimulusData: item.stimulus,
+                isTimed: false,
+              }}
             />
-          ))}
-        </View>
-
-        {pendingAnswer && !hasAnswered && (
-          <TouchableOpacity
-            style={[styles.checkButton, { backgroundColor: t.sectionQR }]}
-            onPress={handleCheckAnswer}
-          >
-            <Text style={styles.checkButtonText}>Check Answer</Text>
-          </TouchableOpacity>
-        )}
-
-        {hasAnswered && (
-          <FeedbackBox
-            isCorrect={isCorrect}
-            correctAnswer={item.question.answer}
-            reason={item.question.answeringReason}
-            showReason
-            questionContext={{
-              questionId: item.question.questionId ?? item.question.id,
-              question: item.question.questionText,
-              questionType: item.stimulus?.type ?? 'quantitative_reasoning',
-              section: 'qr',
-              options: item.question.options.map((o) => `${o.label}. ${o.text}`),
-              correctAnswer: item.question.answer,
-              userAnswer: selectedAnswer,
-              explanation: item.question.answeringReason,
-              stimulusData: item.stimulus,
-              isTimed: false,
-            }}
-          />
-        )}
+          ) : null}
+        </QuestionPanel>
       </ScrollView>
 
       <BottomToolbar
         onNotes={() => setNotesVisible(true)}
         onCalculator={() => setCalcVisible(true)}
-        sectionColor={t.sectionQR}
+        sectionColor={sectionColor}
       />
 
       <NotesModal
         visible={notesVisible}
-        notes={notes}
-        onChangeNotes={setNotes}
-        onClear={() => setNotes('')}
+        sectionKey="qr"
         onClose={() => setNotesVisible(false)}
       />
-    </SafeAreaView>
+    </PremiumQuestionScaffold>
   );
 }
 
 const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  container: { flex: 1 },
   scroll: { flex: 1 },
-  scrollContent: { padding: 20, paddingBottom: 40, gap: 12 },
-  sectionLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 1.2,
-  },
-  divider: {
-    height: 1,
-    marginVertical: 4,
-  },
-  questionText: {
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
-    marginBottom: 16,
-  },
-  options: { gap: 10 },
-  checkButton: {
-    marginTop: 14,
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  checkButtonText: {
-    color: '#ffffff',
-    fontSize: 15,
-    fontWeight: '700',
-  },
+  scrollContent: { paddingHorizontal: 8, paddingBottom: 28 },
+  options: { gap: 10, marginTop: 16 },
 });

@@ -1,6 +1,6 @@
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
 import PassageLayout from '../../components/PassageLayout';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
+import { PremiumQuestionLoading } from '../../components/premium/PremiumQuestionScreenUI';
 import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReasoningAttempts';
 
@@ -10,11 +10,7 @@ export default function VRPassageScreen({ route }) {
   const { submitAttempt, localAnswers, cacheLoading } = useVerbalReasoningAttempts();
 
   if (loading || cacheLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
+    return <PremiumQuestionLoading label="Loading passage..." />;
   }
 
   function handleAnswerCommit(item, selectedAnswer) {
@@ -51,6 +47,3 @@ export default function VRPassageScreen({ route }) {
   );
 }
 
-const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});
