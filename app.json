@@ -141,6 +141,14 @@
       "expo-apple-authentication",
       "expo-build-properties",
       [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#1F6FEB",
+          "defaultChannel": "daily-reminder"
+        }
+      ],
+      [
         "@sentry/react-native/expo",
         {
           "url": "https://sentry.io/",

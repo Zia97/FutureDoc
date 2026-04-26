@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { reportError, reportMessage } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 const ATTEMPTS_KEY = 'qr_attempts';
 export const QR_PROGRESS_CACHE_KEY = 'qr_set_progress';
@@ -81,6 +83,8 @@ export function useQuantitativeReasoningAttempts() {
     try {
       const attempts = await saveToCache(questionId, setId, selectedAnswer);
       if (attempts) await updateProgressCache(setId, totalQuestions, attempts);
+      recordActivity();
+      setLastActivity({ kind: 'practice', section: 'QR' });
     } finally {
       submitting.current.delete(questionId);
     }

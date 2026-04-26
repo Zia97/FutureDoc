@@ -5,6 +5,8 @@ import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildQRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { reportError } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 const COMPLETED_KEY = 'timed_qr_completed_attempts';
 const SECTION = 'qr';
@@ -174,6 +176,8 @@ export function useTimedQRExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
+      recordActivity();
+      setLastActivity({ kind: 'timedList', section: 'QR' });
     } catch (err) {
       reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }

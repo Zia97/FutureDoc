@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -30,6 +30,7 @@ import {
   getQRScaledScore,
   scoreColor as scaledScoreColor,
 } from '../../lib/ucatScoring';
+import { setLastActivity } from '../../services/lastActivityService';
 import SyncBanner from '../../components/SyncBanner';
 import OfflineRetry from '../../components/OfflineRetry';
 import PremiumIcon from '../../components/premium/PremiumIcon';
@@ -106,6 +107,9 @@ const SECTION_COMPONENT = {
 export default function TimedTestListScreen({ navigation, route }) {
   const { section, title } = route.params;
   const Component = SECTION_COMPONENT[section] ?? VRList;
+  useEffect(() => {
+    if (section) setLastActivity({ kind: 'timedList', section });
+  }, [section]);
   return <Component navigation={navigation} section={section} title={title} />;
 }
 

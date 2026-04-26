@@ -17,6 +17,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
+  requestPermission,
+  scheduleDailyReminder,
+} from '../../services/notificationService';
+import {
   AppHeader,
   PremiumIcon,
   PremiumScreen,
@@ -65,7 +69,31 @@ export default function SignUpScreen({ navigation }) {
     Alert.alert(
       'Check your email',
       'We sent you a confirmation link. Please verify your email before signing in.',
-      [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
+      [{ text: 'OK', onPress: askForNotifications }],
+    );
+  };
+
+  const askForNotifications = () => {
+    Alert.alert(
+      'Stay on track',
+      'Get a daily reminder to keep your streak going and study consistently.',
+      [
+        {
+          text: 'Not now',
+          style: 'cancel',
+          onPress: () => navigation.navigate('Login'),
+        },
+        {
+          text: 'Enable reminders',
+          onPress: async () => {
+            const status = await requestPermission();
+            if (status === 'granted') {
+              await scheduleDailyReminder();
+            }
+            navigation.navigate('Login');
+          },
+        },
+      ],
     );
   };
 

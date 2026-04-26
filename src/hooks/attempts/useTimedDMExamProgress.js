@@ -5,6 +5,8 @@ import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildDMAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { reportError } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 const COMPLETED_KEY = 'timed_dm_completed_attempts';
 const SECTION = 'dm';
@@ -116,6 +118,8 @@ export function useTimedDMExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
+      recordActivity();
+      setLastActivity({ kind: 'timedList', section: 'DM' });
     } catch (err) {
       reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }

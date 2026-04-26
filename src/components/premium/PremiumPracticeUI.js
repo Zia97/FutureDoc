@@ -319,23 +319,8 @@ export function SectionSelectionCard(props) {
   return <GlassMenuCard iconSize={60} iconGlyphSize={29} style={styles.sectionCard} {...props} />;
 }
 
-export function PremiumFooter({ style }) {
-  const { isDark } = useTheme();
-  const { colors } = getPremiumTheme(isDark);
-
-  return (
-    <View style={[styles.footer, style]}>
-      <View style={[styles.footerLine, { backgroundColor: isDark ? 'rgba(116, 154, 209, 0.22)' : 'rgba(69, 94, 140, 0.2)' }]} />
-      <View style={styles.footerCenter}>
-        <PremiumIcon name="shield-heart" size={24} color={colors.blue} secondaryColor={colors.cyan} />
-        <View style={styles.footerTextBlock}>
-          <Text style={[styles.footerMuted, { color: colors.textMuted }]}>Consistent practice. Confident mindset. Clinical future.</Text>
-          <Text style={[styles.footerAccent, { color: colors.blue }]}>You've got this.</Text>
-        </View>
-      </View>
-      <View style={[styles.footerLine, { backgroundColor: isDark ? 'rgba(116, 154, 209, 0.22)' : 'rgba(69, 94, 140, 0.2)' }]} />
-    </View>
-  );
+export function PremiumFooter() {
+  return null;
 }
 
 export { PremiumIcon, premiumColors, hexToRgba };

@@ -5,6 +5,8 @@ import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildVRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { reportError } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 const COMPLETED_KEY = 'timed_vr_completed_attempts';
 const SECTION = 'vr';
@@ -127,6 +129,8 @@ export function useTimedVRExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
+      recordActivity();
+      setLastActivity({ kind: 'timedList', section: 'VR' });
     } catch (err) {
       reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }

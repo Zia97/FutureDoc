@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { reportError, reportMessage } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 const ATTEMPTS_KEY  = 'vr_attempts';
 export const VR_PROGRESS_CACHE_KEY = 'vr_passage_progress';
@@ -86,6 +88,8 @@ export function useVerbalReasoningAttempts() {
     try {
       const attempts = await saveToCache(questionId, passageId, selectedAnswer);
       if (attempts) await updateProgressCache(passageId, totalQuestions, attempts);
+      recordActivity();
+      setLastActivity({ kind: 'practice', section: 'VR' });
     } finally {
       submitting.current.delete(questionId);
     }

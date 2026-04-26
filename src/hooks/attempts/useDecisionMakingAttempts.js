@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { reportError, reportMessage } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 export const DM_ATTEMPTS_KEY = 'dm_attempts';
 const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
@@ -69,6 +71,8 @@ export function useDecisionMakingAttempts() {
 
     try {
       await saveToCache(questionId, answer);
+      recordActivity();
+      setLastActivity({ kind: 'practice', section: 'DM' });
     } finally {
       submitting.current.delete(questionId);
     }

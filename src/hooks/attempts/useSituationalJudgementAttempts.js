@@ -2,6 +2,8 @@ import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { reportError, reportMessage } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 const ATTEMPTS_KEY = 'sj_attempts';
 export const SJ_PROGRESS_CACHE_KEY = 'sj_scenario_progress';
@@ -81,6 +83,8 @@ export function useSituationalJudgementAttempts() {
     try {
       const attempts = await saveToCache(questionId, scenarioId, selectedAnswer);
       if (attempts) await updateProgressCache(scenarioId, totalQuestions, attempts);
+      recordActivity();
+      setLastActivity({ kind: 'practice', section: 'SJ' });
     } finally {
       submitting.current.delete(questionId);
     }

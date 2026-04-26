@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   Animated,
   Platform,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useFocusEffect } from '@react-navigation/native';
 import Svg, {
   Circle,
   Defs,
@@ -24,6 +25,13 @@ import Svg, {
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { getDisplayStreak } from '../../services/streakService';
+import {
+  getLastActivity,
+  getResumeNavTarget,
+  getSectionVisuals,
+} from '../../services/lastActivityService';
+import { refreshDailyReminder } from '../../services/notificationService';
 import {
   GlassMenuCard,
   PremiumFooter,
@@ -192,6 +200,35 @@ export default function HomeScreen({ navigation }) {
   const action3Anim = useFadeSlide(330, 18);
   const footerAnim = useFadeSlide(410, 18);
 
+  const [streak, setStreak] = useState({ currentStreak: 0, longestStreak: 0 });
+  const [lastActivity, setLastActivityState] = useState(null);
+
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      (async () => {
+        const [s, a] = await Promise.all([getDisplayStreak(), getLastActivity()]);
+        if (cancelled) return;
+        setStreak(s);
+        setLastActivityState(a);
+        refreshDailyReminder();
+      })();
+      return () => { cancelled = true; };
+    }, []),
+  );
+
+  const resumeTarget = getResumeNavTarget(lastActivity);
+  const resumeVisuals = lastActivity ? getSectionVisuals(lastActivity.section) : null;
+  const resumeAccent = resumeVisuals ? (colors[resumeVisuals.accentKey] ?? colors.blue) : colors.blue;
+  const handleResume = () => {
+    if (resumeTarget) {
+      navigation.navigate(resumeTarget.screen, resumeTarget.params);
+    } else {
+      navigation.navigate('PracticeMode');
+    }
+  };
+  const streakLabel = `${streak.currentStreak} Day Streak`;
+
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
@@ -218,46 +255,35 @@ export default function HomeScreen({ navigation }) {
               <DoctorHeroArt colors={colors} isDark={isDark} />
             </View>
 
-            <View style={styles.heroCopy}>
+            <View style={[styles.heroCopy, { minHeight: resumeVisuals ? 240 : 200 }]}>
               <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text>
-              <Text style={[styles.heroTitle, { color: colors.text }]}>Focus today.</Text>
-              <Text style={[styles.heroTitle, { color: colors.text }]}>
-                <Text style={[styles.heroTitleAccent, { color: colors.cyan }]}>Excel</Text> tomorrow.
-              </Text>
-              <Text style={[styles.heroSubtitle, { color: colors.textSecondary }]}>
-                Sharpen your thinking. Strengthen your skills. Secure your future.
-              </Text>
 
               <View style={[styles.streakRow, { borderColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)', backgroundColor: isDark ? 'rgba(5, 12, 26, 0.5)' : 'rgba(255, 255, 255, 0.64)' }]}>
                 <View style={styles.streakPill}>
                   <PremiumIcon name="refresh" size={21} color={colors.teal} strokeWidth={2.4} />
-                  <Text style={[styles.streakText, { color: colors.teal }]}>7 Day Streak</Text>
+                  <Text style={[styles.streakText, { color: colors.teal }]}>{streakLabel}</Text>
                 </View>
                 <View style={[styles.firePill, { borderLeftColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)' }]}>
                   <PremiumIcon name="flame" size={20} color={colors.amber} />
-                  <Text style={[styles.fireText, { color: colors.text }]}>7</Text>
+                  <Text style={[styles.fireText, { color: colors.text }]}>{streak.currentStreak}</Text>
                 </View>
               </View>
-            </View>
 
-            <TouchableOpacity
-              activeOpacity={0.86}
-              onPress={() => navigation.navigate('PracticeMode')}
-              style={[styles.continuePanel, { borderColor: isDark ? 'rgba(88, 126, 184, 0.18)' : 'rgba(69, 94, 140, 0.16)', backgroundColor: isDark ? 'rgba(5, 12, 25, 0.58)' : 'rgba(255, 255, 255, 0.72)' }]}
-              accessibilityRole="button"
-            >
-              <RichIconBox icon="target" accent={colors.blue} size={62} iconSize={31} />
-              <View style={styles.continueCopy}>
-                <Text style={[styles.continueTitle, { color: colors.text }]}>Continue where you left off</Text>
-                <Text style={[styles.continueMeta, { color: colors.textSecondary }]}>Verbal Reasoning  |  Mini Test 3</Text>
-              </View>
-              <View style={styles.progressColumn}>
-                <Text style={[styles.progressText, { color: colors.blue }]}>82% complete</Text>
-                <View style={[styles.progressTrack, { backgroundColor: hexToRgba(colors.blue, 0.18) }]}>
-                  <View style={[styles.progressFill, { backgroundColor: colors.blue }]} />
-                </View>
-              </View>
-            </TouchableOpacity>
+              {resumeVisuals ? (
+                <TouchableOpacity
+                  activeOpacity={0.86}
+                  onPress={handleResume}
+                  style={[styles.continuePanel, { borderColor: isDark ? 'rgba(88, 126, 184, 0.18)' : 'rgba(69, 94, 140, 0.16)', backgroundColor: isDark ? 'rgba(5, 12, 25, 0.58)' : 'rgba(255, 255, 255, 0.72)' }]}
+                  accessibilityRole="button"
+                >
+                  <RichIconBox icon={resumeVisuals.icon} accent={resumeAccent} size={42} iconSize={22} />
+                  <Text style={[styles.continueTitle, { color: colors.text }]} numberOfLines={2}>
+                    Continue where you left off
+                  </Text>
+                  <PremiumIcon name="chevron-right" size={20} color={resumeAccent} strokeWidth={2.4} />
+                </TouchableOpacity>
+              ) : null}
+            </View>
           </LinearGradient>
         </Animated.View>
 
@@ -370,7 +396,6 @@ const styles = StyleSheet.create({
     paddingBottom: 34,
   },
   heroCard: {
-    minHeight: 488,
     borderRadius: 28,
     borderWidth: 1,
     borderColor: premiumColors.border,
@@ -392,7 +417,6 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   heroCopy: {
-    minHeight: 330,
     justifyContent: 'flex-start',
   },
   greeting: {
@@ -461,32 +485,36 @@ const styles = StyleSheet.create({
     fontWeight: '900',
   },
   continuePanel: {
-    minHeight: 104,
-    borderRadius: 24,
+    alignSelf: 'flex-start',
+    maxWidth: 250,
+    borderRadius: 18,
     borderWidth: 1,
     borderColor: 'rgba(88, 126, 184, 0.18)',
     backgroundColor: 'rgba(5, 12, 25, 0.58)',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
-    paddingHorizontal: 18,
-    paddingVertical: 16,
-  },
-  continueCopy: {
-    flex: 1,
-    minWidth: 0,
+    gap: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    marginTop: 18,
   },
   continueTitle: {
+    flex: 1,
     color: premiumColors.text,
-    fontSize: 16,
-    lineHeight: 22,
-    fontWeight: '900',
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: '800',
   },
   continueMeta: {
     color: premiumColors.textSecondary,
     fontSize: 14,
     lineHeight: 20,
     marginTop: 4,
+  },
+  continueChevron: {
+    paddingHorizontal: 4,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   progressColumn: {
     width: 118,

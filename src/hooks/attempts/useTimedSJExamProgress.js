@@ -6,6 +6,8 @@ import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue
 import { buildSJAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import { reportError } from '../../lib/reportError';
+import { recordActivity } from '../../services/streakService';
+import { setLastActivity } from '../../services/lastActivityService';
 
 // Local storage key — stores completed exam results keyed by test.id string
 const COMPLETED_KEY = 'timed_sj_completed_attempts';
@@ -138,6 +140,8 @@ export function useTimedSJExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
+      recordActivity();
+      setLastActivity({ kind: 'timedList', section: 'SJ' });
     } catch (err) {
       reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
