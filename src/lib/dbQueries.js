@@ -83,6 +83,7 @@ class DatabaseService {
         )
       `)
       .order('created_at', { ascending: true })
+      .order('id', { ascending: true })
       .range(from, to);
     if (error) throw error;
     onProgress?.();
@@ -179,6 +180,7 @@ class DatabaseService {
         )
       `)
       .order('order_index', { ascending: true })
+      .order('id', { ascending: true })
       .range(from, to);
     if (error) throw error;
     onProgress?.();
@@ -247,6 +249,7 @@ class DatabaseService {
         )
       `)
       .order('created_at', { ascending: true })
+      .order('id', { ascending: true })
       .range(from, to);
     if (error) throw error;
     onProgress?.();
@@ -313,6 +316,7 @@ class DatabaseService {
         )
       `)
       .order('created_at', { ascending: true })
+      .order('id', { ascending: true })
       .range(from, to);
     if (error) throw error;
     onProgress?.();

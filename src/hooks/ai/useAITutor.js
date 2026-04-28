@@ -6,6 +6,8 @@ export const TUTOR_ERROR = {
   LIFETIME_LIMIT: 'lifetime_limit_reached',
   NETWORK: 'network_error',
   OFFLINE: 'offline',
+  TUTOR_DISABLED: 'tutor_disabled',
+  DEMO_DISABLED: 'demo_disabled',
 };
 
 /**
@@ -20,7 +22,8 @@ export const TUTOR_ERROR = {
  * @param {string} questionContext.explanation
  * @param {object} [questionContext.stimulusData]
  */
-export function useAITutor(questionContext) {
+export function useAITutor(questionContext, options = {}) {
+  const { isDemo = false } = options;
   const [messages, setMessages] = useState([]);
   const [streamingContent, setStreamingContent] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
@@ -45,6 +48,7 @@ export function useAITutor(questionContext) {
     streamAITutor({
       ...questionContext,
       messages: historyRef.current,
+      isDemo,
       onChunk: (chunk) => {
         accumulated += chunk;
         setStreamingContent(accumulated);
@@ -61,7 +65,9 @@ export function useAITutor(questionContext) {
         if (
           code === TUTOR_ERROR.DAILY_LIMIT ||
           code === TUTOR_ERROR.LIFETIME_LIMIT ||
-          code === TUTOR_ERROR.OFFLINE
+          code === TUTOR_ERROR.OFFLINE ||
+          code === TUTOR_ERROR.TUTOR_DISABLED ||
+          code === TUTOR_ERROR.DEMO_DISABLED
         ) {
           setError(code);
         } else {
@@ -73,7 +79,7 @@ export function useAITutor(questionContext) {
         setIsStreaming(false);
       },
     });
-  }, [isStreaming, questionContext]);
+  }, [isStreaming, questionContext, isDemo]);
 
   // Reset the session when the question changes (new question = fresh chat)
   useEffect(() => {

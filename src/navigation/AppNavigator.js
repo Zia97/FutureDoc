@@ -26,9 +26,13 @@ import PaywallScreen from '../screens/home/PaywallScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
 import TermsOfServiceScreen from '../screens/home/TermsOfServiceScreen';
 import DecisionMakingLearnScreen from '../screens/learn/DecisionMakingLearnScreen';
+import DecisionMakingLessonScreen from '../screens/learn/DecisionMakingLessonScreen';
 import LearnSectionsScreen from '../screens/learn/LearnSectionsScreen';
 import QuantitativeReasoningLearnScreen from '../screens/learn/QuantitativeReasoningLearnScreen';
+import QuantitativeReasoningLessonScreen from '../screens/learn/QuantitativeReasoningLessonScreen';
 import SituationalJudgementLearnScreen from '../screens/learn/SituationalJudgementLearnScreen';
+import SituationalJudgementLessonScreen from '../screens/learn/SituationalJudgementLessonScreen';
+import VerbalReasoningLessonScreen from '../screens/learn/VerbalReasoningLessonScreen';
 import VerbalReasoningLearnScreen from '../screens/learn/VerbalReasoningLearnScreen';
 import PracticeModeScreen from '../screens/practice/PracticeModeScreen';
 import PracticeSectionsScreen from '../screens/practice/PracticeSectionsScreen';
@@ -81,9 +85,13 @@ function AppStack() {
       <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnSections" component={LearnSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnVerbalReasoning" component={VerbalReasoningLearnScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="LearnVRLesson" component={VerbalReasoningLessonScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnDecisionMaking" component={DecisionMakingLearnScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="LearnDMLesson" component={DecisionMakingLessonScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnQuantitativeReasoning" component={QuantitativeReasoningLearnScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="LearnQRLesson" component={QuantitativeReasoningLessonScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnSituationalJudgement" component={SituationalJudgementLearnScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="LearnSJLesson" component={SituationalJudgementLessonScreen} options={{ headerShown: false }} />
       <Stack.Screen name="PracticeMode" component={PracticeModeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="PracticeSections" component={PracticeSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TimedPracticeSections" component={TimedPracticeSectionsScreen} options={{ headerShown: false }} />

@@ -8,7 +8,14 @@ import { flattenQRSets } from '../../lib/flattenQuestions';
 const SECTION = 'quantitative_reasoning';
 
 function mapSets(data) {
-  return data.map((s) => ({
+  const seen = new Set();
+  const unique = [];
+  for (const s of data) {
+    if (seen.has(s.id)) continue;
+    seen.add(s.id);
+    unique.push(s);
+  }
+  return unique.map((s) => ({
     id: s.id,
     setId: s.id,
     title: s.title,

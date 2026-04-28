@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
+  Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 import { useFlatNavigation } from '../hooks/ui/useFlatNavigation';
@@ -11,11 +14,12 @@ import { useAnswers } from '../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../hooks/ui/usePremiumGate';
 import { useTheme } from '../context/ThemeContext';
-import { getPremiumTheme } from '../theme/premiumTheme';
+import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
 import NotesModal from './NotesModal';
 import BottomToolbar from './BottomToolbar';
+import PremiumIcon from './premium/PremiumIcon';
 import {
   PremiumQuestionScaffold,
   QuestionTopBar,
@@ -42,6 +46,8 @@ export default function PassageLayout({
   initialAnswers = {},
   section = 'vr',
   getItemIsFree = null,
+  demoMode = false,
+  onDemoExit = null,
 }) {
   const navigation = useNavigation();
   const { isDark } = useTheme();
@@ -100,24 +106,26 @@ export default function PassageLayout({
   const screenTitle = SECTION_TITLE[section] ?? 'Practice';
 
   return (
-    <PremiumQuestionScaffold panHandlers={panHandlers}>
+    <PremiumQuestionScaffold panHandlers={demoMode ? null : panHandlers}>
       <QuestionTopBar
-        title={screenTitle}
-        subtitle="Practice"
+        title={demoMode ? 'AI Tutor Demo' : screenTitle}
+        subtitle={demoMode ? 'Sample question' : 'Practice'}
         accent={sectionColor}
-        onExit={() => navigation.goBack()}
+        onExit={demoMode ? (onDemoExit ?? (() => navigation.goBack())) : () => navigation.goBack()}
       />
 
-      <ScreenNavBar
-        title={getTitle(item)}
-        meta={`Question ${index + 1} of ${flatQuestions.length}`}
-        onPrev={goPrev}
-        onNext={goNext}
-        isFirst={isFirst}
-        isLast={isLast}
-        color={sectionColor}
-        report={{ questionId: qid, section }}
-      />
+      {demoMode ? null : (
+        <ScreenNavBar
+          title={getTitle(item)}
+          meta={`Question ${index + 1} of ${flatQuestions.length}`}
+          onPrev={goPrev}
+          onNext={goNext}
+          isFirst={isFirst}
+          isLast={isLast}
+          color={sectionColor}
+          report={{ questionId: qid, section }}
+        />
+      )}
 
       <ScrollView
         key={item.stemId + qid}
@@ -149,6 +157,8 @@ export default function PassageLayout({
               correctAnswer={item.question.answer}
               reason={item.question.answeringReason}
               showReason={alwaysShowReason || true}
+              isDemo={demoMode}
+              highlightTeachMe={demoMode}
               questionContext={{
                 questionId: qid,
                 question: item.question.questionText,
@@ -166,10 +176,19 @@ export default function PassageLayout({
         </QuestionPanel>
       </ScrollView>
 
-      <BottomToolbar
-        onNotes={() => setNotesVisible(true)}
-        sectionColor={sectionColor}
-      />
+      {demoMode ? (
+        <DemoBackBar
+          accent={sectionColor}
+          colors={colors}
+          isDark={isDark}
+          onPress={() => (onDemoExit ? onDemoExit() : navigation.goBack())}
+        />
+      ) : (
+        <BottomToolbar
+          onNotes={() => setNotesVisible(true)}
+          sectionColor={sectionColor}
+        />
+      )}
 
       <NotesModal
         visible={notesVisible}
@@ -179,6 +198,66 @@ export default function PassageLayout({
     </PremiumQuestionScaffold>
   );
 }
+
+function DemoBackBar({ accent, colors, isDark, onPress }) {
+  const insets = useSafeAreaInsets();
+  return (
+    <View style={[demoBarStyles.wrap, { paddingBottom: Math.max(insets.bottom, 8) + 8 }]}>
+      <TouchableOpacity
+        activeOpacity={0.86}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel="Done — back to lesson"
+        style={[
+          demoBarStyles.button,
+          {
+            backgroundColor: accent,
+            borderColor: accent,
+            shadowColor: accent,
+          },
+        ]}
+      >
+        <PremiumIcon name="check" size={18} color="#FFFFFF" strokeWidth={2.6} />
+        <Text style={demoBarStyles.buttonText}>Done — back to lesson</Text>
+      </TouchableOpacity>
+      <Text style={[demoBarStyles.hint, { color: colors.textMuted }]}>
+        This sample doesn't use any of your AI credits.
+      </Text>
+    </View>
+  );
+}
+
+const demoBarStyles = StyleSheet.create({
+  wrap: {
+    paddingHorizontal: 18,
+    paddingTop: 8,
+  },
+  button: {
+    minHeight: 52,
+    borderRadius: 16,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '900',
+  },
+  hint: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '700',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+});
 
 const styles = StyleSheet.create({
   scrollContent: {

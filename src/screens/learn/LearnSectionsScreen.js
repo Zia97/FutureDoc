@@ -21,42 +21,42 @@ const LEARN_SECTIONS = [
   {
     id: 'VR',
     title: 'Verbal Reasoning',
-    description: 'Filler theory, question types, worked examples, and strategy',
-    meta: '8 lessons - 12 examples - 25 min',
+    description: 'Roadmap with theory, question types, traps, worked examples, and drills',
+    meta: '16 lessons - 4 modules - 40 min',
     icon: 'book',
     accentKey: 'blue',
     route: 'LearnVerbalReasoning',
-    badge: 'Demo',
+    badge: 'Roadmap',
   },
   {
     id: 'DM',
     title: 'Decision Making',
-    description: 'Filler logic, diagrams, arguments, and probability lessons',
-    meta: '7 lessons - 10 examples - 24 min',
+    description: 'Roadmap with logic, diagrams, arguments, probability, traps, and worked examples',
+    meta: '27 lessons - 5 modules - 55 min',
     icon: 'person-cog',
     accentKey: 'teal',
     route: 'LearnDecisionMaking',
-    badge: 'Filler',
+    badge: 'Roadmap',
   },
   {
     id: 'QR',
     title: 'Quantitative Reasoning',
-    description: 'Filler numeracy, data interpretation, and calculator lessons',
-    meta: '8 lessons - 14 examples - 28 min',
+    description: 'Roadmap with maths skills, question types, calculator strategy, traps, and worked examples',
+    meta: '25 lessons - 5 modules - 45 min',
     icon: 'calculator',
     accentKey: 'purple',
     route: 'LearnQuantitativeReasoning',
-    badge: 'Filler',
+    badge: 'Roadmap',
   },
   {
     id: 'SJ',
     title: 'Situational Judgement',
-    description: 'Filler professionalism, ethics, and response ranking lessons',
-    meta: '6 lessons - 11 examples - 22 min',
+    description: 'Roadmap with judgement principles, question formats, scenario themes, traps, and worked examples',
+    meta: '31 lessons - 7 modules - 55 min',
     icon: 'stethoscope',
     accentKey: 'mint',
     route: 'LearnSituationalJudgement',
-    badge: 'Filler',
+    badge: 'Roadmap',
   },
 ];
 
@@ -123,7 +123,7 @@ export default function LearnSectionsScreen({ navigation }) {
           <View style={styles.intro}>
             <Text style={[styles.heading, { color: colors.text }]}>Choose a Section</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              Open any section to see the filler lesson experience.
+              Open a section to build the method before moving into practice.
             </Text>
           </View>
         </Animated.View>
@@ -140,7 +140,7 @@ export default function LearnSectionsScreen({ navigation }) {
                 icon={section.icon}
                 accent={accent}
                 badge={section.badge}
-                highlighted={section.id === 'VR'}
+                highlighted={section.id === 'VR' || section.id === 'DM' || section.id === 'QR' || section.id === 'SJ'}
                 showChevron={!!section.route}
                 onPress={section.route ? () => navigation.navigate(section.route) : undefined}
               />
@@ -159,7 +159,7 @@ export default function LearnSectionsScreen({ navigation }) {
         >
           <PremiumIcon name="notes" size={23} color={colors.cyan} />
           <Text style={[styles.noteText, { color: colors.textSecondary }]}>
-            This is a UI prototype using filler lesson text only. Replace these demo blocks with real learning content later.
+            All four sections now include a structured learning roadmap. Pick a section to build the method before moving into practice.
           </Text>
         </View>
       </PremiumScrollView>

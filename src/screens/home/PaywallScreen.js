@@ -19,6 +19,7 @@ const FEATURES = [
   'Full practice question bank across all sections',
   'Unlimited AI Tutor explanations',
   'Performance analytics dashboard',
+  'Strategy lessons, exam traps & worked examples',
 ];
 
 // Maps RevenueCat package identifiers to display metadata.

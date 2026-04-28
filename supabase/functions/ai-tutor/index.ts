@@ -8,6 +8,40 @@ import { getSectionPrompt, buildQuestionContext } from './prompt.ts';
 const FREE_LIFETIME_LIMIT = 5;
 // Premium users get unlimited access (no daily cap)
 
+// ── Kill switches ─────────────────────────────────────────────────────────────
+// In-memory cache for app_kill_switches reads. Edge Function instances are
+// short-lived but shared across requests on a warm instance; a 60s TTL keeps
+// flag flips visible within ~60–120s without hammering the DB on every call.
+const KILL_SWITCH_TTL_MS = 60_000;
+type KillSwitchCache = { value: boolean; fetchedAt: number };
+const killSwitchCache = new Map<string, KillSwitchCache>();
+
+async function isKillSwitchEnabled(
+  client: ReturnType<typeof createClient>,
+  key: string,
+  defaultValue: boolean,
+): Promise<boolean> {
+  const cached = killSwitchCache.get(key);
+  if (cached && Date.now() - cached.fetchedAt < KILL_SWITCH_TTL_MS) {
+    return cached.value;
+  }
+  const { data, error } = await client
+    .from('app_kill_switches')
+    .select('enabled')
+    .eq('key', key)
+    .single();
+  if (error) {
+    // Fail-open on lookup errors so a transient DB hiccup doesn't kill the
+    // tutor for everyone. The 60s cache prevents a tight retry loop.
+    console.warn(`[ai-tutor] kill switch lookup failed for ${key}:`, error.message);
+    killSwitchCache.set(key, { value: defaultValue, fetchedAt: Date.now() });
+    return defaultValue;
+  }
+  const value = data?.enabled ?? defaultValue;
+  killSwitchCache.set(key, { value, fetchedAt: Date.now() });
+  return value;
+}
+
 // ── Provider factory ──────────────────────────────────────────────────────────
 function getProvider() {
   const provider = Deno.env.get('AI_PROVIDER') ?? 'openai';
@@ -54,6 +88,14 @@ Deno.serve(async (req) => {
   );
   if (authError || !user) return json({ error: 'Unauthorized', detail: authError?.message ?? 'no user' }, 401);
 
+  // 1b. Global kill switch — disables the tutor for everyone (paid + demo).
+  // Flip via Supabase Studio: UPDATE app_kill_switches SET enabled = false
+  // WHERE key = 'ai_tutor_enabled'; takes effect within ~60–120s.
+  const tutorEnabled = await isKillSwitchEnabled(supabase, 'ai_tutor_enabled', true);
+  if (!tutorEnabled) {
+    return json({ error: 'tutor_disabled' }, 503);
+  }
+
   // 2. Parse body
   const {
     questionId,
@@ -68,6 +110,7 @@ Deno.serve(async (req) => {
     stimulusData,
     vennDiagrams,
     isTimed,
+    isDemo,
     messages,
   }: {
     questionId?: string;
@@ -82,8 +125,19 @@ Deno.serve(async (req) => {
     stimulusData?: unknown;
     vennDiagrams?: string;
     isTimed?: boolean;
+    isDemo?: boolean;
     messages: ChatMessage[];
   } = await req.json();
+
+  // 2b. Demo-only kill switch — disables only the in-lesson free demo while
+  // paid users keep unlimited access. Flip via Studio: UPDATE
+  // app_kill_switches SET enabled = false WHERE key = 'ai_tutor_demo_enabled'.
+  if (isDemo) {
+    const demoEnabled = await isKillSwitchEnabled(supabase, 'ai_tutor_demo_enabled', true);
+    if (!demoEnabled) {
+      return json({ error: 'demo_disabled' }, 503);
+    }
+  }
 
   // 3. Check subscription tier + admin status + ban status
   const { data: profile, error: profileError } = await supabase
@@ -108,7 +162,12 @@ Deno.serve(async (req) => {
     .eq('user_id', user.id)
     .single();
 
-  if (isPremium) {
+  // Demo messages from the in-lesson AI tutor sample don't deplete the free
+  // lifetime quota and aren't gated by it. They still go through auth + ban
+  // checks above and are still logged below.
+  if (isDemo) {
+    // no usage upsert
+  } else if (isPremium) {
     // Premium users have unlimited AI Tutor access — just track usage for analytics
     await supabase.from('user_ai_usage').upsert({
       user_id: user.id,

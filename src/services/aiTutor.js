@@ -16,6 +16,7 @@ export async function streamAITutor({
   stimulusData,
   vennDiagrams,
   isTimed,
+  isDemo,
   messages,
   onChunk,
   onDone,
@@ -56,6 +57,7 @@ export async function streamAITutor({
         stimulusData,
         vennDiagrams,
         isTimed,
+        isDemo,
         messages,
       }),
     });

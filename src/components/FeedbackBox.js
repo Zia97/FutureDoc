@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useState, useEffect } from 'react';
+import { Animated, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useState, useEffect, useRef } from 'react';
 import AITutorModal from './AITutorModal';
 import { useAITutor } from '../hooks/ai/useAITutor';
 import { useAICredits } from '../hooks/ai/useAICredits';
@@ -7,7 +7,15 @@ import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 
-export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
+export default function FeedbackBox({
+  isCorrect,
+  correctAnswer,
+  reason,
+  showReason = true,
+  questionContext,
+  isDemo = false,
+  highlightTeachMe = false,
+}) {
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
@@ -20,13 +28,34 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
   };
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
+  const [tutorOpenedOnce, setTutorOpenedOnce] = useState(false);
 
-  const tutorState = useAITutor(questionContext);
+  const tutorState = useAITutor(questionContext, { isDemo });
   const { creditsRemaining, isPro, decrement: decrementCredits } = useAICredits();
 
   useEffect(() => {
     setInputText('');
   }, [questionContext?.question]);
+
+  const pulse = useRef(new Animated.Value(0)).current;
+  const shouldPulse = highlightTeachMe && !tutorOpenedOnce;
+  useEffect(() => {
+    if (!shouldPulse) {
+      pulse.setValue(0);
+      return;
+    }
+    const loop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulse, { toValue: 1, duration: 900, useNativeDriver: true }),
+        Animated.timing(pulse, { toValue: 0, duration: 900, useNativeDriver: true }),
+      ]),
+    );
+    loop.start();
+    return () => loop.stop();
+  }, [shouldPulse, pulse]);
+
+  const ringScale = pulse.interpolate({ inputRange: [0, 1], outputRange: [1, 1.18] });
+  const ringOpacity = pulse.interpolate({ inputRange: [0, 1], outputRange: [0.55, 0] });
 
   return (
     <>
@@ -48,18 +77,43 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
           </>
         )}
         {questionContext && (
-          <TouchableOpacity
-            style={[
-              styles.teachMeBtn,
-              {
-                backgroundColor: isDark ? 'rgba(9, 22, 43, 0.86)' : 'rgba(255, 255, 255, 0.92)',
-                borderColor: colors.border,
-              },
-            ]}
-            onPress={() => setTutorVisible(true)}
-          >
-            <Text style={[styles.teachMeBtnText, { color: colors.text }]}>Teach Me</Text>
-          </TouchableOpacity>
+          <View style={styles.teachMeWrap}>
+            {shouldPulse ? (
+              <>
+                <Animated.View
+                  pointerEvents="none"
+                  style={[
+                    styles.teachMeRing,
+                    {
+                      borderColor: colors.cyan,
+                      opacity: ringOpacity,
+                      transform: [{ scale: ringScale }],
+                    },
+                  ]}
+                />
+                <Text style={[styles.teachMeHint, { color: colors.cyan }]}>Tap to ask the AI tutor</Text>
+              </>
+            ) : null}
+            <TouchableOpacity
+              style={[
+                styles.teachMeBtn,
+                shouldPulse
+                  ? { backgroundColor: colors.cyan, borderColor: colors.cyan }
+                  : {
+                      backgroundColor: isDark ? 'rgba(9, 22, 43, 0.86)' : 'rgba(255, 255, 255, 0.92)',
+                      borderColor: colors.border,
+                    },
+              ]}
+              onPress={() => {
+                setTutorVisible(true);
+                setTutorOpenedOnce(true);
+              }}
+            >
+              <Text style={[styles.teachMeBtnText, { color: shouldPulse ? '#FFFFFF' : colors.text }]}>
+                Teach Me
+              </Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
 
@@ -73,7 +127,8 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
           setInputText={setInputText}
           creditsRemaining={creditsRemaining}
           isPro={isPro}
-          onCreditUsed={decrementCredits}
+          onCreditUsed={isDemo ? null : decrementCredits}
+          isDemo={isDemo}
         />
       )}
     </>
@@ -100,9 +155,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
   },
-  teachMeBtn: {
+  teachMeWrap: {
     marginTop: 14,
     alignSelf: 'flex-end',
+    alignItems: 'flex-end',
+    position: 'relative',
+  },
+  teachMeBtn: {
     borderRadius: 12,
     paddingVertical: 8,
     paddingHorizontal: 16,
@@ -111,5 +170,20 @@ const styles = StyleSheet.create({
   teachMeBtnText: {
     fontSize: 13,
     fontWeight: '600',
+  },
+  teachMeRing: {
+    position: 'absolute',
+    right: 0,
+    bottom: 0,
+    top: 0,
+    left: 0,
+    borderRadius: 12,
+    borderWidth: 2,
+  },
+  teachMeHint: {
+    fontSize: 11,
+    fontWeight: '900',
+    marginBottom: 6,
+    letterSpacing: 0.4,
   },
 });

@@ -41,6 +41,7 @@ export default function AITutorModal({
   creditsRemaining,
   isPro,
   onCreditUsed,
+  isDemo = false,
 }) {
   const { messages, streamingContent, isStreaming, error, sendMessage: rawSendMessage } = tutorState;
   const navigation = useNavigation();
@@ -49,7 +50,7 @@ export default function AITutorModal({
 
   function sendMessage(text) {
     rawSendMessage(text);
-    if (!isPro && onCreditUsed) onCreditUsed();
+    if (!isDemo && !isPro && onCreditUsed) onCreditUsed();
   }
 
   const flatListRef = useRef(null);
@@ -157,7 +158,22 @@ export default function AITutorModal({
               <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
                 Ask me about this question
               </Text>
-              {!isPro && creditsRemaining != null && (
+              {isDemo && (
+                <View style={styles.creditRow}>
+                  <View
+                    style={[
+                      styles.proPill,
+                      {
+                        borderColor: hexToRgba(colors.cyan, 0.5),
+                        backgroundColor: hexToRgba(colors.cyan, isDark ? 0.14 : 0.1),
+                      },
+                    ]}
+                  >
+                    <Text style={[styles.creditText, { color: colors.cyan }]}>FREE DEMO · NO CREDITS USED</Text>
+                  </View>
+                </View>
+              )}
+              {!isDemo && !isPro && creditsRemaining != null && (
                 <View style={styles.creditRow}>
                   <View
                     style={[
@@ -174,7 +190,7 @@ export default function AITutorModal({
                   </View>
                 </View>
               )}
-              {isPro && (
+              {!isDemo && isPro && (
                 <View style={styles.creditRow}>
                   <View
                     style={[
@@ -479,6 +495,9 @@ function MessageBubble({ message, colors, isDark }) {
 function ErrorBanner({ error, onUpgrade, colors, isDark }) {
   const isLimit = error === TUTOR_ERROR.LIFETIME_LIMIT;
   const isOffline = error === TUTOR_ERROR.OFFLINE;
+  const isTutorDisabled = error === TUTOR_ERROR.TUTOR_DISABLED;
+  const isDemoDisabled = error === TUTOR_ERROR.DEMO_DISABLED;
+  const showUpgrade = isLimit || isDemoDisabled;
 
   let title;
   let body;
@@ -488,12 +507,18 @@ function ErrorBanner({ error, onUpgrade, colors, isDark }) {
   } else if (isOffline) {
     title = "You're offline";
     body = 'Reconnect to the internet to ask the AI tutor. Your message was not sent.';
+  } else if (isTutorDisabled) {
+    title = 'AI tutor temporarily unavailable';
+    body = "We've paused the AI tutor while we look into something. Please try again in a little while.";
+  } else if (isDemoDisabled) {
+    title = 'Free demo paused';
+    body = "We've paused the free AI tutor demo. Sign up for Premium to keep unlimited access on every question.";
   } else {
     title = 'Something went wrong';
     body = 'Could not reach the AI tutor. Check your connection and try again.';
   }
 
-  const accent = isLimit ? colors.amber : colors.red;
+  const accent = isLimit || isDemoDisabled ? colors.amber : isTutorDisabled ? colors.cyan : colors.red;
 
   return (
     <LinearGradient
@@ -510,7 +535,7 @@ function ErrorBanner({ error, onUpgrade, colors, isDark }) {
     >
       <Text style={[styles.errorTitle, { color: accent }]}>{title}</Text>
       <Text style={[styles.errorText, { color: colors.textSecondary }]}>{body}</Text>
-      {isLimit && onUpgrade && (
+      {showUpgrade && onUpgrade && (
         <TouchableOpacity
           style={[styles.upgradeBtn, { shadowColor: colors.cyan }]}
           onPress={onUpgrade}
