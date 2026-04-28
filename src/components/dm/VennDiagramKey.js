@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Circle, Rect, Polygon, Ellipse } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { shapeToSvgSpec } from '../../utils/venn/shapes';
 
 const SIZE = 30;
@@ -58,6 +59,10 @@ function KeyShape({ shape, stroke }) {
 
 export default function VennDiagramKey({ sets }) {
   const { practiceTheme: t } = useTheme();
+  const { multiplier } = useTextSize();
+  const itemLabelScaled = {
+    fontSize: Math.round(styles.itemLabel.fontSize * multiplier),
+  };
 
   if (!sets || sets.length === 0) return null;
 
@@ -77,7 +82,7 @@ export default function VennDiagramKey({ sets }) {
             <Svg width={SIZE} height={SIZE}>
               <KeyShape shape={s.shape || 'circle'} stroke={t.text} />
             </Svg>
-            <Text style={[styles.itemLabel, { color: t.text }]}>{s.label}</Text>
+            <Text style={[styles.itemLabel, itemLabelScaled, { color: t.text }]}>{s.label}</Text>
           </View>
         ))}
       </View>

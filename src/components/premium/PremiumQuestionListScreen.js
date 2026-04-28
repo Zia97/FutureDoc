@@ -101,7 +101,7 @@ function StatusMark({ status, size = 34 }) {
   );
 }
 
-function StatsCard({ status, count, colors }) {
+function StatsCard({ status, count, colors, onReset, resetDisabled, resetting }) {
   const meta = STATUS_META[status];
 
   return (
@@ -123,6 +123,30 @@ function StatsCard({ status, count, colors }) {
       <Text style={[styles.statLabel, { color: colors.textSecondary }]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.82}>
         {meta.label}
       </Text>
+      {onReset ? (
+        <TouchableOpacity
+          onPress={onReset}
+          disabled={resetDisabled || resetting}
+          activeOpacity={0.78}
+          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          accessibilityRole="button"
+          accessibilityLabel="Reset section progress"
+          style={[
+            styles.resetIconButton,
+            {
+              backgroundColor: hexToRgba(colors.red, resetDisabled ? 0.07 : 0.16),
+              borderColor: hexToRgba(colors.red, resetDisabled ? 0.25 : 0.55),
+              opacity: resetDisabled ? 0.55 : 1,
+            },
+          ]}
+        >
+          {resetting ? (
+            <ActivityIndicator size="small" color={colors.red} />
+          ) : (
+            <PremiumIcon name="refresh" size={13} color={colors.red} strokeWidth={2.6} />
+          )}
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
@@ -139,15 +163,25 @@ function ListHeader({
   onControlsLayout,
   colors,
   isDark,
+  onReset,
+  deleting,
 }) {
   const hasExtraFilters = filterControls.length > 1;
+  const resetDisabled = stats.completed === 0 && stats.inProgress === 0;
 
   return (
     <View style={styles.headerWrap}>
       <View style={styles.statsRow}>
         <StatsCard status="not_started" count={stats.notStarted} colors={colors} />
         <StatsCard status="in_progress" count={stats.inProgress} colors={colors} />
-        <StatsCard status="completed" count={stats.completed} colors={colors} />
+        <StatsCard
+          status="completed"
+          count={stats.completed}
+          colors={colors}
+          onReset={onReset}
+          resetDisabled={resetDisabled}
+          resetting={deleting}
+        />
       </View>
 
       <View style={hasExtraFilters ? styles.controlsStack : styles.controlsRow} onLayout={onControlsLayout}>
@@ -268,33 +302,6 @@ function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey, colors
           );
         })}
       </View>
-    </TouchableOpacity>
-  );
-}
-
-function ResetButton({ deleting, onReset, colors, isDark }) {
-  return (
-    <TouchableOpacity
-      activeOpacity={0.84}
-      onPress={onReset}
-      disabled={deleting}
-      style={[
-        styles.resetButton,
-        {
-          borderColor: colors.red,
-          backgroundColor: isDark ? 'rgba(7, 8, 18, 0.38)' : 'rgba(255, 255, 255, 0.78)',
-        },
-      ]}
-      accessibilityRole="button"
-    >
-      {deleting ? (
-        <ActivityIndicator size="small" color={colors.red} />
-      ) : (
-        <>
-          <PremiumIcon name="refresh" size={24} color={colors.red} strokeWidth={2.5} />
-          <Text style={[styles.resetText, { color: colors.red }]}>Reset Section Progress</Text>
-        </>
-      )}
     </TouchableOpacity>
   );
 }
@@ -554,7 +561,7 @@ export default function PremiumQuestionListScreen({
         contentContainerStyle={[
           styles.listContent,
           {
-            paddingBottom: Math.max(insets.bottom, 8) + 100,
+            paddingBottom: Math.max(insets.bottom, 8) + 16,
           },
         ]}
         ListHeaderComponent={(
@@ -570,6 +577,8 @@ export default function PremiumQuestionListScreen({
             onControlsLayout={(event) => setFilterMenuTop(headerHeight + event.nativeEvent.layout.y + (filterControls.length > 1 ? 112 : 62))}
             colors={colors}
             isDark={isDark}
+            onReset={onReset}
+            deleting={deleting}
           />
         )}
         renderItem={renderItem}
@@ -590,14 +599,6 @@ export default function PremiumQuestionListScreen({
           isDark={isDark}
         />
       ) : null}
-      <LinearGradient
-        pointerEvents="none"
-        colors={isDark ? ['rgba(2, 5, 12, 0)', 'rgba(2, 5, 12, 0.96)'] : ['rgba(231, 238, 248, 0)', 'rgba(231, 238, 248, 0.96)']}
-        style={styles.resetFade}
-      />
-      <View style={[styles.resetPanel, { paddingBottom: Math.max(insets.bottom, 8) + 10 }]}>
-        <ResetButton deleting={deleting} onReset={onReset} colors={colors} isDark={isDark} />
-      </View>
     </PremiumScreen>
   );
 }
@@ -876,34 +877,15 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textAlign: 'center',
   },
-  resetButton: {
-    minHeight: 58,
-    borderRadius: 14,
-    borderWidth: 1.4,
-    borderColor: premiumColors.red,
-    flexDirection: 'row',
+  resetIconButton: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 24,
+    height: 24,
+    borderRadius: 999,
+    borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 10,
-    backgroundColor: 'rgba(7, 8, 18, 0.38)',
-  },
-  resetFade: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    bottom: 0,
-    height: 120,
-  },
-  resetPanel: {
-    position: 'absolute',
-    left: 18,
-    right: 18,
-    bottom: 0,
-    paddingTop: 14,
-  },
-  resetText: {
-    color: premiumColors.red,
-    fontSize: 16,
-    fontWeight: '900',
   },
 });

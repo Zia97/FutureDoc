@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Polyline, Circle, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { formatWithUnit } from './formatUnit';
 
-const VW = 420;
-const VH = 320;
-const M = { top: 32, right: 22, bottom: 80, left: 84 };
-const CW = VW - M.left - M.right;
-const CH = VH - M.top - M.bottom;
+const DEFAULT_VW = 420;
+const VH_BASE = 320;
+const M_BASE = { top: 32, right: 0, bottom: 80, left: 38 };
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
 
@@ -102,9 +101,21 @@ function computeYAxis(allValues, tickCount = 5) {
 
 export default function LineGraphRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
   const [selected, setSelected] = useState(null);
-  const [svgWidth, setSvgWidth] = useState(VW);
+  const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
   const [hiddenSeries, setHiddenSeries] = useState(new Set());
+  const fz = (n) => Math.round(n * svgMultiplier);
+  const M = {
+    top: M_BASE.top,
+    right: M_BASE.right,
+    bottom: M_BASE.bottom + Math.round((svgMultiplier - 1) * 30),
+    left: M_BASE.left + Math.round((svgMultiplier - 1) * 18),
+  };
+  const VH = VH_BASE + Math.round((svgMultiplier - 1) * 30);
+  const CH = VH - M.top - M.bottom;
+  const VW = svgWidth;
+  const CW = VW - M.left - M.right;
   const { labels, series, yAxisLabel, unit = '' } = data;
 
   function toggleSeries(si) {
@@ -137,12 +148,11 @@ export default function LineGraphRenderer({ data, showValues = false }) {
 
   function handleTap(e) {
     const { locationX, locationY } = e.nativeEvent;
-    const scale = svgWidth / VW;
-    const cx = locationX / scale - M.left;
-    const cy = locationY / scale - M.top;
+    const cx = locationX - M.left;
+    const cy = locationY - M.top;
 
     let closest = null;
-    let minDist = 30 / scale;
+    let minDist = 30;
     series.forEach((s, si) => {
       if (hiddenSeries.has(si)) return;
       s.values.forEach((v, i) => {
@@ -180,7 +190,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
                     x1={0} y1={y} x2={CW} y2={y}
                     stroke={t.border} strokeWidth={0.7}
                   />
-                  <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
+                  <SvgText x={-5} y={y + 4} fontSize={fz(13)} fill={t.text} textAnchor="end">
                     {formatWithUnit(Math.round(val), unit)}
                   </SvgText>
                 </G>
@@ -190,9 +200,9 @@ export default function LineGraphRenderer({ data, showValues = false }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-64} y={CH / 2} fontSize={12} fill={t.text}
+                x={-(M.left - 8)} y={CH / 2} fontSize={fz(12)} fill={t.text}
                 textAnchor="middle" rotation="-90"
-                originX={-64} originY={CH / 2}
+                originX={-(M.left - 8)} originY={CH / 2}
               >
                 {yAxisLabel}
               </SvgText>
@@ -215,7 +225,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
                   key={i}
                   x={px}
                   y={CH + 14}
-                  fontSize={11}
+                  fontSize={fz(11)}
                   fill={t.text}
                   textAnchor="end"
                   rotation="-40"
@@ -262,7 +272,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
             {labelPositions.map(({ key, x, y, w, txt, color }) => (
               <G key={key}>
                 <Rect x={x - w / 2} y={y} width={w} height={LH} rx={3} fill={color} opacity={0.92} />
-                <SvgText x={x} y={y + LH - 3} fontSize={11} fill="#fff" textAnchor="middle" fontWeight="700">
+                <SvgText x={x} y={y + LH - 3} fontSize={fz(11)} fill="#fff" textAnchor="middle" fontWeight="700">
                   {txt}
                 </SvgText>
               </G>
@@ -285,7 +295,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
                 <G>
                   <Rect x={tx - tw / 2} y={ty} width={tw} height={th} rx={6}
                         fill={tooltipColor} stroke={tooltipColor} strokeWidth={0.8} />
-                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={12} fill="#fff"
+                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={fz(12)} fill="#fff"
                            textAnchor="middle" fontWeight="600">
                     {text}
                   </SvgText>
@@ -314,7 +324,7 @@ export default function LineGraphRenderer({ data, showValues = false }) {
                   <Rect x={-4} y={-16} width={item.width + 4} height={20} fill="transparent" />
                   <Line x1={0} y1={-4} x2={16} y2={-4} stroke={color} strokeWidth={2} />
                   <Circle cx={8} cy={-4} r={5} fill={color} />
-                  <SvgText x={22} y={0} fontSize={13} fill={t.text}>
+                  <SvgText x={22} y={0} fontSize={fz(13)} fill={t.text}>
                     {item.name}
                   </SvgText>
                 </G>

@@ -106,6 +106,11 @@ export function AuthProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
+        // Clear immediately so UI flips to signed-out state without waiting
+        // for the anonymous sign-in round-trip — otherwise headers briefly
+        // keep showing the prior user's avatar/initial.
+        setUser(null);
+        setDisplayNameState(null);
         const { data, error } = await supabase.auth.signInAnonymously();
         if (!error) setUser(isUsable(data?.user) ? data.user : null);
         return;

@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import PremiumIcon from './premium/PremiumIcon';
 
@@ -32,6 +33,7 @@ const SECTION_META = {
 
 export default function NotesModal({ visible, sectionKey, onClose }) {
   const { isDark } = useTheme();
+  const { multiplier } = useTextSize();
   const premium = getPremiumTheme(isDark);
   const c = premium.colors;
 
@@ -152,6 +154,8 @@ export default function NotesModal({ visible, sectionKey, onClose }) {
                   backgroundColor: inputBg,
                   color: c.text,
                   borderColor: c.border,
+                  fontSize: Math.round(styles.input.fontSize * multiplier),
+                  lineHeight: Math.round(styles.input.lineHeight * multiplier),
                 },
               ]}
               value={notes}

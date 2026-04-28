@@ -9,6 +9,7 @@ import GeometryDiagramRenderer from './GeometryDiagramRenderer';
 import DataTable from '../dm/DataTable';
 import ZoomableView from '../ZoomableView';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 
 function ChartWithToggle({ renderChart }) {
   const [showValues, setShowValues] = useState(false);
@@ -74,16 +75,25 @@ function ChartWithExpand({ children }) {
 }
 
 function FormulaText({ text, color }) {
+  const { multiplier } = useTextSize();
+  const formulaScaled = {
+    fontSize: Math.round(styles.formula.fontSize * multiplier),
+    lineHeight: Math.round(styles.formula.lineHeight * multiplier),
+  };
+  const superScaled = {
+    fontSize: Math.round(styles.superscriptText.fontSize * multiplier),
+    lineHeight: Math.round(styles.superscriptText.lineHeight * multiplier),
+  };
   const parts = text.split(/\^([^\s^]+)/);
   return (
     <View style={styles.formulaRow}>
       {parts.map((part, i) =>
         i % 2 === 1 ? (
           <View key={i} style={styles.superscriptWrap}>
-            <Text style={[styles.superscriptText, { color }]}>{part}</Text>
+            <Text style={[styles.superscriptText, superScaled, { color }]}>{part}</Text>
           </View>
         ) : (
-          <Text key={i} style={[styles.formula, { color }]}>{part}</Text>
+          <Text key={i} style={[styles.formula, formulaScaled, { color }]}>{part}</Text>
         )
       )}
     </View>
@@ -112,7 +122,16 @@ function stripItalicMarkers(line) {
 
 // Renders stem text, detecting embedded formula/conversion lines and italicising them.
 function StemText({ text, color }) {
+  const { multiplier } = useTextSize();
   if (!text) return null;
+  const textScaled = {
+    fontSize: Math.round(styles.text.fontSize * multiplier),
+    lineHeight: Math.round(styles.text.lineHeight * multiplier),
+  };
+  const formulaScaled = {
+    fontSize: Math.round(styles.formula.fontSize * multiplier),
+    lineHeight: Math.round(styles.formula.lineHeight * multiplier),
+  };
   const segments = text.split('\n\n');
   return (
     <View style={styles.stemBlock}>
@@ -123,12 +142,12 @@ function StemText({ text, color }) {
             {lines.map((line, li) => {
               const stripped = stripItalicMarkers(line);
               if (stripped !== null) {
-                return <Text key={li} style={[styles.formula, { color }]}>{stripped}</Text>;
+                return <Text key={li} style={[styles.formula, formulaScaled, { color }]}>{stripped}</Text>;
               }
               return isFormulaLine(line) ? (
-                <Text key={li} style={[styles.formula, { color }]}>{line}</Text>
+                <Text key={li} style={[styles.formula, formulaScaled, { color }]}>{line}</Text>
               ) : (
-                <Text key={li} style={[styles.text, { color }]}>{line}</Text>
+                <Text key={li} style={[styles.text, textScaled, { color }]}>{line}</Text>
               );
             })}
           </View>

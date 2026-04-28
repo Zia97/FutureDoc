@@ -3,6 +3,7 @@ import { Animated, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import {
   AppHeader,
   PremiumIcon,
@@ -82,6 +83,11 @@ const SECTIONS = [
 export default function TermsOfServiceScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
+  const introScaled = {
+    fontSize: Math.round(styles.introText.fontSize * multiplier),
+    lineHeight: Math.round(styles.introText.lineHeight * multiplier),
+  };
 
   const heroAnim = useFadeSlide(0);
   const introAnim = useFadeSlide(100);
@@ -118,7 +124,7 @@ export default function TermsOfServiceScreen({ navigation }) {
             end={{ x: 1, y: 1 }}
             style={[styles.introCard, { borderColor: colors.border }]}
           >
-            <Text style={[styles.introText, { color: colors.textSecondary }]}>
+            <Text style={[styles.introText, introScaled, { color: colors.textSecondary }]}>
               Please read these terms carefully before using UCAT Genius.
             </Text>
           </LinearGradient>
@@ -141,6 +147,11 @@ export default function TermsOfServiceScreen({ navigation }) {
 
 function SectionBlock({ title, body, delay, colors, gradients }) {
   const anim = useFadeSlide(delay, 12);
+  const { multiplier } = useTextSize();
+  const bodyScaled = {
+    fontSize: Math.round(styles.sectionBody.fontSize * multiplier),
+    lineHeight: Math.round(styles.sectionBody.lineHeight * multiplier),
+  };
   return (
     <Animated.View style={[styles.section, anim]}>
       <LinearGradient
@@ -151,7 +162,7 @@ function SectionBlock({ title, body, delay, colors, gradients }) {
       >
         <View style={[styles.sectionAccent, { backgroundColor: colors.blue }]} />
         <Text style={[styles.sectionTitle, { color: colors.text }]}>{title}</Text>
-        <Text style={[styles.sectionBody, { color: colors.textSecondary }]}>{body}</Text>
+        <Text style={[styles.sectionBody, bodyScaled, { color: colors.textSecondary }]}>{body}</Text>
       </LinearGradient>
     </Animated.View>
   );

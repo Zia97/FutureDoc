@@ -8,6 +8,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme } from '../theme/premiumTheme';
 import { PremiumScreen } from './premium/PremiumPracticeUI';
 import AnswerOptionButton from './AnswerOptionButton';
@@ -33,6 +34,15 @@ import {
 export default function TimedVRResultsScreen({ passages, getAnswer, flags, test, onDone }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
+  const stemScaled = {
+    fontSize: Math.round(resultsStyles.stemText.fontSize * multiplier),
+    lineHeight: Math.round(resultsStyles.stemText.lineHeight * multiplier),
+  };
+  const qScaled = {
+    fontSize: Math.round(resultsStyles.questionText.fontSize * multiplier),
+    lineHeight: Math.round(resultsStyles.questionText.lineHeight * multiplier),
+  };
   const accent = colors.blue;
   const [reviewItem, setReviewItem] = useState(null);
 
@@ -120,13 +130,13 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
               colors={colors}
               isDark={isDark}
             >
-              <Text style={[resultsStyles.stemText, { color: colors.textSecondary }]}>
+              <Text style={[resultsStyles.stemText, stemScaled, { color: colors.textSecondary }]}>
                 {passage.resource ?? passage.body}
               </Text>
             </ReviewStemCard>
 
             <ReviewQuestionCard colors={colors} isDark={isDark}>
-              <Text style={[resultsStyles.questionText, { color: colors.text }]}>{q.questionText}</Text>
+              <Text style={[resultsStyles.questionText, qScaled, { color: colors.text }]}>{q.questionText}</Text>
               <View style={resultsStyles.optionsContainer}>
                 {q.options.map((opt) => (
                   <AnswerOptionButton

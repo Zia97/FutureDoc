@@ -17,6 +17,7 @@ import AITutorModal from '../AITutorModal';
 import { useAITutor } from '../../hooks/ai/useAITutor';
 import { useAICredits } from '../../hooks/ai/useAICredits';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
@@ -44,14 +45,20 @@ export function DMStemContent({ question, showLabel = true }) {
   const { width: screenWidth } = useWindowDimensions();
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
   const sectionColor = colors.teal;
   const [diagramExpanded, setDiagramExpanded] = useState(false);
   const { isInterpVenn, vennKeySets, stimDiagram, stimulusWidthPx, expandedWidthPx } = useQuestionMeta(question, screenWidth);
 
+  const stemScaled = {
+    fontSize: Math.round(styles.stem.fontSize * multiplier),
+    lineHeight: Math.round(styles.stem.lineHeight * multiplier),
+  };
+
   return (
     <View style={styles.container}>
       {showLabel && <Text style={[styles.sectionLabel, { color: sectionColor }]}>STEM</Text>}
-      <Text style={[styles.stem, { color: colors.text }]}>{question.stem}</Text>
+      <Text style={[styles.stem, stemScaled, { color: colors.text }]}>{question.stem}</Text>
 
       {vennKeySets && !question.hideLabels && <VennDiagramKey sets={vennKeySets} />}
 
@@ -193,7 +200,12 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
 export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
   const sectionColor = colors.teal;
+  const explanationScaled = {
+    fontSize: Math.round(styles.explanationText.fontSize * multiplier),
+    lineHeight: Math.round(styles.explanationText.lineHeight * multiplier),
+  };
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
   const [activeTutorContext, setActiveTutorContext] = useState(null);
@@ -242,7 +254,7 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
       {submitted && !timedMode && !isYesNo && (
         <View style={[styles.explanation, { backgroundColor: hexToRgba(sectionColor, isDark ? 0.12 : 0.08), borderLeftColor: sectionColor }]}>
           <Text style={[styles.explanationLabel, { color: sectionColor }]}>Explanation</Text>
-          <Text style={[styles.explanationText, { color: colors.textSecondary }]}>{question.answeringReason}</Text>
+          <Text style={[styles.explanationText, explanationScaled, { color: colors.textSecondary }]}>{question.answeringReason}</Text>
           {questionContext && (
             <TouchableOpacity
               style={[

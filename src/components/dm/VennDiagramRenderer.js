@@ -8,6 +8,7 @@ import Svg, {
   Text as SvgText,
 } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { getLayout, getLayoutAdaptive } from '../../utils/venn/layout';
 
 const STROKE_WIDTH = 2;
@@ -48,6 +49,10 @@ export function getCanvasSize(_layoutName, vennConfig, widthPx) {
 //   scale      — legacy. Used only when widthPx is not provided.
 export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry, scale = 1 }) {
   const { practiceTheme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
+  // Use a gentler multiplier than other diagrams since the baker tuned label
+  // size to fit inside regions; too much growth would cause overlap.
+  const vennLabelMultiplier = 1 + (svgMultiplier - 1) * 0.5;
 
   const baked = useMemo(() => {
     if (bakedGeometry) return bakedGeometry;
@@ -100,7 +105,7 @@ export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry
             x={lbl.x}
             y={lbl.y}
             fill={lbl.kind === 'set' ? t.textSecondary : t.text}
-            fontSize={lbl.fontSize}
+            fontSize={Math.round(lbl.fontSize * vennLabelMultiplier)}
             fontWeight={lbl.kind === 'set' ? '500' : '600'}
             fontStyle={lbl.kind === 'set' ? 'italic' : 'normal'}
             textAnchor="middle"

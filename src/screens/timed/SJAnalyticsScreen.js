@@ -4,18 +4,23 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  ActivityIndicator,
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Line, Text as SvgText } from 'react-native-svg';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
 import { getSJBand, SJ_UK_BANDS } from '../../lib/ucatScoring';
+import {
+  AnalyticsCard,
+  AnalyticsEmptyState,
+  AnalyticsInsight,
+  AnalyticsTile,
+  usePremiumAnalyticsTheme,
+} from '../../components/premium/PremiumAnalyticsUI';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Aggregation
@@ -292,15 +297,16 @@ function StatBar({ label, value, sub, color, barBg, textColor, mutedColor }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function SJAnalyticsScreen({ route, preloadedRows }) {
-  const { theme: t } = useTheme();
   const { user } = useAuth();
   const tests = route.params?.tests ?? [];
   const hasPreloaded = preloadedRows !== undefined;
+  const t = usePremiumAnalyticsTheme('SJ');
+  const screenBg = hasPreloaded ? 'transparent' : t.bgInput;
 
   const [rows, setRows] = useState(hasPreloaded ? preloadedRows : null);
   const [loading, setLoading] = useState(!hasPreloaded);
   const [error, setError] = useState(null);
-  const [chartWidth, setChartWidth] = useState(320);
+  const [chartWidth, setChartWidth] = useState(280);
 
   const load = useCallback(async () => {
     if (hasPreloaded) return;
@@ -339,50 +345,56 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
 
   if (loading) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <ActivityIndicator size="large" color={t.accent} />
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        loading
+        title="Loading SJ analytics"
+        message="Fetching your latest Situational Judgement attempts."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   if (error) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={[styles.emptyText, { color: t.textSecondary }]}>
-          Couldn't load analytics. Pull down or come back later.
-        </Text>
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        icon="wifi-off"
+        title="Couldn't load analytics"
+        message="Pull down or come back later."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   if (!user) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={[styles.emptyTitle, { color: t.text }]}>Sign in to see analytics</Text>
-        <Text style={[styles.emptyText, { color: t.textSecondary }]}>
-          Performance analytics are tied to your account so they survive reinstall and
-          sync across devices.
-        </Text>
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        icon="user"
+        title="Sign in to see analytics"
+        message="Performance analytics are tied to your account so they survive reinstall and sync across devices."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   if (stats.attemptCount === 0) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={[styles.emptyTitle, { color: t.text }]}>No data yet</Text>
-        <Text style={[styles.emptyText, { color: t.textSecondary }]}>
-          Complete a timed Situational Judgement test to start building your performance
-          analytics.
-        </Text>
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        icon="shield-heart"
+        title="No SJ data yet"
+        message="Complete a timed Situational Judgement test to start building your performance analytics."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['bottom']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: screenBg }]} edges={['bottom']}>
       <StatusBar barStyle={t.statusBar} />
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Headline tiles — SJ uses bands, not scaled scores */}
         <View style={styles.tileRow}>
           <Tile t={t} label="Tests" value={stats.attemptCount} />
@@ -401,7 +413,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
         </View>
 
         {/* Average band description */}
-        <View style={[styles.benchmarkStrip, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <View style={[styles.benchmarkStrip, { backgroundColor: t.accentDim, borderColor: t.border }]}>
           <Text style={[styles.benchmarkLabel, { color: t.textSecondary }]}>
             Average: {stats.headline.avgPct}% marks
           </Text>
@@ -411,9 +423,9 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
         </View>
 
         {/* Band trend chart */}
-        <View
-          style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}
-          onLayout={(e) => setChartWidth(e.nativeEvent.layout.width - 24)}
+        <AnalyticsCard
+          t={t}
+          onLayout={(e) => setChartWidth(Math.max(240, e.nativeEvent.layout.width - 36))}
         >
           <Text style={[styles.cardTitle, { color: t.text }]}>Band over time</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
@@ -429,10 +441,10 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
               width={chartWidth}
             />
           </View>
-        </View>
+        </AnalyticsCard>
 
         {/* Band distribution */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Band distribution</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             How many of your tests landed in each band.
@@ -453,11 +465,11 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
               </View>
             ))}
           </View>
-        </View>
+        </AnalyticsCard>
 
         {/* Mark quality breakdown */}
         {stats.markBreakdown && (
-          <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+          <AnalyticsCard t={t}>
             <Text style={[styles.cardTitle, { color: t.text }]}>Mark quality</Text>
             <Text style={[styles.cardSub, { color: t.textSecondary }]}>
               SJ uses partial credit: 4 marks for exact match, 2 for one position off, 0 for
@@ -479,11 +491,11 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
             {markInsight(stats.markBreakdown) && (
               <Insight t={t} text={markInsight(stats.markBreakdown)} />
             )}
-          </View>
+          </AnalyticsCard>
         )}
 
         {/* Pacing */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Pacing</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             Average time you're spending on each question.
@@ -529,10 +541,10 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
               )}
             </>
           )}
-        </View>
+        </AnalyticsCard>
 
         {/* Difficulty breakdown — exact matches only (4 marks) */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Exact match by difficulty</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             How often you pick the exact correct answer on standard vs harder questions.
@@ -563,10 +575,10 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
               text={difficultyInsight(stats.difficulty.normal.value, stats.difficulty.hard.value)}
             />
           )}
-        </View>
+        </AnalyticsCard>
 
         {/* Completion rate */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Completion rate</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             How often you answer every question before the timer runs out.
@@ -587,10 +599,10 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
               text={`You're leaving ~${stats.completion.unansweredAvg} questions blank per test. Unanswered SJ questions score 0 marks — always put an answer down, even if unsure.`}
             />
           )}
-        </View>
+        </AnalyticsCard>
 
         {/* SJ scoring disclaimer */}
-        <View style={[styles.disclaimerCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t} style={styles.disclaimerCard}>
           <Text style={[styles.disclaimerTitle, { color: t.text }]}>About SJ bands</Text>
           <Text style={[styles.disclaimerBody, { color: t.textSecondary }]}>
             Unlike VR, DM, and QR, Situational Judgement is reported as a band (1–4) rather
@@ -602,7 +614,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
             SJ uses partial credit: you receive 4 marks for the exact answer, 2 marks if
             one position away, and 0 marks if two or more positions away.
           </Text>
-        </View>
+        </AnalyticsCard>
 
         <View style={{ height: 20 }} />
       </ScrollView>
@@ -611,20 +623,11 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
 }
 
 function Tile({ t, label, value, valueColor }) {
-  return (
-    <View style={[styles.tile, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-      <Text style={[styles.tileValue, { color: valueColor ?? t.text }]}>{value}</Text>
-      <Text style={[styles.tileLabel, { color: t.textSecondary }]}>{label}</Text>
-    </View>
-  );
+  return <AnalyticsTile t={t} label={label} value={value} valueColor={valueColor} />;
 }
 
 function Insight({ t, text }) {
-  return (
-    <View style={[styles.insight, { backgroundColor: t.accentDim, borderColor: t.accent }]}>
-      <Text style={[styles.insightText, { color: t.text }]}>{text}</Text>
-    </View>
-  );
+  return <AnalyticsInsight t={t} text={text} />;
 }
 
 function LegendItem({ color, label, value, textColor }) {
@@ -668,7 +671,12 @@ function difficultyInsight(normalPct, hardPct) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32 },
-  scroll: { padding: 16, gap: 14 },
+  scroll: {
+    paddingHorizontal: 20,
+    paddingTop: 2,
+    paddingBottom: 34,
+    gap: 14,
+  },
 
   tileRow: { flexDirection: 'row', gap: 10 },
   tile: {
@@ -680,29 +688,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tileValue: { fontSize: 18, fontWeight: '800' },
-  tileLabel: { fontSize: 11, marginTop: 4, fontWeight: '600', letterSpacing: 0.5 },
+  tileLabel: { fontSize: 11, marginTop: 4, fontWeight: '600', letterSpacing: 0 },
 
   benchmarkStrip: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    borderRadius: 12,
+    gap: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 13,
+    borderRadius: 18,
     borderWidth: 1,
-    marginTop: -4,
+    flexWrap: 'wrap',
   },
-  benchmarkLabel: { fontSize: 12, fontWeight: '600' },
-  benchmarkValue: { fontSize: 13, fontWeight: '800' },
+  benchmarkLabel: { flex: 1, minWidth: 145, fontSize: 12, lineHeight: 17, fontWeight: '700' },
+  benchmarkValue: { fontSize: 13, lineHeight: 18, fontWeight: '900', textAlign: 'right' },
 
   disclaimerCard: {
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 16,
-    marginTop: 4,
-    opacity: 0.92,
+    marginTop: 2,
   },
-  disclaimerTitle: { fontSize: 13, fontWeight: '700', marginBottom: 8 },
+  disclaimerTitle: { fontSize: 14, fontWeight: '800', marginBottom: 8 },
   disclaimerBody: { fontSize: 12, lineHeight: 18 },
 
   card: {
@@ -710,8 +715,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
   },
-  cardTitle: { fontSize: 16, fontWeight: '700' },
-  cardSub: { fontSize: 12, marginTop: 4 },
+  cardTitle: { fontSize: 17, lineHeight: 22, fontWeight: '900' },
+  cardSub: { fontSize: 13, lineHeight: 19, marginTop: 6 },
 
   chartWrap: { marginTop: 12, alignItems: 'center' },
 
@@ -719,6 +724,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    minHeight: 34,
   },
   bandDot: { width: 10, height: 10, borderRadius: 5 },
   bandLabel: { fontSize: 13, fontWeight: '700', width: 52 },
@@ -727,13 +733,13 @@ const styles = StyleSheet.create({
 
   markBarTrack: {
     height: 12,
-    borderRadius: 6,
+    borderRadius: 999,
     overflow: 'hidden',
     flexDirection: 'row',
   },
   markBarSegment: { height: '100%' },
 
-  markLegend: { flexDirection: 'row', justifyContent: 'space-around' },
+  markLegend: { flexDirection: 'row', justifyContent: 'space-around', flexWrap: 'wrap', gap: 10 },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   legendDot: { width: 8, height: 8, borderRadius: 4 },
   legendLabel: { fontSize: 11, fontWeight: '600' },
@@ -747,8 +753,8 @@ const styles = StyleSheet.create({
   },
   barLabel: { fontSize: 13, fontWeight: '600' },
   barValue: { fontSize: 13, fontWeight: '700' },
-  barTrack: { height: 8, borderRadius: 4, overflow: 'hidden' },
-  barFill: { height: '100%', borderRadius: 4 },
+  barTrack: { height: 9, borderRadius: 999, overflow: 'hidden' },
+  barFill: { height: '100%', borderRadius: 999 },
 
   pacingHero: {
     flexDirection: 'row',

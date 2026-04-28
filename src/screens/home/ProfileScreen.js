@@ -19,6 +19,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize, TEXT_SIZE_OPTIONS } from '../../context/TextSizeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
@@ -48,6 +49,7 @@ export default function ProfileScreen() {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { isPro, presentCustomerCenter } = useSubscription();
+  const { sizeId, setSize } = useTextSize();
 
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
@@ -359,6 +361,59 @@ export default function ProfileScreen() {
               onPress={() => navigation.navigate('Paywall')}
             />
           )}
+        </Animated.View>
+
+        {/* Display */}
+        <Animated.View style={[styles.section, contentAnim]}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>Display</Text>
+          <Text style={[styles.helperText, { color: colors.textMuted }]}>
+            Adjust the size of reading text in questions, passages and information screens. Buttons and headers stay the same.
+          </Text>
+          <View
+            style={[
+              styles.textSizeRow,
+              {
+                borderColor: colors.border,
+                backgroundColor: isDark ? 'rgba(8, 22, 43, 0.85)' : 'rgba(255, 255, 255, 0.95)',
+              },
+            ]}
+          >
+            {TEXT_SIZE_OPTIONS.map((option, idx) => {
+              const selected = option.id === sizeId;
+              return (
+                <TouchableOpacity
+                  key={option.id}
+                  activeOpacity={0.85}
+                  onPress={() => setSize(option.id)}
+                  style={[
+                    styles.textSizeOption,
+                    idx > 0 && { borderLeftWidth: 1, borderLeftColor: colors.border },
+                    selected && { backgroundColor: hexToRgba(colors.blue, isDark ? 0.18 : 0.12) },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.textSizeSample,
+                      {
+                        color: selected ? colors.blue : colors.text,
+                        fontSize: Math.round(14 * option.multiplier),
+                      },
+                    ]}
+                  >
+                    Aa
+                  </Text>
+                  <Text
+                    style={[
+                      styles.textSizeLabel,
+                      { color: selected ? colors.blue : colors.textSecondary },
+                    ]}
+                  >
+                    {option.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </Animated.View>
 
         {/* Content */}
@@ -786,6 +841,30 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
     marginBottom: 4,
+  },
+
+  textSizeRow: {
+    flexDirection: 'row',
+    borderRadius: 16,
+    borderWidth: 1,
+    overflow: 'hidden',
+  },
+  textSizeOption: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+  },
+  textSizeSample: {
+    fontWeight: '900',
+    letterSpacing: 0.4,
+  },
+  textSizeLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.3,
   },
 
   devCard: {

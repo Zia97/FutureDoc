@@ -1,17 +1,23 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 
-const VW = 360;
+const DEFAULT_VW = 360;
 const VH = 260;
 const M = { top: 10, right: 16, bottom: 10, left: 16 };
-const CW = VW - M.left - M.right;
 const CH = VH - M.top - M.bottom;
 
 const NODE_R = 6;
 
 export default function NetworkDiagramRenderer({ data }) {
   const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
+  const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
+  const fz = (n) => Math.round(n * svgMultiplier);
+  const VW = svgWidth;
+  const CW = VW - M.left - M.right;
   const NODE_FILL = t.accent;
   const NODE_STROKE = t.bgCard;
   const EDGE_COLOR = t.borderStrong;
@@ -33,10 +39,10 @@ export default function NetworkDiagramRenderer({ data }) {
   });
 
   return (
-    <View>
+    <View onLayout={(e) => setSvgWidth(e.nativeEvent.layout.width)}>
       {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
-        width="100%"
+        width={VW}
         height={VH}
         viewBox={`0 0 ${VW} ${VH}`}
         preserveAspectRatio="xMidYMid meet"
@@ -72,7 +78,7 @@ export default function NetworkDiagramRenderer({ data }) {
                   <SvgText
                     x={midX + offsetX}
                     y={midY + offsetY}
-                    fontSize={10}
+                    fontSize={fz(10)}
                     fontWeight="600"
                     fill={EDGE_LABEL_COLOR}
                     textAnchor="middle"
@@ -106,7 +112,7 @@ export default function NetworkDiagramRenderer({ data }) {
                 <SvgText
                   x={cx}
                   y={labelY}
-                  fontSize={10}
+                  fontSize={fz(10)}
                   fontWeight="700"
                   fill={LABEL_COLOR}
                   textAnchor="middle"
@@ -123,7 +129,7 @@ export default function NetworkDiagramRenderer({ data }) {
           <SvgText
             x={VW / 2}
             y={VH - 4}
-            fontSize={10}
+            fontSize={fz(10)}
             fill={t.text}
             textAnchor="middle"
           >

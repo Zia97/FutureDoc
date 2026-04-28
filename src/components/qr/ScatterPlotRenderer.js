@@ -2,12 +2,11 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Circle, Line, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 
-const VW = 420;
-const VH = 320;
-const M = { top: 32, right: 22, bottom: 68, left: 62 };
-const CW = VW - M.left - M.right;
-const CH = VH - M.top - M.bottom;
+const DEFAULT_VW = 420;
+const VH_BASE = 320;
+const M_BASE = { top: 32, right: 0, bottom: 68, left: 38 };
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
 
@@ -103,8 +102,20 @@ function niceAxis(min, max, tickCount = 5) {
 
 export default function ScatterPlotRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
   const [selected, setSelected] = useState(null);
-  const [svgWidth, setSvgWidth] = useState(VW);
+  const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
+  const fz = (n) => Math.round(n * svgMultiplier);
+  const M = {
+    top: M_BASE.top,
+    right: M_BASE.right,
+    bottom: M_BASE.bottom + Math.round((svgMultiplier - 1) * 26),
+    left: M_BASE.left + Math.round((svgMultiplier - 1) * 18),
+  };
+  const VH = VH_BASE + Math.round((svgMultiplier - 1) * 26);
+  const CH = VH - M.top - M.bottom;
+  const VW = svgWidth;
+  const CW = VW - M.left - M.right;
   const { series, xAxisLabel, yAxisLabel } = data;
 
   const allX = series.flatMap((s) => s.points.map((p) => p.x));
@@ -136,12 +147,11 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
 
   function handleTap(e) {
     const { locationX, locationY } = e.nativeEvent;
-    const scale = svgWidth / VW;
-    const cx = locationX / scale - M.left;
-    const cy = locationY / scale - M.top;
+    const cx = locationX - M.left;
+    const cy = locationY - M.top;
 
     let closest = null;
-    let minDist = 30 / scale;
+    let minDist = 30;
     series.forEach((s, si) => {
       s.points.forEach((p, pi) => {
         const px = xPos(p.x);
@@ -174,7 +184,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
               return (
                 <G key={`yt-${i}`}>
                   <Line x1={0} y1={y} x2={CW} y2={y} stroke={t.border} strokeWidth={0.7} />
-                  <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
+                  <SvgText x={-5} y={y + 4} fontSize={fz(13)} fill={t.text} textAnchor="end">
                     {Math.round(val)}
                   </SvgText>
                 </G>
@@ -188,7 +198,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
               return (
                 <G key={`xt-${i}`}>
                   <Line x1={x} y1={0} x2={x} y2={CH} stroke={t.border} strokeWidth={0.7} />
-                  <SvgText x={x} y={CH + 18} fontSize={13} fill={t.text} textAnchor="middle">
+                  <SvgText x={x} y={CH + 18} fontSize={fz(13)} fill={t.text} textAnchor="middle">
                     {Math.round(val)}
                   </SvgText>
                 </G>
@@ -198,9 +208,9 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-48} y={CH / 2} fontSize={12} fill={t.text}
+                x={-(M.left - 8)} y={CH / 2} fontSize={fz(12)} fill={t.text}
                 textAnchor="middle" rotation="-90"
-                originX={-48} originY={CH / 2}
+                originX={-(M.left - 8)} originY={CH / 2}
               >
                 {yAxisLabel}
               </SvgText>
@@ -209,7 +219,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
             {/* X-axis label */}
             {xAxisLabel && (
               <SvgText
-                x={CW / 2} y={CH + 42} fontSize={12} fill={t.text} textAnchor="middle"
+                x={CW / 2} y={CH + 42} fontSize={fz(12)} fill={t.text} textAnchor="middle"
               >
                 {xAxisLabel}
               </SvgText>
@@ -225,7 +235,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
                   <G key={`${si}-${pi}`}>
                     <Circle cx={cx} cy={cy} r={4} fill={color} stroke={t.bgCard} strokeWidth={1} />
                     {p.label && (
-                      <SvgText x={cx + 8} y={cy - 7} fontSize={12} fontWeight="700" fill={t.text}>
+                      <SvgText x={cx + 8} y={cy - 7} fontSize={fz(12)} fontWeight="700" fill={t.text}>
                         {p.label}
                       </SvgText>
                     )}
@@ -246,7 +256,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
                   />
                 )}
                 <Rect x={x - w / 2} y={y} width={w} height={SLH} rx={2} fill={color} opacity={0.88} />
-                <SvgText x={x} y={y + SLH - 3} fontSize={10} fill="#fff" textAnchor="middle" fontWeight="600">
+                <SvgText x={x} y={y + SLH - 3} fontSize={fz(10)} fill="#fff" textAnchor="middle" fontWeight="600">
                   {txt}
                 </SvgText>
               </G>
@@ -269,7 +279,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
                 <G>
                   <Rect x={tx - tw / 2} y={ty} width={tw} height={th} rx={6}
                         fill={t.bgCard} stroke={t.borderStrong} strokeWidth={0.8} />
-                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={11} fill={t.text}
+                  <SvgText x={tx} y={ty + th / 2 + 4} fontSize={fz(11)} fill={t.text}
                            textAnchor="middle" fontWeight="600">
                     {text}
                   </SvgText>
@@ -283,7 +293,7 @@ export default function ScatterPlotRenderer({ data, showValues = false }) {
             series.map((s, si) => (
               <G key={s.name} x={M.left + si * 120} y={VH - 10}>
                 <Circle cx={5} cy={-5} r={5} fill={COLORS[si % COLORS.length]} stroke={t.bgCard} strokeWidth={1} />
-                <SvgText x={16} y={0} fontSize={13} fill={t.text}>
+                <SvgText x={16} y={0} fontSize={fz(13)} fill={t.text}>
                   {s.name}
                 </SvgText>
               </G>

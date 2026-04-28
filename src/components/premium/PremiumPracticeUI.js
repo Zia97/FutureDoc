@@ -146,7 +146,7 @@ export function AppHeader({ navigation, title, showBack = true }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const showProfile = !!user && !isAnonymous;
-  const initial = showProfile ? user?.email?.[0]?.toUpperCase() ?? 'A' : 'A';
+  const initial = showProfile ? user?.email?.[0]?.toUpperCase() ?? '?' : '';
 
   const handleBack = () => {
     if (navigation?.canGoBack?.()) {
@@ -196,7 +196,11 @@ export function AppHeader({ navigation, title, showBack = true }) {
         accessibilityRole="button"
         accessibilityLabel={showProfile ? 'Open profile' : 'Log in'}
       >
-        <Text style={[styles.headerAvatarText, { color: isDark ? '#C5E4FF' : colors.blue }]}>{initial}</Text>
+        {showProfile ? (
+          <Text style={[styles.headerAvatarText, { color: isDark ? '#C5E4FF' : colors.blue }]}>{initial}</Text>
+        ) : (
+          <PremiumIcon name="user" size={24} color={isDark ? '#C5E4FF' : colors.blue} strokeWidth={2.2} />
+        )}
       </TouchableOpacity>
     </View>
   );

@@ -2,6 +2,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { AuthProvider } from './src/context/AuthContext';
 import { ThemeProvider } from './src/context/ThemeContext';
+import { TextSizeProvider } from './src/context/TextSizeContext';
 import { SubscriptionProvider } from './src/context/SubscriptionContext';
 import { NetworkProvider } from './src/context/NetworkContext';
 import ErrorBoundary from './src/components/ErrorBoundary';
@@ -35,11 +36,13 @@ export default Sentry.wrap(function App() {
         <ErrorBoundary>
           <NetworkProvider>
             <ThemeProvider>
-              <AuthProvider>
-                <SubscriptionProvider>
-                  <AppNavigator />
-                </SubscriptionProvider>
-              </AuthProvider>
+              <TextSizeProvider>
+                <AuthProvider>
+                  <SubscriptionProvider>
+                    <AppNavigator />
+                  </SubscriptionProvider>
+                </AuthProvider>
+              </TextSizeProvider>
             </ThemeProvider>
           </NetworkProvider>
         </ErrorBoundary>

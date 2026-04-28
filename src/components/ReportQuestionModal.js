@@ -11,8 +11,12 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { REPORT_REASONS, submitQuestionReport } from '../lib/reportQuestion';
+import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
+import PremiumIcon from './premium/PremiumIcon';
 
 export default function ReportQuestionModal({
   visible,
@@ -22,13 +26,15 @@ export default function ReportQuestionModal({
   testId = null,
   isTimed = false,
 }) {
-  const { practiceTheme: t } = useTheme();
+  const { isDark } = useTheme();
+  const { colors, gradients } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
+
   const [selected, setSelected] = useState([]);
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submittedOk, setSubmittedOk] = useState(false);
 
-  // Reset form whenever the modal closes
   useEffect(() => {
     if (!visible) {
       setSelected([]);
@@ -69,34 +75,75 @@ export default function ReportQuestionModal({
     setTimeout(onClose, 1100);
   }
 
+  const accent = colors.red;
+
   return (
     <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
       <KeyboardAvoidingView
         style={styles.overlay}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <View style={[styles.cardWrap, { borderColor: colors.border }]}>
+          <LinearGradient
+            colors={gradients.glass}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
+          <View style={[styles.handle, { backgroundColor: hexToRgba(colors.text, 0.18) }]} />
+
           <View style={styles.header}>
-            <Text style={[styles.title, { color: t.text }]}>Report this question</Text>
+            <View style={styles.headerLeft}>
+              <View
+                style={[
+                  styles.iconBox,
+                  {
+                    backgroundColor: hexToRgba(accent, isDark ? 0.18 : 0.14),
+                    borderColor: hexToRgba(accent, 0.55),
+                  },
+                ]}
+              >
+                <PremiumIcon name="flag" size={20} color={accent} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={[styles.title, { color: colors.text }]}>Report this question</Text>
+                <Text style={[styles.kicker, { color: colors.textMuted }]}>Help us keep content sharp</Text>
+              </View>
+            </View>
             <TouchableOpacity
-              style={[styles.closeButton, { borderColor: t.borderStrong }]}
+              style={[
+                styles.closeButton,
+                { borderColor: colors.borderStrong, backgroundColor: hexToRgba(colors.text, 0.04) },
+              ]}
               onPress={onClose}
               activeOpacity={0.7}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
             >
-              <Text style={[styles.closeText, { color: t.textSecondary }]}>Close</Text>
+              <PremiumIcon name="x" size={16} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
 
           {submittedOk ? (
             <View style={styles.successBlock}>
-              <Text style={[styles.successTitle, { color: t.text }]}>Thanks!</Text>
-              <Text style={[styles.successBody, { color: t.textSecondary }]}>
+              <View
+                style={[
+                  styles.successIcon,
+                  {
+                    backgroundColor: hexToRgba(colors.mint, isDark ? 0.18 : 0.14),
+                    borderColor: hexToRgba(colors.mint, 0.55),
+                  },
+                ]}
+              >
+                <PremiumIcon name="check" size={26} color={colors.mint} />
+              </View>
+              <Text style={[styles.successTitle, { color: colors.text }]}>Thanks!</Text>
+              <Text style={[styles.successBody, { color: colors.textSecondary }]}>
                 Your report has been sent. We'll review it shortly.
               </Text>
             </View>
           ) : (
             <>
-              <Text style={[styles.subtitle, { color: t.textSecondary }]}>
+              <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 What's wrong with it? Pick all that apply.
               </Text>
 
@@ -108,17 +155,23 @@ export default function ReportQuestionModal({
                       key={r.id}
                       style={[
                         styles.chip,
-                        { borderColor: t.borderStrong, backgroundColor: t.bg },
-                        isOn && { backgroundColor: t.accent, borderColor: t.accent },
+                        {
+                          borderColor: colors.border,
+                          backgroundColor: hexToRgba(colors.text, isDark ? 0.04 : 0.05),
+                        },
+                        isOn && {
+                          backgroundColor: hexToRgba(accent, isDark ? 0.22 : 0.16),
+                          borderColor: hexToRgba(accent, 0.7),
+                        },
                       ]}
                       onPress={() => toggleReason(r.id)}
-                      activeOpacity={0.7}
+                      activeOpacity={0.75}
                     >
                       <Text
                         style={[
                           styles.chipText,
-                          { color: t.text },
-                          isOn && { color: '#ffffff', fontWeight: '700' },
+                          { color: colors.textSecondary },
+                          isOn && { color: colors.text, fontWeight: '700' },
                         ]}
                       >
                         {r.label}
@@ -128,38 +181,50 @@ export default function ReportQuestionModal({
                 })}
               </View>
 
-              <Text style={[styles.subtitle, { color: t.textSecondary, marginTop: 16 }]}>
+              <Text style={[styles.subtitle, { color: colors.textSecondary, marginTop: 18 }]}>
                 Comments (optional)
               </Text>
               <TextInput
                 style={[
                   styles.input,
-                  { backgroundColor: t.bgInput ?? t.bg, color: t.text, borderColor: t.border },
+                  {
+                    backgroundColor: hexToRgba(colors.text, isDark ? 0.04 : 0.05),
+                    color: colors.text,
+                    borderColor: colors.border,
+                    fontSize: Math.round(styles.input.fontSize * multiplier),
+                    lineHeight: Math.round(styles.input.lineHeight * multiplier),
+                  },
                 ]}
                 value={comment}
                 onChangeText={setComment}
                 placeholder="Add any extra details that would help us fix this..."
-                placeholderTextColor={t.textMuted}
+                placeholderTextColor={colors.textMuted}
                 multiline
                 textAlignVertical="top"
                 maxLength={1000}
               />
 
               <TouchableOpacity
-                style={[
-                  styles.submitButton,
-                  { backgroundColor: t.accent },
-                  submitting && { opacity: 0.6 },
-                ]}
                 onPress={handleSubmit}
                 disabled={submitting}
                 activeOpacity={0.85}
+                style={[styles.submitWrap, submitting && { opacity: 0.65 }]}
               >
-                {submitting ? (
-                  <ActivityIndicator color="#ffffff" />
-                ) : (
-                  <Text style={styles.submitText}>Send report</Text>
-                )}
+                <LinearGradient
+                  colors={[accent, hexToRgba(accent, 0.82)]}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.submitButton}
+                >
+                  {submitting ? (
+                    <ActivityIndicator color="#ffffff" />
+                  ) : (
+                    <>
+                      <PremiumIcon name="flag" size={16} color="#ffffff" />
+                      <Text style={styles.submitText}>Send report</Text>
+                    </>
+                  )}
+                </LinearGradient>
               </TouchableOpacity>
             </>
           )}
@@ -172,41 +237,73 @@ export default function ReportQuestionModal({
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(2, 6, 16, 0.72)',
     justifyContent: 'flex-end',
   },
-  card: {
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+  cardWrap: {
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
     borderTopWidth: 1,
-    paddingTop: 14,
-    paddingHorizontal: 18,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    paddingTop: 10,
+    paddingHorizontal: 20,
     paddingBottom: 32,
+    overflow: 'hidden',
+  },
+  handle: {
+    alignSelf: 'center',
+    width: 44,
+    height: 4,
+    borderRadius: 999,
+    marginBottom: 14,
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
-    marginBottom: 6,
+    marginBottom: 14,
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    gap: 12,
+  },
+  iconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '700',
+    letterSpacing: 0.2,
+  },
+  kicker: {
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    marginTop: 2,
   },
   closeButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
     borderWidth: 1,
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  closeText: {
-    fontSize: 13,
-    fontWeight: '600',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
   },
   subtitle: {
     fontSize: 13,
-    marginTop: 8,
-    marginBottom: 10,
+    marginTop: 4,
+    marginBottom: 12,
+    fontWeight: '500',
   },
   chipsContainer: {
     flexDirection: 'row',
@@ -217,35 +314,51 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 999,
     paddingHorizontal: 14,
-    paddingVertical: 8,
+    paddingVertical: 9,
   },
   chipText: {
     fontSize: 13,
-    fontWeight: '500',
+    fontWeight: '600',
   },
   input: {
     borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
+    borderRadius: 14,
+    padding: 14,
     fontSize: 14,
     lineHeight: 20,
-    minHeight: 90,
+    minHeight: 96,
     maxHeight: 140,
   },
+  submitWrap: {
+    marginTop: 18,
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
   submitButton: {
-    marginTop: 16,
-    borderRadius: 12,
     paddingVertical: 14,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
   },
   submitText: {
     color: '#ffffff',
     fontSize: 15,
     fontWeight: '700',
+    letterSpacing: 0.3,
   },
   successBlock: {
     paddingVertical: 30,
     alignItems: 'center',
+  },
+  successIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 16,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
   },
   successTitle: {
     fontSize: 22,
@@ -255,5 +368,6 @@ const styles = StyleSheet.create({
   successBody: {
     fontSize: 14,
     textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });

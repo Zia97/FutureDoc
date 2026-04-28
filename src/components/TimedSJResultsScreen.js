@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import { PremiumScreen } from './premium/PremiumPracticeUI';
 import { LABEL_SETS } from '../constants/sjLabelSets';
@@ -64,6 +65,15 @@ function deriveScenarioTitle(stem, fallback) {
 export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test, onDone }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
+  const stemScaled = {
+    fontSize: Math.round(resultsStyles.stemText.fontSize * multiplier),
+    lineHeight: Math.round(resultsStyles.stemText.lineHeight * multiplier),
+  };
+  const qScaled = {
+    fontSize: Math.round(resultsStyles.questionText.fontSize * multiplier),
+    lineHeight: Math.round(resultsStyles.questionText.lineHeight * multiplier),
+  };
   const accent = colors.mint;
   const [reviewItem, setReviewItem] = useState(null);
 
@@ -163,13 +173,13 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
             showsVerticalScrollIndicator={false}
           >
             <ReviewStemCard label="SCENARIO" accent={accent} colors={colors} isDark={isDark}>
-              <Text style={[resultsStyles.stemText, { color: colors.textSecondary }]}>
+              <Text style={[resultsStyles.stemText, stemScaled, { color: colors.textSecondary }]}>
                 {scenario.stem}
               </Text>
             </ReviewStemCard>
 
             <ReviewQuestionCard colors={colors} isDark={isDark}>
-              <Text style={[resultsStyles.questionText, { color: colors.text }]}>{item.text}</Text>
+              <Text style={[resultsStyles.questionText, qScaled, { color: colors.text }]}>{item.text}</Text>
               <View style={resultsStyles.optionsContainer}>
                 {labelSet.map((opt) => (
                   <AnswerOptionButton

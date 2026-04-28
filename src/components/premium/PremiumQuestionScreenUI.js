@@ -13,6 +13,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
 import { PremiumScreen } from './PremiumPracticeUI';
 import PremiumIcon from './PremiumIcon';
@@ -144,8 +145,14 @@ export function SectionLabel({ children, accent }) {
 
 export function QuestionText({ children, muted = false, style }) {
   const { colors } = getPremiumTheme(useTheme().isDark);
+  const { multiplier } = useTextSize();
+  const base = muted ? styles.mutedText : styles.questionText;
+  const scaled = {
+    fontSize: Math.round(base.fontSize * multiplier),
+    lineHeight: Math.round(base.lineHeight * multiplier),
+  };
   return (
-    <Text style={[muted ? styles.mutedText : styles.questionText, { color: muted ? colors.textSecondary : colors.text }, style]}>
+    <Text style={[base, scaled, { color: muted ? colors.textSecondary : colors.text }, style]}>
       {children}
     </Text>
   );

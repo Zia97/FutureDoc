@@ -1,11 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 
 export default function AnswerOptionButton({ label, state, onPress }) {
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
 
   const buttonStyle = [
     styles.button,
@@ -23,7 +25,11 @@ export default function AnswerOptionButton({ label, state, onPress }) {
 
   const textStyle = [
     styles.text,
-    { color: colors.text },
+    {
+      color: colors.text,
+      fontSize: Math.round(styles.text.fontSize * multiplier),
+      lineHeight: Math.round(styles.text.lineHeight * multiplier),
+    },
     state === 'correct' && { color: t.correctText, fontWeight: '700' },
     state === 'incorrect' && { color: t.incorrectText, fontWeight: '700' },
     state === 'selected' && { color: colors.blue, fontWeight: '800' },

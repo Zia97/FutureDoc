@@ -8,6 +8,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme } from '../theme/premiumTheme';
 import { PremiumScreen } from './premium/PremiumPracticeUI';
 import AnswerOptionButton from './AnswerOptionButton';
@@ -33,6 +34,11 @@ import {
 
 export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onDone }) {
   const { isDark } = useTheme();
+  const { multiplier } = useTextSize();
+  const qScaled = {
+    fontSize: Math.round(resultsStyles.questionText.fontSize * multiplier),
+    lineHeight: Math.round(resultsStyles.questionText.lineHeight * multiplier),
+  };
   const { colors } = getPremiumTheme(isDark);
   const accent = colors.purple;
   const [reviewItem, setReviewItem] = useState(null);
@@ -119,7 +125,7 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
             </ReviewStemCard>
 
             <ReviewQuestionCard colors={colors} isDark={isDark}>
-              <Text style={[resultsStyles.questionText, { color: colors.text }]}>{q.stem}</Text>
+              <Text style={[resultsStyles.questionText, qScaled, { color: colors.text }]}>{q.stem}</Text>
               <View style={resultsStyles.optionsContainer}>
                 {q.options.map((opt) => (
                   <AnswerOptionButton

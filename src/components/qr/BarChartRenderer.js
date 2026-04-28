@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { formatWithUnit, formatNegativeWithUnit } from './formatUnit';
 
-const VW = 420;
-const VH = 400;
-const M = { top: 28, right: 20, bottom: 90, left: 80 };
-const CW = VW - M.left - M.right;
-const CH = VH - M.top - M.bottom;
+const DEFAULT_VW = 420;
+const VH_BASE = 400;
+const M_BASE = { top: 28, right: 0, bottom: 90, left: 38 };
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
 
@@ -38,9 +37,23 @@ function wrapLabel(label) {
 
 export default function BarChartRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
   const [hiddenSeries, setHiddenSeries] = useState(new Set());
   const [tapped, setTapped] = useState(null); // { gi, si }
-  const [svgWidth, setSvgWidth] = useState(VW);
+  const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
+
+  const fz = (n) => Math.round(n * svgMultiplier);
+  // Grow margins so larger tick numbers and rotated x-labels still fit.
+  const M = {
+    top: M_BASE.top,
+    right: M_BASE.right,
+    bottom: M_BASE.bottom + Math.round((svgMultiplier - 1) * 30),
+    left: M_BASE.left + Math.round((svgMultiplier - 1) * 18),
+  };
+  const VH = VH_BASE + Math.round((svgMultiplier - 1) * 30);
+  const CH = VH - M.top - M.bottom;
+  const VW = svgWidth;
+  const CW = VW - M.left - M.right;
 
   const { labels, series, yAxisLabel, unit = '' } = data;
   const numGroups = labels.length;
@@ -101,9 +114,8 @@ export default function BarChartRenderer({ data, showValues = false }) {
 
   function handleTap(e) {
     const { locationX, locationY } = e.nativeEvent;
-    const scale = svgWidth / VW;
-    const cx = locationX / scale - M.left;
-    const cy = locationY / scale - M.top;
+    const cx = locationX - M.left;
+    const cy = locationY - M.top;
 
     let hit = null;
     labels.forEach((_, gi) => {
@@ -199,7 +211,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
                     stroke={val === 0 && hasNegative ? t.borderStrong : t.border}
                     strokeWidth={val === 0 && hasNegative ? 1.2 : 0.7}
                   />
-                  <SvgText x={-5} y={y + 4} fontSize={13} fill={t.text} textAnchor="end">
+                  <SvgText x={-5} y={y + 4} fontSize={fz(13)} fill={t.text} textAnchor="end">
                     {tickLabel}
                   </SvgText>
                 </G>
@@ -209,9 +221,9 @@ export default function BarChartRenderer({ data, showValues = false }) {
             {/* Y-axis label */}
             {yAxisLabel && (
               <SvgText
-                x={-58} y={CH / 2} fontSize={12} fill={t.text}
+                x={-(M.left - 8)} y={CH / 2} fontSize={fz(12)} fill={t.text}
                 textAnchor="middle"
-                transform={`rotate(-90, ${-58}, ${CH / 2})`}
+                transform={`rotate(-90, ${-(M.left - 8)}, ${CH / 2})`}
               >
                 {yAxisLabel}
               </SvgText>
@@ -250,7 +262,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
                       key={li}
                       x={lx}
                       y={CH + 26 + li * 15}
-                      fontSize={12}
+                      fontSize={fz(12)}
                       fill={t.text}
                       textAnchor="middle"
                     >
@@ -269,7 +281,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
                   width={txt.length * 6 + 8} height={LH + 2}
                   rx={2} fill={color} opacity={0.9}
                 />
-                <SvgText x={x} y={y - 2} fontSize={11} fill="#fff" textAnchor="middle" fontWeight="700">
+                <SvgText x={x} y={y - 2} fontSize={fz(11)} fill="#fff" textAnchor="middle" fontWeight="700">
                   {txt}
                 </SvgText>
               </G>
@@ -285,7 +297,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
                 />
                 <SvgText
                   x={tooltip.tx} y={tooltip.ty + tooltip.th / 2 + 5}
-                  fontSize={12} fill="#fff" textAnchor="middle" fontWeight="700"
+                  fontSize={fz(12)} fill="#fff" textAnchor="middle" fontWeight="700"
                 >
                   {tooltip.txt}
                 </SvgText>
@@ -318,7 +330,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
                    onPress={() => toggleSeries(si)}>
                   <Rect x={-4} y={-16} width={item.width + 8} height={20} fill="transparent" />
                   <Rect x={0} y={-11} width={13} height={13} fill={COLORS[si % COLORS.length]} rx={2} />
-                  <SvgText x={20} y={0} fontSize={13} fill={t.text}>
+                  <SvgText x={20} y={0} fontSize={fz(13)} fill={t.text}>
                     {item.name}
                   </SvgText>
                 </G>

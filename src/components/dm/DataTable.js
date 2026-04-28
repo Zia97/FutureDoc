@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 
 // Two-tier sizing. Each tier is tried in order — the first one whose
 // computed column widths sum to ≤ container width wins. "compact" is the
@@ -59,13 +60,23 @@ function layoutAtTier(headers, rows, tier, containerW) {
 
 export default function DataTable({ tableData }) {
   const { practiceTheme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
   const { headers, rows } = tableData;
   const { width: screenWidth } = useWindowDimensions();
   const targetW = screenWidth - 48;
 
+  // Scale tier font sizes and character widths together so layout math stays consistent.
+  const scaledTiers = TIERS.map((tt) => ({
+    ...tt,
+    headerFont: Math.round(tt.headerFont * svgMultiplier),
+    cellFont: Math.round(tt.cellFont * svgMultiplier),
+    headerCharW: tt.headerCharW * svgMultiplier,
+    cellCharW: tt.cellCharW * svgMultiplier,
+  }));
+
   // Pick the first tier whose natural widths fit. If none fit, use compact as floor.
   let tier, layout;
-  for (const candidate of TIERS) {
+  for (const candidate of scaledTiers) {
     layout = layoutAtTier(headers, rows, candidate, targetW);
     tier = candidate;
     if (layout.fits) break;

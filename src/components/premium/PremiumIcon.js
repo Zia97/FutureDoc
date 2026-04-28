@@ -281,6 +281,13 @@ export default function PremiumIcon({
             <Path d="M4.2 4.2 19.8 19.8" />
           </G>
         );
+      case 'user':
+        return (
+          <G {...strokeProps} fill="none">
+            <Circle cx="12" cy="8.2" r="3.8" />
+            <Path d="M4.8 20.2c.6-3.9 3.4-6.2 7.2-6.2s6.6 2.3 7.2 6.2" />
+          </G>
+        );
       case 'pulse':
         return (
           <Polyline

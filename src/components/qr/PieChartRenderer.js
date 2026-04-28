@@ -1,13 +1,14 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 import { formatWithUnit } from './formatUnit';
 
-const VW = 420;
-const VH = 260;
-const CX = 110;
-const CY = 118;
-const R = 96;
+const DEFAULT_VW = 420;
+const VH_BASE = 260;
+const PIE_PAD = 14;
+const LEGEND_W_BASE = 200;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4', '#76e4f7'];
 
@@ -25,6 +26,18 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 
 export default function PieChartRenderer({ data }) {
   const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
+  const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
+  const fz = (n) => Math.round(n * svgMultiplier);
+  const LEGEND_W = Math.round(LEGEND_W_BASE * svgMultiplier);
+  const VH = Math.round(VH_BASE * (1 + (svgMultiplier - 1) * 0.5));
+  const VW = svgWidth;
+  // Reserve right side for legend, pie occupies left side
+  const pieAreaW = VW - LEGEND_W;
+  const R = Math.min((pieAreaW - PIE_PAD * 2) / 2, (VH - PIE_PAD * 2) / 2);
+  const CX = PIE_PAD + R;
+  const CY = VH / 2;
+  const legendX = pieAreaW + 8;
   const { segments, total, unit = '' } = data;
   const computedTotal = total ?? segments.reduce((s, seg) => s + (seg.value ?? 0), 0);
 
@@ -63,14 +76,14 @@ export default function PieChartRenderer({ data }) {
       : '#2d3748',
   }));
 
-  const ROW_H = 44;
+  const ROW_H = Math.round(44 * svgMultiplier);
   const legendStartY = Math.max(14, (VH - legendItems.length * ROW_H) / 2);
 
   return (
-    <View>
+    <View onLayout={(e) => setSvgWidth(e.nativeEvent.layout.width)}>
       {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
-        width="100%"
+        width={VW}
         height={VH}
         viewBox={`0 0 ${VW} ${VH}`}
         preserveAspectRatio="xMidYMid meet"
@@ -94,12 +107,12 @@ export default function PieChartRenderer({ data }) {
           const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
           const valText = isNull ? '?' : formatWithUnit(fmtVal, unit);
           return (
-            <G key={i} x={228} y={ly}>
+            <G key={i} x={legendX} y={ly}>
               <Rect x={0} y={0} width={14} height={14} fill={seg.color} rx={3} />
-              <SvgText x={20} y={12} fontSize={13} fill={t.text} fontWeight="600">
+              <SvgText x={20} y={12} fontSize={fz(13)} fill={t.text} fontWeight="600">
                 {seg.label}
               </SvgText>
-              <SvgText x={20} y={29} fontSize={12} fill={t.text}>
+              <SvgText x={20} y={29} fontSize={fz(12)} fill={t.text}>
                 {valText} ({pct}%)
               </SvgText>
             </G>

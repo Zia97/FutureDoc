@@ -4,11 +4,20 @@ import AITutorModal from './AITutorModal';
 import { useAITutor } from '../hooks/ai/useAITutor';
 import { useAICredits } from '../hooks/ai/useAICredits';
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 
 export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReason = true, questionContext }) {
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const { multiplier } = useTextSize();
+  const reasonScaled = {
+    fontSize: Math.round(styles.reason.fontSize * multiplier),
+    lineHeight: Math.round(styles.reason.lineHeight * multiplier),
+  };
+  const correctAnswerScaled = {
+    fontSize: Math.round(styles.correctAnswer.fontSize * multiplier),
+  };
   const [tutorVisible, setTutorVisible] = useState(false);
   const [inputText, setInputText] = useState('');
 
@@ -31,11 +40,11 @@ export default function FeedbackBox({ isCorrect, correctAnswer, reason, showReas
         {(!isCorrect || showReason) && (
           <>
             {!isCorrect && (
-              <Text style={[styles.correctAnswer, { color: colors.textSecondary }]}>
+              <Text style={[styles.correctAnswer, correctAnswerScaled, { color: colors.textSecondary }]}>
                 Correct answer: {correctAnswer}
               </Text>
             )}
-            <Text style={[styles.reason, { color: colors.textSecondary }]}>{reason}</Text>
+            <Text style={[styles.reason, reasonScaled, { color: colors.textSecondary }]}>{reason}</Text>
           </>
         )}
         {questionContext && (

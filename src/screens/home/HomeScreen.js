@@ -53,9 +53,15 @@ function getGreeting() {
 }
 
 function getDisplayName(user, profileDisplayName) {
+  if (!user) return 'Guest';
   const name = profileDisplayName || user?.user_metadata?.full_name || user?.email?.split('@')[0];
-  if (!name) return 'Alex';
-  return name.split(/[ ._-]/)[0] || 'Alex';
+  if (!name) return 'Guest';
+  return name.split(/[ ._-]/)[0] || 'Guest';
+}
+
+function getInitial(user, profileDisplayName) {
+  const source = profileDisplayName || user?.user_metadata?.full_name || user?.email;
+  return source?.trim()?.[0]?.toUpperCase() ?? '?';
 }
 
 function DoctorHeroArt({ colors = premiumColors, isDark = true }) {
@@ -132,6 +138,7 @@ function DoctorHeroArt({ colors = premiumColors, isDark = true }) {
 }
 
 function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colors }) {
+  const avatarTint = isDark ? '#BDE2FF' : colors.blue;
   const insets = useSafeAreaInsets();
 
   return (
@@ -176,7 +183,11 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colo
           accessibilityRole="button"
           accessibilityLabel={showProfile ? 'Open profile' : 'Log in'}
         >
-          <Text style={[styles.avatarText, { color: isDark ? '#BDE2FF' : colors.blue }]}>{initial}</Text>
+          {showProfile ? (
+            <Text style={[styles.avatarText, { color: avatarTint }]}>{initial}</Text>
+          ) : (
+            <PremiumIcon name="user" size={26} color={avatarTint} strokeWidth={2.2} />
+          )}
         </TouchableOpacity>
       </View>
     </View>
@@ -190,7 +201,7 @@ export default function HomeScreen({ navigation }) {
   const { colors, gradients } = getPremiumTheme(isDark);
 
   const showProfile = !!user && !isAnonymous;
-  const initial = showProfile ? user?.email?.[0]?.toUpperCase() ?? 'A' : 'A';
+  const initial = showProfile ? getInitial(user, profileDisplayName) : '';
   const displayName = getDisplayName(user, profileDisplayName);
 
   const headerAnim = useFadeSlide(0, 12);
@@ -198,7 +209,8 @@ export default function HomeScreen({ navigation }) {
   const action1Anim = useFadeSlide(190, 18);
   const action2Anim = useFadeSlide(260, 18);
   const action3Anim = useFadeSlide(330, 18);
-  const footerAnim = useFadeSlide(410, 18);
+  const action4Anim = useFadeSlide(400, 18);
+  const footerAnim = useFadeSlide(480, 18);
 
   const [streak, setStreak] = useState({ currentStreak: 0, longestStreak: 0 });
   const [lastActivity, setLastActivityState] = useState(null);
@@ -289,17 +301,28 @@ export default function HomeScreen({ navigation }) {
 
         <Animated.View style={action1Anim}>
           <GlassMenuCard
-            title="Start Practising"
-            description="Adaptive practice across all UCAT subtests."
-            icon="target"
-            accent={colors.blue}
+            title="Learn UCAT Techniques"
+            description="Theory, question types, worked examples, and strategy."
+            icon="brain"
+            accent={colors.cyan}
             highlighted
-            onPress={() => navigation.navigate('PracticeMode')}
+            onPress={() => navigation.navigate('LearnSections')}
             style={styles.actionCard}
           />
         </Animated.View>
 
         <Animated.View style={action2Anim}>
+          <GlassMenuCard
+            title="Start Practising"
+            description="Adaptive practice across all UCAT subtests."
+            icon="target"
+            accent={colors.blue}
+            onPress={() => navigation.navigate('PracticeMode')}
+            style={styles.actionCard}
+          />
+        </Animated.View>
+
+        <Animated.View style={action3Anim}>
           <GlassMenuCard
             title="Performance Analytics"
             description="Track progress, strengths, and areas to improve."
@@ -310,7 +333,7 @@ export default function HomeScreen({ navigation }) {
           />
         </Animated.View>
 
-        <Animated.View style={action3Anim}>
+        <Animated.View style={action4Anim}>
           <GlassMenuCard
             title="About the UCAT"
             description="Understand the exam and prepare with confidence."

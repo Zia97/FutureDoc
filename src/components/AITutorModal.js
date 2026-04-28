@@ -18,8 +18,18 @@ import { useNavigation } from '@react-navigation/native';
 import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
 import { useNetwork } from '../context/NetworkContext';
 import { useTheme } from '../context/ThemeContext';
+import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import PremiumIcon from './premium/PremiumIcon';
+
+function ScaledText({ baseStyle, style, children, ...rest }) {
+  const { multiplier } = useTextSize();
+  const scaled = {
+    fontSize: Math.round(baseStyle.fontSize * multiplier),
+    lineHeight: Math.round(baseStyle.lineHeight * multiplier),
+  };
+  return <Text style={[baseStyle, scaled, style]} {...rest}>{children}</Text>;
+}
 
 export default function AITutorModal({
   visible,
@@ -332,7 +342,7 @@ function QuestionContextCard({ context, colors, isDark }) {
       {question ? (
         <>
           <Text style={[styles.contextLabel, { color: colors.cyan }]}>QUESTION</Text>
-          <Text style={[styles.contextQuestion, { color: colors.text }]}>{question}</Text>
+          <ScaledText baseStyle={styles.contextQuestion} style={{ color: colors.text }}>{question}</ScaledText>
           <View style={[styles.contextDivider, { backgroundColor: hexToRgba(colors.blue, 0.24) }]} />
         </>
       ) : null}
@@ -377,7 +387,7 @@ function QuestionContextCard({ context, colors, isDark }) {
         <>
           <View style={[styles.contextDivider, { backgroundColor: hexToRgba(colors.blue, 0.24) }]} />
           <Text style={[styles.contextLabel, { color: colors.cyan }]}>EXPLANATION</Text>
-          <Text style={[styles.contextExplanation, { color: colors.textSecondary }]}>{explanation}</Text>
+          <ScaledText baseStyle={styles.contextExplanation} style={{ color: colors.textSecondary }}>{explanation}</ScaledText>
         </>
       ) : null}
     </LinearGradient>
@@ -400,9 +410,9 @@ function WelcomePrompt({ colors, isDark }) {
         <PremiumIcon name="brain" size={32} color={colors.cyan} secondaryColor={colors.text} />
       </View>
       <Text style={[styles.welcomeTitle, { color: colors.text }]}>Still confused?</Text>
-      <Text style={[styles.welcomeText, { color: colors.textSecondary }]}>
+      <ScaledText baseStyle={styles.welcomeText} style={{ color: colors.textSecondary }}>
         Tell me what part you don't understand and I'll help you work through it.
-      </Text>
+      </ScaledText>
     </View>
   );
 }
@@ -426,8 +436,13 @@ function renderFormattedText(text, baseStyle) {
 }
 
 function MessageBubble({ message, colors, isDark }) {
+  const { multiplier } = useTextSize();
   const isUser = message.role === 'user';
-  const baseStyle = [styles.bubbleText, { color: isUser ? '#fff' : colors.text }];
+  const bubbleScaled = {
+    fontSize: Math.round(styles.bubbleText.fontSize * multiplier),
+    lineHeight: Math.round(styles.bubbleText.lineHeight * multiplier),
+  };
+  const baseStyle = [styles.bubbleText, bubbleScaled, { color: isUser ? '#fff' : colors.text }];
 
   if (isUser) {
     return (

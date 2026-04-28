@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Rect, Line, Circle, Ellipse, Polygon, Path, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
 
 const DEFAULT_VW = 300;
 const DEFAULT_VH = 220;
@@ -9,6 +10,8 @@ const CAP_SIZE = 4; // end-cap length for dimension arrows
 
 export default function GeometryDiagramRenderer({ data }) {
   const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
+  const fz = (n) => Math.round(n * svgMultiplier);
   const SHAPE_STROKE = t.text;
   const DIM_TEXT_COLOR = t.text;
   const { shapes = [], dimensions = [] } = data;
@@ -163,7 +166,7 @@ export default function GeometryDiagramRenderer({ data }) {
         <SvgText
           x={midX + textOffX}
           y={midY + textOffY}
-          fontSize={10}
+          fontSize={fz(10)}
           fontWeight="600"
           fill={DIM_TEXT_COLOR}
           textAnchor={textAnchor}

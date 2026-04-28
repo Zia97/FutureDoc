@@ -4,17 +4,22 @@ import {
   Text,
   ScrollView,
   StyleSheet,
-  ActivityIndicator,
   StatusBar,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Line, G, Text as SvgText } from 'react-native-svg';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { useTheme } from '../../context/ThemeContext';
 import { useAuth } from '../../context/AuthContext';
 import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
+import {
+  AnalyticsCard,
+  AnalyticsEmptyState,
+  AnalyticsInsight,
+  AnalyticsTile,
+  usePremiumAnalyticsTheme,
+} from '../../components/premium/PremiumAnalyticsUI';
 import {
   getVRScaledScore,
   scoreColor,
@@ -298,15 +303,16 @@ function StatBar({ label, value, sub, color, barBg, textColor, mutedColor }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function VRAnalyticsScreen({ route, preloadedRows }) {
-  const { theme: t } = useTheme();
   const { user } = useAuth();
   const tests = route.params?.tests ?? [];
   const hasPreloaded = preloadedRows !== undefined;
+  const t = usePremiumAnalyticsTheme('VR');
+  const screenBg = hasPreloaded ? 'transparent' : t.bgInput;
 
   const [rows, setRows] = useState(hasPreloaded ? preloadedRows : null);
   const [loading, setLoading] = useState(!hasPreloaded);
   const [error, setError] = useState(null);
-  const [chartWidth, setChartWidth] = useState(320);
+  const [chartWidth, setChartWidth] = useState(280);
 
   const load = useCallback(async () => {
     if (hasPreloaded) return;
@@ -346,50 +352,56 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
 
   if (loading) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <ActivityIndicator size="large" color={t.accent} />
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        loading
+        title="Loading VR analytics"
+        message="Fetching your latest Verbal Reasoning attempts."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   if (error) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={[styles.emptyText, { color: t.textSecondary }]}>
-          Couldn't load analytics. Pull down or come back later.
-        </Text>
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        icon="wifi-off"
+        title="Couldn't load analytics"
+        message="Pull down or come back later."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   if (!user) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={[styles.emptyTitle, { color: t.text }]}>Sign in to see analytics</Text>
-        <Text style={[styles.emptyText, { color: t.textSecondary }]}>
-          Performance analytics are tied to your account so they survive reinstall and
-          sync across devices.
-        </Text>
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        icon="user"
+        title="Sign in to see analytics"
+        message="Performance analytics are tied to your account so they survive reinstall and sync across devices."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   if (stats.attemptCount === 0) {
     return (
-      <View style={[styles.centered, { backgroundColor: t.bgInput }]}>
-        <Text style={[styles.emptyTitle, { color: t.text }]}>No data yet</Text>
-        <Text style={[styles.emptyText, { color: t.textSecondary }]}>
-          Complete a timed Verbal Reasoning test to start building your performance
-          analytics.
-        </Text>
-      </View>
+      <AnalyticsEmptyState
+        t={t}
+        icon="book"
+        title="No VR data yet"
+        message="Complete a timed Verbal Reasoning test to start building your performance analytics."
+        backgroundColor={screenBg}
+      />
     );
   }
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['bottom']}>
+    <SafeAreaView style={[styles.container, { backgroundColor: screenBg }]} edges={['bottom']}>
       <StatusBar barStyle={t.statusBar} />
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Headline tiles — Average and Best are estimated UCAT scaled scores
             (300–900), matching what students see on the post-test results
             screen. Both are colour-coded against the 2025 mean. The "(est.)"
@@ -414,7 +426,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
         {/* 2025 average comparison strip — gives the headline tiles context.
             "approx" wording so a student in the middle of the distribution
             doesn't read "+38" as a precise claim. */}
-        <View style={[styles.benchmarkStrip, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <View style={[styles.benchmarkStrip, { backgroundColor: t.accentDim, borderColor: t.border }]}>
           <Text style={[styles.benchmarkLabel, { color: t.textSecondary }]}>
             vs 2025 UK average ({VR_2025_MEAN})
           </Text>
@@ -424,9 +436,9 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
         </View>
 
         {/* Score trend */}
-        <View
-          style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}
-          onLayout={(e) => setChartWidth(e.nativeEvent.layout.width - 24)}
+        <AnalyticsCard
+          t={t}
+          onLayout={(e) => setChartWidth(Math.max(240, e.nativeEvent.layout.width - 36))}
         >
           <Text style={[styles.cardTitle, { color: t.text }]}>Score over time</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
@@ -453,10 +465,10 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
               </Text>
             );
           })()}
-        </View>
+        </AnalyticsCard>
 
         {/* Difficulty breakdown */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Accuracy by difficulty</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             How you perform on standard vs harder questions.
@@ -487,11 +499,11 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
               text={difficultyInsight(stats.difficulty.normal.value, stats.difficulty.hard.value)}
             />
           )}
-        </View>
+        </AnalyticsCard>
 
         {/* Pacing — placed before completion rate so students see how
             long they're taking before they see how many they leave blank. */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Pacing</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             Average time you're spending on each question.
@@ -537,10 +549,10 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
               )}
             </>
           )}
-        </View>
+        </AnalyticsCard>
 
         {/* Completion rate */}
-        <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Completion rate</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
             How often you finish every question before the timer runs out.
@@ -561,12 +573,12 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
               text={`You're leaving ~${stats.completion.unansweredAvg} questions blank per test. Try skipping long questions earlier so you have time to come back to them.`}
             />
           )}
-        </View>
+        </AnalyticsCard>
 
         {/* Estimation disclaimer — surfaced near the bottom of the screen
             so anyone scrolling through the analytics has read what these
             numbers actually mean before drawing conclusions. */}
-        <View style={[styles.disclaimerCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
+        <AnalyticsCard t={t} style={styles.disclaimerCard}>
           <Text style={[styles.disclaimerTitle, { color: t.text }]}>About these scores</Text>
           <Text style={[styles.disclaimerBody, { color: t.textSecondary }]}>
             {UCAT_SCORE_DISCLAIMER}
@@ -574,7 +586,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
           <Text style={[styles.disclaimerBody, { color: t.textSecondary, marginTop: 8 }]}>
             Read the full methodology in <Text style={{ fontWeight: '700' }}>About UCAT → Scoring</Text>.
           </Text>
-        </View>
+        </AnalyticsCard>
 
         <View style={{ height: 20 }} />
       </ScrollView>
@@ -583,12 +595,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
 }
 
 function Tile({ t, label, value, valueColor }) {
-  return (
-    <View style={[styles.tile, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-      <Text style={[styles.tileValue, { color: valueColor ?? t.text }]}>{value}</Text>
-      <Text style={[styles.tileLabel, { color: t.textSecondary }]}>{label}</Text>
-    </View>
-  );
+  return <AnalyticsTile t={t} label={label} value={value} valueColor={valueColor} />;
 }
 
 // Formats the delta from the user's average to the 2025 UK mean.
@@ -602,11 +609,7 @@ function benchmarkDelta(userAvg, mean) {
 }
 
 function Insight({ t, text }) {
-  return (
-    <View style={[styles.insight, { backgroundColor: t.accentDim, borderColor: t.accent }]}>
-      <Text style={[styles.insightText, { color: t.text }]}>{text}</Text>
-    </View>
-  );
+  return <AnalyticsInsight t={t} text={text} />;
 }
 
 function difficultyInsight(normalPct, hardPct) {
@@ -626,7 +629,12 @@ function difficultyInsight(normalPct, hardPct) {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32 },
-  scroll: { padding: 16, gap: 14 },
+  scroll: {
+    paddingHorizontal: 20,
+    paddingTop: 2,
+    paddingBottom: 34,
+    gap: 14,
+  },
 
   tileRow: { flexDirection: 'row', gap: 10 },
   tile: {
@@ -638,20 +646,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tileValue: { fontSize: 22, fontWeight: '800' },
-  tileLabel: { fontSize: 11, marginTop: 4, fontWeight: '600', letterSpacing: 0.5 },
+  tileLabel: { fontSize: 11, marginTop: 4, fontWeight: '600', letterSpacing: 0 },
 
   benchmarkStrip: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    borderRadius: 12,
+    gap: 10,
+    paddingHorizontal: 15,
+    paddingVertical: 13,
+    borderRadius: 18,
     borderWidth: 1,
-    marginTop: -4,
+    flexWrap: 'wrap',
   },
-  benchmarkLabel: { fontSize: 12, fontWeight: '600' },
-  benchmarkValue: { fontSize: 14, fontWeight: '800' },
+  benchmarkLabel: { flex: 1, minWidth: 160, fontSize: 12, lineHeight: 17, fontWeight: '700' },
+  benchmarkValue: { fontSize: 14, lineHeight: 18, fontWeight: '900', textAlign: 'right' },
 
   percentileLine: {
     fontSize: 12,
@@ -662,13 +671,9 @@ const styles = StyleSheet.create({
   },
 
   disclaimerCard: {
-    borderRadius: 14,
-    borderWidth: 1,
-    padding: 16,
-    marginTop: 4,
-    opacity: 0.92,
+    marginTop: 2,
   },
-  disclaimerTitle: { fontSize: 13, fontWeight: '700', marginBottom: 8 },
+  disclaimerTitle: { fontSize: 14, fontWeight: '800', marginBottom: 8 },
   disclaimerBody: { fontSize: 12, lineHeight: 18 },
 
   card: {
@@ -676,8 +681,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 16,
   },
-  cardTitle: { fontSize: 16, fontWeight: '700' },
-  cardSub: { fontSize: 12, marginTop: 4 },
+  cardTitle: { fontSize: 17, lineHeight: 22, fontWeight: '900' },
+  cardSub: { fontSize: 13, lineHeight: 19, marginTop: 6 },
 
   chartWrap: { marginTop: 12, alignItems: 'center' },
 
@@ -689,8 +694,8 @@ const styles = StyleSheet.create({
   },
   barLabel: { fontSize: 13, fontWeight: '600' },
   barValue: { fontSize: 13, fontWeight: '700' },
-  barTrack: { height: 8, borderRadius: 4, overflow: 'hidden' },
-  barFill: { height: '100%', borderRadius: 4 },
+  barTrack: { height: 9, borderRadius: 999, overflow: 'hidden' },
+  barFill: { height: '100%', borderRadius: 999 },
 
   completionRow: {
     flexDirection: 'row',
