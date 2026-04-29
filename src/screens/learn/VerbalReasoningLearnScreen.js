@@ -24,10 +24,11 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { VR_LEARN_STORAGE_KEY } from '../../data/learn/vrLearningStorage';
 
 const PREMIUM_LESSON_TYPES = new Set(['Strategy', 'Traps', 'Worked example']);
 
-export const STORAGE_KEY = '@futuredoc/vr_learning_completed_lessons';
+export const STORAGE_KEY = VR_LEARN_STORAGE_KEY;
 
 export const MODULES = [
   {
@@ -1459,6 +1460,191 @@ export const MODULES = [
     ],
   },
   {
+    id: 'examples',
+    title: 'Worked Examples',
+    description: 'See the VR method applied to a real passage and question. Read, answer, then study the breakdown.',
+    icon: 'notes',
+    accentKey: 'mint',
+    lessons: [
+      {
+        id: 'tfct-example-supported',
+        title: 'T/F/CT worked example 1',
+        subtitle: 'A True / False / Can’t Tell statement to evaluate using passage evidence alone.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'check',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'True / False / Can’t Tell',
+            body: 'Read the passage and decide whether the statement is supported, contradicted, or not settled by the text. Commit to your answer first — the breakdown afterwards walks through the full method.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'tfct-example-contradiction',
+        title: 'T/F/CT worked example 2',
+        subtitle: 'Another True / False / Can’t Tell statement to evaluate against the passage.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'flag',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'True / False / Can’t Tell',
+            body: 'Read the passage and decide whether the statement is supported, contradicted, or not settled by the text. Pay close attention to whether the passage actively addresses the statement’s topic. The breakdown follows once you commit.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'tfct-example-cant-tell',
+        title: 'T/F/CT worked example 3',
+        subtitle: 'A True / False / Can’t Tell statement to evaluate carefully against the passage.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'shield-heart',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'True / False / Can’t Tell',
+            body: 'Read the passage and decide whether the statement is supported, contradicted, or not settled by the text. Watch the scope of the statement against what the passage actually covers. The breakdown follows your answer.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'detail-example',
+        title: 'Direct detail worked example',
+        subtitle: 'Locate a specific fact inside a passage that contains several similar-looking values.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'search',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: direct detail',
+            body: 'A fact-finding question. Read the stem carefully, anchor on the most distinctive word, and pick the option the passage supports exactly. Commit to an answer first; the audit follows.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'detail-paraphrase-example',
+        title: 'Detail with paraphrase worked example',
+        subtitle: 'Several options describe the same idea in different words. Pick the one that matches the passage faithfully.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'filter',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: detail with paraphrase',
+            body: 'Read the passage, then choose the option that best restates what it actually says. Compare options closely against the passage’s wording. The breakdown comes after you commit.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'inference-example',
+        title: 'Inference worked example',
+        subtitle: 'Pick the conclusion the passage best supports.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'compass',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: inference',
+            body: 'Read the passage and decide which option is most justified by the evidence. Try to trace the reasoning chain in the passage before you answer. The breakdown follows.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'inference-causation-example',
+        title: 'Inference from study data worked example',
+        subtitle: 'A passage describes a study with mixed evidence. Pick the conclusion the passage best supports.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'flame',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: inference from study data',
+            body: 'Read the passage and choose the option most consistent with the evidence and the language the authors actually use. Pay attention to how strongly each option phrases the relationship. The breakdown follows your answer.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'author-example-stance',
+        title: 'Author opinion worked example 1',
+        subtitle: 'Identify the view the author of the passage holds.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'person-cog',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: author’s opinion',
+            body: 'Read the passage and decide which option best captures the author’s own view. Look closely at evaluative language and where it sits in the passage. The breakdown follows once you commit.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'author-example-reported-speech',
+        title: 'Author opinion worked example 2',
+        subtitle: 'A passage with multiple voices. Identify the view the author actually holds.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'notes',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: author’s opinion with quoted voices',
+            body: 'Read the passage and decide which option best captures the author’s own view. Track who is making each claim — not every voice in a passage is the author’s. The breakdown follows your answer.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'negative-stem-example',
+        title: 'EXCEPT / negative stem worked example',
+        subtitle: 'A question that asks which option is NOT supported by the passage.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'flag',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: EXCEPT / negative stem',
+            body: 'The stem reverses the task — you are looking for the option the passage does not support. Read the stem carefully before scanning. The breakdown follows your answer.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+      {
+        id: 'mixed-trap-example',
+        title: 'Detail with multiple figures worked example',
+        subtitle: 'A passage with several numbers tied to different scopes. Match the value the question actually asks for.',
+        duration: '3 min',
+        type: 'Worked example',
+        icon: 'list',
+        steps: [
+          {
+            kind: 'workedExampleLaunch',
+            title: 'Multiple choice: detail with multiple figures',
+            body: 'A fact-finding question where every option corresponds to a real number in the passage. Make sure your choice matches the value, the location, and the time period the question is asking about. The breakdown follows.',
+            buttonLabel: 'Start worked example',
+          },
+        ],
+      },
+    ],
+  },
+  {
     id: 'optional',
     title: 'Optional Add-ons',
     description: 'Targeted support for specific situations. Take it or skip it.',
@@ -1515,655 +1701,6 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'Lexical coverage builds gradually. Logging unfamiliar words during practice and reviewing them later raises your coverage in the topic areas UCAT favours.',
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 'examples',
-    title: 'Worked Examples',
-    description: 'See the VR method applied step by step before trying it alone.',
-    icon: 'notes',
-    accentKey: 'mint',
-    lessons: [
-      {
-        id: 'tfct-example-supported',
-        title: 'T/F/CT worked example: clearly supported',
-        subtitle: 'A clean True case anchored in direct passage evidence.',
-        duration: '2 min',
-        type: 'Worked example',
-        icon: 'check',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"Northfield Library extended weekday opening hours in 2024 after a six-month trial. The trial showed strong demand from students preparing for evening exams."',
-          },
-          {
-            title: 'Statement',
-            body: '"Northfield Library extended its weekday opening hours in 2024."',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: T/F/CT. Predicted shape: direct support. The statement matches the wording of the passage almost word-for-word.',
-          },
-          {
-            title: 'Find the anchor',
-            body: 'Anchor on "weekday opening hours" and "2024". Both appear in the first sentence of the passage.',
-          },
-          {
-            title: 'Read locally',
-            body: 'The first sentence says weekday hours were extended in 2024. That is exactly what the statement claims.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              'True - directly supported. Correct.',
-              'False - rejected. The passage does not contradict the statement.',
-              "Can't Tell - rejected. The passage does give enough evidence.",
-            ],
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'When the statement matches the passage almost word-for-word, True is usually safe.',
-              'You should still verify the anchor before locking in.',
-              'Do not over-think clean support cases - they are designed to be accessible marks.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'tfct-example-contradiction',
-        title: 'T/F/CT worked example: clear contradiction',
-        subtitle: 'A False case where the passage explicitly says otherwise.',
-        duration: '2 min',
-        type: 'Worked example',
-        icon: 'flag',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"Northfield Library extended weekday opening hours in 2024. Weekend opening hours remained unchanged."',
-          },
-          {
-            title: 'Statement',
-            body: '"Northfield Library increased weekend opening hours in 2024."',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: T/F/CT. Predicted shape: contradiction. The statement is about weekends; the passage explicitly says weekends remained unchanged.',
-          },
-          {
-            title: 'Find the anchor',
-            body: 'Anchor on "weekend". It appears once, in the second sentence.',
-          },
-          {
-            title: 'Read locally',
-            body: '"Weekend opening hours remained unchanged." This directly contradicts "increased weekend opening hours".',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              'True - rejected. The passage contradicts the claim.',
-              'False - directly contradicted. Correct.',
-              "Can't Tell - rejected. The passage does say something about weekends.",
-            ],
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'False requires actual contradiction, not just absence.',
-              'When the passage explicitly addresses the topic and says the opposite, False is correct.',
-              'Read for the exact noun: "weekday" and "weekend" are both used and must not be confused.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'tfct-example-cant-tell',
-        title: "T/F/CT worked example: genuine Can't Tell",
-        subtitle: "When the passage simply does not settle the claim.",
-        duration: '2 min',
-        type: 'Worked example',
-        icon: 'shield-heart',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"A pilot scheme reduced waiting times in three clinics in the north of the country. Officials called the results encouraging."',
-          },
-          {
-            title: 'Statement',
-            body: '"The scheme would reduce waiting times across the whole country."',
-          },
-          {
-            title: 'Classify and predict',
-            body: "Family: T/F/CT. Predicted shape: scope mismatch trap. The passage covers three clinics; the statement extrapolates to the whole country.",
-          },
-          {
-            title: 'Apply default-to-CT',
-            body: "Ask: can I argue this is True without adding assumptions? No. Can I argue it is False without adding assumptions? Also no. The passage does not justify or contradict the country-wide claim.",
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              'True - rejected. Three clinics is not "the whole country".',
-              "False - rejected. The passage does not say the scheme would fail elsewhere.",
-              "Can't Tell - the passage does not address country-wide impact. Correct.",
-            ],
-          },
-          {
-            kind: 'trap',
-            title: 'Trap label: scope mismatch',
-            body: 'A correct fact about a smaller area does not extend to a larger area. This is one of the most common reasons students wrongly pick True.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              "If the statement extrapolates beyond the passage's scope, default to Can't Tell.",
-              'Sounding plausible is not enough; the passage must support it.',
-              'When you find yourself building a multi-step justification, the answer is usually CT.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'detail-example',
-        title: 'Direct detail worked example',
-        subtitle: 'Clean retrieval from a single, clearly anchored line.',
-        duration: '2 min',
-        type: 'Worked example',
-        icon: 'search',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"The east wing of the National Museum reopened in 2018, after two years of structural repairs that had begun in 2016."',
-          },
-          {
-            title: 'Question',
-            body: 'According to the passage, when did the east wing reopen?',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: direct detail. Predicted shape: simple retrieval. Anchor on a year.',
-          },
-          {
-            title: 'Find the anchor',
-            body: '"east wing" and "2018" both appear in the same sentence. Match found.',
-          },
-          {
-            title: 'Read locally',
-            body: 'The passage states the east wing reopened in 2018, after repairs that started in 2016.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"In 2016" - rejected. 2016 is when repairs began, not when the wing reopened. Almost-right trap.',
-              '"In 2018" - directly supported. Correct.',
-              '"After a refurbishment that took longer than planned" - rejected. The passage does not say repairs ran late.',
-              '"Shortly before the west wing opened" - rejected. The west wing is not mentioned.',
-            ],
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'Anchor on the most distinctive word in the stem (here, "east wing" or "reopened").',
-              'Read the whole sentence, not just the keyword - 2016 and 2018 both appear and must not be confused.',
-              'Almost-right traps are common in detail questions: same kind of fact, wrong value.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'detail-paraphrase-example',
-        title: 'Detail worked example: paraphrase trap',
-        subtitle: 'Same idea, different words - but watch for distortion.',
-        duration: '2 min',
-        type: 'Worked example',
-        icon: 'filter',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"In some districts, attendance at adult education classes rose moderately during the pilot year, although other districts saw no change."',
-          },
-          {
-            title: 'Question',
-            body: 'According to the passage, the pilot year saw...',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: direct detail with paraphrase. Predicted trap: synonym/paraphrase distortion - options that change "some" to "most" or "moderate" to "sharp".',
-          },
-          {
-            title: 'Find the anchor',
-            body: 'Anchor on "districts" and "pilot year". The passage describes mixed results.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"a sharp rise in attendance across districts" - rejected. Strength shift ("sharp" vs "moderately") AND scope shift ("across" vs "some").',
-              '"moderate increases in some districts but no change in others" - directly supported. Correct.',
-              '"declines in attendance" - rejected. Direct contradiction.',
-              '"identical results in every district" - rejected. The passage explicitly contrasts districts.',
-            ],
-          },
-          {
-            kind: 'trap',
-            title: 'Trap label: synonym / paraphrase distortion',
-            body: 'The wrong option matched on the topic and the year, but inflated "moderate" into "sharp" and "some" into "across". Two small words is enough to make an option wrong.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'When two options share the same idea, compare the smallest words first.',
-              'A correct paraphrase preserves both topic AND strength.',
-              'If you have to soften or harden the passage to make an option work, it is wrong.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'inference-example',
-        title: 'Inference worked example: moderate inference',
-        subtitle: 'A cautious conclusion the passage genuinely supports.',
-        duration: '3 min',
-        type: 'Worked example',
-        icon: 'compass',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"When online booking opened, evening slots filled fastest. The service also kept phone booking available, and older patients used the phone line more often than younger patients."',
-          },
-          {
-            title: 'Question',
-            body: 'Which inference is most justified?',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: inference. Predicted shape: moderate, evidence-linked conclusion. Watch for options that go too far.',
-          },
-          {
-            title: 'Trace the chain',
-            body: 'Clue: phone booking is still available. Connection: older patients use it more often. Conclusion: some patients continued to use phone booking. The chain holds.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"All older patients prefer phone booking" - rejected. "All" overshoots "more often than".',
-              '"Some patients continued to use phone booking despite online being available" - directly supported. Correct.',
-              '"Patient satisfaction with online booking was high" - rejected. Satisfaction is never mentioned.',
-              '"The clinic plans to remove phone booking" - rejected. The passage says the opposite.',
-            ],
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'Moderate inferences win. Extreme ones overshoot.',
-              'Trace the clue → connection → conclusion chain. If you cannot, the inference is too loose.',
-              'Beware of plausible real-world claims (satisfaction levels, future plans) that the passage never addresses.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'inference-causation-example',
-        title: 'Inference worked example: causation trap',
-        subtitle: 'Spot the option that upgrades correlation into cause.',
-        duration: '3 min',
-        type: 'Worked example',
-        icon: 'flame',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"A study found that patients who slept more than seven hours a night recovered from minor surgery faster than those who slept less. Researchers noted that other lifestyle factors were not controlled."',
-          },
-          {
-            title: 'Question',
-            body: 'Which conclusion is most justified by the passage?',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: inference. Predicted trap: causation vs correlation. The passage describes a correlation and explicitly notes lifestyle factors were not controlled.',
-          },
-          {
-            title: 'Trace the chain',
-            body: 'Clue: a correlation between sleep length and recovery speed. Connection: the researchers themselves flag confounders. Conclusion: a relationship exists, but cause is uncertain.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"Sleep directly causes faster recovery" - rejected. Causation/correlation trap. The passage does not justify "causes".',
-              '"Patients who slept more recovered faster, though cause is uncertain" - directly supported. Correct.',
-              '"Sleep has no effect on recovery" - rejected. The passage shows a correlation.',
-              '"All patients should sleep eight hours" - rejected. Prescriptive advice not in the passage.',
-            ],
-          },
-          {
-            kind: 'trap',
-            title: 'Trap label: causation vs correlation',
-            body: 'The most common inference trap. The passage shows two things move together; the wrong option claims one causes the other. Even more obvious when researchers themselves flag uncontrolled factors.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'Watch for "causes", "leads to", "produces" in options when the passage only describes a relationship.',
-              'When researchers note uncontrolled factors, take that seriously - it is a signal that causation is not proven.',
-              'The right answer often preserves uncertainty using mitigating words ("though cause is uncertain").',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'author-example-stance',
-        title: 'Author opinion worked example: final-paragraph-first',
-        subtitle: 'Use the closing paragraph to lock in the writer\'s stance.',
-        duration: '3 min',
-        type: 'Worked example',
-        icon: 'person-cog',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage (abridged)',
-            body: '"Two proposals were considered. Both involved restructuring the agency. The first relied on cross-training existing staff; the second hired external consultants at significant expense. The second option, ultimately, is costly, reactive, and politically convenient rather than effective."',
-          },
-          {
-            title: 'Question',
-            body: 'Which view does the author most likely hold?',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: author opinion. Apply final-paragraph-first technique - read the closing sentence to identify stance.',
-          },
-          {
-            title: 'Read the final line',
-            body: '"The second option is costly, reactive, and politically convenient rather than effective." Three negative descriptors in a row. The author is plainly critical of option two.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"The author supports the second proposal" - rejected. The closing line is openly critical.',
-              '"The author is critical of the second proposal" - directly supported. Correct.',
-              '"The author has no view" - rejected. Strong evaluative language is present.',
-              '"The author supports neither proposal" - rejected. The passage does not criticise the first.',
-            ],
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'For author/writer questions, read the final paragraph first.',
-              'Three or more evaluative descriptors in a row is a strong stance signal.',
-              'Stance questions are decided by tone, not by counting facts on each side.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'author-example-reported-speech',
-        title: 'Author opinion worked example: reported-speech trap',
-        subtitle: 'A quoted critic is not the author.',
-        duration: '3 min',
-        type: 'Worked example',
-        icon: 'notes',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"The new reporting policy has been welcomed by many in the profession. One vocal opponent, Dr Hayes, called it \'a bureaucratic disaster\'. The author of this article notes that early data on compliance is encouraging."',
-          },
-          {
-            title: 'Question',
-            body: "What is the author's overall stance?",
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: author opinion. Predicted trap: reported speech. A loud quoted view (Dr Hayes) might tempt you, but it is not the author\'s view.',
-          },
-          {
-            title: 'Separate author from source',
-            body: 'Dr Hayes calls it "a bureaucratic disaster" - that is Dr Hayes\' view, not the author\'s. The author themselves describes early data as "encouraging".',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"The author thinks the policy is a bureaucratic disaster" - rejected. That is Dr Hayes, not the author. Reported-speech trap.',
-              '"The author is broadly supportive of the policy" - directly supported. Correct.',
-              '"The author has no view" - rejected. The author calls early data "encouraging".',
-              '"The author thinks the policy will fail" - rejected. The opposite of what the author says.',
-            ],
-          },
-          {
-            kind: 'trap',
-            title: 'Trap label: reported-speech',
-            body: 'A loud, quotable view from a named source is often the most memorable line in the passage - which is exactly why it is the trap. Always check who is speaking.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'A passage can quote a critic at length without agreeing with them.',
-              'Track who is making each claim. The author\'s own evaluation often comes after the quoted view.',
-              'Phrases like "the author of this article notes" or "in the writer\'s view" are direct stance signals.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'negative-stem-example',
-        title: 'Negative stem worked example',
-        subtitle: 'Three options are supported. Find the one that is not.',
-        duration: '2 min',
-        type: 'Worked example',
-        icon: 'flag',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"The hospital implemented four changes last year: a new triage protocol, electronic prescribing, expanded pharmacy hours, and weekly safety audits. A previously discussed proposal to outsource cleaning was dropped."',
-          },
-          {
-            title: 'Question',
-            body: 'All of the following changes occurred at the hospital EXCEPT...',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: negative stem (EXCEPT). Predicted shape: three options will be supported, one will fail. Find the failure.',
-          },
-          {
-            title: 'Tick each supported option',
-            bullets: [
-              '"A new triage protocol" - supported. Tick.',
-              '"Electronic prescribing" - supported. Tick.',
-              '"Expanded pharmacy hours" - supported. Tick.',
-              '"Outsourced cleaning" - dropped, not implemented. This is the EXCEPT answer.',
-            ],
-          },
-          {
-            title: 'Audit the options',
-            body: 'The dropped proposal looks like part of the list at first glance, but the passage explicitly says it was dropped. That is the unsupported option, which is what the negative stem asks for.',
-          },
-          {
-            kind: 'trap',
-            title: 'Trap label: misread negative stem',
-            body: 'The most common failure: students answer the positive version - they pick a supported option because it sounds correct. Re-read the stem before locking in.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'Re-read the stem once before you select. EXCEPT and NOT reverse the task.',
-              'Tick supported options. The unticked one is your answer.',
-              'Watch for items that appear in the passage but were rejected, dropped, or only proposed - they often hide here.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'mixed-trap-example',
-        title: 'Mixed-trap worked example',
-        subtitle: 'Scope mismatch and almost-right distractors stacked together.',
-        duration: '3 min',
-        type: 'Worked example',
-        icon: 'list',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'The passage below is intentionally short so we can demonstrate the method clearly. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'Passage',
-            body: '"The county council reported that traffic in the town centre fell by 12% during the trial of pedestrianised zones in 2022 and 2023. Surrounding villages saw no measurable change."',
-          },
-          {
-            title: 'Question',
-            body: 'Which conclusion is best supported by the passage?',
-          },
-          {
-            title: 'Classify and predict',
-            body: 'Family: inference / direct detail hybrid. Predicted traps: scope mismatch (town vs county) AND almost-right (12% vs other numbers).',
-          },
-          {
-            title: 'Find the anchors',
-            body: 'Anchor on "town centre", "12%", and "2022 and 2023". The passage explicitly limits the fall to the town centre.',
-          },
-          {
-            title: 'Audit the options',
-            bullets: [
-              '"Traffic in the county fell by 12%" - rejected. Scope mismatch: 12% applies only to the town centre, not the county.',
-              '"Town centre traffic fell by 12% during the trial period" - directly supported. Correct.',
-              '"Surrounding villages saw a 12% fall" - rejected. The passage says villages saw no change. Almost-right trap (correct number, wrong location).',
-              '"Traffic fell by 20% in the town centre" - rejected. Number swap.',
-            ],
-          },
-          {
-            kind: 'trap',
-            title: 'Trap labels: scope mismatch + almost-right + number swap',
-            body: 'Three distractors in this question each fail in a different way. Naming the trap on each rejected option - county vs town centre, villages vs town centre, 20% vs 12% - converts the question into three learning reps.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'When a question stacks multiple distractor shapes, slow down on the option audit.',
-              'A correct option must match scope, value, AND location simultaneously.',
-              'Label each rejected option with one of the nine trap categories - it cements the pattern.',
-            ],
-          },
-        ],
-      },
-      {
-        id: 'triage-example',
-        title: 'Passage-level triage worked example',
-        subtitle: 'When a dense passage threatens the rest of the section.',
-        duration: '3 min',
-        type: 'Worked example',
-        icon: 'timer',
-        steps: [
-          {
-            kind: 'rule',
-            title: 'Note on passage length',
-            body: 'This worked example is about timing strategy across the full section, so it does not include a passage itself. Real UCAT VR passages are roughly 200–400 words across 3–4 paragraphs, with 4 questions per passage and about 2 minutes to read and answer them.',
-          },
-          {
-            title: 'The scenario',
-            body: 'You are on passage 5 of 11 in your timed VR practice. The passage is unusually long, technical, and full of unfamiliar terms. You have already spent 90 seconds longer than your usual budget on this passage and have not yet locked in any of the 4 questions.',
-          },
-          {
-            title: 'The decision',
-            body: 'You have two choices. Option A: keep pushing on this passage, hoping to lock in the 4 marks. Option B: best-guess all 4 questions on this passage (with flags), and protect the time for passages 6-11.',
-          },
-          {
-            title: 'Why triage usually wins',
-            body: 'Sinking another 3-4 minutes into a single dense passage costs you the equivalent of 6-8 questions on later passages, where your accuracy will be much higher. Even if you triage all 4 questions blind (25% expected accuracy = 1 mark), the time saved usually wins you 4-6 marks elsewhere.',
-          },
-          {
-            title: 'The triage routine',
-            bullets: [
-              'Scan each of the 4 stems for any obvious anchor.',
-              'If an answer jumps out, take it. If not, best-guess.',
-              'Flag every triaged item.',
-              'Move to passage 6 with your time budget reset.',
-            ],
-          },
-          {
-            kind: 'rule',
-            title: 'Rule',
-            body: 'Triage is a strategic move, not failure. It protects the section as a whole. Top scorers use it deliberately on 1-2 passages out of 11 in some sittings.',
-          },
-          {
-            kind: 'mini',
-            prompt: 'You triage a passage with 4 questions. With 90 seconds to spare at the end, you revisit your flags. Which strategy is best?',
-            options: [
-              'Try to redo all 4 from scratch.',
-              'Pick the 1-2 questions where you have the best chance of finding the answer quickly. Leave the rest.',
-              'Change every triaged answer to a different letter.',
-            ],
-            correctIndex: 1,
-            explanation: 'You will not have time to redo all 4. Spend the bonus 90 seconds where the marginal return is highest - usually one or two stems with clear anchors. Random changes erase any value from your earlier guesses.',
-          },
-          {
-            kind: 'checklist',
-            title: 'Takeaway',
-            items: [
-              'Decide your triage trigger before the test (e.g. "if I am 90 seconds over budget on a passage").',
-              'Triage protects the section, not the individual passage.',
-              'Flag everything you triage so you can revisit if time allows.',
-              'Even random guesses are strictly better than blanks - no negative marking.',
-            ],
           },
         ],
       },

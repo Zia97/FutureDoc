@@ -298,6 +298,56 @@ function DemoLaunchCard({ title, body, buttonLabel, note, accent, colors, isDark
   );
 }
 
+function WorkedExampleLaunchCard({ title, body, buttonLabel, accent, colors, isDark, onLaunch, completed }) {
+  return (
+    <View
+      style={[
+        styles.demoCard,
+        {
+          backgroundColor: hexToRgba(accent, isDark ? 0.12 : 0.08),
+          borderColor: hexToRgba(accent, 0.5),
+        },
+      ]}
+    >
+      <View style={[styles.demoBadge, { backgroundColor: accent }]}>
+        <Text style={styles.demoBadgeText}>WORKED EXAMPLE</Text>
+      </View>
+      {title ? <Text style={[styles.demoTitle, { color: colors.text }]}>{title}</Text> : null}
+      {body ? <Text style={[styles.demoBody, { color: colors.textSecondary }]}>{body}</Text> : null}
+      <TouchableOpacity
+        activeOpacity={0.86}
+        onPress={onLaunch}
+        accessibilityRole="button"
+        style={[
+          styles.demoButton,
+          {
+            backgroundColor: accent,
+            borderColor: accent,
+            shadowColor: accent,
+          },
+        ]}
+      >
+        <PremiumIcon name={completed ? 'refresh' : 'play'} size={18} color="#FFFFFF" strokeWidth={2.4} />
+        <Text style={styles.demoButtonText}>
+          {completed ? 'Re-open worked example' : (buttonLabel ?? 'Open worked example')}
+        </Text>
+      </TouchableOpacity>
+      {completed ? (
+        <View style={styles.demoLaunchedRow}>
+          <PremiumIcon name="check" size={14} color={colors.mint} strokeWidth={2.8} />
+          <Text style={[styles.demoLaunchedText, { color: colors.mint }]}>
+            Worked example complete — you can continue
+          </Text>
+        </View>
+      ) : (
+        <Text style={[styles.demoNote, { color: colors.textMuted }]}>
+          Read the passage, answer the question, then study the breakdown — that's where the method is taught.
+        </Text>
+      )}
+    </View>
+  );
+}
+
 function ChecklistCard({ title, items, colors, isDark }) {
   return (
     <View
@@ -345,7 +395,7 @@ function StepCard({ step, index, accent, colors, isDark }) {
   );
 }
 
-function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, demoCtx) {
+function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, demoCtx, workedExampleCtx) {
   const kind = step.kind ?? 'step';
 
   if (kind === 'rule') {
@@ -439,6 +489,23 @@ function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, de
           launched={demoCtx?.launched}
           disabled={demoCtx?.disabled}
           onLaunch={() => demoCtx?.onLaunch?.(index)}
+        />
+      </View>
+    );
+  }
+
+  if (kind === 'workedExampleLaunch') {
+    return (
+      <View key={`worked-${index}`} style={index > 0 ? styles.blockSpacing : null}>
+        <WorkedExampleLaunchCard
+          title={step.title}
+          body={step.body}
+          buttonLabel={step.buttonLabel}
+          accent={accent}
+          colors={colors}
+          isDark={isDark}
+          completed={!!workedExampleCtx?.completed}
+          onLaunch={() => workedExampleCtx?.onLaunch?.()}
         />
       </View>
     );
@@ -569,7 +636,7 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
   const interactiveIndices = useMemo(
     () => lesson.steps.reduce((acc, step, i) => {
       const kind = step.kind ?? 'step';
-      if (kind === 'mini' || kind === 'demoLaunch') acc.push(i);
+      if (kind === 'mini' || kind === 'demoLaunch' || kind === 'workedExampleLaunch') acc.push(i);
       return acc;
     }, []),
     [lesson.steps],
@@ -578,12 +645,23 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
     () => lesson.steps.findIndex((step) => (step.kind ?? 'step') === 'demoLaunch'),
     [lesson.steps],
   );
+  const workedExampleLaunchIndex = useMemo(
+    () => lesson.steps.findIndex((step) => (step.kind ?? 'step') === 'workedExampleLaunch'),
+    [lesson.steps],
+  );
   const hasQuestions = interactiveIndices.length > 0;
   const [answeredIndices, setAnsweredIndices] = useState(new Set());
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
+  // Worked-example steps are "answered" when the user actually completes the
+  // example (lesson id is written to AsyncStorage from VRPassageScreen on
+  // answer commit). The lesson screen picks that up via useFocusEffect.
   const allQuestionsAnswered = !hasQuestions
     ? hasScrolledToBottom
-    : interactiveIndices.every((i) => answeredIndices.has(i));
+    : interactiveIndices.every((i) => {
+        const kind = lesson.steps[i].kind ?? 'step';
+        if (kind === 'workedExampleLaunch') return completed;
+        return answeredIndices.has(i);
+      });
 
   useFocusEffect(useCallback(() => {
     let mounted = true;
@@ -609,6 +687,19 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
     }
     navigation.navigate('VRPassage', { mode: 'tutorDemo' });
   }, [demoLaunchIndex, handleQuestionAnswered, navigation]);
+
+  const launchWorkedExample = useCallback(() => {
+    navigation.navigate('VRPassage', { mode: 'workedExample', exampleId: lesson.id });
+  }, [navigation, lesson.id]);
+
+  const workedExampleCtx = useMemo(
+    () => ({
+      visible: workedExampleLaunchIndex >= 0,
+      completed,
+      onLaunch: launchWorkedExample,
+    }),
+    [workedExampleLaunchIndex, completed, launchWorkedExample],
+  );
 
   // When the demo kill switch is off, auto-satisfy the demoLaunch step so
   // users aren't trapped on a disabled button. The card itself shows a
@@ -719,7 +810,7 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
             },
           ]}
         >
-          {lesson.steps.map((step, index) => renderBlock(step, index, accent, colors, isDark, handleQuestionAnswered, demoCtx))}
+          {lesson.steps.map((step, index) => renderBlock(step, index, accent, colors, isDark, handleQuestionAnswered, demoCtx, workedExampleCtx))}
         </View>
 
         <View style={styles.actionStack}>

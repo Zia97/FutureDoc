@@ -336,6 +336,11 @@ export default function AITutorModal({
 function QuestionContextCard({ context, colors, isDark }) {
   const { question, userAnswer, correctAnswer, explanation } = context;
 
+  const normalize = (v) => (v == null ? '' : String(v).trim().toLowerCase());
+  const userAnswered = normalize(userAnswer) !== '' && normalize(userAnswer) !== 'not answered';
+  const userIsCorrect = userAnswered && normalize(userAnswer) === normalize(correctAnswer);
+  const userAccent = userIsCorrect ? colors.mint : colors.red;
+
   return (
     <LinearGradient
       colors={
@@ -368,16 +373,16 @@ function QuestionContextCard({ context, colors, isDark }) {
           style={[
             styles.contextMarkBubble,
             {
-              borderColor: hexToRgba(colors.red, 0.55),
-              backgroundColor: hexToRgba(colors.red, isDark ? 0.18 : 0.12),
+              borderColor: hexToRgba(userAccent, 0.55),
+              backgroundColor: hexToRgba(userAccent, isDark ? 0.18 : 0.12),
             },
           ]}
         >
-          <Text style={[styles.contextMarkText, { color: colors.red }]}>✕</Text>
+          <Text style={[styles.contextMarkText, { color: userAccent }]}>{userIsCorrect ? '✓' : '✕'}</Text>
         </View>
         <View style={styles.contextAnswerTextWrap}>
           <Text style={[styles.contextAnswerHint, { color: colors.textMuted }]}>YOUR ANSWER</Text>
-          <Text style={[styles.contextAnswerText, { color: colors.red }]}>{userAnswer || '—'}</Text>
+          <Text style={[styles.contextAnswerText, { color: userAccent }]}>{userAnswer || '—'}</Text>
         </View>
       </View>
 

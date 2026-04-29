@@ -48,6 +48,10 @@ export default function PassageLayout({
   getItemIsFree = null,
   demoMode = false,
   onDemoExit = null,
+  demoTitle = null,
+  demoSubtitle = null,
+  demoExitLabel = null,
+  demoExitHint = null,
 }) {
   const navigation = useNavigation();
   const { isDark } = useTheme();
@@ -108,8 +112,8 @@ export default function PassageLayout({
   return (
     <PremiumQuestionScaffold panHandlers={demoMode ? null : panHandlers}>
       <QuestionTopBar
-        title={demoMode ? 'AI Tutor Demo' : screenTitle}
-        subtitle={demoMode ? 'Sample question' : 'Practice'}
+        title={demoMode ? (demoTitle ?? 'AI Tutor Demo') : screenTitle}
+        subtitle={demoMode ? (demoSubtitle ?? 'Sample question') : 'Practice'}
         accent={sectionColor}
         onExit={demoMode ? (onDemoExit ?? (() => navigation.goBack())) : () => navigation.goBack()}
       />
@@ -181,6 +185,8 @@ export default function PassageLayout({
           accent={sectionColor}
           colors={colors}
           isDark={isDark}
+          label={demoExitLabel}
+          hint={demoExitHint}
           onPress={() => (onDemoExit ? onDemoExit() : navigation.goBack())}
         />
       ) : (
@@ -199,15 +205,16 @@ export default function PassageLayout({
   );
 }
 
-function DemoBackBar({ accent, colors, isDark, onPress }) {
+function DemoBackBar({ accent, colors, isDark, onPress, label, hint }) {
   const insets = useSafeAreaInsets();
+  const buttonLabel = label ?? 'Done — back to lesson';
   return (
     <View style={[demoBarStyles.wrap, { paddingBottom: Math.max(insets.bottom, 8) + 8 }]}>
       <TouchableOpacity
         activeOpacity={0.86}
         onPress={onPress}
         accessibilityRole="button"
-        accessibilityLabel="Done — back to lesson"
+        accessibilityLabel={buttonLabel}
         style={[
           demoBarStyles.button,
           {
@@ -218,11 +225,11 @@ function DemoBackBar({ accent, colors, isDark, onPress }) {
         ]}
       >
         <PremiumIcon name="check" size={18} color="#FFFFFF" strokeWidth={2.6} />
-        <Text style={demoBarStyles.buttonText}>Done — back to lesson</Text>
+        <Text style={demoBarStyles.buttonText}>{buttonLabel}</Text>
       </TouchableOpacity>
-      <Text style={[demoBarStyles.hint, { color: colors.textMuted }]}>
-        This sample doesn't use any of your AI credits.
-      </Text>
+      {hint ? (
+        <Text style={[demoBarStyles.hint, { color: colors.textMuted }]}>{hint}</Text>
+      ) : null}
     </View>
   );
 }

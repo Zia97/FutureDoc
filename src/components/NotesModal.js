@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
@@ -34,6 +35,7 @@ const SECTION_META = {
 export default function NotesModal({ visible, sectionKey, onClose }) {
   const { isDark } = useTheme();
   const { multiplier } = useTextSize();
+  const insets = useSafeAreaInsets();
   const premium = getPremiumTheme(isDark);
   const c = premium.colors;
 
@@ -113,7 +115,7 @@ export default function NotesModal({ visible, sectionKey, onClose }) {
             colors={cardGradient}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
-            style={[styles.card, { borderColor: c.border, shadowColor: accent }]}
+            style={[styles.card, { borderColor: c.border, shadowColor: accent, paddingBottom: 28 + insets.bottom }]}
           >
             <Pressable
               onPress={handleClose}
