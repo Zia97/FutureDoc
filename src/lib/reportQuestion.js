@@ -1,5 +1,6 @@
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
+import { reportError } from './reportError';
 
 export const REPORT_REASONS = [
   { id: 'wrong_answer',        label: 'Wrong answer' },
@@ -60,7 +61,8 @@ export async function submitQuestionReport({
   });
 
   if (error) {
-    return { ok: false, error: error.message };
+    reportError('submitQuestionReport', error, { extra: { questionId, section } });
+    return { ok: false, error: 'Could not submit your report. Please try again.' };
   }
   return { ok: true };
 }
@@ -103,7 +105,8 @@ export async function submitLessonReport({
   });
 
   if (error) {
-    return { ok: false, error: error.message };
+    reportError('submitLessonReport', error, { extra: { lessonId, section } });
+    return { ok: false, error: 'Could not submit your report. Please try again.' };
   }
   return { ok: true };
 }

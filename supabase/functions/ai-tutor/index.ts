@@ -8,6 +8,30 @@ import { getSectionPrompt, buildQuestionContext } from './prompt.ts';
 const FREE_LIFETIME_LIMIT = 5;
 // Premium users get unlimited access (no daily cap)
 
+// Hard caps on what the client may send. Anything over these is rejected
+// before the body is forwarded to the LLM, so a single user cannot rack up
+// arbitrary token cost by sending huge payloads.
+const MAX_BODY_BYTES        = 32 * 1024;   // 32 KB whole request
+const MAX_PASSAGE_CHARS     = 8000;
+const MAX_QUESTION_CHARS    = 4000;
+const MAX_EXPLANATION_CHARS = 4000;
+const MAX_STIMULUS_CHARS    = 8000;        // JSON-stringified stimulusData
+const MAX_VENN_CHARS        = 4000;
+const MAX_MESSAGE_CHARS     = 2000;        // per chat message
+const MAX_MESSAGES          = 12;          // last N turns kept
+
+function tooLong(field: string, value: unknown, max: number): boolean {
+  if (value == null) return false;
+  const len = typeof value === 'string'
+    ? value.length
+    : JSON.stringify(value).length;
+  if (len > max) {
+    console.warn(`[ai-tutor] reject: ${field} length ${len} > ${max}`);
+    return true;
+  }
+  return false;
+}
+
 // ── Kill switches ─────────────────────────────────────────────────────────────
 // In-memory cache for app_kill_switches reads. Edge Function instances are
 // short-lived but shared across requests on a warm instance; a 60s TTL keeps
@@ -62,8 +86,67 @@ function json(body: unknown, status = 200) {
 function corsHeaders() {
   return {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'authorization, content-type',
+    'Access-Control-Allow-Headers': 'authorization, content-type, x-app-version, x-platform',
   };
+}
+
+// ── Version gate ─────────────────────────────────────────────────────────────
+// Server-side enforcement of the min-supported app version. Mirrors the
+// client-side appVersionGate.js check but cannot be bypassed by a modified
+// build — without the X-App-Version header (or with a too-old one), the
+// request is refused.
+
+function parseVersion(v: string | null | undefined): number[] | null {
+  if (typeof v !== 'string') return null;
+  const parts = v.trim().split('.').map((p) => parseInt(p, 10));
+  if (parts.length !== 3 || parts.some((n) => Number.isNaN(n) || n < 0)) return null;
+  return parts;
+}
+
+function versionLower(a: number[], b: number[]): boolean {
+  for (let i = 0; i < 3; i++) {
+    if (a[i] < b[i]) return true;
+    if (a[i] > b[i]) return false;
+  }
+  return false;
+}
+
+const versionCache = new Map<string, { min: string; fetchedAt: number }>();
+const VERSION_CACHE_TTL_MS = 60_000;
+
+async function isAppVersionSupported(
+  client: ReturnType<typeof createClient>,
+  platform: string | null,
+  appVersion: string | null,
+): Promise<boolean> {
+  // Permissive only when the client clearly isn't a UCAT Genius app build —
+  // e.g. a non-mobile platform we never shipped to. Real builds always send
+  // X-App-Version. Missing version on ios/android fails closed.
+  if (!platform) return true;
+  if (platform !== 'ios' && platform !== 'android') return true;
+
+  const current = parseVersion(appVersion);
+  if (!current) return false;
+
+  const cached = versionCache.get(platform);
+  let minVersion: string | undefined = cached?.min;
+  if (!cached || Date.now() - cached.fetchedAt > VERSION_CACHE_TTL_MS) {
+    const { data } = await client
+      .from('app_version_requirements')
+      .select('min_supported_version')
+      .eq('platform', platform)
+      .single();
+    const fetched = data?.min_supported_version;
+    if (typeof fetched === 'string') {
+      minVersion = fetched;
+      versionCache.set(platform, { min: fetched, fetchedAt: Date.now() });
+    }
+  }
+  if (!minVersion) return true; // fail open if the row is missing
+
+  const min = parseVersion(minVersion);
+  if (!min) return true;
+  return !versionLower(current, min);
 }
 
 // ── Main handler ──────────────────────────────────────────────────────────────
@@ -73,6 +156,14 @@ Deno.serve(async (req) => {
   }
 
   console.log('[ai-tutor] env check — AI_PROVIDER:', Deno.env.get('AI_PROVIDER') ?? '(not set)', '| OPENAI_API_KEY present:', !!Deno.env.get('OPENAI_API_KEY'));
+
+  // 0. Reject oversized requests before parsing the body. Content-Length is
+  // a hint, not a guarantee, but it catches the obvious cost-amplification
+  // case (gigantic stimulus / passage / messages payload).
+  const declaredLen = Number(req.headers.get('Content-Length') ?? 0);
+  if (declaredLen > MAX_BODY_BYTES) {
+    return json({ error: 'payload_too_large', limit: MAX_BODY_BYTES }, 413);
+  }
 
   // 1. Auth
   const authHeader = req.headers.get('Authorization');
@@ -88,6 +179,16 @@ Deno.serve(async (req) => {
   );
   if (authError || !user) return json({ error: 'Unauthorized', detail: authError?.message ?? 'no user' }, 401);
 
+  // 1a. Server-side min-version gate. A modified build that strips the
+  // client-side appVersionGate cannot bypass this — the request is refused
+  // unless the X-App-Version header satisfies app_version_requirements.
+  const platform   = req.headers.get('X-Platform');
+  const appVersion = req.headers.get('X-App-Version');
+  const versionOk  = await isAppVersionSupported(supabase, platform, appVersion);
+  if (!versionOk) {
+    return json({ error: 'app_update_required' }, 426);
+  }
+
   // 1b. Global kill switch — disables the tutor for everyone (paid + demo).
   // Flip via Supabase Studio: UPDATE app_kill_switches SET enabled = false
   // WHERE key = 'ai_tutor_enabled'; takes effect within ~60–120s.
@@ -96,7 +197,18 @@ Deno.serve(async (req) => {
     return json({ error: 'tutor_disabled' }, 503);
   }
 
-  // 2. Parse body
+  // 2. Parse body. Re-measure after parsing in case Content-Length lied,
+  // and reject any individual field that's blown past its cap.
+  const rawBody = await req.text();
+  if (rawBody.length > MAX_BODY_BYTES) {
+    return json({ error: 'payload_too_large', limit: MAX_BODY_BYTES }, 413);
+  }
+  let parsed;
+  try {
+    parsed = JSON.parse(rawBody);
+  } catch {
+    return json({ error: 'invalid_json' }, 400);
+  }
   const {
     questionId,
     question,
@@ -127,7 +239,36 @@ Deno.serve(async (req) => {
     isTimed?: boolean;
     isDemo?: boolean;
     messages: ChatMessage[];
-  } = await req.json();
+  } = parsed;
+
+  if (
+    tooLong('question', question, MAX_QUESTION_CHARS) ||
+    tooLong('explanation', explanation, MAX_EXPLANATION_CHARS) ||
+    tooLong('passage', passage, MAX_PASSAGE_CHARS) ||
+    tooLong('stimulusData', stimulusData, MAX_STIMULUS_CHARS) ||
+    tooLong('vennDiagrams', vennDiagrams, MAX_VENN_CHARS)
+  ) {
+    return json({ error: 'field_too_large' }, 413);
+  }
+
+  // Cap message history: keep at most the last MAX_MESSAGES turns and
+  // truncate any single message to MAX_MESSAGE_CHARS. This protects against
+  // a long-running chat being padded out into an expensive context window.
+  const safeMessages: ChatMessage[] = Array.isArray(messages)
+    ? messages
+        .slice(-MAX_MESSAGES)
+        .map((m) => ({
+          role: m.role,
+          content: typeof m.content === 'string'
+            ? m.content.slice(0, MAX_MESSAGE_CHARS)
+            : '',
+        }))
+        .filter((m) => m.content.length > 0)
+    : [];
+
+  if (safeMessages.length === 0) {
+    return json({ error: 'no_messages' }, 400);
+  }
 
   // 2b. Demo-only kill switch — disables only the in-lesson free demo while
   // paid users keep unlimited access. Flip via Studio: UPDATE
@@ -140,7 +281,7 @@ Deno.serve(async (req) => {
   }
 
   // 3. Check subscription tier + admin status + ban status
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile } = await supabase
     .from('user_profiles')
     .select('is_premium, is_admin, ai_banned')
     .eq('user_id', user.id)
@@ -153,41 +294,25 @@ Deno.serve(async (req) => {
   // Unlimited access for RevenueCat subscribers OR admins
   const isPremium = !!(profile?.is_premium || profile?.is_admin);
 
-  // 4. Enforce usage limits
-  const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-
-  const { data: usage } = await supabase
-    .from('user_ai_usage')
-    .select('lifetime_count, daily_count, daily_reset_at')
-    .eq('user_id', user.id)
-    .single();
-
-  // Demo messages from the in-lesson AI tutor sample don't deplete the free
-  // lifetime quota and aren't gated by it. They still go through auth + ban
-  // checks above and are still logged below.
-  if (isDemo) {
-    // no usage upsert
-  } else if (isPremium) {
-    // Premium users have unlimited AI Tutor access — just track usage for analytics
-    await supabase.from('user_ai_usage').upsert({
-      user_id: user.id,
-      lifetime_count: (usage?.lifetime_count ?? 0) + 1,
-      daily_count: (usage?.daily_count ?? 0) + 1,
-      daily_reset_at: usage?.daily_reset_at ?? today,
-    });
-  } else {
-    const currentLifetime = usage?.lifetime_count ?? 0;
-
-    if (currentLifetime >= FREE_LIFETIME_LIMIT) {
+  // 4. Enforce usage limits via the atomic increment_ai_usage RPC.
+  // Returns -1 when the cap is hit, the new lifetime_count otherwise.
+  // This closes the SELECT-then-UPSERT race on the free-tier limit.
+  if (!isDemo) {
+    const { data: incremented, error: incErr } = await supabase.rpc(
+      'increment_ai_usage',
+      {
+        p_user_id:   user.id,
+        p_limit:     FREE_LIFETIME_LIMIT,
+        p_unlimited: isPremium,
+      },
+    );
+    if (incErr) {
+      console.error('[ai-tutor] increment_ai_usage failed:', incErr.message);
+      return json({ error: 'usage_check_failed' }, 500);
+    }
+    if (incremented === -1) {
       return json({ error: 'lifetime_limit_reached', limit: FREE_LIFETIME_LIMIT }, 429);
     }
-
-    await supabase.from('user_ai_usage').upsert({
-      user_id: user.id,
-      lifetime_count: currentLifetime + 1,
-      daily_count: (usage?.daily_count ?? 0),
-      daily_reset_at: usage?.daily_reset_at ?? today,
-    });
   }
 
   // 5. Fetch user context (top struggles)
@@ -229,7 +354,7 @@ Deno.serve(async (req) => {
   });
 
   // 8. Log the user's message for abuse monitoring
-  const lastUserMsg = messages.filter((m: ChatMessage) => m.role === 'user').pop();
+  const lastUserMsg = safeMessages.filter((m: ChatMessage) => m.role === 'user').pop();
   if (lastUserMsg?.content) {
     const { error: logError } = await supabase.from('ai_tutor_logs').insert({
       user_id: user.id,
@@ -247,7 +372,7 @@ Deno.serve(async (req) => {
   const provider = getProvider();
   let aiResponse: Response;
   try {
-    aiResponse = await provider.chat(systemPrompt, messages);
+    aiResponse = await provider.chat(systemPrompt, safeMessages);
   } catch (err) {
     console.error('[ai-tutor] provider error:', err);
     return json({ error: 'provider_error', detail: String(err) }, 500);

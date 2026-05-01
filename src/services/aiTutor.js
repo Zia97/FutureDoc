@@ -1,7 +1,10 @@
+import { Platform } from 'react-native';
+import Constants from 'expo-constants';
 import { supabase } from '../lib/supabase';
 import { getIsOnline } from '../context/NetworkContext';
 
 const FUNCTION_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/ai-tutor`;
+const APP_VERSION  = Constants.expoConfig?.version ?? '0.0.0';
 
 function firstPresentId(...values) {
   return values.find((value) => value != null && String(value).trim() !== '');
@@ -51,6 +54,8 @@ export async function streamAITutor({
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${session.access_token}`,
+        'X-Platform': Platform.OS,
+        'X-App-Version': APP_VERSION,
       },
       body: JSON.stringify({
         questionId: resolvedQuestionId,
