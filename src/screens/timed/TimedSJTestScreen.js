@@ -67,7 +67,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
     useFlatNavigation(test.flatQuestions, 0);
   const { handleAnswer, getAnswer } = useAnswers({});
 
-  const itemId = item.question.itemId;
+  const itemId = item.question.itemId ?? item.question.questionId ?? item.question.id;
 
   const getQuestionTimes = useQuestionTimeTracker(
     itemId,

@@ -10,7 +10,7 @@ import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReason
 import { flattenVRPassages } from '../../lib/flattenQuestions';
 import { VR_TUTOR_DEMO_PASSAGE } from '../../data/demo/vrTutorDemoQuestion';
 import { VR_WORKED_EXAMPLES } from '../../data/learn/vrWorkedExamples';
-import { VR_LEARN_STORAGE_KEY } from '../../data/learn/vrLearningStorage';
+import { VR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
 const DEMO_FLAT_QUESTIONS = flattenVRPassages([VR_TUTOR_DEMO_PASSAGE]);
 
@@ -118,7 +118,7 @@ function VRPassageScreenInner({ index }) {
 
   function handleAnswerCommit(item, selectedAnswer) {
     submitAttempt({
-      questionId: item.question.questionId,
+      questionId: item.question.questionId ?? item.question.id ?? item.question.itemId,
       passageId: item.stemId,
       selectedAnswer,
       totalQuestions: item.stemQuestionCount,

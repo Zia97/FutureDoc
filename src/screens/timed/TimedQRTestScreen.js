@@ -69,7 +69,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
   const { index, item, isFirst, isLast, goTo, goNext, goPrev } =
     useFlatNavigation(test.flatQuestions, 0);
 
-  const qid = item.question.questionId;
+  const qid = item.question.questionId ?? item.question.id;
   const currentAnswer = answers[qid];
   const isFlagged = flags.has(qid);
 

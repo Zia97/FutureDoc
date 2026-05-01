@@ -96,7 +96,8 @@ export default function TimedVRResultsScreen({ passages, getAnswer, flags, test,
     }
 
     const questionContext = {
-      question: q.questionText,
+      questionId: q.questionId ?? q.id,
+      question: q.questionText ?? q.stem,
       questionType: 'verbal_reasoning',
       section: 'vr',
       passage: passage.resource ?? passage.body,

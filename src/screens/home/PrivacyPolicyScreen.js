@@ -15,33 +15,33 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '9 April 2026';
+const LAST_UPDATED = '1 May 2026';
 
 const SECTIONS = [
   {
     title: '1. Information We Collect',
     body:
-      'When you create an account we collect your email address and, if you sign in via Google or Apple, the basic profile information provided by that service (name and email). We also collect data on you performance when answering questions and completing tests in this app.',
+      'We keep data collection limited to what is needed for the app to work:\n\n- Your email address, used only to create and manage your account\n- Your test and practice performance, including answers, scores, timings, and analytics summaries, so your results can be retrieved and we can help you analyse your progress\n- Questions or messages you send to the AI tutor, stored so we can protect the service, detect abuse, and investigate misuse if needed',
   },
   {
     title: '2. How We Use Your Information',
     body:
-      'We use your data to:\n\n• Provide and maintain the app\n• Track your practice progress and display performance analytics\n• Send important account-related communications\n• Improve the app and fix bugs',
+      'We only use your information for the limited purposes above: account access, saving and showing your performance, helping you analyse your results, and preventing abuse of the AI tutor. We do not process it for unrelated purposes, sell, rent, trade, profile, advertise with, train models on, or otherwise use your data for anything outside those purposes.',
   },
   {
     title: '3. Data Storage & Security',
     body:
-      'Your data is stored securely using Supabase (hosted on AWS). We use industry-standard encryption in transit (TLS) and at rest. We do not sell, rent, or share your personal data with third parties for marketing purposes.',
+      'Your data is stored securely using Supabase. We use industry-standard encryption in transit (TLS) and at rest. Access is limited to what is needed to operate the app, retrieve your progress, support performance analysis, and enforce abuse-prevention safeguards.',
   },
   {
     title: '4. Third-Party Services',
     body:
-      'We use the following third-party services:\n\n• Supabase — authentication and database\n• Google Sign-In — optional authentication\n• Apple Sign-In — optional authentication\n• RevenueCat — subscription management\n• Expo / EAS — app updates and builds\n\nEach service has its own privacy policy governing how they handle your data.',
+      'We use trusted third-party services only where they are needed to run the app, such as authentication, secure storage, subscription management, app updates, and the AI tutor. We do not allow those services to use your data for our marketing, advertising, resale, profiling, or unrelated analytics. Each service has its own privacy policy governing how it handles data.',
   },
   {
     title: '5. Your Rights',
     body:
-      'You can:\n\n• Access your data through the app\n• Delete your account and all associated data at any time from the Profile screen\n• Contact us to request a copy of your data\n\nIf you are in the UK or EU, you have additional rights under UK GDPR / EU GDPR including the right to rectification, restriction of processing, and data portability.',
+      'You can:\n\n- Access your performance data through the app\n- Delete your account and associated data at any time from the Profile screen\n- Contact us to request a copy of the data we hold about you\n\nIf you are in the UK or EU, you have additional rights under UK GDPR / EU GDPR including the right to rectification, restriction of processing, and data portability.',
   },
   {
     title: '6. Data Retention',

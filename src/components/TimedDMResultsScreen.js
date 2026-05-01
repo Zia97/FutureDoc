@@ -30,7 +30,8 @@ import {
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
 function getQuestionResult(q, answers) {
-  const selected = answers[q.questionId];
+  const qid = q.questionId ?? q.id;
+  const selected = answers[qid];
   const isYesNo = YES_NO_TYPES.includes(q.type);
 
   if (isYesNo) {
@@ -58,7 +59,7 @@ export default function TimedDMResultsScreen({ questions, answers, flags, test, 
         ...q,
         index: idx,
         result: getQuestionResult(q, answers),
-        flagged: flags ? flags.has(q.questionId) : false,
+        flagged: flags ? flags.has(q.questionId ?? q.id) : false,
         displayTitle: q.title ?? `Question ${idx + 1}`,
       })),
     [questions, answers, flags],
@@ -95,7 +96,7 @@ export default function TimedDMResultsScreen({ questions, answers, flags, test, 
           >
             <DMQuestionRenderer
               question={q}
-              answer={answers[q.questionId]}
+              answer={answers[q.questionId ?? q.id]}
               onAnswer={() => {}}
               submitted
               timedMode={false}
@@ -151,7 +152,7 @@ export default function TimedDMResultsScreen({ questions, answers, flags, test, 
           <View style={resultsStyles.breakdownList}>
             {questionResults.map((q) => (
               <QuestionBreakdownRow
-                key={q.questionId}
+                key={q.questionId ?? q.id}
                 number={q.index + 1}
                 title={q.displayTitle}
                 result={q.result}

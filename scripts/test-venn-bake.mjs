@@ -35,6 +35,12 @@ const FILES = [
   'src/dev/preview-dm.json',
 ];
 
+// Static worked-example modules — JS files (not JSON) that ship in-app and
+// also need to bake cleanly. Loaded via dynamic import below.
+const WORKED_EXAMPLE_MODULES = [
+  { rel: 'src/data/learn/dmWorkedExamples.js', exportName: 'DM_WORKED_EXAMPLES' },
+];
+
 // Re-implement a small distance-to-outline check for testing.
 function distPointToSegment(px, py, x1, y1, x2, y2) {
   const dx = x2 - x1, dy = y2 - y1;
@@ -110,8 +116,10 @@ function assertLabelClearances(baked, title, { strict }) {
 
 function findVennConfigs(question) {
   const configs = [];
-  if (question.stimulus_diagram) {
-    configs.push({ vennConfig: question.stimulus_diagram, role: 'stimulus' });
+  // JSON shape (snake_case) and worked-example shape (camelCase) both supported.
+  const stim = question.stimulus_diagram || question.stimulusDiagram;
+  if (stim) {
+    configs.push({ vennConfig: stim, role: 'stimulus' });
   }
   const opts = question.decision_making_question_options || question.options || [];
   for (const opt of opts) {
@@ -130,21 +138,44 @@ function findVennConfigs(question) {
 // catch any topology that bakes naturally but fails at a real on-screen size.
 const PIXEL_TARGET_PX = 340;
 
-function run() {
-  let total = 0;
-  let passed = 0;
-  let failed = 0;
-  let skipped = 0;
-
+async function loadSources() {
+  const sources = [];
   for (const relPath of FILES) {
     const fullPath = path.join(ROOT, relPath);
     if (!fs.existsSync(fullPath)) {
       console.log(`SKIP (missing): ${relPath}`);
       continue;
     }
-
     const data = JSON.parse(fs.readFileSync(fullPath, 'utf8'));
     const questions = Array.isArray(data) ? data : (data.questions || []);
+    sources.push({ relPath, questions });
+  }
+  for (const { rel, exportName } of WORKED_EXAMPLE_MODULES) {
+    const fullPath = path.join(ROOT, rel);
+    if (!fs.existsSync(fullPath)) {
+      console.log(`SKIP (missing): ${rel}`);
+      continue;
+    }
+    const moduleUrl = new URL(`file:///${fullPath.replace(/\\/g, '/')}`).href;
+    const mod = await import(moduleUrl);
+    const map = mod[exportName];
+    if (!map) {
+      console.log(`SKIP (no export ${exportName}): ${rel}`);
+      continue;
+    }
+    const questions = Object.values(map);
+    sources.push({ relPath: rel, questions });
+  }
+  return sources;
+}
+
+async function run() {
+  let total = 0;
+  let passed = 0;
+  let failed = 0;
+
+  const sources = await loadSources();
+  for (const { relPath, questions } of sources) {
 
     for (const q of questions) {
       if (q.type !== 'venn_diagram') continue;
@@ -209,4 +240,7 @@ function run() {
 let pixelFitOk = 0;
 let pixelFitFail = 0;
 
-run();
+run().catch((err) => {
+  console.error('FATAL:', err);
+  process.exit(1);
+});

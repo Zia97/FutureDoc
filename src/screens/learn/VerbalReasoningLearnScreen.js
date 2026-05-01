@@ -24,7 +24,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
-import { VR_LEARN_STORAGE_KEY } from '../../data/learn/vrLearningStorage';
+import { VR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
 const PREMIUM_LESSON_TYPES = new Set(['Strategy', 'Traps', 'Worked example']);
 
@@ -53,8 +53,8 @@ export const MODULES = [
           {
             title: 'The two question types',
             bullets: [
-              'True / False / Cannot Tell (T/F/CT) — You read a statement and decide if the passage proves it true, proves it false, or gives you too little information to tell.',
-              'Multiple Choice (MCP) — You pick the best answer from four options, usually completing a sentence or choosing the most supported conclusion.',
+              "True / False / Can't Tell (T/F/CT) — You read a statement and decide if the passage proves it true, proves it false, or gives you too little information to tell.",
+              'Multiple Choice (MCQ) — You pick the best answer from four options, usually completing a sentence or choosing the most supported conclusion.',
             ],
           },
           {
@@ -120,7 +120,7 @@ export const MODULES = [
       {
         id: 'how-passages-work',
         title: 'How the section is built',
-        subtitle: 'Before you practise, know the format — how many questions, how long you have, and what the interface looks like.',
+        subtitle: 'Before you practise, know the format — how many questions there are, how long you have, and which shortcuts matter.',
         duration: '3 min',
         type: 'Foundation',
         icon: 'notes',
@@ -140,7 +140,7 @@ export const MODULES = [
           },
           {
             title: 'What the timer really means',
-            body: "The '30' seconds per question figure is an average, not a target. Easier True/False/Can't tell items often take 15-25 seconds. Harder author or inference items can take 45-60 seconds. Plan for variable spend, not a metronome.",
+            body: "The '30 seconds per question' figure is an average, not a target. Easier True / False / Can't Tell items often take 15-25 seconds. Harder author or inference items can take 45-60 seconds. Plan for variable spend, not a metronome.",
           },
           {
             title: 'Pearson VUE shortcuts that save time',
@@ -181,7 +181,7 @@ export const MODULES = [
           {
             kind: 'tip',
             title: 'Why VR feels faster than it looks on paper',
-            body: 'Reading 11 passages plus 44 stems in 22 minutes feels short because you are doing two tasks per question: searching the passage AND comparing options. Both use working memory, which is why pacing feels tighter than the raw timer suggests.',
+            body: 'Reading 11 passages plus 44 question prompts in 22 minutes feels short because you are doing two tasks per question: searching the passage AND comparing options. Both use working memory, which is why pacing feels tighter than the raw timer suggests.',
           },
         ],
       },
@@ -206,24 +206,8 @@ export const MODULES = [
             body: 'A quick glance at the passage first gives you a rough map — you know where the numbers are, where names appear, which paragraph covers which topic. Then when you read the question and pick your anchor keyword, you already have a sense of where to look. This is faster than either reading the whole passage carefully upfront or going in completely cold.',
           },
           {
-            title: 'Step 1: read the question',
-            body: 'Before you touch the passage, read the question or statement in full. Work out what it is asking — is it a T/F/CT, a direct detail, an inference, or an author opinion? Each one tells you what kind of evidence to look for.',
-          },
-          {
-            title: 'Step 2: pick your anchor keyword',
-            bullets: [
-              'Pull a distinctive word from the question — a name, date, place, or specific noun.',
-              'Note any quantity words: "some", "all", "most", "may", "must".',
-              'Avoid common words like "the" or "study" — they appear everywhere and will not help you locate the right line.',
-            ],
-          },
-          {
-            title: 'Step 3: scan the passage for that keyword',
-            body: 'Run your eye down the passage looking only for your anchor. Once you find it, slow down and read that sentence and the one before and after it. That local area usually contains everything you need.',
-          },
-          {
-            title: 'How to do the opening glance',
-            body: 'When a new passage appears, spend 8–10 seconds letting your eye move down the text. You are not reading — you are building a rough map.',
+            title: 'Step 1: do the opening glance',
+            body: 'When a new passage appears, spend 8-10 seconds letting your eye move down the text. You are not reading in detail — you are building a rough map.',
             bullets: [
               'The first sentence of each paragraph usually signals its topic.',
               'Also glance at the final paragraph — writers often put their stance there.',
@@ -233,7 +217,23 @@ export const MODULES = [
             ],
           },
           {
-            title: 'Step 4: decide — or guess and move on',
+            title: 'Step 2: read the question',
+            body: 'After the opening glance, read the question or statement in full. Work out what it is asking — is it a T/F/CT, a direct detail, an inference, or an author opinion? Each one tells you what kind of evidence to look for.',
+          },
+          {
+            title: 'Step 3: pick your anchor keyword',
+            bullets: [
+              'Pull a distinctive word from the question — a name, date, place, or specific noun.',
+              'Note any quantity words: "some", "all", "most", "may", "must".',
+              'Avoid common words like "the" or "study" — they appear everywhere and will not help you locate the right line.',
+            ],
+          },
+          {
+            title: 'Step 4: scan the passage for that keyword',
+            body: 'Run your eye down the passage looking only for your anchor. Once you find it, slow down and read that sentence and the one before and after it. That local area usually contains everything you need.',
+          },
+          {
+            title: 'Step 5: decide — or guess and move on',
             body: 'If two options are close, compare their exact wording against the passage, not your memory of the idea. If an item is eating time, make your best call, flag it, and move on. Do not drift.',
           },
           {
@@ -255,10 +255,10 @@ export const MODULES = [
           },
           {
             kind: 'mini',
-            prompt: 'You have read the question stem. What is the next best move under UCAT timing?',
+            prompt: 'You have read the question wording. What is the next best move under UCAT timing?',
             options: [
               'Read the entire passage carefully.',
-              'Scan for the named person or keyword from the stem.',
+              'Scan for the named person or keyword from the question.',
               'Read the answer options first to spot patterns.',
             ],
             correctIndex: 1,
@@ -267,14 +267,14 @@ export const MODULES = [
           {
             kind: 'tip',
             title: 'When a passage-first read can actually be faster',
-            body: 'For very short passages (3-4 lines), reading the whole thing first can be quicker than scanning. For author-opinion stems, glancing at the final paragraph first often reveals the writer\'s stance. Adapt the method, do not abandon it.',
+            body: 'For very short passages (3-4 lines), reading the whole thing first can be quicker than scanning. For author-opinion questions, glancing at the final paragraph first often reveals the writer\'s stance. Adapt the method, do not abandon it.',
           },
           {
             kind: 'checklist',
             title: 'My core method',
             items: [
-              'Give the passage a quick 8–10 second glance to build a rough map.',
-              'Read the question first, then pick an anchor keyword.',
+              'Give the passage a quick 8-10 second glance to build a rough map.',
+              'After the glance, read the question and pick an anchor keyword.',
               'Scan for the anchor, then read that area closely.',
               'Compare exact wording when two options are close.',
               'Decide or guess and move on when time pressure builds.',
@@ -295,14 +295,8 @@ export const MODULES = [
             body: 'A short walkthrough of how to learn and practise VR on this app, plus a live demo of the AI tutor — the feature that turns every wrong answer into a one-on-one teaching session.',
           },
           {
-            title: 'The learning loop',
-            bullets: [
-              'Read a lesson to learn the method (you are doing this now).',
-              'Move into untimed practice questions to apply it on real passages.',
-              'After each answer, see whether you were right and read the explanation.',
-              'If anything is unclear, open the AI tutor and ask follow-up questions on that exact question.',
-              'The tutor is also available for each question on timed tests after you have completed it.'
-            ],
+            title: 'When to try questions',
+            body: 'Once you have finished the lessons, or if you want to skip ahead and try questions now, answer a practice question and check whether you were correct for the right reasons. If you were wrong, guessed, or still feel unsure, ask the AI tutor follow-up questions on that exact question.',
           },
           {
             title: 'Why static explanations may not be enough',
@@ -315,12 +309,7 @@ export const MODULES = [
           },
           {
             title: 'What you can ask',
-            bullets: [
-              '"Why is the answer not B?"',
-              '"I do not understand why this is Can\'t Tell."',
-              '"Walk me through your reasoning step by step."',
-              '"Give me a simpler version of the explanation."',
-            ],
+            body: 'Ask any UCAT Verbal Reasoning question about the passage, the answer choices, or your reasoning. The tutor knows the full context of the question you are on, so you can ask directly, for example: "Why is this not B?" or "What did I miss?"',
           },
           {
             kind: 'demoLaunch',
@@ -332,7 +321,7 @@ export const MODULES = [
           {
             kind: 'tip',
             title: 'Free vs Premium AI tutor access',
-            body: 'Free users get 5 AI tutor messages in total across the app. Premium gives unlimited access on every question. Every student is unique and learns in different ways - the AI tutor is here to answer your questions specifically',
+            body: 'Free users get 5 AI tutor messages in total across the app. Premium gives unlimited access on every question. Every student is unique and learns in different ways, so the AI tutor is here to answer your specific questions.',
           },
           {
             kind: 'rule',
@@ -346,7 +335,7 @@ export const MODULES = [
   {
     id: 'types',
     title: 'Question Types',
-    description: 'Learn the two response formats and the stem families nested inside them.',
+    description: 'Learn the two response formats and the question-wording patterns nested inside them.',
     icon: 'list',
     accentKey: 'cyan',
     lessons: [
@@ -360,7 +349,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this question type looks like',
-            body: 'You are shown a passage and then a statement about it. Your job is to decide whether the statement is True, False, or Cannot Be Determined from the passage alone. You pick one of exactly three answers:',
+            body: "You are shown a passage and then a statement about it. Your job is to decide whether the statement is True, False, or Can't Tell from the passage alone. You pick one of exactly three answers:",
             bullets: [
               'True — the passage directly supports the statement',
               'False — the passage directly contradicts the statement',
@@ -382,7 +371,7 @@ export const MODULES = [
           },
           {
             title: "The default-to-Can't-Tell heuristic",
-            body: "If you find yourself building a multi-step argument to call something True, the answer is usually Can't Tell. The right answer should feel direct. A statement can sound reasonable and still be Can't Tell.",
+            body: "If you find yourself building a multi-step argument to call something 'True' or 'False', the answer is usually Can't Tell. The right answer should feel direct. A statement can sound reasonable and still be Can't Tell.",
           },
           {
             title: 'What to do when you have to guess',
@@ -476,7 +465,7 @@ export const MODULES = [
             body: 'In 4-option MCQ items, all four options often sound reasonable. The correct option is the one that fits the passage most exactly, not the one that sounds smartest. Your task is to reject the wrong ones for clear reasons.',
           },
           {
-            title: 'The four common failure modes',
+            title: 'Four quick distractor shapes',
             bullets: [
               'Too strong: the option overstates what the passage says.',
               'Too broad: the option goes wider than the passage scope.',
@@ -486,7 +475,7 @@ export const MODULES = [
           },
           {
             title: 'The four teaching sub-types',
-            body: 'Within 4-option MCQ, you will see direct detail (according to the passage), inference (most likely), author opinion, and negative stems (NOT/EXCEPT). These are tutoring labels, not separate UCAT formats. Recognising the sub-type tells you which reading discipline to apply.',
+            body: 'Within 4-option MCQ, you will see direct detail (according to the passage), inference (most likely), author opinion, and negative stems (NOT/EXCEPT). These are tutoring labels, not separate UCAT formats. Recognising the sub-type tells you which reading discipline to apply; the later trap taxonomy gives more precise labels for wrong-answer patterns.',
           },
           {
             kind: 'trap',
@@ -528,16 +517,16 @@ export const MODULES = [
         steps: [
           {
             title: 'What this question type looks like',
-            body: 'Direct detail questions sit inside the 4-option multiple choice format. The stem usually says "According to the passage..." or gives you an incomplete sentence to finish. The answer is always explicitly stated in the passage — your job is to locate it and match it exactly, not interpret or infer.',
+            body: 'Direct detail questions sit inside the 4-option multiple choice format. The question stem — the wording before the answer options — usually says "According to the passage..." or gives you an incomplete sentence to finish. The answer is always explicitly stated in the passage; your job is to locate it and match it exactly, not interpret or infer.',
             bullets: [
-              'Common stems: "According to the passage...", "The passage states that...", "Complete the sentence: The trial ended..."',
+              'Common question stems: "According to the passage...", "The passage states that...", "Complete the sentence: The trial ended..."',
               'The trap: four options that all look plausible, but only one is actually supported by the text word-for-word.',
               'The skill: finding the right line quickly, then reading it precisely enough to avoid the almost-right distractors.',
             ],
           },
           {
             title: 'Where to look first',
-            body: 'Start with the distinctive words in the stem, then scan for those anchors. Read the answer line and the surrounding lines, not just the matched keyword. One shared word is rarely enough.',
+            body: 'Start with the distinctive words in the question, then scan for those anchors. Read the answer line and the surrounding lines, not just the matched keyword. One shared word is rarely enough.',
           },
           {
             title: 'How incomplete statements mislead',
@@ -546,7 +535,7 @@ export const MODULES = [
           {
             kind: 'rule',
             title: 'Rule',
-            body: 'Read the local lines, not just the matched keyword. Detail questions are precision tests, not reading-comprehension tests.',
+            body: 'Read the local lines, not just the matched keyword. Detail questions are precision tests, not broad interpretation tests.',
           },
           {
             kind: 'mini',
@@ -589,9 +578,9 @@ export const MODULES = [
         steps: [
           {
             title: 'What this question type looks like',
-            body: 'Inference questions sit inside the 4-option multiple choice format. Unlike direct detail, the answer is not copied from the passage — it is a conclusion the passage makes reasonable. The stem usually signals this:',
+            body: 'Inference questions sit inside the 4-option multiple choice format. Unlike direct detail, the answer is not copied from the passage — it is a conclusion the passage makes reasonable. The question wording usually signals this:',
             bullets: [
-              'Common stems: "Which conclusion is most justified?", "What is most likely true?", "Which inference is best supported?"',
+              'Common question stems: "Which conclusion is most justified?", "What is most likely true?", "Which inference is best supported?"',
               'The task: find the option that follows logically from the passage without going beyond it.',
               'The main trap: options that sound plausible or likely in the real world, but go further than what the passage actually supports.',
             ],
@@ -652,7 +641,7 @@ export const MODULES = [
             title: 'What this question type looks like',
             body: 'Author opinion questions sit inside the 4-option multiple choice format. Instead of asking what the passage states, they ask what the author thinks, believes, or intends.',
             bullets: [
-              'Common stems: "Which view does the author most likely hold?", "What is the writer\'s overall stance?", "The author implies that..."',
+              'Common question stems: "Which view does the author most likely hold?", "What is the writer\'s overall stance?", "The author implies that..."',
               'The key distinction: the passage may quote other people\'s opinions at length — those are not the author\'s view unless the author endorses them.',
               'The main trap: picking the view of a quoted expert or critic instead of the author\'s own position.',
             ],
@@ -714,16 +703,16 @@ export const MODULES = [
         steps: [
           {
             title: 'What this question type looks like',
-            body: 'Negative stem questions look like normal multiple choice, but the stem contains a reversal word that flips your task. Instead of finding what the passage supports, you find what it does not.',
+            body: 'Negative stem questions look like normal multiple choice, but the question stem contains a reversal word that flips your task. Instead of finding what the passage supports, you find what it does not.',
             bullets: [
-              'Common stems: "All of the following are mentioned EXCEPT...", "Which of the following is NOT supported?", "Which conclusion is least justified?"',
+              'Common question stems: "All of the following are mentioned EXCEPT...", "Which of the following is NOT supported?", "Which conclusion is least justified?"',
               'The format: three of the four options will be supported by the passage. One will not. You pick the unsupported one.',
               'The main trap: students solve the question correctly but answer the positive version — they pick the supported option because it feels right.',
             ],
           },
           {
             title: 'How reverse stems work',
-            body: 'If the stem contains "not", "except", or "least", your task has reversed. In many reverse stems, three options will be supported by the passage and one will fail. Your job is to find the failure.',
+            body: 'If the question stem contains "not", "except", or "least", your task has reversed. In many reverse stems, three options will be supported by the passage and one will fail. Your job is to find the failure.',
           },
           {
             title: 'Elimination order for EXCEPT questions',
@@ -736,12 +725,12 @@ export const MODULES = [
           {
             kind: 'rule',
             title: 'Rule',
-            body: 'Re-read the stem once before you select. Reverse stems are accuracy tests disguised as reading tests.',
+            body: 'Re-read the question stem once before you select. Reverse stems are accuracy tests disguised as reading tests.',
           },
           {
             kind: 'trap',
             title: 'Solved the passage, answered the wrong task',
-            body: 'The most common failure on negative stems: students answer the positive version of the question. They find the supported option and pick it, even though the stem asked which option is NOT supported.',
+            body: 'The most common failure on negative stems: students answer the positive version of the question. They find the supported option and pick it, even though the question asked which option is NOT supported.',
           },
           {
             kind: 'mini',
@@ -757,7 +746,7 @@ export const MODULES = [
           },
           {
             kind: 'mini',
-            prompt: 'Passage outlines four hospital changes: new ward, longer triage hours, electronic records, expanded pharmacy. The stem asks: "All of the following occurred EXCEPT..." with one option being "outsourced cleaning". What do you do?',
+            prompt: 'Passage outlines four hospital changes: new ward, longer triage hours, electronic records, expanded pharmacy. The question asks: "All of the following occurred EXCEPT..." with one option being "outsourced cleaning". What do you do?',
             options: [
               'Pick whichever option sounds least familiar.',
               'Tick each option that the passage supports, and pick the one left over (outsourced cleaning).',
@@ -770,43 +759,43 @@ export const MODULES = [
       },
       {
         id: 'rare-stems',
-        title: 'Word reference and unusual stems',
-        subtitle: 'Some VR questions use wording you haven\'t seen before — this lesson shows you how to recognise and reduce them to familiar types.',
+        title: 'Word reference and unusual question wording',
+        subtitle: 'Some VR questions use wording you have not seen before — this lesson shows you how to recognise and reduce them to familiar types.',
         duration: '3 min',
         type: 'Question type',
         icon: 'book',
         steps: [
           {
             title: 'What these questions look like',
-            body: 'Occasionally a VR stem uses phrasing that does not match the standard formats. Do not let unfamiliar wording throw you — the underlying task is almost always something you already know how to do.',
+            body: 'Occasionally a VR question uses phrasing that does not match the standard formats. Do not let unfamiliar wording throw you — the underlying task is almost always something you already know how to do.',
             bullets: [
-              '"What does \'this\' refer to?" — a word reference question. The answer is in the previous sentence.',
+              '"What does \'this\' refer to?" — a word reference question. The answer is usually nearby, often in the previous sentence.',
               '"Which new fact would most weaken the argument?" — an inference question in disguise. Test the passage\'s logic.',
               '"What is the primary purpose of the passage?" — an author opinion question. Read the final paragraph first.',
             ],
           },
           {
-            title: 'How to re-label a rare stem',
-            body: 'A rare stem usually hides a familiar job. Reduce it to a known type, then solve it. Do not freeze just because the wording looks unfamiliar.',
+            title: 'How to re-label rare wording',
+            body: 'Rare wording usually hides a familiar job. Reduce it to a known type, then solve it. Do not freeze just because the wording looks unfamiliar.',
           },
           {
-            title: 'Two rare stems you will meet',
+            title: 'Two rare wording patterns you will meet',
             bullets: [
-              '"What does \'this\' refer to?" - a local reference question. Find the antecedent in the previous sentence.',
+              '"What does \'this\' refer to?" - a local reference question. Check the previous sentence for the antecedent.',
               '"Which new fact would matter most?" or "weaken the argument?" - usually an inference question in disguise. Test the passage\'s logic.',
             ],
           },
           {
             kind: 'mini',
-            prompt: 'Passage: "This resistance grew after the tax was widened to smaller traders." What does "this resistance" refer to?',
+            prompt: 'Passage: "Local traders opposed the new tax when it first applied only to large firms. This resistance grew after the tax was widened to smaller traders." What does "this resistance" refer to?',
             options: [
+              'Local traders\' opposition to the new tax.',
               'Tax inspectors\' resistance.',
-              'Resistance described in the previous sentence of the passage.',
               'A general feeling of resistance to all taxes.',
               'Resistance to the smaller traders themselves.',
             ],
-            correctIndex: 1,
-            explanation: 'Word reference always points back. Find the previous sentence to see what "this" attaches to.',
+            correctIndex: 0,
+            explanation: '"This resistance" points back to local traders opposing the new tax in the previous sentence.',
           },
           {
             kind: 'mini',
@@ -818,7 +807,7 @@ export const MODULES = [
               'The total number of teachers.',
             ],
             correctIndex: 1,
-            explanation: 'A "what would weaken or test this?" stem is really an inference question. A control comparison directly tests whether the policy is the cause of the improvement.',
+            explanation: 'A "what would weaken or test the claim?" question is really an inference question. A control comparison directly tests whether the policy is the cause of the improvement.',
           },
         ],
       },
@@ -860,13 +849,13 @@ export const MODULES = [
             body: 'Regressions are the habit of jumping back to re-read what you have already read. If you finish a sentence and want to go back, it is usually better to keep reading and let context fill the gap. Only regress when a question specifically prompts you back.',
           },
           {
-            title: 'Activating schema without contaminating answers',
-            body: 'For unfamiliar topics, take one second to ask "what kind of passage is this?" (history, science, opinion). This activates relevant schema and speeds processing. But do not let your prior knowledge answer the question for you.',
+            title: 'Activating background context without contaminating answers',
+            body: 'For unfamiliar topics, take one second to ask "what kind of passage is this?" (history, science, opinion). This activates useful background context and speeds processing. But do not let your prior knowledge answer the question for you.',
           },
           {
             kind: 'rule',
             title: 'Rule',
-            body: 'Skim → scan → read locally. Never read word-by-word.',
+            body: 'Skim → scan → read locally. Save word-by-word reading for the exact local lines that decide the answer.',
           },
           {
             kind: 'mini',
@@ -916,7 +905,7 @@ export const MODULES = [
           },
           {
             title: 'Feature 1: proper nouns and numbers',
-            body: 'Names, dates, places, and percentages are your strongest scan anchors in any passage. They are distinctive, appear rarely, and usually mark the exact sentence the question is testing. When you spot one in a question stem, use it immediately as your anchor.',
+            body: 'Names, dates, places, and percentages are your strongest scan anchors in any passage. They are distinctive, appear rarely, and usually mark the exact sentence the question is testing. When you spot one in the question wording, use it immediately as your anchor.',
           },
           {
             title: 'Feature 2: causation language',
@@ -991,7 +980,7 @@ export const MODULES = [
           },
           {
             title: 'How to use a second anchor',
-            body: 'If your first keyword appears many times in the passage, pick a second anchor from the stem to narrow the search. The intersection of two anchors usually points to a single sentence.',
+            body: 'If your first keyword appears many times in the passage, pick a second anchor from the question to narrow the search. The intersection of two anchors usually points to a single sentence.',
           },
           {
             kind: 'rule',
@@ -1012,7 +1001,7 @@ export const MODULES = [
           },
           {
             kind: 'mini',
-            prompt: 'Your first keyword "trial" appears five times in the passage. The stem also mentions "Phase 2" and "blood pressure". What is the best second anchor?',
+            prompt: 'Your first keyword "trial" appears five times in the passage. The question also mentions "Phase 2" and "blood pressure". What is the best second anchor?',
             options: [
               '"Phase 2", because it is more specific than the others.',
               '"Trial" again - just re-scan more carefully.',
@@ -1159,14 +1148,14 @@ export const MODULES = [
       {
         id: 'trap-taxonomy',
         title: 'The VR trap taxonomy',
-        subtitle: 'Every wrong answer in VR is built on one of nine patterns. Learn to name them and you can train against them systematically.',
+        subtitle: 'A detailed set of nine wrong-answer patterns. Learn to name them and you can train against them systematically.',
         duration: '5 min',
         type: 'Traps',
         icon: 'flag',
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'VR distractors are not random — they follow predictable patterns. This lesson gives you a named taxonomy of the nine trap types that appear across all VR question formats. Once you can label a distractor, you can recognise the same pattern the next time it appears.',
+            body: 'VR distractors are not random — they follow predictable patterns. This lesson gives you a named taxonomy of nine common trap types that appear across VR question formats. These labels describe wrong-answer patterns; the later review lesson uses separate error labels to describe why you personally missed a question.',
           },
           {
             title: 'Why naming traps matters',
@@ -1189,7 +1178,7 @@ export const MODULES = [
           {
             kind: 'rule',
             title: 'Rule',
-            body: 'If you cannot name the trap, you cannot train against it. Tag every miss in practice with one of the nine labels.',
+            body: 'If you can name the trap, you can train against it. When reviewing a miss, tag the tempting wrong option with one of these trap labels when it fits.',
           },
           {
             kind: 'mini',
@@ -1387,7 +1376,11 @@ export const MODULES = [
             body: '"I got it wrong" tells you nothing. "I got it wrong because I assumed outside knowledge" tells you what to train. Always tag the reason, not just the outcome.',
           },
           {
-            title: 'The nine error labels',
+            title: 'The nine review labels',
+            body: 'These labels describe why you missed a question. They overlap with the trap taxonomy, but they are for your personal error log rather than for classifying every wrong answer.',
+          },
+          {
+            title: 'The labels',
             bullets: [
               'Time pressure - rushed and missed something.',
               'Bad scanning - did not find the right region.',
@@ -1449,7 +1442,7 @@ export const MODULES = [
             kind: 'checklist',
             title: 'My review routine after practice',
             items: [
-              'Tag every miss with one of the nine labels.',
+              'Tag every miss with one review label.',
               'Log it in one line, no essays.',
               'Look for repeating labels across 20+ items.',
               'Open the matching lesson when one label dominates.',
@@ -1525,7 +1518,7 @@ export const MODULES = [
           {
             kind: 'workedExampleLaunch',
             title: 'Multiple choice: direct detail',
-            body: 'A fact-finding question. Read the stem carefully, anchor on the most distinctive word, and pick the option the passage supports exactly. Commit to an answer first; the audit follows.',
+            body: 'A fact-finding question. Read the question stem carefully, anchor on the most distinctive word, and pick the option the passage supports exactly. Commit to an answer first; the audit follows.',
             buttonLabel: 'Start worked example',
           },
         ],
@@ -1621,7 +1614,7 @@ export const MODULES = [
           {
             kind: 'workedExampleLaunch',
             title: 'Multiple choice: EXCEPT / negative stem',
-            body: 'The stem reverses the task — you are looking for the option the passage does not support. Read the stem carefully before scanning. The breakdown follows your answer.',
+            body: 'The question stem reverses the task — you are looking for the option the passage does not support. Read it carefully before scanning. The breakdown follows your answer.',
             buttonLabel: 'Start worked example',
           },
         ],
@@ -1669,7 +1662,7 @@ export const MODULES = [
           },
           {
             title: 'Synonym anticipation',
-            body: 'When you see a stem keyword, train yourself to anticipate two or three synonyms the passage might use. UCAT distractors often hinge on synonym/paraphrase recognition. "Diminished" might appear as "reduced", "lessened", or "decreased".',
+            body: 'When you see a keyword in the question, train yourself to anticipate two or three synonyms the passage might use. UCAT distractors often hinge on synonym/paraphrase recognition. "Diminished" might appear as "reduced", "lessened", or "decreased".',
           },
           {
             title: 'How to structure your practice differently',
@@ -1858,7 +1851,7 @@ function StatusPill({ status, colors, isDark }) {
   );
 }
 
-function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium }) {
+function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked }) {
   const completed = status === 'completed';
   const active = status === 'inProgress' || status === 'next';
   const borderColor = completed
@@ -1869,7 +1862,14 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
   const iconColor = completed ? colors.mint : active ? accent : colors.textMuted;
 
   return (
-    <TouchableOpacity activeOpacity={0.84} onPress={onPress} style={styles.lessonTouch} accessibilityRole="button">
+    <TouchableOpacity
+      activeOpacity={isLocked ? 1 : 0.84}
+      onPress={isLocked ? undefined : onPress}
+      disabled={isLocked}
+      style={[styles.lessonTouch, isLocked && styles.lessonTouchLocked]}
+      accessibilityRole="button"
+      accessibilityState={{ disabled: !!isLocked }}
+    >
       <View
         style={[
           styles.lessonCard,
@@ -1904,12 +1904,16 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
           </View>
           <Text style={[styles.lessonSubtitle, { color: colors.textSecondary }]}>{lesson.subtitle}</Text>
           <View style={styles.lessonMetaRow}>
-            <Text style={[styles.lessonMeta, { color: colors.textMuted }]}>{lesson.duration} - {lesson.type}</Text>
+            <Text style={[styles.lessonMeta, { color: colors.textMuted }]}>
+              {lesson.duration} - {lesson.type}{isLocked ? ' - Locked' : ''}
+            </Text>
             <StatusPill status={status} colors={colors} isDark={isDark} />
           </View>
         </View>
 
-        {isPremium ? (
+        {isLocked ? (
+          <PremiumIcon name="lock" size={20} color={colors.textMuted} strokeWidth={2.4} />
+        ) : isPremium ? (
           <PremiumIcon name="lock" size={20} color={colors.amber ?? '#f59e0b'} strokeWidth={2.4} />
         ) : (
           <PremiumIcon name="chevron-right" size={22} color={active ? accent : colors.textMuted} strokeWidth={2.4} />
@@ -1919,7 +1923,7 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
   );
 }
 
-function ModuleSection({ module, completedIds, nextLessonId, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
   const accent = getAccent(colors, module.accentKey);
   const completedInModule = module.lessons.filter((lesson) => completedIds.includes(lesson.id)).length;
   const progress = completedInModule / module.lessons.length;
@@ -1949,11 +1953,13 @@ function ModuleSection({ module, completedIds, nextLessonId, colors, isDark, onS
         <View style={styles.lessonList}>
           {module.lessons.map((lesson) => {
             const numberedLesson = ALL_LESSONS.find((item) => item.id === lesson.id);
-            const status = completedIds.includes(lesson.id)
+            const completed = completedIds.includes(lesson.id);
+            const status = completed
               ? 'completed'
-              : nextLessonId === lesson.id
+              : numberedLesson?.number === nextLessonNumber
                 ? 'next'
                 : 'notStarted';
+            const isLocked = !completed && (numberedLesson?.number ?? 0) > nextLessonNumber;
 
             return (
               <LessonCard
@@ -1964,6 +1970,7 @@ function ModuleSection({ module, completedIds, nextLessonId, colors, isDark, onS
                 colors={colors}
                 isDark={isDark}
                 isPremium={PREMIUM_LESSON_TYPES.has(numberedLesson?.type) && !isPro}
+                isLocked={isLocked}
                 onPress={() => onSelectLesson(lesson.id)}
               />
             );
@@ -2078,12 +2085,16 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
 
   const openLesson = useCallback((lessonId) => {
     const lesson = ALL_LESSONS.find((l) => l.id === lessonId);
-    if (!isPro && lesson && PREMIUM_LESSON_TYPES.has(lesson.type)) {
+    if (!lesson) return;
+    const alreadyCompleted = completedIds.includes(lessonId);
+    const isLocked = !alreadyCompleted && lesson.number > nextLesson.number;
+    if (isLocked) return;
+    if (!isPro && PREMIUM_LESSON_TYPES.has(lesson.type)) {
       navigation.navigate('Paywall');
       return;
     }
     navigation.navigate('LearnVRLesson', { lessonId });
-  }, [isPro, navigation]);
+  }, [isPro, navigation, completedIds, nextLesson]);
 
   const handleContinue = useCallback(() => {
     if (allComplete) {
@@ -2133,7 +2144,7 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-              Follow the recommended order, or open any lesson when you want to review a specific skill.
+              Work through the path in order. Each lesson unlocks once you finish the one before it — completed lessons stay open for review.
             </Text>
           </View>
 
@@ -2142,7 +2153,7 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
               key={module.id}
               module={module}
               completedIds={completedIds}
-              nextLessonId={nextLesson?.id}
+              nextLessonNumber={nextLesson?.number ?? TOTAL_LESSONS}
               colors={colors}
               isDark={isDark}
               onSelectLesson={openLesson}
@@ -2366,6 +2377,9 @@ const styles = StyleSheet.create({
   },
   lessonTouch: {
     borderRadius: 18,
+  },
+  lessonTouchLocked: {
+    opacity: 0.55,
   },
   lessonCard: {
     minHeight: 112,

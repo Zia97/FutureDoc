@@ -66,7 +66,7 @@ export default function TimedVRTestScreen({ route, navigation }) {
     useFlatNavigation(test.flatQuestions, 0);
   const { handleAnswer, getAnswer } = useAnswers({});
 
-  const qid = item.question.questionId;
+  const qid = item.question.questionId ?? item.question.id;
   const scrollRef = useRef(null);
   const prevStemId = useRef(item.stemId);
 

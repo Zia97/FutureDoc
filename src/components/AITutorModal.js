@@ -12,6 +12,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useRef, useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -20,6 +21,10 @@ import { useNetwork } from '../context/NetworkContext';
 import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
+import {
+  AI_TUTOR_DEMO_QUESTIONS_KEY,
+  AI_TUTOR_DEMO_QUESTION_LIMIT,
+} from '../data/learn/learningStorageKeys';
 import PremiumIcon from './premium/PremiumIcon';
 
 function ScaledText({ baseStyle, style, children, ...rest }) {
@@ -48,9 +53,35 @@ export default function AITutorModal({
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
 
+  const [demoQuestionsUsed, setDemoQuestionsUsed] = useState(0);
+  const demoLimitReached = isDemo && demoQuestionsUsed >= AI_TUTOR_DEMO_QUESTION_LIMIT;
+
+  useEffect(() => {
+    if (!isDemo) return;
+    let cancelled = false;
+    AsyncStorage.getItem(AI_TUTOR_DEMO_QUESTIONS_KEY)
+      .then((raw) => {
+        if (cancelled) return;
+        const n = Number.parseInt(raw ?? '0', 10);
+        setDemoQuestionsUsed(Number.isFinite(n) && n >= 0 ? n : 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [isDemo, visible]);
+
   function sendMessage(text) {
+    if (isDemo && demoLimitReached) return;
     rawSendMessage(text);
     if (!isDemo && !isPro && onCreditUsed) onCreditUsed();
+    if (isDemo) {
+      setDemoQuestionsUsed((prev) => {
+        const next = prev + 1;
+        AsyncStorage.setItem(AI_TUTOR_DEMO_QUESTIONS_KEY, String(next)).catch(() => {});
+        return next;
+      });
+    }
   }
 
   const flatListRef = useRef(null);
@@ -169,7 +200,9 @@ export default function AITutorModal({
                       },
                     ]}
                   >
-                    <Text style={[styles.creditText, { color: colors.cyan }]}>FREE DEMO · NO CREDITS USED</Text>
+                    <Text style={[styles.creditText, { color: colors.cyan }]}>
+                      FREE DEMO · {Math.min(demoQuestionsUsed, AI_TUTOR_DEMO_QUESTION_LIMIT)}/{AI_TUTOR_DEMO_QUESTION_LIMIT} QUESTIONS USED
+                    </Text>
                   </View>
                 </View>
               )}
@@ -273,7 +306,16 @@ export default function AITutorModal({
           </View>
         )}
 
-        {!error && (
+        {!error && demoLimitReached && (
+          <DemoLimitPanel
+            colors={colors}
+            isDark={isDark}
+            onDone={onClose}
+            limit={AI_TUTOR_DEMO_QUESTION_LIMIT}
+          />
+        )}
+
+        {!error && !demoLimitReached && (
           <View
             style={[
               styles.inputRow,
@@ -494,6 +536,48 @@ function MessageBubble({ message, colors, isDark }) {
         {message.streaming && <Text style={[styles.cursor, { color: colors.cyan }]}>▌</Text>}
       </Text>
     </View>
+  );
+}
+
+function DemoLimitPanel({ colors, isDark, onDone, limit }) {
+  return (
+    <LinearGradient
+      colors={[
+        hexToRgba(colors.cyan, isDark ? 0.18 : 0.12),
+        isDark ? 'rgba(8, 17, 33, 0.96)' : 'rgba(255, 255, 255, 0.96)',
+      ]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={[
+        styles.demoLimit,
+        {
+          borderColor: hexToRgba(colors.cyan, 0.55),
+          shadowColor: colors.cyan,
+        },
+      ]}
+    >
+      <Text style={[styles.demoLimitTitle, { color: colors.cyan }]}>
+        Demo limit reached
+      </Text>
+      <Text style={[styles.demoLimitText, { color: colors.textSecondary }]}>
+        You've asked the maximum of {limit} demo questions. In real practice, the AI tutor
+        works on every question — for now, head back and continue with the lesson.
+      </Text>
+      <TouchableOpacity
+        style={[styles.demoLimitBtn, { shadowColor: colors.cyan }]}
+        onPress={onDone}
+        activeOpacity={0.85}
+      >
+        <LinearGradient
+          colors={[colors.cyan, colors.blue]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.demoLimitBtnGradient}
+        >
+          <Text style={styles.demoLimitBtnText}>Back to lesson</Text>
+        </LinearGradient>
+      </TouchableOpacity>
+    </LinearGradient>
   );
 }
 
@@ -868,5 +952,44 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
     letterSpacing: 0.2,
+  },
+  demoLimit: {
+    margin: 16,
+    padding: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    overflow: 'hidden',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.22 : 0,
+    shadowRadius: 14,
+  },
+  demoLimitTitle: {
+    fontWeight: '900',
+    fontSize: 14,
+    letterSpacing: 0.2,
+    marginBottom: 6,
+  },
+  demoLimitText: {
+    fontSize: 13,
+    lineHeight: 20,
+    fontWeight: '500',
+  },
+  demoLimitBtn: {
+    marginTop: 14,
+    borderRadius: 12,
+    overflow: 'hidden',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
+    shadowRadius: 12,
+  },
+  demoLimitBtnGradient: {
+    paddingVertical: 13,
+    alignItems: 'center',
+  },
+  demoLimitBtnText: {
+    color: '#fff',
+    fontWeight: '900',
+    fontSize: 14,
+    letterSpacing: 0.4,
   },
 });

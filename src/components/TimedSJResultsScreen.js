@@ -145,7 +145,8 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
     }
 
     const questionContext = {
-      question: item.text,
+      questionId: item.itemId ?? item.questionId ?? item.id,
+      question: item.text ?? item.questionText,
       questionType: 'situational_judgement',
       section: 'sj',
       passage: scenario.stem,
@@ -153,6 +154,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
       correctAnswer: item.answer,
       userAnswer: selectedAnswer ?? 'Not answered',
       explanation: item.answeringReason,
+      isTimed: true,
     };
 
     return (

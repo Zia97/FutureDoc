@@ -76,7 +76,7 @@ export default function PassageLayout({
   const [pendingAnswer, setPendingAnswer] = useState(null);
   const [notesVisible, setNotesVisible] = useState(false);
 
-  const qid = item.question.questionId ?? item.question.id;
+  const qid = item.question.questionId ?? item.question.id ?? item.question.itemId;
   const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === item.question.answer;

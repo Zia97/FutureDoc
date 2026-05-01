@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { streamAITutor } from '../../services/aiTutor';
 
 export const TUTOR_ERROR = {
@@ -10,10 +10,32 @@ export const TUTOR_ERROR = {
   DEMO_DISABLED: 'demo_disabled',
 };
 
+function firstPresentId(...values) {
+  return values.find((value) => value != null && String(value).trim() !== '');
+}
+
+function resolveQuestionId(context) {
+  return firstPresentId(
+    context?.questionId,
+    context?.id,
+    context?.itemId,
+    context?.question?.questionId,
+    context?.question?.id,
+    context?.question?.itemId,
+  );
+}
+
+function normalizeQuestionContext(context) {
+  if (!context) return context;
+  const questionId = resolveQuestionId(context);
+  return questionId == null ? context : { ...context, questionId };
+}
+
 /**
  * Manages AI tutor chat state for a single question session.
  *
  * @param {object} questionContext - passed straight to the Edge Function
+ * @param {string} questionContext.questionId
  * @param {string} questionContext.question
  * @param {string} questionContext.questionType
  * @param {string} questionContext.section
@@ -24,6 +46,11 @@ export const TUTOR_ERROR = {
  */
 export function useAITutor(questionContext, options = {}) {
   const { isDemo = false } = options;
+  const normalizedQuestionContext = useMemo(
+    () => normalizeQuestionContext(questionContext),
+    [questionContext],
+  );
+  const questionSessionKey = `${resolveQuestionId(normalizedQuestionContext) ?? ''}:${normalizedQuestionContext?.question ?? ''}`;
   const [messages, setMessages] = useState([]);
   const [streamingContent, setStreamingContent] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
@@ -46,7 +73,7 @@ export function useAITutor(questionContext, options = {}) {
     let accumulated = '';
 
     streamAITutor({
-      ...questionContext,
+      ...normalizedQuestionContext,
       messages: historyRef.current,
       isDemo,
       onChunk: (chunk) => {
@@ -79,7 +106,7 @@ export function useAITutor(questionContext, options = {}) {
         setIsStreaming(false);
       },
     });
-  }, [isStreaming, questionContext, isDemo]);
+  }, [isStreaming, normalizedQuestionContext, isDemo]);
 
   // Reset the session when the question changes (new question = fresh chat)
   useEffect(() => {
@@ -88,7 +115,7 @@ export function useAITutor(questionContext, options = {}) {
     setIsStreaming(false);
     setError(null);
     historyRef.current = [];
-  }, [questionContext?.question]);
+  }, [questionSessionKey]);
 
   const reset = useCallback(() => {
     setMessages([]);

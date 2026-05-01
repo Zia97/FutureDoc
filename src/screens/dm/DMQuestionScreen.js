@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 import DMQuestionRenderer from '../../components/dm/DMQuestionRenderer';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
@@ -18,6 +20,9 @@ import {
   QuestionPanel,
   PrimaryQuestionButton,
 } from '../../components/premium/PremiumQuestionScreenUI';
+import { DM_TUTOR_DEMO_QUESTION } from '../../data/demo/dmTutorDemoQuestion';
+import { DM_WORKED_EXAMPLES } from '../../data/learn/dmWorkedExamples';
+import { DM_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
@@ -82,7 +87,195 @@ function buildVennAIContext(question) {
   return '';
 }
 
+function buildQuestionContext(question, currentAnswer, isYesNo) {
+  return {
+    questionId: question.id ?? question.questionId,
+    question: question.stem,
+    questionType: question.type,
+    section: 'dm',
+    options: isYesNo
+      ? question.statements?.map((s, i) => `${i + 1}. ${s.text}`)
+      : question.subtype === 'select_diagram'
+      ? undefined
+      : question.options?.map((o) => `${o.label}. ${o.text}`),
+    correctAnswer: isYesNo
+      ? undefined
+      : typeof question.answer === 'object'
+      ? JSON.stringify(question.answer)
+      : question.answer,
+    userAnswer: isYesNo
+      ? undefined
+      : typeof currentAnswer === 'object'
+      ? JSON.stringify(currentAnswer)
+      : (currentAnswer ?? ''),
+    explanation: isYesNo ? undefined : question.answeringReason,
+    stimulusData: question.tableData ?? undefined,
+    vennDiagrams: question.type === 'venn_diagram'
+      ? buildVennAIContext(question)
+      : undefined,
+    isTimed: false,
+  };
+}
+
 export default function DMQuestionScreen({ route, navigation }) {
+  const mode = route?.params?.mode;
+
+  if (mode === 'tutorDemo') {
+    return <DMSingleQuestionBranch question={DM_TUTOR_DEMO_QUESTION} headerTitle="AI Tutor Demo" headerSubtitle="Sample question" />;
+  }
+
+  if (mode === 'workedExample') {
+    return <DMWorkedExampleBranch exampleId={route?.params?.exampleId} />;
+  }
+
+  return <DMQuestionScreenInner route={route} navigation={navigation} />;
+}
+
+// ── Worked example branch ─────────────────────────────────────────────────────
+//
+// Loads a single hardcoded DM question keyed by the lesson id. On answer
+// commit, writes the lesson id to the DM learn storage so the lesson screen
+// picks it up via useFocusEffect and unlocks the "Continue" button.
+
+function DMWorkedExampleBranch({ exampleId }) {
+  const example = exampleId ? DM_WORKED_EXAMPLES[exampleId] : null;
+
+  const onAnswerCommit = useCallback(() => {
+    if (!exampleId) return;
+    AsyncStorage.getItem(DM_LEARN_STORAGE_KEY)
+      .then((raw) => {
+        let ids = [];
+        if (raw) {
+          try {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) ids = parsed;
+          } catch (_) {
+            ids = [];
+          }
+        }
+        if (ids.includes(exampleId)) return;
+        const next = [...ids, exampleId];
+        AsyncStorage.setItem(DM_LEARN_STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      })
+      .catch(() => {});
+  }, [exampleId]);
+
+  if (!example) {
+    return <PremiumQuestionLoading label="Loading worked example..." />;
+  }
+
+  return (
+    <DMSingleQuestionBranch
+      question={example}
+      headerTitle="Worked Example"
+      headerSubtitle={example.title}
+      onAnswerCommit={onAnswerCommit}
+    />
+  );
+}
+
+// ── Single-question branch ────────────────────────────────────────────────────
+//
+// Renders one hardcoded DM question without going through Supabase or the
+// attempts cache. Used for both the AI tutor demo and the worked-example
+// flow. The user can still open the calculator and notes from the toolbar.
+
+function DMSingleQuestionBranch({ question, headerTitle, headerSubtitle, onAnswerCommit }) {
+  const navigation = useNavigation();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
+  const sectionColor = colors.teal;
+
+  const [answer, setAnswer] = useState(undefined);
+  const [submitted, setSubmitted] = useState(false);
+  const [calcVisible, setCalcVisible] = useState(false);
+  const [notesVisible, setNotesVisible] = useState(false);
+
+  const isYesNo = YES_NO_TYPES.includes(question.type);
+
+  const allStatementsAnswered =
+    isYesNo &&
+    question.statements &&
+    answer &&
+    question.statements.every((_, i) => answer[i] !== undefined);
+
+  function handleAnswer(val) {
+    if (submitted) return;
+    setAnswer(val);
+  }
+
+  function handleCheckAnswers() {
+    if (answer === undefined || answer === null) return;
+    setSubmitted(true);
+    onAnswerCommit?.();
+  }
+
+  return (
+    <PremiumQuestionScaffold panHandlers={null}>
+      <QuestionTopBar
+        title={headerTitle}
+        subtitle={headerSubtitle}
+        accent={sectionColor}
+        onExit={() => navigation.goBack()}
+      />
+
+      <ScreenNavBar
+        title={question.title}
+        meta=""
+        onPrev={null}
+        onNext={null}
+        isFirst
+        isLast
+        color={sectionColor}
+        report={{ questionId: question.id, section: 'dm' }}
+      />
+
+      <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
+
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <QuestionPanel>
+          <DMQuestionRenderer
+            question={question}
+            answer={answer}
+            onAnswer={handleAnswer}
+            submitted={submitted}
+            questionContext={submitted ? buildQuestionContext(question, answer, isYesNo) : undefined}
+          />
+
+          {!submitted && answer !== undefined && answer !== null ? (
+            <PrimaryQuestionButton
+              accent={sectionColor}
+              onPress={handleCheckAnswers}
+              disabled={isYesNo && !allStatementsAnswered}
+            >
+              Check Answer
+            </PrimaryQuestionButton>
+          ) : null}
+        </QuestionPanel>
+      </ScrollView>
+
+      <BottomToolbar
+        onNotes={() => setNotesVisible(true)}
+        onCalculator={() => setCalcVisible(true)}
+        sectionColor={sectionColor}
+      />
+
+      <NotesModal
+        visible={notesVisible}
+        sectionKey="dm"
+        onClose={() => setNotesVisible(false)}
+      />
+    </PremiumQuestionScaffold>
+  );
+}
+
+// ── Regular practice flow ─────────────────────────────────────────────────────
+
+function DMQuestionScreenInner({ route, navigation }) {
   const { index: initialIndex = 0, filteredIndices = null } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [answers, setAnswers] = useState({});
@@ -193,33 +386,7 @@ export default function DMQuestionScreen({ route, navigation }) {
             answer={currentAnswer}
             onAnswer={handleAnswer}
             submitted={isSubmitted}
-            questionContext={isSubmitted ? {
-              questionId: question.id,
-              question: question.stem,
-              questionType: question.type,
-              section: 'dm',
-              options: isYesNo
-                ? question.statements?.map((s, i) => `${i + 1}. ${s.text}`)
-                : question.subtype === 'select_diagram'
-                ? undefined
-                : question.options?.map((o) => `${o.label}. ${o.text}`),
-              correctAnswer: isYesNo
-                ? undefined
-                : typeof question.answer === 'object'
-                ? JSON.stringify(question.answer)
-                : question.answer,
-              userAnswer: isYesNo
-                ? undefined
-                : typeof currentAnswer === 'object'
-                ? JSON.stringify(currentAnswer)
-                : (currentAnswer ?? ''),
-              explanation: isYesNo ? undefined : question.answeringReason,
-              stimulusData: question.tableData ?? undefined,
-              vennDiagrams: question.type === 'venn_diagram'
-                ? buildVennAIContext(question)
-                : undefined,
-              isTimed: false,
-            } : undefined}
+            questionContext={isSubmitted ? buildQuestionContext(question, currentAnswer, isYesNo) : undefined}
           />
 
           {!isSubmitted && currentAnswer !== undefined && currentAnswer !== null ? (

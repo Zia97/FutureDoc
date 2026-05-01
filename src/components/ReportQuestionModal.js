@@ -14,14 +14,22 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
-import { REPORT_REASONS, submitQuestionReport } from '../lib/reportQuestion';
+import {
+  LESSON_REPORT_REASONS,
+  REPORT_REASONS,
+  submitLessonReport,
+  submitQuestionReport,
+} from '../lib/reportQuestion';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import PremiumIcon from './premium/PremiumIcon';
 
 export default function ReportQuestionModal({
   visible,
   onClose,
+  reportType = 'question',
   questionId,
+  lessonId,
+  lessonTitle = null,
   section,
   testId = null,
   isTimed = false,
@@ -34,6 +42,8 @@ export default function ReportQuestionModal({
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submittedOk, setSubmittedOk] = useState(false);
+  const isLessonReport = reportType === 'lesson';
+  const reasons = isLessonReport ? LESSON_REPORT_REASONS : REPORT_REASONS;
 
   useEffect(() => {
     if (!visible) {
@@ -52,19 +62,27 @@ export default function ReportQuestionModal({
 
   async function handleSubmit() {
     if (submitting) return;
-    if (selected.length === 0 && !comment.trim()) {
-      Alert.alert('Pick a reason', 'Select at least one reason or add a comment.');
+    if (!comment.trim()) {
+      Alert.alert('Add comments', 'Please describe the issue so we know what to fix.');
       return;
     }
     setSubmitting(true);
-    const res = await submitQuestionReport({
-      questionId,
-      section,
-      testId,
-      isTimed,
-      reasons: selected,
-      comment,
-    });
+    const res = isLessonReport
+      ? await submitLessonReport({
+          lessonId,
+          lessonTitle,
+          section,
+          reasons: selected,
+          comment,
+        })
+      : await submitQuestionReport({
+          questionId,
+          section,
+          testId,
+          isTimed,
+          reasons: selected,
+          comment,
+        });
     setSubmitting(false);
 
     if (!res.ok) {
@@ -76,6 +94,14 @@ export default function ReportQuestionModal({
   }
 
   const accent = colors.red;
+  const title = isLessonReport ? 'Report this lesson' : 'Report this question';
+  const kicker = isLessonReport ? 'Help us keep lessons accurate' : 'Help us keep content sharp';
+  const reasonPrompt = isLessonReport
+    ? "What's wrong with this lesson? Pick all that apply."
+    : "What's wrong with it? Pick all that apply.";
+  const commentPlaceholder = isLessonReport
+    ? 'Tell us what needs fixing and where in the lesson...'
+    : 'Tell us what needs fixing and where you noticed it...';
 
   return (
     <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
@@ -106,8 +132,8 @@ export default function ReportQuestionModal({
                 <PremiumIcon name="flag" size={20} color={accent} />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={[styles.title, { color: colors.text }]}>Report this question</Text>
-                <Text style={[styles.kicker, { color: colors.textMuted }]}>Help us keep content sharp</Text>
+                <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
+                <Text style={[styles.kicker, { color: colors.textMuted }]}>{kicker}</Text>
               </View>
             </View>
             <TouchableOpacity
@@ -144,11 +170,11 @@ export default function ReportQuestionModal({
           ) : (
             <>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-                What's wrong with it? Pick all that apply.
+                {reasonPrompt}
               </Text>
 
               <View style={styles.chipsContainer}>
-                {REPORT_REASONS.map((r) => {
+                {reasons.map((r) => {
                   const isOn = selected.includes(r.id);
                   return (
                     <TouchableOpacity
@@ -182,7 +208,7 @@ export default function ReportQuestionModal({
               </View>
 
               <Text style={[styles.subtitle, { color: colors.textSecondary, marginTop: 18 }]}>
-                Comments (optional)
+                Comments (required)
               </Text>
               <TextInput
                 style={[
@@ -197,7 +223,7 @@ export default function ReportQuestionModal({
                 ]}
                 value={comment}
                 onChangeText={setComment}
-                placeholder="Add any extra details that would help us fix this..."
+                placeholder={commentPlaceholder}
                 placeholderTextColor={colors.textMuted}
                 multiline
                 textAlignVertical="top"

@@ -15,7 +15,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '11 April 2026';
+const LAST_UPDATED = '1 May 2026';
 
 const SECTIONS = [
   {
@@ -31,50 +31,55 @@ const SECTIONS = [
   {
     title: '3. Accounts',
     body:
-      'You must provide a valid email address to create an account. You are responsible for maintaining the security of your account credentials. You must be at least 16 years old to use this app.',
+      'You must provide a valid email address to create an account. We store your email only for account creation and account management. You are responsible for maintaining the security of your account credentials. You must be at least 16 years old to use this app.',
   },
   {
-    title: '4. Subscriptions & Payments',
+    title: '4. Data and Privacy',
+    body:
+      'We only store the data needed to provide the app: your email address for account creation, your test and practice performance so it can be retrieved and analysed, and the questions or messages you send to the AI tutor so we can detect and prevent abuse of the service. We do not process it for unrelated purposes, sell, rent, trade, profile, advertise with, train models on, or otherwise use your data for anything outside those purposes.',
+  },
+  {
+    title: '5. Subscriptions & Payments',
     body:
       'Some features require a paid subscription. Subscriptions are managed through the Apple App Store or Google Play Store and are subject to their respective terms.\n\n• Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period\n• You can manage or cancel subscriptions in your device’s account settings\n• Refunds are handled by Apple or Google according to their policies',
   },
   {
-    title: '5. Intellectual Property',
+    title: '6. Intellectual Property',
     body:
       'All content in the app — including questions, explanations, diagrams, and UI design — is the intellectual property of UCAT Genius. You may not reproduce, distribute, or create derivative works from our content without written permission.',
   },
   {
-    title: '6. Disclaimer',
+    title: '7. Disclaimer',
     body:
       'UCAT Genius is an independent study tool and is not affiliated with, endorsed by, or connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university. "UCAT" is a registered trademark of the UCAT Consortium; its use here is purely descriptive.\n\nThis app is intended solely as a supplementary preparation aid. It does not replace official UCAT resources. We strongly recommend that all users visit the official UCAT website (ucat.ac.uk) for the latest information on exam format, registration dates, and scoring.\n\nPractice questions are original content designed to reflect the style and difficulty of the UCAT. They are not past exam questions.\n\nScaled scores (300–900) and SJ bands shown in this app are estimates only. The real UCAT uses Item Response Theory scoring with proprietary, item-level parameters that no third-party app can replicate exactly. Our estimates are derived from the 2025 UCAT Consortium official statistics (means, standard deviations, and decile tables) using piecewise-linear interpolation (Verbal Reasoning) and z-score transformation (Decision Making, Quantitative Reasoning), with a typical ±40-point uncertainty per subtest. Treat any score shown in this app as a rough indicator of progress, not as a prediction of your actual UCAT result. See "About UCAT → Scoring" inside the app for the full methodology.',
   },
   {
-    title: '7. Limitation of Liability',
+    title: '8. Limitation of Liability',
     body:
       'The app is provided "as is" without warranties of any kind. We do not guarantee that use of the app will result in any particular exam outcome. To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, or consequential damages arising from your use of the app.',
   },
   {
-    title: '8. Account Deletion',
+    title: '9. Account Deletion',
     body:
-      'You may delete your account at any time from the Profile screen. Upon deletion, all personal data and progress will be permanently removed. Active subscriptions should be cancelled separately through your device’s account settings.',
+      'You may delete your account at any time from the Profile screen. Upon deletion, your email, performance data, AI tutor question logs, and associated account data will be permanently removed. Active subscriptions should be cancelled separately through your device’s account settings.',
   },
   {
-    title: '9. Termination',
+    title: '10. Termination',
     body:
       'We reserve the right to suspend or terminate your account if you violate these terms, abuse the service, or engage in fraudulent activity.',
   },
   {
-    title: '10. Changes to Terms',
+    title: '11. Changes to Terms',
     body:
       'We may update these terms from time to time. We will notify you of significant changes via the app or email. Continued use after changes constitutes acceptance of the updated terms.',
   },
   {
-    title: '11. Governing Law',
+    title: '12. Governing Law',
     body:
       'These terms are governed by and construed in accordance with the laws of England and Wales.',
   },
   {
-    title: '12. Contact Us',
+    title: '13. Contact Us',
     body:
       'If you have any questions about these terms, please contact us at:\n\nucatprepaisupport@gmail.com',
   },

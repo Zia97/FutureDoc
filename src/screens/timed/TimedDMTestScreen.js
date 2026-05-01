@@ -65,7 +65,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
   }, [secondsLeft]);
 
   const question = test.questions[currentIndex] ?? test.questions[0];
-  const qid = question?.questionId;
+  const qid = question?.questionId ?? question?.id;
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === test.questions.length - 1;
   const currentAnswer = answers[qid];
@@ -97,7 +97,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
       questionIndex: idx,
       flatIndex: idx,
       stemIndex: idx,
-      questionId: q.questionId,
+      questionId: q.questionId ?? q.id,
     })),
   [test]);
 

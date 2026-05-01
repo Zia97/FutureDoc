@@ -26,7 +26,12 @@ import {
   TOTAL_LESSONS,
   VALID_LESSON_IDS,
 } from './VerbalReasoningLearnScreen';
+import ReportLessonButton from '../../components/ReportLessonButton';
 import { useAITutorAvailability } from '../../hooks/ai/useAITutorAvailability';
+import {
+  loadMiniAnswersForLesson,
+  saveMiniAnswer,
+} from '../../data/learn/learnMiniAnswersStorage';
 
 function getAccent(colors, accentKey) {
   return colors[accentKey] ?? colors.blue;
@@ -151,16 +156,35 @@ function CollapsibleTip({ title, body, bullets, accent, colors, isDark }) {
   );
 }
 
-function MiniExampleCard({ prompt, options, correctIndex, explanation, accent, colors, isDark, onAnswered }) {
-  const [selected, setSelected] = useState(null);
-  const [revealed, setRevealed] = useState(false);
+function shuffleOrderForPrompt(prompt, n) {
+  let h = 2166136261;
+  const key = String(prompt ?? '');
+  for (let i = 0; i < key.length; i++) {
+    h = Math.imul(h ^ key.charCodeAt(i), 16777619);
+  }
+  const order = Array.from({ length: n }, (_, i) => i);
+  for (let i = n - 1; i > 0; i--) {
+    h = (Math.imul(h, 1664525) + 1013904223) | 0;
+    const j = Math.abs(h) % (i + 1);
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+}
+
+function MiniExampleCard({ prompt, options, correctIndex, explanation, accent, colors, isDark, onAnswered, initialSelected }) {
+  const [selected, setSelected] = useState(initialSelected ?? null);
+  const [revealed, setRevealed] = useState(initialSelected != null);
   const isCorrect = selected === correctIndex;
+  const displayOrder = useMemo(
+    () => shuffleOrderForPrompt(prompt, options.length),
+    [prompt, options.length],
+  );
 
   const handleSelect = (index) => {
     if (selected !== null) return;
     setSelected(index);
     setRevealed(true);
-    onAnswered?.();
+    onAnswered?.(index);
   };
 
   return (
@@ -179,7 +203,8 @@ function MiniExampleCard({ prompt, options, correctIndex, explanation, accent, c
       <Text style={[styles.miniPrompt, { color: colors.text }]}>{prompt}</Text>
 
       <View style={styles.miniOptions}>
-        {options.map((option, index) => {
+        {displayOrder.map((index) => {
+          const option = options[index];
           const isSelected = selected === index;
           const isAnswer = index === correctIndex;
           const showCorrect = revealed && isAnswer;
@@ -395,7 +420,7 @@ function StepCard({ step, index, accent, colors, isDark }) {
   );
 }
 
-function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, demoCtx, workedExampleCtx) {
+function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, demoCtx, workedExampleCtx, savedMiniAnswers) {
   const kind = step.kind ?? 'step';
 
   if (kind === 'rule') {
@@ -456,7 +481,8 @@ function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, de
           accent={accent}
           colors={colors}
           isDark={isDark}
-          onAnswered={() => onQuestionAnswered?.(index)}
+          initialSelected={savedMiniAnswers?.[index]?.selectedIndex}
+          onAnswered={(selectedIndex) => onQuestionAnswered?.(index, selectedIndex, step.correctIndex)}
         />
       </View>
     );
@@ -523,7 +549,7 @@ function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, de
   );
 }
 
-function LessonHeader({ lesson, completed, completedCount, colors, isDark, accent }) {
+function LessonHeader({ lesson, completed, completedCount, colors, isDark, accent, section }) {
   return (
     <View
       style={[
@@ -542,11 +568,18 @@ function LessonHeader({ lesson, completed, completedCount, colors, isDark, accen
           <Text style={[styles.heroTitle, { color: colors.text }]}>{lesson.title}</Text>
           <Text style={[styles.heroMeta, { color: colors.textMuted }]}>{lesson.duration} - {lesson.type}</Text>
         </View>
-        {completed ? (
-          <View style={[styles.completeBadge, { borderColor: hexToRgba(colors.mint, 0.42), backgroundColor: hexToRgba(colors.mint, 0.12) }]}>
-            <PremiumIcon name="check" size={17} color={colors.mint} strokeWidth={2.8} />
-          </View>
-        ) : null}
+        <View style={styles.heroActions}>
+          <ReportLessonButton
+            section={section}
+            lessonId={lesson.id}
+            lessonTitle={lesson.title}
+          />
+          {completed ? (
+            <View style={[styles.completeBadge, { borderColor: hexToRgba(colors.mint, 0.42), backgroundColor: hexToRgba(colors.mint, 0.12) }]}>
+              <PremiumIcon name="check" size={17} color={colors.mint} strokeWidth={2.8} />
+            </View>
+          ) : null}
+        </View>
       </View>
 
       <Text style={[styles.heroBody, { color: colors.textSecondary }]}>{lesson.subtitle}</Text>
@@ -651,6 +684,7 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
   );
   const hasQuestions = interactiveIndices.length > 0;
   const [answeredIndices, setAnsweredIndices] = useState(new Set());
+  const [savedMiniAnswers, setSavedMiniAnswers] = useState({});
   const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
   // Worked-example steps are "answered" when the user actually completes the
   // example (lesson id is written to AsyncStorage from VRPassageScreen on
@@ -668,18 +702,38 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
     getStoredCompletedIds().then((ids) => {
       if (mounted) setCompletedIds(ids);
     });
+    loadMiniAnswersForLesson(lesson.id).then((map) => {
+      if (!mounted) return;
+      setSavedMiniAnswers(map);
+      const restoredIndices = Object.keys(map).map((k) => Number(k)).filter((n) => Number.isInteger(n));
+      if (restoredIndices.length) {
+        setAnsweredIndices((prev) => {
+          const next = new Set(prev);
+          restoredIndices.forEach((i) => next.add(i));
+          return next;
+        });
+      }
+    });
     return () => {
       mounted = false;
     };
-  }, []));
+  }, [lesson.id]));
 
-  const handleQuestionAnswered = useCallback((index) => {
+  const handleQuestionAnswered = useCallback((index, selectedIndex, correctIndex) => {
     setAnsweredIndices((prev) => {
+      if (prev.has(index)) return prev;
       const next = new Set(prev);
       next.add(index);
       return next;
     });
-  }, []);
+    if (selectedIndex == null) return;
+    const isCorrect = selectedIndex === correctIndex;
+    setSavedMiniAnswers((prev) => {
+      if (prev[index]) return prev;
+      return { ...prev, [index]: { selectedIndex, isCorrect } };
+    });
+    saveMiniAnswer(lesson.id, index, { selectedIndex, isCorrect });
+  }, [lesson.id]);
 
   const launchTutorDemo = useCallback(() => {
     if (demoLaunchIndex >= 0) {
@@ -757,14 +811,6 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
     navigation.navigate('TimedTestList', { section: 'VR', title: 'Verbal Reasoning' });
   }, [navigation]);
 
-  const openLessonPractice = useCallback(() => {
-    if (lesson.practiceRoute === 'timed') {
-      openTimedPractice();
-      return;
-    }
-    openPractice();
-  }, [lesson.practiceRoute, openPractice, openTimedPractice]);
-
   const goToNextLesson = useCallback(() => {
     if (nextLesson) {
       navigation.replace('LearnVRLesson', { lessonId: nextLesson.id });
@@ -799,6 +845,7 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
           colors={colors}
           isDark={isDark}
           accent={accent}
+          section="vr"
         />
 
         <View
@@ -810,7 +857,7 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
             },
           ]}
         >
-          {lesson.steps.map((step, index) => renderBlock(step, index, accent, colors, isDark, handleQuestionAnswered, demoCtx, workedExampleCtx))}
+          {lesson.steps.map((step, index) => renderBlock(step, index, accent, colors, isDark, handleQuestionAnswered, demoCtx, workedExampleCtx, savedMiniAnswers))}
         </View>
 
         <View style={styles.actionStack}>
@@ -828,15 +875,6 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
                 ? 'Answer all questions above to continue'
                 : 'Scroll to the bottom to continue'}
             </Text>
-          ) : null}
-          {lesson.practiceLabel ? (
-            <PrimaryButton
-              label={lesson.practiceLabel}
-              icon={lesson.practiceRoute === 'timed' ? 'timer' : 'pencil'}
-              color={accent}
-              variant="outline"
-              onPress={openLessonPractice}
-            />
           ) : null}
           {prevLesson ? (
             <PrimaryButton
@@ -873,6 +911,10 @@ const styles = StyleSheet.create({
   heroCopy: {
     flex: 1,
     minWidth: 0,
+  },
+  heroActions: {
+    alignItems: 'center',
+    gap: 8,
   },
   eyebrow: {
     fontSize: 11,

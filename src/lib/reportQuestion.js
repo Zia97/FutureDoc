@@ -10,6 +10,15 @@ export const REPORT_REASONS = [
   { id: 'other',               label: 'Other' },
 ];
 
+export const LESSON_REPORT_REASONS = [
+  { id: 'inaccurate_content',     label: 'Inaccurate content' },
+  { id: 'confusing_explanation',  label: 'Confusing explanation' },
+  { id: 'typo',                   label: 'Typo / formatting' },
+  { id: 'broken_interaction',     label: 'Broken interaction' },
+  { id: 'missing_detail',         label: 'Missing / incomplete detail' },
+  { id: 'other',                  label: 'Other' },
+];
+
 /**
  * Submit a question report.
  *
@@ -32,8 +41,9 @@ export async function submitQuestionReport({
 }) {
   if (!questionId) return { ok: false, error: 'Missing questionId' };
   if (!section)    return { ok: false, error: 'Missing section' };
-  if (reasons.length === 0 && !comment.trim()) {
-    return { ok: false, error: 'Please pick a reason or add a comment' };
+  const trimmedComment = String(comment ?? '').trim();
+  if (!trimmedComment) {
+    return { ok: false, error: 'Please add comments describing the issue.' };
   }
 
   const { data: { user } } = await supabase.auth.getUser();
@@ -45,7 +55,50 @@ export async function submitQuestionReport({
     is_timed: isTimed,
     user_id: user?.id ?? null,
     reasons,
-    comment: comment.trim() || null,
+    comment: trimmedComment,
+    platform: Platform.OS,
+  });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+  return { ok: true };
+}
+
+/**
+ * Submit a lesson report.
+ *
+ * @param {object} args
+ * @param {string} args.lessonId
+ * @param {string} [args.lessonTitle]
+ * @param {'dm'|'qr'|'sj'|'vr'} args.section
+ * @param {string[]} args.reasons
+ * @param {string} args.comment
+ * @returns {Promise<{ ok: boolean, error?: string }>}
+ */
+export async function submitLessonReport({
+  lessonId,
+  lessonTitle = null,
+  section,
+  reasons = [],
+  comment = '',
+}) {
+  if (!lessonId) return { ok: false, error: 'Missing lessonId' };
+  if (!section)  return { ok: false, error: 'Missing section' };
+  const trimmedComment = String(comment ?? '').trim();
+  if (!trimmedComment) {
+    return { ok: false, error: 'Please add comments describing the issue.' };
+  }
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const { error } = await supabase.from('lesson_reports').insert({
+    lesson_id: lessonId,
+    lesson_title: lessonTitle,
+    section,
+    user_id: user?.id ?? null,
+    reasons,
+    comment: trimmedComment,
     platform: Platform.OS,
   });
 

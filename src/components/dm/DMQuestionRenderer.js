@@ -220,12 +220,14 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
   function handleStatementTeachMe(index) {
     const statement = question.statements[index];
     setActiveTutorContext({
+      questionId: questionContext?.questionId ?? question.questionId ?? question.id,
       question: `${question.stem}\n\nStatement ${index + 1}: "${statement.text}"`,
       questionType: question.type,
       section: questionContext?.section ?? 'dm',
       correctAnswer: statement.answer,
       userAnswer: answer?.[index] ?? '',
       explanation: statement.reason ?? '',
+      isTimed: questionContext?.isTimed ?? false,
     });
     setInputText('');
     setTutorVisible(true);

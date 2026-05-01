@@ -48,8 +48,14 @@ const KEY_POINTS = [
     body: 'Scaled scores and SJ bands shown in the app are estimates only — rough indicators of progress, not predictions of your result.',
   },
   {
-    icon: 'shield-heart',
+    icon: 'lock',
     accent: 'mint',
+    title: 'Minimal data',
+    body: 'We only store your account email, your test performance, and AI tutor questions needed to protect the service. We do not process, sell, or use your data for unrelated purposes.',
+  },
+  {
+    icon: 'shield-heart',
+    accent: 'blue',
     title: 'Subscriptions',
     body: 'Subscriptions are managed through the App Store or Google Play.',
   },

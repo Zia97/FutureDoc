@@ -3,8 +3,14 @@ import { getIsOnline } from '../context/NetworkContext';
 
 const FUNCTION_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/ai-tutor`;
 
+function firstPresentId(...values) {
+  return values.find((value) => value != null && String(value).trim() !== '');
+}
+
 export async function streamAITutor({
   questionId,
+  id,
+  itemId,
   question,
   questionType,
   section,
@@ -22,6 +28,8 @@ export async function streamAITutor({
   onDone,
   onError,
 }) {
+  const resolvedQuestionId = firstPresentId(questionId, id, itemId);
+
   // Pre-flight: never debit a credit (or stall on a hung fetch) when offline.
   // Streaming AI responses are non-idempotent and credit-gated server-side, so
   // we refuse to even start the request. The caller surfaces an inline retry.
@@ -45,7 +53,7 @@ export async function streamAITutor({
         Authorization: `Bearer ${session.access_token}`,
       },
       body: JSON.stringify({
-        questionId,
+        questionId: resolvedQuestionId,
         question,
         questionType,
         section,
