@@ -24,6 +24,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { VR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
 const PREMIUM_LESSON_TYPES = new Set(['Strategy', 'Traps', 'Worked example']);
@@ -1712,7 +1713,7 @@ export const ALL_LESSONS = MODULES.flatMap((module) =>
 
 export const VALID_LESSON_IDS = new Set(ALL_LESSONS.map((lesson) => lesson.id));
 export const TOTAL_LESSONS = ALL_LESSONS.length;
-export const ESTIMATED_TIME = '110 min';
+export const ESTIMATED_TIME = '85 min';
 
 function getAccent(colors, accentKey) {
   return colors[accentKey] ?? colors.blue;
@@ -1779,7 +1780,7 @@ function PrimaryButton({ label, icon = 'chevron-right', onPress, color, disabled
 }
 
 function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, gradients, isDark, onContinue }) {
-  const accent = colors.blue;
+  const accent = colors[UCAT_SECTIONS.VR.accentKey] ?? colors.blue;
 
   return (
     <LinearGradient
@@ -1789,15 +1790,15 @@ function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, g
       style={[styles.heroCard, { borderColor: colors.border, shadowColor: accent }]}
     >
       <View style={styles.heroHeader}>
-        <RichIconBox icon="book" accent={accent} size={58} iconSize={30} />
+        <RichIconBox icon={UCAT_SECTIONS.VR.icon} accent={accent} size={58} iconSize={30} />
         <View style={styles.heroCopy}>
-          <Text style={[styles.eyebrow, { color: accent }]}>VERBAL REASONING</Text>
-          <Text style={[styles.heroTitle, { color: colors.text }]}>Master VR step by step.</Text>
+          <Text style={[styles.eyebrow, { color: accent }]}>{UCAT_SECTIONS.VR.title.toUpperCase()}</Text>
+          <Text style={[styles.heroTitle, { color: colors.text }]}>Verbal Reasoning lessons.</Text>
         </View>
       </View>
 
       <Text style={[styles.heroBody, { color: colors.textSecondary }]}>
-        Learn the section, question types, reading mechanics, traps, and worked examples before moving into practice.
+        Section overview, question types, reading mechanics, traps, and worked examples.
       </Text>
 
       <View style={styles.heroProgressHeader}>
@@ -2001,7 +2002,7 @@ function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
         </Text>
         <Text style={[styles.practiceText, { color: colors.textSecondary }]}>
           {allComplete
-            ? 'You have finished the VR learning pathway. Move into practice while the method is fresh.'
+            ? 'You have finished the VR learning pathway.'
             : 'Open untimed VR practice when you want to turn a lesson into repetition.'}
         </Text>
         <View style={styles.practiceButtons}>

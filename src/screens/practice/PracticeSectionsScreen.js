@@ -13,42 +13,31 @@ import {
   useStaggeredFade,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 
 const SECTIONS = [
   {
-    id: 'VR',
-    title: 'Verbal Reasoning',
+    ...UCAT_SECTIONS.VR,
     description: 'Reading comprehension and critical analysis',
-    icon: 'book',
     accent: premiumColors.blue,
-    accentKey: 'blue',
     route: 'VRQuestionList',
   },
   {
-    id: 'DM',
-    title: 'Decision Making',
+    ...UCAT_SECTIONS.DM,
     description: 'Logic puzzles, arguments and diagrams',
-    icon: 'person-cog',
     accent: premiumColors.teal,
-    accentKey: 'teal',
     route: 'DMQuestionList',
   },
   {
-    id: 'QR',
-    title: 'Quantitative Reasoning',
+    ...UCAT_SECTIONS.QR,
     description: 'Numerical problem solving and data interpretation',
-    icon: 'calculator',
     accent: premiumColors.purple,
-    accentKey: 'purple',
     route: 'QRQuestionList',
   },
   {
-    id: 'SJ',
-    title: 'Situational Judgement',
+    ...UCAT_SECTIONS.SJ,
     description: 'Professional scenarios and ethical judgement',
-    icon: 'stethoscope',
     accent: premiumColors.mint,
-    accentKey: 'mint',
     route: 'SJScenarioList',
   },
 ];

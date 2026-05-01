@@ -4,47 +4,43 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
 import { getPremiumTheme, hexToRgba, premiumColors } from '../../theme/premiumTheme';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import PremiumIcon from './PremiumIcon';
 
 const SECTION_COPY = {
   VR: {
-    shortLabel: 'VR',
-    title: 'Verbal Reasoning',
+    shortLabel: UCAT_SECTIONS.VR.shortLabel,
+    title: UCAT_SECTIONS.VR.title,
     description: 'Reading speed, accuracy, and scaled-score movement.',
-    icon: 'book',
+    icon: UCAT_SECTIONS.VR.icon,
   },
   DM: {
-    shortLabel: 'DM',
-    title: 'Decision Making',
+    shortLabel: UCAT_SECTIONS.DM.shortLabel,
+    title: UCAT_SECTIONS.DM.title,
     description: 'Logic, assumptions, diagrams, and reasoning accuracy.',
-    icon: 'brain',
+    icon: UCAT_SECTIONS.DM.icon,
   },
   QR: {
-    shortLabel: 'QR',
-    title: 'Quantitative Reasoning',
+    shortLabel: UCAT_SECTIONS.QR.shortLabel,
+    title: UCAT_SECTIONS.QR.title,
     description: 'Numerical accuracy, timing, and data interpretation.',
-    icon: 'calculator',
+    icon: UCAT_SECTIONS.QR.icon,
   },
   SJ: {
-    shortLabel: 'SJ',
-    title: 'Situational Judgement',
+    shortLabel: UCAT_SECTIONS.SJ.shortLabel,
+    title: UCAT_SECTIONS.SJ.title,
     description: 'Professional judgement, bands, and mark quality.',
-    icon: 'shield-heart',
+    icon: UCAT_SECTIONS.SJ.icon,
   },
 };
 
 export function getAnalyticsSectionMeta(sectionKey = 'VR', colors = premiumColors) {
-  const accentBySection = {
-    VR: colors.blue,
-    DM: colors.teal,
-    QR: colors.purple,
-    SJ: colors.mint,
-  };
+  const accentKey = UCAT_SECTIONS[sectionKey]?.accentKey ?? UCAT_SECTIONS.VR.accentKey;
 
   return {
     key: sectionKey,
     ...(SECTION_COPY[sectionKey] ?? SECTION_COPY.VR),
-    accent: accentBySection[sectionKey] ?? colors.blue,
+    accent: colors[accentKey] ?? colors.blue,
   };
 }
 

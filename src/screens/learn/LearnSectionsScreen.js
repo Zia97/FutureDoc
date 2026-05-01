@@ -16,45 +16,34 @@ import {
   useStaggeredFade,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import { LEARN_FEATURE_ICON, UCAT_SECTIONS } from '../../constants/sectionVisuals';
 
 const LEARN_SECTIONS = [
   {
-    id: 'VR',
-    title: 'Verbal Reasoning',
+    ...UCAT_SECTIONS.VR,
     description: 'Roadmap with theory, question types, traps, worked examples, and drills',
-    meta: '16 lessons - 4 modules - 40 min',
-    icon: 'book',
-    accentKey: 'blue',
+    meta: '32 lessons - 5 modules - 85 min',
     route: 'LearnVerbalReasoning',
     badge: 'Roadmap',
   },
   {
-    id: 'DM',
-    title: 'Decision Making',
+    ...UCAT_SECTIONS.DM,
     description: 'Roadmap with logic, diagrams, arguments, probability, traps, and worked examples',
-    meta: '27 lessons - 5 modules - 55 min',
-    icon: 'person-cog',
-    accentKey: 'teal',
+    meta: '37 lessons - 6 modules - 126 min',
     route: 'LearnDecisionMaking',
     badge: 'Roadmap',
   },
   {
-    id: 'QR',
-    title: 'Quantitative Reasoning',
+    ...UCAT_SECTIONS.QR,
     description: 'Roadmap with maths skills, question types, calculator strategy, traps, and worked examples',
-    meta: '25 lessons - 5 modules - 45 min',
-    icon: 'calculator',
-    accentKey: 'purple',
+    meta: '37 lessons - 6 modules - 158 min',
     route: 'LearnQuantitativeReasoning',
     badge: 'Roadmap',
   },
   {
-    id: 'SJ',
-    title: 'Situational Judgement',
+    ...UCAT_SECTIONS.SJ,
     description: 'Roadmap with judgement principles, question formats, scenario themes, traps, and worked examples',
-    meta: '31 lessons - 7 modules - 55 min',
-    icon: 'stethoscope',
-    accentKey: 'mint',
+    meta: '38 lessons - 7 modules - 179 min',
     route: 'LearnSituationalJudgement',
     badge: 'Roadmap',
   },
@@ -69,10 +58,10 @@ function LearnHero({ colors, gradients, isDark }) {
       style={[styles.heroCard, { borderColor: colors.border, shadowColor: colors.cyan }]}
     >
       <View style={styles.heroTopRow}>
-        <RichIconBox icon="brain" accent={colors.cyan} size={54} iconSize={28} />
+        <RichIconBox icon={LEARN_FEATURE_ICON} accent={colors.cyan} size={54} iconSize={28} />
         <View style={styles.heroCopy}>
           <Text style={[styles.eyebrow, { color: colors.cyan }]}>LEARN MODE</Text>
-          <Text style={[styles.heroTitle, { color: colors.text }]}>Build the method before the timer starts.</Text>
+          <Text style={[styles.heroTitle, { color: colors.text }]}>Lessons across every section.</Text>
         </View>
       </View>
 
@@ -123,7 +112,7 @@ export default function LearnSectionsScreen({ navigation }) {
           <View style={styles.intro}>
             <Text style={[styles.heading, { color: colors.text }]}>Choose a Section</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              Open a section to build the method before moving into practice.
+              Pick a section to open its lesson pathway.
             </Text>
           </View>
         </Animated.View>
@@ -159,7 +148,7 @@ export default function LearnSectionsScreen({ navigation }) {
         >
           <PremiumIcon name="notes" size={23} color={colors.cyan} />
           <Text style={[styles.noteText, { color: colors.textSecondary }]}>
-            All four sections now include a structured learning roadmap. Pick a section to build the method before moving into practice.
+            All four sections include a full lesson pathway.
           </Text>
         </View>
       </PremiumScrollView>

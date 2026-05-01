@@ -11,16 +11,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
-import Svg, {
-  Circle,
-  Defs,
-  Ellipse,
-  G,
-  LinearGradient as SvgLinearGradient,
-  Path,
-  Polyline,
-  Stop,
-} from 'react-native-svg';
 
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -32,6 +22,7 @@ import {
   getSectionVisuals,
 } from '../../services/lastActivityService';
 import { refreshDailyReminder } from '../../services/notificationService';
+import { LEARN_FEATURE_ICON } from '../../constants/sectionVisuals';
 import {
   GlassMenuCard,
   PremiumFooter,
@@ -62,79 +53,6 @@ function getDisplayName(user, profileDisplayName) {
 function getInitial(user, profileDisplayName) {
   const source = profileDisplayName || user?.user_metadata?.full_name || user?.email;
   return source?.trim()?.[0]?.toUpperCase() ?? '?';
-}
-
-function DoctorHeroArt({ colors = premiumColors, isDark = true }) {
-  return (
-    <Svg width="100%" height="100%" viewBox="0 0 245 320" preserveAspectRatio="xMidYMid meet">
-      <Defs>
-        <SvgLinearGradient id="coat" x1="48" y1="134" x2="201" y2="292" gradientUnits="userSpaceOnUse">
-          <Stop offset="0" stopColor="#C9D7FF" stopOpacity="0.85" />
-          <Stop offset="0.56" stopColor="#45537D" stopOpacity="0.62" />
-          <Stop offset="1" stopColor="#111B35" stopOpacity="0.92" />
-        </SvgLinearGradient>
-        <SvgLinearGradient id="skin" x1="94" y1="56" x2="148" y2="125" gradientUnits="userSpaceOnUse">
-          <Stop offset="0" stopColor="#D7A18E" stopOpacity="0.9" />
-          <Stop offset="1" stopColor="#7B5362" stopOpacity="0.78" />
-        </SvgLinearGradient>
-        <SvgLinearGradient id="tablet" x1="68" y1="186" x2="165" y2="267" gradientUnits="userSpaceOnUse">
-          <Stop offset="0" stopColor="#173B73" stopOpacity="0.92" />
-          <Stop offset="1" stopColor="#081529" stopOpacity="0.98" />
-        </SvgLinearGradient>
-      </Defs>
-
-      <Circle cx="134" cy="154" r="102" stroke={colors.blue} strokeWidth="2" opacity={isDark ? 0.22 : 0.18} fill="none" />
-      <Circle cx="134" cy="154" r="78" stroke={colors.cyan} strokeWidth="1.4" opacity={isDark ? 0.09 : 0.14} fill="none" />
-      <Path d="M54 155c25-53 78-82 141-76" stroke={colors.blue} strokeWidth="4" strokeLinecap="round" opacity={isDark ? 0.38 : 0.22} fill="none" />
-      <Polyline
-        points="25 165 50 165 61 143 76 188 93 157 108 165 135 165"
-        stroke={colors.cyan}
-        strokeWidth="2"
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        opacity="0.12"
-      />
-      <G opacity={isDark ? 0.12 : 0.16} stroke={colors.blue} strokeWidth="1.5" fill="none">
-        <Path d="M66 86c-10-8-8-24 6-26 4-12 20-11 25-2 11-1 18 10 15 20 9 6 5 21-7 23H77c-4 0-8-5-11-15Z" />
-        <Path d="M82 61v39M97 61v38M69 76h42M73 91h35" />
-      </G>
-
-      <G opacity="0.9">
-        <Path
-          d="M72 310c4-63 16-121 50-134 23-9 53 2 69 25 17 26 24 65 27 109H72Z"
-          fill="url(#coat)"
-        />
-        <Path d="M124 174l13 55 16-55c-8 4-18 4-29 0Z" fill="#0D1830" opacity="0.96" />
-        <Path d="M109 189c8 23 13 61 13 121M171 194c-15 27-21 66-21 116" stroke="#DCE8FF" strokeWidth="2" opacity="0.2" fill="none" />
-
-        <Path d="M88 190c-16 25-23 58-25 98" stroke="#B8D6FF" strokeWidth="8" strokeLinecap="round" opacity="0.35" fill="none" />
-        <Path d="M183 193c11 28 17 59 20 95" stroke="#B8D6FF" strokeWidth="8" strokeLinecap="round" opacity="0.32" fill="none" />
-
-        <Path d="M120 113c-9 20-8 48 5 59 11 10 32 4 42-11 9-14 12-39 3-55-12-21-40-17-50 7Z" fill="url(#skin)" />
-        <Path d="M113 112c1-24 23-48 54-34 22 10 27 33 14 50-6-16-20-21-35-26-15-4-24 0-33 10Z" fill="#172340" />
-        <Path d="M145 103c14 3 26 9 36 23-1-19-9-36-30-44-18-6-32 2-39 16 9-2 19 1 33 5Z" fill="#0B1428" opacity="0.86" />
-        <Ellipse cx="138" cy="131" rx="2.4" ry="3.2" fill="#162037" />
-        <Ellipse cx="166" cy="130" rx="2.4" ry="3.2" fill="#162037" />
-        <Path d="M145 151c6 5 15 5 22 0" stroke="#2B3454" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7" />
-
-        <Path d="M102 187c2-20 15-31 26-34" stroke="#09203D" strokeWidth="5" strokeLinecap="round" fill="none" />
-        <Path d="M176 181c-5-20-14-28-26-30" stroke="#09203D" strokeWidth="5" strokeLinecap="round" fill="none" />
-        <Circle cx="101" cy="190" r="8" stroke="#16223D" strokeWidth="4" fill="#0A1528" />
-        <Circle cx="178" cy="184" r="9" stroke="#16223D" strokeWidth="4" fill="#0A1528" />
-
-        <Path
-          d="M63 205c0-6 5-10 11-9l94 16c6 1 9 6 7 12l-16 69c-1 6-6 9-12 8L55 282c-6-1-9-6-8-12l16-65Z"
-          fill="url(#tablet)"
-          stroke={hexToRgba(colors.blue, 0.45)}
-          strokeWidth="2"
-        />
-        <Circle cx="112" cy="249" r="9" fill={hexToRgba(colors.blue, 0.1)} />
-        <Path d="M87 213c-18-4-31 6-35 20" stroke="#9FB8E8" strokeWidth="8" strokeLinecap="round" opacity="0.55" fill="none" />
-        <Path d="M72 214c-9 2-13 9-12 17" stroke="#D6E6FF" strokeWidth="6" strokeLinecap="round" opacity="0.45" fill="none" />
-      </G>
-    </Svg>
-  );
 }
 
 function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colors }) {
@@ -263,11 +181,7 @@ export default function HomeScreen({ navigation }) {
             end={{ x: 1, y: 1 }}
             style={[styles.heroCard, { borderColor: colors.border, shadowColor: colors.blue }]}
           >
-            <View style={styles.heroArt}>
-              <DoctorHeroArt colors={colors} isDark={isDark} />
-            </View>
-
-            <View style={[styles.heroCopy, { minHeight: resumeVisuals ? 240 : 200 }]}>
+            <View style={[styles.heroCopy, { minHeight: resumeVisuals ? 150 : 112 }]}>
               <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text>
 
               <View style={[styles.streakRow, { borderColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)', backgroundColor: isDark ? 'rgba(5, 12, 26, 0.5)' : 'rgba(255, 255, 255, 0.64)' }]}>
@@ -303,7 +217,7 @@ export default function HomeScreen({ navigation }) {
           <GlassMenuCard
             title="Learn UCAT Techniques"
             description="Theory, question types, worked examples, and strategy."
-            icon="brain"
+            icon={LEARN_FEATURE_ICON}
             accent={colors.cyan}
             highlighted
             onPress={() => navigation.navigate('LearnSections')}
@@ -336,7 +250,7 @@ export default function HomeScreen({ navigation }) {
         <Animated.View style={action4Anim}>
           <GlassMenuCard
             title="About the UCAT"
-            description="Understand the exam and prepare with confidence."
+            description="General knowledge about the UCAT"
             icon="book"
             accent={colors.purple}
             onPress={() => navigation.navigate('AboutUCAT')}
@@ -430,14 +344,6 @@ const styles = StyleSheet.create({
     shadowOpacity: Platform.OS === 'ios' ? 0.18 : 0,
     shadowRadius: 30,
     elevation: 8,
-  },
-  heroArt: {
-    position: 'absolute',
-    right: -26,
-    top: 54,
-    width: 218,
-    height: 292,
-    opacity: 0.9,
   },
   heroCopy: {
     justifyContent: 'flex-start',

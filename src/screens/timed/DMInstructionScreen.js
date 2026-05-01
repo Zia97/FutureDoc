@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 
 import PremiumInstructionScreen from '../../components/premium/PremiumInstructionScreen';
 import { useTheme } from '../../context/ThemeContext';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const INSTRUCTION_SECONDS = 90;
@@ -15,9 +16,9 @@ export default function DMInstructionScreen({ navigation, route }) {
   return (
     <PremiumInstructionScreen
       navigation={navigation}
-      sectionTitle="Decision Making"
-      sectionIcon="brain"
-      accent={colors.teal}
+      sectionTitle={UCAT_SECTIONS.DM.title}
+      sectionIcon={UCAT_SECTIONS.DM.icon}
+      accent={colors[UCAT_SECTIONS.DM.accentKey]}
       durationSeconds={INSTRUCTION_SECONDS}
       readNotice="You have 1 minute 30 seconds to read this screen."
       table={{

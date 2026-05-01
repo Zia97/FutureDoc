@@ -142,11 +142,12 @@ export function PremiumScrollView({ children, contentContainerStyle, ...props })
 
 export function AppHeader({ navigation, title, showBack = true }) {
   const insets = useSafeAreaInsets();
-  const { user, isAnonymous } = useAuth();
+  const { user, isAnonymous, displayName } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const showProfile = !!user && !isAnonymous;
-  const initial = showProfile ? user?.email?.[0]?.toUpperCase() ?? '?' : '';
+  const initialSource = displayName || user?.user_metadata?.full_name || user?.email;
+  const initial = showProfile ? initialSource?.trim()?.[0]?.toUpperCase() ?? '?' : '';
 
   const handleBack = () => {
     if (navigation?.canGoBack?.()) {

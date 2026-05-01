@@ -24,6 +24,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { DM_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
 const PREMIUM_LESSON_TYPES = new Set(['Strategy', 'Traps', 'Worked example']);
@@ -1712,7 +1713,7 @@ export const ALL_LESSONS = MODULES.flatMap((module) =>
 
 export const VALID_LESSON_IDS = new Set(ALL_LESSONS.map((lesson) => lesson.id));
 export const TOTAL_LESSONS = ALL_LESSONS.length;
-export const ESTIMATED_TIME = '180 min';
+export const ESTIMATED_TIME = '126 min';
 
 function getAccent(colors, accentKey) {
   return colors[accentKey] ?? colors.blue;
@@ -1779,7 +1780,7 @@ function PrimaryButton({ label, icon = 'chevron-right', onPress, color, disabled
 }
 
 function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, gradients, isDark, onContinue }) {
-  const accent = colors.teal ?? colors.cyan ?? colors.blue;
+  const accent = colors[UCAT_SECTIONS.DM.accentKey] ?? colors.cyan ?? colors.blue;
 
   return (
     <LinearGradient
@@ -1789,15 +1790,15 @@ function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, g
       style={[styles.heroCard, { borderColor: colors.border, shadowColor: accent }]}
     >
       <View style={styles.heroHeader}>
-        <RichIconBox icon="person-cog" accent={accent} size={58} iconSize={30} />
+        <RichIconBox icon={UCAT_SECTIONS.DM.icon} accent={accent} size={58} iconSize={30} />
         <View style={styles.heroCopy}>
-          <Text style={[styles.eyebrow, { color: accent }]}>DECISION MAKING</Text>
-          <Text style={[styles.heroTitle, { color: colors.text }]}>Master UCAT logic step by step.</Text>
+          <Text style={[styles.eyebrow, { color: accent }]}>{UCAT_SECTIONS.DM.title.toUpperCase()}</Text>
+          <Text style={[styles.heroTitle, { color: colors.text }]}>Decision Making lessons.</Text>
         </View>
       </View>
 
       <Text style={[styles.heroBody, { color: colors.textSecondary }]}>
-        Learn the section, the six question families, the logic skills underneath them, traps, timing, and worked examples before moving into practice.
+        Section overview, the six question families, the logic skills underneath them, traps, timing, and worked examples.
       </Text>
 
       <View style={styles.heroProgressHeader}>
@@ -2003,7 +2004,7 @@ function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
         </Text>
         <Text style={[styles.practiceText, { color: colors.textSecondary }]}>
           {allComplete
-            ? 'You have finished the DM learning pathway. Move into practice while the method is fresh.'
+            ? 'You have finished the DM learning pathway.'
             : 'Open untimed DM practice when you want to turn a lesson into repetition.'}
         </Text>
         <View style={styles.practiceButtons}>

@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 
 import PremiumInstructionScreen from '../../components/premium/PremiumInstructionScreen';
 import { useTheme } from '../../context/ThemeContext';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const INSTRUCTION_SECONDS = 90;
@@ -15,9 +16,9 @@ export default function VRInstructionScreen({ navigation, route }) {
   return (
     <PremiumInstructionScreen
       navigation={navigation}
-      sectionTitle="Verbal Reasoning"
-      sectionIcon="book"
-      accent={colors.blue}
+      sectionTitle={UCAT_SECTIONS.VR.title}
+      sectionIcon={UCAT_SECTIONS.VR.icon}
+      accent={colors[UCAT_SECTIONS.VR.accentKey]}
       durationSeconds={INSTRUCTION_SECONDS}
       readNotice="You have 1 minute 30 seconds to read this screen."
       table={{

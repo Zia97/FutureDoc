@@ -176,6 +176,15 @@ export default function PremiumIcon({
             <Path d="M16.8 9.3c-1.2 0-2.1.2-3.1.8" />
           </G>
         );
+      case 'graduation-cap':
+        return (
+          <G {...strokeProps} fill="none">
+            <Path d="M3.5 8.3 12 4.2l8.5 4.1-8.5 4.1-8.5-4.1Z" />
+            <Path d="M7.2 10.3v4.2c1.3 1.3 2.9 2 4.8 2s3.5-.7 4.8-2v-4.2" />
+            <Path d="M20.5 8.3v5.3" />
+            <Path d="M20.5 13.6 19.2 16" />
+          </G>
+        );
       case 'pencil':
         return (
           <G {...strokeProps} fill="none">

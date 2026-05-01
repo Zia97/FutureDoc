@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import {
   AnalyticsCard,
   AnalyticsEmptyState,
@@ -421,7 +422,7 @@ export default function DMAnalyticsScreen({ route, preloadedRows }) {
     return (
       <AnalyticsEmptyState
         t={t}
-        icon="brain"
+        icon={UCAT_SECTIONS.DM.icon}
         title="No DM data yet"
         message="Complete a timed Decision Making test to start building your performance analytics."
         backgroundColor={screenBg}

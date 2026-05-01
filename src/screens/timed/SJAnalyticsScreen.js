@@ -13,6 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { getSJBand, SJ_UK_BANDS } from '../../lib/ucatScoring';
 import {
   AnalyticsCard,
@@ -383,7 +384,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
     return (
       <AnalyticsEmptyState
         t={t}
-        icon="shield-heart"
+        icon={UCAT_SECTIONS.SJ.icon}
         title="No SJ data yet"
         message="Complete a timed Situational Judgement test to start building your performance analytics."
         backgroundColor={screenBg}

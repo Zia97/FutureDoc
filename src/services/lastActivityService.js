@@ -1,33 +1,22 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../lib/reportError';
+import { UCAT_SECTIONS, getSectionVisuals as getUcatSectionVisuals } from '../constants/sectionVisuals';
 
 const LAST_ACTIVITY_KEY = 'last_activity_v1';
 
 const SECTION_LABEL = {
-  VR: 'Verbal Reasoning',
-  DM: 'Decision Making',
-  QR: 'Quantitative Reasoning',
-  SJ: 'Situational Judgement',
-};
-
-const SECTION_ICON = {
-  VR: 'book',
-  DM: 'person-cog',
-  QR: 'calculator',
-  SJ: 'stethoscope',
-};
-
-const SECTION_ACCENT_KEY = {
-  VR: 'blue',
-  DM: 'teal',
-  QR: 'purple',
-  SJ: 'mint',
+  VR: UCAT_SECTIONS.VR.title,
+  DM: UCAT_SECTIONS.DM.title,
+  QR: UCAT_SECTIONS.QR.title,
+  SJ: UCAT_SECTIONS.SJ.title,
 };
 
 export function getSectionVisuals(section) {
+  const visual = getUcatSectionVisuals(section);
+
   return {
-    icon: SECTION_ICON[section] ?? 'target',
-    accentKey: SECTION_ACCENT_KEY[section] ?? 'blue',
+    icon: visual.icon,
+    accentKey: visual.accentKey,
   };
 }
 

@@ -24,6 +24,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { SJ_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
 const PREMIUM_LESSON_TYPES = new Set(['Strategy', 'Traps', 'Worked example']);
@@ -2087,7 +2088,7 @@ export const ALL_LESSONS = MODULES.flatMap((module) =>
 
 export const VALID_LESSON_IDS = new Set(ALL_LESSONS.map((lesson) => lesson.id));
 export const TOTAL_LESSONS = ALL_LESSONS.length;
-export const ESTIMATED_TIME = '3 hr';
+export const ESTIMATED_TIME = '179 min';
 
 function getAccent(colors, accentKey) {
   return colors[accentKey] ?? colors.blue;
@@ -2154,7 +2155,7 @@ function PrimaryButton({ label, icon = 'chevron-right', onPress, color, disabled
 }
 
 function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, gradients, isDark, onContinue }) {
-  const accent = colors.mint ?? colors.cyan ?? colors.blue;
+  const accent = colors[UCAT_SECTIONS.SJ.accentKey] ?? colors.cyan ?? colors.blue;
 
   return (
     <LinearGradient
@@ -2164,15 +2165,15 @@ function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, g
       style={[styles.heroCard, { borderColor: colors.border, shadowColor: accent }]}
     >
       <View style={styles.heroHeader}>
-        <RichIconBox icon="stethoscope" accent={accent} size={58} iconSize={30} />
+        <RichIconBox icon={UCAT_SECTIONS.SJ.icon} accent={accent} size={58} iconSize={30} />
         <View style={styles.heroCopy}>
-          <Text style={[styles.eyebrow, { color: accent }]}>SITUATIONAL JUDGEMENT</Text>
-          <Text style={[styles.heroTitle, { color: colors.text }]}>Learn how to think like a safe, professional future clinician.</Text>
+          <Text style={[styles.eyebrow, { color: accent }]}>{UCAT_SECTIONS.SJ.title.toUpperCase()}</Text>
+          <Text style={[styles.heroTitle, { color: colors.text }]}>Situational Judgement lessons.</Text>
         </View>
       </View>
 
       <Text style={[styles.heroBody, { color: colors.textSecondary }]}>
-        Understand scenarios, judge responses, avoid traps, and apply consistent reasoning before starting practice.
+        Scenarios, response judgement, common traps, and consistent reasoning rules.
       </Text>
 
       <View style={styles.heroProgressHeader}>
@@ -2378,7 +2379,7 @@ function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
         </Text>
         <Text style={[styles.practiceText, { color: colors.textSecondary }]}>
           {allComplete
-            ? 'You have finished the SJ learning pathway. Move into practice while the method is fresh.'
+            ? 'You have finished the SJ learning pathway.'
             : 'Open SJ practice when you want to turn a lesson into repetition.'}
         </Text>
         <View style={styles.practiceButtons}>

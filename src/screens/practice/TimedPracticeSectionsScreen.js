@@ -13,39 +13,28 @@ import {
   useStaggeredFade,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 
 const SECTIONS = [
   {
-    id: 'VR',
-    title: 'Verbal Reasoning',
+    ...UCAT_SECTIONS.VR,
     description: '44 questions - 22 minutes',
-    icon: 'book',
     accent: premiumColors.blue,
-    accentKey: 'blue',
   },
   {
-    id: 'DM',
-    title: 'Decision Making',
+    ...UCAT_SECTIONS.DM,
     description: '35 questions - 37 minutes',
-    icon: 'person-cog',
     accent: premiumColors.teal,
-    accentKey: 'teal',
   },
   {
-    id: 'QR',
-    title: 'Quantitative Reasoning',
+    ...UCAT_SECTIONS.QR,
     description: '36 questions - 26 minutes',
-    icon: 'calculator',
     accent: premiumColors.purple,
-    accentKey: 'purple',
   },
   {
-    id: 'SJ',
-    title: 'Situational Judgement',
+    ...UCAT_SECTIONS.SJ,
     description: '69 questions - 26 minutes',
-    icon: 'stethoscope',
     accent: premiumColors.mint,
-    accentKey: 'mint',
   },
 ];
 

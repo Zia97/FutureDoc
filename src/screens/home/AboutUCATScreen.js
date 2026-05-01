@@ -34,14 +34,15 @@ import {
   useStaggeredFade,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 
 const SECTIONS = [
   { id: 'what', label: 'What is the UCAT?', icon: 'book', accentKey: 'blue' },
   { id: 'format', label: 'Exam Format', icon: 'timer', accentKey: 'cyan' },
-  { id: 'vr', label: 'Verbal Reasoning', icon: 'book', accentKey: 'blue' },
-  { id: 'dm', label: 'Decision Making', icon: 'person-cog', accentKey: 'teal' },
-  { id: 'qr', label: 'Quantitative Reasoning', icon: 'calculator', accentKey: 'purple' },
-  { id: 'sj', label: 'Situational Judgement', icon: 'stethoscope', accentKey: 'mint' },
+  { id: 'vr', label: UCAT_SECTIONS.VR.title, icon: UCAT_SECTIONS.VR.icon, accentKey: UCAT_SECTIONS.VR.accentKey },
+  { id: 'dm', label: UCAT_SECTIONS.DM.title, icon: UCAT_SECTIONS.DM.icon, accentKey: UCAT_SECTIONS.DM.accentKey },
+  { id: 'qr', label: UCAT_SECTIONS.QR.title, icon: UCAT_SECTIONS.QR.icon, accentKey: UCAT_SECTIONS.QR.accentKey },
+  { id: 'sj', label: UCAT_SECTIONS.SJ.title, icon: UCAT_SECTIONS.SJ.icon, accentKey: UCAT_SECTIONS.SJ.accentKey },
   { id: 'scoring', label: 'Scoring', icon: 'chart', accentKey: 'amber' },
   { id: 'tips', label: 'Study Tips', icon: 'target', accentKey: 'cyan' },
   { id: 'dates', label: 'Exam Dates & Registration', icon: 'flag', accentKey: 'red' },
@@ -340,21 +341,21 @@ export default function AboutUCATScreen({ navigation }) {
         <Animated.View style={sectionAnims[2]}>
           <View ref={registerRef('vr')} style={styles.sectionAnchor}>
             <SectionCard
-              title="Verbal Reasoning"
-              icon="book"
-              accent={colors.blue}
+              title={UCAT_SECTIONS.VR.title}
+              icon={UCAT_SECTIONS.VR.icon}
+              accent={colors[UCAT_SECTIONS.VR.accentKey]}
               styles={styles}
               colors={colors}
               isDark={isDark}
             >
-              <SectionBadge label="VR" color={colors.blue} styles={styles} />
+              <SectionBadge label={UCAT_SECTIONS.VR.shortLabel} color={colors[UCAT_SECTIONS.VR.accentKey]} styles={styles} />
               <StatRow
                 items={[
                   { label: 'Questions', value: '44' },
                   { label: 'Time', value: '22 min' },
                   { label: 'Per question', value: '~30 sec' },
                 ]}
-                accent={colors.blue}
+                accent={colors[UCAT_SECTIONS.VR.accentKey]}
                 styles={styles}
               />
               <Text style={styles.body}>
@@ -395,21 +396,21 @@ export default function AboutUCATScreen({ navigation }) {
         <Animated.View style={sectionAnims[3]}>
           <View ref={registerRef('dm')} style={styles.sectionAnchor}>
             <SectionCard
-              title="Decision Making"
-              icon="person-cog"
-              accent={colors.teal}
+              title={UCAT_SECTIONS.DM.title}
+              icon={UCAT_SECTIONS.DM.icon}
+              accent={colors[UCAT_SECTIONS.DM.accentKey]}
               styles={styles}
               colors={colors}
               isDark={isDark}
             >
-              <SectionBadge label="DM" color={colors.teal} styles={styles} />
+              <SectionBadge label={UCAT_SECTIONS.DM.shortLabel} color={colors[UCAT_SECTIONS.DM.accentKey]} styles={styles} />
               <StatRow
                 items={[
                   { label: 'Questions', value: '35' },
                   { label: 'Time', value: '37 min' },
                   { label: 'Per question', value: '~63 sec' },
                 ]}
-                accent={colors.teal}
+                accent={colors[UCAT_SECTIONS.DM.accentKey]}
                 styles={styles}
               />
               <Text style={styles.body}>
@@ -442,21 +443,21 @@ export default function AboutUCATScreen({ navigation }) {
         <Animated.View style={sectionAnims[4]}>
           <View ref={registerRef('qr')} style={styles.sectionAnchor}>
             <SectionCard
-              title="Quantitative Reasoning"
-              icon="calculator"
-              accent={colors.purple}
+              title={UCAT_SECTIONS.QR.title}
+              icon={UCAT_SECTIONS.QR.icon}
+              accent={colors[UCAT_SECTIONS.QR.accentKey]}
               styles={styles}
               colors={colors}
               isDark={isDark}
             >
-              <SectionBadge label="QR" color={colors.purple} styles={styles} />
+              <SectionBadge label={UCAT_SECTIONS.QR.shortLabel} color={colors[UCAT_SECTIONS.QR.accentKey]} styles={styles} />
               <StatRow
                 items={[
                   { label: 'Questions', value: '36' },
                   { label: 'Time', value: '26 min' },
                   { label: 'Per question', value: '~43 sec' },
                 ]}
-                accent={colors.purple}
+                accent={colors[UCAT_SECTIONS.QR.accentKey]}
                 styles={styles}
               />
               <Text style={styles.body}>
@@ -473,7 +474,7 @@ export default function AboutUCATScreen({ navigation }) {
                   'Data interpretation from tables and graphs',
                   'Area, volume, and basic geometry',
                 ]}
-                accent={colors.purple}
+                accent={colors[UCAT_SECTIONS.QR.accentKey]}
                 styles={styles}
               />
               <Text style={styles.subheading}>Calculator Use</Text>
@@ -495,21 +496,21 @@ export default function AboutUCATScreen({ navigation }) {
         <Animated.View style={sectionAnims[5]}>
           <View ref={registerRef('sj')} style={styles.sectionAnchor}>
             <SectionCard
-              title="Situational Judgement"
-              icon="stethoscope"
-              accent={colors.mint}
+              title={UCAT_SECTIONS.SJ.title}
+              icon={UCAT_SECTIONS.SJ.icon}
+              accent={colors[UCAT_SECTIONS.SJ.accentKey]}
               styles={styles}
               colors={colors}
               isDark={isDark}
             >
-              <SectionBadge label="SJ" color={colors.mint} styles={styles} />
+              <SectionBadge label={UCAT_SECTIONS.SJ.shortLabel} color={colors[UCAT_SECTIONS.SJ.accentKey]} styles={styles} />
               <StatRow
                 items={[
                   { label: 'Questions', value: '69' },
                   { label: 'Time', value: '26 min' },
                   { label: 'Per question', value: '~23 sec' },
                 ]}
-                accent={colors.mint}
+                accent={colors[UCAT_SECTIONS.SJ.accentKey]}
                 styles={styles}
               />
               <Text style={styles.body}>
@@ -529,7 +530,7 @@ export default function AboutUCATScreen({ navigation }) {
                   'Appropriateness questions - rate each response from very appropriate to very inappropriate.',
                   'Importance questions - rate how important each action is from very important to not important at all.',
                 ]}
-                accent={colors.mint}
+                accent={colors[UCAT_SECTIONS.SJ.accentKey]}
                 styles={styles}
               />
               <Text style={styles.subheading}>Key Themes</Text>
@@ -541,10 +542,10 @@ export default function AboutUCATScreen({ navigation }) {
                   'Confidentiality and consent',
                   'Personal wellbeing and limitations',
                 ]}
-                accent={colors.mint}
+                accent={colors[UCAT_SECTIONS.SJ.accentKey]}
                 styles={styles}
               />
-              <InfoBox text={r.sjInfoBox} icon="shield-heart" accent={colors.mint} styles={styles} />
+              <InfoBox text={r.sjInfoBox} icon="shield-heart" accent={colors[UCAT_SECTIONS.SJ.accentKey]} styles={styles} />
             </SectionCard>
           </View>
         </Animated.View>

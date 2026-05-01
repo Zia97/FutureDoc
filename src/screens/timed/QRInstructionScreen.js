@@ -3,6 +3,7 @@ import { Text } from 'react-native';
 
 import PremiumInstructionScreen from '../../components/premium/PremiumInstructionScreen';
 import { useTheme } from '../../context/ThemeContext';
+import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
 const INSTRUCTION_SECONDS = 120;
@@ -15,9 +16,9 @@ export default function QRInstructionScreen({ navigation, route }) {
   return (
     <PremiumInstructionScreen
       navigation={navigation}
-      sectionTitle="Quantitative Reasoning"
-      sectionIcon="calculator"
-      accent={colors.purple}
+      sectionTitle={UCAT_SECTIONS.QR.title}
+      sectionIcon={UCAT_SECTIONS.QR.icon}
+      accent={colors[UCAT_SECTIONS.QR.accentKey]}
       durationSeconds={INSTRUCTION_SECONDS}
       readNotice="You have 2 minutes to read this screen."
       table={{
