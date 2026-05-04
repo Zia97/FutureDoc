@@ -203,7 +203,8 @@ export default function ProfileScreen() {
   const initialSource = isAnonymous ? 'G' : (displayName?.[0] ?? user?.email?.[0] ?? '?');
   const heroInitial = initialSource.toUpperCase();
   const emailLabel = isAnonymous ? 'Guest — progress saved on this device' : user?.email;
-  const isPasswordUser = !isAnonymous && user?.app_metadata?.provider === 'email';
+  const isPasswordUser =
+    !isAnonymous && (user?.identities ?? []).some((i) => i.provider === 'email');
 
   const proAccent = colors.mint;
   const accountAccent = colors.cyan;
