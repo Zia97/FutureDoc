@@ -54,6 +54,7 @@ class DatabaseService {
           order_index
         )
       `)
+      .order('is_free', { ascending: false })
       .order('created_at', { ascending: true });
     if (error) throw error;
     return data;
@@ -82,6 +83,7 @@ class DatabaseService {
           order_index
         )
       `)
+      .order('is_free', { ascending: false })
       .order('created_at', { ascending: true })
       .order('id', { ascending: true })
       .range(from, to);
@@ -141,6 +143,7 @@ class DatabaseService {
           order_index
         )
       `)
+      .order('is_free', { ascending: false })
       .order('order_index', { ascending: true });
     if (error) throw error;
     return data;
@@ -179,6 +182,7 @@ class DatabaseService {
           order_index
         )
       `)
+      .order('is_free', { ascending: false })
       .order('order_index', { ascending: true })
       .order('id', { ascending: true })
       .range(from, to);
@@ -224,6 +228,7 @@ class DatabaseService {
           order_index
         )
       `)
+      .order('is_free', { ascending: false })
       .order('created_at', { ascending: true });
     if (error) throw error;
     return data;
@@ -248,6 +253,7 @@ class DatabaseService {
           order_index
         )
       `)
+      .order('is_free', { ascending: false })
       .order('created_at', { ascending: true })
       .order('id', { ascending: true })
       .range(from, to);
@@ -292,6 +298,7 @@ class DatabaseService {
           label_set
         )
       `)
+      .order('is_free', { ascending: false })
       .order('created_at', { ascending: true });
     if (error) throw error;
     return data ?? [];
@@ -315,6 +322,7 @@ class DatabaseService {
           label_set
         )
       `)
+      .order('is_free', { ascending: false })
       .order('created_at', { ascending: true })
       .order('id', { ascending: true })
       .range(from, to);
