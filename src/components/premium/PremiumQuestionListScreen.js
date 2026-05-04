@@ -359,9 +359,10 @@ export default function PremiumQuestionListScreen({
         title: String(titleText),
         searchText: `${titleText} ${extraSearchText}`.toLowerCase(),
         status: normalizeStatus(getStatus?.(item, originalIndex)),
+        isFree: getIsFree ? !!getIsFree(item, originalIndex) : true,
       };
     })
-  ), [getSearchText, getStatus, getTitle, items]);
+  ), [getIsFree, getSearchText, getStatus, getTitle, items]);
 
   const stats = useMemo(() => indexedItems.reduce((acc, entry) => {
     if (entry.status === 'completed') acc.completed += 1;
@@ -372,7 +373,7 @@ export default function PremiumQuestionListScreen({
 
   const visibleItems = useMemo(() => {
     const query = searchText.trim().toLowerCase();
-    return indexedItems.filter((entry) => {
+    const filtered = indexedItems.filter((entry) => {
       if (activeFilter !== 'all' && entry.status !== activeFilter) return false;
       for (const filter of extraFilters) {
         const activeValue = extraFilterValues[filter.key] ?? 'all';
@@ -382,6 +383,10 @@ export default function PremiumQuestionListScreen({
       }
       if (query && !entry.searchText.includes(query)) return false;
       return true;
+    });
+    return filtered.sort((a, b) => {
+      if (a.isFree !== b.isFree) return a.isFree ? -1 : 1;
+      return a.originalIndex - b.originalIndex;
     });
   }, [activeFilter, extraFilterValues, extraFilters, indexedItems, searchText]);
 
