@@ -17,6 +17,7 @@ import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import SetDisplayNameScreen from '../screens/auth/SetDisplayNameScreen';
 import ToSAcceptanceScreen, { TOS_FLAG_KEY } from '../screens/onboarding/ToSAcceptanceScreen';
 import ForceUpdateScreen from '../screens/onboarding/ForceUpdateScreen';
+import SuspendedScreen from '../screens/onboarding/SuspendedScreen';
 import HeaderAuthButton from '../components/HeaderAuthButton';
 
 import HomeScreen from '../screens/home/HomeScreen';
@@ -25,6 +26,7 @@ import AboutUCATScreen from '../screens/home/AboutUCATScreen';
 import PaywallScreen from '../screens/home/PaywallScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
 import TermsOfServiceScreen from '../screens/home/TermsOfServiceScreen';
+import SupportScreen from '../screens/home/SupportScreen';
 import DecisionMakingLearnScreen from '../screens/learn/DecisionMakingLearnScreen';
 import DecisionMakingLessonScreen from '../screens/learn/DecisionMakingLessonScreen';
 import LearnSectionsScreen from '../screens/learn/LearnSectionsScreen';
@@ -126,6 +128,7 @@ function AppStack() {
       <Stack.Screen name="Paywall" component={PaywallScreen} options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />
       {/* Reachable from Profile for anonymous users who want to link an account or sign in. */}
       <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
@@ -151,7 +154,7 @@ function DisplayNameStack() {
 }
 
 export default function AppNavigator() {
-  const { user, loading, passwordRecovery, displayName, displayNameLoading } = useAuth();
+  const { user, loading, passwordRecovery, displayName, displayNameLoading, suspension } = useAuth();
   const { theme: t } = useTheme();
   const [tosAccepted, setTosAccepted] = useState(null); // null = unknown (loading)
   const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
@@ -191,7 +194,14 @@ export default function AppNavigator() {
     }
   }, [tosAccepted, user]);
 
-  if (loading || tosAccepted === null || versionGate === null) {
+  // Hold the loader until suspension state is resolved for non-anonymous
+  // users — otherwise a suspended user briefly sees Home before the gate
+  // kicks in. Anonymous users skip this entirely (suspension.loading flips
+  // to false immediately for them).
+  const suspensionPending =
+    !!user && !user.is_anonymous && suspension?.loading;
+
+  if (loading || tosAccepted === null || versionGate === null || suspensionPending) {
     return (
       <View style={{ flex: 1, backgroundColor: t.headerBg, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color={t.accent} />
@@ -201,6 +211,10 @@ export default function AppNavigator() {
 
   if (versionGate.updateRequired) {
     return <ForceUpdateScreen storeUrl={versionGate.storeUrl} />;
+  }
+
+  if (suspension?.isSuspended) {
+    return <SuspendedScreen reason={suspension.reason} suspendedAt={suspension.suspendedAt} />;
   }
 
   if (!tosAccepted) {

@@ -26,6 +26,10 @@ export function AuthProvider({ children }) {
   const [passwordRecovery, setPasswordRecovery] = useState(false);
   const [displayName, setDisplayNameState] = useState(null);
   const [displayNameLoading, setDisplayNameLoading] = useState(false);
+  // Suspension state — null while we're still resolving on first load so the
+  // app can hold on the loader rather than briefly flashing the home stack
+  // before the gate kicks in.
+  const [suspension, setSuspension] = useState({ loading: true, isSuspended: false, reason: null, suspendedAt: null });
 
   // Mirror every display_name change to AsyncStorage so cold-start renders
   // can show the name immediately, before the network fetch resolves. The
@@ -42,13 +46,16 @@ export function AuthProvider({ children }) {
     }
   };
 
-  // Fetch display_name whenever the signed-in user changes. Hydrates from
-  // AsyncStorage first so cold starts don't flash the gate screen, then
-  // verifies against the DB and updates if it has changed.
+  // Fetch display_name + suspension whenever the signed-in user changes.
+  // Hydrates display_name from AsyncStorage first so cold starts don't
+  // flash the gate screen, then verifies against the DB and updates if it
+  // has changed. Suspension is only meaningful for non-anonymous users —
+  // anonymous sessions are never suspended (we'd just rotate them).
   const refreshDisplayName = async (u) => {
     const target = u ?? user;
     if (!target || target.is_anonymous) {
       setDisplayName(null, target?.id);
+      setSuspension({ loading: false, isSuspended: false, reason: null, suspendedAt: null });
       return null;
     }
     setDisplayNameLoading(true);
@@ -63,11 +70,21 @@ export function AuthProvider({ children }) {
     } catch {}
     const { data, error } = await supabase
       .from('user_profiles')
-      .select('display_name')
+      .select('display_name, is_suspended, suspended_at, suspension_reason')
       .eq('user_id', target.id)
       .maybeSingle();
     setDisplayNameLoading(false);
-    if (error) return null;
+    if (error) {
+      // Fail-open on suspension so a transient outage doesn't lock users out.
+      setSuspension({ loading: false, isSuspended: false, reason: null, suspendedAt: null });
+      return null;
+    }
+    setSuspension({
+      loading: false,
+      isSuspended: !!data?.is_suspended,
+      reason: data?.suspension_reason ?? null,
+      suspendedAt: data?.suspended_at ?? null,
+    });
     const name = data?.display_name ?? null;
     setDisplayName(name, target.id);
     return name;
@@ -111,6 +128,7 @@ export function AuthProvider({ children }) {
         // keep showing the prior user's avatar/initial.
         setUser(null);
         setDisplayNameState(null);
+        setSuspension({ loading: false, isSuspended: false, reason: null, suspendedAt: null });
         const { data, error } = await supabase.auth.signInAnonymously();
         if (!error) setUser(isUsable(data?.user) ? data.user : null);
         return;
@@ -275,7 +293,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery, displayName, displayNameLoading, refreshDisplayName, saveDisplayName, resendVerificationEmail }}>
+    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery, displayName, displayNameLoading, refreshDisplayName, saveDisplayName, resendVerificationEmail, suspension }}>
       {children}
     </AuthContext.Provider>
   );

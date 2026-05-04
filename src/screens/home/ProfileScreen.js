@@ -63,8 +63,9 @@ export default function ProfileScreen() {
   const heroAnim = useFadeSlide(0);
   const subAnim = useFadeSlide(90);
   const contentAnim = useFadeSlide(170);
-  const legalAnim = useFadeSlide(250);
-  const dangerAnim = useFadeSlide(320);
+  const supportAnim = useFadeSlide(220);
+  const legalAnim = useFadeSlide(280);
+  const dangerAnim = useFadeSlide(340);
   const footerAnim = useFadeSlide(400);
 
   const openNameModal = () => {
@@ -430,6 +431,18 @@ export default function ProfileScreen() {
             </View>
           </Animated.View>
         )}
+
+        {/* Support */}
+        <Animated.View style={[styles.section, supportAnim]}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>Support</Text>
+          <GlassMenuCard
+            title="Contact Support"
+            description="Send us a message about a bug, billing issue, or anything else."
+            icon="shield-heart"
+            accent={colors.cyan}
+            onPress={() => navigation.navigate('Support')}
+          />
+        </Animated.View>
 
         {/* Legal */}
         <Animated.View style={[styles.section, legalAnim]}>
