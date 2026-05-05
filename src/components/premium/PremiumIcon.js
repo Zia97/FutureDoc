@@ -217,6 +217,14 @@ export default function PremiumIcon({
             <Path d="M14.8 17c1-.1 1.8-.6 2.4-1.4" />
           </G>
         );
+      case 'sparkles':
+        return (
+          <G {...strokeProps} fill="none" strokeLinejoin="round">
+            <Path d="M12 3.2 13.6 8.4 18.8 10 13.6 11.6 12 16.8 10.4 11.6 5.2 10 10.4 8.4Z" />
+            <Path d="M18.5 15.2 19.2 17.3 21.3 18 19.2 18.7 18.5 20.8 17.8 18.7 15.7 18 17.8 17.3Z" />
+            <Path d="M5.5 3.2 6.1 5.1 8 5.7 6.1 6.3 5.5 8.2 4.9 6.3 3 5.7 4.9 5.1Z" />
+          </G>
+        );
       case 'person-cog':
         return (
           <G {...strokeProps} fill="none">

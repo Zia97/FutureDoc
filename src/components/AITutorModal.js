@@ -179,7 +179,7 @@ export default function AITutorModal({
                 },
               ]}
             >
-              <PremiumIcon name="brain" size={22} color={colors.cyan} secondaryColor={colors.text} />
+              <PremiumIcon name="sparkles" size={22} color={colors.cyan} secondaryColor={colors.text} />
             </View>
 
             <View style={styles.headerCenter}>
@@ -470,7 +470,7 @@ function WelcomePrompt({ colors, isDark }) {
           },
         ]}
       >
-        <PremiumIcon name="brain" size={32} color={colors.cyan} secondaryColor={colors.text} />
+        <PremiumIcon name="sparkles" size={32} color={colors.cyan} secondaryColor={colors.text} />
       </View>
       <Text style={[styles.welcomeTitle, { color: colors.text }]}>Still confused?</Text>
       <ScaledText baseStyle={styles.welcomeText} style={{ color: colors.textSecondary }}>

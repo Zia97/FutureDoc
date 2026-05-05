@@ -5,12 +5,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
-  PremiumIcon,
   PremiumScreen,
   PremiumScrollView,
   RichIconBox,
   SectionSelectionCard,
-  hexToRgba,
   premiumColors,
   useFadeSlide,
   useStaggeredFade,
@@ -136,21 +134,6 @@ export default function LearnSectionsScreen({ navigation }) {
             </Animated.View>
           );
         })}
-
-        <View
-          style={[
-            styles.noteCard,
-            {
-              backgroundColor: isDark ? 'rgba(8, 20, 38, 0.72)' : 'rgba(255, 255, 255, 0.76)',
-              borderColor: hexToRgba(colors.cyan, isDark ? 0.24 : 0.2),
-            },
-          ]}
-        >
-          <PremiumIcon name="notes" size={23} color={colors.cyan} />
-          <Text style={[styles.noteText, { color: colors.textSecondary }]}>
-            All four sections include a full lesson pathway.
-          </Text>
-        </View>
       </PremiumScrollView>
     </PremiumScreen>
   );
@@ -232,19 +215,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     marginTop: 8,
-  },
-  noteCard: {
-    borderRadius: 20,
-    borderWidth: 1,
-    padding: 16,
-    marginTop: 18,
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-  },
-  noteText: {
-    flex: 1,
-    fontSize: 13,
-    lineHeight: 20,
   },
 });

@@ -6,13 +6,14 @@ import {
   StyleSheet,
   StatusBar,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useSubscription } from '../context/SubscriptionContext';
 
 export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, getIsFree, routeName, navigation, extraNavParams }) {
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
+  const insets = useSafeAreaInsets();
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['left', 'right']}>
@@ -20,7 +21,7 @@ export default function SectionQuestionList({ items, getTitle, getStatus, getInd
       <FlatList
         data={items}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, { paddingBottom: styles.listContent.paddingBottom + insets.bottom }]}
         renderItem={({ item, index }) => {
           const status = getStatus ? getStatus(item) : null;
           const navIndex = getIndex ? getIndex(item, index) : index;

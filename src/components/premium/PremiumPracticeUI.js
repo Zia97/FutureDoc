@@ -115,12 +115,20 @@ export function MedicalBackgroundPattern({ colors = premiumColors, isDark = true
   );
 }
 
-export function PremiumScreen({ children, style }) {
+export function PremiumScreen({ children, style, applyBottomInset = false }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.screen, { backgroundColor: colors.bgBottom }, style]}>
+    <View
+      style={[
+        styles.screen,
+        { backgroundColor: colors.bgBottom },
+        applyBottomInset && { paddingBottom: insets.bottom },
+        style,
+      ]}
+    >
       <LinearGradient colors={gradients.screen} style={StyleSheet.absoluteFill} />
       <MedicalBackgroundPattern colors={colors} isDark={isDark} />
       {children}
@@ -129,10 +137,18 @@ export function PremiumScreen({ children, style }) {
 }
 
 export function PremiumScrollView({ children, contentContainerStyle, ...props }) {
+  const insets = useSafeAreaInsets();
+  const flat = StyleSheet.flatten(contentContainerStyle) || {};
+  const basePaddingBottom = flat.paddingBottom ?? styles.scrollContent.paddingBottom ?? 0;
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={[styles.scrollContent, contentContainerStyle]}
+      contentContainerStyle={[
+        styles.scrollContent,
+        contentContainerStyle,
+        { paddingBottom: basePaddingBottom + insets.bottom },
+      ]}
       {...props}
     >
       {children}

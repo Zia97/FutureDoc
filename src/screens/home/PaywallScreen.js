@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -110,6 +110,7 @@ export default function PaywallScreen({ navigation }) {
   const { colors, gradients } = getPremiumTheme(isDark);
   const { isAnonymous } = useAuth();
   const { offerings, purchasePackage, restorePurchases, isPro } = useSubscription();
+  const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState('season');
   const [loading, setLoading] = useState(false);
 
@@ -247,7 +248,10 @@ export default function PaywallScreen({ navigation }) {
         <PremiumIcon name="x" size={21} color={colors.text} strokeWidth={2.3} />
       </TouchableOpacity>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[styles.scroll, { paddingBottom: styles.scroll.paddingBottom + insets.bottom }]}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.header}>
           <LogoMark colors={colors} isDark={isDark} />
           <Text style={[styles.eyebrow, { color: accent }]}>UCAT GENIUS PREMIUM</Text>

@@ -21,6 +21,8 @@ import Svg, {
   Text as SvgText,
 } from 'react-native-svg';
 
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 import { useTheme } from '../../context/ThemeContext';
 import { useTextSize } from '../../context/TextSizeContext';
 import {
@@ -177,6 +179,7 @@ export default function AboutUCATScreen({ navigation }) {
   const { width } = useWindowDimensions();
   const { colors, gradients } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
+  const insets = useSafeAreaInsets();
   const styles = makeStyles(colors, isDark, multiplier);
   const [region, setRegion] = useState('uk');
   const r = REGION[region];
@@ -212,7 +215,7 @@ export default function AboutUCATScreen({ navigation }) {
 
       <ScrollView
         ref={scrollRef}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: styles.scrollContent.paddingBottom + insets.bottom }]}
         showsVerticalScrollIndicator={false}
       >
         <Animated.View style={heroAnim}>
