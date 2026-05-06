@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Animated,
   Platform,
@@ -22,6 +22,7 @@ import {
   getSectionVisuals,
 } from '../../services/lastActivityService';
 import { refreshDailyReminder } from '../../services/notificationService';
+import { getExamDate, NOT_BOOKED } from '../../services/onboardingFlags';
 import { LEARN_FEATURE_ICON } from '../../constants/sectionVisuals';
 import {
   GlassMenuCard,
@@ -53,6 +54,105 @@ function getDisplayName(user, profileDisplayName) {
 function getInitial(user, profileDisplayName) {
   const source = profileDisplayName || user?.user_metadata?.full_name || user?.email;
   return source?.trim()?.[0]?.toUpperCase() ?? '?';
+}
+
+// Parses a YYYY-MM-DD date and returns the millisecond timestamp at the
+// END of that local day. The exam runs through the day, so the countdown
+// shouldn't tick to "Exam day" the moment local midnight strikes.
+function parseExamEndOfDay(iso) {
+  if (!iso || iso === NOT_BOOKED) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return null;
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 23, 59, 59, 999);
+  return d.getTime();
+}
+
+function isExamToday(iso) {
+  if (!iso || iso === NOT_BOOKED) return false;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
+  if (!m) return false;
+  const today = new Date();
+  return today.getFullYear() === Number(m[1])
+    && today.getMonth() + 1 === Number(m[2])
+    && today.getDate() === Number(m[3]);
+}
+
+const pad2 = (n) => String(Math.max(0, n | 0)).padStart(2, '0');
+
+function ExamCountdownClock({ examDate, isDark, colors, onPress }) {
+  const isSet = !!examDate && examDate !== NOT_BOOKED;
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    if (!isSet) return undefined;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [isSet]);
+
+  let days = 0;
+  let hours = 0;
+  let minutes = 0;
+  let seconds = 0;
+  let headline = 'TIME UNTIL UCAT EXAM';
+  let helper = 'Tap to set your exam date';
+  let active = false;
+
+  if (isSet) {
+    const target = parseExamEndOfDay(examDate);
+    const diff = target ? target - now : 0;
+
+    if (isExamToday(examDate)) {
+      headline = "EXAM DAY — YOU'VE GOT THIS";
+      helper = 'Tap to change date';
+    } else if (diff <= 0) {
+      headline = 'UCAT COMPLETE';
+      helper = 'Tap to change date';
+    } else {
+      const totalSeconds = Math.floor(diff / 1000);
+      days = Math.floor(totalSeconds / 86400);
+      hours = Math.floor((totalSeconds % 86400) / 3600);
+      minutes = Math.floor((totalSeconds % 3600) / 60);
+      seconds = totalSeconds % 60;
+      helper = 'Tap to change date';
+      active = true;
+    }
+  }
+
+  const digits = active
+    ? `${pad2(days)}:${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`
+    : '--:--:--:--';
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.85}
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={isSet ? 'Change exam date' : 'Set exam date'}
+      style={[
+        styles.clockCard,
+        {
+          borderColor: hexToRgba(colors.cyan, isDark ? 0.34 : 0.32),
+          backgroundColor: isDark ? 'rgba(5, 12, 26, 0.55)' : 'rgba(255, 255, 255, 0.7)',
+        },
+      ]}
+    >
+      <Text style={[styles.clockHeadline, { color: colors.textSecondary }]} numberOfLines={1}>
+        {headline}
+      </Text>
+      <Text style={[styles.clockDigits, { color: colors.text }]} numberOfLines={1}>
+        {digits}
+      </Text>
+      <View style={styles.clockUnitsRow}>
+        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>days</Text>
+        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>hrs</Text>
+        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>min</Text>
+        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>sec</Text>
+      </View>
+      <Text style={[styles.clockHelper, { color: colors.textMuted }]} numberOfLines={1}>
+        {helper}
+      </Text>
+    </TouchableOpacity>
+  );
 }
 
 function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colors }) {
@@ -132,15 +232,17 @@ export default function HomeScreen({ navigation }) {
 
   const [streak, setStreak] = useState({ currentStreak: 0, longestStreak: 0 });
   const [lastActivity, setLastActivityState] = useState(null);
+  const [examDate, setExamDateState] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
       let cancelled = false;
       (async () => {
-        const [s, a] = await Promise.all([getDisplayStreak(), getLastActivity()]);
+        const [s, a, e] = await Promise.all([getDisplayStreak(), getLastActivity(), getExamDate()]);
         if (cancelled) return;
         setStreak(s);
         setLastActivityState(a);
+        setExamDateState(e);
         refreshDailyReminder();
       })();
       return () => { cancelled = true; };
@@ -184,13 +286,20 @@ export default function HomeScreen({ navigation }) {
             <View style={[styles.heroCopy, { minHeight: resumeVisuals ? 150 : 112 }]}>
               <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text>
 
+              <ExamCountdownClock
+                examDate={examDate}
+                isDark={isDark}
+                colors={colors}
+                onPress={() => navigation.navigate('ExamDate')}
+              />
+
               <View style={[styles.streakRow, { borderColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)', backgroundColor: isDark ? 'rgba(5, 12, 26, 0.5)' : 'rgba(255, 255, 255, 0.64)' }]}>
                 <View style={styles.streakPill}>
-                  <PremiumIcon name="refresh" size={21} color={colors.teal} strokeWidth={2.4} />
+                  <PremiumIcon name="refresh" size={16} color={colors.teal} strokeWidth={2.4} />
                   <Text style={[styles.streakText, { color: colors.teal }]}>{streakLabel}</Text>
                 </View>
                 <View style={[styles.firePill, { borderLeftColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)' }]}>
-                  <PremiumIcon name="flame" size={20} color={colors.amber} />
+                  <PremiumIcon name="flame" size={15} color={colors.amber} />
                   <Text style={[styles.fireText, { color: colors.text }]}>{streak.currentStreak}</Text>
                 </View>
               </View>
@@ -382,36 +491,81 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(116, 154, 209, 0.18)',
     borderRadius: 999,
     backgroundColor: 'rgba(5, 12, 26, 0.5)',
-    marginTop: 24,
+    marginTop: 14,
     overflow: 'hidden',
   },
   streakPill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 9,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    gap: 6,
+    paddingHorizontal: 11,
+    paddingVertical: 6,
   },
   firePill: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 10,
+    gap: 5,
+    paddingHorizontal: 11,
+    paddingVertical: 6,
     borderLeftWidth: 1,
     borderLeftColor: 'rgba(116, 154, 209, 0.18)',
   },
   streakText: {
     color: premiumColors.teal,
-    fontSize: 16,
-    lineHeight: 21,
-    fontWeight: '900',
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '800',
   },
   fireText: {
     color: premiumColors.text,
-    fontSize: 16,
-    lineHeight: 21,
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '800',
+  },
+  clockCard: {
+    alignSelf: 'stretch',
+    borderWidth: 1,
+    borderRadius: 18,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    marginTop: 6,
+    alignItems: 'center',
+  },
+  clockHeadline: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: '800',
+    letterSpacing: 1.6,
+  },
+  clockDigits: {
+    fontSize: 36,
+    lineHeight: 42,
     fontWeight: '900',
+    letterSpacing: 1.5,
+    marginTop: 8,
+    fontVariant: ['tabular-nums'],
+  },
+  clockUnitsRow: {
+    flexDirection: 'row',
+    alignSelf: 'stretch',
+    justifyContent: 'space-around',
+    marginTop: 4,
+    paddingHorizontal: 6,
+  },
+  clockUnit: {
+    fontSize: 10,
+    lineHeight: 14,
+    fontWeight: '800',
+    letterSpacing: 1.2,
+    width: 56,
+    textAlign: 'center',
+  },
+  clockHelper: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: '700',
+    marginTop: 8,
+    letterSpacing: 0.4,
   },
   continuePanel: {
     alignSelf: 'flex-start',

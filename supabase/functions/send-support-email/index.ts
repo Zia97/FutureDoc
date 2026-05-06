@@ -10,7 +10,7 @@
 //
 // Env vars (set with `supabase secrets set ...`):
 //   RESEND_API_KEY     — required, Resend API key
-//   SUPPORT_EMAIL_TO   — recipient (defaults to ucatprepaisupport@gmail.com)
+//   SUPPORT_EMAIL_TO   — recipient (defaults to ucatgenius@gmail.com)
 //   SUPPORT_EMAIL_FROM — sender, must be a verified Resend domain (defaults
 //                        to onboarding@resend.dev which is fine for testing)
 //
@@ -21,7 +21,7 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-const DEFAULT_TO   = 'ucatprepaisupport@gmail.com';
+const DEFAULT_TO   = 'ucatgenius@gmail.com';
 const DEFAULT_FROM = 'UCAT Genius Support <onboarding@resend.dev>';
 
 function json(body: unknown, status = 200) {

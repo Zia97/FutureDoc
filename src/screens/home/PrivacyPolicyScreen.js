@@ -61,7 +61,7 @@ const SECTIONS = [
   {
     title: '9. Contact Us',
     body:
-      'If you have any questions about this privacy policy or your data, please contact us at:\n\nucatprepaisupport@gmail.com',
+      'If you have any questions about this privacy policy or your data, please contact us at:\n\nucatgenius@gmail.com',
   },
 ];
 

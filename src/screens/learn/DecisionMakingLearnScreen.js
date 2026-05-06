@@ -1797,10 +1797,6 @@ function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, g
         </View>
       </View>
 
-      <Text style={[styles.heroBody, { color: colors.textSecondary }]}>
-        Section overview, the six question families, the logic skills underneath them, traps, timing, and worked examples.
-      </Text>
-
       <View style={styles.heroProgressHeader}>
         <Text style={[styles.progressLabel, { color: colors.text }]}>
           Progress: {completedCount} / {TOTAL_LESSONS} lessons complete

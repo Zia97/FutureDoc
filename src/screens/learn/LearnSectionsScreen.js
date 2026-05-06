@@ -19,78 +19,29 @@ import { LEARN_FEATURE_ICON, UCAT_SECTIONS } from '../../constants/sectionVisual
 const LEARN_SECTIONS = [
   {
     ...UCAT_SECTIONS.VR,
-    description: 'Roadmap with theory, question types, traps, worked examples, and drills',
+    description: 'Theory, question types, traps, worked examples, and drills',
     meta: '32 lessons - 5 modules - 85 min',
     route: 'LearnVerbalReasoning',
-    badge: 'Roadmap',
   },
   {
     ...UCAT_SECTIONS.DM,
-    description: 'Roadmap with logic, diagrams, arguments, probability, traps, and worked examples',
+    description: 'Logic, diagrams, arguments, probability, traps, and worked examples',
     meta: '37 lessons - 6 modules - 126 min',
     route: 'LearnDecisionMaking',
-    badge: 'Roadmap',
   },
   {
     ...UCAT_SECTIONS.QR,
-    description: 'Roadmap with maths skills, question types, calculator strategy, traps, and worked examples',
+    description: 'Maths skills, question types, calculator strategy, traps, and worked examples',
     meta: '37 lessons - 6 modules - 158 min',
     route: 'LearnQuantitativeReasoning',
-    badge: 'Roadmap',
   },
   {
     ...UCAT_SECTIONS.SJ,
-    description: 'Roadmap with judgement principles, question formats, scenario themes, traps, and worked examples',
+    description: 'Judgement principles, question formats, scenario themes, traps, and worked examples',
     meta: '38 lessons - 7 modules - 179 min',
     route: 'LearnSituationalJudgement',
-    badge: 'Roadmap',
   },
 ];
-
-function LearnHero({ colors, gradients, isDark }) {
-  return (
-    <LinearGradient
-      colors={gradients.hero}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={[styles.heroCard, { borderColor: colors.border, shadowColor: colors.cyan }]}
-    >
-      <View style={styles.heroTopRow}>
-        <RichIconBox icon={LEARN_FEATURE_ICON} accent={colors.cyan} size={54} iconSize={28} />
-        <View style={styles.heroCopy}>
-          <Text style={[styles.eyebrow, { color: colors.cyan }]}>LEARN MODE</Text>
-          <Text style={[styles.heroTitle, { color: colors.text }]}>Lessons across every section.</Text>
-        </View>
-      </View>
-
-      <Text style={[styles.heroBody, { color: colors.textSecondary }]}>
-        Short lesson modules with theory, question-type previews, worked examples, and quick practice prompts.
-      </Text>
-
-      <View style={styles.metricRow}>
-        {[
-          ['4', 'Sections'],
-          ['5 min', 'Lesson blocks'],
-          ['4', 'Demo modules'],
-        ].map(([value, label]) => (
-          <View
-            key={label}
-            style={[
-              styles.metricPill,
-              {
-                backgroundColor: isDark ? 'rgba(5, 12, 26, 0.54)' : 'rgba(255, 255, 255, 0.7)',
-                borderColor: colors.border,
-              },
-            ]}
-          >
-            <Text style={[styles.metricValue, { color: colors.text }]}>{value}</Text>
-            <Text style={[styles.metricLabel, { color: colors.textMuted }]}>{label}</Text>
-          </View>
-        ))}
-      </View>
-    </LinearGradient>
-  );
-}
 
 export default function LearnSectionsScreen({ navigation }) {
   const { isDark } = useTheme();
@@ -105,13 +56,9 @@ export default function LearnSectionsScreen({ navigation }) {
 
       <PremiumScrollView>
         <Animated.View style={introAnim}>
-          <LearnHero colors={colors} gradients={gradients} isDark={isDark} />
 
           <View style={styles.intro}>
             <Text style={[styles.heading, { color: colors.text }]}>Choose a Section</Text>
-            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              Pick a section to open its lesson pathway.
-            </Text>
           </View>
         </Animated.View>
 

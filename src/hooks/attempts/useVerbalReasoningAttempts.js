@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../context/AuthContext';
-import { reportError, reportMessage } from '../../lib/reportError';
+import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
 
@@ -13,7 +12,6 @@ export const VR_PROGRESS_CACHE_KEY = 'vr_passage_progress';
 // localAnswers shape:    { [passageId]:  { [questionId]: selectedAnswer } }  ← matches useAnswers
 
 export function useVerbalReasoningAttempts() {
-  const { user } = useAuth();
   const submitting = useRef(new Set());
 
   const [localAnswers, setLocalAnswers]   = useState({});
@@ -78,10 +76,6 @@ export function useVerbalReasoningAttempts() {
   // ── Public API ───────────────────────────────────────────────────────────────
 
   async function submitAttempt({ questionId, passageId, selectedAnswer, totalQuestions }) {
-    if (!user) {
-      reportMessage('useVerbalReasoningAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
-      return;
-    }
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 

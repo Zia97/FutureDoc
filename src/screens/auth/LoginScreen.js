@@ -43,10 +43,11 @@ const AppleIcon = ({ size = 22, color = '#fff' }) => (
   </Svg>
 );
 
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation, onSkip }) {
   const { signIn, signInWithGoogle, signInWithApple, resendVerificationEmail } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const isGate = typeof onSkip === 'function';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,8 +62,16 @@ export default function LoginScreen({ navigation }) {
   const linksAnim = useFadeSlide(300);
 
   const dismissToHome = () => {
+    // In gate mode the auth state change (anon → real user) is what unmounts
+    // this screen — the AppNavigator reroutes once the verified user lands.
+    if (isGate) return;
     if (navigation.canGoBack()) navigation.goBack();
     else navigation.navigate('Home');
+  };
+
+  const handleSkip = () => {
+    if (isGate) onSkip();
+    else dismissToHome();
   };
 
   const handleLogin = async () => {
@@ -136,7 +145,7 @@ export default function LoginScreen({ navigation }) {
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
-      <AppHeader navigation={navigation} title="Sign In" />
+      <AppHeader navigation={navigation} title="Sign In" showBack={!isGate} />
 
       <KeyboardAvoidingView
         style={styles.keyboard}
@@ -277,6 +286,12 @@ export default function LoginScreen({ navigation }) {
                 <Text style={[styles.signupLink, { color: colors.blue }]}>Create an account</Text>
               </TouchableOpacity>
             </View>
+
+            {isGate ? (
+              <TouchableOpacity onPress={handleSkip} style={styles.skipButton} activeOpacity={0.7}>
+                <Text style={[styles.skipText, { color: colors.textMuted }]}>Skip for now</Text>
+              </TouchableOpacity>
+            ) : null}
           </Animated.View>
         </PremiumScrollView>
       </KeyboardAvoidingView>
@@ -410,4 +425,15 @@ const styles = StyleSheet.create({
   },
   signupMuted: { fontSize: 14 },
   signupLink: { fontSize: 14, fontWeight: '800' },
+  skipButton: {
+    marginTop: 18,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+  },
+  skipText: {
+    fontSize: 13,
+    fontWeight: '600',
+    letterSpacing: 0.4,
+    textDecorationLine: 'underline',
+  },
 });

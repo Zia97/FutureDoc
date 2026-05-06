@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../context/AuthContext';
-import { reportError, reportMessage } from '../../lib/reportError';
+import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
 
@@ -12,7 +11,6 @@ export const QR_PROGRESS_CACHE_KEY = 'qr_set_progress';
 // localAnswers shape:    { [setId]:      { [questionId]: selectedAnswer } }
 
 export function useQuantitativeReasoningAttempts() {
-  const { user } = useAuth();
   const submitting = useRef(new Set());
 
   const [localAnswers, setLocalAnswers] = useState({});
@@ -73,10 +71,6 @@ export function useQuantitativeReasoningAttempts() {
   }
 
   async function submitAttempt({ questionId, setId, selectedAnswer, totalQuestions }) {
-    if (!user) {
-      reportMessage('useQuantitativeReasoningAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
-      return;
-    }
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 

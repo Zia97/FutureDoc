@@ -16,9 +16,17 @@ import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import SetDisplayNameScreen from '../screens/auth/SetDisplayNameScreen';
 import ToSAcceptanceScreen, { TOS_FLAG_KEY } from '../screens/onboarding/ToSAcceptanceScreen';
+import ExamDateScreen from '../screens/onboarding/ExamDateScreen';
+import WelcomeScreen from '../screens/onboarding/WelcomeScreen';
 import ForceUpdateScreen from '../screens/onboarding/ForceUpdateScreen';
 import SuspendedScreen from '../screens/onboarding/SuspendedScreen';
 import HeaderAuthButton from '../components/HeaderAuthButton';
+import {
+  AUTH_CHOICE_KEY,
+  EXAM_DATE_KEY,
+  WELCOME_SEEN_KEY,
+  setAuthChoiceMade,
+} from '../services/onboardingFlags';
 
 import HomeScreen from '../screens/home/HomeScreen';
 import ProfileScreen from '../screens/home/ProfileScreen';
@@ -124,6 +132,7 @@ function AppStack() {
       <Stack.Screen name="QRQuestionList" component={QRQuestionListScreen} options={{ headerShown: false }} />
       <Stack.Screen name="QRQuestion" component={QRQuestionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ExamDate" component={ExamDateScreen} options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Paywall" component={PaywallScreen} options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
@@ -153,16 +162,68 @@ function DisplayNameStack() {
   );
 }
 
+// First-launch gate that nudges users to sign in / sign up but lets them
+// fall through to the anonymous session via "Skip for now". The same
+// LoginScreen/SignUpScreen are reused — they accept an `onSkip` callback
+// that flips the auth-choice flag and unmounts the gate.
+function AuthGateStack({ onSkip }) {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+      <Stack.Screen name="Login">
+        {(props) => <LoginScreen {...props} onSkip={onSkip} />}
+      </Stack.Screen>
+      <Stack.Screen name="SignUp">
+        {(props) => <SignUpScreen {...props} onSkip={onSkip} />}
+      </Stack.Screen>
+      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+    </Stack.Navigator>
+  );
+}
+
+function ExamDateStack({ onComplete }) {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="ExamDate">
+        {() => <ExamDateScreen onComplete={onComplete} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+}
+
+function WelcomeStack({ onComplete }) {
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="Welcome">
+        {() => <WelcomeScreen onComplete={onComplete} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  );
+}
+
 export default function AppNavigator() {
   const { user, loading, passwordRecovery, displayName, displayNameLoading, suspension } = useAuth();
   const { theme: t } = useTheme();
   const [tosAccepted, setTosAccepted] = useState(null); // null = unknown (loading)
+  const [authChoiceMade, setAuthChoiceMadeState] = useState(null);
+  const [examDateSet, setExamDateSet] = useState(null);
+  const [welcomeSeen, setWelcomeSeenState] = useState(null);
   const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
 
   useEffect(() => {
-    AsyncStorage.getItem(TOS_FLAG_KEY)
-      .then((v) => setTosAccepted(v === 'true'))
-      .catch(() => setTosAccepted(false));
+    AsyncStorage.multiGet([TOS_FLAG_KEY, AUTH_CHOICE_KEY, EXAM_DATE_KEY, WELCOME_SEEN_KEY])
+      .then((entries) => {
+        const map = Object.fromEntries(entries);
+        setTosAccepted(map[TOS_FLAG_KEY] === 'true');
+        setAuthChoiceMadeState(map[AUTH_CHOICE_KEY] === 'true');
+        setExamDateSet(map[EXAM_DATE_KEY] != null);
+        setWelcomeSeenState(map[WELCOME_SEEN_KEY] === 'true');
+      })
+      .catch(() => {
+        setTosAccepted(false);
+        setAuthChoiceMadeState(false);
+        setExamDateSet(false);
+        setWelcomeSeenState(false);
+      });
   }, []);
 
   // Fail-open version check: any error resolves to no update required so a
@@ -194,6 +255,14 @@ export default function AppNavigator() {
     }
   }, [tosAccepted, user]);
 
+  // A signed-in (non-anon) user has implicitly chosen the auth path — flip
+  // the flag so the AuthGate doesn't reappear if they sign out and back in.
+  useEffect(() => {
+    if (authChoiceMade === false && user && !user.is_anonymous) {
+      setAuthChoiceMade().then(() => setAuthChoiceMadeState(true));
+    }
+  }, [authChoiceMade, user]);
+
   // Hold the loader until suspension state is resolved for non-anonymous
   // users — otherwise a suspended user briefly sees Home before the gate
   // kicks in. Anonymous users skip this entirely (suspension.loading flips
@@ -201,7 +270,15 @@ export default function AppNavigator() {
   const suspensionPending =
     !!user && !user.is_anonymous && suspension?.loading;
 
-  if (loading || tosAccepted === null || versionGate === null || suspensionPending) {
+  if (
+    loading
+    || tosAccepted === null
+    || authChoiceMade === null
+    || examDateSet === null
+    || welcomeSeen === null
+    || versionGate === null
+    || suspensionPending
+  ) {
     return (
       <View style={{ flex: 1, backgroundColor: t.headerBg, alignItems: 'center', justifyContent: 'center' }}>
         <ActivityIndicator size="large" color={t.accent} />
@@ -227,9 +304,29 @@ export default function AppNavigator() {
   const needsDisplayName =
     user && !user.is_anonymous && !displayNameLoading && !displayName;
 
+  // Auth gate: only nudge users who haven't yet picked a path AND are still
+  // anonymous. Once they sign in, the implicit-mark effect above flips the
+  // flag so they don't see the gate again.
+  const needsAuthChoice = !authChoiceMade && !!user?.is_anonymous;
+
   const getStack = () => {
     if (passwordRecovery) return <RecoveryStack />;
+    if (needsAuthChoice) {
+      return (
+        <AuthGateStack
+          onSkip={() => {
+            setAuthChoiceMade().then(() => setAuthChoiceMadeState(true));
+          }}
+        />
+      );
+    }
     if (needsDisplayName) return <DisplayNameStack />;
+    if (!examDateSet) {
+      return <ExamDateStack onComplete={() => setExamDateSet(true)} />;
+    }
+    if (!welcomeSeen) {
+      return <WelcomeStack onComplete={() => setWelcomeSeenState(true)} />;
+    }
     return <AppStack />;
   };
 

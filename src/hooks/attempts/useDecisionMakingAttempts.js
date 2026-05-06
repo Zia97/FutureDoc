@@ -1,7 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../../context/AuthContext';
-import { reportError, reportMessage } from '../../lib/reportError';
+import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
 
@@ -17,7 +16,6 @@ const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
 // localSubmitted shape: { [questionId]: true }
 
 export function useDecisionMakingAttempts() {
-  const { user } = useAuth();
   const submitting = useRef(new Set());
 
   const [localAnswers, setLocalAnswers]   = useState({});
@@ -62,10 +60,6 @@ export function useDecisionMakingAttempts() {
   }
 
   async function submitAttempt({ questionId, answer }) {
-    if (!user) {
-      reportMessage('useDecisionMakingAttempts', 'submitAttempt called with no logged-in user', { level: 'error' });
-      return;
-    }
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 
