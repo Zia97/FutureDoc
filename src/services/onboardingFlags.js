@@ -1,9 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Gate flags for the post-ToS onboarding flow. Each gate is local-only and
-// device-scoped — anonymous and real users alike persist the same flags so
-// that signing up after "Skip for now" doesn't replay the gates.
-export const AUTH_CHOICE_KEY = 'auth_choice_made_v1';
+// Gate flags for the post-ToS onboarding flow. Local-only and device-scoped.
 export const EXAM_DATE_KEY = 'exam_date_v1';
 export const WELCOME_SEEN_KEY = 'welcome_seen_v1';
 
@@ -12,7 +9,6 @@ export const WELCOME_SEEN_KEY = 'welcome_seen_v1';
 // through it and chose to skip" (NOT_BOOKED).
 export const NOT_BOOKED = 'NOT_BOOKED';
 
-export const setAuthChoiceMade = () => AsyncStorage.setItem(AUTH_CHOICE_KEY, 'true');
 export const setWelcomeSeen = () => AsyncStorage.setItem(WELCOME_SEEN_KEY, 'true');
 
 export const setExamDate = (isoDateOrNotBooked) =>

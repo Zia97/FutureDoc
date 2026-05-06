@@ -43,11 +43,10 @@ const AppleIcon = ({ size = 22, color = '#fff' }) => (
   </Svg>
 );
 
-export default function LoginScreen({ navigation, onSkip }) {
+export default function LoginScreen({ navigation }) {
   const { signIn, signInWithGoogle, signInWithApple, resendVerificationEmail } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const isGate = typeof onSkip === 'function';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,18 +60,8 @@ export default function LoginScreen({ navigation, onSkip }) {
   const socialAnim = useFadeSlide(220);
   const linksAnim = useFadeSlide(300);
 
-  const dismissToHome = () => {
-    // In gate mode the auth state change (anon → real user) is what unmounts
-    // this screen — the AppNavigator reroutes once the verified user lands.
-    if (isGate) return;
-    if (navigation.canGoBack()) navigation.goBack();
-    else navigation.navigate('Home');
-  };
-
-  const handleSkip = () => {
-    if (isGate) onSkip();
-    else dismissToHome();
-  };
+  // After successful sign-in the verified user lands in AuthContext and
+  // AppNavigator swaps to AppStack — no manual navigation needed.
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -89,7 +78,6 @@ export default function LoginScreen({ navigation, onSkip }) {
       return;
     }
     setShowResend(false);
-    dismissToHome();
   };
 
   const handleResend = async () => {
@@ -113,9 +101,7 @@ export default function LoginScreen({ navigation, onSkip }) {
     setSocialLoading(null);
     if (error) {
       Alert.alert('Google sign-in failed', error.message);
-      return;
     }
-    dismissToHome();
   };
 
   const handleApple = async () => {
@@ -124,9 +110,7 @@ export default function LoginScreen({ navigation, onSkip }) {
       const { error } = await signInWithApple();
       if (error) {
         Alert.alert('Apple sign-in failed', error.message);
-        return;
       }
-      dismissToHome();
     } catch (e) {
       if (e.code !== 'ERR_REQUEST_CANCELED') {
         Alert.alert('Apple sign-in failed', e.message);
@@ -145,7 +129,7 @@ export default function LoginScreen({ navigation, onSkip }) {
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
-      <AppHeader navigation={navigation} title="Sign In" showBack={!isGate} />
+      <AppHeader navigation={navigation} title="Sign In" />
 
       <KeyboardAvoidingView
         style={styles.keyboard}
@@ -286,12 +270,6 @@ export default function LoginScreen({ navigation, onSkip }) {
                 <Text style={[styles.signupLink, { color: colors.blue }]}>Create an account</Text>
               </TouchableOpacity>
             </View>
-
-            {isGate ? (
-              <TouchableOpacity onPress={handleSkip} style={styles.skipButton} activeOpacity={0.7}>
-                <Text style={[styles.skipText, { color: colors.textMuted }]}>Skip for now</Text>
-              </TouchableOpacity>
-            ) : null}
           </Animated.View>
         </PremiumScrollView>
       </KeyboardAvoidingView>
@@ -425,15 +403,4 @@ const styles = StyleSheet.create({
   },
   signupMuted: { fontSize: 14 },
   signupLink: { fontSize: 14, fontWeight: '800' },
-  skipButton: {
-    marginTop: 18,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-  },
-  skipText: {
-    fontSize: 13,
-    fontWeight: '600',
-    letterSpacing: 0.4,
-    textDecorationLine: 'underline',
-  },
 });

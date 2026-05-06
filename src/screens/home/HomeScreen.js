@@ -15,7 +15,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
-import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { getDisplayStreak } from '../../services/streakService';
 import {
   getLastActivity,
@@ -46,10 +45,8 @@ function getGreeting() {
 }
 
 function getDisplayName(user, profileDisplayName) {
-  if (!user) return 'Guest';
   const name = profileDisplayName || user?.user_metadata?.full_name || user?.email?.split('@')[0];
-  if (!name) return 'Guest';
-  return name.split(/[ ._-]/)[0] || 'Guest';
+  return name ? (name.split(/[ ._-]/)[0] || name) : '';
 }
 
 function getInitial(user, profileDisplayName) {
@@ -156,7 +153,7 @@ function ExamCountdownClock({ examDate, isDark, colors, onPress }) {
   );
 }
 
-function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colors }) {
+function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
   const avatarTint = isDark ? '#BDE2FF' : colors.blue;
   const insets = useSafeAreaInsets();
 
@@ -189,7 +186,7 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colo
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.86}
-          onPress={() => navigation.navigate(showProfile ? 'Profile' : 'Login')}
+          onPress={() => navigation.navigate('Profile')}
           style={[
             styles.headerCircle,
             styles.avatarCircle,
@@ -200,13 +197,9 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colo
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel={showProfile ? 'Open profile' : 'Log in'}
+          accessibilityLabel="Open profile"
         >
-          {showProfile ? (
-            <Text style={[styles.avatarText, { color: avatarTint }]}>{initial}</Text>
-          ) : (
-            <PremiumIcon name="user" size={26} color={avatarTint} strokeWidth={2.2} />
-          )}
+          <Text style={[styles.avatarText, { color: avatarTint }]}>{initial}</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -214,14 +207,12 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, showProfile, colo
 }
 
 export default function HomeScreen({ navigation }) {
-  const { user, isAnonymous, displayName: profileDisplayName } = useAuth();
+  const { user, displayName: profileDisplayName } = useAuth();
   const { isDark, toggleDark } = useTheme();
   const { isPro } = useSubscription();
-  const openPaywall = usePaywallNavigation();
   const { colors, gradients } = getPremiumTheme(isDark);
 
-  const showProfile = !!user && !isAnonymous;
-  const initial = showProfile ? getInitial(user, profileDisplayName) : '';
+  const initial = getInitial(user, profileDisplayName);
   const displayName = getDisplayName(user, profileDisplayName);
 
   const headerAnim = useFadeSlide(0, 12);
@@ -272,7 +263,6 @@ export default function HomeScreen({ navigation }) {
           isDark={isDark}
           toggleDark={toggleDark}
           initial={initial}
-          showProfile={showProfile}
           colors={colors}
         />
       </Animated.View>
@@ -353,7 +343,7 @@ export default function HomeScreen({ navigation }) {
             description="Track progress, strengths, and areas to improve."
             icon="chart"
             accent={colors.teal}
-            onPress={() => (isPro ? navigation.navigate('PerformanceAnalytics') : openPaywall())}
+            onPress={() => navigation.navigate(isPro ? 'PerformanceAnalytics' : 'Paywall')}
             style={styles.actionCard}
           />
         </Animated.View>

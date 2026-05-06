@@ -158,12 +158,11 @@ export function PremiumScrollView({ children, contentContainerStyle, ...props })
 
 export function AppHeader({ navigation, title, showBack = true }) {
   const insets = useSafeAreaInsets();
-  const { user, isAnonymous, displayName } = useAuth();
+  const { user, displayName } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const showProfile = !!user && !isAnonymous;
   const initialSource = displayName || user?.user_metadata?.full_name || user?.email;
-  const initial = showProfile ? initialSource?.trim()?.[0]?.toUpperCase() ?? '?' : '';
+  const initial = initialSource?.trim()?.[0]?.toUpperCase() ?? '?';
 
   const handleBack = () => {
     if (navigation?.canGoBack?.()) {
@@ -171,10 +170,6 @@ export function AppHeader({ navigation, title, showBack = true }) {
       return;
     }
     navigation?.navigate?.('Home');
-  };
-
-  const handleAvatar = () => {
-    navigation?.navigate?.(showProfile ? 'Profile' : 'Login');
   };
 
   return (
@@ -199,26 +194,26 @@ export function AppHeader({ navigation, title, showBack = true }) {
 
       <Text style={[styles.appHeaderTitle, { color: colors.text }]} numberOfLines={1}>{title}</Text>
 
-      <TouchableOpacity
-        activeOpacity={0.85}
-        onPress={handleAvatar}
-        style={[
-          styles.headerAvatar,
-          {
-            backgroundColor: isDark ? 'rgba(17, 31, 55, 0.82)' : '#DBEAFE',
-            borderColor: isDark ? 'rgba(122, 158, 214, 0.2)' : hexToRgba(colors.blue, 0.28),
-            shadowColor: colors.blue,
-          },
-        ]}
-        accessibilityRole="button"
-        accessibilityLabel={showProfile ? 'Open profile' : 'Log in'}
-      >
-        {showProfile ? (
+      {user ? (
+        <TouchableOpacity
+          activeOpacity={0.85}
+          onPress={() => navigation?.navigate?.('Profile')}
+          style={[
+            styles.headerAvatar,
+            {
+              backgroundColor: isDark ? 'rgba(17, 31, 55, 0.82)' : '#DBEAFE',
+              borderColor: isDark ? 'rgba(122, 158, 214, 0.2)' : hexToRgba(colors.blue, 0.28),
+              shadowColor: colors.blue,
+            },
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel="Open profile"
+        >
           <Text style={[styles.headerAvatarText, { color: isDark ? '#C5E4FF' : colors.blue }]}>{initial}</Text>
-        ) : (
-          <PremiumIcon name="user" size={24} color={isDark ? '#C5E4FF' : colors.blue} strokeWidth={2.2} />
-        )}
-      </TouchableOpacity>
+        </TouchableOpacity>
+      ) : (
+        <View style={[styles.headerAvatar, styles.invisible]} />
+      )}
     </View>
   );
 }

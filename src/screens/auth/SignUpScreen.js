@@ -31,11 +31,10 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-export default function SignUpScreen({ navigation, onSkip }) {
+export default function SignUpScreen({ navigation }) {
   const { signUp } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const isGate = typeof onSkip === 'function';
 
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
@@ -107,7 +106,7 @@ export default function SignUpScreen({ navigation, onSkip }) {
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
-      <AppHeader navigation={navigation} title="Create Account" showBack={!isGate} />
+      <AppHeader navigation={navigation} title="Create Account" showBack={false} />
 
       <KeyboardAvoidingView
         style={styles.keyboard}
@@ -202,16 +201,10 @@ export default function SignUpScreen({ navigation, onSkip }) {
           <Animated.View style={[styles.linkBlock, linksAnim]}>
             <View style={[styles.signinRow, { borderColor: hexToRgba(colors.blue, 0.18) }]}>
               <Text style={[styles.signinMuted, { color: colors.textMuted }]}>Already have an account?</Text>
-              <TouchableOpacity onPress={() => navigation.replace('Login')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text style={[styles.signinLink, { color: colors.blue }]}>Sign In</Text>
               </TouchableOpacity>
             </View>
-
-            {isGate ? (
-              <TouchableOpacity onPress={onSkip} style={styles.skipButton} activeOpacity={0.7}>
-                <Text style={[styles.skipText, { color: colors.textMuted }]}>Skip for now</Text>
-              </TouchableOpacity>
-            ) : null}
           </Animated.View>
         </PremiumScrollView>
       </KeyboardAvoidingView>
@@ -315,15 +308,4 @@ const styles = StyleSheet.create({
   },
   signinMuted: { fontSize: 14 },
   signinLink: { fontSize: 14, fontWeight: '800' },
-  skipButton: {
-    marginTop: 18,
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-  },
-  skipText: {
-    fontSize: 13,
-    fontWeight: '600',
-    letterSpacing: 0.4,
-    textDecorationLine: 'underline',
-  },
 });

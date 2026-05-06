@@ -10,7 +10,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { reportError } from '../../lib/reportError';
 import {
@@ -113,7 +112,6 @@ function TabBar({ active, onSelect, t }) {
 }
 
 export default function PerformanceAnalyticsScreen({ route, navigation }) {
-  const { user } = useAuth();
   const tests = route.params?.tests ?? {};
 
   const [activeTab, setActiveTab] = useState('VR');
@@ -132,7 +130,6 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
   const loadSection = useCallback(
     async (section) => {
       if (loadedRef.current.has(section)) return;
-      if (!user) return;
 
       const loader = SECTIONS.find((s) => s.key === section)?.loader;
       if (!loader) return;
@@ -150,7 +147,7 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
         setLoading(false);
       }
     },
-    [user],
+    [],
   );
 
   useFocusEffect(
@@ -174,17 +171,6 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
   const isLoading = loading && !rows;
 
   function renderContent() {
-    if (!user) {
-      return (
-        <AnalyticsEmptyState
-          t={t}
-          icon="user"
-          title="Sign in to see analytics"
-          message="Performance analytics are tied to your account so they survive reinstall and sync across devices."
-        />
-      );
-    }
-
     if (isLoading) {
       return (
         <AnalyticsEmptyState

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -14,7 +14,6 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import {
@@ -108,23 +107,10 @@ function FeatureRow({ text, colors }) {
 export default function PaywallScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
-  const { isAnonymous } = useAuth();
   const { offerings, purchasePackage, restorePurchases, isPro } = useSubscription();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState('season');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    if (!isAnonymous) return;
-    Alert.alert(
-      'Create an account',
-      'You need an account to subscribe so your purchase is saved and restorable across devices.',
-      [
-        { text: 'Cancel', style: 'cancel', onPress: () => navigation.goBack() },
-        { text: 'Create account', onPress: () => navigation.replace('SignUp') },
-      ],
-    );
-  }, [isAnonymous, navigation]);
 
   const plans = useMemo(() => {
     if (!offerings?.availablePackages?.length) return [];
@@ -189,8 +175,6 @@ export default function PaywallScreen({ navigation }) {
       setLoading(false);
     }
   };
-
-  if (isAnonymous) return null;
 
   if (isPro) {
     return (

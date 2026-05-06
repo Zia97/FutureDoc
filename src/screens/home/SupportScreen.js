@@ -35,7 +35,7 @@ const MAX_SUBJECT = 120;
 
 export default function SupportScreen() {
   const navigation = useNavigation();
-  const { user, isAnonymous, displayName } = useAuth();
+  const { user, displayName } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { isPro } = useSubscription();
@@ -45,7 +45,7 @@ export default function SupportScreen() {
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
 
-  const replyEmail = isAnonymous ? null : (user?.email ?? null);
+  const replyEmail = user?.email ?? null;
 
   const heroAnim = useFadeSlide(0);
   const formAnim = useFadeSlide(100);
@@ -143,35 +143,6 @@ export default function SupportScreen() {
                   activeOpacity={0.85}
                 >
                   <Text style={styles.primaryButtonText}>Done</Text>
-                </TouchableOpacity>
-              </View>
-            </Animated.View>
-          ) : isAnonymous ? (
-            <Animated.View style={[styles.section, formAnim]}>
-              <View
-                style={[
-                  styles.signInCard,
-                  { borderColor: colors.border, backgroundColor: hexToRgba(accent, isDark ? 0.08 : 0.06) },
-                ]}
-              >
-                <RichIconBox icon="person-cog" accent={accent} size={56} iconSize={28} />
-                <Text style={[styles.successTitle, { color: colors.text }]}>Sign in to contact support</Text>
-                <Text style={[styles.successBody, { color: colors.textSecondary }]}>
-                  We reply to support messages by email. Create an account or sign in so we have an inbox to write back to.
-                </Text>
-                <TouchableOpacity
-                  style={[styles.primaryButton, { backgroundColor: accent, shadowColor: accent }]}
-                  onPress={() => navigation.navigate('SignUp')}
-                  activeOpacity={0.85}
-                >
-                  <Text style={styles.primaryButtonText}>Create Account</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.secondaryButton, { borderColor: colors.border, marginTop: 10 }]}
-                  onPress={() => navigation.navigate('Login')}
-                  activeOpacity={0.85}
-                >
-                  <Text style={[styles.secondaryButtonText, { color: colors.text }]}>Sign In</Text>
                 </TouchableOpacity>
               </View>
             </Animated.View>
@@ -410,25 +381,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 18,
-  },
-  signInCard: {
-    borderRadius: 22,
-    borderWidth: 1,
-    paddingVertical: 28,
-    paddingHorizontal: 22,
-    alignItems: 'center',
-  },
-  secondaryButton: {
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    width: '100%',
-  },
-  secondaryButtonText: {
-    fontSize: 15,
-    fontWeight: '700',
-    letterSpacing: 0.4,
   },
 });

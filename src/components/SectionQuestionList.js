@@ -9,12 +9,10 @@ import {
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useSubscription } from '../context/SubscriptionContext';
-import { usePaywallNavigation } from '../hooks/ui/usePaywallNavigation';
 
 export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, getIsFree, routeName, navigation, extraNavParams }) {
   const { theme: t } = useTheme();
   const { isPro } = useSubscription();
-  const openPaywall = usePaywallNavigation();
   const insets = useSafeAreaInsets();
 
   return (
@@ -34,7 +32,7 @@ export default function SectionQuestionList({ items, getTitle, getStatus, getInd
               style={[styles.row, { borderBottomColor: t.border }, isLocked && { opacity: 0.5 }]}
               onPress={() => {
                 if (isLocked) {
-                  openPaywall();
+                  navigation.navigate('Paywall');
                   return;
                 }
                 navigation.navigate(routeName, { index: navIndex, ...(extraNavParams || {}) });

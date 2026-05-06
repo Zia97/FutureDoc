@@ -24,7 +24,6 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
-import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { QR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
@@ -2483,7 +2482,6 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
   const { isPro } = useSubscription();
-  const openPaywall = usePaywallNavigation();
   const [completedIds, setCompletedIds] = useState([]);
   const [expandedModules, setExpandedModules] = useState(() => MODULES.reduce((acc, m) => ({ ...acc, [m.id]: true }), {}));
   const introAnim = useFadeSlide(0, 14);
@@ -2557,11 +2555,11 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
     const isLocked = !alreadyCompleted && lesson.number > nextLesson.number;
     if (isLocked) return;
     if (!isPro && PREMIUM_LESSON_TYPES.has(lesson.type)) {
-      openPaywall();
+      navigation.navigate('Paywall');
       return;
     }
     navigation.navigate('LearnQRLesson', { lessonId });
-  }, [isPro, openPaywall, navigation, completedIds, nextLesson]);
+  }, [isPro, navigation, completedIds, nextLesson]);
 
   const handleContinue = useCallback(() => {
     if (allComplete) {

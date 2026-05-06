@@ -11,14 +11,9 @@ WebBrowser.maybeCompleteAuthSession();
 
 const AuthContext = createContext(null);
 
-// A user is "usable" (session-ready) if they have a session at all.
-// Anonymous users have no email; real users must have a verified email
-// before we treat them as signed in (prevents unverified-email bypass).
-const isUsable = (u) => {
-  if (!u) return false;
-  if (u.is_anonymous) return true;
-  return !!u.email_confirmed_at;
-};
+// A user is "usable" (session-ready) once their email is verified —
+// prevents an unverified-email bypass after sign-up.
+const isUsable = (u) => !!u && !!u.email_confirmed_at;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -49,12 +44,11 @@ export function AuthProvider({ children }) {
   // Fetch display_name + suspension whenever the signed-in user changes.
   // Hydrates display_name from AsyncStorage first so cold starts don't
   // flash the gate screen, then verifies against the DB and updates if it
-  // has changed. Suspension is only meaningful for non-anonymous users —
-  // anonymous sessions are never suspended (we'd just rotate them).
+  // has changed.
   const refreshDisplayName = async (u) => {
     const target = u ?? user;
-    if (!target || target.is_anonymous) {
-      setDisplayName(null, target?.id);
+    if (!target) {
+      setDisplayName(null);
       setSuspension({ loading: false, isSuspended: false, reason: null, suspendedAt: null });
       return null;
     }
@@ -94,7 +88,7 @@ export function AuthProvider({ children }) {
     (async () => {
       const name = await refreshDisplayName(user);
       // Promote a name staged at signup into user_profiles on first verified sign-in.
-      if (user && !user.is_anonymous && !name) {
+      if (user && !name) {
         const pending = user.user_metadata?.pending_display_name;
         if (pending && pending.trim()) {
           await supabase
@@ -105,32 +99,19 @@ export function AuthProvider({ children }) {
         }
       }
     })();
-  }, [user?.id, user?.is_anonymous]);
+  }, [user?.id]);
 
   useEffect(() => {
-    // Anonymous-by-default: if there's no session on startup, silently create
-    // an anonymous one so the app always lands on Home with a usable user.
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      if (isUsable(session?.user)) {
-        setUser(session.user);
-        setLoading(false);
-        return;
-      }
-      const { data, error } = await supabase.auth.signInAnonymously();
-      if (!error) setUser(isUsable(data?.user) ? data.user : null);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(isUsable(session?.user) ? session.user : null);
       setLoading(false);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') {
-        // Clear immediately so UI flips to signed-out state without waiting
-        // for the anonymous sign-in round-trip — otherwise headers briefly
-        // keep showing the prior user's avatar/initial.
         setUser(null);
         setDisplayNameState(null);
         setSuspension({ loading: false, isSuspended: false, reason: null, suspendedAt: null });
-        const { data, error } = await supabase.auth.signInAnonymously();
-        if (!error) setUser(isUsable(data?.user) ? data.user : null);
         return;
       }
       setUser(isUsable(session?.user) ? session.user : null);
@@ -173,10 +154,6 @@ export function AuthProvider({ children }) {
     return () => subscription.remove();
   }, []);
 
-  // Works whether or not the current session is anonymous. Calling signUp while
-  // anon creates a brand-new user and fires the "Confirm sign up" email (not
-  // "Change email"). The orphaned anon user is harmless — local practice
-  // progress lives in device-scoped AsyncStorage and survives the swap.
   // pendingDisplayName is staged in user_metadata so we can persist it to
   // user_profiles after the user verifies their email and signs in.
   const signUp = (email, password, pendingDisplayName) =>
@@ -206,13 +183,11 @@ export function AuthProvider({ children }) {
   const resendVerificationEmail = (email) =>
     supabase.auth.resend({ type: 'signup', email });
 
-  const signInAnonymously = () => supabase.auth.signInAnonymously();
-
   const signIn = async (email, password) => {
     const result = await supabase.auth.signInWithPassword({ email, password });
     if (result.error) return result;
     const u = result.data?.user;
-    if (u && !u.is_anonymous && !u.email_confirmed_at) {
+    if (u && !u.email_confirmed_at) {
       await supabase.auth.signOut();
       return {
         data: null,
@@ -285,7 +260,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, isAnonymous: !!user?.is_anonymous, signUp, signIn, signInAnonymously, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery, displayName, displayNameLoading, refreshDisplayName, saveDisplayName, resendVerificationEmail, suspension }}>
+    <AuthContext.Provider value={{ user, loading, signUp, signIn, signOut, deleteAccount, signInWithGoogle, signInWithApple, resetPassword, updatePassword, passwordRecovery, setPasswordRecovery, displayName, displayNameLoading, refreshDisplayName, saveDisplayName, resendVerificationEmail, suspension }}>
       {children}
     </AuthContext.Provider>
   );

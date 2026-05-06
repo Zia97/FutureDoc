@@ -1,7 +1,6 @@
 import React from 'react';
-import { Alert, Animated, StatusBar, StyleSheet, Text } from 'react-native';
+import { Animated, StatusBar, StyleSheet, Text } from 'react-native';
 
-import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
@@ -15,7 +14,6 @@ import {
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
 export default function PracticeModeScreen({ navigation }) {
-  const { isAnonymous } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
 
@@ -23,22 +21,6 @@ export default function PracticeModeScreen({ navigation }) {
   const card1Anim = useFadeSlide(110);
   const card2Anim = useFadeSlide(190);
   const footerAnim = useFadeSlide(280);
-
-  const handleTimedPractice = () => {
-    if (isAnonymous) {
-      Alert.alert(
-        'Create an account',
-        'Timed practice simulates real UCAT conditions and saves your results so you can track progress. Create a free account to unlock it.',
-        [
-          { text: 'Not now', style: 'cancel' },
-          { text: 'Create account', onPress: () => navigation.navigate('SignUp') },
-        ],
-      );
-      return;
-    }
-
-    navigation.navigate('TimedPracticeSections');
-  };
 
   return (
     <PremiumScreen>
@@ -68,8 +50,7 @@ export default function PracticeModeScreen({ navigation }) {
             description="Sit timed tests under real UCAT conditions."
             icon="timer"
             accent={colors.red}
-            badge={isAnonymous ? 'Account required' : null}
-            onPress={handleTimedPractice}
+            onPress={() => navigation.navigate('TimedPracticeSections')}
           />
         </Animated.View>
 

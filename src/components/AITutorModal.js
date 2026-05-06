@@ -15,8 +15,8 @@ import { useRef, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 import { TUTOR_ERROR } from '../hooks/ai/useAITutor';
-import { usePaywallNavigation } from '../hooks/ui/usePaywallNavigation';
 import { useNetwork } from '../context/NetworkContext';
 import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
@@ -49,7 +49,7 @@ export default function AITutorModal({
   isDemo = false,
 }) {
   const { messages, streamingContent, isStreaming, error, sendMessage: rawSendMessage } = tutorState;
-  const openPaywall = usePaywallNavigation();
+  const navigation = useNavigation();
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
 
@@ -133,7 +133,7 @@ export default function AITutorModal({
 
   function handleUpgrade() {
     onClose?.();
-    setTimeout(() => openPaywall(), 120);
+    setTimeout(() => navigation.navigate('Paywall'), 120);
   }
 
   function scrollToBottom() {

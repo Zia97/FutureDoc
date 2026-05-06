@@ -10,7 +10,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Path, Circle, Line, Text as SvgText } from 'react-native-svg';
 import { useFocusEffect } from '@react-navigation/native';
 
-import { useAuth } from '../../context/AuthContext';
 import { reportError } from '../../lib/reportError';
 import { db } from '../../lib/dbQueries';
 import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
@@ -298,7 +297,6 @@ function StatBar({ label, value, sub, color, barBg, textColor, mutedColor }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function SJAnalyticsScreen({ route, preloadedRows }) {
-  const { user } = useAuth();
   const tests = route.params?.tests ?? [];
   const hasPreloaded = preloadedRows !== undefined;
   const t = usePremiumAnalyticsTheme('SJ');
@@ -311,11 +309,6 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
 
   const load = useCallback(async () => {
     if (hasPreloaded) return;
-    if (!user) {
-      setRows([]);
-      setLoading(false);
-      return;
-    }
     try {
       setLoading(true);
       const data = await db.loadSJAnalytics();
@@ -327,7 +320,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
     } finally {
       setLoading(false);
     }
-  }, [user, hasPreloaded]);
+  }, [hasPreloaded]);
 
   useFocusEffect(
     useCallback(() => {
@@ -368,17 +361,6 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
     );
   }
 
-  if (!user) {
-    return (
-      <AnalyticsEmptyState
-        t={t}
-        icon="user"
-        title="Sign in to see analytics"
-        message="Performance analytics are tied to your account so they survive reinstall and sync across devices."
-        backgroundColor={screenBg}
-      />
-    );
-  }
 
   if (stats.attemptCount === 0) {
     return (

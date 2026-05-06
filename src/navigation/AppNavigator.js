@@ -22,10 +22,8 @@ import ForceUpdateScreen from '../screens/onboarding/ForceUpdateScreen';
 import SuspendedScreen from '../screens/onboarding/SuspendedScreen';
 import HeaderAuthButton from '../components/HeaderAuthButton';
 import {
-  AUTH_CHOICE_KEY,
   EXAM_DATE_KEY,
   WELCOME_SEEN_KEY,
-  setAuthChoiceMade,
 } from '../services/onboardingFlags';
 
 import HomeScreen from '../screens/home/HomeScreen';
@@ -138,10 +136,6 @@ function AppStack() {
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />
-      {/* Reachable from Profile for anonymous users who want to link an account or sign in. */}
-      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
@@ -162,19 +156,13 @@ function DisplayNameStack() {
   );
 }
 
-// First-launch gate that nudges users to sign in / sign up but lets them
-// fall through to the anonymous session via "Skip for now". The same
-// LoginScreen/SignUpScreen are reused — they accept an `onSkip` callback
-// that flips the auth-choice flag and unmounts the gate.
-function AuthGateStack({ onSkip }) {
+// Mounted whenever there's no signed-in user. SignUp is the landing screen —
+// every user must register before reaching the app.
+function AuthGateStack() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
-      <Stack.Screen name="Login">
-        {(props) => <LoginScreen {...props} onSkip={onSkip} />}
-      </Stack.Screen>
-      <Stack.Screen name="SignUp">
-        {(props) => <SignUpScreen {...props} onSkip={onSkip} />}
-      </Stack.Screen>
+    <Stack.Navigator initialRouteName="SignUp" screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );
@@ -204,23 +192,20 @@ export default function AppNavigator() {
   const { user, loading, passwordRecovery, displayName, displayNameLoading, suspension } = useAuth();
   const { theme: t } = useTheme();
   const [tosAccepted, setTosAccepted] = useState(null); // null = unknown (loading)
-  const [authChoiceMade, setAuthChoiceMadeState] = useState(null);
   const [examDateSet, setExamDateSet] = useState(null);
   const [welcomeSeen, setWelcomeSeenState] = useState(null);
   const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
 
   useEffect(() => {
-    AsyncStorage.multiGet([TOS_FLAG_KEY, AUTH_CHOICE_KEY, EXAM_DATE_KEY, WELCOME_SEEN_KEY])
+    AsyncStorage.multiGet([TOS_FLAG_KEY, EXAM_DATE_KEY, WELCOME_SEEN_KEY])
       .then((entries) => {
         const map = Object.fromEntries(entries);
         setTosAccepted(map[TOS_FLAG_KEY] === 'true');
-        setAuthChoiceMadeState(map[AUTH_CHOICE_KEY] === 'true');
         setExamDateSet(map[EXAM_DATE_KEY] != null);
         setWelcomeSeenState(map[WELCOME_SEEN_KEY] === 'true');
       })
       .catch(() => {
         setTosAccepted(false);
-        setAuthChoiceMadeState(false);
         setExamDateSet(false);
         setWelcomeSeenState(false);
       });
@@ -250,30 +235,18 @@ export default function AppNavigator() {
   // If a returning verified user is already signed in but pre-dates the ToS flag,
   // they implicitly accepted at signup — silently mark and skip the modal.
   useEffect(() => {
-    if (tosAccepted === false && user && !user.is_anonymous) {
+    if (tosAccepted === false && user) {
       AsyncStorage.setItem(TOS_FLAG_KEY, 'true').then(() => setTosAccepted(true));
     }
   }, [tosAccepted, user]);
 
-  // A signed-in (non-anon) user has implicitly chosen the auth path — flip
-  // the flag so the AuthGate doesn't reappear if they sign out and back in.
-  useEffect(() => {
-    if (authChoiceMade === false && user && !user.is_anonymous) {
-      setAuthChoiceMade().then(() => setAuthChoiceMadeState(true));
-    }
-  }, [authChoiceMade, user]);
-
-  // Hold the loader until suspension state is resolved for non-anonymous
-  // users — otherwise a suspended user briefly sees Home before the gate
-  // kicks in. Anonymous users skip this entirely (suspension.loading flips
-  // to false immediately for them).
-  const suspensionPending =
-    !!user && !user.is_anonymous && suspension?.loading;
+  // Hold the loader until suspension state is resolved — otherwise a
+  // suspended user briefly sees Home before the gate kicks in.
+  const suspensionPending = !!user && suspension?.loading;
 
   if (
     loading
     || tosAccepted === null
-    || authChoiceMade === null
     || examDateSet === null
     || welcomeSeen === null
     || versionGate === null
@@ -298,28 +271,14 @@ export default function AppNavigator() {
     return <ToSAcceptanceScreen onAccepted={() => setTosAccepted(true)} />;
   }
 
-  // Real (non-anonymous) users must have a display_name set before entering the
-  // app. Email signups stage it in user_metadata and AuthContext promotes it
-  // to user_profiles on first verified sign-in; OAuth users hit this screen.
-  const needsDisplayName =
-    user && !user.is_anonymous && !displayNameLoading && !displayName;
-
-  // Auth gate: only nudge users who haven't yet picked a path AND are still
-  // anonymous. Once they sign in, the implicit-mark effect above flips the
-  // flag so they don't see the gate again.
-  const needsAuthChoice = !authChoiceMade && !!user?.is_anonymous;
+  // Users must have a display_name set before entering the app. Email signups
+  // stage it in user_metadata and AuthContext promotes it to user_profiles on
+  // first verified sign-in; OAuth users hit this screen.
+  const needsDisplayName = user && !displayNameLoading && !displayName;
 
   const getStack = () => {
     if (passwordRecovery) return <RecoveryStack />;
-    if (needsAuthChoice) {
-      return (
-        <AuthGateStack
-          onSkip={() => {
-            setAuthChoiceMade().then(() => setAuthChoiceMadeState(true));
-          }}
-        />
-      );
-    }
+    if (!user) return <AuthGateStack />;
     if (needsDisplayName) return <DisplayNameStack />;
     if (!examDateSet) {
       return <ExamDateStack onComplete={() => setExamDateSet(true)} />;

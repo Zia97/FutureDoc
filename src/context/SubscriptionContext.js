@@ -17,7 +17,7 @@ const ENTITLEMENT_ID = 'UCAT Genius AI Pro';
 const SubscriptionContext = createContext(null);
 
 export function SubscriptionProvider({ children }) {
-  const { user, isAnonymous } = useAuth();
+  const { user } = useAuth();
   const [isPro, setIsPro] = useState(false);
   const [adminOverride, setAdminOverride] = useState(false);
   const [offerings, setOfferings] = useState(null);
@@ -36,9 +36,6 @@ export function SubscriptionProvider({ children }) {
   // Sync is_premium flag to Supabase user_profiles
   async function syncPremiumToSupabase(isPremium) {
     if (!user?.id) return;
-    // Anonymous users cannot purchase (Paywall blocks it), and we keep zero
-    // writes against their anonymous user_id.
-    if (isAnonymous) return;
     try {
       await supabase
         .from('user_profiles')
@@ -128,19 +125,17 @@ export function SubscriptionProvider({ children }) {
         reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'getCustomerInfo failed' } });
       }
 
-      // 2. Check admin override from Supabase (skip for anonymous — they can't be admins)
+      // 2. Check admin override from Supabase
       let isAdmin = false;
-      if (!isAnonymous) {
-        try {
-          const { data } = await supabase
-            .from('user_profiles')
-            .select('is_admin')
-            .eq('user_id', user.id)
-            .single();
-          isAdmin = !!data?.is_admin;
-        } catch (err) {
-          reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'checkAdmin failed' } });
-        }
+      try {
+        const { data } = await supabase
+          .from('user_profiles')
+          .select('is_admin')
+          .eq('user_id', user.id)
+          .single();
+        isAdmin = !!data?.is_admin;
+      } catch (err) {
+        reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'checkAdmin failed' } });
       }
 
       // 3. User is pro if RevenueCat subscriber OR admin
@@ -149,7 +144,7 @@ export function SubscriptionProvider({ children }) {
       syncPremiumToSupabase(premium);
     }
     identify();
-  }, [user?.id, isAnonymous]);
+  }, [user?.id]);
 
   async function checkSubscription() {
     try {

@@ -20,7 +20,6 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
-import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
 import {
@@ -45,11 +44,10 @@ const PRACTICE_SECTIONS = [
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const { user, signOut, deleteAccount, isAnonymous, displayName, updatePassword, saveDisplayName } = useAuth();
+  const { user, signOut, deleteAccount, displayName, updatePassword, saveDisplayName } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { isPro, presentCustomerCenter } = useSubscription();
-  const openPaywall = usePaywallNavigation();
 
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
@@ -203,11 +201,9 @@ export default function ProfileScreen() {
     );
   };
 
-  const initialSource = isAnonymous ? 'G' : (displayName?.[0] ?? user?.email?.[0] ?? '?');
-  const heroInitial = initialSource.toUpperCase();
-  const emailLabel = isAnonymous ? 'Guest — progress saved on this device' : user?.email;
-  const isPasswordUser =
-    !isAnonymous && (user?.identities ?? []).some((i) => i.provider === 'email');
+  const heroInitial = (displayName?.[0] ?? user?.email?.[0] ?? '?').toUpperCase();
+  const emailLabel = user?.email;
+  const isPasswordUser = (user?.identities ?? []).some((i) => i.provider === 'email');
 
   const proAccent = colors.mint;
   const accountAccent = colors.cyan;
@@ -251,15 +247,9 @@ export default function ProfileScreen() {
               </View>
 
               <View style={styles.heroIdentity}>
-                {!isAnonymous && displayName ? (
-                  <Text style={[styles.heroName, { color: colors.text }]} numberOfLines={1}>
-                    {displayName}
-                  </Text>
-                ) : (
-                  <Text style={[styles.heroName, { color: colors.text }]} numberOfLines={1}>
-                    {isAnonymous ? 'Guest' : 'Account'}
-                  </Text>
-                )}
+                <Text style={[styles.heroName, { color: colors.text }]} numberOfLines={1}>
+                  {displayName ?? 'Account'}
+                </Text>
                 <Text style={[styles.heroEmail, { color: colors.textSecondary }]} numberOfLines={1}>
                   {emailLabel}
                 </Text>
@@ -286,7 +276,7 @@ export default function ProfileScreen() {
                 </Text>
               </View>
 
-              {!isAnonymous && displayName ? (
+              {displayName ? (
                 <TouchableOpacity
                   onPress={openNameModal}
                   activeOpacity={0.8}
@@ -305,29 +295,6 @@ export default function ProfileScreen() {
             </View>
           </LinearGradient>
         </Animated.View>
-
-        {/* Anonymous CTA */}
-        {isAnonymous && (
-          <Animated.View style={[styles.section, subAnim]}>
-            <Text style={[styles.sectionHeading, { color: colors.text }]}>Account</Text>
-            <GlassMenuCard
-              title="Save your progress"
-              description="Add an email to sync across devices and avoid losing progress if you reinstall."
-              icon="shield-heart"
-              accent={accountAccent}
-              highlighted
-              badge="Save"
-              onPress={() => navigation.navigate('SignUp')}
-            />
-            <GlassMenuCard
-              title="Already have an account?"
-              description="Sign in to restore your progress and unlock cross-device sync."
-              icon="person-cog"
-              accent={colors.blue}
-              onPress={() => navigation.navigate('Login')}
-            />
-          </Animated.View>
-        )}
 
         {/* Subscription */}
         <Animated.View style={[styles.section, subAnim]}>
@@ -360,7 +327,7 @@ export default function ProfileScreen() {
               accent={proAccent}
               highlighted
               badge="Upgrade"
-              onPress={openPaywall}
+              onPress={() => navigation.navigate('Paywall')}
             />
           )}
         </Animated.View>
@@ -466,43 +433,41 @@ export default function ProfileScreen() {
         </Animated.View>
 
         {/* Account actions */}
-        {!isAnonymous && (
-          <Animated.View style={[styles.section, dangerAnim]}>
-            <TouchableOpacity
-              style={[
-                styles.actionButton,
-                {
-                  backgroundColor: isDark ? 'rgba(8, 22, 43, 0.7)' : 'rgba(255, 255, 255, 0.9)',
-                  borderColor: colors.border,
-                },
-              ]}
-              onPress={handleSignOut}
-              activeOpacity={0.85}
-            >
-              <Text style={[styles.actionText, { color: colors.textSecondary }]}>Sign Out</Text>
-            </TouchableOpacity>
+        <Animated.View style={[styles.section, dangerAnim]}>
+          <TouchableOpacity
+            style={[
+              styles.actionButton,
+              {
+                backgroundColor: isDark ? 'rgba(8, 22, 43, 0.7)' : 'rgba(255, 255, 255, 0.9)',
+                borderColor: colors.border,
+              },
+            ]}
+            onPress={handleSignOut}
+            activeOpacity={0.85}
+          >
+            <Text style={[styles.actionText, { color: colors.textSecondary }]}>Sign Out</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.actionButton,
-                styles.dangerButton,
-                {
-                  borderColor: hexToRgba(colors.red, 0.6),
-                  backgroundColor: hexToRgba(colors.red, isDark ? 0.08 : 0.06),
-                },
-              ]}
-              onPress={handleDeleteAccount}
-              activeOpacity={0.85}
-              disabled={deleting}
-            >
-              {deleting ? (
-                <ActivityIndicator size="small" color={colors.red} />
-              ) : (
-                <Text style={[styles.actionText, { color: colors.red }]}>Delete Account</Text>
-              )}
-            </TouchableOpacity>
-          </Animated.View>
-        )}
+          <TouchableOpacity
+            style={[
+              styles.actionButton,
+              styles.dangerButton,
+              {
+                borderColor: hexToRgba(colors.red, 0.6),
+                backgroundColor: hexToRgba(colors.red, isDark ? 0.08 : 0.06),
+              },
+            ]}
+            onPress={handleDeleteAccount}
+            activeOpacity={0.85}
+            disabled={deleting}
+          >
+            {deleting ? (
+              <ActivityIndicator size="small" color={colors.red} />
+            ) : (
+              <Text style={[styles.actionText, { color: colors.red }]}>Delete Account</Text>
+            )}
+          </TouchableOpacity>
+        </Animated.View>
 
         <Animated.View style={footerAnim}>
           <PremiumFooter style={styles.footer} />

@@ -1,25 +1,25 @@
 import { useCallback } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { useSubscription } from '../../context/SubscriptionContext';
-import { usePaywallNavigation } from './usePaywallNavigation';
 
 /**
  * Returns a gate function that checks if an item is accessible.
- * If not, opens the paywall (or prompts anonymous users to sign up).
+ * If not, navigates to Paywall and returns false.
  *
  * @param {(item: any) => boolean} getIsFree - returns true if the item is free content
  */
 export function usePremiumGate(getIsFree) {
   const { isPro } = useSubscription();
-  const openPaywall = usePaywallNavigation();
+  const navigation = useNavigation();
 
   const canAccess = useCallback(
     (item) => {
       if (isPro) return true;
       if (getIsFree && getIsFree(item)) return true;
-      openPaywall();
+      navigation.navigate('Paywall');
       return false;
     },
-    [isPro, getIsFree, openPaywall],
+    [isPro, getIsFree, navigation],
   );
 
   return { canAccess, isPro };
