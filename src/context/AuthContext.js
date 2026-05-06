@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
@@ -25,6 +25,10 @@ export function AuthProvider({ children }) {
   // app can hold on the loader rather than briefly flashing the home stack
   // before the gate kicks in.
   const [suspension, setSuspension] = useState({ loading: true, isSuspended: false, reason: null, suspendedAt: null });
+  // True while the Google OAuth flow is exchanging the code inline. The deep-link
+  // listener must skip auth/callback URLs in that window or both code paths race
+  // to redeem the same PKCE verifier and the loser sees "code verifier not found".
+  const oauthInFlight = useRef(false);
 
   // Mirror every display_name change to AsyncStorage so cold-start renders
   // can show the name immediately, before the network fetch resolves. The
@@ -126,6 +130,7 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const handleUrl = async ({ url }) => {
       if (url.includes('auth/callback')) {
+        if (oauthInFlight.current) return;
         const { queryParams } = Linking.parse(url);
         const code = queryParams?.code;
         const type = queryParams?.type;
@@ -220,27 +225,32 @@ export function AuthProvider({ children }) {
   const signInWithGoogle = async () => {
     const redirectTo = AuthSession.makeRedirectUri({ scheme: 'ucatgeniusai', path: 'auth/callback' });
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo, skipBrowserRedirect: true },
-    });
+    oauthInFlight.current = true;
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo, skipBrowserRedirect: true },
+      });
 
-    if (error) return { error };
+      if (error) return { error };
 
-    const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
+      const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
 
-    if (result.type !== 'success') return { error: new Error('Sign-in cancelled') };
+      if (result.type !== 'success') return { error: new Error('Sign-in cancelled') };
 
-    const { queryParams } = Linking.parse(result.url);
-    const code = queryParams?.code;
-    if (!code) {
-      const desc = queryParams?.error_description || queryParams?.error || 'No code in redirect URL';
-      return { error: new Error(decodeURIComponent(String(desc))) };
+      const { queryParams } = Linking.parse(result.url);
+      const code = queryParams?.code;
+      if (!code) {
+        const desc = queryParams?.error_description || queryParams?.error || 'No code in redirect URL';
+        return { error: new Error(decodeURIComponent(String(desc))) };
+      }
+
+      const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+      if (exchangeError) return { error: exchangeError };
+      return { error: null };
+    } finally {
+      oauthInFlight.current = false;
     }
-
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
-    if (exchangeError) return { error: exchangeError };
-    return { error: null };
   };
 
   const signInWithApple = async () => {
