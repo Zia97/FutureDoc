@@ -16,6 +16,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { useTimedVRTests } from '../../hooks/queries/useTimedVRTests';
 import { useTimedDMTests } from '../../hooks/queries/useTimedDMTests';
 import { useTimedQRTests } from '../../hooks/queries/useTimedQRTests';
@@ -133,6 +134,7 @@ function StatCard({ label, count, color, isDark, colors }) {
 function TimedListBody({ navigation, section, title, tests, loading, error, progress, syncing, syncProgress, refetch }) {
   const { theme: t, isDark } = useTheme();
   const { isPro } = useSubscription();
+  const openPaywall = usePaywallNavigation();
   const { colors } = getPremiumTheme(isDark);
   const insets = useSafeAreaInsets();
   const sectionAccent = colors[SECTION_META[section]?.accentKey ?? 'blue'] ?? colors.blue;
@@ -240,7 +242,7 @@ function TimedListBody({ navigation, section, title, tests, loading, error, prog
         style={[styles.rowTouch, isLocked && styles.lockedRow]}
         onPress={() => {
           if (isLocked) {
-            navigation.navigate('Paywall');
+            openPaywall();
             return;
           }
           if (isCompleted) {

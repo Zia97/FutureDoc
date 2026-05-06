@@ -88,7 +88,7 @@ export async function scheduleDailyReminder() {
     const id = await Notifications.scheduleNotificationAsync({
       content: {
         ...content,
-        sound: null,
+        sound: false,
         ...(Platform.OS === 'android' ? { channelId: CHANNEL_ID } : {}),
       },
       trigger: {

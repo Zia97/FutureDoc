@@ -24,6 +24,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { DM_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
@@ -2016,6 +2017,7 @@ export default function DecisionMakingLearnScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
   const { isPro } = useSubscription();
+  const openPaywall = usePaywallNavigation();
   const [completedIds, setCompletedIds] = useState([]);
   const [expandedModules, setExpandedModules] = useState(() => MODULES.reduce((acc, m) => ({ ...acc, [m.id]: true }), {}));
   const introAnim = useFadeSlide(0, 14);
@@ -2089,11 +2091,11 @@ export default function DecisionMakingLearnScreen({ navigation }) {
     const isLocked = !alreadyCompleted && lesson.number > nextLesson.number;
     if (isLocked) return;
     if (!isPro && PREMIUM_LESSON_TYPES.has(lesson.type)) {
-      navigation.navigate('Paywall');
+      openPaywall();
       return;
     }
     navigation.navigate('LearnDMLesson', { lessonId });
-  }, [isPro, navigation, completedIds, nextLesson]);
+  }, [isPro, openPaywall, navigation, completedIds, nextLesson]);
 
   const handleContinue = useCallback(() => {
     if (allComplete) {

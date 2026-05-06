@@ -15,6 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { getDisplayStreak } from '../../services/streakService';
 import {
   getLastActivity,
@@ -216,6 +217,7 @@ export default function HomeScreen({ navigation }) {
   const { user, isAnonymous, displayName: profileDisplayName } = useAuth();
   const { isDark, toggleDark } = useTheme();
   const { isPro } = useSubscription();
+  const openPaywall = usePaywallNavigation();
   const { colors, gradients } = getPremiumTheme(isDark);
 
   const showProfile = !!user && !isAnonymous;
@@ -351,7 +353,7 @@ export default function HomeScreen({ navigation }) {
             description="Track progress, strengths, and areas to improve."
             icon="chart"
             accent={colors.teal}
-            onPress={() => (isPro ? navigation.navigate('PerformanceAnalytics') : navigation.navigate('Paywall'))}
+            onPress={() => (isPro ? navigation.navigate('PerformanceAnalytics') : openPaywall())}
             style={styles.actionCard}
           />
         </Animated.View>

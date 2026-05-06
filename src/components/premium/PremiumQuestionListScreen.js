@@ -17,6 +17,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
 
 import { useSubscription } from '../../context/SubscriptionContext';
 import { useTheme } from '../../context/ThemeContext';
+import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { getPremiumTheme, hexToRgba, premiumColors } from '../../theme/premiumTheme';
 import SyncBanner from '../SyncBanner';
 import PremiumIcon from './PremiumIcon';
@@ -333,6 +334,7 @@ export default function PremiumQuestionListScreen({
 }) {
   const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
+  const openPaywall = usePaywallNavigation();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const [searchText, setSearchText] = useState('');
@@ -451,7 +453,7 @@ export default function PremiumQuestionListScreen({
         style={[styles.rowTouch, isLocked && styles.lockedRow]}
         onPress={() => {
           if (isLocked) {
-            navigation.navigate('Paywall');
+            openPaywall();
             return;
           }
           navigation.navigate(routeName, { index: navIndex, ...extraNavParams });

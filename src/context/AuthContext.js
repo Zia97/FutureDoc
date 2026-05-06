@@ -140,31 +140,23 @@ export function AuthProvider({ children }) {
   }, []);
 
   // Handle OAuth deep link callback — covers the case where Android kills
-  // the app while the browser is open and relaunches it via the deep link.
+  // the app while the browser is open and relaunches it via the deep link,
+  // and email verification / password recovery links.
   useEffect(() => {
     const handleUrl = async ({ url }) => {
       if (url.includes('auth/callback')) {
-        const hash = url.split('#')[1];
-        if (hash) {
-          const params = new URLSearchParams(hash);
-          const access_token = params.get('access_token');
-          const refresh_token = params.get('refresh_token');
-          const type = params.get('type');
+        const { queryParams } = Linking.parse(url);
+        const code = queryParams?.code;
+        const type = queryParams?.type;
 
-          if (access_token && refresh_token) {
-            await supabase.auth.setSession({ access_token, refresh_token });
-          }
-
-          // Email verification — session is set, user is now confirmed
-          if (type === 'signup') {
-            // Session already set above, user will be logged in automatically
-          }
-
-          // Password recovery — session is set, user can now call updateUser
-          if (type === 'recovery') {
-            setPasswordRecovery(true);
-          }
+        if (code) {
+          await supabase.auth.exchangeCodeForSession(code);
         }
+
+        if (type === 'recovery') {
+          setPasswordRecovery(true);
+        }
+
         const { data: { session } } = await supabase.auth.getSession();
         setUser(isUsable(session?.user) ? session.user : null);
       }
@@ -257,22 +249,22 @@ export function AuthProvider({ children }) {
       provider: 'google',
       options: { redirectTo, skipBrowserRedirect: true },
     });
-    
+
     if (error) return { error };
 
     const result = await WebBrowser.openAuthSessionAsync(data.url, redirectTo);
 
-    if (result.type === 'success') {
-      const hash = result.url.split('#')[1];
-      if (!hash) return { error: new Error('No token in redirect URL') };
-      const params = new URLSearchParams(hash);
-      const access_token = params.get('access_token');
-      const refresh_token = params.get('refresh_token');
-      if (!access_token || !refresh_token) return { error: new Error('Missing tokens in redirect URL') };
-      const { error: sessionError } = await supabase.auth.setSession({ access_token, refresh_token });
-      if (sessionError) return { error: sessionError };
+    if (result.type !== 'success') return { error: new Error('Sign-in cancelled') };
+
+    const { queryParams } = Linking.parse(result.url);
+    const code = queryParams?.code;
+    if (!code) {
+      const desc = queryParams?.error_description || queryParams?.error || 'No code in redirect URL';
+      return { error: new Error(decodeURIComponent(String(desc))) };
     }
 
+    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+    if (exchangeError) return { error: exchangeError };
     return { error: null };
   };
 

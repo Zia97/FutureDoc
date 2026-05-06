@@ -20,6 +20,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
 import {
@@ -48,6 +49,7 @@ export default function ProfileScreen() {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { isPro, presentCustomerCenter } = useSubscription();
+  const openPaywall = usePaywallNavigation();
 
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
@@ -358,7 +360,7 @@ export default function ProfileScreen() {
               accent={proAccent}
               highlighted
               badge="Upgrade"
-              onPress={() => navigation.navigate('Paywall')}
+              onPress={openPaywall}
             />
           )}
         </Animated.View>

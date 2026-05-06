@@ -24,6 +24,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSubscription } from '../../context/SubscriptionContext';
+import { usePaywallNavigation } from '../../hooks/ui/usePaywallNavigation';
 import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import { VR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
 
@@ -1797,10 +1798,6 @@ function HeroCard({ completedCount, progress, nextLesson, allComplete, colors, g
         </View>
       </View>
 
-      <Text style={[styles.heroBody, { color: colors.textSecondary }]}>
-        Section overview, question types, reading mechanics, traps, and worked examples.
-      </Text>
-
       <View style={styles.heroProgressHeader}>
         <Text style={[styles.progressLabel, { color: colors.text }]}>
           Progress: {completedCount} / {TOTAL_LESSONS} lessons complete
@@ -2018,6 +2015,7 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
   const { isPro } = useSubscription();
+  const openPaywall = usePaywallNavigation();
   const [completedIds, setCompletedIds] = useState([]);
   const [expandedModules, setExpandedModules] = useState(() => MODULES.reduce((acc, m) => ({ ...acc, [m.id]: true }), {}));
   const introAnim = useFadeSlide(0, 14);
@@ -2091,11 +2089,11 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
     const isLocked = !alreadyCompleted && lesson.number > nextLesson.number;
     if (isLocked) return;
     if (!isPro && PREMIUM_LESSON_TYPES.has(lesson.type)) {
-      navigation.navigate('Paywall');
+      openPaywall();
       return;
     }
     navigation.navigate('LearnVRLesson', { lessonId });
-  }, [isPro, navigation, completedIds, nextLesson]);
+  }, [isPro, openPaywall, navigation, completedIds, nextLesson]);
 
   const handleContinue = useCallback(() => {
     if (allComplete) {
