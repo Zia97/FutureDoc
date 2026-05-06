@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   View,
   ScrollView,
@@ -266,7 +266,11 @@ function QRQuestionScreenInner({ route, navigation }) {
     if (!cacheLoading) resetAnswers(localAnswers);
   }, [cacheLoading]);
 
-  useEffect(() => { setPendingAnswer(null); }, [item?.question?.questionId]);
+  const viewedAtRef = useRef(Date.now());
+  useEffect(() => {
+    setPendingAnswer(null);
+    viewedAtRef.current = Date.now();
+  }, [item?.question?.questionId, item?.stemId]);
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,
@@ -289,12 +293,17 @@ function QRQuestionScreenInner({ route, navigation }) {
 
   function handleCheckAnswer() {
     if (!pendingAnswer || hasAnswered) return;
+    const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+    const correctAnswer = item.question.answer;
+    const correctness = correctAnswer != null ? pendingAnswer === correctAnswer : null;
     handleAnswer(item.stemId, qid, pendingAnswer);
     submitAttempt({
       questionId: qid,
       setId: item.stemId,
       selectedAnswer: pendingAnswer,
       totalQuestions: item.stemQuestionCount,
+      timeSpentMs,
+      isCorrect: correctness,
     });
   }
 

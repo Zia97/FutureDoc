@@ -28,6 +28,7 @@ import {
 } from './SituationalJudgementLearnScreen';
 import ReportLessonButton from '../../components/ReportLessonButton';
 import { useAITutorAvailability } from '../../hooks/ai/useAITutorAvailability';
+import { useLessonTelemetry } from '../../hooks/useLessonTelemetry';
 import {
   loadMiniAnswersForLesson,
   saveMiniAnswer,
@@ -665,6 +666,10 @@ export default function SituationalJudgementLessonScreen({ navigation, route }) 
   const [completedIds, setCompletedIds] = useState([]);
   const completed = completedIds.includes(lesson.id);
   const [showAllDoneModal, setShowAllDoneModal] = useState(false);
+  const { markComplete: markLessonTelemetryComplete } = useLessonTelemetry({
+    section: 'sj',
+    lessonId: lesson.id,
+  });
 
   const interactiveIndices = useMemo(
     () => lesson.steps.reduce((acc, step, i) => {
@@ -787,9 +792,10 @@ export default function SituationalJudgementLessonScreen({ navigation, route }) 
       if (current.includes(lesson.id)) return current;
       const next = [...current, lesson.id];
       AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      markLessonTelemetryComplete();
       return next;
     });
-  }, [lesson.id]);
+  }, [lesson.id, markLessonTelemetryComplete]);
 
   useEffect(() => {
     if (!completed && allQuestionsAnswered) {

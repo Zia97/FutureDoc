@@ -116,12 +116,16 @@ function VRPassageScreenInner({ index }) {
     return <PremiumQuestionLoading label="Loading passage..." />;
   }
 
-  function handleAnswerCommit(item, selectedAnswer) {
+  function handleAnswerCommit(item, selectedAnswer, meta = {}) {
+    const correctAnswer = item.question.answer;
+    const isCorrect = correctAnswer != null ? selectedAnswer === correctAnswer : null;
     submitAttempt({
       questionId: item.question.questionId ?? item.question.id ?? item.question.itemId,
       passageId: item.stemId,
       selectedAnswer,
       totalQuestions: item.stemQuestionCount,
+      timeSpentMs: meta.timeSpentMs ?? null,
+      isCorrect,
     });
   }
 

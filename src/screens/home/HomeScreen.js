@@ -93,7 +93,7 @@ function ExamCountdownClock({ examDate, isDark, colors, onPress }) {
   let hours = 0;
   let minutes = 0;
   let seconds = 0;
-  let headline = 'TIME UNTIL UCAT EXAM';
+  let headline = 'TIME UNTIL YOUR UCAT EXAM';
   let helper = 'Tap to set your exam date';
   let active = false;
 

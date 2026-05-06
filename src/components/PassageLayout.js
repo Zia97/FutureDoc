@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -81,7 +81,11 @@ export default function PassageLayout({
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === item.question.answer;
 
-  useEffect(() => { setPendingAnswer(null); }, [qid]);
+  const viewedAtRef = useRef(Date.now());
+  useEffect(() => {
+    setPendingAnswer(null);
+    viewedAtRef.current = Date.now();
+  }, [qid, item.stemId]);
 
   const panHandlers = useSwipeGesture(
     isFirst ? null : goPrev,
@@ -102,8 +106,9 @@ export default function PassageLayout({
 
   function handleCheckAnswer() {
     if (!pendingAnswer || hasAnswered) return;
+    const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
     handleAnswer(item.stemId, qid, pendingAnswer);
-    onAnswerCommit?.(item, pendingAnswer);
+    onAnswerCommit?.(item, pendingAnswer, { timeSpentMs });
   }
 
   const sectionColor = section === 'sj' ? colors.mint : colors.blue;

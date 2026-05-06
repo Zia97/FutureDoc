@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
+import { recordPracticeAttempt } from '../../lib/userTelemetry';
 
 const ATTEMPTS_KEY = 'qr_attempts';
 export const QR_PROGRESS_CACHE_KEY = 'qr_set_progress';
@@ -70,7 +71,14 @@ export function useQuantitativeReasoningAttempts() {
     }
   }
 
-  async function submitAttempt({ questionId, setId, selectedAnswer, totalQuestions }) {
+  async function submitAttempt({
+    questionId,
+    setId,
+    selectedAnswer,
+    totalQuestions,
+    timeSpentMs = null,
+    isCorrect = null,
+  }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 
@@ -79,6 +87,13 @@ export function useQuantitativeReasoningAttempts() {
       if (attempts) await updateProgressCache(setId, totalQuestions, attempts);
       recordActivity();
       setLastActivity({ kind: 'practice', section: 'QR' });
+      recordPracticeAttempt({
+        section: 'qr',
+        questionId,
+        selectedAnswer,
+        isCorrect,
+        timeSpentMs,
+      });
     } finally {
       submitting.current.delete(questionId);
     }

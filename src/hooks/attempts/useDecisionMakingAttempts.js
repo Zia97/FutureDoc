@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
+import { recordPracticeAttempt } from '../../lib/userTelemetry';
 
 export const DM_ATTEMPTS_KEY = 'dm_attempts';
 const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
@@ -59,7 +60,12 @@ export function useDecisionMakingAttempts() {
     }
   }
 
-  async function submitAttempt({ questionId, answer }) {
+  async function submitAttempt({
+    questionId,
+    answer,
+    timeSpentMs = null,
+    statementCorrectness = null,
+  }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 
@@ -67,6 +73,31 @@ export function useDecisionMakingAttempts() {
       await saveToCache(questionId, answer);
       recordActivity();
       setLastActivity({ kind: 'practice', section: 'DM' });
+
+      // DM Yes/No questions: emit one telemetry row per statement.
+      if (answer && typeof answer === 'object') {
+        for (const [key, value] of Object.entries(answer)) {
+          const idx = Number(key);
+          if (!Number.isInteger(idx)) continue;
+          const correct = statementCorrectness?.[idx];
+          recordPracticeAttempt({
+            section: 'dm',
+            questionId,
+            statementIndex: idx,
+            selectedAnswer: value == null ? null : String(value),
+            isCorrect: correct == null ? null : !!correct,
+            timeSpentMs,
+          });
+        }
+      } else {
+        recordPracticeAttempt({
+          section: 'dm',
+          questionId,
+          selectedAnswer: answer,
+          isCorrect: statementCorrectness == null ? null : !!statementCorrectness,
+          timeSpentMs,
+        });
+      }
     } finally {
       submitting.current.delete(questionId);
     }

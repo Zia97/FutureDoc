@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
+import { recordPracticeAttempt } from '../../lib/userTelemetry';
 
 const ATTEMPTS_KEY = 'sj_attempts';
 export const SJ_PROGRESS_CACHE_KEY = 'sj_scenario_progress';
@@ -70,7 +71,14 @@ export function useSituationalJudgementAttempts() {
     }
   }
 
-  async function submitAttempt({ questionId, scenarioId, selectedAnswer, totalQuestions }) {
+  async function submitAttempt({
+    questionId,
+    scenarioId,
+    selectedAnswer,
+    totalQuestions,
+    timeSpentMs = null,
+    isCorrect = null,
+  }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 
@@ -79,6 +87,13 @@ export function useSituationalJudgementAttempts() {
       if (attempts) await updateProgressCache(scenarioId, totalQuestions, attempts);
       recordActivity();
       setLastActivity({ kind: 'practice', section: 'SJ' });
+      recordPracticeAttempt({
+        section: 'sj',
+        questionId,
+        selectedAnswer,
+        isCorrect,
+        timeSpentMs,
+      });
     } finally {
       submitting.current.delete(questionId);
     }

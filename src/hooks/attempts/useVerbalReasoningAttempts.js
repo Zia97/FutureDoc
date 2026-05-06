@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
+import { recordPracticeAttempt } from '../../lib/userTelemetry';
 
 const ATTEMPTS_KEY  = 'vr_attempts';
 export const VR_PROGRESS_CACHE_KEY = 'vr_passage_progress';
@@ -75,7 +76,14 @@ export function useVerbalReasoningAttempts() {
 
   // ── Public API ───────────────────────────────────────────────────────────────
 
-  async function submitAttempt({ questionId, passageId, selectedAnswer, totalQuestions }) {
+  async function submitAttempt({
+    questionId,
+    passageId,
+    selectedAnswer,
+    totalQuestions,
+    timeSpentMs = null,
+    isCorrect = null,
+  }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 
@@ -84,6 +92,13 @@ export function useVerbalReasoningAttempts() {
       if (attempts) await updateProgressCache(passageId, totalQuestions, attempts);
       recordActivity();
       setLastActivity({ kind: 'practice', section: 'VR' });
+      recordPracticeAttempt({
+        section: 'vr',
+        questionId,
+        selectedAnswer,
+        isCorrect,
+        timeSpentMs,
+      });
     } finally {
       submitting.current.delete(questionId);
     }

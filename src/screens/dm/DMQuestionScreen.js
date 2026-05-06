@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -326,6 +326,11 @@ function DMQuestionScreenInner({ route, navigation }) {
     isLast ? null : goNext,
   );
 
+  const viewedAtRef = useRef(Date.now());
+  useEffect(() => {
+    viewedAtRef.current = Date.now();
+  }, [question?.id]);
+
   if (loading || cacheLoading || !question) {
     return <PremiumQuestionLoading label="Loading question..." />;
   }
@@ -342,7 +347,30 @@ function DMQuestionScreenInner({ route, navigation }) {
   function handleCheckAnswers() {
     if (!currentAnswer) return;
     setSubmitted((prev) => ({ ...prev, [question.id]: true }));
-    submitAttempt({ questionId: question.id, answer: currentAnswer });
+
+    const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+
+    let statementCorrectness = null;
+    if (isYesNo && Array.isArray(question.statements) && currentAnswer && typeof currentAnswer === 'object') {
+      statementCorrectness = {};
+      question.statements.forEach((st, i) => {
+        if (st?.answer != null && currentAnswer[i] != null) {
+          statementCorrectness[i] = currentAnswer[i] === st.answer;
+        }
+      });
+    } else if (!isYesNo && question.answer != null) {
+      statementCorrectness =
+        typeof question.answer === 'object'
+          ? JSON.stringify(currentAnswer) === JSON.stringify(question.answer)
+          : currentAnswer === question.answer;
+    }
+
+    submitAttempt({
+      questionId: question.id,
+      answer: currentAnswer,
+      timeSpentMs,
+      statementCorrectness,
+    });
   }
 
   const allStatementsAnswered =
