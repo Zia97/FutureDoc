@@ -11,6 +11,7 @@ import AnswerOptionButton from '../AnswerOptionButton';
 import ZoomableView from '../ZoomableView';
 import DataTable from './DataTable';
 import YesNoStatements from './YesNoStatements';
+import QuestionStatsBullets from '../QuestionStatsBullets';
 import VennDiagramRenderer from './VennDiagramRenderer';
 import VennDiagramKey from './VennDiagramKey';
 import AITutorModal from '../AITutorModal';
@@ -107,7 +108,17 @@ export function DMStemContent({ question, showLabel = true }) {
 }
 
 // Renders only the answer inputs (MCQ options, yes/no statements, venn option grid)
-export function DMOptionsContent({ question, answer, onAnswer, submitted, timedMode = false, onTeachMe, showLabel = true }) {
+export function DMOptionsContent({
+  question,
+  answer,
+  onAnswer,
+  submitted,
+  timedMode = false,
+  onTeachMe,
+  showLabel = true,
+  getStatementStats,
+  statementUserTimesMs,
+}) {
   const { width: screenWidth } = useWindowDimensions();
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
@@ -189,6 +200,8 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
           submitted={submitted}
           timedMode={timedMode}
           onTeachMe={onTeachMe}
+          getStatementStats={getStatementStats}
+          statementUserTimesMs={statementUserTimesMs}
         />
       </View>
     );
@@ -197,7 +210,18 @@ export function DMOptionsContent({ question, answer, onAnswer, submitted, timedM
   return null;
 }
 
-export default function DMQuestionRenderer({ question, answer, onAnswer, submitted, questionContext, timedMode = false }) {
+export default function DMQuestionRenderer({
+  question,
+  answer,
+  onAnswer,
+  submitted,
+  questionContext,
+  timedMode = false,
+  questionStats = null,
+  questionUserTimeMs = null,
+  getStatementStats,
+  statementUserTimesMs,
+}) {
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
@@ -251,12 +275,15 @@ export default function DMQuestionRenderer({ question, answer, onAnswer, submitt
         timedMode={timedMode}
         questionContext={questionContext}
         onTeachMe={questionContext ? handleStatementTeachMe : undefined}
+        getStatementStats={getStatementStats}
+        statementUserTimesMs={statementUserTimesMs}
       />
 
       {submitted && !timedMode && !isYesNo && (
         <View style={[styles.explanation, { backgroundColor: hexToRgba(sectionColor, isDark ? 0.12 : 0.08), borderLeftColor: sectionColor }]}>
           <Text style={[styles.explanationLabel, { color: sectionColor }]}>Explanation</Text>
           <Text style={[styles.explanationText, explanationScaled, { color: colors.textSecondary }]}>{question.answeringReason}</Text>
+          <QuestionStatsBullets userTimeMs={questionUserTimeMs} stats={questionStats} />
           {questionContext && (
             <TouchableOpacity
               style={[

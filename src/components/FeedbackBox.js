@@ -1,6 +1,7 @@
 import { Animated, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useState, useEffect, useRef } from 'react';
 import AITutorModal from './AITutorModal';
+import QuestionStatsBullets from './QuestionStatsBullets';
 import { useAITutor } from '../hooks/ai/useAITutor';
 import { useAICredits } from '../hooks/ai/useAICredits';
 import { useTheme } from '../context/ThemeContext';
@@ -15,6 +16,9 @@ export default function FeedbackBox({
   questionContext,
   isDemo = false,
   highlightTeachMe = false,
+  userTimeMs = null,
+  stats = null,
+  showStats = false,
 }) {
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
@@ -75,6 +79,9 @@ export default function FeedbackBox({
             )}
             <Text style={[styles.reason, reasonScaled, { color: colors.textSecondary }]}>{reason}</Text>
           </>
+        )}
+        {showStats && (
+          <QuestionStatsBullets userTimeMs={userTimeMs} stats={stats} />
         )}
         {questionContext && (
           <View style={styles.teachMeWrap}>

@@ -10,6 +10,7 @@ import BottomToolbar from '../../components/BottomToolbar';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
+import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
 import { useTheme } from '../../context/ThemeContext';
 import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
 import { getPremiumTheme } from '../../theme/premiumTheme';
@@ -288,6 +289,8 @@ function DMQuestionScreenInner({ route, navigation }) {
   const { questions, loading } = useDecisionMakingQuestions();
   const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
   const { canAccess } = usePremiumGate((item) => item.isFree);
+  const { getStats } = useQuestionStats('dm');
+  const [userTimesMs, setUserTimesMs] = useState({});
 
   useEffect(() => {
     if (!cacheLoading) {
@@ -349,6 +352,7 @@ function DMQuestionScreenInner({ route, navigation }) {
     setSubmitted((prev) => ({ ...prev, [question.id]: true }));
 
     const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+    setUserTimesMs((prev) => ({ ...prev, [question.id]: timeSpentMs }));
 
     let statementCorrectness = null;
     if (isYesNo && Array.isArray(question.statements) && currentAnswer && typeof currentAnswer === 'object') {
@@ -415,6 +419,17 @@ function DMQuestionScreenInner({ route, navigation }) {
             onAnswer={handleAnswer}
             submitted={isSubmitted}
             questionContext={isSubmitted ? buildQuestionContext(question, currentAnswer, isYesNo) : undefined}
+            questionStats={getStats(question.id, null)}
+            questionUserTimeMs={userTimesMs[question.id] ?? null}
+            getStatementStats={(idx) => getStats(question.id, idx)}
+            statementUserTimesMs={
+              isYesNo && Array.isArray(question.statements)
+                ? question.statements.reduce((acc, _, i) => {
+                    acc[i] = userTimesMs[question.id] ?? null;
+                    return acc;
+                  }, {})
+                : null
+            }
           />
 
           {!isSubmitted && currentAnswer !== undefined && currentAnswer !== null ? (

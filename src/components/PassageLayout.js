@@ -52,6 +52,7 @@ export default function PassageLayout({
   demoSubtitle = null,
   demoExitLabel = null,
   demoExitHint = null,
+  getStats = null,
 }) {
   const navigation = useNavigation();
   const { isDark } = useTheme();
@@ -75,6 +76,7 @@ export default function PassageLayout({
   const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
   const [pendingAnswer, setPendingAnswer] = useState(null);
   const [notesVisible, setNotesVisible] = useState(false);
+  const [userTimesMs, setUserTimesMs] = useState({});
 
   const qid = item.question.questionId ?? item.question.id ?? item.question.itemId;
   const selectedAnswer = getAnswer(item.stemId, qid);
@@ -107,6 +109,7 @@ export default function PassageLayout({
   function handleCheckAnswer() {
     if (!pendingAnswer || hasAnswered) return;
     const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+    setUserTimesMs((prev) => ({ ...prev, [qid]: timeSpentMs }));
     handleAnswer(item.stemId, qid, pendingAnswer);
     onAnswerCommit?.(item, pendingAnswer, { timeSpentMs });
   }
@@ -168,6 +171,9 @@ export default function PassageLayout({
               showReason={alwaysShowReason || true}
               isDemo={demoMode}
               highlightTeachMe={demoMode}
+              showStats={!demoMode && !!getStats}
+              userTimeMs={userTimesMs[qid] ?? null}
+              stats={getStats ? getStats(qid, null) : null}
               questionContext={{
                 questionId: qid,
                 question: item.question.questionText,

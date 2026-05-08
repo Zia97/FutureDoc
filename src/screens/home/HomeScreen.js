@@ -316,23 +316,23 @@ export default function HomeScreen({ navigation }) {
 
         <Animated.View style={action1Anim}>
           <GlassMenuCard
-            title="Learn UCAT Techniques"
-            description="Theory, question types, worked examples, and strategy."
-            icon={LEARN_FEATURE_ICON}
-            accent={colors.cyan}
+            title="Start Practising"
+            description="Adaptive practice across all UCAT subtests."
+            icon="target"
+            accent={colors.blue}
             highlighted
-            onPress={() => navigation.navigate('LearnSections')}
+            onPress={() => navigation.navigate('PracticeMode')}
             style={styles.actionCard}
           />
         </Animated.View>
 
         <Animated.View style={action2Anim}>
           <GlassMenuCard
-            title="Start Practising"
-            description="Adaptive practice across all UCAT subtests."
-            icon="target"
-            accent={colors.blue}
-            onPress={() => navigation.navigate('PracticeMode')}
+            title="Learn UCAT Techniques"
+            description="Theory, question types, worked examples, and strategy."
+            icon={LEARN_FEATURE_ICON}
+            accent={colors.cyan}
+            onPress={() => navigation.navigate('LearnSections')}
             style={styles.actionCard}
           />
         </Animated.View>

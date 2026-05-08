@@ -13,6 +13,7 @@ import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
+import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
 import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import AnswerOptionButton from '../../components/AnswerOptionButton';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -238,6 +239,8 @@ function QRQuestionScreenInner({ route, navigation }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const { flatQuestions, loading } = useQuantitativeReasoningSets();
   const { submitAttempt, localAnswers, cacheLoading } = useQuantitativeReasoningAttempts();
+  const { getStats } = useQuestionStats('qr');
+  const [userTimesMs, setUserTimesMs] = useState({});
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const sectionColor = colors.purple;
@@ -296,6 +299,7 @@ function QRQuestionScreenInner({ route, navigation }) {
     const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
     const correctAnswer = item.question.answer;
     const correctness = correctAnswer != null ? pendingAnswer === correctAnswer : null;
+    setUserTimesMs((prev) => ({ ...prev, [qid]: timeSpentMs }));
     handleAnswer(item.stemId, qid, pendingAnswer);
     submitAttempt({
       questionId: qid,
@@ -373,6 +377,9 @@ function QRQuestionScreenInner({ route, navigation }) {
               correctAnswer={item.question.answer}
               reason={item.question.answeringReason}
               showReason
+              showStats
+              userTimeMs={userTimesMs[qid] ?? null}
+              stats={getStats(qid, null)}
               questionContext={{
                 questionId: qid,
                 question: item.question.questionText,

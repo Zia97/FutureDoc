@@ -7,6 +7,7 @@ import AnswerOptionButton from '../../components/AnswerOptionButton';
 import { PremiumQuestionLoading } from '../../components/premium/PremiumQuestionScreenUI';
 import { useVerbalReasoningPassages } from '../../hooks/queries/useVerbalReasoningPassages';
 import { useVerbalReasoningAttempts } from '../../hooks/attempts/useVerbalReasoningAttempts';
+import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
 import { flattenVRPassages } from '../../lib/flattenQuestions';
 import { VR_TUTOR_DEMO_PASSAGE } from '../../data/demo/vrTutorDemoQuestion';
 import { VR_WORKED_EXAMPLES } from '../../data/learn/vrWorkedExamples';
@@ -111,6 +112,7 @@ function WorkedExampleBranch({ exampleId }) {
 function VRPassageScreenInner({ index }) {
   const { flatQuestions, loading } = useVerbalReasoningPassages();
   const { submitAttempt, localAnswers, cacheLoading } = useVerbalReasoningAttempts();
+  const { getStats } = useQuestionStats('vr');
 
   if (loading || cacheLoading) {
     return <PremiumQuestionLoading label="Loading passage..." />;
@@ -141,6 +143,7 @@ function VRPassageScreenInner({ index }) {
       getItemIsFree={(item) => item.isFree}
       getQuestionOptions={(item, question) => question.options}
       renderOptions={renderVRAnswerOptions}
+      getStats={getStats}
     />
   );
 }

@@ -1,8 +1,18 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
+import QuestionStatsBullets from '../QuestionStatsBullets';
 
-export default function YesNoStatements({ statements, answers = {}, onAnswer, submitted, timedMode = false, onTeachMe }) {
+export default function YesNoStatements({
+  statements,
+  answers = {},
+  onAnswer,
+  submitted,
+  timedMode = false,
+  onTeachMe,
+  getStatementStats,
+  statementUserTimesMs,
+}) {
   const { practiceTheme: t } = useTheme();
 
   return (
@@ -67,6 +77,12 @@ export default function YesNoStatements({ statements, answers = {}, onAnswer, su
                 <Text style={[styles.explanationText, { color: t.textSecondary }]}>
                   {statement.reason}
                 </Text>
+                {getStatementStats ? (
+                  <QuestionStatsBullets
+                    userTimeMs={statementUserTimesMs?.[index] ?? null}
+                    stats={getStatementStats(index)}
+                  />
+                ) : null}
                 {showTeachMe && onTeachMe && (
                   <TouchableOpacity
                     style={[styles.teachMeBtn, { backgroundColor: t.bgInput, borderColor: t.borderStrong }]}

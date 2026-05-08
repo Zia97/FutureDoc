@@ -8,6 +8,7 @@ import { PremiumQuestionLoading } from '../../components/premium/PremiumQuestion
 import { LABEL_SETS } from '../../constants/sjLabelSets';
 import { useSituationalJudgementScenarios } from '../../hooks/queries/useSituationalJudgementScenarios';
 import { useSituationalJudgementAttempts } from '../../hooks/attempts/useSituationalJudgementAttempts';
+import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
 import { flattenSJScenarios } from '../../lib/flattenQuestions';
 import { SJ_TUTOR_DEMO_SCENARIO } from '../../data/demo/sjTutorDemoQuestion';
 import { SJ_WORKED_EXAMPLES } from '../../data/learn/sjWorkedExamples';
@@ -115,6 +116,7 @@ function WorkedExampleBranch({ exampleId }) {
 function SJScenarioScreenInner({ index }) {
   const { flatQuestions, loading } = useSituationalJudgementScenarios();
   const { submitAttempt, localAnswers, cacheLoading } = useSituationalJudgementAttempts();
+  const { getStats } = useQuestionStats('sj');
 
   if (loading || cacheLoading) {
     return <PremiumQuestionLoading label="Loading scenario..." />;
@@ -146,6 +148,7 @@ function SJScenarioScreenInner({ index }) {
       getItemIsFree={(item) => item.isFree}
       getQuestionOptions={(item) => LABEL_SETS[item.labelSet] ?? LABEL_SETS[1]}
       renderOptions={renderSJOptions}
+      getStats={getStats}
     />
   );
 }
