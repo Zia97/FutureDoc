@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +8,7 @@ import CalculatorModal from '../../components/CalculatorModal';
 import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
+import { useActiveTimer } from '../../hooks/ui/useActiveTimer';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
 import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
@@ -329,10 +330,7 @@ function DMQuestionScreenInner({ route, navigation }) {
     isLast ? null : goNext,
   );
 
-  const viewedAtRef = useRef(Date.now());
-  useEffect(() => {
-    viewedAtRef.current = Date.now();
-  }, [question?.id]);
+  const timer = useActiveTimer({ resetKey: question?.id });
 
   if (loading || cacheLoading || !question) {
     return <PremiumQuestionLoading label="Loading question..." />;
@@ -351,7 +349,7 @@ function DMQuestionScreenInner({ route, navigation }) {
     if (!currentAnswer) return;
     setSubmitted((prev) => ({ ...prev, [question.id]: true }));
 
-    const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+    const timeSpentMs = Math.max(0, timer.getElapsedMs());
     setUserTimesMs((prev) => ({ ...prev, [question.id]: timeSpentMs }));
 
     let statementCorrectness = null;
@@ -405,7 +403,7 @@ function DMQuestionScreenInner({ route, navigation }) {
         report={{ questionId: question.id, section: 'dm' }}
       />
 
-      <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
+      <CalculatorModal visible={calcVisible} onClose={() => { setCalcVisible(false); timer.resume(); }} />
 
       <ScrollView
         style={styles.scroll}
@@ -445,15 +443,15 @@ function DMQuestionScreenInner({ route, navigation }) {
       </ScrollView>
 
       <BottomToolbar
-        onNotes={() => setNotesVisible(true)}
-        onCalculator={() => setCalcVisible(true)}
+        onNotes={() => { timer.pause(); setNotesVisible(true); }}
+        onCalculator={() => { timer.pause(); setCalcVisible(true); }}
         sectionColor={sectionColor}
       />
 
       <NotesModal
         visible={notesVisible}
         sectionKey="dm"
-        onClose={() => setNotesVisible(false)}
+        onClose={() => { setNotesVisible(false); timer.resume(); }}
       />
     </PremiumQuestionScaffold>
   );

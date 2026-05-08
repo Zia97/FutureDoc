@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   View,
   ScrollView,
@@ -11,6 +11,7 @@ import { useFlatNavigation } from '../../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
+import { useActiveTimer } from '../../hooks/ui/useActiveTimer';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
 import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
@@ -269,10 +270,10 @@ function QRQuestionScreenInner({ route, navigation }) {
     if (!cacheLoading) resetAnswers(localAnswers);
   }, [cacheLoading]);
 
-  const viewedAtRef = useRef(Date.now());
+  const qidForTimer = item?.question?.questionId ?? item?.question?.id ?? null;
+  const timer = useActiveTimer({ resetKey: `${item?.stemId ?? ''}:${qidForTimer ?? ''}` });
   useEffect(() => {
     setPendingAnswer(null);
-    viewedAtRef.current = Date.now();
   }, [item?.question?.questionId, item?.stemId]);
 
   const panHandlers = useSwipeGesture(
@@ -296,7 +297,7 @@ function QRQuestionScreenInner({ route, navigation }) {
 
   function handleCheckAnswer() {
     if (!pendingAnswer || hasAnswered) return;
-    const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+    const timeSpentMs = Math.max(0, timer.getElapsedMs());
     const correctAnswer = item.question.answer;
     const correctness = correctAnswer != null ? pendingAnswer === correctAnswer : null;
     setUserTimesMs((prev) => ({ ...prev, [qid]: timeSpentMs }));
@@ -338,7 +339,7 @@ function QRQuestionScreenInner({ route, navigation }) {
         report={{ questionId: qid, section: 'qr' }}
       />
 
-      <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
+      <CalculatorModal visible={calcVisible} onClose={() => { setCalcVisible(false); timer.resume(); }} />
 
       <ScrollView
         key={item.stemId + qid}
@@ -398,15 +399,15 @@ function QRQuestionScreenInner({ route, navigation }) {
       </ScrollView>
 
       <BottomToolbar
-        onNotes={() => setNotesVisible(true)}
-        onCalculator={() => setCalcVisible(true)}
+        onNotes={() => { timer.pause(); setNotesVisible(true); }}
+        onCalculator={() => { timer.pause(); setCalcVisible(true); }}
         sectionColor={sectionColor}
       />
 
       <NotesModal
         visible={notesVisible}
         sectionKey="qr"
-        onClose={() => setNotesVisible(false)}
+        onClose={() => { setNotesVisible(false); timer.resume(); }}
       />
     </PremiumQuestionScaffold>
   );

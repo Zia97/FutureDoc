@@ -14,7 +14,6 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import { useSubscription } from '../../context/SubscriptionContext';
 import { getDisplayStreak } from '../../services/streakService';
 import {
   getLastActivity,
@@ -209,7 +208,6 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
 export default function HomeScreen({ navigation }) {
   const { user, displayName: profileDisplayName } = useAuth();
   const { isDark, toggleDark } = useTheme();
-  const { isPro } = useSubscription();
   const { colors, gradients } = getPremiumTheme(isDark);
 
   const initial = getInitial(user, profileDisplayName);
@@ -343,7 +341,7 @@ export default function HomeScreen({ navigation }) {
             description="Track progress, strengths, and areas to improve."
             icon="chart"
             accent={colors.teal}
-            onPress={() => navigation.navigate(isPro ? 'PerformanceAnalytics' : 'Paywall')}
+            onPress={() => navigation.navigate('PerformanceAnalytics')}
             style={styles.actionCard}
           />
         </Animated.View>

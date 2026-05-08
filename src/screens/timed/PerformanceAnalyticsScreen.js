@@ -31,6 +31,7 @@ import VRAnalyticsScreen from './VRAnalyticsScreen';
 import DMAnalyticsScreen from './DMAnalyticsScreen';
 import QRAnalyticsScreen from './QRAnalyticsScreen';
 import SJAnalyticsScreen from './SJAnalyticsScreen';
+import PracticeAnalyticsView from './PracticeAnalyticsView';
 
 const SECTIONS = [
   { key: 'VR', loader: 'loadVRAnalytics' },
@@ -114,34 +115,44 @@ function TabBar({ active, onSelect, t }) {
 export default function PerformanceAnalyticsScreen({ route, navigation }) {
   const tests = route.params?.tests ?? {};
 
+  const [mode, setMode] = useState('timed'); // 'timed' | 'practice'
   const [activeTab, setActiveTab] = useState('VR');
   const [cache, setCache] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const loadedRef = useRef(new Set());
 
+  const cacheKey = (m, section) => `${m}:${section}`;
+
   const t = usePremiumAnalyticsTheme(activeTab);
   const heroAnim = useFadeSlide(0, 14);
   const tabsAnim = useFadeSlide(90, 12);
   const activeMeta = t.meta;
-  const activeRows = cache[activeTab];
-  const loadedSections = Object.keys(cache).filter((key) => cache[key]?.length >= 0).length;
+  const activeData = cache[cacheKey(mode, activeTab)];
+  const activeRows = mode === 'timed' ? activeData : (activeData?.latestAttempts ?? null);
+  const loadedSections = Object.keys(cache).filter((key) => key.startsWith(`${mode}:`)).length;
 
   const loadSection = useCallback(
-    async (section) => {
-      if (loadedRef.current.has(section)) return;
-
-      const loader = SECTIONS.find((s) => s.key === section)?.loader;
-      if (!loader) return;
+    async (m, section) => {
+      const key = cacheKey(m, section);
+      if (loadedRef.current.has(key)) return;
 
       setLoading(true);
       setError(null);
       try {
-        const data = await db[loader]();
-        loadedRef.current.add(section);
-        setCache((prev) => ({ ...prev, [section]: data }));
+        let data;
+        if (m === 'timed') {
+          const loader = SECTIONS.find((s) => s.key === section)?.loader;
+          if (!loader) return;
+          data = await db[loader]();
+        } else {
+          const sectionId = { VR: 'vr', DM: 'dm', QR: 'qr', SJ: 'sj' }[section];
+          data = await db.loadPracticeAnalytics(sectionId);
+        }
+        loadedRef.current.add(key);
+        setCache((prev) => ({ ...prev, [key]: data }));
       } catch (err) {
-        reportError('PerformanceAnalytics', err, { level: 'warning', extra: { note: 'load failed', section } });
+        reportError('PerformanceAnalytics', err, { level: 'warning', extra: { note: 'load failed', mode: m, section } });
         setError(err);
       } finally {
         setLoading(false);
@@ -152,13 +163,19 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      loadSection(activeTab);
-    }, [loadSection, activeTab]),
+      loadSection(mode, activeTab);
+    }, [loadSection, mode, activeTab]),
   );
 
   const handleTabSelect = (key) => {
     setActiveTab(key);
-    loadSection(key);
+    loadSection(mode, key);
+  };
+
+  const handleModeSelect = (next) => {
+    if (next === mode) return;
+    setMode(next);
+    loadSection(next, activeTab);
   };
 
   const childRoute = {
@@ -167,8 +184,7 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
     },
   };
 
-  const rows = cache[activeTab];
-  const isLoading = loading && !rows;
+  const isLoading = loading && !activeData;
 
   function renderContent() {
     if (isLoading) {
@@ -177,12 +193,12 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
           t={t}
           loading
           title={`Loading ${activeMeta.shortLabel}`}
-          message="Fetching your latest timed-test data."
+          message={mode === 'timed' ? 'Fetching your latest timed-test data.' : 'Fetching your practice attempts.'}
         />
       );
     }
 
-    if (error && !rows) {
+    if (error && !activeData) {
       return (
         <AnalyticsEmptyState
           t={t}
@@ -193,7 +209,16 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
       );
     }
 
-    const props = { route: childRoute, preloadedRows: rows ?? [] };
+    if (mode === 'practice') {
+      return (
+        <PracticeAnalyticsView
+          sectionKey={activeTab}
+          preloadedData={activeData ?? { rawAttempts: [], latestAttempts: [], cohortByKey: new Map(), totalQuestions: 0 }}
+        />
+      );
+    }
+
+    const props = { route: childRoute, preloadedRows: activeData ?? [] };
 
     switch (activeTab) {
       case 'VR': return <VRAnalyticsScreen {...props} />;
@@ -210,34 +235,38 @@ export default function PerformanceAnalyticsScreen({ route, navigation }) {
       <AppHeader navigation={navigation} title="Performance" />
 
       <View style={styles.topContent}>
-        <Animated.View style={heroAnim}>
-          <AnalyticsCard t={t} style={styles.heroCard}>
-            <View style={styles.heroRow}>
-              <RichIconBox icon="chart" accent={activeMeta.accent} size={58} iconSize={29} />
-              <View style={styles.heroCopy}>
-                <Text style={[styles.eyebrow, { color: activeMeta.accent }]}>PERFORMANCE LAB</Text>
-                <Text style={[styles.heroTitle, { color: t.text }]}>Analytics</Text>
-                <Text style={[styles.heroSubtitle, { color: t.textSecondary }]}>
-                  Track score movement, timing, accuracy, and exam readiness across timed UCAT practice.
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.heroMetrics}>
-              <HeroMetric t={t} label="Active tab" value={activeMeta.shortLabel} accent={activeMeta.accent} />
-              <HeroMetric
-                t={t}
-                label="Attempts"
-                value={activeRows ? activeRows.length : loadedRef.current.has(activeTab) ? 0 : '-'}
-              />
-              <HeroMetric t={t} label="Loaded" value={`${loadedSections}/4`} />
-            </View>
-          </AnalyticsCard>
-        </Animated.View>
-
         <Animated.View style={[styles.tabWrap, tabsAnim]}>
+          <View style={styles.modeToggle}>
+            {['practice', 'timed'].map((m) => {
+              const isActive = m === mode;
+              return (
+                <TouchableOpacity
+                  key={m}
+                  onPress={() => handleModeSelect(m)}
+                  activeOpacity={0.85}
+                  style={[
+                    styles.modeButton,
+                    {
+                      backgroundColor: isActive ? hexToRgba(activeMeta.accent, t.isDark ? 0.22 : 0.14) : 'transparent',
+                      borderColor: isActive ? hexToRgba(activeMeta.accent, 0.5) : t.border,
+                    },
+                  ]}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Show ${m} analytics`}
+                >
+                  <Text style={[styles.modeButtonText, { color: isActive ? t.text : t.textSecondary, fontWeight: isActive ? '900' : '700' }]}>
+                    {m === 'practice' ? 'Practice' : 'Timed'}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
           <Text style={[styles.sectionTitle, { color: t.text }]}>{activeMeta.title}</Text>
-          <Text style={[styles.sectionSubtitle, { color: t.textSecondary }]}>{activeMeta.description}</Text>
+          <Text style={[styles.sectionSubtitle, { color: t.textSecondary }]}>
+            {mode === 'practice'
+              ? 'Your accuracy and coverage on non-timed practice questions.'
+              : activeMeta.description}
+          </Text>
           <TabBar active={activeTab} onSelect={handleTabSelect} t={t} />
         </Animated.View>
       </View>
@@ -311,6 +340,23 @@ const styles = StyleSheet.create({
   tabWrap: {
     paddingTop: 18,
     paddingBottom: 12,
+  },
+  modeToggle: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 14,
+  },
+  modeButton: {
+    flex: 1,
+    paddingVertical: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  modeButtonText: {
+    fontSize: 13,
+    letterSpacing: 0.4,
   },
   sectionTitle: {
     fontSize: 18,

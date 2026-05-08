@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -13,6 +13,7 @@ import { useFlatNavigation } from '../hooks/ui/useFlatNavigation';
 import { useAnswers } from '../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../hooks/ui/usePremiumGate';
+import { useActiveTimer } from '../hooks/ui/useActiveTimer';
 import { useTheme } from '../context/ThemeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import ScreenNavBar from './ScreenNavBar';
@@ -83,10 +84,9 @@ export default function PassageLayout({
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === item.question.answer;
 
-  const viewedAtRef = useRef(Date.now());
+  const timer = useActiveTimer({ resetKey: `${item.stemId}:${qid}` });
   useEffect(() => {
     setPendingAnswer(null);
-    viewedAtRef.current = Date.now();
   }, [qid, item.stemId]);
 
   const panHandlers = useSwipeGesture(
@@ -108,7 +108,7 @@ export default function PassageLayout({
 
   function handleCheckAnswer() {
     if (!pendingAnswer || hasAnswered) return;
-    const timeSpentMs = Math.max(0, Date.now() - viewedAtRef.current);
+    const timeSpentMs = Math.max(0, timer.getElapsedMs());
     setUserTimesMs((prev) => ({ ...prev, [qid]: timeSpentMs }));
     handleAnswer(item.stemId, qid, pendingAnswer);
     onAnswerCommit?.(item, pendingAnswer, { timeSpentMs });
@@ -202,7 +202,10 @@ export default function PassageLayout({
         />
       ) : (
         <BottomToolbar
-          onNotes={() => setNotesVisible(true)}
+          onNotes={() => {
+            timer.pause();
+            setNotesVisible(true);
+          }}
           sectionColor={sectionColor}
         />
       )}
@@ -210,7 +213,10 @@ export default function PassageLayout({
       <NotesModal
         visible={notesVisible}
         sectionKey={section}
-        onClose={() => setNotesVisible(false)}
+        onClose={() => {
+          setNotesVisible(false);
+          timer.resume();
+        }}
       />
     </PremiumQuestionScaffold>
   );

@@ -993,6 +993,117 @@ class DatabaseService {
     return data ?? [];
   }
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Practice analytics (per-section, derived from practice_question_attempts)
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Loads everything needed for the Practice analytics tab:
+   *   - rawAttempts (all rows, descending by answered_at) — used for trends + streak
+   *   - latestAttempts (one per question/statement, with question metadata) —
+   *     used for current accuracy, coverage, by-type/difficulty cuts
+   *   - cohortByKey: Map<"qid:stmtIdx", { avgTimeMs, correctPct, totalFirstAttempts }>
+   *   - totalQuestions in the section
+   *
+   * @param {'vr'|'dm'|'qr'|'sj'} section
+   */
+  async loadPracticeAnalytics(section) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      return { rawAttempts: [], latestAttempts: [], cohortByKey: new Map(), totalQuestions: 0 };
+    }
+
+    // 1. All raw attempts (chronological for trend/streak; we'll reverse later).
+    const { data: rawAttempts, error: attemptsErr } = await supabase
+      .from('practice_question_attempts')
+      .select('question_id, statement_index, is_correct, time_spent_ms, answered_at')
+      .eq('user_id', user.id)
+      .eq('section', section)
+      .order('answered_at', { ascending: false });
+    if (attemptsErr) throw attemptsErr;
+
+    // 2. Collapse to latest-per-(question, statement_index). rawAttempts is
+    //    already DESC, so the first occurrence is the latest.
+    const seen = new Set();
+    const latest = [];
+    for (const a of rawAttempts ?? []) {
+      const key = `${a.question_id}:${a.statement_index ?? -1}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      latest.push(a);
+    }
+
+    // 3. Question metadata (difficulty + DM type) for attempted questions.
+    const questionIds = [...new Set(latest.map((a) => a.question_id))];
+    const metaByQid = new Map();
+    if (questionIds.length > 0) {
+      const metaTable = {
+        vr: 'verbal_reasoning_questions',
+        dm: 'decision_making_questions',
+        qr: 'quantitative_reasoning_questions',
+        sj: 'situational_judgement_questions',
+      }[section];
+      const metaCols = section === 'dm' ? 'id, difficulty, type' : 'id, difficulty';
+      const { data: meta, error: metaErr } = await supabase
+        .from(metaTable)
+        .select(metaCols)
+        .in('id', questionIds);
+      if (metaErr) throw metaErr;
+      for (const row of meta ?? []) {
+        metaByQid.set(row.id, row);
+      }
+    }
+
+    const latestAttempts = latest.map((a) => {
+      const meta = metaByQid.get(a.question_id) ?? null;
+      return {
+        ...a,
+        difficulty: meta?.difficulty ?? null,
+        type: meta?.type ?? null,
+      };
+    });
+
+    // 4. Cohort stats for the questions the user has attempted.
+    const cohortByKey = new Map();
+    if (questionIds.length > 0) {
+      const { data: stats, error: statsErr } = await supabase
+        .from('question_stats')
+        .select('question_id, statement_index, total_first_attempts, total_correct_first_attempts, sum_time_ms')
+        .eq('section', section)
+        .in('question_id', questionIds);
+      if (statsErr) throw statsErr;
+      for (const row of stats ?? []) {
+        const total = row.total_first_attempts ?? 0;
+        if (total <= 0) continue;
+        const k = `${row.question_id}:${row.statement_index ?? -1}`;
+        cohortByKey.set(k, {
+          avgTimeMs: Math.round((row.sum_time_ms ?? 0) / total),
+          correctPct: (row.total_correct_first_attempts ?? 0) / total, // 0..1
+          totalFirstAttempts: total,
+        });
+      }
+    }
+
+    // 5. Total questions available in the section.
+    const totalTable = {
+      vr: 'verbal_reasoning_questions',
+      dm: 'decision_making_questions',
+      qr: 'quantitative_reasoning_questions',
+      sj: 'situational_judgement_questions',
+    }[section];
+    const { count, error: countErr } = await supabase
+      .from(totalTable)
+      .select('id', { count: 'exact', head: true });
+    if (countErr) throw countErr;
+
+    return {
+      rawAttempts: rawAttempts ?? [],
+      latestAttempts,
+      cohortByKey,
+      totalQuestions: count ?? 0,
+    };
+  }
+
   async deleteTimedSJAttempt(testId) {
     const { error } = await supabase
       .from('timed_situational_judgement_exam_attempts')
