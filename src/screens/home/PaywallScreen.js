@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  Image,
   Platform,
   ScrollView,
   StatusBar,
@@ -22,8 +21,7 @@ import {
   hexToRgba,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
-
-const APP_LOGO = require('../../../assets/icon.png');
+import AppLogo from '../../components/AppLogo';
 
 const FEATURES = [
   'All mock tests unlocked',
@@ -66,29 +64,14 @@ function getPeriodLabel(pkg) {
   return '';
 }
 
-function LogoMark({ colors, isDark, size = 74 }) {
+function LogoMark({ colors, size = 74 }) {
   return (
-    <View style={[styles.logoShadow, { shadowColor: colors.blue }]}>
-      <LinearGradient
-        colors={[
-          hexToRgba(colors.cyan, isDark ? 0.2 : 0.13),
-          isDark ? 'rgba(7, 19, 38, 0.96)' : 'rgba(255, 255, 255, 0.96)',
-        ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[
-          styles.logoFrame,
-          {
-            width: size,
-            height: size,
-            borderRadius: Math.max(18, size * 0.28),
-            borderColor: hexToRgba(colors.cyan, 0.42),
-          },
-        ]}
-      >
-        <Image source={APP_LOGO} style={styles.logoImage} resizeMode="contain" />
-      </LinearGradient>
-    </View>
+    <AppLogo
+      size={size}
+      radius={Math.max(18, size * 0.28)}
+      shadowColor={colors.blue}
+      borderColor={hexToRgba(colors.cyan, 0.42)}
+    />
   );
 }
 
@@ -182,7 +165,7 @@ export default function PaywallScreen({ navigation }) {
         <LinearGradient colors={gradients.screen} style={StyleSheet.absoluteFill} />
         <MedicalBackgroundPattern colors={colors} isDark={isDark} />
         <View style={styles.proActiveContainer}>
-          <LogoMark colors={colors} isDark={isDark} size={82} />
+          <LogoMark colors={colors} size={82} />
           <Text style={[styles.proActiveTitle, { color: colors.text }]}>You're Premium</Text>
           <Text style={[styles.proActiveSubtitle, { color: colors.textSecondary }]}>
             Full access is active on this account.
@@ -236,7 +219,7 @@ export default function PaywallScreen({ navigation }) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <LogoMark colors={colors} isDark={isDark} />
+          <LogoMark colors={colors} />
           <Text style={[styles.eyebrow, { color: accent }]}>UCAT GENIUS PREMIUM</Text>
           <Text style={[styles.title, { color: colors.text }]}>Unlock full access</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -386,23 +369,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 20,
     marginBottom: 20,
-  },
-  logoShadow: {
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.25 : 0,
-    shadowRadius: 22,
-    elevation: 0,
-  },
-  logoFrame: {
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  logoImage: {
-    width: '72%',
-    height: '72%',
-    borderRadius: 16,
   },
   eyebrow: {
     fontSize: 11,

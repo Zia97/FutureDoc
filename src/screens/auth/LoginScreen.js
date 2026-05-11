@@ -19,7 +19,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
-  PremiumIcon,
   PremiumScreen,
   PremiumScrollView,
   hexToRgba,
@@ -27,6 +26,7 @@ import {
   useFadeSlide,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import AppLogo from '../../components/AppLogo';
 
 const GoogleIcon = ({ size = 20 }) => (
   <Svg width={size} height={size} viewBox="0 0 533.5 544.3">
@@ -137,16 +137,13 @@ export default function LoginScreen({ navigation }) {
       >
         <PremiumScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll}>
           <Animated.View style={[styles.hero, heroAnim]}>
-            <View style={[styles.logoBadge, { borderColor: hexToRgba(colors.blue, 0.42) }]}>
-              <LinearGradient
-                colors={[hexToRgba(colors.blue, isDark ? 0.22 : 0.16), isDark ? 'rgba(8, 17, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.logoFill}
-              >
-                <PremiumIcon name="caduceus" size={36} color={colors.blue} secondaryColor={colors.cyan} />
-              </LinearGradient>
-            </View>
+            <AppLogo
+              size={76}
+              radius={22}
+              shadowColor={colors.blue}
+              borderColor={hexToRgba(colors.blue, 0.42)}
+              style={styles.logo}
+            />
             <Text style={[styles.heading, { color: colors.text }]}>Welcome back</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               Sign in to continue your UCAT preparation.
@@ -285,19 +282,7 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     paddingBottom: 30,
   },
-  logoBadge: {
-    width: 76,
-    height: 76,
-    borderRadius: 22,
-    borderWidth: 1,
-    overflow: 'hidden',
-    marginBottom: 18,
-  },
-  logoFill: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  logo: { marginBottom: 18 },
   heading: {
     color: premiumColors.text,
     fontSize: 30,

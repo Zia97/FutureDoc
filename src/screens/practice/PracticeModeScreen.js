@@ -30,7 +30,6 @@ export default function PracticeModeScreen({ navigation }) {
       <PremiumScrollView>
         <Animated.View style={[styles.intro, introAnim]}>
           <Text style={[styles.heading, { color: colors.text }]}>How do you want to practise?</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Choose a practice mode that fits your goals.</Text>
         </Animated.View>
 
         <Animated.View style={card1Anim}>

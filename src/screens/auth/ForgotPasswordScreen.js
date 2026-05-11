@@ -18,7 +18,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
   AppHeader,
-  PremiumIcon,
   PremiumScreen,
   PremiumScrollView,
   hexToRgba,
@@ -26,6 +25,7 @@ import {
   useFadeSlide,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import AppLogo from '../../components/AppLogo';
 
 export default function ForgotPasswordScreen({ navigation }) {
   const { resetPassword } = useAuth();
@@ -67,16 +67,13 @@ export default function ForgotPasswordScreen({ navigation }) {
         <AppHeader navigation={navigation} title="Reset Password" />
         <PremiumScrollView contentContainerStyle={styles.scroll}>
           <Animated.View style={[styles.hero, heroAnim]}>
-            <View style={[styles.logoBadge, { borderColor: hexToRgba(colors.cyan, 0.42) }]}>
-              <LinearGradient
-                colors={[hexToRgba(colors.cyan, isDark ? 0.22 : 0.16), isDark ? 'rgba(8, 17, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.logoFill}
-              >
-                <PremiumIcon name="check" size={36} color={colors.cyan} />
-              </LinearGradient>
-            </View>
+            <AppLogo
+              size={76}
+              radius={22}
+              shadowColor={colors.cyan}
+              borderColor={hexToRgba(colors.cyan, 0.42)}
+              style={styles.logo}
+            />
             <Text style={[styles.heading, { color: colors.text }]}>Check your email</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               We sent a password reset link to{'\n'}
@@ -117,16 +114,13 @@ export default function ForgotPasswordScreen({ navigation }) {
       >
         <PremiumScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll}>
           <Animated.View style={[styles.hero, heroAnim]}>
-            <View style={[styles.logoBadge, { borderColor: hexToRgba(colors.blue, 0.42) }]}>
-              <LinearGradient
-                colors={[hexToRgba(colors.blue, isDark ? 0.22 : 0.16), isDark ? 'rgba(8, 17, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)']}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.logoFill}
-              >
-                <PremiumIcon name="lock" size={36} color={colors.blue} />
-              </LinearGradient>
-            </View>
+            <AppLogo
+              size={76}
+              radius={22}
+              shadowColor={colors.blue}
+              borderColor={hexToRgba(colors.blue, 0.42)}
+              style={styles.logo}
+            />
             <Text style={[styles.heading, { color: colors.text }]}>Forgot password?</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               Enter your email and we'll send you a link to set a new password.
@@ -186,19 +180,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
     paddingBottom: 30,
   },
-  logoBadge: {
-    width: 76,
-    height: 76,
-    borderRadius: 22,
-    borderWidth: 1,
-    overflow: 'hidden',
-    marginBottom: 18,
-  },
-  logoFill: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  logo: { marginBottom: 18 },
   heading: {
     color: premiumColors.text,
     fontSize: 28,

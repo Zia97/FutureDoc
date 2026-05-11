@@ -35,6 +35,7 @@ import {
   useFadeSlide,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import AppLogo from '../../components/AppLogo';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -159,7 +160,12 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
   return (
     <View style={[styles.header, { paddingTop: Math.max(insets.top, 12) + 8 }]}>
       <View style={styles.logoRow}>
-        <PremiumIcon name="caduceus" size={48} color={colors.blue} />
+        <AppLogo
+          size={48}
+          radius={16}
+          shadowColor={colors.blue}
+          borderColor={hexToRgba(colors.blue, 0.34)}
+        />
         <View style={styles.logoCopy}>
           <Text style={[styles.logoTitle, { color: colors.text }]} numberOfLines={1}>UCAT Genius</Text>
           <Text style={[styles.logoSubtitle, { color: colors.textMuted }]} numberOfLines={1}>PREP SMARTER</Text>

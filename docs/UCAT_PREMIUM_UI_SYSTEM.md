@@ -79,7 +79,7 @@ Important Android note:
 
 The home screen should resemble the premium dark design:
 
-- Header with medical logo, "UCAT Genius", "PREP SMARTER", theme button, and circular avatar.
+- Header with the shared app logo, "UCAT Genius", "PREP SMARTER", theme button, and circular avatar.
 - Hero card with greeting, "Focus today. Excel tomorrow.", supportive subtitle, streak pill, and continue-progress panel.
 - Medical/doctor illustration should be vector/SVG or component-based, not pasted as a screenshot.
 - Main menu cards:

@@ -25,6 +25,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { setExamDate, NOT_BOOKED } from '../../services/onboardingFlags';
+import AppLogo from '../../components/AppLogo';
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 const MONTHS = [
@@ -175,16 +176,12 @@ export default function ExamDateScreen({ onComplete }) {
             <PremiumIcon name="chevron-left" size={20} color={colors.text} strokeWidth={2.4} />
           </TouchableOpacity>
         ) : (
-          <View style={[styles.brandBadge, { borderColor: hexToRgba(colors.blue, 0.42) }]}>
-            <LinearGradient
-              colors={[hexToRgba(colors.blue, isDark ? 0.22 : 0.16), isDark ? 'rgba(8, 17, 33, 0.92)' : 'rgba(255, 255, 255, 0.96)']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={styles.brandFill}
-            >
-              <PremiumIcon name="timer" size={28} color={colors.blue} secondaryColor={colors.cyan} />
-            </LinearGradient>
-          </View>
+          <AppLogo
+            size={48}
+            radius={16}
+            shadowColor={colors.blue}
+            borderColor={hexToRgba(colors.blue, 0.42)}
+          />
         )}
         <View style={styles.brandText}>
           <Text style={[styles.brandTitle, { color: colors.text }]}>Your exam date</Text>
@@ -378,14 +375,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 12,
   },
-  brandBadge: {
-    width: 48,
-    height: 48,
-    borderRadius: 16,
-    borderWidth: 1,
-    overflow: 'hidden',
-  },
-  brandFill: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   backButton: {
     width: 40,
     height: 40,
