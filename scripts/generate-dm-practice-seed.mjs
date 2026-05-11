@@ -35,6 +35,22 @@ function sqlJson(obj) {
   return `'${JSON.stringify(obj).replace(/'/g, "''")}'::jsonb`;
 }
 
+function getOptions(q) {
+  return q.decision_making_question_options || q.options || [];
+}
+
+function getStimulusDiagram(q) {
+  return q.stimulus_diagram || q.stimulusDiagram || null;
+}
+
+function getOptionText(opt) {
+  return opt.option_text ?? opt.text ?? '';
+}
+
+function getOptionData(opt) {
+  return opt.option_data ?? opt.vennConfig ?? null;
+}
+
 // Fisher-Yates shuffle
 function shuffle(arr) {
   const a = [...arr];
@@ -63,9 +79,10 @@ for (let i = 0; i < shuffled.length; i++) {
 
   // Bake stimulus venn geometry if applicable
   let stimulusGeo = null;
-  if (q.type === 'venn_diagram' && q.stimulus_diagram) {
+  const stimulusDiagram = getStimulusDiagram(q);
+  if (q.type === 'venn_diagram' && stimulusDiagram) {
     try {
-      stimulusGeo = bake(q.stimulus_diagram);
+      stimulusGeo = bake(stimulusDiagram);
     } catch (err) {
       process.stderr.write(`WARN: ${q.id} stimulus bake failed: ${err.message}\n`);
     }
@@ -80,7 +97,7 @@ for (let i = 0; i < shuffled.length; i++) {
   lines.push(`    '${q.type}'::dm_question_type,`);
   lines.push(`    ${sqlStr(q.stem)},`);
   lines.push(`    ${sqlJson(q.table_data)},`);
-  lines.push(`    ${sqlJson(q.stimulus_diagram)},`);
+  lines.push(`    ${sqlJson(stimulusDiagram)},`);
   lines.push(`    ${sqlStr(q.correct_answer)},`);
   lines.push(`    ${sqlStr(q.answer_reason)},`);
   lines.push(`    ${orderIndex},`);
@@ -89,13 +106,14 @@ for (let i = 0; i < shuffled.length; i++) {
   lines.push(`  ) RETURNING id INTO v_id;\n`);
 
   // Options (logic_puzzle, venn_diagram, probabilistic, recognising_assumptions)
-  const opts = q.decision_making_question_options || [];
+  const opts = getOptions(q);
   if (opts.length > 0) {
     for (const opt of opts) {
       let optGeo = null;
-      if (opt.option_data) {
+      const optionData = getOptionData(opt);
+      if (optionData) {
         try {
-          optGeo = bake(opt.option_data);
+          optGeo = bake(optionData);
         } catch (err) {
           process.stderr.write(`WARN: ${q.id} option ${opt.label} bake failed: ${err.message}\n`);
         }
@@ -103,7 +121,7 @@ for (let i = 0; i < shuffled.length; i++) {
       lines.push(`  INSERT INTO decision_making_question_options`);
       lines.push(`    (question_id, label, option_text, option_data, order_index, venn_geometry)`);
       lines.push(`  VALUES (`);
-      lines.push(`    v_id, '${opt.label}', ${sqlStr(opt.option_text)}, ${sqlJson(opt.option_data)}, ${opt.order_index}, ${sqlJson(optGeo)}`);
+      lines.push(`    v_id, '${opt.label}', ${sqlStr(getOptionText(opt))}, ${sqlJson(optionData)}, ${opt.order_index}, ${sqlJson(optGeo)}`);
       lines.push(`  );`);
     }
     lines.push('');

@@ -70,10 +70,24 @@ function buildVennAIContext(question) {
   }
 
   if (stimDiagram) {
-    // interpret_diagram: student reads a labelled diagram and picks an answer
+    // interpret_diagram: student reads a given diagram and picks an answer
     const { diagramLayout, sets = [], regions = {} } = stimDiagram;
     const setLabels = {};
     sets.forEach((s) => { setLabels[s.id] = s.label || s.id; });
+    const isStatementEvaluation = Object.values(regions).every((value) => value === '');
+    if (isStatementEvaluation) {
+      const lines = [
+        '[Statement-evaluation diagram question: the student is shown an unlabelled diagram and must judge which option statement is true or false]\n',
+        `Diagram layout: ${diagramLayout}`,
+        `Shapes: ${sets.map((s) => `${s.label || s.id} (${s.shape || 'circle'})`).join(', ')}\n`,
+        'Visible regions in the diagram:',
+      ];
+      Object.keys(regions).forEach((key) => {
+        lines.push(`  • ${regionKeyToHuman(key, setLabels)}`);
+      });
+      return lines.join('\n');
+    }
+
     const lines = [
       '[Interpret-diagram question: the student is shown a diagram with labelled regions and must identify which region matches the description]\n',
       `Diagram layout: ${diagramLayout}`,
@@ -99,7 +113,7 @@ function buildQuestionContext(question, currentAnswer, isYesNo) {
       ? question.statements?.map((s, i) => `${i + 1}. ${s.text}`)
       : question.subtype === 'select_diagram'
       ? undefined
-      : question.options?.map((o) => `${o.label}. ${o.text}`),
+      : question.options?.map((o) => `${o.label}. ${o.text ?? o.option_text ?? ''}`),
     correctAnswer: isYesNo
       ? undefined
       : typeof question.answer === 'object'

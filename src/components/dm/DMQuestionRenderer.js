@@ -30,7 +30,8 @@ function useQuestionMeta(question, screenWidth) {
   const isMCQ        = MCQ_TYPES.includes(question.type);
   const isVenn       = question.type === 'venn_diagram';
   const stimDiagram  = question.stimulusDiagram ?? question.stimulus_diagram;
-  const isSelectVenn = isVenn && (question.subtype === 'select_diagram' || question.options?.[0]?.option_data != null);
+  const hasOptionDiagrams = question.options?.some((opt) => (opt.vennConfig ?? opt.option_data) != null);
+  const isSelectVenn = isVenn && (question.subtype === 'select_diagram' || hasOptionDiagrams);
   const isInterpVenn = isVenn && (question.subtype === 'interpret_diagram' || stimDiagram != null);
   const vennKeySets  = isVenn
     ? (stimDiagram?.sets ?? question.options?.[0]?.vennConfig?.sets ?? question.options?.[0]?.option_data?.sets ?? null)
@@ -177,14 +178,17 @@ export function DMOptionsContent({
     return (
       <View style={styles.mcqOptions}>
         {optionsLabel}
-        {question.options.map((opt) => (
-          <AnswerOptionButton
-            key={opt.label}
-            label={`${opt.label}.  ${opt.text}`}
-            state={mcqOptionState(opt.label)}
-            onPress={() => onAnswer(opt.label)}
-          />
-        ))}
+        {question.options.map((opt) => {
+          const optionText = opt.text ?? opt.option_text ?? '';
+          return (
+            <AnswerOptionButton
+              key={opt.label}
+              label={`${opt.label}.  ${optionText}`}
+              state={mcqOptionState(opt.label)}
+              onPress={() => onAnswer(opt.label)}
+            />
+          );
+        })}
       </View>
     );
   }

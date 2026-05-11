@@ -7,6 +7,20 @@ import { reportError } from '../../lib/reportError';
 
 const SECTION = 'timed_decision_making';
 
+function normalizeOptions(options = []) {
+  return [...options]
+    .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
+    .map((o) => ({
+      label: o.label,
+      text: o.option_text ?? o.text ?? '',
+      option_text: o.option_text ?? o.text ?? '',
+      option_data: o.option_data ?? o.vennConfig ?? null,
+      vennConfig: o.option_data ?? o.vennConfig ?? null,
+      vennGeometry: o.venn_geometry ?? o.vennGeometry ?? null,
+      order_index: o.order_index,
+    }));
+}
+
 function mapQuestion(q) {
   return {
     questionId: q.id,
@@ -15,10 +29,8 @@ function mapQuestion(q) {
     subtype: q.subtype ?? null,
     stem: q.stem,
     options: q.timed_decision_making_question_options
-      ? [...q.timed_decision_making_question_options]
-          .sort((a, b) => a.order_index - b.order_index)
-          .map((o) => ({ label: o.label, text: o.option_text, option_data: o.option_data ?? null, vennGeometry: o.venn_geometry ?? null }))
-      : (q.options ?? []),
+      ? normalizeOptions(q.timed_decision_making_question_options)
+      : normalizeOptions(q.options ?? []),
     statements: q.timed_decision_making_question_statements
       ? [...q.timed_decision_making_question_statements]
           .sort((a, b) => a.order_index - b.order_index)
@@ -29,7 +41,7 @@ function mapQuestion(q) {
               .map((s) => ({ text: s.statement_text, answer: s.correct_answer, reason: s.answer_reason ?? null }))
           : []),
     tableData: q.table_data,
-    stimulusDiagram: q.stimulus_diagram,
+    stimulusDiagram: q.stimulus_diagram ?? q.stimulusDiagram,
     stimulusVennGeometry: q.venn_geometry ?? null,
     hideLabels: q.hideLabels ?? q.hide_labels ?? false,
     answer: q.correct_answer,
