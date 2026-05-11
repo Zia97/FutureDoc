@@ -738,7 +738,7 @@ export default function DecisionMakingLessonScreen({ navigation, route }) {
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'DM', title: 'Decision Making' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'DM', title: 'Decision Making' } });
   }, [navigation]);
 
   const goToNextLesson = useCallback(() => {

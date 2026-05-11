@@ -63,7 +63,7 @@ export default function TimedPracticeSectionsScreen({ navigation }) {
               description={section.description}
               icon={section.icon}
               accent={colors[section.accentKey] ?? section.accent}
-              onPress={() => navigation.navigate('TimedTestList', { section: section.id, title: section.title })}
+              onPress={() => navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: section.id, title: section.title } })}
             />
           </Animated.View>
         ))}

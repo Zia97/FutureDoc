@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
   PremiumIcon,
@@ -2853,7 +2854,7 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'QR', title: 'Quantitative Reasoning' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'QR', title: 'Quantitative Reasoning' } });
   }, [navigation]);
 
   const openLesson = useCallback((lessonId) => {
@@ -2945,6 +2946,7 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
           />
         </Animated.View>
       </PremiumScrollView>
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

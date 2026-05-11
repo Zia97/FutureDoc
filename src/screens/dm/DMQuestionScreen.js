@@ -9,6 +9,7 @@ import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useActiveTimer } from '../../hooks/ui/useActiveTimer';
+import { useBookmarks } from '../../hooks/useBookmarks';
 import { useDecisionMakingQuestions } from '../../hooks/queries/useDecisionMakingQuestions';
 import { useDecisionMakingAttempts } from '../../hooks/attempts/useDecisionMakingAttempts';
 import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
@@ -306,6 +307,7 @@ function DMQuestionScreenInner({ route, navigation }) {
   const { canAccess } = usePremiumGate((item) => item.isFree);
   const { getStats } = useQuestionStats('dm');
   const [userTimesMs, setUserTimesMs] = useState({});
+  const { isBookmarked, toggle: toggleBookmark } = useBookmarks('dm');
 
   useEffect(() => {
     if (!cacheLoading) {
@@ -459,6 +461,8 @@ function DMQuestionScreenInner({ route, navigation }) {
       <BottomToolbar
         onNotes={() => { timer.pause(); setNotesVisible(true); }}
         onCalculator={() => { timer.pause(); setCalcVisible(true); }}
+        onBookmark={() => toggleBookmark(question.id)}
+        isBookmarked={isBookmarked(question.id)}
         sectionColor={sectionColor}
       />
 

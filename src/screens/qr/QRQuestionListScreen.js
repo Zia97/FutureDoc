@@ -99,6 +99,16 @@ export default function QRQuestionListScreen({ navigation }) {
       getIndex={(item) => getFirstFlatIndex(item.setId, flatQuestions)}
       getIsFree={(item) => item.isFree}
       getItemKey={(item) => item.id ?? item.setId}
+      bookmarksConfig={{
+        section: 'qr',
+        getFlatQuestions: () => flatQuestions,
+        getQuestionId: (fq) => fq.question.questionId ?? fq.question.id,
+        getFlatTitle: (fq) => {
+          const pos = (fq.flatIndex - fq.stemFirstFlatIndex) + 1;
+          return `${fq.stemTitle ?? 'Set'} — Q${pos} of ${fq.stemQuestionCount}`;
+        },
+        getFlatNavIndex: (fq) => fq.flatIndex,
+      }}
       routeName="QRQuestion"
       navigation={navigation}
       loading={loading}

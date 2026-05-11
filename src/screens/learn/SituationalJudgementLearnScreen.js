@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
   PremiumIcon,
@@ -2813,7 +2814,7 @@ export default function SituationalJudgementLearnScreen({ navigation }) {
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'SJ', title: 'Situational Judgement' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'SJ', title: 'Situational Judgement' } });
   }, [navigation]);
 
   const openLesson = useCallback((lessonId) => {
@@ -2905,6 +2906,7 @@ export default function SituationalJudgementLearnScreen({ navigation }) {
           />
         </Animated.View>
       </PremiumScrollView>
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
   PremiumIcon,
@@ -2356,7 +2357,7 @@ export default function DecisionMakingLearnScreen({ navigation }) {
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'DM', title: 'Decision Making' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'DM', title: 'Decision Making' } });
   }, [navigation]);
 
   const openLesson = useCallback((lessonId) => {
@@ -2448,6 +2449,7 @@ export default function DecisionMakingLearnScreen({ navigation }) {
           />
         </Animated.View>
       </PremiumScrollView>
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

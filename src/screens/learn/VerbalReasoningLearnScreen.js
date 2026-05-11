@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
   PremiumIcon,
@@ -2290,7 +2291,7 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'VR', title: 'Verbal Reasoning' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'VR', title: 'Verbal Reasoning' } });
   }, [navigation]);
 
   const openLesson = useCallback((lessonId) => {
@@ -2382,6 +2383,7 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
           />
         </Animated.View>
       </PremiumScrollView>
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

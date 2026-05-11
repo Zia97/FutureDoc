@@ -99,6 +99,18 @@ export default function SJScenarioListScreen({ navigation }) {
       getIndex={(item) => getFirstFlatIndex(item.id, flatQuestions)}
       getIsFree={(item) => item.isFree}
       getItemKey={(item) => item.id}
+      bookmarksConfig={{
+        section: 'sj',
+        getFlatQuestions: () => flatQuestions,
+        getQuestionId: (fq) => fq.question.questionId ?? fq.question.id ?? fq.question.itemId,
+        getFlatTitle: (fq) => {
+          const pos = (fq.flatIndex - fq.stemFirstFlatIndex) + 1;
+          const scenario = scenarios.find((s) => s.id === fq.stemId);
+          const stemTitle = scenario?.title ?? scenario?.name ?? `Scenario ${fq.stemIndex + 1}`;
+          return `${stemTitle} — Q${pos} of ${fq.stemQuestionCount}`;
+        },
+        getFlatNavIndex: (fq) => fq.flatIndex,
+      }}
       routeName="SJScenario"
       navigation={navigation}
       loading={loading}

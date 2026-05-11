@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import PremiumIcon from './premium/PremiumIcon';
 
-export default function BottomToolbar({ onNotes, onCalculator, onPause, onNavigator, sectionColor }) {
+export default function BottomToolbar({ onNotes, onCalculator, onPause, onNavigator, onBookmark, isBookmarked, sectionColor }) {
   const insets = useSafeAreaInsets();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
@@ -14,6 +14,13 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
 
   const actions = [
     onPause ? { key: 'pause', icon: 'pause', onPress: onPause, label: 'Pause test' } : null,
+    onBookmark ? {
+      key: 'bookmark',
+      icon: isBookmarked ? 'bookmark-filled' : 'bookmark',
+      onPress: onBookmark,
+      label: isBookmarked ? 'Remove bookmark' : 'Bookmark question',
+      iconColorOverride: isBookmarked ? accent : undefined,
+    } : null,
     onNotes ? { key: 'notes', icon: 'notes', onPress: onNotes, label: 'Open notes' } : null,
     onCalculator ? { key: 'calculator', icon: 'calculator', onPress: onCalculator, label: 'Open calculator' } : null,
     onNavigator ? { key: 'navigator', icon: 'list', onPress: onNavigator, label: 'Open question navigator' } : null,
@@ -45,7 +52,7 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
             accessibilityRole="button"
             accessibilityLabel={action.label}
           >
-            <PremiumIcon name={action.icon} size={21} color={iconColor} strokeWidth={2.2} />
+            <PremiumIcon name={action.icon} size={21} color={action.iconColorOverride ?? iconColor} strokeWidth={2.2} />
           </TouchableOpacity>
         ))}
       </View>

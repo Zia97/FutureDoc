@@ -25,6 +25,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useTheme } from '../../context/ThemeContext';
 import { useTextSize } from '../../context/TextSizeContext';
+import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
   PremiumIcon,
@@ -821,6 +822,7 @@ export default function AboutUCATScreen({ navigation }) {
           </View>
         </Animated.View>
       </ScrollView>
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

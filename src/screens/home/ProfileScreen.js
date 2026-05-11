@@ -147,7 +147,10 @@ export default function ProfileScreen() {
   };
 
   const dismissToHome = () => {
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'MainTabs', state: { index: 0, routes: [{ name: 'Home' }] } }],
+    });
   };
 
   const handleSignOut = () => {

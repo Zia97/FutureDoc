@@ -83,6 +83,18 @@ export default function PremiumIcon({
             <Path d="M6 5.5h10.2l-1.5 4 1.5 4H6" />
           </G>
         );
+      case 'bookmark':
+        return (
+          <G {...strokeProps} fill="none">
+            <Path d="M6.5 4.2h11a0.8 0.8 0 0 1 0.8 0.8v15l-6.3-3.6L5.7 20V5a0.8 0.8 0 0 1 0.8-0.8z" />
+          </G>
+        );
+      case 'bookmark-filled':
+        return (
+          <G {...strokeProps}>
+            <Path d="M6.5 4.2h11a0.8 0.8 0 0 1 0.8 0.8v15l-6.3-3.6L5.7 20V5a0.8 0.8 0 0 1 0.8-0.8z" fill={color} />
+          </G>
+        );
       case 'search':
         return (
           <G {...strokeProps} fill="none">

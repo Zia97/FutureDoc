@@ -765,7 +765,7 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'QR', title: 'Quantitative Reasoning' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'QR', title: 'Quantitative Reasoning' } });
   }, [navigation]);
 
   const goToNextLesson = useCallback(() => {

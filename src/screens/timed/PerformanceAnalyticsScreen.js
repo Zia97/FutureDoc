@@ -115,7 +115,7 @@ function TabBar({ active, onSelect, t }) {
 export default function PerformanceAnalyticsScreen({ route, navigation }) {
   const tests = route.params?.tests ?? {};
 
-  const [mode, setMode] = useState('timed'); // 'timed' | 'practice'
+  const [mode, setMode] = useState('practice'); // 'timed' | 'practice'
   const [activeTab, setActiveTab] = useState('VR');
   const [cache, setCache] = useState({});
   const [loading, setLoading] = useState(false);

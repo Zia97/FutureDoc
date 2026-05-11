@@ -14,6 +14,7 @@ import { useAnswers } from '../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../hooks/ui/usePremiumGate';
 import { useActiveTimer } from '../hooks/ui/useActiveTimer';
+import { useBookmarks } from '../hooks/useBookmarks';
 import { useTheme } from '../context/ThemeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import ScreenNavBar from './ScreenNavBar';
@@ -78,6 +79,7 @@ export default function PassageLayout({
   const [pendingAnswer, setPendingAnswer] = useState(null);
   const [notesVisible, setNotesVisible] = useState(false);
   const [userTimesMs, setUserTimesMs] = useState({});
+  const { isBookmarked, toggle: toggleBookmark } = useBookmarks(section);
 
   const qid = item.question.questionId ?? item.question.id ?? item.question.itemId;
   const selectedAnswer = getAnswer(item.stemId, qid);
@@ -206,6 +208,8 @@ export default function PassageLayout({
             timer.pause();
             setNotesVisible(true);
           }}
+          onBookmark={() => toggleBookmark(qid)}
+          isBookmarked={isBookmarked(qid)}
           sectionColor={sectionColor}
         />
       )}

@@ -12,6 +12,7 @@ import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { usePremiumGate } from '../../hooks/ui/usePremiumGate';
 import { useActiveTimer } from '../../hooks/ui/useActiveTimer';
+import { useBookmarks } from '../../hooks/useBookmarks';
 import { useQuantitativeReasoningSets } from '../../hooks/queries/useQuantitativeReasoningSets';
 import { useQuantitativeReasoningAttempts } from '../../hooks/attempts/useQuantitativeReasoningAttempts';
 import { useQuestionStats } from '../../hooks/queries/useQuestionStats';
@@ -265,6 +266,7 @@ function QRQuestionScreenInner({ route, navigation }) {
   const [calcVisible, setCalcVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
   const [pendingAnswer, setPendingAnswer] = useState(null);
+  const { isBookmarked, toggle: toggleBookmark } = useBookmarks('qr');
 
   useEffect(() => {
     if (!cacheLoading) resetAnswers(localAnswers);
@@ -401,6 +403,8 @@ function QRQuestionScreenInner({ route, navigation }) {
       <BottomToolbar
         onNotes={() => { timer.pause(); setNotesVisible(true); }}
         onCalculator={() => { timer.pause(); setCalcVisible(true); }}
+        onBookmark={() => toggleBookmark(qid)}
+        isBookmarked={isBookmarked(qid)}
         sectionColor={sectionColor}
       />
 

@@ -39,7 +39,7 @@ export default function PracticeModeScreen({ navigation }) {
             icon="pencil"
             accent={colors.cyan}
             highlighted
-            onPress={() => navigation.navigate('PracticeSections')}
+            onPress={() => navigation.navigate('MainTabs', { screen: 'PracticeSections' })}
           />
         </Animated.View>
 

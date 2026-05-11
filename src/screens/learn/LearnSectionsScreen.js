@@ -3,6 +3,7 @@ import { Animated, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
   PremiumScreen,
@@ -82,6 +83,7 @@ export default function LearnSectionsScreen({ navigation }) {
           );
         })}
       </PremiumScrollView>
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

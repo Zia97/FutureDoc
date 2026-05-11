@@ -111,6 +111,21 @@ export default function DMQuestionListScreen({ navigation }) {
       getExtraNavParams={(_, visibleEntries) => ({
         filteredIndices: visibleEntries.map((entry) => entry.originalIndex),
       })}
+      bookmarksConfig={{
+        section: 'dm',
+        getFlatQuestions: () => questions.map((q, i) => ({
+          flatIndex: i,
+          stemFirstFlatIndex: i,
+          stemQuestionCount: 1,
+          stemIndex: i,
+          isFree: q.isFree,
+          question: q,
+        })),
+        getQuestionId: (fq) => fq.question.id,
+        getFlatTitle: (fq) => fq.question.title ?? `Question ${fq.flatIndex + 1}`,
+        getFlatBadge: (fq) => getDMTypeLabel(fq.question.type),
+        getFlatNavIndex: (fq) => fq.flatIndex,
+      }}
       routeName="DMQuestion"
       navigation={navigation}
       loading={loading}

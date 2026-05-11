@@ -738,7 +738,7 @@ export default function SituationalJudgementLessonScreen({ navigation, route }) 
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'SJ', title: 'Situational Judgement' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'SJ', title: 'Situational Judgement' } });
   }, [navigation]);
 
   const goToNextLesson = useCallback(() => {

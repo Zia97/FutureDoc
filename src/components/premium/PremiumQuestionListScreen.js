@@ -12,14 +12,17 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Path } from 'react-native-svg';
 
 import { useSubscription } from '../../context/SubscriptionContext';
 import { useTheme } from '../../context/ThemeContext';
 import { getPremiumTheme, hexToRgba, premiumColors } from '../../theme/premiumTheme';
+import { useBookmarks } from '../../hooks/useBookmarks';
 import SyncBanner from '../SyncBanner';
 import PremiumIcon from './PremiumIcon';
+import MainTabBar from '../MainTabBar';
 import { AppHeader, PremiumScreen } from './PremiumPracticeUI';
 
 const STATUS_META = {
@@ -165,24 +168,27 @@ function ListHeader({
   isDark,
   onReset,
   deleting,
+  bookmarkActive,
 }) {
   const hasExtraFilters = filterControls.length > 1;
   const resetDisabled = stats.completed === 0 && stats.inProgress === 0;
 
   return (
     <View style={styles.headerWrap}>
-      <View style={styles.statsRow}>
-        <StatsCard status="not_started" count={stats.notStarted} colors={colors} />
-        <StatsCard status="in_progress" count={stats.inProgress} colors={colors} />
-        <StatsCard
-          status="completed"
-          count={stats.completed}
-          colors={colors}
-          onReset={onReset}
-          resetDisabled={resetDisabled}
-          resetting={deleting}
-        />
-      </View>
+      {bookmarkActive ? null : (
+        <View style={styles.statsRow}>
+          <StatsCard status="not_started" count={stats.notStarted} colors={colors} />
+          <StatsCard status="in_progress" count={stats.inProgress} colors={colors} />
+          <StatsCard
+            status="completed"
+            count={stats.completed}
+            colors={colors}
+            onReset={onReset}
+            resetDisabled={resetDisabled}
+            resetting={deleting}
+          />
+        </View>
+      )}
 
       <View style={hasExtraFilters ? styles.controlsStack : styles.controlsRow} onLayout={onControlsLayout}>
         <View
@@ -208,8 +214,8 @@ function ListHeader({
           />
         </View>
 
-        <View style={hasExtraFilters ? styles.filterButtonsRow : styles.filterWrap}>
-          {filterControls.map((control) => (
+        <View style={hasExtraFilters && !bookmarkActive ? styles.filterButtonsRow : styles.filterWrap}>
+          {(bookmarkActive ? filterControls.filter((c) => c.key === 'status') : filterControls).map((control) => (
             <TouchableOpacity
               key={control.key}
               onPress={() => setOpenFilterKey((openKey) => (openKey === control.key ? null : control.key))}
@@ -283,6 +289,8 @@ function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey, colors
             >
               {option.value === 'all' ? (
                 <PremiumIcon name="filter" size={17} color={colors.blue} strokeWidth={2} />
+              ) : option.value === 'bookmarked' ? (
+                <PremiumIcon name="bookmark-filled" size={17} color={colors.amber} strokeWidth={2} />
               ) : meta ? (
                 <StatusMark status={option.value} size={18} />
               ) : (
@@ -402,6 +410,7 @@ export default function PremiumQuestionListScreen({
   onReset,
   onResetItem,
   resetItemLabel = 'this question',
+  bookmarksConfig = null,
 }) {
   const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
@@ -413,7 +422,13 @@ export default function PremiumQuestionListScreen({
   const [openFilterKey, setOpenFilterKey] = useState(null);
   const [filterMenuTop, setFilterMenuTop] = useState(236);
   const [headerHeight, setHeaderHeight] = useState(0);
+  const bookmarkMode = activeFilter === 'bookmarked';
   const headerTitle = title ?? pluralLabel;
+
+  const bookmarkSection = bookmarksConfig?.section ?? null;
+  const { isBookmarked, reload: reloadBookmarks } = useBookmarks(bookmarkSection);
+
+  useFocusEffect(useCallback(() => { reloadBookmarks(); }, [reloadBookmarks]));
 
   const screenHeader = (
     <View onLayout={(event) => setHeaderHeight(event.nativeEvent.layout.height)}>
@@ -443,14 +458,40 @@ export default function PremiumQuestionListScreen({
     return acc;
   }, { notStarted: 0, inProgress: 0, completed: 0 }), [indexedItems]);
 
+  const bookmarkedEntries = useMemo(() => {
+    if (!bookmarksConfig || !bookmarkMode) return [];
+    const flatQuestions = bookmarksConfig.getFlatQuestions?.() ?? [];
+    const out = [];
+    flatQuestions.forEach((fq) => {
+      const qid = bookmarksConfig.getQuestionId
+        ? bookmarksConfig.getQuestionId(fq)
+        : (fq?.question?.questionId ?? fq?.question?.id ?? fq?.id);
+      if (qid == null || !isBookmarked(qid)) return;
+      const titleText = bookmarksConfig.getFlatTitle?.(fq) ?? String(qid);
+      const badgeLabel = bookmarksConfig.getFlatBadge?.(fq) ?? null;
+      out.push({
+        item: { __bookmarkFlat: true, fq, qid, badgeLabel },
+        originalIndex: fq?.flatIndex ?? out.length,
+        title: String(titleText),
+        searchText: String(titleText).toLowerCase(),
+        status: 'not_started',
+        isFree: fq?.isFree ?? true,
+      });
+    });
+    return out;
+  }, [bookmarksConfig, bookmarkMode, isBookmarked]);
+
   const visibleItems = useMemo(() => {
+    const source = bookmarkMode && bookmarksConfig ? bookmarkedEntries : indexedItems;
     const query = searchText.trim().toLowerCase();
-    const filtered = indexedItems.filter((entry) => {
-      if (activeFilter !== 'all' && entry.status !== activeFilter) return false;
-      for (const filter of extraFilters) {
-        const activeValue = extraFilterValues[filter.key] ?? 'all';
-        if (activeValue !== 'all' && filter.getValue?.(entry.item, entry.originalIndex) !== activeValue) {
-          return false;
+    const filtered = source.filter((entry) => {
+      if (!bookmarkMode) {
+        if (activeFilter !== 'all' && entry.status !== activeFilter) return false;
+        for (const filter of extraFilters) {
+          const activeValue = extraFilterValues[filter.key] ?? 'all';
+          if (activeValue !== 'all' && filter.getValue?.(entry.item, entry.originalIndex) !== activeValue) {
+            return false;
+          }
         }
       }
       if (query && !entry.searchText.includes(query)) return false;
@@ -460,14 +501,18 @@ export default function PremiumQuestionListScreen({
       if (a.isFree !== b.isFree) return a.isFree ? -1 : 1;
       return a.originalIndex - b.originalIndex;
     });
-  }, [activeFilter, extraFilterValues, extraFilters, indexedItems, searchText]);
+  }, [activeFilter, extraFilterValues, extraFilters, indexedItems, searchText, bookmarkMode, bookmarksConfig, bookmarkedEntries]);
 
-  const filterOptions = useMemo(() => ([
-    { label: `All ${pluralLabel}`, value: 'all' },
-    { label: 'Not Started', value: 'not_started' },
-    { label: 'In Progress', value: 'in_progress' },
-    { label: 'Completed', value: 'completed' },
-  ]), [pluralLabel]);
+  const filterOptions = useMemo(() => {
+    const base = [
+      { label: `All ${pluralLabel}`, value: 'all' },
+      { label: 'Not Started', value: 'not_started' },
+      { label: 'In Progress', value: 'in_progress' },
+      { label: 'Completed', value: 'completed' },
+    ];
+    if (bookmarksConfig) base.push({ label: 'Bookmarked', value: 'bookmarked' });
+    return base;
+  }, [pluralLabel, bookmarksConfig]);
 
   const filterControls = useMemo(() => {
     const statusLabel = filterOptions.find((option) => option.value === activeFilter)?.label ?? filterOptions[0]?.label;
@@ -511,9 +556,16 @@ export default function PremiumQuestionListScreen({
       return;
     }
     const item = entry.item;
+    if (item?.__bookmarkFlat) {
+      const navIndex = bookmarksConfig?.getFlatNavIndex
+        ? bookmarksConfig.getFlatNavIndex(item.fq)
+        : (item.fq?.flatIndex ?? 0);
+      navigation.navigate(routeName, { index: navIndex, ...extraNavParams });
+      return;
+    }
     const navIndex = getIndex ? getIndex(item, entry.originalIndex) : entry.originalIndex;
     navigation.navigate(routeName, { index: navIndex, ...extraNavParams });
-  }, [navigation, getIndex, routeName, extraNavParams]);
+  }, [navigation, getIndex, routeName, extraNavParams, bookmarksConfig]);
 
   const handleRowReset = useCallback((entry) => {
     if (!onResetItem) return;
@@ -533,15 +585,16 @@ export default function PremiumQuestionListScreen({
 
   const renderItem = useCallback(({ item: entry, index }) => {
     const item = entry.item;
-    const isFree = getIsFree ? getIsFree(item, entry.originalIndex) : true;
+    const isBookmarkRow = !!item?.__bookmarkFlat;
+    const isFree = isBookmarkRow ? (item.fq?.isFree ?? true) : (getIsFree ? getIsFree(item, entry.originalIndex) : true);
     const isLocked = !isFree && !isPro;
     const meta = STATUS_META[entry.status] ?? STATUS_META.not_started;
-    const rowColor = isLocked ? colors.amber : meta.color;
-    const badgeLabel = getBadgeLabel?.(item, entry.originalIndex);
+    const rowColor = isLocked ? colors.amber : (isBookmarkRow ? colors.amber : meta.color);
+    const badgeLabel = isBookmarkRow ? item.badgeLabel : getBadgeLabel?.(item, entry.originalIndex);
     const rowGradient = isDark
       ? [hexToRgba(rowColor, 0.16), 'rgba(7, 20, 39, 0.94)', 'rgba(4, 10, 24, 0.98)']
       : [hexToRgba(rowColor, 0.08), 'rgba(255, 255, 255, 0.98)', 'rgba(247, 250, 255, 0.98)'];
-    const showResetButton = !isLocked && !!onResetItem && entry.status !== 'not_started';
+    const showResetButton = !isBookmarkRow && !isLocked && !!onResetItem && entry.status !== 'not_started';
 
     return (
       <QuestionRow
@@ -562,9 +615,12 @@ export default function PremiumQuestionListScreen({
     );
   }, [getIsFree, getBadgeLabel, isPro, colors, isDark, onResetItem, handleRowPress, handleRowReset]);
 
-  const keyExtractor = useCallback((entry, index) => (
-    String(getItemKey?.(entry.item, entry.originalIndex) ?? entry.item?.id ?? entry.item?.setId ?? index)
-  ), [getItemKey]);
+  const keyExtractor = useCallback((entry, index) => {
+    if (entry.item?.__bookmarkFlat) {
+      return `bm-${entry.item.qid}-${entry.originalIndex}`;
+    }
+    return String(getItemKey?.(entry.item, entry.originalIndex) ?? entry.item?.id ?? entry.item?.setId ?? index);
+  }, [getItemKey]);
 
   if (loading) {
     return (
@@ -576,6 +632,7 @@ export default function PremiumQuestionListScreen({
           <ActivityIndicator size="large" color={colors.blue} />
           <Text style={[styles.loadingText, { color: colors.textSecondary }]}>Loading {pluralLabel}...</Text>
         </View>
+        <MainTabBar navigation={navigation} />
       </PremiumScreen>
     );
   }
@@ -590,6 +647,7 @@ export default function PremiumQuestionListScreen({
           <Text style={[styles.errorTitle, { color: colors.text }]}>Something went wrong</Text>
           <Text style={[styles.errorText, { color: colors.textSecondary }]}>{JSON.stringify(error)}</Text>
         </View>
+        <MainTabBar navigation={navigation} />
       </PremiumScreen>
     );
   }
@@ -630,6 +688,7 @@ export default function PremiumQuestionListScreen({
             isDark={isDark}
             onReset={onReset}
             deleting={deleting}
+            bookmarkActive={bookmarkMode}
           />
         )}
         renderItem={renderItem}
@@ -650,6 +709,7 @@ export default function PremiumQuestionListScreen({
           isDark={isDark}
         />
       ) : null}
+      <MainTabBar navigation={navigation} />
     </PremiumScreen>
   );
 }

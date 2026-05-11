@@ -99,6 +99,16 @@ export default function VRQuestionListScreen({ navigation }) {
       getIndex={(item) => getFirstFlatIndex(item.id, flatQuestions)}
       getIsFree={(item) => item.isFree}
       getItemKey={(item) => item.id}
+      bookmarksConfig={{
+        section: 'vr',
+        getFlatQuestions: () => flatQuestions,
+        getQuestionId: (fq) => fq.question.questionId ?? fq.question.id,
+        getFlatTitle: (fq) => {
+          const pos = (fq.flatIndex - fq.stemFirstFlatIndex) + 1;
+          return `${fq.stemTitle} — Q${pos} of ${fq.stemQuestionCount}`;
+        },
+        getFlatNavIndex: (fq) => fq.flatIndex,
+      }}
       routeName="VRPassage"
       navigation={navigation}
       loading={loading}

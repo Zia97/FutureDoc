@@ -738,7 +738,7 @@ export default function VerbalReasoningLessonScreen({ navigation, route }) {
   }, [navigation]);
 
   const openTimedPractice = useCallback(() => {
-    navigation.navigate('TimedTestList', { section: 'VR', title: 'Verbal Reasoning' });
+    navigation.navigate('MainTabs', { screen: 'TimedTestList', params: { section: 'VR', title: 'Verbal Reasoning' } });
   }, [navigation]);
 
   const goToNextLesson = useCallback(() => {
