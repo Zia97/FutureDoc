@@ -108,6 +108,16 @@ export const MODULES = [
             title: 'Why SJ feels different from VR, DM, and QR',
             body: 'The other UCAT sections — Verbal Reasoning (VR), Decision Making (DM), and Quantitative Reasoning (QR) — reward fast logic on facts. SJ rewards the kind of judgement you cannot get from speed alone. The "right" answer is rarely the most obvious one; it is the one a safe professional would choose after thinking carefully about safety, honesty, and role.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know SJ tests professional judgement against medical standards, not your personal opinion.',
+              'Recognise that clinical and medical knowledge is never required to answer.',
+              'Identify the core areas SJ checks: safety, honesty, confidentiality, communication, escalation.',
+              'Treat clinical detail in a scenario as background — judge the behaviour, not the medicine.',
+            ],
+          },
         ],
       },
       {
@@ -181,6 +191,17 @@ export const MODULES = [
             title: 'Why "no negative marking" still matters',
             body: 'If a question is eating time, make a confident guess on the half you believe in and move on. A blank scores zero; a guess at least has a chance of full or partial credit.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the SJ section is 69 questions in 26 minutes, scored in bands 1 to 4.',
+              'Recognise the three question formats: appropriateness, importance, and most/least drag-and-drop.',
+              'Understand each option in a scenario is rated on its own, not against the others.',
+              'Use partial credit by getting the half of the scale right first.',
+              'Remember drag-and-drop awards no partial credit and there is no negative marking.',
+            ],
+          },
         ],
       },
       {
@@ -228,6 +249,16 @@ export const MODULES = [
             kind: 'rule',
             title: 'Use the tutor as soon as something is unclear',
             body: 'Do not power through a confusing rating hoping it clicks later. Ask. The whole point of the tutor is to convert a confused minute into a learning minute.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know where to find the AI tutor — the Teach Me button on every practice scenario.',
+              'Use the tutor when an explanation does not tell you why your specific rating fell short.',
+              'Ask targeted questions like "what principle did I miss?" or "why is this not Very appropriate?".',
+              'Remember free users get 5 tutor messages total; premium is unlimited.',
+            ],
           },
         ],
       },
@@ -298,6 +329,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Why this list speeds you up',
             body: 'If you can identify which pillar (or which combination) the scenario is testing, the right answer usually follows quickly. Most close calls collapse once you ask "which priority does this action actually serve?".',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the four practical priorities: patient safety, honesty, autonomy and dignity, staying in your competence.',
+              'Recall the four pillars of medical ethics: autonomy, beneficence, non-maleficence, justice.',
+              'Map scenarios onto the pillar or priority they test to find the answer faster.',
+              'Apply the tie-break: when principles compete, patient safety and honesty almost always win.',
+              'Recognise that respecting autonomy means informing and documenting, not overriding.',
+            ],
           },
         ],
       },
@@ -381,6 +423,17 @@ export const MODULES = [
               'Pick the half first, then refine using the tie-breaker default.',
             ],
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply a five-step routine to every SJ question rather than answering by feel.',
+              'Spot the core issue first: safety, honesty, confidentiality, teamwork, or role.',
+              'Use only what the scenario actually states — no invented seniority or backstory.',
+              'Decide the half of the scale before refining to a specific rating.',
+              'Default to the stronger option in your chosen half unless a clear flaw or better alternative exists.',
+            ],
+          },
         ],
       },
     ],
@@ -407,10 +460,7 @@ export const MODULES = [
           },
           {
             title: 'The principle',
-            body: 'When a patient might be harmed, the response should not be passive, dismissive, or unnecessarily delayed. Actions that protect patients are usually rated very appropriate or very important; actions that ignore or downplay danger are very inappropriate.',
-          },
-          {
-            title: 'Signs the scenario is a safety scenario',
+            body: 'When a patient might be harmed, the response should not be passive, dismissive, or unnecessarily delayed. Actions that protect patients are usually rated very appropriate or very important; actions that ignore or downplay danger are very inappropriate.\n\nSigns the scenario is a safety scenario:',
             bullets: [
               'Risk of immediate physical harm to a patient.',
               'A medication, dosage, equipment, or procedure error in progress.',
@@ -446,6 +496,17 @@ export const MODULES = [
             title: 'Why this principle is so heavily weighted',
             body: 'GMC (General Medical Council) guidance explicitly requires doctors to act promptly if patient safety may be seriously compromised. SJ writers translate that directly: actions that protect patients land at the top of the scale, actions that downplay risk land at the bottom.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Treat patient safety as the dominant principle that overrides hierarchy and personal discomfort.',
+              'Spot the signs of a safety scenario: impairment, medication errors, equipment failure, ignored patients.',
+              'Ask "which option best safeguards the patient?" to resolve most safety scenarios quickly.',
+              'Recognise speaking up to a senior on a safety issue is appropriate, often very appropriate.',
+              'Avoid the trap of staying silent because someone senior is involved.',
+            ],
+          },
         ],
       },
       {
@@ -461,12 +522,8 @@ export const MODULES = [
             body: 'After patient safety, honesty is the principle SJ rewards most consistently. Once you internalise that "white lies" do not exist in SJ, you will avoid a whole category of wrong answers.',
           },
           {
-            title: 'The principle',
-            body: 'Whether the mistake is yours or someone else\'s, the right move is almost always to be truthful and put it right. Covering up errors, falsifying records, lying about events, or ignoring dishonesty is almost always inappropriate, even when the intent is to protect someone.',
-          },
-          {
-            title: 'The duty of candour',
-            body: 'When something has gone wrong, the GMC duty of candour requires you to be open with patients, put matters right where possible, apologise, and explain fully and promptly. Apologising is not an admission of legal liability — it is part of being open.',
+            title: 'The principle and duty of candour',
+            body: 'Whether the mistake is yours or someone else\'s, the right move is almost always to be truthful and put it right. Covering up errors, falsifying records, lying about events, or ignoring dishonesty is almost always inappropriate, even when the intent is to protect someone.\n\nWhen something has gone wrong, the GMC duty of candour requires you to be open with patients, put matters right where possible, apologise, and explain fully and promptly. Apologising is not an admission of legal liability — it is part of being open.',
           },
           {
             title: 'Strong honesty responses usually involve',
@@ -500,6 +557,17 @@ export const MODULES = [
             title: 'Why dishonesty is treated so firmly',
             body: 'Medicine relies on accurate records and trust. A dishonest entry now sets a precedent that makes future safety incidents harder to prevent. SJ tests this directly because the profession does.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply the duty of candour: be open, put matters right, apologise, and explain promptly.',
+              'Know that apologising is not an admission of legal liability.',
+              'Reject the idea of a "white lie" in SJ — convenience never beats honesty.',
+              'Recognise that quietly correcting an error without telling the team is still a cover-up.',
+              'Own up to your own mistakes and escalate dishonesty that puts patient care at risk.',
+            ],
+          },
         ],
       },
       {
@@ -515,11 +583,8 @@ export const MODULES = [
             body: 'Confidentiality scenarios are common in SJ and have predictable correct answers. This lesson teaches the default (do not share) and the small list of exceptions where sharing is allowed.',
           },
           {
-            title: 'The default',
-            body: 'Patient information is confidential by default — and the duty continues even after the patient has died. Do not share patient details with people who do not need to know them, in person, by phone, by message, or on social media.',
-          },
-          {
-            title: 'When confidentiality bends',
+            title: 'The default, and when it bends',
+            body: 'Patient information is confidential by default — and the duty continues even after the patient has died. Do not share patient details with people who do not need to know them, in person, by phone, by message, or on social media.\n\nConfidentiality bends only in these cases:',
             bullets: [
               'The patient gives consent.',
               'It is required by law or court order.',
@@ -557,6 +622,17 @@ export const MODULES = [
             kind: 'trap',
             title: 'Social media is never a grey area',
             body: 'Posting a case online, even without names, is almost always rated very inappropriate. There is no benefit to the patient\'s care and a real risk of identification.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Default to privacy — do not share patient details unless an exception applies.',
+              'Know the narrow exceptions: patient consent, legal duty, public-interest harm, team need-to-know.',
+              'Remember the duty continues even after the patient has died.',
+              'Treat social media posts about cases as very inappropriate, even without names.',
+              'For family asking about a patient, check patient consent first rather than assuming entitlement.',
+            ],
           },
         ],
       },
@@ -607,6 +683,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Why false reassurance is treated as dishonesty',
             body: 'Even with good intentions, telling a patient something is fine when you do not know is rated as dishonesty in SJ. Honesty paired with compassion almost always beats false comfort.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Combine empathy with action — kindness alone is not enough.',
+              'Recognise hallmarks of strong communication: listen, acknowledge, speak privately, avoid jargon.',
+              'Avoid being so gentle that safety, honesty, or escalation gets ignored.',
+              'Treat false reassurance ("everything will be fine") as dishonesty.',
+              'Pair honesty with compassion rather than choosing between them.',
+            ],
           },
         ],
       },
@@ -679,6 +766,17 @@ export const MODULES = [
             title: 'Where students lose marks',
             body: 'Reaching for the consultant on minor interpersonal issues, and staying silent on serious safety issues. Both are rated poorly. Match the response to the seriousness of the issue.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Try local resolution first for minor issues, but escalate when safety is at immediate risk.',
+              'Know the triggers to escalate: immediate risk, repeated behaviour, dishonesty, beyond your competence.',
+              'Recognise that asking for help is professional, not failure.',
+              'Use reasonable belief as the bar to raise a concern — you do not need proof.',
+              'Match the response to the seriousness; avoid both overshooting and under-reacting.',
+            ],
+          },
         ],
       },
       {
@@ -728,6 +826,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Why "ask the supervising doctor" is so often correct',
             body: 'For student scenarios specifically, "flag this to the supervising doctor" or "ask the registrar or another supervising doctor" is frequently the most appropriate option. SJ writers know that students sometimes try to over-help, and they reward those who escalate within their role.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Work within the limits of your competence — acting outside your role is unsafe even if you are right.',
+              'Recognise the strong in-role moves: be honest about uncertainty, ask for supervision, escalate.',
+              'Avoid prescribing, performing unsupervised procedures, or making final clinical decisions as a student.',
+              'Pick "flag this to the supervising doctor" when the action exceeds your training.',
+              'Reject over-helping — confidence is not the same as competence.',
+            ],
           },
         ],
       },
@@ -788,6 +897,17 @@ export const MODULES = [
             title: 'Why this category got firmer',
             body: 'Medicine has had public reckonings about workplace behaviour. SJ now reflects the strengthened GMC stance, so scenarios that used to feel grey have clearer expected answers.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Treat colleagues with kindness, courtesy, and respect — loyalty does not require silence.',
+              'Know the GMC 2024 update: bullying, discrimination, and sexual misconduct have firm expected answers.',
+              'For minor issues, start with a private direct conversation, not gossip or public confrontation.',
+              'When you witness inappropriate behaviour, check on the affected person, challenge, or report.',
+              'Reject "say nothing because they are senior" — for serious misconduct, silence is very inappropriate.',
+            ],
+          },
         ],
       },
       {
@@ -847,6 +967,17 @@ export const MODULES = [
             title: 'When in doubt, ask the eyebrow test',
             body: 'If a colleague would raise an eyebrow at the situation, treat it as a boundary issue and respond accordingly.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Default response to a conflict of interest is to declare, refuse, or step back.',
+              'Politely decline gifts that could be seen as influencing care.',
+              'Avoid treating friends or family where possible; keep personal and professional channels separate.',
+              'Treat sexual or improper emotional relationships with patients as firmly prohibited, not grey.',
+              'Use the "eyebrow test" — if a colleague would raise an eyebrow, treat it as a boundary issue.',
+            ],
+          },
         ],
       },
     ],
@@ -871,11 +1002,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'Appropriateness questions are the most common SJ format. This lesson teaches the four-point scale, what each rating actually means, and how to choose between them.',
-          },
-          {
-            title: 'What you are rating',
-            body: 'Appropriateness asks whether the specific action is a good response to the scenario. You are NOT asked whether the action is the best of the four options — each option is rated in its own right, against the situation.',
+            body: 'Appropriateness questions are the most common SJ format. This lesson teaches the four-point scale, what each rating actually means, and how to choose between them.\n\nAppropriateness asks whether the specific action is a good response to the scenario. You are NOT asked whether the action is the best of the four options — each option is rated in its own right, against the situation.',
           },
           {
             title: 'The four-point scale (exact wording)',
@@ -917,6 +1044,17 @@ export const MODULES = [
             title: 'The middle ratings exist for a reason',
             body: 'An action can be appropriate without being ideal. It can be inappropriate without being a disaster. Most close-call scenarios live in the two middle ratings.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the exact wording of the four appropriateness ratings, from "Very appropriate" to "Very inappropriate".',
+              'Rate each option on its own merit, not against the other options in the question.',
+              'Check safety, honesty, confidentiality, role, and proportion before assigning a rating.',
+              'Map effect on the core issue to the four ratings: solves, partly solves, misses, or worsens.',
+              'Use the two middle ratings when the action helps but is incomplete, or is wrong but not harmful.',
+            ],
+          },
         ],
       },
       {
@@ -931,11 +1069,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'Importance questions ask you to weigh whether a factor SHOULD influence the decision. They use a different scale to appropriateness — using the wrong scale is a common way to lose marks.',
-          },
-          {
-            title: 'What you are rating',
-            body: 'Importance asks whether a factor or consideration should influence the decision in this scenario. You are not asked what to do — just whether this consideration matters when working out what to do.',
+            body: 'Importance questions ask you to weigh whether a factor SHOULD influence the decision. They use a different scale to appropriateness — using the wrong scale is a common way to lose marks.\n\nImportance asks whether a factor or consideration should influence the decision in this scenario. You are not asked what to do — just whether this consideration matters when working out what to do.',
           },
           {
             title: 'The four-point scale (exact wording)',
@@ -976,6 +1110,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'A useful split',
             body: 'Patient safety, honesty, and core professional standards usually fall under "Very important". Personal feelings, minor inconveniences, and protocol annoyances are usually "Of minor importance" or "Not important at all". The middle "Important" rating is for genuinely relevant but non-critical factors.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the four importance ratings, from "Very important" to "Not important at all".',
+              'Judge whether a factor should influence the decision, not what action to take.',
+              'Rate safety, honesty, and confidentiality factors as Very important by default.',
+              'Rate personal feelings, embarrassment, and convenience low — usually minor or not important.',
+              'Avoid confusing importance with appropriateness — they use different scales.',
+            ],
           },
         ],
       },
@@ -1027,6 +1172,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Why this trap is so common',
             body: 'Under time pressure, students start applying their answer before they finish reading the question. Force yourself to identify "is this an action or a factor?" before you start rating.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Identify "action or factor?" before you start rating.',
+              'Use the appropriateness scale when the wording says "How appropriate...?".',
+              'Use the importance scale when the wording says "How important...?".',
+              'Never rate an action as "important" or a factor as "appropriate" — those are category errors.',
+              'Let the question stem control the scale, not your intuition about the content.',
+            ],
           },
         ],
       },
@@ -1089,6 +1245,17 @@ export const MODULES = [
             title: 'When to soften',
             body: 'Soften from the stronger option only when (a) the action helps but is incomplete, OR (b) there is a clearly better alternative the action skips. If neither is true, stay with the strong option.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Use the half-first technique to lock in partial credit on close calls.',
+              'Apply the tests for each half to decide whether an answer is upper or lower.',
+              'Default to the stronger rating once the half is fixed, unless a clear flaw applies.',
+              'Soften only when the action is incomplete or a better alternative is being skipped.',
+              'Reject the "play it safe" instinct — picking the milder option by default loses marks.',
+            ],
+          },
         ],
       },
       {
@@ -1133,6 +1300,17 @@ export const MODULES = [
             title: 'Practical implication',
             body: 'On four-point scale questions, getting the half right is genuinely valuable — it converts a coin-flip between two ratings into guaranteed partial credit. On drag-and-drop, focus your time on confirming both selections.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know full marks come from a perfect match and partial marks from a neighbour rating.',
+              'Treat two positions away as zero — partial credit only flows to adjacent ratings.',
+              'Recognise drag-and-drop questions award no partial credit; both picks must be correct.',
+              'Remember there is no negative marking, so a wrong answer just scores zero.',
+              'Use the half-first technique to guarantee partial credit on close calls.',
+            ],
+          },
         ],
       },
     ],
@@ -1159,10 +1337,7 @@ export const MODULES = [
           },
           {
             title: 'What these scenarios test',
-            body: 'You are shown a situation where someone has made an error, forgotten something, given wrong information, or put a patient at potential risk. The judgement is how to respond honestly and safely.',
-          },
-          {
-            title: 'Strong response patterns',
+            body: 'You are shown a situation where someone has made an error, forgotten something, given wrong information, or put a patient at potential risk. The judgement is how to respond honestly and safely. Strong response patterns:',
             bullets: [
               'Address the immediate safety risk first.',
               'Be honest about what happened.',
@@ -1196,6 +1371,17 @@ export const MODULES = [
             ],
             correctIndex: 0,
             explanation: 'Private, prompt, in-role, and gives the colleague a chance to fix the issue before it harms the patient. There is no obvious better step.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Address the immediate safety risk first, then be honest about what happened.',
+              'Own your own mistakes promptly; raise a colleague\'s mistake sensitively in private.',
+              'Apply the duty of candour: be open, put matters right, apologise, explain.',
+              'Reject "wait and see" — it is a cover-up in disguise.',
+              'Document the issue properly rather than quietly fixing it without telling anyone.',
+            ],
           },
         ],
       },
@@ -1245,6 +1431,17 @@ export const MODULES = [
             ],
             correctIndex: 3,
             explanation: 'Public lifts are a classic confidentiality breach. Volume does not change the principle — the conversation should pause until you are in a private setting. SJ rates this firmly.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise the common breach shapes: public spaces, social media, family asking, unauthorised viewing.',
+              'Default to privacy unless an exception applies.',
+              'Move sensitive conversations out of lifts, cafes, and transport — volume does not solve it.',
+              'For family asking about a patient, check patient consent first.',
+              'Treat social media posts about cases as very inappropriate, even without names.',
+            ],
           },
         ],
       },
@@ -1303,6 +1500,17 @@ export const MODULES = [
             ],
             correctIndex: 3,
             explanation: 'This is bullying behaviour, and ignoring it is exactly what GMC 2024 explicitly rules out. The expected actions are check on the affected person, challenge, or report.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Scale the response to severity: private chat for minor issues, escalation for serious ones.',
+              'Know the GMC 2024 rules narrowed the answers for bullying, harassment, and discrimination.',
+              'Treat saying nothing on serious misconduct as very inappropriate, regardless of hierarchy.',
+              'When facing bullying or harassment: check on the person, challenge, or report.',
+              'Use reasonable belief to raise a concern — you do not need proof.',
+            ],
           },
         ],
       },
@@ -1363,6 +1571,17 @@ export const MODULES = [
             title: 'SPIES is an interview framework that maps onto SJ',
             body: 'SPIES is technically a framework taught for foundation-year interviews, but it maps neatly onto SJ scenarios in this category. If you remember it, fitness-to-practise scenarios become routine.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply the SPIES framework: Seek, Patient safety, Initiative, Escalate, Support.',
+              'Treat patient interests as outranking professional loyalty.',
+              'Use reasonable belief to act — you do not need proof of impairment.',
+              'Reject promising a colleague you will keep an impairment concern quiet.',
+              'Escalate without delay when a patient is at immediate risk.',
+            ],
+          },
         ],
       },
       {
@@ -1411,6 +1630,17 @@ export const MODULES = [
             ],
             correctIndex: 0,
             explanation: 'Falsifying attendance is dishonesty — and SJ treats it firmly. Polite decline is the right response. You can still offer to support the friend in other ways.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise the integrity shapes: cheating, plagiarism, false attendance, exaggerated experience.',
+              'Decline politely when asked to help with dishonesty, even by a friend under pressure.',
+              'Treat honesty about qualifications and experience as non-negotiable.',
+              'Speak to the person privately first, then escalate if they do not put it right.',
+              'Remember medicine relies on trust — SJ treats integrity issues firmly because the profession does.',
+            ],
           },
         ],
       },
@@ -1468,6 +1698,17 @@ export const MODULES = [
             correctIndex: 3,
             explanation: 'Dismissal almost never improves the situation. The right response is to acknowledge the frustration, explain calmly, and involve a senior if the issue cannot be resolved at your level.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Acknowledge feelings, listen first, then explain in plain language.',
+              'Stay calm with angry or frustrated patients and relatives — do not dismiss or walk away.',
+              'Recognise empathy without role is a trap — flag distress to a supervising doctor when needed.',
+              'Reject lying or false reassurance, even with kind intent.',
+              'Involve seniors when a question is beyond your remit without abandoning the patient.',
+            ],
+          },
         ],
       },
       {
@@ -1517,6 +1758,17 @@ export const MODULES = [
             correctIndex: 3,
             explanation: 'Calling the family without consent breaches confidentiality and tries to override the patient\'s autonomy. Both make this very inappropriate. The right move is to ensure the refusal is informed and documented.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Respect the choice of a patient with capacity, even when clinicians disagree.',
+              'Distinguish disagreement from incapacity — they are not the same.',
+              'Ensure refusals are informed, then document the conversation properly.',
+              'Apply Gillick competence: an under-16 with sufficient understanding can consent on their own.',
+              'Avoid calling family or pressuring patients to override their decision.',
+            ],
+          },
         ],
       },
       {
@@ -1557,6 +1809,17 @@ export const MODULES = [
             ],
             correctIndex: 3,
             explanation: 'Mixing social media with patient relationships is a clear boundary issue. Politely declining (or simply not responding) and explaining professional boundaries is the right move. Worry about seeming rude is not enough to override the principle.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise the recurring shapes: gifts, friend-as-patient, social media, attraction, financial ties.',
+              'Apply the three default moves: declare, refuse, or step back.',
+              'Decline social media contact with patients to keep professional distance.',
+              'Step back from the care of someone you have feelings for rather than acting on it.',
+              'Reject "I do not want to seem rude" as a reason to cross a professional boundary.',
+            ],
           },
         ],
       },
@@ -1617,6 +1880,17 @@ export const MODULES = [
             title: 'A useful self-check',
             body: 'If your answer changes when you imagine a different student answering the same question, you are using personal opinion, not professional judgement.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Answer as the safe-professional version of yourself, not as your personal self.',
+              'Step into the role of a calm, honest, patient-centred clinician before rating.',
+              'Rate the response, not the scenario — even when the situation is upsetting.',
+              'Ignore personal discomfort or cultural preferences when patient safety is on the line.',
+              'Use the self-check: if your answer would change for a different student, you are using opinion.',
+            ],
+          },
         ],
       },
       {
@@ -1656,6 +1930,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Why this is the most-tested strategy theme',
             body: 'SJ writers know students like the look of "decisive" actions. The trap is dressing up an over-reaction as decisiveness. Match the response to the seriousness of the issue.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Default to a calm direct conversation for non-safety interpersonal issues.',
+              'Treat jumping straight to a senior or a formal complaint as disproportionate when a chat would do.',
+              'Flip the rule the moment patient safety is at immediate risk — escalate first, talk later.',
+              'Avoid dressing up an over-reaction as "being decisive".',
+              'Match the seriousness of the response to the seriousness of the issue.',
+            ],
           },
         ],
       },
@@ -1700,6 +1985,16 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'Double-checking helps the patient short term, but it does not address why the colleague is making errors (overload? fatigue? a knowledge gap?). The stronger action is a private conversation alongside the safety net of double-checking.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Spot surface-level responses that handle symptoms but leave the underlying issue alive.',
+              'Look for actions that ask why, offer support, fix process, or prevent repeats.',
+              'Rate surface-only responses as "Appropriate, but not ideal" at best.',
+              'Combine a safety net with a root-cause conversation when colleagues keep making errors.',
+            ],
           },
         ],
       },
@@ -1749,6 +2044,17 @@ export const MODULES = [
             ],
             correctIndex: 3,
             explanation: 'Reporting a one-off absence as "repeated absenteeism" is wildly disproportionate AND inaccurate (the absence is not repeated). The action overshoots and misrepresents the situation.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Ask whether the response fits the size of the problem — neither extreme wins.',
+              'Spot disproportion: going straight to the most senior person for something minor, or ignoring a clear safety issue.',
+              'Reject treating a one-off mistake as a long-term character flaw.',
+              'Recognise "empathy" that sacrifices safety or honesty as the wrong answer, not the kind one.',
+              'Aim for responses that sit between "do nothing" and "fire everyone".',
+            ],
           },
         ],
       },
@@ -1805,6 +2111,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'A single word ("publicly", "during the round") can flip the rating. The underlying intent matters less than how the action is described. Read the wording every time.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Watch for single words that flip ratings: publicly, immediately, secretly, alone, never, only.',
+              'Re-read the option once more before locking in a rating.',
+              'Rate the action as described, not the version you imagine in your head.',
+              'Use only what the scenario actually states — do not assume seniority, intoxication, or motives.',
+              'Distinguish private vs public, asking advice vs reporting alone, ignore vs raise later.',
+            ],
+          },
         ],
       },
       {
@@ -1848,6 +2165,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'SJ has a forgiving time budget. The risk is fatigue-driven misreading, not running out of time. Slow the read; lean on the half-first technique to lock in partial credit when you cannot decide.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Treat fatigue, not the timer, as the real enemy in SJ.',
+              'Aim for around 22 seconds per question on average, banking time on easy ones.',
+              'Slow the read deliberately rather than rushing a half-read scenario.',
+              'Lean on the half-first technique when a close call is eating time.',
+              'Practise full mocks so the post-VR-DM-QR fatigue is already familiar.',
+            ],
           },
         ],
       },
@@ -2034,6 +2362,17 @@ export const MODULES = [
             title: 'Use the AI tutor on every wrong answer',
             body: 'When a rating surprises you, ask the tutor "what principle did I miss?" That single question converts a confusing wrong answer into a learning point you will remember.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Run a short mixed drill before committing to long practice sessions.',
+              'Aim for roughly two appropriateness, two importance, and one close-call scenario.',
+              'For each wrong answer, label the principle missed: safety, honesty, role, escalation, proportion, or wording.',
+              'Track patterns of mistakes rather than fixating on the score.',
+              'Use the AI tutor on every wrong answer to lock in the principle you missed.',
+            ],
+          },
         ],
       },
       {
@@ -2070,6 +2409,17 @@ export const MODULES = [
           {
             title: 'One last reminder',
             body: 'Think like a safe, professional clinician — calm, honest, patient-centred, willing to ask for help. Apply the half-the-scale-first technique. Default to the stronger option when the half is clear. Don\'t burn time on questions that won\'t yield — flag and move on.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Run the pre-answer checklist on every SJ question until it becomes automatic.',
+              'Identify the main issue and prioritise patient safety where it applies.',
+              'Use only the information given and rate the specific action or factor asked.',
+              'Pick the correct half of the scale first, then refine using the tie-breaker default.',
+              'Answer as a calm, honest, patient-centred professional, not based on personal feeling.',
+            ],
           },
         ],
       },
@@ -2227,7 +2577,10 @@ function StatusPill({ status, colors, isDark }) {
   );
 }
 
-function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked }) {
+const LessonCard = React.memo(function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked, lessonId, onSelectLesson }) {
+  const handlePress = onSelectLesson && lessonId
+    ? () => onSelectLesson(lessonId)
+    : onPress;
   const completed = status === 'completed';
   const active = status === 'inProgress' || status === 'next';
   const borderColor = completed
@@ -2240,7 +2593,7 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
   return (
     <TouchableOpacity
       activeOpacity={isLocked ? 1 : 0.84}
-      onPress={isLocked ? undefined : onPress}
+      onPress={isLocked ? undefined : handlePress}
       disabled={isLocked}
       style={[styles.lessonTouch, isLocked && styles.lessonTouchLocked]}
       accessibilityRole="button"
@@ -2297,16 +2650,17 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
       </View>
     </TouchableOpacity>
   );
-}
+});
 
-function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+const ModuleSection = React.memo(function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+  const handleToggle = useCallback(() => onToggle(module.id), [onToggle, module.id]);
   const accent = getAccent(colors, module.accentKey);
   const completedInModule = module.lessons.filter((lesson) => completedIds.includes(lesson.id)).length;
   const progress = completedInModule / module.lessons.length;
 
   return (
     <View style={styles.moduleSection}>
-      <TouchableOpacity activeOpacity={0.84} onPress={onToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
+      <TouchableOpacity activeOpacity={0.84} onPress={handleToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
         <View style={styles.moduleHeader}>
           <View style={[styles.moduleIcon, { backgroundColor: hexToRgba(accent, 0.12), borderColor: hexToRgba(accent, 0.34) }]}>
             <PremiumIcon name={module.icon} size={21} color={accent} strokeWidth={2.2} />
@@ -2347,7 +2701,8 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
                 isDark={isDark}
                 isPremium={PREMIUM_LESSON_TYPES.has(numberedLesson?.type) && !isPro}
                 isLocked={isLocked}
-                onPress={() => onSelectLesson(lesson.id)}
+                lessonId={lesson.id}
+                onSelectLesson={onSelectLesson}
               />
             );
           })}
@@ -2355,7 +2710,7 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
       ) : null}
     </View>
   );
-}
+});
 
 function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
   const heroAccent = colors.mint ?? colors.cyan ?? colors.blue;
@@ -2536,7 +2891,7 @@ export default function SituationalJudgementLearnScreen({ navigation }) {
               isDark={isDark}
               onSelectLesson={openLesson}
               expanded={!!expandedModules[module.id]}
-              onToggle={() => toggleModule(module.id)}
+              onToggle={toggleModule}
               isPro={isPro}
             />
           ))}

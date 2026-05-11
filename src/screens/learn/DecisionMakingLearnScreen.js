@@ -77,6 +77,16 @@ export const MODULES = [
             title: 'The order of question types can change',
             body: 'Similar question types tend to appear together in the exam, but UCAT does not promise a fixed order. Always work out which family a question belongs to from the question itself, not from where it sits in the test.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know that DM tests disciplined thinking, not specialist knowledge.',
+              'Treat the information given as true, even when it sounds unrealistic.',
+              'Recognise the six DM question families on sight.',
+              'Identify the family from the question itself, not its position in the test.',
+            ],
+          },
         ],
       },
       {
@@ -128,6 +138,16 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'A 5-statement Yes/No set is worth 2 marks vs 1 for a single MCQ. Under time pressure, do not abandon a higher-value set when you can still lock in answers.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the format: 35 questions in 37 minutes, with two answer styles.',
+              'Apply the partial credit rule: 2 marks for 5/5, 1 mark for 4/5, 0 below.',
+              'Protect five-statement Yes/No sets first under time pressure.',
+              'Never leave anything blank — there is no negative marking.',
+            ],
+          },
         ],
       },
       {
@@ -175,6 +195,16 @@ export const MODULES = [
             kind: 'rule',
             title: 'Use the tutor as soon as something is unclear',
             body: 'Do not power through a confusing explanation hoping it clicks later. Ask. The whole point of the tutor is to convert a confused minute into a learning minute.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know where the AI tutor lives — the Teach Me button on every explanation.',
+              'Use the tutor for follow-ups when an explanation does not answer your real question.',
+              'Ask in plain English about the setup, options, or your reasoning.',
+              'Free users get 5 tutor messages total; Premium gets unlimited access.',
+            ],
           },
         ],
       },
@@ -251,6 +281,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: '"Not all" guarantees at least one exception. It does not commit to most or to none — those would over-strengthen the claim.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know UCAT\'s exact meanings: "some" = more than zero AND less than all.',
+              'Read "all A are B" as "if x is an A, then x is a B" — never flip it.',
+              '"Not all" guarantees at least one exception, never most or none.',
+              '"No A are B" means zero overlap, in both directions.',
+              'Spot when an option silently flips or strengthens a quantifier.',
+            ],
+          },
         ],
       },
       {
@@ -314,6 +355,17 @@ export const MODULES = [
             title: 'The "only if" trap',
             body: '"A only if B" means "if A then B" — NOT "if B then A". B has to be in place before A can happen, not the other way round. Reading it the wrong way is the most common DM if-then error.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know that "if A then B" only fails when A happens but B does not.',
+              'Use the one safe rearrangement: flip AND negate to "if not B, then not A".',
+              'Translate "A only if B" as "if A then B" — never the reverse.',
+              'Translate "A unless B" as "if not B, then A".',
+              'Spot the wrong-direction trap: B happening does not prove A.',
+            ],
+          },
         ],
       },
       {
@@ -359,6 +411,16 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: '"Either/or but not both" means exactly one of them attends — never both, never neither.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Rewrite messy clues into short, usable logic before reasoning.',
+              'Translate "only if" into "if...then" in the correct direction.',
+              'Read "either A or B but not both" as exactly one.',
+              'Distinguish "at least", "at most", and "exactly" when counting.',
+            ],
           },
         ],
       },
@@ -416,6 +478,16 @@ export const MODULES = [
             correctIndex: 0,
             explanation: 'In standard logic "some" only means "at least one", but UCAT defines "some" as more than zero AND less than all (see the All, some, none lesson). That directly forces at least one candidate to not wear glasses, so the second statement must follow.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Answer Yes only when the conclusion is forced by the premises.',
+              'Apply the one-question test: can I find any situation where the premises hold but the conclusion fails?',
+              'Treat "could be true" as No when DM asks if a conclusion follows.',
+              'Remember UCAT\'s "some" already commits you to "not all".',
+            ],
+          },
         ],
       },
       {
@@ -469,6 +541,16 @@ export const MODULES = [
             kind: 'trap',
             title: 'Calling every extra idea an "assumption"',
             body: 'In DM, an assumption must be connected to whether the argument works — not just vaguely related to the topic. Pretend each candidate is false; if the argument still works without it, it is not the assumption.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Separate statements (given), conclusions (claimed), and assumptions (needed but unstated).',
+              'Judge arguments on support and relevance, not personal agreement.',
+              'Apply the "pretend it is false" test to find the real assumption.',
+              'Reject candidates that are topical but do not actually load-bear the argument.',
+            ],
           },
         ],
       },
@@ -539,6 +621,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'Two short premises like this resolve mentally in seconds — a one-line note is enough to anchor the logic. Drawing a three-circle Venn for a two-statement syllogism burns 15-20 seconds you do not have. Save full Venn sketches for numerical Venn questions or 3+ overlapping sets you cannot track in your head.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply TRACE: Type, Read, Anchor, Conclude, Eliminate.',
+              'Name the question family before reasoning — it drives the method.',
+              'Read the actual task before drowning in detail.',
+              'Anchor mentally for short logic and only sketch when the question is too tangled to track.',
+              'Conclude from your representation, never from instinct, and flag if you stall.',
+            ],
           },
         ],
       },
@@ -621,6 +714,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Numerical Venns are the one set-overlap question type where a sketch genuinely pays for itself — a 5-10 second four-region outline prevents double-counting and surfaces the "neither" region you would otherwise forget. Pure mental arithmetic on multi-region overlap is where students lose the easy marks.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Default to mental reasoning; sketch only when the question genuinely needs it.',
+              'Always sketch numerical Venns and 4+ item matching puzzles.',
+              'Keep two-statement syllogisms and argument questions mental.',
+              'Apply the 15-second sketch cap — stop drawing if it takes longer.',
+              'Know your noteboard setup for Pearson VUE and OnVUE in advance.',
+            ],
+          },
         ],
       },
       {
@@ -689,6 +793,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Simple fraction multiplication is faster mentally than reaching for the calculator. Save the calculator for multi-step or 4+ digit arithmetic.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the calculator executes operations in entry order, not BODMAS.',
+              'Do multiplications and divisions yourself first, then add or subtract.',
+              'Use M+ and MRC to store and recall intermediate values.',
+              'Reach for it on 4+ digit or multi-step arithmetic, not simple fractions.',
+              'Confirm the exact button layout in the official UCAT tutorial before test day.',
+            ],
+          },
         ],
       },
       {
@@ -701,10 +816,7 @@ export const MODULES = [
         steps: [
           {
             title: 'Why elimination is a speed skill',
-            body: 'Good elimination is one of the fastest ways to find the right answer in DM. For every wrong answer, you should be able to name why it is wrong.',
-          },
-          {
-            title: 'The five rejection reasons',
+            body: 'Good elimination is one of the fastest ways to find the right answer in DM. For every wrong answer, you should be able to name why it is wrong — use these five rejection reasons:',
             bullets: [
               'Contradicted — the premises directly rule it out.',
               'Too strong — uses "all", "always", "never" when the evidence supports only "some" or "sometimes".',
@@ -740,6 +852,16 @@ export const MODULES = [
             title: 'Do not keep favourites',
             body: 'If you cannot name why an option is wrong, you have not eliminated it — you have just hoped the option was wrong. Force a label, then move on.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Use elimination as a primary reasoning tool, not just a tidy-up.',
+              'Name the rejection reason for every wrong option: contradicted, too strong, not proven, off-topic, or partly supported.',
+              'Spot "too strong" wording like all, always, or never as fast eliminations.',
+              'Force a label on each option — never keep a favourite you cannot defend.',
+            ],
+          },
         ],
       },
     ],
@@ -763,10 +885,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this question type tests',
-            body: 'Syllogism questions ask whether conclusions follow from premises. Treat the premises as true even if they sound unrealistic. These commonly appear as five-statement Yes/No sets worth 2 marks.',
-          },
-          {
-            title: 'The method',
+            body: 'Syllogism questions ask whether conclusions follow from premises. Treat the premises as true even if they sound unrealistic. These commonly appear as five-statement Yes/No sets worth 2 marks. The method:',
             bullets: [
               'For two short premises, hold the logic in your head or jot a single line of shorthand — drawing a full Venn is usually slower than the reasoning itself.',
               'Only sketch a Venn when you have 3+ overlapping sets or you cannot track the relationships mentally.',
@@ -801,6 +920,17 @@ export const MODULES = [
             correctIndex: 0,
             explanation: '"Not all" = at least one is not. That is exactly what "some are not" claims. Direct restatement.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Treat each conclusion separately — never let one bleed into another.',
+              'Mark Yes only when the conclusion must be true given the premises.',
+              'Hold short two-premise logic mentally; sketch a Venn only for 3+ overlapping sets.',
+              'Avoid chaining "all" and "some" through a shared middle term.',
+              'Stick to UCAT\'s exact wording on "all", "some", and "no".',
+            ],
+          },
         ],
       },
       {
@@ -831,10 +961,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this question type covers',
-            body: 'Logic puzzles include ordering, grouping, matching, and scheduling. They are mentally expensive but reward organisation more than speed-reading.',
-          },
-          {
-            title: 'The method',
+            body: 'Logic puzzles include ordering, grouping, matching, and scheduling. They are mentally expensive but reward organisation more than speed-reading. Follow this method:',
             bullets: [
               'Identify the items and the slots.',
               'For 3 items with 1-2 rules, reason it out mentally or jot a single order line.',
@@ -870,6 +997,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: '90 seconds is your decision threshold for stuck puzzles. Best-guess after eliminating clearly wrong options — there is no negative marking.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Identify items and slots before translating any clues.',
+              'Place absolute rules first, then layer relative rules against them.',
+              'Match the tool to the size: mental for 3 items, grid for 4+.',
+              'Make forced deductions before testing options.',
+              'Best-guess, flag, and move on after 90 seconds with no progress.',
+            ],
           },
         ],
       },
@@ -946,6 +1084,17 @@ export const MODULES = [
             kind: 'trap',
             title: 'Double-counting the overlap',
             body: 'Adding 12 sport + 8 music + 3 both = 23 misreads the question. The 3 in both are already counted in the 12 and the 8. The total in either is 12 + 8 − 3 = 17 (inclusion–exclusion).',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise the three formats: select-the-diagram, interpret, and region calculation.',
+              'Read the legend first — UCAT may use shapes other than circles.',
+              'Spot fast values: centre, outside, and pair totals to eliminate diagrams quickly.',
+              'Distinguish "A and B" from "A and B only" before calculating.',
+              'Use inclusion-exclusion to avoid double-counting the overlap.',
+            ],
           },
         ],
       },
@@ -1063,6 +1212,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Both rising together is correlation. Concluding cause from co-movement ignores the obvious common driver (summer / sun exposure). Watch any data option that upgrades correlation to cause.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Read the title, units, and denominator before answering anything.',
+              'Test each statement against the exact row, column, or rule it uses.',
+              'Distinguish a count from a rate (40 vs 40/200 = 20%).',
+              'Check the time base — weekly totals do not become daily maxima.',
+              'Reject any option that upgrades correlation into cause.',
+            ],
+          },
         ],
       },
       {
@@ -1128,6 +1288,17 @@ export const MODULES = [
             kind: 'trap',
             title: 'Multiplying probabilities of mutually exclusive events',
             body: 'The chance of A and B when A and B cannot both happen is 0, not A multiplied by B. Never multiply mutually exclusive probabilities.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Multiply for "A and B"; add for "A or B" and subtract any overlap.',
+              'Update the second denominator when there is no replacement.',
+              'Distinguish independent events (can both happen) from mutually exclusive (cannot).',
+              'Never multiply probabilities of mutually exclusive events — the answer is zero.',
+              'Decide add vs multiply before touching the calculator.',
+            ],
           },
         ],
       },
@@ -1206,6 +1377,17 @@ export const MODULES = [
             title: 'Picking the option you personally agree with',
             body: 'Confident wording is not strength. The strongest argument is the one with the best evidence and chain of reasoning, regardless of which side it takes.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply FREES: Factual, Relevant, Entire, Emotionless, Sensible.',
+              'Eliminate obvious FREES failures first, then check the survivors carefully.',
+              'For assumption questions, pretend each candidate is false and see if the argument collapses.',
+              'Judge by evidence and reasoning, not personal agreement or confident tone.',
+              'Spend 30-45 seconds total — do not run all five checks on every option.',
+            ],
+          },
         ],
       },
       {
@@ -1234,6 +1416,7 @@ export const MODULES = [
         steps: [
           {
             title: 'Five common weak patterns',
+            body: 'Weak arguments often sound passionate, certain, or righteous — under time pressure, energy can feel like strength. UCAT tests whether you can see past it.',
             bullets: [
               'Emotional appeal — feeling replaces reasoning ("it would be nicer").',
               'Popularity — common view is not proof ("everyone wants it").',
@@ -1241,10 +1424,6 @@ export const MODULES = [
               'Off-topic — answers a different question (cost when asked about fairness).',
               'Extreme wording — too absolute for the evidence (always, never, impossible).',
             ],
-          },
-          {
-            title: 'Why weak arguments still tempt students',
-            body: 'Weak arguments often sound passionate, certain, or righteous. Under time pressure, energy can feel like strength. UCAT tests whether you can see past it.',
           },
           {
             kind: 'mini',
@@ -1267,6 +1446,16 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: '"All... forever" is a sweeping future claim with no evidence — unsupported prediction plus extreme wording. Strong arguments rarely commit to "all" or "always".',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise the five weak patterns: emotional, popularity, unsupported prediction, off-topic, and extreme wording.',
+              'Treat passionate or righteous tone as a warning sign, not strength.',
+              'Spot "always", "never", and "impossible" as quick extreme-wording tells.',
+              'Reject options that answer a different question than the one asked.',
+            ],
           },
         ],
       },
@@ -1345,6 +1534,17 @@ export const MODULES = [
             correctIndex: 0,
             explanation: '"Some" never licences "most". Pushing a weaker word ("some") into a stronger one ("most") is one of the most reliable DM traps.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Spot the "all" flip: "all A are B" never gives you "all B are A".',
+              'Spot the if-then flip: B happening does not prove A.',
+              'Treat "could be true" as No on any "must follow" question.',
+              'Keep outside knowledge out — the question\'s statements are the only source of truth.',
+              'Reject any option that strengthens "some" to "most".',
+            ],
+          },
         ],
       },
       {
@@ -1386,6 +1586,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'Only the overlap is established by "some". Drawing the doctor circle fully inside research would over-claim a subset; separate circles would over-claim disjoint. (Reminder: for a single "some" statement on its own, you usually do not need to sketch at all — this is about getting the geometry right when a sketch is genuinely useful.)',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Avoid double-counting overlap; apply inclusion-exclusion.',
+              'Never forget the outside region — those in neither group still exist.',
+              'Treat unlabelled regions as unknown, not zero.',
+              'Draw "some" as partial overlap, not as a subset or as disjoint circles.',
+              'Mark only the constraint a clue gives, not a fixed position.',
+            ],
           },
         ],
       },
@@ -1433,6 +1644,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Independent events combined with "and" — multiply. 1/5 × 1/2 = 1/10. The 7/10 distractor comes from adding instead of multiplying.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Update denominators when the question says "without replacement".',
+              'Decide add vs multiply from the wording — "or" adds, "and" multiplies.',
+              'Confirm independence before assuming it.',
+              'Compare proportions, not raw totals, when the denominators differ.',
+              'Identify which value is the denominator before any rate calculation.',
+            ],
+          },
         ],
       },
       {
@@ -1445,6 +1667,7 @@ export const MODULES = [
         steps: [
           {
             title: 'The five trap shapes',
+            body: 'Run FREES (Factual, Relevant, Entire, Emotionless, Sensible) on each option. A trap option fails on at least one letter; the strongest passes all five. Watch for these five shapes:',
             bullets: [
               'Emotional appeal — words like "feel", "deserve", "should" without evidence.',
               'Popularity — "everyone wants it", "the majority".',
@@ -1452,10 +1675,6 @@ export const MODULES = [
               'Off-topic — answers a different question (cost when fairness was asked).',
               'Extreme wording — "always", "never", "impossible".',
             ],
-          },
-          {
-            title: 'Apply FREES to test',
-            body: 'Run Factual, Relevant, Entire, Emotionless, Sensible on each option. A trap option fails on at least one letter; the strongest passes all five.',
           },
           {
             kind: 'mini',
@@ -1478,6 +1697,17 @@ export const MODULES = [
             ],
             correctIndex: 0,
             explanation: '"Always fail" is a sweeping claim ("every single time") that evidence rarely supports. Watch for "always", "never", "impossible" as quick weak-argument tells.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Run FREES on each option and name which letter it fails.',
+              'Spot popularity claims as proof — common view is not evidence.',
+              'Reject unsupported predictions like "will definitely" or "is bound to".',
+              'Watch off-topic options that answer a different question than the one asked.',
+              'Flag extreme wording — "always", "never", "impossible" rarely survive scrutiny.',
+            ],
           },
         ],
       },
@@ -1535,6 +1765,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Five-statement sets are 2 marks vs 1 for an MCQ. If you can answer or guess quickly, that is better than leaving a 2-mark item blank. Cover the high-value item first.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Use ~63 seconds per question as a benchmark, not a target.',
+              'Know target ranges by type — arguments fastest, puzzles and Yes/No sets slowest.',
+              'Apply the two-pass method: clean marks first, flagged items second.',
+              'Best-guess and move on after 90 seconds on a stuck puzzle.',
+              'Cover the 2-mark Yes/No set before single MCQs under time pressure.',
+            ],
+          },
         ],
       },
       {
@@ -1590,6 +1831,16 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'A blank guarantees 0 marks. Filling all five gives you a real chance at 1 or 2 marks and there is no penalty for being wrong, so always answer every statement — even when you are guessing.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the scoring: 2 marks for 5/5, 1 mark for 4/5, 0 below.',
+              'Prioritise five-statement sets under time pressure.',
+              'Lock in the easy four to protect the partial-credit mark.',
+              'Never leave any statement blank — guessing has no penalty.',
+            ],
           },
         ],
       },
@@ -1652,6 +1903,17 @@ export const MODULES = [
             title: 'Quick review habits',
             body: 'After each mini set, ask: did I identify the type fast enough? Did I represent the information clearly? Did I choose logic over instinct? Tag missed items with the matching trap label.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Switch methods quickly between syllogisms, Venns, puzzles, and arguments.',
+              'Identify the question type before reaching for a tool.',
+              'Apply inclusion-exclusion on overlap questions, not raw addition.',
+              'Choose logic over instinct, especially on strongest-argument items.',
+              'Review missed items by tagging the matching trap label.',
+            ],
+          },
         ],
       },
       {
@@ -1695,6 +1957,16 @@ export const MODULES = [
             kind: 'rule',
             title: 'The timing rule',
             body: 'Fast questions fund slow questions. Take clean marks quickly. Flag stubborn puzzles. Return with time left. Never leave blanks.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Carry the TRACE checklist into every DM question.',
+              'Apply the wording check — must vs could, and never reverse "all" or "if-then".',
+              'Treat five-statement Yes/No sets as 2-mark priorities and never leave a statement blank.',
+              'Let fast questions fund slow questions — take clean marks first, flag stubborn ones.',
+            ],
           },
         ],
       },
@@ -1848,7 +2120,10 @@ function StatusPill({ status, colors, isDark }) {
   );
 }
 
-function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked }) {
+const LessonCard = React.memo(function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked, lessonId, onSelectLesson }) {
+  const handlePress = onSelectLesson && lessonId
+    ? () => onSelectLesson(lessonId)
+    : onPress;
   const completed = status === 'completed';
   const active = status === 'inProgress' || status === 'next';
   const borderColor = completed
@@ -1861,7 +2136,7 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
   return (
     <TouchableOpacity
       activeOpacity={isLocked ? 1 : 0.84}
-      onPress={isLocked ? undefined : onPress}
+      onPress={isLocked ? undefined : handlePress}
       disabled={isLocked}
       style={[styles.lessonTouch, isLocked && styles.lessonTouchLocked]}
       accessibilityRole="button"
@@ -1918,16 +2193,17 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
       </View>
     </TouchableOpacity>
   );
-}
+});
 
-function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+const ModuleSection = React.memo(function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+  const handleToggle = useCallback(() => onToggle(module.id), [onToggle, module.id]);
   const accent = getAccent(colors, module.accentKey);
   const completedInModule = module.lessons.filter((lesson) => completedIds.includes(lesson.id)).length;
   const progress = completedInModule / module.lessons.length;
 
   return (
     <View style={styles.moduleSection}>
-      <TouchableOpacity activeOpacity={0.84} onPress={onToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
+      <TouchableOpacity activeOpacity={0.84} onPress={handleToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
         <View style={styles.moduleHeader}>
           <View style={[styles.moduleIcon, { backgroundColor: hexToRgba(accent, 0.12), borderColor: hexToRgba(accent, 0.34) }]}>
             <PremiumIcon name={module.icon} size={21} color={accent} strokeWidth={2.2} />
@@ -1962,13 +2238,14 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
               <LessonCard
                 key={lesson.id}
                 lesson={numberedLesson}
+                lessonId={lesson.id}
+                onSelectLesson={onSelectLesson}
                 status={status}
                 accent={accent}
                 colors={colors}
                 isDark={isDark}
                 isPremium={PREMIUM_LESSON_TYPES.has(numberedLesson?.type) && !isPro}
                 isLocked={isLocked}
-                onPress={() => onSelectLesson(lesson.id)}
               />
             );
           })}
@@ -1976,7 +2253,7 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
       ) : null}
     </View>
   );
-}
+});
 
 function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
   const heroAccent = colors.teal ?? colors.cyan ?? colors.blue;
@@ -2157,7 +2434,7 @@ export default function DecisionMakingLearnScreen({ navigation }) {
               isDark={isDark}
               onSelectLesson={openLesson}
               expanded={!!expandedModules[module.id]}
-              onToggle={() => toggleModule(module.id)}
+              onToggle={toggleModule}
               isPro={isPro}
             />
           ))}

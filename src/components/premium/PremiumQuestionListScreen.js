@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -306,6 +306,78 @@ function FilterDropdown({ top, control, setFilterValue, setOpenFilterKey, colors
   );
 }
 
+const QuestionRow = React.memo(function QuestionRow({
+  entry,
+  displayIndex,
+  isLocked,
+  rowColor,
+  rowGradient,
+  colors,
+  badgeLabel,
+  onPress,
+  onResetPress,
+  showResetButton,
+}) {
+  return (
+    <TouchableOpacity
+      activeOpacity={0.82}
+      style={[styles.rowTouch, isLocked && styles.lockedRow]}
+      onPress={onPress}
+      accessibilityRole="button"
+    >
+      <LinearGradient
+        colors={rowGradient}
+        start={{ x: 0, y: 0.5 }}
+        end={{ x: 1, y: 0.5 }}
+        style={[
+          styles.rowCard,
+          {
+            borderColor: hexToRgba(rowColor, entry.status === 'not_started' ? 0.44 : 0.7),
+            shadowColor: rowColor,
+          },
+        ]}
+      >
+        <View style={[styles.rowAccent, { backgroundColor: rowColor }]} />
+        <Text style={[styles.rowNumber, { color: rowColor }]} numberOfLines={1}>
+          {isLocked ? 'PRO' : displayIndex}
+        </Text>
+        <View style={[styles.rowDivider, { backgroundColor: hexToRgba(rowColor, 0.22) }]} />
+        <View style={styles.rowCopy}>
+          <Text style={[styles.rowTitle, { color: colors.text }]} numberOfLines={2}>
+            {entry.title}
+          </Text>
+          {badgeLabel ? (
+            <View style={[styles.typeBadge, { borderColor: hexToRgba(colors.cyan, 0.38), backgroundColor: hexToRgba(colors.cyan, 0.1) }]}>
+              <Text style={[styles.typeBadgeText, { color: colors.cyan }]} numberOfLines={1}>
+                {badgeLabel}
+              </Text>
+            </View>
+          ) : null}
+        </View>
+        <View style={styles.rowStatusCluster}>
+          {isLocked ? (
+            <PremiumIcon name="lock" size={30} color={colors.amber} strokeWidth={1.9} />
+          ) : (
+            <StatusMark status={entry.status} size={34} />
+          )}
+          {showResetButton ? (
+            <TouchableOpacity
+              onPress={onResetPress}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              accessibilityRole="button"
+              accessibilityLabel="Reset progress for this item"
+            >
+              <PremiumIcon name="more-vertical" size={22} color={colors.textMuted} />
+            </TouchableOpacity>
+          ) : (
+            <PremiumIcon name="more-vertical" size={22} color={colors.textMuted} />
+          )}
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
+});
+
 export default function PremiumQuestionListScreen({
   title,
   items,
@@ -433,97 +505,66 @@ export default function PremiumQuestionListScreen({
 
   const extraNavParams = getExtraNavParams?.(visibleItems.map((entry) => entry.item), visibleItems) ?? {};
 
-  const renderItem = ({ item: entry, index }) => {
+  const handleRowPress = useCallback((entry, isLocked) => {
+    if (isLocked) {
+      navigation.navigate('Paywall');
+      return;
+    }
+    const item = entry.item;
+    const navIndex = getIndex ? getIndex(item, entry.originalIndex) : entry.originalIndex;
+    navigation.navigate(routeName, { index: navIndex, ...extraNavParams });
+  }, [navigation, getIndex, routeName, extraNavParams]);
+
+  const handleRowReset = useCallback((entry) => {
+    if (!onResetItem) return;
+    Alert.alert(
+      'Reset Progress',
+      `Reset your progress for ${resetItemLabel}? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Reset',
+          style: 'destructive',
+          onPress: () => onResetItem(entry.item, entry.originalIndex),
+        },
+      ],
+    );
+  }, [onResetItem, resetItemLabel]);
+
+  const renderItem = useCallback(({ item: entry, index }) => {
     const item = entry.item;
     const isFree = getIsFree ? getIsFree(item, entry.originalIndex) : true;
     const isLocked = !isFree && !isPro;
     const meta = STATUS_META[entry.status] ?? STATUS_META.not_started;
     const rowColor = isLocked ? colors.amber : meta.color;
-    const navIndex = getIndex ? getIndex(item, entry.originalIndex) : entry.originalIndex;
     const badgeLabel = getBadgeLabel?.(item, entry.originalIndex);
     const rowGradient = isDark
       ? [hexToRgba(rowColor, 0.16), 'rgba(7, 20, 39, 0.94)', 'rgba(4, 10, 24, 0.98)']
       : [hexToRgba(rowColor, 0.08), 'rgba(255, 255, 255, 0.98)', 'rgba(247, 250, 255, 0.98)'];
+    const showResetButton = !isLocked && !!onResetItem && entry.status !== 'not_started';
 
     return (
-      <TouchableOpacity
-        activeOpacity={0.82}
-        style={[styles.rowTouch, isLocked && styles.lockedRow]}
-        onPress={() => {
-          if (isLocked) {
-            navigation.navigate('Paywall');
-            return;
-          }
-          navigation.navigate(routeName, { index: navIndex, ...extraNavParams });
+      <QuestionRow
+        entry={entry}
+        displayIndex={index + 1}
+        isLocked={isLocked}
+        rowColor={rowColor}
+        rowGradient={rowGradient}
+        colors={colors}
+        badgeLabel={badgeLabel}
+        showResetButton={showResetButton}
+        onPress={() => handleRowPress(entry, isLocked)}
+        onResetPress={(event) => {
+          event?.stopPropagation?.();
+          handleRowReset(entry);
         }}
-        accessibilityRole="button"
-      >
-        <LinearGradient
-          colors={rowGradient}
-          start={{ x: 0, y: 0.5 }}
-          end={{ x: 1, y: 0.5 }}
-          style={[
-            styles.rowCard,
-            {
-              borderColor: hexToRgba(rowColor, entry.status === 'not_started' ? 0.44 : 0.7),
-              shadowColor: rowColor,
-            },
-          ]}
-        >
-          <View style={[styles.rowAccent, { backgroundColor: rowColor }]} />
-          <Text style={[styles.rowNumber, { color: rowColor }]} numberOfLines={1}>
-            {isLocked ? 'PRO' : index + 1}
-          </Text>
-          <View style={[styles.rowDivider, { backgroundColor: hexToRgba(rowColor, 0.22) }]} />
-          <View style={styles.rowCopy}>
-            <Text style={[styles.rowTitle, { color: colors.text }]} numberOfLines={2}>
-              {entry.title}
-            </Text>
-            {badgeLabel ? (
-              <View style={[styles.typeBadge, { borderColor: hexToRgba(colors.cyan, 0.38), backgroundColor: hexToRgba(colors.cyan, 0.1) }]}>
-                <Text style={[styles.typeBadgeText, { color: colors.cyan }]} numberOfLines={1}>
-                  {badgeLabel}
-                </Text>
-              </View>
-            ) : null}
-          </View>
-          <View style={styles.rowStatusCluster}>
-            {isLocked ? (
-              <PremiumIcon name="lock" size={30} color={colors.amber} strokeWidth={1.9} />
-            ) : (
-              <StatusMark status={entry.status} size={34} />
-            )}
-            {!isLocked && onResetItem && entry.status !== 'not_started' ? (
-              <TouchableOpacity
-                onPress={(event) => {
-                  event.stopPropagation?.();
-                  Alert.alert(
-                    'Reset Progress',
-                    `Reset your progress for ${resetItemLabel}? This cannot be undone.`,
-                    [
-                      { text: 'Cancel', style: 'cancel' },
-                      {
-                        text: 'Reset',
-                        style: 'destructive',
-                        onPress: () => onResetItem(item, entry.originalIndex),
-                      },
-                    ],
-                  );
-                }}
-                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                accessibilityRole="button"
-                accessibilityLabel="Reset progress for this item"
-              >
-                <PremiumIcon name="more-vertical" size={22} color={colors.textMuted} />
-              </TouchableOpacity>
-            ) : (
-              <PremiumIcon name="more-vertical" size={22} color={colors.textMuted} />
-            )}
-          </View>
-        </LinearGradient>
-      </TouchableOpacity>
+      />
     );
-  };
+  }, [getIsFree, getBadgeLabel, isPro, colors, isDark, onResetItem, handleRowPress, handleRowReset]);
+
+  const keyExtractor = useCallback((entry, index) => (
+    String(getItemKey?.(entry.item, entry.originalIndex) ?? entry.item?.id ?? entry.item?.setId ?? index)
+  ), [getItemKey]);
 
   if (loading) {
     return (
@@ -560,9 +601,14 @@ export default function PremiumQuestionListScreen({
       <SyncBanner visible={syncing} progress={syncProgress} />
       <FlatList
         data={visibleItems}
-        keyExtractor={(entry, index) => String(getItemKey?.(entry.item, entry.originalIndex) ?? entry.item?.id ?? entry.item?.setId ?? index)}
+        keyExtractor={keyExtractor}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        removeClippedSubviews
+        initialNumToRender={12}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={50}
+        windowSize={7}
         contentContainerStyle={[
           styles.listContent,
           {

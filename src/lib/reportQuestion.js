@@ -84,6 +84,8 @@ export async function submitLessonReport({
   section,
   reasons = [],
   comment = '',
+  partNumber = null,
+  totalParts = null,
 }) {
   if (!lessonId) return { ok: false, error: 'Missing lessonId' };
   if (!section)  return { ok: false, error: 'Missing section' };
@@ -91,6 +93,11 @@ export async function submitLessonReport({
   if (!trimmedComment) {
     return { ok: false, error: 'Please add comments describing the issue.' };
   }
+
+  const partPrefix = (Number.isInteger(partNumber) && Number.isInteger(totalParts) && totalParts > 0)
+    ? `[Part ${partNumber} of ${totalParts}] `
+    : '';
+  const finalComment = `${partPrefix}${trimmedComment}`;
 
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -100,7 +107,7 @@ export async function submitLessonReport({
     section,
     user_id: user?.id ?? null,
     reasons,
-    comment: trimmedComment,
+    comment: finalComment,
     platform: Platform.OS,
   });
 

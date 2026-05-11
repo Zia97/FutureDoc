@@ -50,9 +50,6 @@ export const MODULES = [
           {
             title: 'What a VR question looks like',
             body: 'You are shown an unfamiliar passage on any topic, then asked questions about it. There are two question types:',
-          },
-          {
-            title: 'The two question types',
             bullets: [
               "True / False / Can't Tell (T/F/CT) — You read a statement and decide if the passage proves it true, proves it false, or gives you too little information to tell.",
               'Multiple Choice (MCQ) — You pick the best answer from four options, usually completing a sentence or choosing the most supported conclusion.',
@@ -115,6 +112,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Why common sense can still lose you marks',
             body: 'Familiar topics are dangerous. Your brain fills gaps automatically with what you already know, even when the passage does not say it. Treat every option as guilty until the passage clears it.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the two VR question formats: True / False / Can\'t Tell and multiple choice.',
+              'Answer only from the passage, never from real-world knowledge or what feels likely.',
+              'Treat the passage as the single source of truth — do not add missing facts.',
+              'Spot options that are too strong, too broad, or too confident for the evidence.',
+              'Resist plausible-sounding answers on familiar topics until the passage backs them up.',
+            ],
           },
         ],
       },
@@ -184,6 +192,17 @@ export const MODULES = [
             title: 'Why VR feels faster than it looks on paper',
             body: 'Reading 11 passages plus 44 question prompts in 22 minutes feels short because you are doing two tasks per question: searching the passage AND comparing options. Both use working memory, which is why pacing feels tighter than the raw timer suggests.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the section shape: 44 questions across 11 passages in 22 minutes.',
+              'Treat 30 seconds per question as an average, not a fixed target.',
+              'Use Alt+F, Alt+N, and Alt+P shortcuts to save time on the real test.',
+              'Never leave an item blank — there is no negative marking, so always guess.',
+              'Bank time on easy items so harder ones can take longer.',
+            ],
+          },
         ],
       },
       {
@@ -200,11 +219,7 @@ export const MODULES = [
           },
           {
             title: 'The approach in one sentence',
-            body: 'Give the passage a quick glance so you roughly know where things are, then read each question, find your keyword, and go straight to the relevant part of the passage.',
-          },
-          {
-            title: 'Why this order works',
-            body: 'A quick glance at the passage first gives you a rough map — you know where the numbers are, where names appear, which paragraph covers which topic. Then when you read the question and pick your anchor keyword, you already have a sense of where to look. This is faster than either reading the whole passage carefully upfront or going in completely cold.',
+            body: 'Give the passage a quick glance so you roughly know where things are, then read each question, find your keyword, and go straight to the relevant part of the passage.\n\nWhy this order works: a quick glance at the passage first gives you a rough map — you know where the numbers are, where names appear, which paragraph covers which topic. Then when you read the question and pick your anchor keyword, you already have a sense of where to look. This is faster than either reading the whole passage carefully upfront or going in completely cold.',
           },
           {
             title: 'Step 1: do the opening glance',
@@ -281,6 +296,18 @@ export const MODULES = [
               'Decide or guess and move on when time pressure builds.',
             ],
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply the five-step method: glance, read, anchor, scan, decide.',
+              'Use the opening glance to map a passage in 8-10 seconds, not to read it.',
+              'Pick distinctive nouns, names, dates, or numbers as anchor keywords.',
+              'Read the sentence before and after a keyword, not just the matched line.',
+              'Commit and move when stuck — drift on one item is what costs the section.',
+              'Adapt the method on short passages and author-opinion items, do not abandon it.',
+            ],
+          },
         ],
       },
       {
@@ -329,6 +356,17 @@ export const MODULES = [
             title: 'Use the tutor as soon as something is unclear',
             body: 'Do not power through a confusing explanation hoping it clicks later. Ask. The whole point of the tutor is to convert a confused minute into a learning minute.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know how to move from lessons into practice questions on this app.',
+              'Open the AI tutor via the "Teach Me" button under any question explanation.',
+              'Ask the tutor specific follow-ups like "why is this not B?" or "what did I miss?"',
+              'Use the tutor the moment something is unclear, do not push through confusion.',
+              'Remember free users get 5 tutor messages total; premium is unlimited.',
+            ],
+          },
         ],
       },
     ],
@@ -364,15 +402,12 @@ export const MODULES = [
           },
           {
             title: 'What each answer means',
+            body: "If you find yourself building a multi-step argument to call something 'True' or 'False', the answer is usually Can't Tell. The right answer should feel direct — a statement can sound reasonable and still be Can't Tell.",
             bullets: [
               'True — the passage contains evidence that proves the statement.',
               'False — the passage contains evidence that contradicts the statement in a meaningful way.',
               "Can't Tell — the passage neither proves nor disproves the statement. There is simply not enough information.",
             ],
-          },
-          {
-            title: "The default-to-Can't-Tell heuristic",
-            body: "If you find yourself building a multi-step argument to call something 'True' or 'False', the answer is usually Can't Tell. The right answer should feel direct. A statement can sound reasonable and still be Can't Tell.",
           },
           {
             title: 'What to do when you have to guess',
@@ -436,6 +471,18 @@ export const MODULES = [
             kind: 'tip',
             title: "Why students underuse Can't Tell",
             body: "Students avoid Can't Tell because it feels like giving up. But the test deliberately includes statements the passage does not settle. If you almost never pick Can't Tell in practice, you are probably forcing True or False onto missing evidence.",
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Decide between True, False, or Can\'t Tell using passage evidence alone.',
+              'Pick False only when the passage actively contradicts the statement.',
+              'Pick Can\'t Tell when the passage simply does not settle the claim.',
+              'When forced to guess, choose between the surviving option and Can\'t Tell, not True vs False.',
+              'Use definitive vs mitigating language as a tiebreaker, not as a substitute for evidence.',
+              'Do not force True or False onto statements the passage does not address.',
+            ],
           },
         ],
       },
@@ -506,6 +553,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: '"All" requires more evidence than "some". The stronger claim usually fails first because the passage rarely supports universal claims.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Pick the option the passage supports exactly, not the one that sounds smartest.',
+              'Reject the wrong three options for clear reasons before locking in your choice.',
+              'Spot the four distractor shapes: too strong, too broad, partly true, wrong location.',
+              'Recognise the MCQ sub-types: direct detail, inference, author opinion, negative stems.',
+              'Eliminate the stronger claim first when two options differ only in quantity words.',
+            ],
+          },
         ],
       },
       {
@@ -527,11 +585,7 @@ export const MODULES = [
           },
           {
             title: 'Where to look first',
-            body: 'Start with the distinctive words in the question, then scan for those anchors. Read the answer line and the surrounding lines, not just the matched keyword. One shared word is rarely enough.',
-          },
-          {
-            title: 'How incomplete statements mislead',
-            body: 'Incomplete statements often fail because students choose an ending that is plausible but not the best supported. Direct detail questions are won by precision, not deep interpretation.',
+            body: 'Start with the distinctive words in the question, then scan for those anchors. Read the answer line and the surrounding lines, not just the matched keyword. One shared word is rarely enough.\n\nIncomplete statements often fail because students choose an ending that is plausible but not the best supported. Direct detail questions are won by precision, not deep interpretation.',
           },
           {
             kind: 'rule',
@@ -567,6 +621,17 @@ export const MODULES = [
             title: 'Why one shared keyword is not enough',
             body: 'Test writers love to use the same keyword in two different sentences and put the answer to your question in only one of them. Always read the sentence before and after the keyword to confirm you are in the right place.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise "according to the passage" and sentence-completion stems as direct detail items.',
+              'Locate the answer line using the distinctive keyword from the question.',
+              'Read the lines around the keyword, not just the matched word itself.',
+              'Treat direct detail as a precision task — the right option matches the passage word for word.',
+              'Reject options that twist a date, place, or detail even when other parts feel right.',
+            ],
+          },
         ],
       },
       {
@@ -588,11 +653,7 @@ export const MODULES = [
           },
           {
             title: 'What an inference is',
-            body: 'An inference is not random imagination. It is the next conclusion the passage genuinely supports. The right answer is often implied rather than copied, but it is still anchored in evidence.',
-          },
-          {
-            title: 'How inference becomes speculation',
-            body: 'Extreme answers often fail because they outrun the text. If you cannot point to the evidence chain, your inference is probably too loose. Prefer moderate, evidence-linked conclusions over dramatic ones.',
+            body: 'An inference is not random imagination. It is the next conclusion the passage genuinely supports. The right answer is often implied rather than copied, but it is still anchored in evidence.\n\nHow it becomes speculation: extreme answers often fail because they outrun the text. If you cannot point to the evidence chain, your inference is probably too loose. Prefer moderate, evidence-linked conclusions over dramatic ones.',
           },
           {
             kind: 'rule',
@@ -627,6 +688,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'How to spot an answer that is one step too far',
             body: 'Read your candidate option and ask: "Does the passage justify each part of this claim?" If you have to add a word like "always", "everyone", or "the only reason", you have probably overreached.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise inference stems like "most justified", "most likely true", "best supported".',
+              'Treat an inference as the next conclusion the passage genuinely supports, not a guess.',
+              'Trace the clue → connection → conclusion chain before picking an option.',
+              'Prefer moderate, evidence-linked options over dramatic or extreme ones.',
+              'Reject options that need extra words like "always" or "only" to make sense.',
+            ],
           },
         ],
       },
@@ -692,6 +764,17 @@ export const MODULES = [
             correctIndex: 2,
             explanation: 'The author praises one element ("welcome transparency") and criticises another ("poor implementation"). Neither extreme captures the mixed view.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Distinguish the author\'s view from views the passage merely reports.',
+              'Track attribution phrases like "critics argue" or "according to" — those are not the author.',
+              'Read the final paragraph first when a question asks about author stance.',
+              'Use contrast words like "however" and "yet" to find the author\'s actual position.',
+              'Pick mixed-view options when the passage praises one element and criticises another.',
+            ],
+          },
         ],
       },
       {
@@ -756,6 +839,16 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Tick the supported options and pick what is left. Outsourced cleaning is not in the passage, so it is the EXCEPT answer.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Spot reversal words like NOT, EXCEPT, and "least justified" in the question stem.',
+              'Re-read the stem once before locking your answer on any negative item.',
+              'Tick each option the passage supports; the unticked one is your answer.',
+              'Avoid the trap of picking a supported option just because it feels right.',
+            ],
+          },
         ],
       },
       {
@@ -768,16 +861,12 @@ export const MODULES = [
         steps: [
           {
             title: 'What these questions look like',
-            body: 'Occasionally a VR question uses phrasing that does not match the standard formats. Do not let unfamiliar wording throw you — the underlying task is almost always something you already know how to do.',
+            body: 'Occasionally a VR question uses phrasing that does not match the standard formats. Do not let unfamiliar wording throw you — the underlying task is almost always something you already know how to do. Rare wording usually hides a familiar job: reduce it to a known type, then solve it.',
             bullets: [
               '"What does \'this\' refer to?" — a word reference question. The answer is usually nearby, often in the previous sentence.',
               '"Which new fact would most weaken the argument?" — an inference question in disguise. Test the passage\'s logic.',
               '"What is the primary purpose of the passage?" — an author opinion question. Read the final paragraph first.',
             ],
-          },
-          {
-            title: 'How to re-label rare wording',
-            body: 'Rare wording usually hides a familiar job. Reduce it to a known type, then solve it. Do not freeze just because the wording looks unfamiliar.',
           },
           {
             title: 'Two rare wording patterns you will meet',
@@ -809,6 +898,16 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'A "what would weaken or test the claim?" question is really an inference question. A control comparison directly tests whether the policy is the cause of the improvement.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Reduce unfamiliar wording to a known VR question type before answering.',
+              'Treat "what does this refer to?" as a local reference — check the previous sentence.',
+              'Treat "what would weaken or test the claim?" as an inference task in disguise.',
+              'Treat "the primary purpose of the passage" as an author-opinion task — read the final paragraph first.',
+            ],
           },
         ],
       },
@@ -885,6 +984,18 @@ export const MODULES = [
             title: 'Why your reading speed in school is not your reading speed for UCAT',
             body: 'School reading rewards depth and reflection. UCAT reading rewards speed plus precision on a small region. They are different skills. Practising on outside reading (BBC, Economist, New Scientist) trains the right habits before test day.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Use the 10-second skim of first sentences and the final paragraph for orientation.',
+              'Read in 2-4 word chunks instead of fixating on individual words.',
+              'Suppress subvocalisation on initial scans to read faster than speech speed.',
+              'Stop regressing — let later context fill gaps unless a question sends you back.',
+              'Activate background context to speed reading without letting it answer the question.',
+              'Reserve word-by-word reading for the exact local lines that decide the answer.',
+            ],
+          },
         ],
       },
       {
@@ -957,6 +1068,18 @@ export const MODULES = [
             correctIndex: 1,
             explanation: '"However" signals a contrast. The author\'s own evaluative claim comes after it — "early results are encouraging". The critics\' view is reported speech, not the author\'s position.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Keep the same approach regardless of passage topic — strategy does not change.',
+              'Use proper nouns, dates, and numbers as the strongest scan anchors in any passage.',
+              'Spot when an option upgrades correlation language into a direct cause.',
+              'Match the passage\'s strength: do not let "may" become "will" or "some" become "all".',
+              'Read contrast words like "however" and "yet" as signals of the author\'s real view.',
+              'Treat reported speech as someone else\'s view, not the author\'s, unless they endorse it.',
+            ],
+          },
         ],
       },
       {
@@ -1016,6 +1139,17 @@ export const MODULES = [
             title: 'Why verbs like "is" and "has" waste time',
             body: 'These appear in nearly every sentence, so they give you no signal about location. Train yourself to skip past them and lock onto distinctive nouns instead.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Choose strong anchors: dates, names, unusual nouns, contrast terms, technical phrases.',
+              'Avoid weak anchors like "the", "a", common verbs, or generic nouns.',
+              'Use a second anchor when the first appears too often in the passage.',
+              'Find the intersection of two anchors to pinpoint the right sentence.',
+              'Scan first to locate, then read locally to decide.',
+            ],
+          },
         ],
       },
       {
@@ -1035,12 +1169,8 @@ export const MODULES = [
             body: 'A correct paraphrase keeps the meaning; a distortion shifts the strength of the claim. Many wrong answers borrow the passage\'s idea but change one small word.',
           },
           {
-            title: 'Quantity words',
-            body: '"Some" does not mean "most". "Many" does not mean "all". Quantity words decide whether an option is right or wrong, even when everything else looks fine.',
-          },
-          {
-            title: 'Qualifier words',
-            body: '"May", "could", "often", "likely" all soften a claim. "Will", "must", "always" all harden it. Match the strength of the option to the strength in the passage.',
+            title: 'Quantity and qualifier words',
+            body: '"Some" does not mean "most". "Many" does not mean "all". Quantity words decide whether an option is right or wrong, even when everything else looks fine.\n\nQualifier words shift strength too: "may", "could", "often", "likely" all soften a claim; "will", "must", "always" all harden it. Match the strength of the option to the strength in the passage.',
           },
           {
             title: 'Definitive vs mitigating language',
@@ -1089,6 +1219,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'Definitive language ("always") raises the evidence bar. The passage almost never justifies it. Use this as a tiebreaker when guessing.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Tell a faithful paraphrase apart from one that shifts the claim\'s strength.',
+              'Match quantity exactly: "some" is not "most", "many" is not "all".',
+              'Match qualifier strength: "may" and "could" stay soft; "will" and "must" stay hard.',
+              'Spot the shared-idea-wrong-strength trap when two options look similar.',
+              'Use definitive vs mitigating language as a guessing tiebreaker.',
+            ],
           },
         ],
       },
@@ -1143,6 +1284,17 @@ export const MODULES = [
             ],
             correctIndex: 2,
             explanation: 'It feels obvious that road travel would increase, but that is outside knowledge. The passage says nothing about road travel, so the answer is Can\'t Tell.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Notice when your brain is filling gaps with real-world knowledge instead of the text.',
+              'Reject options that need an unstated assumption to work, no matter how small.',
+              'Run a 2-second self-check before submitting: can I point to the supporting line?',
+              'Treat familiar topics as the highest-risk passages, not the easiest.',
+              'Pick Can\'t Tell when a claim is true in life but absent from the passage.',
+            ],
           },
         ],
       },
@@ -1216,6 +1368,17 @@ export const MODULES = [
             ],
             correctIndex: 0,
             explanation: 'Same kind of fact (a percentage), wrong value. Number swap is the dedicated label for this very common trap.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the nine VR trap categories by name so you can recognise patterns.',
+              'Tag tempting wrong options with a trap label during review, not just "wrong".',
+              'Spot causation-vs-correlation, scope mismatch, and number-swap traps quickly.',
+              'Watch for dispersion, juxtaposition, and almost-right options on harder items.',
+              'Use these labels to train families of mistakes, not single questions.',
+            ],
           },
         ],
       },
@@ -1300,6 +1463,18 @@ export const MODULES = [
               'Have a pre-rehearsed plan for being 4 minutes behind.',
             ],
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Set a personal time threshold per question and stick to it under pressure.',
+              'Best-guess after eliminating two options instead of staring at a 50/50.',
+              'Use flag and move on as a protection device, not a substitute for deciding.',
+              'Triage a whole passage when it threatens the rest of the section.',
+              'Have a rehearsed contingency for being 4 minutes behind.',
+              'Protect easy and medium marks first — completion beats heroics.',
+            ],
+          },
         ],
       },
       {
@@ -1357,6 +1532,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: '(A) preserves the relationship type. (B) upgrades correlation to causation - the textbook trap. Naming it ("causation vs correlation") makes it easier to spot next time.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Find the right answer by rejecting the wrong three with clear reasons.',
+              'Test each option against the exact wording of the passage, not your memory.',
+              'Recognise too strong, too broad, partly true, and wrong location distractors.',
+              'Label each rejected distractor with one of the nine trap categories.',
+              'Reject partly-true options the same way as any other wrong answer.',
+            ],
           },
         ],
       },
@@ -1447,6 +1633,17 @@ export const MODULES = [
               'Log it in one line, no essays.',
               'Look for repeating labels across 20+ items.',
               'Open the matching lesson when one label dominates.',
+            ],
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Tag every miss with one of the nine review labels, not just "wrong".',
+              'Log a miss in a single line — pattern, not essay.',
+              'Look for repeating labels over 20+ items to spot real weaknesses.',
+              'Map each label back to its matching lesson when it dominates.',
+              'Track anxiety-induced errors separately so you can monitor them over time.',
             ],
           },
         ],
@@ -1696,6 +1893,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Lexical coverage builds gradually. Logging unfamiliar words during practice and reviewing them later raises your coverage in the topic areas UCAT favours.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Recognise that time pressure hits L2 readers harder, not that they are weaker.',
+              'Build lexical coverage in UCAT-friendly topics: science, history, current affairs.',
+              'Anticipate two or three synonyms for each question keyword before scanning.',
+              'Practise untimed reading on long-form sources first, then add the clock.',
+              'Log unfamiliar words during practice and review them afterwards.',
+            ],
+          },
         ],
       },
     ],
@@ -1848,7 +2056,10 @@ function StatusPill({ status, colors, isDark }) {
   );
 }
 
-function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked }) {
+const LessonCard = React.memo(function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked, lessonId, onSelectLesson }) {
+  const handlePress = onSelectLesson && lessonId
+    ? () => onSelectLesson(lessonId)
+    : onPress;
   const completed = status === 'completed';
   const active = status === 'inProgress' || status === 'next';
   const borderColor = completed
@@ -1861,7 +2072,7 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
   return (
     <TouchableOpacity
       activeOpacity={isLocked ? 1 : 0.84}
-      onPress={isLocked ? undefined : onPress}
+      onPress={isLocked ? undefined : handlePress}
       disabled={isLocked}
       style={[styles.lessonTouch, isLocked && styles.lessonTouchLocked]}
       accessibilityRole="button"
@@ -1918,16 +2129,17 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
       </View>
     </TouchableOpacity>
   );
-}
+});
 
-function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+const ModuleSection = React.memo(function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+  const handleToggle = useCallback(() => onToggle(module.id), [onToggle, module.id]);
   const accent = getAccent(colors, module.accentKey);
   const completedInModule = module.lessons.filter((lesson) => completedIds.includes(lesson.id)).length;
   const progress = completedInModule / module.lessons.length;
 
   return (
     <View style={styles.moduleSection}>
-      <TouchableOpacity activeOpacity={0.84} onPress={onToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
+      <TouchableOpacity activeOpacity={0.84} onPress={handleToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
         <View style={styles.moduleHeader}>
           <View style={[styles.moduleIcon, { backgroundColor: hexToRgba(accent, 0.12), borderColor: hexToRgba(accent, 0.34) }]}>
             <PremiumIcon name={module.icon} size={21} color={accent} strokeWidth={2.2} />
@@ -1968,7 +2180,8 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
                 isDark={isDark}
                 isPremium={PREMIUM_LESSON_TYPES.has(numberedLesson?.type) && !isPro}
                 isLocked={isLocked}
-                onPress={() => onSelectLesson(lesson.id)}
+                lessonId={lesson.id}
+                onSelectLesson={onSelectLesson}
               />
             );
           })}
@@ -1976,7 +2189,7 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
       ) : null}
     </View>
   );
-}
+});
 
 function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
   return (
@@ -2155,7 +2368,7 @@ export default function VerbalReasoningLearnScreen({ navigation }) {
               isDark={isDark}
               onSelectLesson={openLesson}
               expanded={!!expandedModules[module.id]}
-              onToggle={() => toggleModule(module.id)}
+              onToggle={toggleModule}
               isPro={isPro}
             />
           ))}

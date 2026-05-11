@@ -6,7 +6,7 @@ import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import PremiumIcon from './premium/PremiumIcon';
 import ReportQuestionModal from './ReportQuestionModal';
 
-export default function ReportLessonButton({ lessonId, lessonTitle, section, style }) {
+export default function ReportLessonButton({ lessonId, lessonTitle, section, partNumber, totalParts, style }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const [visible, setVisible] = useState(false);
@@ -40,6 +40,8 @@ export default function ReportLessonButton({ lessonId, lessonTitle, section, sty
         lessonId={lessonId}
         lessonTitle={lessonTitle}
         section={section}
+        partNumber={partNumber}
+        totalParts={totalParts}
       />
     </>
   );

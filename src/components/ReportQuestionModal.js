@@ -33,6 +33,8 @@ export default function ReportQuestionModal({
   section,
   testId = null,
   isTimed = false,
+  partNumber = null,
+  totalParts = null,
 }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
@@ -74,6 +76,8 @@ export default function ReportQuestionModal({
           section,
           reasons: selected,
           comment,
+          partNumber,
+          totalParts,
         })
       : await submitQuestionReport({
           questionId,

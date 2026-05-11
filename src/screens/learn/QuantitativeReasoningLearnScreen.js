@@ -93,6 +93,17 @@ export const MODULES = [
             title: 'Why time pressure is the real opponent',
             body: '36 questions in 26 minutes feels short because each question asks two things at once: read the data correctly AND choose the right operation. Both use working memory, which is why pacing feels tighter than the raw timer suggests.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know that QR is 36 questions in 26 minutes — about 43 seconds each.',
+              'Recognise the skills tested: percentages, ratios, rates, data reading, and translation.',
+              'Understand QR is not a school maths paper — no calculus, trig, or proofs.',
+              'See that the real challenge is choosing the right maths faster, not doing harder maths.',
+              'Know why working memory makes the time pressure feel tighter than the raw timer suggests.',
+            ],
+          },
         ],
       },
       {
@@ -139,6 +150,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Sets reuse the data — but each question asks something different',
             body: 'When several questions share one chart, do not re-scan the whole chart from scratch every time. Re-read the next stem first, decide what changed, and only re-look at the part of the data that matters.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'See every QR question as four layers: stem, data, conditions, and options.',
+              'Know that questions appear alone or in sets that share one data source.',
+              'Recognise the common data sources — tables, charts, scenarios, diagrams.',
+              'Always read the stem before studying the data source.',
+              'On sets, re-read the new stem and only re-look at the data slice that changed.',
+            ],
           },
         ],
       },
@@ -217,6 +239,18 @@ export const MODULES = [
               'If it is taking too long, flag and move on.',
             ],
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply the eight-step routine to every QR question.',
+              'Read the stem before looking at the data source.',
+              'Estimate first to catch mistypes and magnitude errors.',
+              'Spot the intermediate-value trap before locking in a short calculation.',
+              'Use the 1-minute rule: flag and move on rather than burning time.',
+              'Sense-check size and units against the answer options before clicking.',
+            ],
+          },
         ],
       },
       {
@@ -264,6 +298,17 @@ export const MODULES = [
             kind: 'rule',
             title: 'Use the tutor as soon as something is unclear',
             body: 'Do not power through a confusing explanation hoping it clicks later. Ask. The whole point of the tutor is to convert a confused minute into a learning minute.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know where the "Teach Me" button lives — at the bottom of every explanation.',
+              'Recognise the limits of static explanations and when to ask the tutor instead.',
+              'Know what kinds of follow-up questions the tutor can answer about a specific item.',
+              'Understand the free vs Premium limits on AI tutor messages.',
+              'Reach for the tutor as soon as something is unclear, not after powering through.',
+            ],
           },
         ],
       },
@@ -339,6 +384,18 @@ export const MODULES = [
             kind: 'tip',
             title: 'Practise on a full keyboard with a numpad before exam day',
             body: 'Laptop keyboards without a numpad train the wrong muscle memory. The numpad is significantly faster than typing numbers along the top row, and Num Lock must be ON for it to enter into the calculator.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the calculator processes left to right — 3 + 7 × 4 gives 40, not 31.',
+              'Remember Backspace wipes the whole entry, so type slowly the first time.',
+              'Re-click the calculator window if it loses focus before keyboard input registers.',
+              'Use MS, M+, MR, MC to hold intermediate values for chained calculations.',
+              'Use Alt + C to toggle the calculator and A–E to select options faster than the mouse.',
+              'Choose mental maths for simple percentages and the calculator for ugly decimals.',
+            ],
           },
         ],
       },
@@ -426,6 +483,17 @@ export const MODULES = [
             title: 'Why this saves whole questions worth of time',
             body: 'Across 36 QR questions, students who never built the anchor habit can lose 2-3 minutes opening the calculator for simple percentages. That is a whole question of saved time when the anchors become automatic.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Find 10% by moving the decimal one place left, and 1% by moving it two places.',
+              'Build any percentage by combining the 10% and 1% anchors.',
+              'Use the shortcuts: 25% = ÷4, 50% = ÷2, 12.5% = ÷8.',
+              'Apply the reciprocation trick: x% of y = y% of x — pick the easier direction.',
+              'Calculate awkward percentages like 35% of 240 in your head without the calculator.',
+            ],
+          },
         ],
       },
       {
@@ -486,6 +554,17 @@ export const MODULES = [
             correctIndex: 0,
             explanation: 'Subtracting two percentages directly gives "percentage points". The relative percentage change is 4 ÷ 30 × 100 ≈ 13.3%, which is a different question.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Increase by p% by multiplying by (1 + p/100); decrease by multiplying by (1 − p/100).',
+              'Calculate percentage change as (new − original) ÷ original × 100.',
+              'Always divide by the original value, never the new one, for percentage change.',
+              'Reverse a percentage by dividing by the multiplier — never subtract it back.',
+              'Distinguish percentage points from percent change — UCAT plants both as options.',
+            ],
+          },
         ],
       },
       {
@@ -498,11 +577,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'Successive percentage changes are one of the most-tested traps in all of QR. Students instinctively guess "no change" when a value goes up by 20% and then down by 20%. That is wrong every single time, and UCAT routinely places "0%" or "no change" in the answer options to catch them.',
-          },
-          {
-            title: 'Why successive percentages do not cancel',
-            body: 'The two percentages apply to different bases — the increase applies to the original; the decrease applies to the now-larger value. Different bases mean different absolute changes. The result is usually a net move unless one multiplier exactly reverses the other.',
+            body: 'Successive percentage changes are one of the most-tested traps in all of QR. Students instinctively guess "no change" when a value goes up by 20% and then down by 20%. That is wrong every single time, and UCAT routinely places "0%" or "no change" in the answer options to catch them.\n\nThe two percentages apply to different bases — the increase applies to the original; the decrease applies to the now-larger value. Different bases mean different absolute changes. The result is usually a net move unless one multiplier exactly reverses the other.',
           },
           {
             kind: 'rule',
@@ -541,6 +616,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'When successive percentages DO cancel',
             body: 'Only when one multiplier is the reciprocal of the other (e.g. ×1.25 and ×0.80, since 0.80 = 1 ÷ 1.25). The percentages will be different (+25% and −20%) — that is the giveaway. If the percentages are equal in size, they never cancel.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Convert each change to a multiplier and multiply them — never add the percentages.',
+              'Know that +20% then −20% gives a 4% loss, not zero change.',
+              'Reject "no change" answers when the two percentages are equal in size.',
+              'Recognise that successive percentages only cancel when the multipliers are reciprocals.',
+              'Apply multipliers in either order — they commute but still do not cancel.',
+            ],
           },
         ],
       },
@@ -604,6 +690,17 @@ export const MODULES = [
             options: ['1/5', '1/6', '1/7', '1/8'],
             correctIndex: 2,
             explanation: '14.3% is the decimal form of 1/7. Recognising the sevenths family on sight saves real time.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Convert fraction to decimal by dividing numerator by denominator.',
+              'Convert decimal to percentage by multiplying by 100; reverse by dividing by 100.',
+              'Recognise common equivalents on sight: halves, quarters, fifths, eighths, tenths.',
+              'Spot the sevenths family (14.3%, 28.6%, 42.9%...) in answer options.',
+              'Pick the friendliest form for the calculation — fractions for thirds, decimals for arithmetic.',
+            ],
           },
         ],
       },
@@ -672,6 +769,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Total parts = 3 + 7 = 10. The smaller part is 3 out of 10, i.e. 3/10. Not 3/7 (that would be smaller-to-larger, not smaller-to-whole).',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Split a total by summing the parts, finding one part, then scaling.',
+              'In a 4:1 ratio, the smaller part is 1/(4+1) = 1/5 of the whole, not 1/4.',
+              'Apply inverse proportion when more workers means less time: workers × time stays constant.',
+              'Distinguish direct from inverse proportion before scaling any quantity.',
+              'Simplify a ratio by dividing every part by the same number.',
+            ],
+          },
         ],
       },
       {
@@ -684,10 +792,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'In QR, "average" usually means mean unless the question says otherwise. This lesson covers mean, median, mode, range, working backwards from a mean to find a missing value, and combined samples — where two groups of different sizes are merged.',
-          },
-          {
-            title: 'The four basics',
+            body: 'In QR, "average" usually means mean unless the question says otherwise. This lesson covers mean, median, mode, range, working backwards from a mean to find a missing value, and combined samples — where two groups of different sizes are merged. The four basics:',
             bullets: [
               'Mean = total ÷ number of values.',
               'Median = middle value after sorting (or mean of two middles for an even count).',
@@ -734,6 +839,17 @@ export const MODULES = [
             options: ['65', '70', '75', '80'],
             correctIndex: 1,
             explanation: '(10 × 50 + 20 × 80) ÷ 30 = (500 + 1,600) ÷ 30 = 2,100 ÷ 30 = 70. The simple average of 50 and 80 is 65 — that would only be correct if the groups were the same size. Class B is twice as big, so the combined mean is pulled toward 80.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Calculate mean as total ÷ number of values.',
+              'Sort first, then take the middle, when finding the median.',
+              'Work backwards from a mean by computing total = mean × count.',
+              'Combine two group means by weighting each by group size, never by simple averaging.',
+              'Know range = maximum − minimum, and mode = most frequent value.',
+            ],
           },
         ],
       },
@@ -795,6 +911,17 @@ export const MODULES = [
             title: 'Always glance at the unit in the answer options',
             body: 'Before locking in an answer, check the unit. If options are in metres and you calculated in km, multiply by 1,000. UCAT often "dresses up" answer options in different units to catch careless readers.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the core conversions: 1 km = 1,000 m, 1 kg = 1,000 g, 1 L = 1,000 mL.',
+              'Convert time as 1 h = 60 min, 1 min = 60 s — and 1.5 h, not 1.30, for 1 h 30 min.',
+              'Convert first, then calculate — never work in mixed units.',
+              'Use 1 mile ≈ 1.6 km unless the question gives a different value.',
+              'Check the unit on the answer options before locking in.',
+            ],
+          },
         ],
       },
       {
@@ -807,10 +934,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'A rate compares quantities with different units. Speed is one example — distance per unit time. QR also hides rates inside cost per item, patients per hour, and output per worker. Strong rate questions usually become easy once you convert all units into one clean system.',
-          },
-          {
-            title: 'The core formulas',
+            body: 'A rate compares quantities with different units. Speed is one example — distance per unit time. QR also hides rates inside cost per item, patients per hour, and output per worker. Strong rate questions usually become easy once you convert all units into one clean system. The core formulas:',
             bullets: [
               'Speed = distance ÷ time.',
               'Distance = speed × time.',
@@ -859,6 +983,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Rule of thumb for multi-leg trips',
             body: 'For equal-distance legs at different speeds, the average is always less than the simple average of the speeds. Never click the simple average without checking.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Use speed = distance ÷ time, distance = speed × time, time = distance ÷ speed.',
+              'Calculate average speed as total distance ÷ total time — never average the leg speeds.',
+              'Convert units before calculating, especially minutes to a decimal fraction of an hour.',
+              'For equal-distance legs, the true average always falls below the simple average of speeds.',
+              'Find a unit rate by dividing the amount by the number of units.',
+            ],
           },
         ],
       },
@@ -925,6 +1060,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Compound earns interest on previous interest; simple does not. Over 10 years at 5%, compound is meaningfully ahead.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply simple interest as I = P × r × t.',
+              'Apply compound interest as A = P × (1 + r)ⁿ; gain = A − P.',
+              'Chain multiplications on the calculator since it has no power key.',
+              'Know that 5% compounded for 2 years gives 10.25%, not 10%.',
+              'Recognise that compound pulls ahead of simple over longer periods and higher rates.',
+            ],
+          },
         ],
       },
       {
@@ -981,6 +1127,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Top-band rates only apply to the income that falls within their band. Applying the top rate wholesale is the single most common progressive-calculation trap.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Work band by band — each rate applies only to the slice of value within its band.',
+              'Reject the wholesale-top-rate trap of multiplying full income by the highest rate.',
+              'Identify the slice of income that falls in each band before multiplying.',
+              'Sum the band totals to get total tax, cost, or commission.',
+              'Apply the same logic to tiered shipping, electricity tariffs, and commission structures.',
+            ],
+          },
         ],
       },
       {
@@ -993,10 +1150,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'QR algebra is always practical, never abstract. The aim is to isolate the unknown by undoing operations in reverse order. You will rarely see anything more complex than a two-step equation, usually disguised as pricing, averages, or "find the missing quantity".',
-          },
-          {
-            title: 'The core moves',
+            body: 'QR algebra is always practical, never abstract. The aim is to isolate the unknown by undoing operations in reverse order. You will rarely see anything more complex than a two-step equation, usually disguised as pricing, averages, or "find the missing quantity". The core moves:',
             bullets: [
               'If a number is added, subtract it.',
               'If a number is subtracted, add it.',
@@ -1036,6 +1190,17 @@ export const MODULES = [
             correctIndex: 2,
             explanation: 'Total needed = 5 × 14 = 70. Known total = 56. Fifth score = 70 − 56 = 14. Reverse-mean is the most common algebra disguise in QR.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Isolate the unknown by undoing operations in reverse order.',
+              'Apply the same change to both sides of the equation.',
+              'Solve two-step equations disguised as pricing, fees, or taxi fares.',
+              'Spot the reverse-mean disguise: total = mean × count, then subtract known values.',
+              'Substitute your answer back into the original equation to sanity-check it.',
+            ],
+          },
         ],
       },
       {
@@ -1048,10 +1213,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'QR geometry stays narrow and practical. The high-yield formulas are area and perimeter of rectangles, area of triangles, circumference and area of circles, and volume of cuboids and cylinders. UCAT typically expects π ≈ 3.14 unless the question gives a different value.',
-          },
-          {
-            title: 'Formulas to know',
+            body: 'QR geometry stays narrow and practical. The high-yield formulas are area and perimeter of rectangles, area of triangles, circumference and area of circles, and volume of cuboids and cylinders. UCAT typically expects π ≈ 3.14 unless the question gives a different value. Formulas to know:',
             bullets: [
               'Perimeter of rectangle = 2(l + w).',
               'Area of rectangle = l × w.',
@@ -1101,6 +1263,18 @@ export const MODULES = [
             kind: 'tip',
             title: 'Watch the diameter-vs-radius switch',
             body: 'UCAT often gives the value that needs converting first. If a question gives a diameter, halve it before using any formula that needs the radius, especially circle area. This single habit saves several easy marks.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Know the high-yield formulas: rectangle, triangle, circle, cuboid, cylinder.',
+              'Use ½ × base × height for triangle area, and π × r² for circle area.',
+              'Convert 1 m³ = 1,000 L (the most-tested geometry trap) — not 100 L.',
+              'Convert 1 m² = 10,000 cm², not 100 cm².',
+              'Halve the diameter before using any formula that needs the radius.',
+              'Use π ≈ 3.14 unless the question specifies otherwise.',
+            ],
           },
         ],
       },
@@ -1196,6 +1370,17 @@ export const MODULES = [
             kind: 'rule',
             title: 'In this app vs the real UCAT exam',
             body: 'In this app, tables and charts are wrapped in extra controls — "Tap to expand", pinch-zoom, and on graph questions a "Show values" toggle. These are ONLY here because phones have less screen space than the real UCAT computer. In the actual UCAT exam you will NOT be able to toggle values on or off, expand the chart, or pinch-zoom. The exam shows the chart at one fixed size on a desktop screen with no interactive controls. Treat the in-app extras as a reading aid for practice; do not build a habit of relying on them.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Apply the five-step table method: stem, row, column, unit, calculate.',
+              'Check the heading for multipliers like "values in thousands" before reading any cell.',
+              'Reduce rows to a unit rate before comparing prices on different quantities.',
+              'Read only the cells the question actually needs — ignore the rest of the table.',
+              'Treat in-app "Tap to expand" controls as a learning aid only; the real UCAT has none.',
+            ],
           },
         ],
       },
@@ -1327,6 +1512,18 @@ export const MODULES = [
             title: 'In this app vs the real UCAT exam',
             body: 'In this app, every chart sits inside extra controls — "Show values" to print numbers on bars and points, "Tap to expand" with pinch-zoom, and on multi-series charts you can tap a legend entry to hide or show a line. These are ONLY here because mobile screens are small and dense charts are hard to read; they are not part of the UCAT. In the actual UCAT exam you will NOT have a "Show values" toggle, expand-and-zoom, or interactive legends. The exam draws each chart at one fixed size on a desktop screen and you read every value off the gridlines yourself. Use the in-app aids while you learn the chart, but do not let yourself rely on them — practise reading values straight off the scale.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Read every chart in the same order: title, axes, scale, legend, target value.',
+              'Confirm what one gridline is worth before reading any bar or point.',
+              'Watch for axis multipliers like £k — a point at 8 means £8,000.',
+              'On dual-axis charts, match each series to its axis before reading any value.',
+              'Use the chart type to pick the right move: subtract for stacked, divide for pie.',
+              'Practise reading values off the gridlines, not the in-app "Show values" toggle.',
+            ],
+          },
         ],
       },
       {
@@ -1396,6 +1593,17 @@ export const MODULES = [
             kind: 'tip',
             title: 'Not every number in the question is useful',
             body: 'Word problems often give one or two numbers you do not need (a date, a count of products that are not relevant). Decide what the question is asking, then ignore the rest.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Translate keywords to operations: "difference" subtracts, "per" divides, "total" adds.',
+              'Read "X% cheaper" as (100 − X)% of the original price.',
+              'Ignore planted distractor numbers that the question does not actually need.',
+              'Apply the four-step method: question, useful numbers, ignore the rest, translate to operations.',
+              'Convert units before subtracting — 0.2 L = 200 mL, not 0.025.',
+            ],
           },
         ],
       },
@@ -1470,6 +1678,17 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Two minutes spent on one hard question is three other questions you did not finish. There is no negative marking, so a flagged guess is strictly better than a blank.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Break a multi-step problem into mini-steps before touching the calculator.',
+              'Store intermediate values in calculator memory (MS, MR) to free up working memory.',
+              'Spot the intermediate-value trap: re-read the stem before locking in a step-one result.',
+              'Apply the 1-minute rule — flag and guess instead of burning two minutes on one question.',
+              'Confirm "this is the final answer" before clicking, not "this matches an option".',
+            ],
+          },
         ],
       },
       {
@@ -1482,10 +1701,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'Official candidate advice explicitly recommends rounding to eliminate clearly wrong options. Not every QR question needs a perfect calculation. Estimation is especially powerful when the answer options are far apart, or when you mainly need to check whether the answer is closer to 200, 2,000, or 20,000.',
-          },
-          {
-            title: 'When estimation pays',
+            body: 'Official candidate advice explicitly recommends rounding to eliminate clearly wrong options. Not every QR question needs a perfect calculation. Estimation is especially powerful when the answer options are far apart, or when you mainly need to check whether the answer is closer to 200, 2,000, or 20,000. Estimation pays when:',
             bullets: [
               'Answer options are far apart in size.',
               'You only need to eliminate clearly wrong options.',
@@ -1530,6 +1746,17 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'A 5-second estimate is a free sanity check. If your calculator answer is wildly different from the estimate, you have probably mistyped — re-enter rather than locking in.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Estimate when answer options are far apart in size or magnitude.',
+              'Use a magnitude check to eliminate options that are an order of magnitude off.',
+              'Round each number to a friendly value before doing the precise calculation.',
+              'Use a 5-second estimate to sense-check a calculator answer for mistypes.',
+              'Switch to precise calculation when options are tightly clustered.',
+            ],
           },
         ],
       },
@@ -1617,6 +1844,17 @@ export const MODULES = [
               'Never leave a blank — there is no negative marking.',
             ],
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Run three passes across the 26 minutes: win-collection, rescue, then no-blanks.',
+              'Use Pass 1 for fast wins under 45 seconds; flag anything longer.',
+              'Cap Pass 2 rescues at 60 seconds per question before guessing.',
+              'Blanket-guess any blanks in the final 30 seconds — never leave one empty.',
+              'Treat 43 seconds per question as a budget across the section, not a target per item.',
+            ],
+          },
         ],
       },
       {
@@ -1629,10 +1867,7 @@ export const MODULES = [
         steps: [
           {
             title: 'What this lesson covers',
-            body: 'The five answer options tell you how much precision the question demands. After reading the question stem, confident students glance at the spread before calculating. If the options are far apart, an estimate suffices and the calculator stays closed. If the options are tightly clustered, you need precision and the calculator earns its time.',
-          },
-          {
-            title: 'Two patterns to recognise',
+            body: 'The five answer options tell you how much precision the question demands. After reading the question stem, confident students glance at the spread before calculating. If the options are far apart, an estimate suffices and the calculator stays closed. If the options are tightly clustered, you need precision and the calculator earns its time. Two patterns to recognise:',
             bullets: [
               'Far-apart options (e.g. 96, 480, 958, 1,960) → estimate. Round friendly, eliminate magnitude misfits, pick the survivor.',
               'Tightly clustered options (e.g. 982, 985, 988, 991) → calculate precisely. Estimation cannot separate them.',
@@ -1680,6 +1915,17 @@ export const MODULES = [
             options: ['98 and 105', '602 and 610', 'All four equally'],
             correctIndex: 1,
             explanation: 'Eliminate 98 and 105 by magnitude — they are five times too small. Then do the precise calculation to choose between 602 and 610.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Glance at the answer options before deciding to estimate or calculate.',
+              'Estimate when options are far apart; calculate precisely when they are tightly clustered.',
+              'Eliminate options that are an order of magnitude off without further checking.',
+              'Use the spread of options to choose whether the calculator is worth the seconds.',
+              'Narrow to the surviving options first, then put precision only where it matters.',
+            ],
           },
         ],
       },
@@ -1745,6 +1991,17 @@ export const MODULES = [
             title: 'Calculator as a comfort blanket',
             body: 'Many students reach for the calculator on every percentage out of habit. Do not. Build the anchor method until simple percentages are mental — that habit alone is worth multiple marks.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Pick the route that finishes fastest, not the one that feels safest.',
+              'Use mental maths for simple percentages (10%, 25%, 50%) and unit-rate comparisons.',
+              'Reach for the calculator on ugly decimals, chained operations, and tightly clustered options.',
+              'Stop using the calculator as a comfort blanket for every percentage.',
+              'Use estimation and answer elimination before committing to a precise calculation.',
+            ],
+          },
         ],
       },
       {
@@ -1809,6 +2066,18 @@ export const MODULES = [
             correctIndex: 1,
             explanation: 'Total parts = 4 + 1 = 5. Doctors are 1 of 5 parts = 1/5 of staff, not 1/4. Always sum the parts before reading off a fraction.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Name the common QR traps so you can spot them under time pressure.',
+              'Use the original value as the denominator for percentage change, never the new one.',
+              'Reject "no change" answers when two equal-size percentages are applied in succession.',
+              'Run pre-click checks: row, column, units, original value, intermediate vs final.',
+              'Distinguish percentage points from percent change — both will appear as options.',
+              'Sum the parts of a ratio before reading off any fraction of the whole.',
+            ],
+          },
         ],
       },
       {
@@ -1870,6 +2139,17 @@ export const MODULES = [
             ],
             correctIndex: 2,
             explanation: 'Half-way values are exactly where one extra digit of precision can change the option. Re-check before locking in — rounding cannot fix a wrong calculation.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Keep extra digits during working and round only at the very end.',
+              'Match the rounding precision to whatever the answer options use.',
+              'Re-check with full precision when your rough answer sits between two options.',
+              'Reject heavy mid-calculation rounding that can shift the answer to a wrong option.',
+              'Round money to 2 decimal places (or as the options show), not arbitrarily.',
+            ],
           },
         ],
       },
@@ -2080,6 +2360,17 @@ export const MODULES = [
             title: 'Watch the carry-over effect',
             body: 'When you switch between question types, your brain often carries the previous question\'s method into the next one. Reset before each item: read the stem fresh, identify the target, choose the method.',
           },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Switch quickly between percentages, ratios, tables, rates, and tax bands.',
+              'Reach for the right method per question rather than the previous question\'s method.',
+              'Apply learned shortcuts: 10%-and-1% anchors, ratio summing, unit rate, multiplier method.',
+              'Catch traps in mixed practice: successive percentages, average speed, intermediate values.',
+              'Reset between items — read the stem fresh and re-identify the target.',
+            ],
+          },
         ],
       },
       {
@@ -2157,6 +2448,18 @@ export const MODULES = [
             ],
             correctIndex: 1,
             explanation: 'Never leave blanks. Random guessing across five options has an expected value of +0.2 per question — across 4 unanswered, that is roughly 1 mark for free.',
+          },
+          {
+            kind: 'checklist',
+            title: 'What you have learned',
+            items: [
+              'Run pre-question checks: target, useful numbers, units, options, estimate, calculator.',
+              'Run pass discipline: collect easy marks first, rescue second, blanket-guess last.',
+              'Sense-check size and units against your estimate before trusting a calculator answer.',
+              'Flag and best-guess on long questions rather than pushing through sunk cost.',
+              'Never leave a blank — random guessing has an expected value of +0.2 per question.',
+              'Remember the one phrase: choose the right maths faster.',
+            ],
           },
         ],
       },
@@ -2314,7 +2617,10 @@ function StatusPill({ status, colors, isDark }) {
   );
 }
 
-function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked }) {
+const LessonCard = React.memo(function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium, isLocked, lessonId, onSelectLesson }) {
+  const handlePress = onSelectLesson && lessonId
+    ? () => onSelectLesson(lessonId)
+    : onPress;
   const completed = status === 'completed';
   const active = status === 'inProgress' || status === 'next';
   const borderColor = completed
@@ -2327,7 +2633,7 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
   return (
     <TouchableOpacity
       activeOpacity={isLocked ? 1 : 0.84}
-      onPress={isLocked ? undefined : onPress}
+      onPress={isLocked ? undefined : handlePress}
       disabled={isLocked}
       style={[styles.lessonTouch, isLocked && styles.lessonTouchLocked]}
       accessibilityRole="button"
@@ -2384,16 +2690,17 @@ function LessonCard({ lesson, status, accent, colors, isDark, onPress, isPremium
       </View>
     </TouchableOpacity>
   );
-}
+});
 
-function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+const ModuleSection = React.memo(function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark, onSelectLesson, expanded, onToggle, isPro }) {
+  const handleToggle = useCallback(() => onToggle(module.id), [onToggle, module.id]);
   const accent = getAccent(colors, module.accentKey);
   const completedInModule = module.lessons.filter((lesson) => completedIds.includes(lesson.id)).length;
   const progress = completedInModule / module.lessons.length;
 
   return (
     <View style={styles.moduleSection}>
-      <TouchableOpacity activeOpacity={0.84} onPress={onToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
+      <TouchableOpacity activeOpacity={0.84} onPress={handleToggle} accessibilityRole="button" accessibilityLabel={`${expanded ? 'Collapse' : 'Expand'} ${module.title}`}>
         <View style={styles.moduleHeader}>
           <View style={[styles.moduleIcon, { backgroundColor: hexToRgba(accent, 0.12), borderColor: hexToRgba(accent, 0.34) }]}>
             <PremiumIcon name={module.icon} size={21} color={accent} strokeWidth={2.2} />
@@ -2434,7 +2741,8 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
                 isDark={isDark}
                 isPremium={PREMIUM_LESSON_TYPES.has(numberedLesson?.type) && !isPro}
                 isLocked={isLocked}
-                onPress={() => onSelectLesson(lesson.id)}
+                lessonId={lesson.id}
+                onSelectLesson={onSelectLesson}
               />
             );
           })}
@@ -2442,7 +2750,7 @@ function ModuleSection({ module, completedIds, nextLessonNumber, colors, isDark,
       ) : null}
     </View>
   );
-}
+});
 
 function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
   const heroAccent = colors.purple ?? colors.blue;
@@ -2623,7 +2931,7 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
               isDark={isDark}
               onSelectLesson={openLesson}
               expanded={!!expandedModules[module.id]}
-              onToggle={() => toggleModule(module.id)}
+              onToggle={toggleModule}
               isPro={isPro}
             />
           ))}

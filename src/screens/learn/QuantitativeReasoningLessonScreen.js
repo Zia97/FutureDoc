@@ -12,21 +12,17 @@ import {
 
 import { useTheme } from '../../context/ThemeContext';
 import {
-  AppHeader,
   PremiumIcon,
   PremiumScreen,
-  PremiumScrollView,
-  RichIconBox,
   hexToRgba,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import {
   ALL_LESSONS,
   STORAGE_KEY,
-  TOTAL_LESSONS,
   VALID_LESSON_IDS,
 } from './QuantitativeReasoningLearnScreen';
-import ReportLessonButton from '../../components/ReportLessonButton';
+import LessonSlidePager from '../../components/lesson/LessonSlidePager';
 import { useAITutorAvailability } from '../../hooks/ai/useAITutorAvailability';
 import { useLessonTelemetry } from '../../hooks/useLessonTelemetry';
 import {
@@ -75,22 +71,6 @@ function PrimaryButton({ label, icon = 'chevron-right', onPress, color, disabled
   );
 }
 
-function ProgressBar({ progress, color, colors, isDark }) {
-  return (
-    <View
-      style={[
-        styles.progressTrack,
-        {
-          backgroundColor: isDark ? 'rgba(5, 12, 26, 0.64)' : 'rgba(219, 234, 254, 0.82)',
-          borderColor: colors.border,
-        },
-      ]}
-    >
-      <View style={[styles.progressFill, { width: `${Math.max(0, Math.min(progress, 1)) * 100}%`, backgroundColor: color }]} />
-    </View>
-  );
-}
-
 function BulletRow({ children, color, colors }) {
   return (
     <View style={styles.bulletRow}>
@@ -124,8 +104,6 @@ function CalloutCard({ badge, badgeColor, title, body, bullets, colors, isDark }
 }
 
 function CollapsibleTip({ title, body, bullets, accent, colors, isDark }) {
-  const [open, setOpen] = useState(false);
-
   return (
     <View
       style={[
@@ -136,24 +114,16 @@ function CollapsibleTip({ title, body, bullets, accent, colors, isDark }) {
         },
       ]}
     >
-      <TouchableOpacity
-        activeOpacity={0.84}
-        onPress={() => setOpen((prev) => !prev)}
-        style={styles.tipHeader}
-        accessibilityRole="button"
-      >
+      <View style={styles.tipHeader}>
         <PremiumIcon name="info" size={16} color={accent} strokeWidth={2.4} />
-        <Text style={[styles.tipTitle, { color: colors.text }]} numberOfLines={2}>{title}</Text>
-        <PremiumIcon name={open ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textMuted} strokeWidth={2.4} />
-      </TouchableOpacity>
-      {open ? (
-        <View style={styles.tipBody}>
-          {body ? <Text style={[styles.tipBodyText, { color: colors.textSecondary }]}>{body}</Text> : null}
-          {bullets?.map((item) => (
-            <BulletRow key={item} color={accent} colors={colors}>{item}</BulletRow>
-          ))}
-        </View>
-      ) : null}
+        <Text style={[styles.tipTitle, { color: colors.text }]}>{title}</Text>
+      </View>
+      <View style={styles.tipBody}>
+        {body ? <Text style={[styles.tipBodyText, { color: colors.textSecondary }]}>{body}</Text> : null}
+        {bullets?.map((item) => (
+          <BulletRow key={item} color={accent} colors={colors}>{item}</BulletRow>
+        ))}
+      </View>
     </View>
   );
 }
@@ -262,7 +232,7 @@ function MiniExampleCard({ prompt, options, correctIndex, explanation, accent, c
           <Text style={[styles.miniExplainText, { color: colors.textSecondary }]}>{explanation}</Text>
         </View>
       ) : (
-        <Text style={[styles.miniHint, { color: colors.textMuted }]}>Select an answer</Text>
+        <Text style={[styles.miniHint, { color: colors.textMuted }]}>Please answer the question to continue</Text>
       )}
     </View>
   );
@@ -577,52 +547,6 @@ function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, de
   );
 }
 
-function LessonHeader({ lesson, completed, completedCount, colors, isDark, accent, section }) {
-  return (
-    <View
-      style={[
-        styles.heroCard,
-        {
-          backgroundColor: isDark ? 'rgba(8, 20, 38, 0.78)' : 'rgba(255, 255, 255, 0.86)',
-          borderColor: hexToRgba(accent, 0.48),
-          shadowColor: accent,
-        },
-      ]}
-    >
-      <View style={styles.heroTop}>
-        <RichIconBox icon={lesson.icon} accent={accent} size={58} iconSize={29} />
-        <View style={styles.heroCopy}>
-          <Text style={[styles.eyebrow, { color: accent }]}>{lesson.moduleTitle} - Lesson {lesson.number}</Text>
-          <Text style={[styles.heroTitle, { color: colors.text }]}>{lesson.title}</Text>
-          <Text style={[styles.heroMeta, { color: colors.textMuted }]}>{lesson.duration} - {lesson.type}</Text>
-        </View>
-        <View style={styles.heroActions}>
-          <ReportLessonButton
-            section={section}
-            lessonId={lesson.id}
-            lessonTitle={lesson.title}
-          />
-          {completed ? (
-            <View style={[styles.completeBadge, { borderColor: hexToRgba(colors.mint, 0.42), backgroundColor: hexToRgba(colors.mint, 0.12) }]}>
-              <PremiumIcon name="check" size={17} color={colors.mint} strokeWidth={2.8} />
-            </View>
-          ) : null}
-        </View>
-      </View>
-
-      <Text style={[styles.heroBody, { color: colors.textSecondary }]}>{lesson.subtitle}</Text>
-
-      <View style={styles.progressHeader}>
-        <Text style={[styles.progressText, { color: colors.text }]}>
-          Path progress: {completedCount} / {TOTAL_LESSONS}
-        </Text>
-        <Text style={[styles.progressText, { color: accent }]}>Lesson {lesson.number}</Text>
-      </View>
-      <ProgressBar progress={completedCount / TOTAL_LESSONS} color={accent} colors={colors} isDark={isDark} />
-    </View>
-  );
-}
-
 function AllLessonsCompleteModal({ visible, colors, isDark, accent, onPractice, onTimed, onDismiss }) {
   return (
     <Modal transparent animationType="fade" visible={visible} onRequestClose={onDismiss}>
@@ -716,13 +640,18 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
   );
   const hasQuestions = interactiveIndices.length > 0;
   const [answeredIndices, setAnsweredIndices] = useState(new Set());
+  const lockedIndices = useMemo(
+    () => new Set(
+      lesson.steps
+        .map((step, i) => ((step.kind ?? 'step') === 'mini' && !answeredIndices.has(i) ? i : -1))
+        .filter((i) => i >= 0),
+    ),
+    [lesson.steps, answeredIndices],
+  );
   const [savedMiniAnswers, setSavedMiniAnswers] = useState({});
-  const [hasScrolledToBottom, setHasScrolledToBottom] = useState(false);
-  // Worked-example steps are "answered" when the user actually completes the
-  // example (lesson id is written to AsyncStorage from QRQuestionScreen on
-  // answer commit). The lesson screen picks that up via useFocusEffect.
+  const [hasReachedLastSlide, setHasReachedLastSlide] = useState(false);
   const allQuestionsAnswered = !hasQuestions
-    ? hasScrolledToBottom
+    ? hasReachedLastSlide
     : interactiveIndices.every((i) => {
         const kind = lesson.steps[i].kind ?? 'step';
         if (kind === 'workedExampleLaunch') return completed;
@@ -805,14 +734,9 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
     [demoLaunchIndex, answeredIndices, launchTutorDemo, tutorDemoEnabled],
   );
 
-  const handleScroll = useCallback(({ nativeEvent }) => {
-    if (!hasQuestions && !hasScrolledToBottom) {
-      const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
-      if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 40) {
-        setHasScrolledToBottom(true);
-      }
-    }
-  }, [hasQuestions, hasScrolledToBottom]);
+  const handleLastSlideReached = useCallback(() => {
+    setHasReachedLastSlide(true);
+  }, []);
 
   const markLessonComplete = useCallback(() => {
     setCompletedIds((current) => {
@@ -853,9 +777,8 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
   }, [navigation, nextLesson, openPractice]);
 
   return (
-    <PremiumScreen>
+    <PremiumScreen applyBottomInset>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
-      <AppHeader navigation={navigation} title="QR Lesson" />
 
       <AllLessonsCompleteModal
         visible={showAllDoneModal}
@@ -867,146 +790,63 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
         onDismiss={() => setShowAllDoneModal(false)}
       />
 
-      <PremiumScrollView
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
+      <LessonSlidePager
+        lesson={lesson}
+        navigation={navigation}
+        accent={accent}
+        section="qr"
+        renderBlock={renderBlock}
+        onQuestionAnswered={handleQuestionAnswered}
+        demoCtx={demoCtx}
+        workedExampleCtx={workedExampleCtx}
+        savedMiniAnswers={savedMiniAnswers}
+        onLastSlideReached={handleLastSlideReached}
+        lockedIndices={lockedIndices}
+      />
+
+      <View
+        style={[
+          styles.footerBar,
+          {
+            backgroundColor: isDark ? 'rgba(8, 20, 38, 0.94)' : 'rgba(255, 255, 255, 0.94)',
+            borderTopColor: colors.border,
+          },
+        ]}
       >
-        <LessonHeader
-          lesson={lesson}
-          completed={completed}
-          completedCount={completedIds.length}
-          colors={colors}
-          isDark={isDark}
-          accent={accent}
-          section="qr"
+        <PrimaryButton
+          label={nextLesson ? 'Continue to Next Lesson' : 'Start QR Practice'}
+          icon={completed ? (nextLesson ? 'chevron-right' : 'pencil') : 'lock'}
+          color={completed ? colors.cyan : colors.textMuted}
+          variant="outline"
+          disabled={!completed}
+          onPress={goToNextLesson}
         />
-
-        <View
-          style={[
-            styles.stepPanel,
-            {
-              backgroundColor: isDark ? 'rgba(8, 20, 38, 0.76)' : 'rgba(255, 255, 255, 0.86)',
-              borderColor: colors.border,
-            },
-          ]}
-        >
-          {lesson.steps.map((step, index) => renderBlock(step, index, accent, colors, isDark, handleQuestionAnswered, demoCtx, workedExampleCtx, savedMiniAnswers))}
-        </View>
-
-        <View style={styles.actionStack}>
+        {!completed && !hasQuestions ? (
+          <Text style={[styles.lockedHint, { color: colors.textMuted }]}>
+            Swipe through all parts to continue
+          </Text>
+        ) : null}
+        {prevLesson ? (
           <PrimaryButton
-            label={nextLesson ? 'Continue to Next Lesson' : 'Start QR Practice'}
-            icon={completed ? (nextLesson ? 'chevron-right' : 'pencil') : 'lock'}
-            color={completed ? colors.cyan : colors.textMuted}
+            label={`Previous: ${prevLesson.title}`}
+            icon="chevron-left"
+            color={colors.textMuted}
             variant="outline"
-            disabled={!completed}
-            onPress={goToNextLesson}
+            onPress={() => navigation.replace('LearnQRLesson', { lessonId: prevLesson.id })}
           />
-          {!completed ? (
-            <Text style={[styles.lockedHint, { color: colors.textMuted }]}>
-              {hasQuestions
-                ? 'Answer all questions above to continue'
-                : 'Scroll to the bottom to continue'}
-            </Text>
-          ) : null}
-          {prevLesson ? (
-            <PrimaryButton
-              label={`Previous: ${prevLesson.title}`}
-              icon="chevron-left"
-              color={colors.textMuted}
-              variant="outline"
-              onPress={() => navigation.replace('LearnQRLesson', { lessonId: prevLesson.id })}
-            />
-          ) : null}
-        </View>
-      </PremiumScrollView>
+        ) : null}
+      </View>
     </PremiumScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  heroCard: {
-    borderRadius: 24,
-    borderWidth: 1,
-    padding: 20,
-    marginTop: 4,
-    marginBottom: 18,
-    shadowOffset: { width: 0, height: 16 },
-    shadowOpacity: 0.16,
-    shadowRadius: 26,
-    elevation: 0,
-  },
-  heroTop: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 14,
-  },
-  heroCopy: {
-    flex: 1,
-    minWidth: 0,
-  },
-  heroActions: {
-    alignItems: 'center',
-    gap: 8,
-  },
-  eyebrow: {
-    fontSize: 11,
-    lineHeight: 15,
-    fontWeight: '900',
-  },
-  heroTitle: {
-    fontSize: 24,
-    lineHeight: 30,
-    fontWeight: '900',
-    marginTop: 4,
-  },
-  heroMeta: {
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '700',
-    marginTop: 5,
-  },
-  heroBody: {
-    fontSize: 15,
-    lineHeight: 22,
-    marginTop: 16,
-  },
-  completeBadge: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  progressHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-    marginTop: 18,
-    marginBottom: 9,
-  },
-  progressText: {
-    fontSize: 13,
-    lineHeight: 18,
-    fontWeight: '900',
-  },
-  progressTrack: {
-    height: 10,
-    borderRadius: 999,
-    borderWidth: 1,
-    overflow: 'hidden',
-  },
-  progressFill: {
-    height: '100%',
-    borderRadius: 999,
-  },
-  stepPanel: {
-    borderRadius: 22,
-    borderWidth: 1,
-    padding: 17,
-    marginBottom: 14,
+  footerBar: {
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: 12,
+    borderTopWidth: 1,
+    gap: 10,
   },
   stepCard: {
     borderRadius: 18,
@@ -1228,10 +1068,6 @@ const styles = StyleSheet.create({
     minWidth: 0,
     fontSize: 14,
     lineHeight: 20,
-  },
-  actionStack: {
-    gap: 10,
-    marginBottom: 8,
   },
   lockedHint: {
     fontSize: 12,
