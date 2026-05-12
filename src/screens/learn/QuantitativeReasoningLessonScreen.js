@@ -23,6 +23,7 @@ import {
   VALID_LESSON_IDS,
 } from './QuantitativeReasoningLearnScreen';
 import LessonSlidePager from '../../components/lesson/LessonSlidePager';
+import LessonIntroCard from '../../components/lesson/LessonIntroCard';
 import { useAITutorAvailability } from '../../hooks/ai/useAITutorAvailability';
 import { useLessonTelemetry } from '../../hooks/useLessonTelemetry';
 import {
@@ -395,6 +396,14 @@ function StepCard({ step, index, accent, colors, isDark }) {
 function renderBlock(step, index, accent, colors, isDark, onQuestionAnswered, demoCtx, workedExampleCtx, savedMiniAnswers) {
   const kind = step.kind ?? 'step';
 
+  if (kind === 'intro') {
+    return (
+      <View key={`intro-${index}`}>
+        <LessonIntroCard lesson={step.lesson} accent={accent} />
+      </View>
+    );
+  }
+
   if (kind === 'rule') {
     return (
       <View key={`rule-${index}`} style={index > 0 ? styles.blockSpacing : null}>
@@ -601,9 +610,16 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
   const { colors } = getPremiumTheme(isDark);
   const { demoEnabled: tutorDemoEnabled } = useAITutorAvailability();
   const routeLessonId = route.params?.lessonId;
-  const lesson = useMemo(
+  const baseLesson = useMemo(
     () => ALL_LESSONS.find((item) => item.id === routeLessonId) ?? ALL_LESSONS[0],
     [routeLessonId],
+  );
+  const lesson = useMemo(
+    () => ({
+      ...baseLesson,
+      steps: [{ kind: 'intro', lesson: baseLesson }, ...baseLesson.steps],
+    }),
+    [baseLesson],
   );
   const nextLesson = useMemo(
     () => ALL_LESSONS.find((item) => item.number === lesson.number + 1) ?? null,
@@ -660,6 +676,9 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
 
   useFocusEffect(useCallback(() => {
     let mounted = true;
+    setHasReachedLastSlide(false);
+    setAnsweredIndices(new Set());
+    setSavedMiniAnswers({});
     getStoredCompletedIds().then((ids) => {
       if (mounted) setCompletedIds(ids);
     });
@@ -667,13 +686,7 @@ export default function QuantitativeReasoningLessonScreen({ navigation, route })
       if (!mounted) return;
       setSavedMiniAnswers(map);
       const restoredIndices = Object.keys(map).map((k) => Number(k)).filter((n) => Number.isInteger(n));
-      if (restoredIndices.length) {
-        setAnsweredIndices((prev) => {
-          const next = new Set(prev);
-          restoredIndices.forEach((i) => next.add(i));
-          return next;
-        });
-      }
+      setAnsweredIndices(new Set(restoredIndices));
     });
     return () => {
       mounted = false;
