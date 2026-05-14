@@ -405,6 +405,10 @@ function QRQuestionScreenInner({ route, navigation }) {
         onCalculator={() => { timer.pause(); setCalcVisible(true); }}
         onBookmark={() => toggleBookmark(qid)}
         isBookmarked={isBookmarked(qid)}
+        onPrev={goPrev}
+        onNext={goNext}
+        isFirst={isFirst}
+        isLast={isLast}
         sectionColor={sectionColor}
       />
 

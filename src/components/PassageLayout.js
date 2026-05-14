@@ -210,6 +210,10 @@ export default function PassageLayout({
           }}
           onBookmark={() => toggleBookmark(qid)}
           isBookmarked={isBookmarked(qid)}
+          onPrev={goPrev}
+          onNext={goNext}
+          isFirst={isFirst}
+          isLast={isLast}
           sectionColor={sectionColor}
         />
       )}

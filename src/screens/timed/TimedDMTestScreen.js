@@ -224,6 +224,10 @@ export default function TimedDMTestScreen({ route, navigation }) {
         onNotes={() => setNotesVisible(true)}
         onCalculator={() => setCalcVisible(true)}
         onNavigator={() => setNavigatorVisible(true)}
+        onPrev={() => setCurrentIndex((i) => i - 1)}
+        onNext={isLast ? () => setShowReview(true) : () => setCurrentIndex((i) => i + 1)}
+        isFirst={isFirst}
+        isLast={false}
         sectionColor={sectionColor}
       />
 
@@ -242,6 +246,7 @@ export default function TimedDMTestScreen({ route, navigation }) {
         flags={flags}
         onNavigateTo={(idx) => setCurrentIndex(idx)}
         onClose={() => setNavigatorVisible(false)}
+        onReview={() => { setNavigatorVisible(false); setShowReview(true); }}
       />
     </PremiumQuestionScaffold>
   );

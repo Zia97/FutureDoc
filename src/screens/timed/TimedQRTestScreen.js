@@ -227,6 +227,10 @@ export default function TimedQRTestScreen({ route, navigation }) {
         onNotes={() => setNotesVisible(true)}
         onCalculator={() => setCalcVisible(true)}
         onNavigator={() => setNavigatorVisible(true)}
+        onPrev={goPrev}
+        onNext={isLast ? () => setShowReview(true) : goNext}
+        isFirst={isFirst}
+        isLast={false}
         sectionColor={sectionColor}
       />
 
@@ -245,6 +249,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
         flags={flags}
         onNavigateTo={(flatIndex) => { goTo(flatIndex); setNavigatorVisible(false); }}
         onClose={() => setNavigatorVisible(false)}
+        onReview={() => { setNavigatorVisible(false); setShowReview(true); }}
       />
     </PremiumQuestionScaffold>
   );

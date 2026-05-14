@@ -23,6 +23,7 @@ export default function TestNavigatorModal({
   flags,
   onNavigateTo,
   onClose,
+  onReview,
 }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
@@ -188,20 +189,44 @@ export default function TestNavigatorModal({
               <Text style={[styles.footerCount, { color: colors.textSecondary }]}>
                 {answeredCount} of {questions.length} answered
               </Text>
-              <TouchableOpacity
-                onPress={onClose}
-                activeOpacity={0.86}
-                style={styles.closeButtonWrap}
-              >
-                <LinearGradient
-                  colors={[colors.blue, hexToRgba(colors.blue, 0.78)]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.closeButton}
+              <View style={styles.footerActions}>
+                {onReview ? (
+                  <TouchableOpacity
+                    onPress={onReview}
+                    activeOpacity={0.86}
+                    style={styles.reviewButtonWrap}
+                    accessibilityRole="button"
+                    accessibilityLabel="Open review screen"
+                  >
+                    <View
+                      style={[
+                        styles.reviewButton,
+                        {
+                          borderColor: hexToRgba(colors.blue, 0.42),
+                          backgroundColor: hexToRgba(colors.blue, isDark ? 0.14 : 0.08),
+                        },
+                      ]}
+                    >
+                      <PremiumIcon name="list" size={14} color={colors.blue} strokeWidth={2.5} />
+                      <Text style={[styles.reviewText, { color: colors.blue }]}>Review screen</Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : null}
+                <TouchableOpacity
+                  onPress={onClose}
+                  activeOpacity={0.86}
+                  style={styles.closeButtonWrap}
                 >
-                  <Text style={styles.closeText}>Close</Text>
-                </LinearGradient>
-              </TouchableOpacity>
+                  <LinearGradient
+                    colors={[colors.blue, hexToRgba(colors.blue, 0.78)]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 1 }}
+                    style={styles.closeButton}
+                  >
+                    <Text style={styles.closeText}>Close</Text>
+                  </LinearGradient>
+                </TouchableOpacity>
+              </View>
             </View>
           </LinearGradient>
         </View>
@@ -391,10 +416,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderTopWidth: 1,
+    gap: 10,
   },
   footerCount: {
     fontSize: 13,
     fontWeight: '700',
+    flexShrink: 1,
+  },
+  footerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  reviewButtonWrap: {
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  reviewButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  reviewText: {
+    fontSize: 12,
+    fontWeight: '900',
+    letterSpacing: 0.3,
   },
   closeButtonWrap: {
     borderRadius: 12,

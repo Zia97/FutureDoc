@@ -463,6 +463,10 @@ function DMQuestionScreenInner({ route, navigation }) {
         onCalculator={() => { timer.pause(); setCalcVisible(true); }}
         onBookmark={() => toggleBookmark(question.id)}
         isBookmarked={isBookmarked(question.id)}
+        onPrev={goPrev}
+        onNext={goNext}
+        isFirst={isFirst}
+        isLast={isLast}
         sectionColor={sectionColor}
       />
 

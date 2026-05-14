@@ -5,14 +5,37 @@ import { useTheme } from '../context/ThemeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import PremiumIcon from './premium/PremiumIcon';
 
-export default function BottomToolbar({ onNotes, onCalculator, onPause, onNavigator, onBookmark, isBookmarked, sectionColor }) {
+export default function BottomToolbar({
+  onNotes,
+  onCalculator,
+  onPause,
+  onNavigator,
+  onBookmark,
+  isBookmarked,
+  onPrev,
+  onNext,
+  isFirst,
+  isLast,
+  sectionColor,
+}) {
   const insets = useSafeAreaInsets();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const accent = sectionColor ?? colors.blue;
   const iconColor = isDark ? '#FFFFFF' : '#0F172A';
 
+  const showNav = !!(onPrev || onNext);
+
   const actions = [
+    showNav ? {
+      key: 'prev',
+      icon: 'chevron-left',
+      onPress: onPrev,
+      label: 'Previous question',
+      disabled: !!isFirst,
+      iconColorOverride: isFirst ? colors.textMuted : accent,
+      borderOpacity: isFirst ? 0.16 : 0.34,
+    } : null,
     onPause ? { key: 'pause', icon: 'pause', onPress: onPause, label: 'Pause test' } : null,
     onBookmark ? {
       key: 'bookmark',
@@ -24,6 +47,15 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
     onNotes ? { key: 'notes', icon: 'notes', onPress: onNotes, label: 'Open notes' } : null,
     onCalculator ? { key: 'calculator', icon: 'calculator', onPress: onCalculator, label: 'Open calculator' } : null,
     onNavigator ? { key: 'navigator', icon: 'list', onPress: onNavigator, label: 'Open question navigator' } : null,
+    showNav ? {
+      key: 'next',
+      icon: 'chevron-right',
+      onPress: onNext,
+      label: 'Next question',
+      disabled: !!isLast,
+      iconColorOverride: isLast ? colors.textMuted : accent,
+      borderOpacity: isLast ? 0.16 : 0.34,
+    } : null,
   ].filter(Boolean);
 
   return (
@@ -43,11 +75,12 @@ export default function BottomToolbar({ onNotes, onCalculator, onPause, onNaviga
             style={[
               styles.button,
               {
-                borderColor: hexToRgba(accent, 0.34),
+                borderColor: hexToRgba(accent, action.borderOpacity ?? 0.34),
                 backgroundColor: hexToRgba(accent, isDark ? 0.12 : 0.08),
               },
             ]}
             onPress={action.onPress}
+            disabled={action.disabled}
             activeOpacity={0.8}
             accessibilityRole="button"
             accessibilityLabel={action.label}
@@ -72,8 +105,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    paddingHorizontal: 12,
-    gap: 10,
+    paddingHorizontal: 10,
+    gap: 6,
   },
   button: {
     width: 42,
