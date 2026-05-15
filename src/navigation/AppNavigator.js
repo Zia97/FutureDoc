@@ -148,13 +148,13 @@ function DisplayNameStack() {
   );
 }
 
-// Mounted whenever there's no signed-in user. SignUp is the landing screen —
-// every user must register before reaching the app.
+// Mounted whenever there's no signed-in user. Login is the landing screen;
+// users without an account tap through to SignUp.
 function AuthGateStack() {
   return (
-    <Stack.Navigator initialRouteName="SignUp" screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
+    <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
       <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} />
       <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
     </Stack.Navigator>
   );

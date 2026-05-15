@@ -91,15 +91,19 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     (async () => {
       const name = await refreshDisplayName(user);
-      // Promote a name staged at signup into user_profiles on first verified sign-in.
+      // Auto-populate display name on first verified sign-in. Sources, in order:
+      //   1. pending_display_name — staged during email/password signup
+      //   2. full_name / name — populated by Google OAuth (and other OIDC providers)
+      // Satisfies Apple App Store review guideline 4: never re-prompt for info
+      // an Authentication Services provider has already supplied.
       if (user && !name) {
-        const pending = user.user_metadata?.pending_display_name;
-        if (pending && pending.trim()) {
+        const meta = user.user_metadata ?? {};
+        const candidate = (meta.pending_display_name || meta.full_name || meta.name || '').trim();
+        if (candidate) {
           await supabase
             .from('user_profiles')
-            .update({ display_name: pending.trim() })
-            .eq('user_id', user.id);
-          setDisplayName(pending.trim());
+            .upsert({ user_id: user.id, display_name: candidate }, { onConflict: 'user_id' });
+          setDisplayName(candidate, user.id);
         }
       }
     })();
@@ -265,6 +269,21 @@ export function AuthProvider({ children }) {
       provider: 'apple',
       token: credential.identityToken,
     });
+
+    if (error) return { data, error };
+
+    // Apple returns fullName ONLY on the first sign-in for a given Apple ID,
+    // so write it straight into user_profiles. Skipping the display-name prompt
+    // satisfies App Store review guideline 4; users can still edit the name later
+    // from the Profile screen.
+    const fn = credential.fullName;
+    const composed = [fn?.givenName, fn?.familyName].filter(Boolean).join(' ').trim();
+    if (composed && data?.user?.id) {
+      await supabase
+        .from('user_profiles')
+        .upsert({ user_id: data.user.id, display_name: composed }, { onConflict: 'user_id' });
+      setDisplayName(composed, data.user.id);
+    }
 
     return { data, error };
   };
