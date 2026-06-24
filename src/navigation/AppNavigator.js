@@ -27,6 +27,7 @@ import {
 } from '../services/onboardingFlags';
 
 import MainTabs from './MainTabs';
+import WhatsNewModal from '../components/WhatsNewModal';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
 import PaywallScreen from '../screens/home/PaywallScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
@@ -85,7 +86,9 @@ function AppStack() {
   };
 
   return (
-    <Stack.Navigator initialRouteName="MainTabs" screenOptions={screenOptions}>
+    <>
+      <WhatsNewModal />
+      <Stack.Navigator initialRouteName="MainTabs" screenOptions={screenOptions}>
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
       <Stack.Screen name="LearnSections" component={LearnSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnVerbalReasoning" component={VerbalReasoningLearnScreen} options={{ headerShown: false }} />
@@ -129,6 +132,7 @@ function AppStack() {
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
+    </>
   );
 }
 

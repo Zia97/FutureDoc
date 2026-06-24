@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -22,6 +22,9 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import AppLogo from '../../components/AppLogo';
+
+// Must match the entitlement identifier in RevenueCat dashboard
+const ENTITLEMENT_ID = 'UCAT Genius AI Pro';
 
 const FEATURES = [
   'All mock tests unlocked',
@@ -89,10 +92,35 @@ function FeatureRow({ text, colors }) {
 export default function PaywallScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
-  const { offerings, purchasePackage, restorePurchases, isPro } = useSubscription();
+  const {
+    offerings,
+    purchasePackage,
+    restorePurchases,
+    isPro,
+    hasUsedTrial,
+    claimTrial,
+    customerInfo,
+  } = useSubscription();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState('season');
   const [loading, setLoading] = useState(false);
+
+  // Derive trial states
+  const activeEntitlement = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
+  const isOnTrial = isPro && hasUsedTrial && activeEntitlement?.periodType === 'PROMOTIONAL';
+  const trialAvailable = !isPro && !hasUsedTrial;
+  const trialExpired = !isPro && hasUsedTrial;
+
+  // Auto-select the trial card when the user is eligible
+  useEffect(() => {
+    if (trialAvailable) setSelected('trial');
+  }, [trialAvailable]);
+
+  // If trial was selected but we discover it's already expired (async load),
+  // fall back to the best-value paid plan
+  useEffect(() => {
+    if (trialExpired && selected === 'trial') setSelected('season');
+  }, [trialExpired, selected]);
 
   const plans = useMemo(() => {
     if (!offerings?.availablePackages?.length) return [];
@@ -118,6 +146,27 @@ export default function PaywallScreen({ navigation }) {
   const accent = colors.cyan;
 
   const handleSubscribe = async () => {
+    if (selected === 'trial') {
+      setLoading(true);
+      try {
+        await claimTrial();
+        Alert.alert(
+          'Trial Started',
+          'Your 3-day free trial is now active. Enjoy full premium access!',
+          [{ text: "Let's go!", onPress: () => navigation.goBack() }],
+        );
+      } catch (err) {
+        const msgs = {
+          trial_already_claimed: 'You have already used your free trial.',
+          already_premium: 'You already have premium access.',
+        };
+        Alert.alert('Trial Unavailable', msgs[err.message] ?? 'Something went wrong. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+      return;
+    }
+
     if (!selectedPlan?.pkg) {
       Alert.alert('Not Available', 'Subscriptions are not available yet. Please try again later.');
       return;
@@ -166,9 +215,13 @@ export default function PaywallScreen({ navigation }) {
         <MedicalBackgroundPattern colors={colors} isDark={isDark} />
         <View style={styles.proActiveContainer}>
           <LogoMark colors={colors} size={82} />
-          <Text style={[styles.proActiveTitle, { color: colors.text }]}>You're Premium</Text>
+          <Text style={[styles.proActiveTitle, { color: colors.text }]}>
+            {isOnTrial ? 'Trial Active' : "You're Premium"}
+          </Text>
           <Text style={[styles.proActiveSubtitle, { color: colors.textSecondary }]}>
-            Full access is active on this account.
+            {isOnTrial
+              ? 'Your 3-day free trial is running. Full access is unlocked.'
+              : 'Full access is active on this account.'}
           </Text>
           <TouchableOpacity
             style={[styles.ctaButton, { shadowColor: accent }]}
@@ -249,6 +302,66 @@ export default function PaywallScreen({ navigation }) {
               <ActivityIndicator color={accent} />
             </View>
           ) : null}
+
+          {/* Free trial card */}
+          {trialAvailable ? (
+            <TouchableOpacity
+              style={styles.planTouch}
+              onPress={() => setSelected('trial')}
+              activeOpacity={0.84}
+              accessibilityRole="button"
+              accessibilityState={{ selected: selected === 'trial' }}
+            >
+              <View style={[styles.planTag, { backgroundColor: colors.mint }]}>
+                <Text style={styles.planTagText}>FREE</Text>
+              </View>
+              <LinearGradient
+                colors={selected === 'trial'
+                  ? [hexToRgba(colors.mint, isDark ? 0.18 : 0.1), isDark ? 'rgba(10, 27, 52, 0.94)' : 'rgba(255, 255, 255, 0.94)']
+                  : [isDark ? 'rgba(8, 20, 38, 0.78)' : 'rgba(255, 255, 255, 0.84)', isDark ? 'rgba(5, 13, 29, 0.88)' : 'rgba(241, 247, 255, 0.9)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.planCard, { borderColor: selected === 'trial' ? hexToRgba(colors.mint, 0.62) : colors.border }]}
+              >
+                <View style={[styles.accentStripe, { backgroundColor: colors.mint }]} />
+                <View style={[styles.radio, { borderColor: selected === 'trial' ? colors.mint : colors.border }]}>
+                  {selected === 'trial' ? <View style={[styles.radioFill, { backgroundColor: colors.mint }]} /> : null}
+                </View>
+                <View style={styles.planInfo}>
+                  <Text style={[styles.planLabel, { color: colors.text }]}>3-Day Free Trial</Text>
+                  <Text style={[styles.planDescription, { color: colors.textSecondary }]}>No card required</Text>
+                </View>
+                <View style={styles.planPriceBlock}>
+                  <Text style={[styles.planPrice, { color: colors.mint }]}>FREE</Text>
+                  <Text style={[styles.planPeriod, { color: colors.textMuted }]}>3 days</Text>
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : trialExpired ? (
+            <View style={[styles.planTouch, styles.trialExpiredRow]}>
+              <View style={[styles.planTag, { backgroundColor: colors.textMuted }]}>
+                <Text style={styles.planTagText}>EXPIRED</Text>
+              </View>
+              <LinearGradient
+                colors={[isDark ? 'rgba(8, 20, 38, 0.78)' : 'rgba(255, 255, 255, 0.84)', isDark ? 'rgba(5, 13, 29, 0.88)' : 'rgba(241, 247, 255, 0.9)']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={[styles.planCard, { borderColor: colors.border }]}
+              >
+                <View style={[styles.accentStripe, { backgroundColor: colors.textMuted }]} />
+                <View style={[styles.radio, { borderColor: colors.border }]} />
+                <View style={styles.planInfo}>
+                  <Text style={[styles.planLabel, { color: colors.textSecondary }]}>3-Day Free Trial</Text>
+                  <Text style={[styles.planDescription, { color: colors.textMuted }]}>Already used</Text>
+                </View>
+                <View style={styles.planPriceBlock}>
+                  <Text style={[styles.planPeriod, { color: colors.textMuted }]}>Used</Text>
+                </View>
+              </LinearGradient>
+            </View>
+          ) : null}
+
+          {/* Paid plans */}
           {plans.map((plan) => {
             const isSelected = selected === plan.id;
             const cardAccent = plan.id === 'season' ? colors.mint : isSelected ? accent : colors.blue;
@@ -317,6 +430,11 @@ export default function PaywallScreen({ navigation }) {
           <LinearGradient colors={[colors.blue, colors.cyan]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.ctaGradient}>
             {loading ? (
               <ActivityIndicator color="#ffffff" />
+            ) : selected === 'trial' ? (
+              <>
+                <PremiumIcon name="lock" size={18} color="#ffffff" strokeWidth={2.4} />
+                <Text style={styles.ctaText}>Start Free Trial</Text>
+              </>
             ) : (
               <>
                 <PremiumIcon name="lock" size={18} color="#ffffff" strokeWidth={2.4} />
@@ -434,6 +552,9 @@ const styles = StyleSheet.create({
   },
   planTouch: {
     borderRadius: 20,
+  },
+  trialExpiredRow: {
+    opacity: 0.45,
   },
   planCard: {
     minHeight: 82,

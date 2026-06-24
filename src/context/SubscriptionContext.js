@@ -20,6 +20,7 @@ export function SubscriptionProvider({ children }) {
   const { user } = useAuth();
   const [isPro, setIsPro] = useState(false);
   const [adminOverride, setAdminOverride] = useState(false);
+  const [hasUsedTrial, setHasUsedTrial] = useState(false);
   const [offerings, setOfferings] = useState(null);
   const [customerInfo, setCustomerInfo] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -33,18 +34,12 @@ export function SubscriptionProvider({ children }) {
     [],
   );
 
-  // Sync is_premium flag to Supabase user_profiles
-  async function syncPremiumToSupabase(isPremium) {
-    if (!user?.id) return;
-    try {
-      await supabase
-        .from('user_profiles')
-        .update({ is_premium: isPremium })
-        .eq('user_id', user.id);
-    } catch (err) {
-      reportError('SubscriptionContext', err, { level: 'error', extra: { note: 'syncPremiumToSupabase failed' } });
-    }
-  }
+  // NOTE: is_premium in Supabase is written ONLY by the `revenuecat-webhook`
+  // edge function (service role). The client never writes it — the
+  // user_profiles_protect_privileged_columns trigger blocks non-service-role
+  // writes anyway. RevenueCat is the single source of truth: the app gates
+  // features on `isPro` (derived from customerInfo), and the DB flag is just
+  // a server-side mirror so we can see who's subscribed.
 
   // Initialise RevenueCat SDK
   useEffect(() => {
@@ -80,7 +75,6 @@ export function SubscriptionProvider({ children }) {
       setCustomerInfo(info);
       const premium = checkEntitlement(info);
       setIsPro(premium || adminOverride);
-      syncPremiumToSupabase(premium);
     };
 
     Purchases.addCustomerInfoUpdateListener(listener);
@@ -125,15 +119,16 @@ export function SubscriptionProvider({ children }) {
         reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'getCustomerInfo failed' } });
       }
 
-      // 2. Check admin override from Supabase
+      // 2. Check admin override + trial state from Supabase
       let isAdmin = false;
       try {
         const { data } = await supabase
           .from('user_profiles')
-          .select('is_admin')
+          .select('is_admin, trial_claimed_at')
           .eq('user_id', user.id)
           .single();
         isAdmin = !!data?.is_admin;
+        setHasUsedTrial(data?.trial_claimed_at !== null && data?.trial_claimed_at !== undefined);
       } catch (err) {
         reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'checkAdmin failed' } });
       }
@@ -141,7 +136,6 @@ export function SubscriptionProvider({ children }) {
       // 3. User is pro if RevenueCat subscriber OR admin
       setAdminOverride(isAdmin);
       setIsPro(premium || isAdmin);
-      syncPremiumToSupabase(premium);
     }
     identify();
   }, [user?.id]);
@@ -152,7 +146,6 @@ export function SubscriptionProvider({ children }) {
       setCustomerInfo(info);
       const premium = checkEntitlement(info);
       setIsPro(premium || adminOverride);
-      syncPremiumToSupabase(premium);
     } catch (err) {
       reportError('SubscriptionContext', err, { level: 'error', extra: { note: 'checkSubscription failed' } });
     }
@@ -172,7 +165,6 @@ export function SubscriptionProvider({ children }) {
     setCustomerInfo(info);
     const premium = checkEntitlement(info);
     setIsPro(premium || adminOverride);
-    if (premium) syncPremiumToSupabase(true);
     return premium;
   }
 
@@ -181,7 +173,6 @@ export function SubscriptionProvider({ children }) {
     setCustomerInfo(info);
     const premium = checkEntitlement(info);
     setIsPro(premium || adminOverride);
-    syncPremiumToSupabase(premium);
     return premium;
   }
 
@@ -202,6 +193,24 @@ export function SubscriptionProvider({ children }) {
     return result;
   }
 
+  // Claim a free 3-day trial via the claim-trial edge function.
+  // Resolves true on success, throws on failure.
+  async function claimTrial() {
+    const { data: { session } } = await supabase.auth.getSession();
+    const res = await supabase.functions.invoke('claim-trial', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${session?.access_token}` },
+    });
+    if (res.error || res.data?.error) {
+      throw new Error(res.data?.error ?? res.error?.message ?? 'claim_failed');
+    }
+    setHasUsedTrial(true);
+    // RC will fire the TEMPORARY_ENTITLEMENT_GRANT webhook which updates
+    // is_premium in DB. Refresh customerInfo so isPro flips immediately.
+    await checkSubscription();
+    return true;
+  }
+
   // Present RevenueCat Customer Center (manage/cancel subscription)
   async function presentCustomerCenter() {
     await RevenueCatUI.presentCustomerCenter();
@@ -212,12 +221,14 @@ export function SubscriptionProvider({ children }) {
     <SubscriptionContext.Provider
       value={{
         isPro,
+        hasUsedTrial,
         offerings,
         customerInfo,
         loading,
         purchasePackage,
         restorePurchases,
         checkSubscription,
+        claimTrial,
         presentPaywall,
         presentPaywallIfNeeded,
         presentCustomerCenter,
