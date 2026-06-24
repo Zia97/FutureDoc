@@ -15,7 +15,6 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const ENTITLEMENT_ID = 'UCAT Genius AI Pro';
-const TRIAL_DURATION = 'THREE_DAY';
 
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -83,7 +82,7 @@ Deno.serve(async (req) => {
         'Authorization': `Bearer ${rcSecretKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ duration: TRIAL_DURATION }),
+      body: JSON.stringify({ duration: 'daily' }),
     });
   } catch (err) {
     console.error('claim-trial: RC API network error', err);

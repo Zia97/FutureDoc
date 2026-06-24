@@ -14,7 +14,7 @@ const WHATS_NEW_KEY = 'whats_new_seen_v1';
 const UPDATES = [
   {
     icon: '🎁',
-    text: 'Try UCAT Genius Premium for free with a 3-day trial. No commitment or payment details required. Just give it a go!',
+    text: 'Try UCAT Genius Premium completely free. No commitment or payment details required. Just give it a go!',
   },
   {
     icon: '🐛',

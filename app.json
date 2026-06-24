@@ -3,7 +3,7 @@
     "name": "UCAT Genius",
     "slug": "ucat-genius-ai",
     "scheme": "ucatgeniusai",
-    "version": "1.0.0",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,7 +16,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.qhz123.ucatgeniusai",
-      "buildNumber": "1",
+      "buildNumber": "19",
       "usesAppleSignIn": true,
       "config": {
         "usesNonExemptEncryption": false

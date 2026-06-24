@@ -47,7 +47,7 @@ export default function ProfileScreen() {
   const { user, signOut, deleteAccount, displayName, updatePassword, saveDisplayName } = useAuth();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const { isPro, presentCustomerCenter } = useSubscription();
+  const { isPro, isOnTrial, presentCustomerCenter } = useSubscription();
 
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
@@ -275,7 +275,7 @@ export default function ProfileScreen() {
                   color={isPro ? proAccent : accountAccent}
                 />
                 <Text style={[styles.pillText, { color: isPro ? proAccent : accountAccent }]}>
-                  {isPro ? 'Premium' : 'Free Plan'}
+                  {isOnTrial ? 'Free Trial' : isPro ? 'Premium' : 'Free Plan'}
                 </Text>
               </View>
 
@@ -302,7 +302,28 @@ export default function ProfileScreen() {
         {/* Subscription */}
         <Animated.View style={[styles.section, subAnim]}>
           <Text style={[styles.sectionHeading, { color: colors.text }]}>Subscription</Text>
-          {isPro ? (
+          {isOnTrial ? (
+            <>
+              <GlassMenuCard
+                title="Free Trial Active"
+                description="You have full premium access during your trial."
+                icon="shield-heart"
+                accent={proAccent}
+                highlighted
+                badge="Trial"
+                showChevron={false}
+              />
+              <GlassMenuCard
+                title="Upgrade to Premium"
+                description="Keep your access after the trial — subscribe or unlock full access."
+                icon="shield-heart"
+                accent={colors.cyan}
+                highlighted
+                badge="Upgrade"
+                onPress={() => navigation.navigate('Paywall')}
+              />
+            </>
+          ) : isPro ? (
             <>
               <GlassMenuCard
                 title="Premium Plan"

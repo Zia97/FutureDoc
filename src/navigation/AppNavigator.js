@@ -28,6 +28,7 @@ import {
 
 import MainTabs from './MainTabs';
 import WhatsNewModal from '../components/WhatsNewModal';
+import TrialExpiredModal from '../components/TrialExpiredModal';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
 import PaywallScreen from '../screens/home/PaywallScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
@@ -88,6 +89,7 @@ function AppStack() {
   return (
     <>
       <WhatsNewModal />
+      <TrialExpiredModal />
       <Stack.Navigator initialRouteName="MainTabs" screenOptions={screenOptions}>
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
       <Stack.Screen name="LearnSections" component={LearnSectionsScreen} options={{ headerShown: false }} />

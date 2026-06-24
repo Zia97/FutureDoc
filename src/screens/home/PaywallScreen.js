@@ -23,9 +23,6 @@ import {
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import AppLogo from '../../components/AppLogo';
 
-// Must match the entitlement identifier in RevenueCat dashboard
-const ENTITLEMENT_ID = 'UCAT Genius AI Pro';
-
 const FEATURES = [
   'All mock tests unlocked',
   'Full practice bank across VR, DM, QR, and SJ',
@@ -97,17 +94,20 @@ export default function PaywallScreen({ navigation }) {
     purchasePackage,
     restorePurchases,
     isPro,
+    isOnTrial,
     hasUsedTrial,
     claimTrial,
-    customerInfo,
   } = useSubscription();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState('season');
   const [loading, setLoading] = useState(false);
 
-  // Derive trial states
-  const activeEntitlement = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
-  const isOnTrial = isPro && hasUsedTrial && activeEntitlement?.periodType === 'PROMOTIONAL';
+  // Paid subscribers see the "you're premium" screen. Trial users are premium
+  // too, but must still be able to buy a real subscription — so they fall
+  // through to the plan list below instead of being blocked here.
+  const isPaidPro = isPro && !isOnTrial;
+
+  // Derive trial states for the trial card
   const trialAvailable = !isPro && !hasUsedTrial;
   const trialExpired = !isPro && hasUsedTrial;
 
@@ -152,7 +152,7 @@ export default function PaywallScreen({ navigation }) {
         await claimTrial();
         Alert.alert(
           'Trial Started',
-          'Your 3-day free trial is now active. Enjoy full premium access!',
+          'Your free trial is now active. Enjoy full premium access!',
           [{ text: "Let's go!", onPress: () => navigation.goBack() }],
         );
       } catch (err) {
@@ -207,7 +207,7 @@ export default function PaywallScreen({ navigation }) {
     }
   };
 
-  if (isPro) {
+  if (isPaidPro) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.bgBottom }]} edges={['top']}>
         <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
@@ -215,13 +215,9 @@ export default function PaywallScreen({ navigation }) {
         <MedicalBackgroundPattern colors={colors} isDark={isDark} />
         <View style={styles.proActiveContainer}>
           <LogoMark colors={colors} size={82} />
-          <Text style={[styles.proActiveTitle, { color: colors.text }]}>
-            {isOnTrial ? 'Trial Active' : "You're Premium"}
-          </Text>
+          <Text style={[styles.proActiveTitle, { color: colors.text }]}>You're Premium</Text>
           <Text style={[styles.proActiveSubtitle, { color: colors.textSecondary }]}>
-            {isOnTrial
-              ? 'Your 3-day free trial is running. Full access is unlocked.'
-              : 'Full access is active on this account.'}
+            Full access is active on this account.
           </Text>
           <TouchableOpacity
             style={[styles.ctaButton, { shadowColor: accent }]}
@@ -274,11 +270,32 @@ export default function PaywallScreen({ navigation }) {
         <View style={styles.header}>
           <LogoMark colors={colors} />
           <Text style={[styles.eyebrow, { color: accent }]}>UCAT GENIUS PREMIUM</Text>
-          <Text style={[styles.title, { color: colors.text }]}>Unlock full access</Text>
+          <Text style={[styles.title, { color: colors.text }]}>
+            {isOnTrial ? 'Upgrade your access' : 'Unlock full access'}
+          </Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Everything you need to learn, practise, review, and improve across all UCAT sections.
+            {isOnTrial
+              ? 'Your free trial is active. Subscribe any time to keep full access when it ends.'
+              : 'Everything you need to learn, practise, review, and improve across all UCAT sections.'}
           </Text>
         </View>
+
+        {isOnTrial ? (
+          <View
+            style={[
+              styles.trialBanner,
+              {
+                backgroundColor: hexToRgba(colors.mint, isDark ? 0.12 : 0.1),
+                borderColor: hexToRgba(colors.mint, 0.4),
+              },
+            ]}
+          >
+            <PremiumIcon name="check" size={16} color={colors.mint} strokeWidth={2.6} />
+            <Text style={[styles.trialBannerText, { color: colors.text }]}>
+              Free trial active — pick a plan below to continue after it ends.
+            </Text>
+          </View>
+        ) : null}
 
         <View
           style={[
@@ -328,12 +345,12 @@ export default function PaywallScreen({ navigation }) {
                   {selected === 'trial' ? <View style={[styles.radioFill, { backgroundColor: colors.mint }]} /> : null}
                 </View>
                 <View style={styles.planInfo}>
-                  <Text style={[styles.planLabel, { color: colors.text }]}>3-Day Free Trial</Text>
+                  <Text style={[styles.planLabel, { color: colors.text }]}>Free Trial</Text>
                   <Text style={[styles.planDescription, { color: colors.textSecondary }]}>No card required</Text>
                 </View>
                 <View style={styles.planPriceBlock}>
                   <Text style={[styles.planPrice, { color: colors.mint }]}>FREE</Text>
-                  <Text style={[styles.planPeriod, { color: colors.textMuted }]}>3 days</Text>
+                  <Text style={[styles.planPeriod, { color: colors.textMuted }]}>Limited time</Text>
                 </View>
               </LinearGradient>
             </TouchableOpacity>
@@ -555,6 +572,22 @@ const styles = StyleSheet.create({
   },
   trialExpiredRow: {
     opacity: 0.45,
+  },
+  trialBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 9,
+    borderRadius: 14,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    marginBottom: 18,
+  },
+  trialBannerText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 18,
+    fontWeight: '700',
   },
   planCard: {
     minHeight: 82,

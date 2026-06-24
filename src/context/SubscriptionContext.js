@@ -34,6 +34,13 @@ export function SubscriptionProvider({ children }) {
     [],
   );
 
+  // True when the active entitlement is the promotional (free trial) grant
+  // rather than a paid purchase. RevenueCat marks promotional grants with
+  // periodType === 'PROMOTIONAL'. Trial users have full premium access but
+  // are NOT paying — so the UI must still offer them the paywall to upgrade.
+  const activeEntitlement = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
+  const isOnTrial = isPro && !adminOverride && activeEntitlement?.periodType === 'PROMOTIONAL';
+
   // NOTE: is_premium in Supabase is written ONLY by the `revenuecat-webhook`
   // edge function (service role). The client never writes it — the
   // user_profiles_protect_privileged_columns trigger blocks non-service-role
@@ -84,20 +91,31 @@ export function SubscriptionProvider({ children }) {
     };
   }, [adminOverride, checkEntitlement]);
 
-  // Re-check subscription when app returns to foreground
+  // Re-check subscription when app returns to foreground.
+  // While the user is on a free trial we invalidate the RC cache first, so an
+  // expired trial is reflected immediately instead of lingering as "premium"
+  // until RevenueCat's client cache TTL lapses (~5 min). This guarantees the
+  // user is dropped back to the free tier — and shown the paywall — promptly.
   useEffect(() => {
     if (!REVENUECAT_API_KEY || !user?.id) return;
 
     const appStateRef = { current: AppState.currentState };
-    const subscription = AppState.addEventListener('change', (nextState) => {
+    const subscription = AppState.addEventListener('change', async (nextState) => {
       if (appStateRef.current.match(/inactive|background/) && nextState === 'active') {
+        if (isOnTrial) {
+          try {
+            await Purchases.invalidateCustomerInfoCache();
+          } catch (err) {
+            reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'foreground invalidate failed' } });
+          }
+        }
         checkSubscription();
       }
       appStateRef.current = nextState;
     });
 
     return () => subscription.remove();
-  }, [user?.id, adminOverride]);
+  }, [user?.id, adminOverride, isOnTrial]);
 
   // Identify user and check subscription + admin status when auth state changes
   useEffect(() => {
@@ -146,8 +164,10 @@ export function SubscriptionProvider({ children }) {
       setCustomerInfo(info);
       const premium = checkEntitlement(info);
       setIsPro(premium || adminOverride);
+      return premium;
     } catch (err) {
       reportError('SubscriptionContext', err, { level: 'error', extra: { note: 'checkSubscription failed' } });
+      return false;
     }
   }
 
@@ -193,7 +213,7 @@ export function SubscriptionProvider({ children }) {
     return result;
   }
 
-  // Claim a free 3-day trial via the claim-trial edge function.
+  // Claim a free trial via the claim-trial edge function.
   // Resolves true on success, throws on failure.
   async function claimTrial() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -205,9 +225,22 @@ export function SubscriptionProvider({ children }) {
       throw new Error(res.data?.error ?? res.error?.message ?? 'claim_failed');
     }
     setHasUsedTrial(true);
-    // RC will fire the TEMPORARY_ENTITLEMENT_GRANT webhook which updates
-    // is_premium in DB. Refresh customerInfo so isPro flips immediately.
-    await checkSubscription();
+    // The promotional entitlement was granted on RevenueCat's servers, but the
+    // SDK still holds a stale customerInfo cache that predates the grant.
+    // Invalidate it so the next getCustomerInfo() hits the network and sees the
+    // active trial — otherwise isPro stays false and everything stays locked.
+    try {
+      await Purchases.invalidateCustomerInfoCache();
+    } catch (err) {
+      reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'invalidateCustomerInfoCache failed' } });
+    }
+    // The grant can take a moment to become queryable. Poll a few times so the
+    // UI flips to premium as soon as RevenueCat reports the active entitlement.
+    for (let attempt = 0; attempt < 4; attempt++) {
+      const premium = await checkSubscription();
+      if (premium) break;
+      await new Promise((resolve) => setTimeout(resolve, 800));
+    }
     return true;
   }
 
@@ -221,6 +254,7 @@ export function SubscriptionProvider({ children }) {
     <SubscriptionContext.Provider
       value={{
         isPro,
+        isOnTrial,
         hasUsedTrial,
         offerings,
         customerInfo,
