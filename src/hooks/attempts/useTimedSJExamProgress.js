@@ -55,6 +55,20 @@ function computeScores(scenarios, getAnswer) {
   return { answers, correctCount, scorePercent };
 }
 
+// Returns true if a cached attempt's answerMap holds at least one answer.
+// Handles the nested SJ shape ({ [scenarioId]: { [itemId]: ans } }).
+function answerMapHasAny(map) {
+  if (!map || typeof map !== 'object') return false;
+  for (const v of Object.values(map)) {
+    if (v && typeof v === 'object') {
+      if (Object.keys(v).length > 0) return true;
+    } else if (v != null && v !== '') {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function useTimedSJExamProgress() {
   const { user } = useAuth();
   // { [testId]: { scorePercent, correctCount, submittedAt, timeTakenSeconds, answerMap, flags } }
@@ -84,7 +98,13 @@ export function useTimedSJExamProgress() {
           if (!answerMap[a.scenario_id]) answerMap[a.scenario_id] = {};
           answerMap[a.scenario_id][a.question_id] = a.selected_answer;
         }
-        merged[keyFromNumericTestId(row.test_id)] = {
+        // Never let an answer-less DB row (e.g. a partial/interrupted write)
+        // clobber a local attempt that still holds the real answers.
+        const sjKey = keyFromNumericTestId(row.test_id);
+        if (row.answers.length === 0 && answerMapHasAny(merged[sjKey]?.answerMap)) {
+          continue;
+        }
+        merged[sjKey] = {
           scorePercent: row.score_percent,
           correctCount: row.correct_count,
           submittedAt: row.submitted_at,

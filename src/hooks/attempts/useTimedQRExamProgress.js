@@ -71,6 +71,20 @@ function computeScores(sets, answers) {
   return { answerList, correctCount, scorePercent };
 }
 
+// Returns true if a cached attempt's answerMap holds at least one answer.
+// Handles the nested QR shape ({ [setId]: { [qid]: ans } }).
+function answerMapHasAny(map) {
+  if (!map || typeof map !== 'object') return false;
+  for (const v of Object.values(map)) {
+    if (v && typeof v === 'object') {
+      if (Object.keys(v).length > 0) return true;
+    } else if (v != null && v !== '') {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function useTimedQRExamProgress() {
   const { user } = useAuth();
   const [completedAttempts, setCompletedAttempts] = useState({});
@@ -120,7 +134,13 @@ export function useTimedQRExamProgress() {
           if (!answerMap[a.set_id]) answerMap[a.set_id] = {};
           answerMap[a.set_id][a.question_id] = a.selected_answer;
         }
-        merged[keyFromNumericTestId(row.test_id)] = {
+        // Never let an answer-less DB row (e.g. a partial/interrupted write)
+        // clobber a local attempt that still holds the real answers.
+        const qrKey = keyFromNumericTestId(row.test_id);
+        if (row.answers.length === 0 && answerMapHasAny(merged[qrKey]?.answerMap)) {
+          continue;
+        }
+        merged[qrKey] = {
           scorePercent: row.score_percent,
           correctCount: row.correct_count,
           submittedAt: row.submitted_at,

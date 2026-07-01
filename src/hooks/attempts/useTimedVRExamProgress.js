@@ -38,6 +38,20 @@ function computeScores(passages, getAnswer) {
   return { answers, correctCount, scorePercent };
 }
 
+// Returns true if a cached attempt's answerMap holds at least one answer.
+// Handles the nested VR shape ({ [passageId]: { [qid]: ans } }).
+function answerMapHasAny(map) {
+  if (!map || typeof map !== 'object') return false;
+  for (const v of Object.values(map)) {
+    if (v && typeof v === 'object') {
+      if (Object.keys(v).length > 0) return true;
+    } else if (v != null && v !== '') {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function useTimedVRExamProgress() {
   const { user } = useAuth();
   const [completedAttempts, setCompletedAttempts] = useState({});
@@ -68,6 +82,11 @@ export function useTimedVRExamProgress() {
         for (const a of row.answers) {
           if (!answerMap[a.passage_id]) answerMap[a.passage_id] = {};
           answerMap[a.passage_id][a.question_id] = a.selected_answer;
+        }
+        // Never let an answer-less DB row (e.g. a partial/interrupted write)
+        // clobber a local attempt that still holds the real answers.
+        if (row.answers.length === 0 && answerMapHasAny(merged[row.test_id]?.answerMap)) {
+          continue;
         }
         merged[row.test_id] = {
           scorePercent: row.score_percent,

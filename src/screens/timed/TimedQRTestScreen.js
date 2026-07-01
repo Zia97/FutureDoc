@@ -57,7 +57,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
   const endExamCalledRef = useRef(false);
   const secondsLeftRef = useRef(null);
 
-  const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume } = useTestTimer(
+  const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
     test.timeMinutes,
     () => endExam(true),
   );
@@ -108,6 +108,7 @@ export default function TimedQRTestScreen({ route, navigation }) {
   async function endExam(timerExpired = false) {
     if (endExamCalledRef.current) return;
     endExamCalledRef.current = true;
+    stopTimer();
     const timeMsByQid = getQuestionTimes();
     await submitExam({
       test,

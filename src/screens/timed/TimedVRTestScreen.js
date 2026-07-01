@@ -52,8 +52,9 @@ export default function TimedVRTestScreen({ route, navigation }) {
   useExitWarning(navigation, !showResults);
 
   const secondsLeftRef = useRef(null);
+  const endExamCalledRef = useRef(false);
 
-  const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume } = useTestTimer(
+  const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
     test.timeMinutes,
     () => handleExamEnd(true),
   );
@@ -101,6 +102,12 @@ export default function TimedVRTestScreen({ route, navigation }) {
   );
 
   async function handleExamEnd(timerExpired = false) {
+    // Guard against a double submit: a manual "End Test" and the timer
+    // expiry can otherwise both fire and the second (empty-ish) one would
+    // overwrite the first. Also stop the timer so it can't re-fire.
+    if (endExamCalledRef.current) return;
+    endExamCalledRef.current = true;
+    stopTimer();
     const timeMsByQid = getQuestionTimes();
     await submitExam({
       test,

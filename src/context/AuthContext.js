@@ -4,6 +4,7 @@ import * as AuthSession from 'expo-auth-session';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as Linking from 'expo-linking';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Sentry from '@sentry/react-native';
 import { supabase } from '../lib/supabase';
 import { clearLocalUserData, DISPLAY_NAME_CACHE_KEY } from '../services/localUserData';
 
@@ -108,6 +109,17 @@ export function AuthProvider({ children }) {
       }
     })();
   }, [user?.id]);
+
+  // Attach the signed-in user to every Sentry event (errors, messages,
+  // replays) so issues can be searched/filtered per user. Cleared on
+  // sign-out. sendDefaultPii is already enabled in Sentry.init.
+  useEffect(() => {
+    if (user?.id) {
+      Sentry.setUser({ id: user.id, email: user.email ?? undefined });
+    } else {
+      Sentry.setUser(null);
+    }
+  }, [user?.id, user?.email]);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

@@ -745,60 +745,40 @@ class DatabaseService {
   // UX and avoids upsert/cascade complexity on the answers table.
 
   async _submitTimedExamAttempt({
-    attemptsTable,
-    answersTable,
-    userId,
+    rpcFn,
     testId,
     scorePercent,
     correctCount,
     timeTakenSeconds,
     flags,
-    answers, // [{ question_id, selected_answer, ...parentRef }]
+    answers, // [{ question_id, selected_answer, ...parentRef, time_ms }]
     analyticsSummary,
   }) {
-    // Wipe any prior attempt for this (user, test) so the unique constraint
-    // doesn't block resubmission, and orphan answer rows are cascaded away.
-    const { error: delError } = await supabase
-      .from(attemptsTable)
-      .delete()
-      .eq('user_id', userId)
-      .eq('test_id', testId);
-    if (delError) throw delError;
-
-    const { data: attempt, error: insError } = await supabase
-      .from(attemptsTable)
-      .insert({
-        user_id: userId,
-        test_id: testId,
-        score_percent: scorePercent,
-        correct_count: correctCount,
-        time_taken_seconds: timeTakenSeconds,
-        flags: flags ?? [],
-        analytics_summary: analyticsSummary ?? null,
-      })
-      .select('id')
-      .single();
-    if (insError) throw insError;
-
-    if (answers.length > 0) {
-      const rows = answers.map((a) => ({
-        ...a,
-        exam_attempt_id: attempt.id,
-        user_id: userId,
-      }));
-      const { error: ansError } = await supabase.from(answersTable).insert(rows);
-      if (ansError) throw ansError;
-    }
-
-    return attempt.id;
+    // Single atomic server-side transaction: delete any prior attempt for
+    // (auth.uid(), test) + insert the attempt + insert all answers. This
+    // replaces the old delete → insert-attempt → insert-answers sequence of
+    // separate requests, which could leave an attempt row with zero answer
+    // rows if the connection dropped between steps (rendered as 0 / scaled
+    // 300 on review). user_id is derived from auth.uid() inside the function,
+    // so the client never sends it.
+    const { data, error } = await supabase.rpc(rpcFn, {
+      p_test_id: testId,
+      p_score_percent: scorePercent,
+      p_correct_count: correctCount,
+      p_time_taken_seconds: timeTakenSeconds,
+      p_flags: flags ?? [],
+      p_answers: answers ?? [],
+      p_analytics: analyticsSummary ?? null,
+    });
+    if (error) throw error;
+    return data; // new attempt uuid
   }
 
   // ── Verbal Reasoning ───────────────────────────────────────
-  async submitTimedVRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedVRExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
-      attemptsTable: 'timed_verbal_reasoning_exam_attempts',
-      answersTable:  'timed_verbal_reasoning_question_answers',
-      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      rpcFn: 'submit_timed_vr_exam',
+      testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, passage_id, selected_answer, time_ms }]
       analyticsSummary,
     });
@@ -846,12 +826,11 @@ class DatabaseService {
   }
 
   // ── Decision Making ────────────────────────────────────────
-  async submitTimedDMExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedDMExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
-      attemptsTable: 'timed_decision_making_exam_attempts',
-      answersTable:  'timed_decision_making_question_answers',
-      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
-      answers, // [{ question_id, selected_answer (JSONB) }]
+      rpcFn: 'submit_timed_dm_exam',
+      testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      answers, // [{ question_id, selected_answer (JSONB), time_ms }]
       analyticsSummary,
     });
   }
@@ -898,11 +877,10 @@ class DatabaseService {
   }
 
   // ── Quantitative Reasoning ─────────────────────────────────
-  async submitTimedQRExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedQRExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
-      attemptsTable: 'timed_quantitative_reasoning_exam_attempts',
-      answersTable:  'timed_quantitative_reasoning_question_answers',
-      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      rpcFn: 'submit_timed_qr_exam',
+      testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, set_id, selected_answer, time_ms }]
       analyticsSummary,
     });
@@ -950,12 +928,11 @@ class DatabaseService {
   }
 
   // ── Situational Judgement ──────────────────────────────────
-  async submitTimedSJExam({ userId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedSJExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
-      attemptsTable: 'timed_situational_judgement_exam_attempts',
-      answersTable:  'timed_situational_judgement_question_answers',
-      userId, testId, scorePercent, correctCount, timeTakenSeconds, flags,
-      answers, // [{ question_id, scenario_id, selected_answer }]
+      rpcFn: 'submit_timed_sj_exam',
+      testId, scorePercent, correctCount, timeTakenSeconds, flags,
+      answers, // [{ question_id, scenario_id, selected_answer, time_ms }]
       analyticsSummary,
     });
   }

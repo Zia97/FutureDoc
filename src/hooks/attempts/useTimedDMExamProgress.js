@@ -49,6 +49,21 @@ function computeScores(questions, answers) {
   return { answerList, correctCount, scorePercent };
 }
 
+// Returns true if a cached attempt's answerMap holds at least one answer.
+// DM's answerMap is flat ({ [qid]: ans }); ans is a string (MCQ/Venn) or an
+// object (Yes/No statements) — both count as an answer.
+function answerMapHasAny(map) {
+  if (!map || typeof map !== 'object') return false;
+  for (const v of Object.values(map)) {
+    if (v && typeof v === 'object') {
+      if (Object.keys(v).length > 0) return true;
+    } else if (v != null && v !== '') {
+      return true;
+    }
+  }
+  return false;
+}
+
 export function useTimedDMExamProgress() {
   const { user } = useAuth();
   const [completedAttempts, setCompletedAttempts] = useState({});
@@ -76,6 +91,11 @@ export function useTimedDMExamProgress() {
         const answerMap = {};
         for (const a of row.answers) {
           answerMap[a.question_id] = a.selected_answer;
+        }
+        // Never let an answer-less DB row (e.g. a partial/interrupted write)
+        // clobber a local attempt that still holds the real answers.
+        if (row.answers.length === 0 && answerMapHasAny(merged[row.test_id]?.answerMap)) {
+          continue;
         }
         merged[row.test_id] = {
           scorePercent: row.score_percent,

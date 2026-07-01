@@ -57,7 +57,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
   const { submitExam } = useTimedSJExamProgress();
 
-  const { secondsLeft, display: timerDisplay, isUrgent, isPaused, pause, resume } = useTestTimer(
+  const { secondsLeft, display: timerDisplay, isUrgent, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
     test.timeMinutes,
     () => onExpireRef.current?.(),
   );
@@ -77,6 +77,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
   function endExam() {
     if (endExamCalledRef.current) return;
     endExamCalledRef.current = true;
+    stopTimer();
     const timeMsByQid = getQuestionTimes();
     setExamEnded(true);
     submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current, flags, timeMsByQid });
