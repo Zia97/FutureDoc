@@ -3,7 +3,7 @@ import { AIProvider, ChatMessage } from './types.ts';
 export class OpenAIProvider implements AIProvider {
   constructor(
     private apiKey: string,
-    private model = 'gpt-4o-mini',
+    private model = 'gpt-4.1-mini',
   ) {}
 
   async chat(system: string, messages: ChatMessage[]): Promise<Response> {

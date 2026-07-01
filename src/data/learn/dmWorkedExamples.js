@@ -71,7 +71,7 @@ export const DM_WORKED_EXAMPLES = {
       '• 19 pupils attended Drama\n' +
       '• 15 pupils attended Music\n' +
       '• 22 pupils attended Sport\n' +
-      '• 11 pupils attended exactly two of the three clubs\n' +
+      '• 9 pupils attended exactly two of the three clubs\n' +
       '• 2 pupils attended all three clubs\n' +
       '• 17 pupils attended none of the three clubs\n\n' +
       'Which of the following diagrams correctly represents the data?',
