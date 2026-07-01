@@ -8,38 +8,48 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../context/ThemeContext';
+import { db } from '../lib/dbQueries';
 
-const WHATS_NEW_KEY = 'whats_new_seen_v1';
-
-const UPDATES = [
-  {
-    icon: '🎁',
-    text: 'Try UCAT Genius Premium completely free. No commitment or payment details required. Just give it a go!',
-  },
-  {
-    icon: '🐛',
-    text: 'Bug fixes and stability improvements',
-  },
-  {
-    icon: '📚',
-    text: 'Content updates and question fixes',
-  },
-];
+const WHATS_NEW_SEEN_VERSION_KEY = 'whats_new_seen_version';
 
 export default function WhatsNewModal() {
   const { theme: t } = useTheme();
+  const [content, setContent] = useState(null);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem(WHATS_NEW_KEY).then((val) => {
-      if (!val) setVisible(true);
-    });
+    let cancelled = false;
+    (async () => {
+      try {
+        const [row, seenRaw] = await Promise.all([
+          db.getWhatsNew(),
+          AsyncStorage.getItem(WHATS_NEW_SEEN_VERSION_KEY),
+        ]);
+        if (cancelled || !row) return;
+        const seenVersion = parseInt(seenRaw ?? '0', 10) || 0;
+        if (row.version > seenVersion) {
+          setContent(row);
+          setVisible(true);
+        }
+      } catch {
+        // Fail silent — no modal if content can't be fetched.
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function dismiss() {
-    AsyncStorage.setItem(WHATS_NEW_KEY, 'true');
+    if (content) {
+      AsyncStorage.setItem(WHATS_NEW_SEEN_VERSION_KEY, String(content.version));
+    }
     setVisible(false);
   }
+
+  if (!content) return null;
+
+  const items = Array.isArray(content.items) ? content.items : [];
 
   return (
     <Modal
@@ -51,13 +61,13 @@ export default function WhatsNewModal() {
     >
       <View style={styles.backdrop}>
         <View style={[styles.card, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-          <Text style={[styles.title, { color: t.text }]}>What's New 🚀</Text>
+          <Text style={[styles.title, { color: t.text }]}>{content.title}</Text>
           <Text style={[styles.subtitle, { color: t.textSecondary }]}>
-            Here's what we've been working on for you:
+            {content.subtitle}
           </Text>
 
           <View style={styles.list}>
-            {UPDATES.map((item, i) => (
+            {items.map((item, i) => (
               <View key={i} style={styles.row}>
                 <Text style={styles.icon}>{item.icon}</Text>
                 <Text style={[styles.itemText, { color: t.textSecondary }]}>{item.text}</Text>

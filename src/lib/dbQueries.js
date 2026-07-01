@@ -1088,6 +1088,27 @@ class DatabaseService {
       .eq('test_id', testId);
     if (error) throw error;
   }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // What's New
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  /**
+   * Fetches the active "What's New" content with the highest version.
+   * Returns null if nothing active is configured (modal stays hidden).
+   * @returns {Promise<{version:number,title:string,subtitle:string,items:Array<{icon:string,text:string}>}|null>}
+   */
+  async getWhatsNew() {
+    const { data, error } = await supabase
+      .from('whats_new')
+      .select('version, title, subtitle, items')
+      .eq('is_active', true)
+      .order('version', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    if (error) throw error;
+    return data;
+  }
 }
 
 export const db = new DatabaseService();
