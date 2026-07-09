@@ -46,6 +46,7 @@ export default function PassageLayout({
   alwaysShowReason = false,
   onAnswerCommit = null,
   initialAnswers = {},
+  initialTimesMs = {},
   section = 'vr',
   getItemIsFree = null,
   demoMode = false,
@@ -174,7 +175,7 @@ export default function PassageLayout({
               isDemo={demoMode}
               highlightTeachMe={demoMode}
               showStats={!demoMode && !!getStats}
-              userTimeMs={userTimesMs[qid] ?? null}
+              userTimeMs={userTimesMs[qid] ?? initialTimesMs[qid] ?? null}
               stats={getStats ? getStats(qid, null) : null}
               questionContext={{
                 questionId: qid,

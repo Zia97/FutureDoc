@@ -8,13 +8,15 @@ import { recordPracticeAttempt } from '../../lib/userTelemetry';
 const ATTEMPTS_KEY = 'sj_attempts';
 export const SJ_PROGRESS_CACHE_KEY = 'sj_scenario_progress';
 
-// Local attempts shape:  { [questionId]: { scenarioId, selectedAnswer, answeredAt } }
+// Local attempts shape:  { [questionId]: { scenarioId, selectedAnswer, answeredAt, timeSpentMs } }
 // localAnswers shape:    { [scenarioId]: { [questionId]: selectedAnswer } }
+// localTimesMs shape:    { [questionId]: timeSpentMs }
 
 export function useSituationalJudgementAttempts() {
   const submitting = useRef(new Set());
 
   const [localAnswers, setLocalAnswers] = useState({});
+  const [localTimesMs, setLocalTimesMs] = useState({});
   const [cacheLoading, setCacheLoading] = useState(true);
 
   useEffect(() => {
@@ -27,28 +29,32 @@ export function useSituationalJudgementAttempts() {
       if (raw) {
         const attempts = JSON.parse(raw);
         const mapped = {};
-        for (const [questionId, { scenarioId, selectedAnswer }] of Object.entries(attempts)) {
+        const timesMs = {};
+        for (const [questionId, { scenarioId, selectedAnswer, timeSpentMs }] of Object.entries(attempts)) {
           if (!mapped[scenarioId]) mapped[scenarioId] = {};
           mapped[scenarioId][questionId] = selectedAnswer;
+          if (timeSpentMs != null) timesMs[questionId] = timeSpentMs;
         }
         setLocalAnswers(mapped);
+        setLocalTimesMs(timesMs);
       }
     } catch (err) {
       reportError('useSituationalJudgementAttempts', err, { level: 'warning', extra: { note: 'loadCache failed' } });
     }
   }
 
-  async function saveToCache(questionId, scenarioId, selectedAnswer) {
+  async function saveToCache(questionId, scenarioId, selectedAnswer, timeSpentMs) {
     try {
       const raw = await AsyncStorage.getItem(ATTEMPTS_KEY);
       const attempts = raw ? JSON.parse(raw) : {};
-      attempts[questionId] = { scenarioId, selectedAnswer, answeredAt: new Date().toISOString() };
+      attempts[questionId] = { scenarioId, selectedAnswer, answeredAt: new Date().toISOString(), timeSpentMs: timeSpentMs ?? null };
       await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
 
       setLocalAnswers((prev) => ({
         ...prev,
         [scenarioId]: { ...prev[scenarioId], [questionId]: selectedAnswer },
       }));
+      if (timeSpentMs != null) setLocalTimesMs((prev) => ({ ...prev, [questionId]: timeSpentMs }));
 
       return attempts;
     } catch (err) {
@@ -83,7 +89,7 @@ export function useSituationalJudgementAttempts() {
     submitting.current.add(questionId);
 
     try {
-      const attempts = await saveToCache(questionId, scenarioId, selectedAnswer);
+      const attempts = await saveToCache(questionId, scenarioId, selectedAnswer, timeSpentMs);
       if (attempts) await updateProgressCache(scenarioId, totalQuestions, attempts);
       recordActivity();
       setLastActivity({ kind: 'practice', section: 'SJ' });
@@ -99,5 +105,5 @@ export function useSituationalJudgementAttempts() {
     }
   }
 
-  return { submitAttempt, localAnswers, cacheLoading };
+  return { submitAttempt, localAnswers, localTimesMs, cacheLoading };
 }

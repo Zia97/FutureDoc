@@ -303,7 +303,7 @@ function DMQuestionScreenInner({ route, navigation }) {
   const { colors } = getPremiumTheme(isDark);
 
   const { questions, loading } = useDecisionMakingQuestions();
-  const { submitAttempt, localAnswers, localSubmitted, cacheLoading } = useDecisionMakingAttempts();
+  const { submitAttempt, localAnswers, localSubmitted, localTimesMs, cacheLoading } = useDecisionMakingAttempts();
   const { canAccess } = usePremiumGate((item) => item.isFree);
   const { getStats } = useQuestionStats('dm');
   const [userTimesMs, setUserTimesMs] = useState({});
@@ -434,12 +434,12 @@ function DMQuestionScreenInner({ route, navigation }) {
             submitted={isSubmitted}
             questionContext={isSubmitted ? buildQuestionContext(question, currentAnswer, isYesNo) : undefined}
             questionStats={getStats(question.id, null)}
-            questionUserTimeMs={userTimesMs[question.id] ?? null}
+            questionUserTimeMs={userTimesMs[question.id] ?? localTimesMs[question.id] ?? null}
             getStatementStats={(idx) => getStats(question.id, idx)}
             statementUserTimesMs={
               isYesNo && Array.isArray(question.statements)
                 ? question.statements.reduce((acc, _, i) => {
-                    acc[i] = userTimesMs[question.id] ?? null;
+                    acc[i] = userTimesMs[question.id] ?? localTimesMs[question.id] ?? null;
                     return acc;
                   }, {})
                 : null

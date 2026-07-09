@@ -240,7 +240,7 @@ function QRSingleSetBranch({ set, headerTitle, headerSubtitle, onAnswerCommit, i
 function QRQuestionScreenInner({ route, navigation }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
   const { flatQuestions, loading } = useQuantitativeReasoningSets();
-  const { submitAttempt, localAnswers, cacheLoading } = useQuantitativeReasoningAttempts();
+  const { submitAttempt, localAnswers, localTimesMs, cacheLoading } = useQuantitativeReasoningAttempts();
   const { getStats } = useQuestionStats('qr');
   const [userTimesMs, setUserTimesMs] = useState({});
   const { isDark } = useTheme();
@@ -381,7 +381,7 @@ function QRQuestionScreenInner({ route, navigation }) {
               reason={item.question.answeringReason}
               showReason
               showStats
-              userTimeMs={userTimesMs[qid] ?? null}
+              userTimeMs={userTimesMs[qid] ?? localTimesMs[qid] ?? null}
               stats={getStats(qid, null)}
               questionContext={{
                 questionId: qid,

@@ -111,7 +111,7 @@ function WorkedExampleBranch({ exampleId }) {
 
 function VRPassageScreenInner({ index }) {
   const { flatQuestions, loading } = useVerbalReasoningPassages();
-  const { submitAttempt, localAnswers, cacheLoading } = useVerbalReasoningAttempts();
+  const { submitAttempt, localAnswers, localTimesMs, cacheLoading } = useVerbalReasoningAttempts();
   const { getStats } = useQuestionStats('vr');
 
   if (loading || cacheLoading) {
@@ -138,6 +138,7 @@ function VRPassageScreenInner({ index }) {
       itemLabel="Passage"
       getTitle={(item) => item.stemTitle}
       initialAnswers={localAnswers}
+      initialTimesMs={localTimesMs}
       onAnswerCommit={handleAnswerCommit}
       section="vr"
       getItemIsFree={(item) => item.isFree}

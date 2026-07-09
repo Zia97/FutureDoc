@@ -30,10 +30,6 @@ function json(body: unknown, status = 200) {
   });
 }
 
-// Canonicalise an email so trivial variants of the same inbox collide to one
-// hash. Lowercase everything; for Gmail (which ignores dots and +suffixes in
-// the local part) strip dots and anything from the first '+'. This closes the
-// cheapest bypasses (john+1@, j.o.h.n@) without affecting other providers.
 function normaliseEmail(raw: string): string {
   const email = raw.trim().toLowerCase();
   const at = email.lastIndexOf('@');

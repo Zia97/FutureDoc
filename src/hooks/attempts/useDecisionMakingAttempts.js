@@ -12,15 +12,17 @@ const ATTEMPTS_KEY = DM_ATTEMPTS_KEY;
 // answer is either a string (MCQ) or an object (Yes/No statements).
 // Only submitted answers are stored.
 //
-// Local attempts shape: { [questionId]: { answer, attemptedAt } }
+// Local attempts shape: { [questionId]: { answer, attemptedAt, timeSpentMs } }
 // localAnswers shape:   { [questionId]: answer }
 // localSubmitted shape: { [questionId]: true }
+// localTimesMs shape:   { [questionId]: timeSpentMs }
 
 export function useDecisionMakingAttempts() {
   const submitting = useRef(new Set());
 
   const [localAnswers, setLocalAnswers]   = useState({});
   const [localSubmitted, setLocalSubmitted] = useState({});
+  const [localTimesMs, setLocalTimesMs]   = useState({});
   const [cacheLoading, setCacheLoading]   = useState(true);
 
   useEffect(() => {
@@ -34,27 +36,31 @@ export function useDecisionMakingAttempts() {
         const attempts = JSON.parse(raw);
         const answers   = {};
         const submitted = {};
-        for (const [questionId, { answer }] of Object.entries(attempts)) {
+        const timesMs   = {};
+        for (const [questionId, { answer, timeSpentMs }] of Object.entries(attempts)) {
           answers[questionId]   = answer;
           submitted[questionId] = true;
+          if (timeSpentMs != null) timesMs[questionId] = timeSpentMs;
         }
         setLocalAnswers(answers);
         setLocalSubmitted(submitted);
+        setLocalTimesMs(timesMs);
       }
     } catch (err) {
       reportError('useDecisionMakingAttempts', err, { level: 'warning', extra: { note: 'loadCache failed' } });
     }
   }
 
-  async function saveToCache(questionId, answer) {
+  async function saveToCache(questionId, answer, timeSpentMs) {
     try {
       const raw = await AsyncStorage.getItem(ATTEMPTS_KEY);
       const attempts = raw ? JSON.parse(raw) : {};
-      attempts[questionId] = { answer, attemptedAt: new Date().toISOString() };
+      attempts[questionId] = { answer, attemptedAt: new Date().toISOString(), timeSpentMs: timeSpentMs ?? null };
       await AsyncStorage.setItem(ATTEMPTS_KEY, JSON.stringify(attempts));
 
       setLocalAnswers((prev) => ({ ...prev, [questionId]: answer }));
       setLocalSubmitted((prev) => ({ ...prev, [questionId]: true }));
+      if (timeSpentMs != null) setLocalTimesMs((prev) => ({ ...prev, [questionId]: timeSpentMs }));
     } catch (err) {
       reportError('useDecisionMakingAttempts', err, { level: 'warning', extra: { note: 'saveToCache failed' } });
     }
@@ -70,7 +76,7 @@ export function useDecisionMakingAttempts() {
     submitting.current.add(questionId);
 
     try {
-      await saveToCache(questionId, answer);
+      await saveToCache(questionId, answer, timeSpentMs);
       recordActivity();
       setLastActivity({ kind: 'practice', section: 'DM' });
 
@@ -103,5 +109,5 @@ export function useDecisionMakingAttempts() {
     }
   }
 
-  return { submitAttempt, localAnswers, localSubmitted, cacheLoading };
+  return { submitAttempt, localAnswers, localSubmitted, localTimesMs, cacheLoading };
 }

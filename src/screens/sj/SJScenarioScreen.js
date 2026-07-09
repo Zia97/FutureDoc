@@ -115,7 +115,7 @@ function WorkedExampleBranch({ exampleId }) {
 
 function SJScenarioScreenInner({ index }) {
   const { flatQuestions, loading } = useSituationalJudgementScenarios();
-  const { submitAttempt, localAnswers, cacheLoading } = useSituationalJudgementAttempts();
+  const { submitAttempt, localAnswers, localTimesMs, cacheLoading } = useSituationalJudgementAttempts();
   const { getStats } = useQuestionStats('sj');
 
   if (loading || cacheLoading) {
@@ -143,6 +143,7 @@ function SJScenarioScreenInner({ index }) {
       getTitle={(item) => `Scenario ${item.stemIndex + 1}`}
       alwaysShowReason
       initialAnswers={localAnswers}
+      initialTimesMs={localTimesMs}
       onAnswerCommit={handleAnswerCommit}
       section="sj"
       getItemIsFree={(item) => item.isFree}
