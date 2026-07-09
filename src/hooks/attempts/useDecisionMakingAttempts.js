@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
+import { maybeRequestReview } from '../../services/reviewPromptService';
 import { setLastActivity } from '../../services/lastActivityService';
 import { recordPracticeAttempt } from '../../lib/userTelemetry';
 
@@ -78,6 +79,7 @@ export function useDecisionMakingAttempts() {
     try {
       await saveToCache(questionId, answer, timeSpentMs);
       recordActivity();
+      maybeRequestReview();
       setLastActivity({ kind: 'practice', section: 'DM' });
 
       // DM Yes/No questions: emit one telemetry row per statement.

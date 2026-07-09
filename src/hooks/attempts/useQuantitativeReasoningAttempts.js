@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
+import { maybeRequestReview } from '../../services/reviewPromptService';
 import { setLastActivity } from '../../services/lastActivityService';
 import { recordPracticeAttempt } from '../../lib/userTelemetry';
 
@@ -91,6 +92,7 @@ export function useQuantitativeReasoningAttempts() {
       const attempts = await saveToCache(questionId, setId, selectedAnswer, timeSpentMs);
       if (attempts) await updateProgressCache(setId, totalQuestions, attempts);
       recordActivity();
+      maybeRequestReview();
       setLastActivity({ kind: 'practice', section: 'QR' });
       recordPracticeAttempt({
         section: 'qr',
