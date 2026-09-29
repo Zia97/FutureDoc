@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "run_id": "vr-practice-20260929-01",
+  "section": "vr",
+  "mode": "practice",
+  "question_count": 20,
+  "passage_count": 5,
+  "format_allocation": {
+    "mc_passages": 3,
+    "tfc_passages": 2
+  },
+  "difficulty_allocation": {
+    "normal_questions": 15,
+    "hard_questions": 5
+  },
+  "is_free": false,
+  "editorial_requirements": [
+    "Write five original 200-400 word passages, each with four questions of a single format.",
+    "Use three MC passages and two TFC passages; use 15 normal and 5 hard questions overall.",
+    "Research these five distinct topics: cork oak bark harvesting, paper marbling, tidal mills, Scottish vitrified forts, and fog collection meshes. Choose a different topic only if credible sources or novelty checks require it.",
+    "Use passage evidence alone for answers and map material factual claims to credible sources in the manifest."
+  ],
+  "excluded_topics": [
+    "Antikythera mechanism",
+    "canal construction",
+    "Japanese lacquerware",
+    "peat bog preservation",
+    "foraminifera and paleoclimate"
+  ],
+  "corpus_run_id": "vr-sync-20260929220816",
+  "corpus_generated_at": "2026-09-29T20:46:20.384Z",
+  "inventory_path": "content-authoring/cache/vr-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/vr-practice-20-v1.json",
+  "manifest_path": "content-authoring/reports/vr-practice-20-v1.manifest.json",
+  "validation_report_path": "content-authoring/reports/vr-practice-20-v1.validation.json"
+}

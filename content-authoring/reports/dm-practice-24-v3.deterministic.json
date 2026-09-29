@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-29T21:52:45.357Z",
+  "section": "dm",
+  "mode": "practice",
+  "counts": {
+    "questions": 24,
+    "errors": 0,
+    "warnings": 0
+  },
+  "deterministic_verdict": "pass",
+  "issues": [],
+  "nearest_existing_content": [
+    {
+      "candidate_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "candidate_title": "Amber Permit Rules",
+      "matches": []
+    },
+    {
+      "candidate_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "candidate_title": "Tile Workshop Rules",
+      "matches": []
+    },
+    {
+      "candidate_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "candidate_title": "Restricted Archive Files",
+      "matches": []
+    },
+    {
+      "candidate_id": "b72ef91a-3680-4f37-aa0f-89998470d7b2",
+      "candidate_title": "Display Crate Sequence",
+      "matches": [
+        {
+          "existing_id": "949c62d0-19ec-4649-a0b0-81842a66877a",
+          "mode": "practice",
+          "title": "Bookshelf Order",
+          "score": 0.2798
+        },
+        {
+          "existing_id": "f418eeef-a1b3-434c-9eb7-d9cba901bab5",
+          "mode": "practice",
+          "title": "Five Swimmers Lanes",
+          "score": 0.2641
+        },
+        {
+          "existing_id": "85d2adfc-b685-4d1d-8b2c-aa6347f12bc6",
+          "mode": "practice",
+          "title": "Shelf Arrangement",
+          "score": 0.2562
+        }
+      ]
+    },
+    {
+      "candidate_id": "2fea6610-f787-41a0-93be-28344a314aeb",
+      "candidate_title": "Workshop Station Assignments",
+      "matches": [
+        {
+          "existing_id": "599b8332-152f-413c-86cb-22dc5917016b",
+          "mode": "timed",
+          "title": "Lighthouse Keeper Shifts",
+          "score": 0.1982
+        }
+      ]
+    },
+    {
+      "candidate_id": "d822dd15-d4f7-4911-8187-2b9c6c356d91",
+      "candidate_title": "Harbour Launch Slots",
+      "matches": []
+    },
+    {
+      "candidate_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "candidate_title": "Repair Desk Outcomes",
+      "matches": [
+        {
+          "existing_id": "b618d8d8-cdd5-4b59-9b93-ab4d62b428e3",
+          "mode": "practice",
+          "title": "Quarterly Rainfall Stations",
+          "score": 0.2195
+        },
+        {
+          "existing_id": "d715b0b8-c1b4-4e81-9145-df6c7a59f851",
+          "mode": "practice",
+          "title": "Community Sports Participation",
+          "score": 0.204
+        },
+        {
+          "existing_id": "61b0e3e1-8272-44fd-a6fa-814becb1d6f9",
+          "mode": "timed",
+          "title": "Regional Rainfall Data",
+          "score": 0.1929
+        }
+      ]
+    },
+    {
+      "candidate_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "candidate_title": "Shuttle Passenger Record",
+      "matches": [
+        {
+          "existing_id": "97dfddc0-cc5f-4bc8-835d-468a4ff9deb9",
+          "mode": "timed",
+          "title": "Pet Ownership Survey",
+          "score": 0.1808
+        }
+      ]
+    },
+    {
+      "candidate_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "candidate_title": "Helpline Transfer Audit",
+      "matches": [
+        {
+          "existing_id": "61b0e3e1-8272-44fd-a6fa-814becb1d6f9",
+          "mode": "timed",
+          "title": "Regional Rainfall Data",
+          "score": 0.2283
+        },
+        {
+          "existing_id": "842782e9-64a6-4232-afe0-86d07441a109",
+          "mode": "practice",
+          "title": "Recycling Bin Survey",
+          "score": 0.2215
+        },
+        {
+          "existing_id": "b618d8d8-cdd5-4b59-9b93-ab4d62b428e3",
+          "mode": "practice",
+          "title": "Quarterly Rainfall Stations",
+          "score": 0.2139
+        }
+      ]
+    },
+    {
+      "candidate_id": "b0f99a28-6127-40ab-b548-bce5ef933dc2",
+      "candidate_title": "Repair Booking Trial",
+      "matches": []
+    },
+    {
+      "candidate_id": "c2e726ed-8cb5-4d7e-88ba-9a6f1118b8ac",
+      "candidate_title": "Early River Shuttle",
+      "matches": []
+    },
+    {
+      "candidate_id": "fbaf9861-744c-45f3-9879-5fad8c0e62eb",
+      "candidate_title": "Archive Catalogue Copies",
+      "matches": [
+        {
+          "existing_id": "147f9524-1da9-44c0-b402-c1b52e9a98fb",
+          "mode": "practice",
+          "title": "Ban Mobile Phones in Cinemas",
+          "score": 0.1901
+        }
+      ]
+    },
+    {
+      "candidate_id": "80fd9429-e35b-42df-8c4a-2e29db932c4e",
+      "candidate_title": "Coastal Trail Signs",
+      "matches": [
+        {
+          "existing_id": "05eae854-d2be-4c30-8010-2c4526f548a6",
+          "mode": "timed",
+          "title": "Engineer Certification Hierarchy",
+          "score": 0.3377
+        },
+        {
+          "existing_id": "96a94860-7987-4dfa-99ca-fcda2a2af465",
+          "mode": "practice",
+          "title": "Fitness Studio Classes",
+          "score": 0.3353
+        },
+        {
+          "existing_id": "1538accd-482e-4b4f-aa35-c8932fd2cc19",
+          "mode": "practice",
+          "title": "Company Pass Holders",
+          "score": 0.3246
+        }
+      ]
+    },
+    {
+      "candidate_id": "a10ba3a4-0fa6-488c-ade8-dbf012618322",
+      "candidate_title": "Studio Workshop Enrolment",
+      "matches": [
+        {
+          "existing_id": "96a94860-7987-4dfa-99ca-fcda2a2af465",
+          "mode": "practice",
+          "title": "Fitness Studio Classes",
+          "score": 0.3698
+        },
+        {
+          "existing_id": "05eae854-d2be-4c30-8010-2c4526f548a6",
+          "mode": "timed",
+          "title": "Engineer Certification Hierarchy",
+          "score": 0.3309
+        },
+        {
+          "existing_id": "e8c08d7d-120b-4009-97ff-ae9918c066d3",
+          "mode": "practice",
+          "title": "Conference Sessions",
+          "score": 0.3297
+        }
+      ]
+    },
+    {
+      "candidate_id": "61a5a8b4-20d2-4b57-b504-6c542a26a872",
+      "candidate_title": "Community Event Roles",
+      "matches": [
+        {
+          "existing_id": "1538accd-482e-4b4f-aa35-c8932fd2cc19",
+          "mode": "practice",
+          "title": "Company Pass Holders",
+          "score": 0.3358
+        },
+        {
+          "existing_id": "05eae854-d2be-4c30-8010-2c4526f548a6",
+          "mode": "timed",
+          "title": "Engineer Certification Hierarchy",
+          "score": 0.3307
+        },
+        {
+          "existing_id": "96a94860-7987-4dfa-99ca-fcda2a2af465",
+          "mode": "practice",
+          "title": "Fitness Studio Classes",
+          "score": 0.3263
+        }
+      ]
+    },
+    {
+      "candidate_id": "7c2c3af5-ffdf-4c56-9eb1-d24c1490c99d",
+      "candidate_title": "Park Volunteer Skills",
+      "matches": [
+        {
+          "existing_id": "05eae854-d2be-4c30-8010-2c4526f548a6",
+          "mode": "timed",
+          "title": "Engineer Certification Hierarchy",
+          "score": 0.3045
+        },
+        {
+          "existing_id": "2712bb75-396e-4c22-a94c-d86e193d7f6d",
+          "mode": "practice",
+          "title": "Company Training Modules",
+          "score": 0.3013
+        },
+        {
+          "existing_id": "96a94860-7987-4dfa-99ca-fcda2a2af465",
+          "mode": "practice",
+          "title": "Fitness Studio Classes",
+          "score": 0.2935
+        }
+      ]
+    },
+    {
+      "candidate_id": "45d47239-046a-4ade-98a3-fa3de9802138",
+      "candidate_title": "Observatory Alert Channels",
+      "matches": [
+        {
+          "existing_id": "cf58fca0-2498-45fb-952e-76c7e154c147",
+          "mode": "timed",
+          "title": "Bus Punctuality",
+          "score": 0.2706
+        },
+        {
+          "existing_id": "90a7c3f0-0884-41e3-92c8-3030508e2bf8",
+          "mode": "practice",
+          "title": "Exactly Two Heads in Three Tosses",
+          "score": 0.2544
+        },
+        {
+          "existing_id": "9bde4832-a583-4563-8ac7-e7c2c26247ed",
+          "mode": "practice",
+          "title": "Independent Alarms",
+          "score": 0.251
+        }
+      ]
+    },
+    {
+      "candidate_id": "8efec042-4316-4d7d-a909-7de9beb2433b",
+      "candidate_title": "Rehearsal Room Collision",
+      "matches": [
+        {
+          "existing_id": "5e896827-f16a-48ba-a224-e85983afca67",
+          "mode": "practice",
+          "title": "Three-Day Rain Forecast",
+          "score": 0.2981
+        },
+        {
+          "existing_id": "a780c346-3326-401a-8828-8222ca617612",
+          "mode": "practice",
+          "title": "Penalty Shoot-out",
+          "score": 0.2564
+        },
+        {
+          "existing_id": "a8da9809-857d-43fe-8a08-8ac17bbbec55",
+          "mode": "practice",
+          "title": "At Least One Six",
+          "score": 0.2524
+        }
+      ]
+    },
+    {
+      "candidate_id": "f5541786-42ff-4db3-9e49-fdf982e875e3",
+      "candidate_title": "Ferry Rain Covers",
+      "matches": [
+        {
+          "existing_id": "95b624a0-3050-4aba-a65b-3bebf6f211ed",
+          "mode": "practice",
+          "title": "French and Spanish Conditional",
+          "score": 0.2293
+        },
+        {
+          "existing_id": "c50b4609-428b-4e00-9876-6bf142d77862",
+          "mode": "timed",
+          "title": "Train and Bus Delays",
+          "score": 0.2091
+        },
+        {
+          "existing_id": "308dfdb6-3226-4559-8e9d-681fb14909e9",
+          "mode": "timed",
+          "title": "Chocolate Box Selection",
+          "score": 0.1979
+        }
+      ]
+    },
+    {
+      "candidate_id": "4c84d495-18b8-4ef5-a86f-1beb34142de1",
+      "candidate_title": "Display Volume Order",
+      "matches": [
+        {
+          "existing_id": "dae3aa0a-163d-43c7-b1c3-5aaf83f672fb",
+          "mode": "practice",
+          "title": "Two Blue Marbles",
+          "score": 0.247
+        },
+        {
+          "existing_id": "08a47850-432b-40cd-a65a-9ee94cb89c07",
+          "mode": "practice",
+          "title": "Coloured Marbles",
+          "score": 0.2342
+        },
+        {
+          "existing_id": "2cf31ed3-24a5-4f52-b15c-a423421b02cf",
+          "mode": "practice",
+          "title": "Coloured Tokens",
+          "score": 0.2318
+        }
+      ]
+    },
+    {
+      "candidate_id": "3aa6e000-327c-45d7-b2f5-26142b4b7177",
+      "candidate_title": "Community Radio Programme Tags",
+      "matches": [
+        {
+          "existing_id": "2c6d8b3d-01f2-492d-8486-99611997556b",
+          "mode": "practice",
+          "title": "Amateur Festival Performers",
+          "score": 0.2328
+        },
+        {
+          "existing_id": "4c4b2dd1-2f70-4797-bf6a-03c528e3e949",
+          "mode": "practice",
+          "title": "Library Book Tags",
+          "score": 0.2277
+        },
+        {
+          "existing_id": "ed3dfef9-6eb7-43e2-b1b2-29b77869dbef",
+          "mode": "timed",
+          "title": "Sports Centre Memberships",
+          "score": 0.2267
+        }
+      ]
+    },
+    {
+      "candidate_id": "5297e7b2-a46d-4750-9a7a-09db32602f59",
+      "candidate_title": "Observatory Image Archive",
+      "matches": [
+        {
+          "existing_id": "2712bb75-396e-4c22-a94c-d86e193d7f6d",
+          "mode": "practice",
+          "title": "Company Training Modules",
+          "score": 0.3619
+        },
+        {
+          "existing_id": "e8c08d7d-120b-4009-97ff-ae9918c066d3",
+          "mode": "practice",
+          "title": "Conference Sessions",
+          "score": 0.3457
+        },
+        {
+          "existing_id": "a7b0fb4e-183a-4adb-98c6-c51bdcb048b9",
+          "mode": "practice",
+          "title": "Library Workshop Attendance",
+          "score": 0.3404
+        }
+      ]
+    },
+    {
+      "candidate_id": "308bcd28-85d0-4149-a2fd-3f6dd456dfd3",
+      "candidate_title": "Repair Fair Route Cards",
+      "matches": [
+        {
+          "existing_id": "dc34d470-1561-444b-8529-1929c8c1285d",
+          "mode": "practice",
+          "title": "Sports Club Facilities",
+          "score": 0.3443
+        },
+        {
+          "existing_id": "28153f59-8b3a-40b1-8e7c-3f22f4604ecb",
+          "mode": "practice",
+          "title": "Clinic Check Hub",
+          "score": 0.328
+        },
+        {
+          "existing_id": "6c4c5404-18ba-4916-9438-e5846251e674",
+          "mode": "practice",
+          "title": "Wedding Roles",
+          "score": 0.3148
+        }
+      ]
+    },
+    {
+      "candidate_id": "7e0c5ab8-a660-4780-a9f1-617433e4056a",
+      "candidate_title": "Packaging Lab Fault Codes",
+      "matches": [
+        {
+          "existing_id": "53e769e8-201e-4535-a12c-4279da6421dd",
+          "mode": "timed",
+          "title": "Online Course Features",
+          "score": 0.306
+        },
+        {
+          "existing_id": "2712bb75-396e-4c22-a94c-d86e193d7f6d",
+          "mode": "practice",
+          "title": "Company Training Modules",
+          "score": 0.2797
+        },
+        {
+          "existing_id": "22959108-0a64-459c-93e7-7e16aff09615",
+          "mode": "timed",
+          "title": "Community Initiative Focus Areas",
+          "score": 0.2745
+        }
+      ]
+    }
+  ],
+  "note": "A pass confirms machine-checkable structure and lexical screening only; an independent blind review must establish correctness and semantic novelty.",
+  "input": "content-authoring\\candidates\\dm-practice-24-v3.json"
+}

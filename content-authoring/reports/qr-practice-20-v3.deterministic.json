@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-29T21:01:51.833Z",
+  "section": "qr",
+  "mode": "practice",
+  "counts": {
+    "questions": 20,
+    "errors": 0,
+    "warnings": 0
+  },
+  "deterministic_verdict": "pass",
+  "issues": [],
+  "nearest_existing_content": [
+    {
+      "candidate_id": "47146d21-b326-48ee-8105-a2aa76c87d05",
+      "candidate_title": "Soap Bottling Quality Log",
+      "matches": [
+        {
+          "existing_id": "ae9a1ba7-2592-41fc-99ab-2d5c39a0320c",
+          "mode": "practice",
+          "title": "GP Training Region Allocations",
+          "score": 0.2183
+        },
+        {
+          "existing_id": "9dfb4abf-2f13-4823-aefa-8b384955b335",
+          "mode": "practice",
+          "title": "Beekeeping Hive Honey Production",
+          "score": 0.2142
+        },
+        {
+          "existing_id": "10f0f1c4-48e7-474c-8a13-e1462202f5cc",
+          "mode": "timed",
+          "title": "Commuter Survey by Borough",
+          "score": 0.2065
+        }
+      ]
+    },
+    {
+      "candidate_id": "71813af5-b73f-4e54-b2e1-cc5a6d7faf11",
+      "candidate_title": "Bicycle Repair Workshop Jobs",
+      "matches": [
+        {
+          "existing_id": "d66eeea2-cbdb-4d0d-a74b-76204f516792",
+          "mode": "practice",
+          "title": "Weekly Hospital Admissions",
+          "score": 0.2888
+        },
+        {
+          "existing_id": "2be0bc2c-b82d-4f05-9480-789406e28a85",
+          "mode": "practice",
+          "title": "Daily Commute Times",
+          "score": 0.2849
+        },
+        {
+          "existing_id": "25ff4f9d-a1c0-4704-8df4-97e6c282364c",
+          "mode": "practice",
+          "title": "City Marathon Finishing Times",
+          "score": 0.2631
+        }
+      ]
+    },
+    {
+      "candidate_id": "749e81cd-845f-45bb-b50f-804bc9a4ddcd",
+      "candidate_title": "Twin Reservoir Morning Readings",
+      "matches": [
+        {
+          "existing_id": "2be0bc2c-b82d-4f05-9480-789406e28a85",
+          "mode": "practice",
+          "title": "Daily Commute Times",
+          "score": 0.2629
+        },
+        {
+          "existing_id": "bd339064-bdc5-4991-96de-d3b34e1f837e",
+          "mode": "practice",
+          "title": "Supermarket Checkout Queue Lengths",
+          "score": 0.2392
+        },
+        {
+          "existing_id": "7358addf-6d47-4d64-86ae-11738efd7cc6",
+          "mode": "practice",
+          "title": "Monthly Rainfall in Two UK Cities",
+          "score": 0.226
+        }
+      ]
+    },
+    {
+      "candidate_id": "7bbf22b7-6003-4252-8dc6-bfa23db59abe",
+      "candidate_title": "Community Compost Batch Ingredients",
+      "matches": [
+        {
+          "existing_id": "149bcc9c-1c8f-4e67-b7be-c34ff82c83e9",
+          "mode": "practice",
+          "title": "Monthly Household Budget Breakdown",
+          "score": 0.2328
+        },
+        {
+          "existing_id": "5d0fe949-dd48-4549-bb13-0126ac2b395a",
+          "mode": "timed",
+          "title": "Restaurant Chain Annual Budget",
+          "score": 0.2196
+        },
+        {
+          "existing_id": "530a6fba-16a0-4e79-ba57-cb95f4229860",
+          "mode": "timed",
+          "title": "School Subject Enrolment",
+          "score": 0.2172
+        }
+      ]
+    },
+    {
+      "candidate_id": "9cf5099f-1160-432b-9d85-6d966830f398",
+      "candidate_title": "Cycle-Share Battery Charging",
+      "matches": [
+        {
+          "existing_id": "15e823f4-fa20-405d-934f-4d1088306325",
+          "mode": "practice",
+          "title": "Electric Vehicle Range and Charging",
+          "score": 0.2368
+        }
+      ]
+    },
+    {
+      "candidate_id": "96dbb0c1-4881-4c67-8131-a3a9c05cd290",
+      "candidate_title": "Museum Audio-Guide Hire",
+      "matches": [
+        {
+          "existing_id": "b57041d4-c1cc-4e71-9d04-bf37f72df59f",
+          "mode": "timed",
+          "title": "Patient Drug Dosage",
+          "score": 0.2239
+        },
+        {
+          "existing_id": "293d285d-8561-4d8b-a796-d8e92776859e",
+          "mode": "practice",
+          "title": "Ambulance Response Times by Severity",
+          "score": 0.218
+        },
+        {
+          "existing_id": "c4c04a5b-8f54-4d4b-a6ad-dbe886cf06f3",
+          "mode": "practice",
+          "title": "Art Gallery Ticket Sales",
+          "score": 0.2069
+        }
+      ]
+    }
+  ],
+  "note": "A pass confirms machine-checkable structure and lexical screening only; an independent blind review must establish correctness and semantic novelty.",
+  "input": "content-authoring\\candidates\\qr-practice-20-v3.json"
+}

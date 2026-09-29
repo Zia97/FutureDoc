@@ -1,0 +1,831 @@
+[
+  {
+    "id": "47146d21-b326-48ee-8105-a2aa76c87d05",
+    "title": "Soap Bottling Quality Log",
+    "stimulus": {
+      "type": "table",
+      "context": "A fictional soap maker records four production runs. Filled bottles include bottles rejected during inspection. Every accepted bottle can be sold. Bottle volume is the volume of each filled bottle.",
+      "data": {
+        "headers": [
+          "Run",
+          "Filled bottles",
+          "Rejected bottles",
+          "Run time (min)",
+          "Volume per bottle (mL)"
+        ],
+        "rows": [
+          [
+            "A",
+            "840",
+            "42",
+            "70",
+            "250"
+          ],
+          [
+            "B",
+            "960",
+            "72",
+            "80",
+            "250"
+          ],
+          [
+            "C",
+            "750",
+            "30",
+            "60",
+            "500"
+          ],
+          [
+            "D",
+            "900",
+            "45",
+            "75",
+            "500"
+          ]
+        ]
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "4305eca6-c29f-4b2b-bd47-dfff20bd4216",
+        "question_text": "How many bottles from run A passed inspection?",
+        "options": [
+          {
+            "label": "A",
+            "text": "798 bottles"
+          },
+          {
+            "label": "B",
+            "text": "812 bottles"
+          },
+          {
+            "label": "C",
+            "text": "840 bottles"
+          },
+          {
+            "label": "D",
+            "text": "882 bottles"
+          },
+          {
+            "label": "E",
+            "text": "924 bottles"
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Run A filled 840 bottles, of which 42 were rejected. Accepted bottles = 840 - 42 = 798 bottles. The answer is 798 bottles.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "4dba068c-fc76-4a39-987f-cfec79905174",
+        "question_text": "What percentage of run B's filled bottles were rejected?",
+        "options": [
+          {
+            "label": "A",
+            "text": "5%"
+          },
+          {
+            "label": "B",
+            "text": "6%"
+          },
+          {
+            "label": "C",
+            "text": "7.5%"
+          },
+          {
+            "label": "D",
+            "text": "8%"
+          },
+          {
+            "label": "E",
+            "text": "9%"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "For run B, divide the 72 rejected bottles by 960 filled bottles: 72 / 960 x 100 = 7.5%. The answer is 7.5%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "b457b1a4-5d19-4ed9-9bf1-6ea5f20d459c",
+        "question_text": "How many litres of soap are in the accepted bottles from run C?",
+        "options": [
+          {
+            "label": "A",
+            "text": "250 L"
+          },
+          {
+            "label": "B",
+            "text": "300 L"
+          },
+          {
+            "label": "C",
+            "text": "330 L"
+          },
+          {
+            "label": "D",
+            "text": "345 L"
+          },
+          {
+            "label": "E",
+            "text": "360 L"
+          }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Run C accepted 750 - 30 = 720 bottles. At 500 mL each, they contain 720 x 500 = 360,000 mL. Divide by 1,000 to get 360 L. The answer is 360 L.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "a0110c90-aa49-4f09-abf1-9dfb948a193c",
+        "question_text": "Across runs C and D together, how many accepted bottles were produced per minute of run time, to 2 decimal places?",
+        "options": [
+          {
+            "label": "A",
+            "text": "11.00 bottles/min"
+          },
+          {
+            "label": "B",
+            "text": "11.67 bottles/min"
+          },
+          {
+            "label": "C",
+            "text": "12.00 bottles/min"
+          },
+          {
+            "label": "D",
+            "text": "12.22 bottles/min"
+          },
+          {
+            "label": "E",
+            "text": "13.13 bottles/min"
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Run C accepted 750 - 30 = 720 bottles and run D accepted 900 - 45 = 855. Together that is 1,575 accepted bottles over 60 + 75 = 135 minutes. 1,575 / 135 = 11.666...; to 2 decimal places this is 11.67 bottles/min. The answer is 11.67 bottles/min.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "71813af5-b73f-4e54-b2e1-cc5a6d7faf11",
+    "title": "Bicycle Repair Workshop Jobs",
+    "stimulus": {
+      "type": "bar_chart",
+      "context": "A fictional bicycle repair workshop completed the following jobs over four days. Every completed job is either standard or complex. A standard job earns GBP 18 and a complex job earns GBP 35; these are the workshop's receipts per job.",
+      "data": {
+        "title": "Completed bicycle repairs",
+        "labels": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday"
+        ],
+        "series": [
+          {
+            "name": "Standard",
+            "values": [
+              24,
+              30,
+              28,
+              36
+            ]
+          },
+          {
+            "name": "Complex",
+            "values": [
+              8,
+              10,
+              14,
+              12
+            ]
+          }
+        ],
+        "yAxisLabel": "Completed jobs",
+        "unit": "jobs"
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "8e484ab2-5a8e-4ff0-a457-02b69a8adeba",
+        "question_text": "How many jobs were completed on Wednesday?",
+        "options": [
+          {
+            "label": "A",
+            "text": "28 jobs"
+          },
+          {
+            "label": "B",
+            "text": "36 jobs"
+          },
+          {
+            "label": "C",
+            "text": "40 jobs"
+          },
+          {
+            "label": "D",
+            "text": "42 jobs"
+          },
+          {
+            "label": "E",
+            "text": "48 jobs"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Wednesday has 28 standard and 14 complex jobs. Their sum is 28 + 14 = 42 jobs. The answer is 42 jobs.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "6fc38f84-f75a-4a2d-b370-4522ce3e73fe",
+        "question_text": "What percentage of Thursday's completed jobs were standard jobs?",
+        "options": [
+          {
+            "label": "A",
+            "text": "70%"
+          },
+          {
+            "label": "B",
+            "text": "75%"
+          },
+          {
+            "label": "C",
+            "text": "77.8%"
+          },
+          {
+            "label": "D",
+            "text": "80%"
+          },
+          {
+            "label": "E",
+            "text": "83.3%"
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Thursday had 36 standard and 12 complex jobs, for 48 in total. Standard jobs made up 36 / 48 x 100 = 75%. The answer is 75%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "803c4093-f9a6-4695-bdc9-dfcfc0f263cb",
+        "question_text": "What was the mean number of complex jobs completed per day across the four days?",
+        "options": [
+          {
+            "label": "A",
+            "text": "11 jobs"
+          },
+          {
+            "label": "B",
+            "text": "11.5 jobs"
+          },
+          {
+            "label": "C",
+            "text": "12 jobs"
+          },
+          {
+            "label": "D",
+            "text": "12.5 jobs"
+          },
+          {
+            "label": "E",
+            "text": "14 jobs"
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The complex job counts are 8, 10, 14 and 12. Their sum is 44; divide by four days to get 11 jobs per day. The answer is 11 jobs.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "17bc795c-d314-4d4c-96b2-26fb08551075",
+        "question_text": "How much did the workshop receive in total for jobs completed on Tuesday and Thursday?",
+        "options": [
+          {
+            "label": "A",
+            "text": "GBP 1,668"
+          },
+          {
+            "label": "B",
+            "text": "GBP 1,780"
+          },
+          {
+            "label": "C",
+            "text": "GBP 1,848"
+          },
+          {
+            "label": "D",
+            "text": "GBP 1,918"
+          },
+          {
+            "label": "E",
+            "text": "GBP 1,958"
+          }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Tuesday and Thursday together had 30 + 36 = 66 standard jobs and 10 + 12 = 22 complex jobs. Receipts are 66 x GBP 18 = GBP 1,188 and 22 x GBP 35 = GBP 770. Total = GBP 1,958. The answer is GBP 1,958.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "749e81cd-845f-45bb-b50f-804bc9a4ddcd",
+    "title": "Twin Reservoir Morning Readings",
+    "stimulus": {
+      "type": "line_graph",
+      "context": "Two fictional reservoirs were measured at the same time each morning, Monday to Friday. Values are stored water in millions of litres (ML). Treat the chart values as exact. A transfer question assumes no water is gained or lost during the transfer.",
+      "data": {
+        "title": "Water stored at the morning reading",
+        "labels": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
+        "series": [
+          {
+            "name": "East Reservoir",
+            "values": [
+              42,
+              46,
+              43,
+              49,
+              54
+            ]
+          },
+          {
+            "name": "West Reservoir",
+            "values": [
+              35,
+              37,
+              39,
+              40,
+              42
+            ]
+          }
+        ],
+        "yAxisLabel": "Stored water (ML)",
+        "unit": "ML"
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "105009e0-8674-4173-b4c7-46dcad68952c",
+        "question_text": "How much did the East Reservoir's stored water increase from Monday to Friday?",
+        "options": [
+          {
+            "label": "A",
+            "text": "8 ML"
+          },
+          {
+            "label": "B",
+            "text": "10 ML"
+          },
+          {
+            "label": "C",
+            "text": "12 ML"
+          },
+          {
+            "label": "D",
+            "text": "14 ML"
+          },
+          {
+            "label": "E",
+            "text": "16 ML"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The East Reservoir rose from 42 ML on Monday to 54 ML on Friday. The increase is 54 - 42 = 12 ML. The answer is 12 ML.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "877332c6-c782-46ef-aaa9-76c6e75fa709",
+        "question_text": "How much water was stored in the two reservoirs combined on Wednesday morning?",
+        "options": [
+          {
+            "label": "A",
+            "text": "76 ML"
+          },
+          {
+            "label": "B",
+            "text": "78 ML"
+          },
+          {
+            "label": "C",
+            "text": "80 ML"
+          },
+          {
+            "label": "D",
+            "text": "82 ML"
+          },
+          {
+            "label": "E",
+            "text": "86 ML"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "On Wednesday, East held 43 ML and West held 39 ML. Combined storage = 43 + 39 = 82 ML. The answer is 82 ML.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f8c5cfcd-0c09-45c3-a81b-1a3f7f6ff072",
+        "question_text": "On Friday morning, how many ML must be transferred from East to West so that both reservoirs hold the same amount?",
+        "options": [
+          {
+            "label": "A",
+            "text": "2 ML"
+          },
+          {
+            "label": "B",
+            "text": "3 ML"
+          },
+          {
+            "label": "C",
+            "text": "4 ML"
+          },
+          {
+            "label": "D",
+            "text": "5 ML"
+          },
+          {
+            "label": "E",
+            "text": "6 ML"
+          }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Friday readings are 54 ML in East and 42 ML in West. The gap is 12 ML. Each ML transferred lowers East by 1 ML and raises West by 1 ML, closing the gap by 2 ML. Transfer 12 / 2 = 6 ML, leaving 48 ML in each. The answer is 6 ML.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "7bbf22b7-6003-4252-8dc6-bfa23db59abe",
+    "title": "Community Compost Batch Ingredients",
+    "stimulus": {
+      "type": "pie_chart",
+      "context": "A fictional community compost site mixes a 2,400 kg batch. The chart gives each ingredient's share by mass before composting. In one question, assume a 25% mass loss applies equally to each ingredient.",
+      "data": {
+        "title": "Ingredient shares by mass",
+        "segments": [
+          {
+            "label": "Food scraps",
+            "value": 35
+          },
+          {
+            "label": "Leaves",
+            "value": 25
+          },
+          {
+            "label": "Wood chips",
+            "value": 20
+          },
+          {
+            "label": "Cardboard",
+            "value": 12
+          },
+          {
+            "label": "Soil",
+            "value": 8
+          }
+        ],
+        "unit": "%"
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "8b8b9389-0bc8-4d40-ad43-b7139ce6f8d1",
+        "question_text": "How many kilograms of leaves are in the original batch?",
+        "options": [
+          {
+            "label": "A",
+            "text": "540 kg"
+          },
+          {
+            "label": "B",
+            "text": "600 kg"
+          },
+          {
+            "label": "C",
+            "text": "630 kg"
+          },
+          {
+            "label": "D",
+            "text": "720 kg"
+          },
+          {
+            "label": "E",
+            "text": "840 kg"
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Leaves are 25% of the 2,400 kg original batch. 0.25 x 2,400 = 600 kg. The answer is 600 kg.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "1181c5e3-8af4-4edb-b002-0b553490885c",
+        "question_text": "What is the combined original mass of wood chips and cardboard?",
+        "options": [
+          {
+            "label": "A",
+            "text": "600 kg"
+          },
+          {
+            "label": "B",
+            "text": "672 kg"
+          },
+          {
+            "label": "C",
+            "text": "720 kg"
+          },
+          {
+            "label": "D",
+            "text": "768 kg"
+          },
+          {
+            "label": "E",
+            "text": "800 kg"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Wood chips and cardboard make up 20% + 12% = 32% of the batch. 0.32 x 2,400 = 768 kg. The answer is 768 kg.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "34a5bc82-cd6c-4a86-8252-9c0852a480e0",
+        "question_text": "After the original batch loses 25% of its mass uniformly across all ingredients, 300 kg of leaves are added. What percentage of the resulting batch is leaves, to the nearest whole percent?",
+        "options": [
+          {
+            "label": "A",
+            "text": "36%"
+          },
+          {
+            "label": "B",
+            "text": "38%"
+          },
+          {
+            "label": "C",
+            "text": "40%"
+          },
+          {
+            "label": "D",
+            "text": "42%"
+          },
+          {
+            "label": "E",
+            "text": "50%"
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "The original batch contains 25% x 2,400 = 600 kg of leaves. After the uniform 25% loss, 600 x 0.75 = 450 kg of those leaves remain, and the total batch weighs 2,400 x 0.75 = 1,800 kg. Adding 300 kg of leaves gives 750 kg leaves in a 2,100 kg final batch. 750 / 2,100 x 100 = 35.714...%, which rounds to 36%. The answer is 36%.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "9cf5099f-1160-432b-9d85-6d966830f398",
+    "title": "Cycle-Share Battery Charging",
+    "stimulus": {
+      "type": "text",
+      "text": "At a fictional cycle-share depot, each e-bike battery stores 0.75 kWh when full. Batteries arrive at 20% charge and are charged to 80%. For every 0.75 kWh drawn from the electricity supply, 0.5625 kWh is stored in the battery, so charging efficiency is 75%. Electricity costs GBP 0.24 per kWh drawn from the supply. A charger draws electricity at a constant total rate of 3 kW, even when several bikes are connected. Ignore any fixed charge or idle time."
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "2c8c2fd3-2bfd-46a6-9683-31ab0c0b03b1",
+        "question_text": "How much energy is added to one battery during charging?",
+        "options": [
+          {
+            "label": "A",
+            "text": "0.30 kWh"
+          },
+          {
+            "label": "B",
+            "text": "0.375 kWh"
+          },
+          {
+            "label": "C",
+            "text": "0.45 kWh"
+          },
+          {
+            "label": "D",
+            "text": "0.50 kWh"
+          },
+          {
+            "label": "E",
+            "text": "0.60 kWh"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The charge rises from 20% to 80%, a gain of 60 percentage points. Stored energy added = 0.60 x 0.75 kWh = 0.45 kWh. The answer is 0.45 kWh.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "6637f3e7-b900-40a8-b473-48a97ed8ac27",
+        "question_text": "What is the electricity cost of charging 10 bikes from 20% to 80%?",
+        "options": [
+          {
+            "label": "A",
+            "text": "GBP 1.08"
+          },
+          {
+            "label": "B",
+            "text": "GBP 1.20"
+          },
+          {
+            "label": "C",
+            "text": "GBP 1.44"
+          },
+          {
+            "label": "D",
+            "text": "GBP 1.60"
+          },
+          {
+            "label": "E",
+            "text": "GBP 1.80"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Each battery stores 0.45 kWh during charging. At 75% efficiency, it draws 0.45 / 0.75 = 0.60 kWh from the supply. Ten bikes draw 6.0 kWh, costing 6.0 x GBP 0.24 = GBP 1.44. The answer is GBP 1.44.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "b66cbc64-c846-4f4b-ad85-f145d2890889",
+        "question_text": "How many hours will the 3 kW charger take to charge 18 bikes from 20% to 80%, assuming constant power draw?",
+        "options": [
+          {
+            "label": "A",
+            "text": "2.7 hours"
+          },
+          {
+            "label": "B",
+            "text": "3.0 hours"
+          },
+          {
+            "label": "C",
+            "text": "3.3 hours"
+          },
+          {
+            "label": "D",
+            "text": "3.45 hours"
+          },
+          {
+            "label": "E",
+            "text": "3.6 hours"
+          }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Each bike draws 0.45 / 0.75 = 0.60 kWh from the supply. Eighteen bikes draw 18 x 0.60 = 10.8 kWh. At 3 kW, time = 10.8 / 3 = 3.6 hours. The answer is 3.6 hours.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "96dbb0c1-4881-4c67-8131-a3a9c05cd290",
+    "title": "Museum Audio-Guide Hire",
+    "stimulus": {
+      "type": "multi",
+      "items": [
+        {
+          "type": "text",
+          "text": "At a fictional museum, visitors may hire an audio guide. The table shows visitors and guide-hire rates on one day. Adult and senior guides cost GBP 4 each; child guides cost GBP 2 each. Hire rates are exact for the visitor counts shown, and every visitor hires at most one guide."
+        },
+        {
+          "type": "table",
+          "context": "Hire rate is the percentage of visitors in that category who hired a guide.",
+          "data": {
+            "headers": [
+              "Visitor category",
+              "Visitors",
+              "Guide-hire rate"
+            ],
+            "rows": [
+              [
+                "Adult",
+                "240",
+                "25%"
+              ],
+              [
+                "Child",
+                "180",
+                "10%"
+              ],
+              [
+                "Senior",
+                "120",
+                "20%"
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "3eaec3a3-70b4-4b48-9aed-099a8df155d3",
+        "question_text": "How many adult visitors hired an audio guide?",
+        "options": [
+          {
+            "label": "A",
+            "text": "60 visitors"
+          },
+          {
+            "label": "B",
+            "text": "66 visitors"
+          },
+          {
+            "label": "C",
+            "text": "72 visitors"
+          },
+          {
+            "label": "D",
+            "text": "80 visitors"
+          },
+          {
+            "label": "E",
+            "text": "90 visitors"
+          }
+        ],
+        "correct_answer": "A",
+        "answer_reason": "Adult hires are 25% of 240 adult visitors. 0.25 x 240 = 60 visitors. The answer is 60 visitors.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "b0a818f0-43d9-4edb-92a8-210356889a5b",
+        "question_text": "How many audio guides were hired in total that day?",
+        "options": [
+          {
+            "label": "A",
+            "text": "90 guides"
+          },
+          {
+            "label": "B",
+            "text": "96 guides"
+          },
+          {
+            "label": "C",
+            "text": "100 guides"
+          },
+          {
+            "label": "D",
+            "text": "102 guides"
+          },
+          {
+            "label": "E",
+            "text": "108 guides"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Adult hires = 240 x 25% = 60; child hires = 180 x 10% = 18; senior hires = 120 x 20% = 24. Total = 60 + 18 + 24 = 102 guides. The answer is 102 guides.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "8bdc5f84-cb2a-485d-820d-a49a4d151be8",
+        "question_text": "How much hire revenue did the museum receive that day?",
+        "options": [
+          {
+            "label": "A",
+            "text": "GBP 348"
+          },
+          {
+            "label": "B",
+            "text": "GBP 372"
+          },
+          {
+            "label": "C",
+            "text": "GBP 384"
+          },
+          {
+            "label": "D",
+            "text": "GBP 408"
+          },
+          {
+            "label": "E",
+            "text": "GBP 420"
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Adult hires = 240 x 25% = 60; child hires = 180 x 10% = 18; and senior hires = 120 x 20% = 24. Adult receipts are 60 x GBP 4 = GBP 240; child receipts are 18 x GBP 2 = GBP 36; and senior receipts are 24 x GBP 4 = GBP 96. Total revenue = GBP 240 + GBP 36 + GBP 96 = GBP 372. The answer is GBP 372.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  }
+]

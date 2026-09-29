@@ -28,6 +28,55 @@ test('DM rejects malformed or non-renderable Venn config', () => {
   assert(report.issues.some((issue) => issue.code === 'dm.venn_schema'));
 });
 
+test('DM brief rejects a repetitive all-circle Venn batch', () => {
+  const diagram = {
+    diagramLayout: 'auto',
+    sets: ['A', 'B', 'C'].map((label, i) => ({ id: `set${i + 1}`, label, shape: 'circle' })),
+    regions: { set1_only: 3, set2_only: 4, set3_only: 5, outside: 2 },
+  };
+  const input = Array.from({ length: 4 }, (_, i) => dmQuestion({
+    title: `Venn category ${i + 1}`,
+    type: 'venn_diagram',
+    stem: `Diagram ${i + 1} classifies distinct objects by three categories. Which count is correct?`,
+    order_index: i + 1,
+    stimulus_diagram: diagram,
+  }));
+  const brief = { section: 'dm', mode: 'practice', question_count: 4, unit_count: 4 };
+  const report = validateSectionCandidate({ section: 'dm', input, modeHint: 'practice', brief });
+  assert(report.issues.some((issue) => issue.code === 'brief.dm_venn_mixed_shape_min'));
+  assert(report.issues.some((issue) => issue.code === 'brief.dm_venn_select_diagram_min'));
+  assert(report.issues.some((issue) => issue.code === 'brief.dm_venn_distinct_shape_types_min'));
+  assert(report.issues.some((issue) => issue.code === 'brief.dm_venn_distinct_region_patterns_min'));
+  const requestedCircleMix = {
+    ...brief,
+    section_constraints: { venn_diagram: {
+      mixed_shape_min: 0, select_diagram_min: 0, stimulus_diagram_min: 0,
+      distinct_set_counts_min: 1, distinct_shape_types_min: 1, distinct_region_patterns_min: 1,
+    } },
+  };
+  const requestedReport = validateSectionCandidate({ section: 'dm', input, modeHint: 'practice', brief: requestedCircleMix });
+  assert.equal(requestedReport.issues.filter((issue) => issue.code.startsWith('brief.dm_venn_')).length, 0);
+});
+
+test('DM diagram-selection questions require complete options and one shared shape key', () => {
+  const diagram = {
+    diagramLayout: 'auto',
+    sets: ['A', 'B', 'C'].map((label, i) => ({ id: `set${i + 1}`, label, shape: 'circle' })),
+    regions: { set1_only: 3, set2_only: 4, set3_only: 5, outside: 2 },
+  };
+  const q = dmQuestion({ type: 'venn_diagram' });
+  q.decision_making_question_options[0].option_data = diagram;
+  let report = validateSectionCandidate({ section: 'dm', input: [q], modeHint: 'practice' });
+  assert(report.issues.some((issue) => issue.code === 'dm.venn_option_diagrams'));
+  q.decision_making_question_options.forEach((option) => { option.option_data = diagram; });
+  q.decision_making_question_options[1].option_data = {
+    ...diagram,
+    sets: diagram.sets.map((set, i) => i === 0 ? { ...set, shape: 'square' } : set),
+  };
+  report = validateSectionCandidate({ section: 'dm', input: [q], modeHint: 'practice' });
+  assert(report.issues.some((issue) => issue.code === 'dm.venn_option_key'));
+});
+
 test('valid QR practice candidate passes renderer and option checks', () => {
   const input = [{
     id: randomUUID(), title: 'Ferry passenger counts', is_free: true,
@@ -176,6 +225,49 @@ test('preview installer validates a DM candidate and remains dry-run by default'
       '.codex/skills/ucat-question-pipeline/scripts/install-preview.mjs',
       candidatePath, '--section', 'dm', '--mode', 'practice', '--write',
     ], { cwd: process.cwd(), stdio: 'pipe' }));
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('QR preview append keeps existing sets and is idempotent', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ucat-qr-preview-append-'));
+  try {
+    const script = path.resolve('.codex/skills/ucat-question-pipeline/scripts/install-preview.mjs');
+    const previewDir = path.join(dir, 'src', 'dev');
+    fs.mkdirSync(previewDir, { recursive: true });
+    const previewPath = path.join(previewDir, 'preview-qr.json');
+    const existing = qrSet();
+    fs.writeFileSync(previewPath, JSON.stringify([existing]));
+
+    const incoming = qrSet();
+    incoming.title = 'Pottery kiln batches';
+    incoming.stimulus.context = 'The table shows pots fired in a pottery kiln.';
+    incoming.stimulus.data.headers = ['Batch', 'Pots'];
+    incoming.stimulus.data.rows = [['First', '120']];
+    incoming.quantitative_reasoning_questions[0].question_text = 'How many pots were fired in the first kiln batch?';
+    const candidatePath = path.join(dir, 'incoming.json');
+    const briefPath = path.join(dir, 'brief.json');
+    fs.writeFileSync(candidatePath, JSON.stringify([incoming]));
+    fs.writeFileSync(briefPath, JSON.stringify(briefFor('qr', [incoming])));
+    const args = [script, candidatePath, '--section', 'qr', '--mode', 'practice', '--brief', briefPath, '--append'];
+
+    const dryRun = execFileSync(process.execPath, args, { cwd: dir, encoding: 'utf8' });
+    assert(dryRun.includes('2 set(s), 2 question(s)'));
+    assert.equal(JSON.parse(fs.readFileSync(previewPath, 'utf8')).length, 1);
+
+    execFileSync(process.execPath, [...args, '--write'], { cwd: dir, stdio: 'pipe' });
+    assert.deepEqual(JSON.parse(fs.readFileSync(previewPath, 'utf8')).map((set) => set.id), [existing.id, incoming.id]);
+    const backupsDir = path.join(dir, 'content-authoring', 'cache', 'preview-backups');
+    assert.equal(fs.readdirSync(backupsDir).length, 1);
+
+    const repeated = execFileSync(process.execPath, [...args, '--write'], { cwd: dir, encoding: 'utf8' });
+    assert(repeated.includes('already present'));
+    assert.equal(JSON.parse(fs.readFileSync(previewPath, 'utf8')).length, 2);
+    assert.equal(fs.readdirSync(backupsDir).length, 1);
+
+    fs.writeFileSync(candidatePath, JSON.stringify([{ ...incoming, title: 'Altered title' }]));
+    assert.throws(() => execFileSync(process.execPath, [...args, '--write'], { cwd: dir, stdio: 'pipe' }));
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

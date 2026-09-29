@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "source_packet": "content-authoring\\reports\\vr-practice-20-v3.blind.json",
+  "validator": {
+    "model": "GPT-6",
+    "started_at": "2026-09-29T21:06:04Z",
+    "completed_at": "2026-09-29T21:06:43Z"
+  },
+  "committed_before_answer_reveal": true,
+  "responses": [
+    {
+      "passage_id": "6790da18-9bee-49c2-a98b-b044d434ecf0",
+      "question_id": "8ea61a64-1222-4b0c-86c0-729fef8c8bda",
+      "order_index": 0,
+      "independent_answer": "To record when bark was last harvested",
+      "evidence": "Paragraph 1: the trunk is marked with the final digit of the harvest year, helping workers identify when it was last stripped.",
+      "relationship_or_option_eliminations": "Amount removed is not recorded; species identification is not the stated purpose; the passage says the bark grows back.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "6790da18-9bee-49c2-a98b-b044d434ecf0",
+      "question_id": "99e12c56-a867-4f52-8384-a7b3fb96936e",
+      "order_index": 1,
+      "independent_answer": "The third crop",
+      "evidence": "Paragraph 3: the second crop is generally unsuitable for quality stoppers; the desired structure is usually obtained from the third and later crops.",
+      "relationship_or_option_eliminations": "A newly planted tree has no crop; the first is irregular and unsuitable; the second is still generally unsuitable.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "6790da18-9bee-49c2-a98b-b044d434ecf0",
+      "question_id": "1bcb8c64-fe4e-4606-86d4-a49cbd195713",
+      "order_index": 2,
+      "independent_answer": "43",
+      "evidence": "Paragraph 2 requires at least nine years between harvests. The second harvest at 34 therefore permits a third no earlier than age 43.",
+      "relationship_or_option_eliminations": "35 is only one year after the second harvest; 34 is the second harvest itself; 52 adds an extra nine-year interval.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "6790da18-9bee-49c2-a98b-b044d434ecf0",
+      "question_id": "30e98bb6-944e-4b25-8a2a-2e4073262353",
+      "order_index": 3,
+      "independent_answer": "Repeated bark harvests require both careful technique and waiting.",
+      "evidence": "Paragraphs 1 and 3 describe careful cutting to preserve the living tree; paragraphs 2 and 3 describe the nine-year interval and crop sequence.",
+      "relationship_or_option_eliminations": "Trunk thickness alone is insufficient; first cork is unsuitable for quality stoppers; trees remain standing and bark regrows.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "e63d2f47-245b-463c-b038-7406b1264c96",
+      "question_id": "f7077645-6bd9-4cdc-a0e2-51e546fba34d",
+      "order_index": 0,
+      "independent_answer": "Colour is floated and arranged on the bath.",
+      "evidence": "Paragraph 1: drops of colour are supported at the bath surface and guided with a comb or tool; paper is then laid onto the surface to pick up the pattern.",
+      "relationship_or_option_eliminations": "Placing a completed sheet in a book is a later use; removing gum is unstated; painting dried paper reverses the described sequence.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "e63d2f47-245b-463c-b038-7406b1264c96",
+      "question_id": "8719b958-9359-4140-b6e4-e8a88b64b0bb",
+      "order_index": 1,
+      "independent_answer": "To show that marbling could complement written pages",
+      "evidence": "Paragraph 2: marbled colours frame rather than replace the calligraphy in a manuscript album.",
+      "relationship_or_option_eliminations": "The text expressly rejects replacement; it does not say all ebru patterns were combed; the example does not date suminagashi.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "e63d2f47-245b-463c-b038-7406b1264c96",
+      "question_id": "32a9fdc7-9d39-4fc7-9c7f-93e637a61961",
+      "order_index": 2,
+      "independent_answer": "Regular parallel lines shaped in the floating colour",
+      "evidence": "Paragraph 2 links a comb to a regular design and mentions combed lines; regular lines in floating colour are therefore strongest evidence of combing.",
+      "relationship_or_option_eliminations": "Concentric ink rings are linked to suminagashi; a gum bath says nothing about whether a comb was used; speckles framing calligraphy also do not establish comb use.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "e63d2f47-245b-463c-b038-7406b1264c96",
+      "question_id": "0598950c-5a2d-4661-b6f7-4d9abf634dfe",
+      "order_index": 3,
+      "independent_answer": "They can share a broad method without sharing a precise recipe.",
+      "evidence": "Paragraph 3: shared uses do not prove the same recipe, and 'marbled' identifies a broad method but not the comb, liquid, or colours used.",
+      "relationship_or_option_eliminations": "The bath may use gum or carrageenan; uses extend beyond covers; more than one cultural tradition is identified.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ec286c7-0754-4e7c-b994-202d18e04bc1",
+      "question_id": "10d52d04-0f6e-49b8-9a95-df8f9d2f96b9",
+      "order_index": 0,
+      "independent_answer": "A difference between stored pond water and the falling sea",
+      "evidence": "Paragraph 1: gates retain pond water while the outside sea falls, creating the height difference that drives the wheel.",
+      "relationship_or_option_eliminations": "Millstones are driven rather than pumping water; a constant river describes a different mill; waves do not strike the wheel directly.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ec286c7-0754-4e7c-b994-202d18e04bc1",
+      "question_id": "fc79e195-a26e-4611-bb2d-89899f95de36",
+      "order_index": 1,
+      "independent_answer": "The outside sea must fall enough to give the stored water a useful height advantage.",
+      "evidence": "Paragraph 2: after filling, the mill waits for a useful difference between pond and sea levels.",
+      "relationship_or_option_eliminations": "The pond is already full, so another incoming tide is unnecessary; the wheel need not be covered by rising sea; releasing all water would consume the stored head.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ec286c7-0754-4e7c-b994-202d18e04bc1",
+      "question_id": "e285562a-5ee4-4af5-951a-43579930a57e",
+      "order_index": 2,
+      "independent_answer": "That tidal water management and familiar milling machinery operated together",
+      "evidence": "Paragraph 3: at Totton and Eling, the dam and gates manage supply while the wheel and stones grind; much machinery resembles other watermills.",
+      "relationship_or_option_eliminations": "Common machinery is explicitly noted; the dam manages water rather than only serving as a bridge; no claim is made about identical millstones at every site.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ec286c7-0754-4e7c-b994-202d18e04bc1",
+      "question_id": "c66ec54c-2c9b-432b-889c-0a82115d993c",
+      "order_index": 3,
+      "independent_answer": "The difference in water levels can grow before the miller releases pond water.",
+      "evidence": "Paragraph 1: closed gates retain water while the outside sea falls; release occurs after a head has developed.",
+      "relationship_or_option_eliminations": "A closed sluice does not imply a turning wheel or constant speed; it prevents immediate emptying; later refilling remains possible.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "cd520cf5-93e8-452f-847f-d0775a298a56",
+      "question_id": "ab07c151-b7ee-49ce-a25c-2cdf490608ad",
+      "order_index": 0,
+      "independent_answer": "True",
+      "evidence": "Paragraph 2 says the White Caterthun has a great stone fort with evidence of vitrification.",
+      "relationship_or_option_eliminations": "Entailment: the statement restates the passage's observation about its stone fort.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "cd520cf5-93e8-452f-847f-d0775a298a56",
+      "question_id": "71f4bc3c-581c-4e67-87ae-bad66f99de62",
+      "order_index": 1,
+      "independent_answer": "False",
+      "evidence": "Paragraph 2 says Brown Caterthun earthworks had been maintained, burned and rebuilt over time.",
+      "relationship_or_option_eliminations": "Contradiction: rebuilding is expressly reported, contrary to abandonment without later rebuilding.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "cd520cf5-93e8-452f-847f-d0775a298a56",
+      "question_id": "2fb8771b-ad3d-413b-af0c-fa6b585ed564",
+      "order_index": 2,
+      "independent_answer": "Can't tell",
+      "evidence": "Paragraph 3 says the Rahoy evidence does not identify the person who set the fire; paragraph 1 says the circumstances of a particular fire may remain uncertain.",
+      "relationship_or_option_eliminations": "Unresolved: attackers are possible but neither identified nor ruled out by the passage.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "cd520cf5-93e8-452f-847f-d0775a298a56",
+      "question_id": "618fbfcf-eb85-4baf-a831-1a1c5d13ee57",
+      "order_index": 3,
+      "independent_answer": "False",
+      "evidence": "Paragraph 3 says the cavities explain a physical route from burned timber to fused rock but do not identify who set the fire; the conclusion says human intention remains open.",
+      "relationship_or_option_eliminations": "Contradiction: the passage explicitly limits the cavities to evidence of process, not why the wall was burned.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ce4672d-1921-4669-bfe8-8228e7d280d1",
+      "question_id": "d26f137c-d687-41e6-8cef-be04c3b5c366",
+      "order_index": 0,
+      "independent_answer": "False",
+      "evidence": "Paragraph 1 says a solid panel diverts much airflow around itself, while an open mesh lets more fog pass through.",
+      "relationship_or_option_eliminations": "Contradiction: the statement reverses the given comparison of airflow.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ce4672d-1921-4669-bfe8-8228e7d280d1",
+      "question_id": "d66695e8-722b-485d-8bbb-adcd35f4eb7a",
+      "order_index": 1,
+      "independent_answer": "True",
+      "evidence": "Paragraph 2 lists three features examined: strand thickness, gaps between strands, and surface coating.",
+      "relationship_or_option_eliminations": "Entailment: all three listed features match the statement.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ce4672d-1921-4669-bfe8-8228e7d280d1",
+      "question_id": "913ef3de-1793-473a-97d1-59cc056be21a",
+      "order_index": 2,
+      "independent_answer": "Can't tell",
+      "evidence": "Paragraph 3 discusses several meshes in series but says no measured annual yield for such a series is given.",
+      "relationship_or_option_eliminations": "Unresolved: the passage provides no basis for the exact three-screen doubling claim, and it does not rule it out.",
+      "confidence": "high",
+      "ambiguity": "None."
+    },
+    {
+      "passage_id": "2ce4672d-1921-4669-bfe8-8228e7d280d1",
+      "question_id": "717397ca-99be-4ced-9ad8-4d3f1fbfbd83",
+      "order_index": 3,
+      "independent_answer": "True",
+      "evidence": "Paragraph 3 says a mesh cannot collect droplets that never reach it; paragraph 2 identifies the finer mesh as an improvement under particular conditions.",
+      "relationship_or_option_eliminations": "Entailment: the stated physical requirement applies to the improved mesh too.",
+      "confidence": "high",
+      "ambiguity": "None."
+    }
+  ]
+}

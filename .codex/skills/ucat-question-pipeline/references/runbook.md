@@ -60,6 +60,15 @@ The Developer controls exist only in `__DEV__`. The phone must be using Expo Go/
 
 Preview content is marked free and local. Practice preview answers stay in local storage but do not write practice telemetry; timed preview results stay local and do not submit or queue cloud writes.
 
+For QR practice, append each accepted batch to the same `src/dev/preview-qr.json` file after screening it against the existing preview. Repeating an install of an identical batch is a no-op; a reused set ID with changed content is rejected. The installer checks the combined preview and backs up the current file before a write:
+
+```powershell
+npm run questions:preview:install -- content-authoring/candidates/qr-practice-20-v3.json -- --section qr --mode practice --brief content-authoring/reports/qr-practice-20-v3.brief.json --append
+npm run questions:preview:install -- content-authoring/candidates/qr-practice-20-v3.json -- --section qr --mode practice --brief content-authoring/reports/qr-practice-20-v3.brief.json --append --write
+```
+
+The versioned candidate and validation files are the review record. Only `src/dev/preview-qr.json` is loaded by QR developer mode.
+
 ## Create SQL only after approval
 
 ```powershell

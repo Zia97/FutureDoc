@@ -1,0 +1,839 @@
+{
+  "schema_version": 1,
+  "candidate_path": "content-authoring\\candidates\\vr-practice-20-v3.json",
+  "validator": {
+    "model": "GPT-6",
+    "run_at": "2026-09-29T21:11:02Z"
+  },
+  "deterministic_report_path": "content-authoring\\reports\\vr-practice-20-v3.deterministic.json",
+  "blind_review_completed": true,
+  "batch_verdict": "ready",
+  "passages": [
+    {
+      "passage_id": "6790da18-9bee-49c2-a98b-b044d434ecf0",
+      "title": "Harvesting Cork Without Felling the Oak",
+      "verdict": "pass",
+      "factual_provenance": "pass",
+      "factual_provenance_note": "APCOR confirms 70 cm at 1.3 m, about 25 years, first/second/third crop grades, manual stripping and the marked harvest digit; its cork-oak page confirms the legal minimum nine-year interval and bark regrowth.",
+      "novelty": "pass",
+      "novelty_note": "Cork bark removal from living trees, nine-year harvest intervals, and crop quality differ from this passage's subject and tested inference.",
+      "nearest_matches": [
+        {
+          "existing_id": "c4a1b8e2-0820-4a01-9f11-000000000001",
+          "title": "The Galapagos Finches and Beak Morphology",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-1.nearest.json",
+          "query_score": 0.0124,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Cork bark removal from living trees, nine-year harvest intervals, and crop quality differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c7a1e4b2-0608-4a08-9d08-000000000008",
+          "title": "Japanese Lacquerware (Urushi)",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-1.nearest.json",
+          "query_score": 0.0117,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both involve tree-derived materials, but the existing passage tests urushi curing, layers and decoration after sap collection; this one tests repeated bark harvests, nine-year intervals and cork grades."
+        },
+        {
+          "existing_id": "f1a2b3c4-0007-4007-8007-000000000001",
+          "title": "The Canal du Midi",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-1.nearest.json",
+          "query_score": 0.0105,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both mention water-related infrastructure, but the existing passage tests a canal's construction and commercial history; this one tests cork oak harvest timing and crop sequence."
+        },
+        {
+          "existing_id": "c7a1e4b2-0605-4a05-9d05-000000000005",
+          "title": "The Cornish Tin Trade",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-1.nearest.json",
+          "query_score": 0.01,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Cork bark removal from living trees, nine-year harvest intervals, and crop quality differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c4a1b8e2-0803-4a01-9f11-000000000001",
+          "title": "The Hanseatic Kontor in London",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-1.nearest.json",
+          "query_score": 0.0097,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Cork bark removal from living trees, nine-year harvest intervals, and crop quality differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "d2e3f4a5-2003-4b03-9b03-000000000003",
+          "existing_passage_id": "d2e3f4a5-2003-4b03-9b03-000000000001",
+          "title": "The Amber Road",
+          "mode": "practice",
+          "source": "v3 deterministic question match",
+          "lexical_score": 0.3227,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "The generic main-point question wording overlaps, but the Amber Road tests ancient amber trade routes and chronology, whereas this item synthesises cork harvesting skill and timing."
+        }
+      ],
+      "questions": [
+        {
+          "question_id": "8ea61a64-1222-4b0c-86c0-729fef8c8bda",
+          "order_index": 0,
+          "independent_answer": "To record when bark was last harvested",
+          "provided_answer": "To record when bark was last harvested",
+          "answer_agrees": true,
+          "evidence": "Paragraph 1: the trunk is marked with the final digit of the harvest year, helping workers identify when it was last stripped.",
+          "relationship_or_option_eliminations": "Amount removed is not recorded; species identification is not the stated purpose; the passage says the bark grows back.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation eliminates yield, species and failed regrowth; retrieval is direct.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "99e12c56-a867-4f52-8384-a7b3fb96936e",
+          "order_index": 1,
+          "independent_answer": "The third crop",
+          "provided_answer": "The third crop",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3: the second crop is generally unsuitable for quality stoppers; the desired structure is usually obtained from the third and later crops.",
+          "relationship_or_option_eliminations": "A newly planted tree has no crop; the first is irregular and unsuitable; the second is still generally unsuitable.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation identifies third and later crops and rejects first and second; the newly planted option is implicitly excluded by the stated roughly 25-year first-harvest threshold. An explicit sentence would improve completeness, but the answer and teaching point remain clear.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "1bcb8c64-fe4e-4606-86d4-a49cbd195713",
+          "order_index": 2,
+          "independent_answer": "43",
+          "provided_answer": "43",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2 requires at least nine years between harvests. The second harvest at 34 therefore permits a third no earlier than age 43.",
+          "relationship_or_option_eliminations": "35 is only one year after the second harvest; 34 is the second harvest itself; 52 adds an extra nine-year interval.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "hard",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation correctly adds nine years to the second harvest and handles all three numerical traps.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "30e98bb6-944e-4b25-8a2a-2e4073262353",
+          "order_index": 3,
+          "independent_answer": "Repeated bark harvests require both careful technique and waiting.",
+          "provided_answer": "Repeated bark harvests require both careful technique and waiting.",
+          "answer_agrees": true,
+          "evidence": "Paragraphs 1 and 3 describe careful cutting to preserve the living tree; paragraphs 2 and 3 describe the nine-year interval and crop sequence.",
+          "relationship_or_option_eliminations": "Trunk thickness alone is insufficient; first cork is unsuitable for quality stoppers; trees remain standing and bark regrows.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The main-idea explanation joins cutting skill, harvest interval and crop sequence and addresses all three alternatives.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        }
+      ],
+      "source_reviews": [
+        {
+          "title": "APCOR, Transformation Process",
+          "url": "https://apcor.pt/en/transformation-process",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "APCOR, Cork oak",
+          "url": "https://apcor.pt/en/cork-oak",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "WWF, Put a cork in it!",
+          "url": "https://wwf.panda.org/wwf_news/?4802/Put-a-cork-in-it=",
+          "access_status": "403 in this audit; facts corroborated by APCOR"
+        }
+      ]
+    },
+    {
+      "passage_id": "e63d2f47-245b-463c-b038-7406b1264c96",
+      "title": "Patterns on a Marbling Bath",
+      "verdict": "pass",
+      "factual_provenance": "pass",
+      "factual_provenance_note": "Metropolitan Museum of Art pages confirm gum or carrageenan baths, combing and transfer, calligraphic marbled borders, bookbinding uses, and water-based suminagashi rings.",
+      "novelty": "pass",
+      "novelty_note": "Floating colour transferred to paper, variation in tools and recipes, and visual evidence of combing differ from this passage's subject and tested inference.",
+      "nearest_matches": [
+        {
+          "existing_id": "301f7d1f-9aa6-414b-983a-7334eb6f4fc6",
+          "title": "The Philosophy of Thought Experiments",
+          "mode": "timed",
+          "source": "vr-practice-20-topic-2.nearest.json",
+          "query_score": 0.0215,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Floating colour transferred to paper, variation in tools and recipes, and visual evidence of combing differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c7a1f010-1010-4010-8010-000000000001",
+          "title": "Cymatics and Acoustic Visualisation",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-2.nearest.json",
+          "query_score": 0.0213,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Floating colour transferred to paper, variation in tools and recipes, and visual evidence of combing differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c7a1e4b2-0608-4a08-9d08-000000000008",
+          "title": "Japanese Lacquerware (Urushi)",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-2.nearest.json",
+          "query_score": 0.0197,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both concern decorated material craft, but the existing passage tests lacquer chemistry, layers and ornament; this one tests floating colour transfer and evidence of combing."
+        },
+        {
+          "existing_id": "c4a1b8e2-0815-4a01-9f11-000000000001",
+          "title": "The Edo Period Fire Brigades",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-2.nearest.json",
+          "query_score": 0.019,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Floating colour transferred to paper, variation in tools and recipes, and visual evidence of combing differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "12cb60d0-6400-4c43-a36f-ce31bfefe1c2",
+          "title": "The Silk Road",
+          "mode": "timed",
+          "source": "vr-practice-20-topic-2.nearest.json",
+          "query_score": 0.018,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Floating colour transferred to paper, variation in tools and recipes, and visual evidence of combing differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "78d38f38-480e-4ecb-b283-226fd3142530",
+          "title": "Mycorrhizal Networks in Forest Ecosystems",
+          "mode": "practice",
+          "source": "v3 deterministic passage match",
+          "lexical_score": 0.1805,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Floating colour transferred to paper, variation in tools and recipes, and visual evidence of combing differ from this passage's subject and tested inference."
+        }
+      ],
+      "questions": [
+        {
+          "question_id": "f7077645-6bd9-4cdc-a0e2-51e546fba34d",
+          "order_index": 0,
+          "independent_answer": "Colour is floated and arranged on the bath.",
+          "provided_answer": "Colour is floated and arranged on the bath.",
+          "answer_agrees": true,
+          "evidence": "Paragraph 1: drops of colour are supported at the bath surface and guided with a comb or tool; paper is then laid onto the surface to pick up the pattern.",
+          "relationship_or_option_eliminations": "Placing a completed sheet in a book is a later use; removing gum is unstated; painting dried paper reverses the described sequence.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation follows the colour-on-bath-to-paper sequence and dismisses each alternative.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "8719b958-9359-4140-b6e4-e8a88b64b0bb",
+          "order_index": 1,
+          "independent_answer": "To show that marbling could complement written pages",
+          "provided_answer": "To show that marbling could complement written pages",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2: marbled colours frame rather than replace the calligraphy in a manuscript album.",
+          "relationship_or_option_eliminations": "The text expressly rejects replacement; it does not say all ebru patterns were combed; the example does not date suminagashi.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation uses the calligraphic border as evidence of complementing text and rejects each wrong purpose.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "32a9fdc7-9d39-4fc7-9c7f-93e637a61961",
+          "order_index": 2,
+          "independent_answer": "Regular parallel lines shaped in the floating colour",
+          "provided_answer": "Regular parallel lines shaped in the floating colour",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2 links a comb to a regular design and mentions combed lines; regular lines in floating colour are therefore strongest evidence of combing.",
+          "relationship_or_option_eliminations": "Concentric ink rings are linked to suminagashi; a gum bath says nothing about whether a comb was used; speckles framing calligraphy also do not establish comb use.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "hard",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation compares all three competing observations and correctly treats regular lines as strong, not conclusive, evidence of combing.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "0598950c-5a2d-4661-b6f7-4d9abf634dfe",
+          "order_index": 3,
+          "independent_answer": "They can share a broad method without sharing a precise recipe.",
+          "provided_answer": "They can share a broad method without sharing a precise recipe.",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3: shared uses do not prove the same recipe, and 'marbled' identifies a broad method but not the comb, liquid, or colours used.",
+          "relationship_or_option_eliminations": "The bath may use gum or carrageenan; uses extend beyond covers; more than one cultural tradition is identified.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation uses the final paragraph's method-versus-recipe distinction and rejects each overgeneralisation.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        }
+      ],
+      "source_reviews": [
+        {
+          "title": "The Metropolitan Museum of Art, The Art of Marbled Paper",
+          "url": "https://www.metmuseum.org/ja/perspectives/marbled-paper",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "The Metropolitan Museum of Art, Decorated Paper Techniques",
+          "url": "https://www.metmuseum.org/de/perspectives/decorated-paper?rss=1",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "The Metropolitan Museum of Art, Playing with Paper: Suminagashi and Orizome",
+          "url": "https://www.metmuseum.org/es/perspectives/playing-with-paper",
+          "access_status": "opened and checked"
+        }
+      ]
+    },
+    {
+      "passage_id": "2ec286c7-0754-4e7c-b994-202d18e04bc1",
+      "title": "Working to the Rhythm of a Tide Mill",
+      "verdict": "pass",
+      "factual_provenance": "pass",
+      "factual_provenance_note": "Historic England's Mills guide confirms a tide pond filled on the flow tide and retained on the ebb, with otherwise similar watermill technology; the Totton and Eling listing confirms the dam, Bartley Water, sluice gear, wheel and millstones.",
+      "novelty": "pass",
+      "novelty_note": "Stored tidal water driving a mill wheel and changing head differ from this passage's subject and tested inference.",
+      "nearest_matches": [
+        {
+          "existing_id": "c7a1e4b2-0605-4a05-9d05-000000000005",
+          "title": "The Cornish Tin Trade",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-3.nearest.json",
+          "query_score": 0.0173,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "The existing passage concerns tin extraction and trade; its incidental tidal island does not duplicate tidal-water storage, sluices or mill power."
+        },
+        {
+          "existing_id": "71e51609-9ed4-4516-993f-1e4709a80200",
+          "title": "The History of Anesthesia",
+          "mode": "timed",
+          "source": "vr-practice-20-topic-3.nearest.json",
+          "query_score": 0.0166,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Stored tidal water driving a mill wheel and changing head differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "f1a2b3c4-0001-4001-8001-000000000001",
+          "title": "The Antikythera Mechanism",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-3.nearest.json",
+          "query_score": 0.0161,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Stored tidal water driving a mill wheel and changing head differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "6c1d64f5-0b7a-4d4e-c8f9-5a9b1d4e6f7a",
+          "title": "Cochineal and the Red Dye Trade",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-3.nearest.json",
+          "query_score": 0.016,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Stored tidal water driving a mill wheel and changing head differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "99356696-d87c-4aef-a8ab-739e5b7365d2",
+          "title": "The Enclosure Movement",
+          "mode": "timed",
+          "source": "vr-practice-20-topic-3.nearest.json",
+          "query_score": 0.016,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Stored tidal water driving a mill wheel and changing head differ from this passage's subject and tested inference."
+        }
+      ],
+      "questions": [
+        {
+          "question_id": "10d52d04-0f6e-49b8-9a95-df8f9d2f96b9",
+          "order_index": 0,
+          "independent_answer": "A difference between stored pond water and the falling sea",
+          "provided_answer": "A difference between stored pond water and the falling sea",
+          "answer_agrees": true,
+          "evidence": "Paragraph 1: gates retain pond water while the outside sea falls, creating the height difference that drives the wheel.",
+          "relationship_or_option_eliminations": "Millstones are driven rather than pumping water; a constant river describes a different mill; waves do not strike the wheel directly.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation correctly identifies the stored-water head and rejects stones, a continuous river and direct wave action.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "fc79e195-a26e-4611-bb2d-89899f95de36",
+          "order_index": 1,
+          "independent_answer": "The outside sea must fall enough to give the stored water a useful height advantage.",
+          "provided_answer": "The outside sea must fall enough to give the stored water a useful height advantage.",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2: after filling, the mill waits for a useful difference between pond and sea levels.",
+          "relationship_or_option_eliminations": "The pond is already full, so another incoming tide is unnecessary; the wheel need not be covered by rising sea; releasing all water would consume the stored head.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation explains why the sea must fall after filling and addresses each timing trap.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "e285562a-5ee4-4af5-951a-43579930a57e",
+          "order_index": 2,
+          "independent_answer": "That tidal water management and familiar milling machinery operated together",
+          "provided_answer": "That tidal water management and familiar milling machinery operated together",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3: at Totton and Eling, the dam and gates manage supply while the wheel and stones grind; much machinery resembles other watermills.",
+          "relationship_or_option_eliminations": "Common machinery is explicitly noted; the dam manages water rather than only serving as a bridge; no claim is made about identical millstones at every site.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation connects dam and sluice gear to familiar wheel and stones; its alternatives are individually rejected.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        },
+        {
+          "question_id": "c66ec54c-2c9b-432b-889c-0a82115d993c",
+          "order_index": 3,
+          "independent_answer": "The difference in water levels can grow before the miller releases pond water.",
+          "provided_answer": "The difference in water levels can grow before the miller releases pond water.",
+          "answer_agrees": true,
+          "evidence": "Paragraph 1: closed gates retain water while the outside sea falls; release occurs after a head has developed.",
+          "relationship_or_option_eliminations": "A closed sluice does not imply a turning wheel or constant speed; it prevents immediate emptying; later refilling remains possible.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "hard",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The explanation draws the conditional head-growth inference without assuming wheel speed, emptying or blocked refilling.",
+          "ambiguity_review": "None.",
+          "option_quality": "pass"
+        }
+      ],
+      "source_reviews": [
+        {
+          "title": "Historic England, Mills: Introductions to Heritage Assets",
+          "url": "https://historicengland.org.uk/images-books/publications/iha-mills/heag212-mills/",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "Historic England, Tide Mill, Totton and Eling listing",
+          "url": "https://historicengland.org.uk/listing/the-list/list-entry/1179062",
+          "access_status": "opened and checked"
+        }
+      ]
+    },
+    {
+      "passage_id": "cd520cf5-93e8-452f-847f-d0775a298a56",
+      "title": "Fire in the Walls of Scottish Hillforts",
+      "verdict": "pass",
+      "factual_provenance": "pass",
+      "factual_provenance_note": "Historic Environment Scotland confirms White Caterthun vitrification and Brown Caterthun burning/rebuilding; its Rahoy record confirms timber cavities, partial excavation, heat-fused rock and rejection of deliberate constructional vitrification.",
+      "novelty": "pass",
+      "novelty_note": "Vitrified stone, timber cavities, rebuilding and unresolved fire intention differ from this passage's subject and tested inference.",
+      "nearest_matches": [
+        {
+          "existing_id": "c7a1e4b2-0601-4a01-9d01-000000000001",
+          "title": "The Antonine Wall",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-4.nearest.json",
+          "query_score": 0.0204,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both involve surviving walls in Scotland, but the Roman frontier passage tests construction, slabs and abandonment; this passage tests vitrification, burning and inference about intention."
+        },
+        {
+          "existing_id": "f1a2b3c4-0004-4004-8004-000000000001",
+          "title": "The Beaufort Scale",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-4.nearest.json",
+          "query_score": 0.0161,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Vitrified stone, timber cavities, rebuilding and unresolved fire intention differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c7a1e4b2-0619-4a19-9d19-000000000019",
+          "title": "The Pastoral Nomads of the Eurasian Steppe",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-4.nearest.json",
+          "query_score": 0.0153,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Vitrified stone, timber cavities, rebuilding and unresolved fire intention differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "78d38f38-480e-4ecb-b283-226fd3142530",
+          "title": "Mycorrhizal Networks in Forest Ecosystems",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-4.nearest.json",
+          "query_score": 0.0136,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Vitrified stone, timber cavities, rebuilding and unresolved fire intention differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c4a1b8e2-0812-4a01-9f11-000000000001",
+          "title": "Peat Bog Preservation and Bog Bodies",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-4.nearest.json",
+          "query_score": 0.0132,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both weigh archaeological traces against interpretations, but the material processes, sites, questions and uncertainty differ: bog chemistry and deaths versus timber-laced rampart fire."
+        },
+        {
+          "existing_id": "38964db3-6e34-4401-9b12-755e96eafb1c",
+          "title": "Linguistic Relativity",
+          "mode": "timed",
+          "source": "v3 deterministic passage match",
+          "lexical_score": 0.1854,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Vitrified stone, timber cavities, rebuilding and unresolved fire intention differ from this passage's subject and tested inference."
+        }
+      ],
+      "questions": [
+        {
+          "question_id": "ab07c151-b7ee-49ce-a25c-2cdf490608ad",
+          "order_index": 0,
+          "independent_answer": "True",
+          "provided_answer": "True",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2 says the White Caterthun has a great stone fort with evidence of vitrification.",
+          "relationship_or_option_eliminations": "Entailment: the statement restates the passage's observation about its stone fort.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The White Caterthun claim is expressly entailed by paragraph 2.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        },
+        {
+          "question_id": "71f4bc3c-581c-4e67-87ae-bad66f99de62",
+          "order_index": 1,
+          "independent_answer": "False",
+          "provided_answer": "False",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2 says Brown Caterthun earthworks had been maintained, burned and rebuilt over time.",
+          "relationship_or_option_eliminations": "Contradiction: rebuilding is expressly reported, contrary to abandonment without later rebuilding.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The no-rebuilding claim is contradicted by paragraph 2's burned-and-rebuilt evidence.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        },
+        {
+          "question_id": "2fb8771b-ad3d-413b-af0c-fa6b585ed564",
+          "order_index": 2,
+          "independent_answer": "Can't tell",
+          "provided_answer": "Can't tell",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3 says the Rahoy evidence does not identify the person who set the fire; paragraph 1 says the circumstances of a particular fire may remain uncertain.",
+          "relationship_or_option_eliminations": "Unresolved: attackers are possible but neither identified nor ruled out by the passage.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "Attacker identity remains unresolved; the passage neither confirms nor excludes attackers.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        },
+        {
+          "question_id": "618fbfcf-eb85-4baf-a831-1a1c5d13ee57",
+          "order_index": 3,
+          "independent_answer": "False",
+          "provided_answer": "False",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3 says the cavities explain a physical route from burned timber to fused rock but do not identify who set the fire; the conclusion says human intention remains open.",
+          "relationship_or_option_eliminations": "Contradiction: the passage explicitly limits the cavities to evidence of process, not why the wall was burned.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "hard",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The cavities show a route to fused rock, while the passage expressly leaves the human reason for the fire open; False is defensible rather than merely unsupported.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        }
+      ],
+      "source_reviews": [
+        {
+          "title": "Historic Environment Scotland, Brown and White Caterthuns: History and stories",
+          "url": "https://www.historicenvironment.scot/visit/all/brown-and-white-caterthuns/history-and-stories/",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "Historic Environment Scotland, Rahoy scheduled monument record",
+          "url": "https://portal.historicenvironment.scot/apex/f?p=1505:300:::::VIEWTYPE,VIEWREF:designation,SM7810",
+          "access_status": "opened and checked"
+        }
+      ]
+    },
+    {
+      "passage_id": "2ce4672d-1921-4669-bfe8-8228e7d280d1",
+      "title": "Catching Water from Coastal Fog",
+      "verdict": "pass",
+      "factual_provenance": "pass",
+      "factual_provenance_note": "MIT News confirms strand size, gap size and coating, airflow deflection around solid surfaces, the Chilean test screens, and the proposal for multiple nets; it does not report a measured annual series yield.",
+      "novelty": "pass",
+      "novelty_note": "Fog droplet capture by permeable meshes and unmeasured multi-screen yield differ from this passage's subject and tested inference.",
+      "nearest_matches": [
+        {
+          "existing_id": "f1a2b3c4-0007-4007-8007-000000000001",
+          "title": "The Canal du Midi",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-5.nearest.json",
+          "query_score": 0.0134,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both concern water management, but a transport canal's feeder channels differ from mesh interception of airborne fog droplets and yield limits."
+        },
+        {
+          "existing_id": "c7a1e4b2-0610-4a10-9d10-000000000010",
+          "title": "Foraminifera and Paleoclimate Reconstruction",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-5.nearest.json",
+          "query_score": 0.0133,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Fog droplet capture by permeable meshes and unmeasured multi-screen yield differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "d2e3f4a5-2005-4b05-9b05-000000000001",
+          "title": "Ocean Acidification and Coral Calcification",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-5.nearest.json",
+          "query_score": 0.0133,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Both concern water and environmental processes, but the existing passage tests seawater chemistry and coral calcification, not mesh structure or fog yield."
+        },
+        {
+          "existing_id": "c1d2e3f4-1002-4a02-9a02-000000000001",
+          "title": "Sourdough Fermentation Science",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-5.nearest.json",
+          "query_score": 0.0128,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Fog droplet capture by permeable meshes and unmeasured multi-screen yield differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "c4a1b8e2-0810-4a01-9f11-000000000001",
+          "title": "The Roman Lead Pipes of Pompeii",
+          "mode": "practice",
+          "source": "vr-practice-20-topic-5.nearest.json",
+          "query_score": 0.0125,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Fog droplet capture by permeable meshes and unmeasured multi-screen yield differ from this passage's subject and tested inference."
+        },
+        {
+          "existing_id": "99356696-d87c-4aef-a8ab-739e5b7365d2",
+          "title": "The Enclosure Movement",
+          "mode": "timed",
+          "source": "v3 deterministic passage match",
+          "lexical_score": 0.1801,
+          "semantic_verdict": "distinct",
+          "semantic_difference": "Fog droplet capture by permeable meshes and unmeasured multi-screen yield differ from this passage's subject and tested inference."
+        }
+      ],
+      "questions": [
+        {
+          "question_id": "d26f137c-d687-41e6-8cef-be04c3b5c366",
+          "order_index": 0,
+          "independent_answer": "False",
+          "provided_answer": "False",
+          "answer_agrees": true,
+          "evidence": "Paragraph 1 says a solid panel diverts much airflow around itself, while an open mesh lets more fog pass through.",
+          "relationship_or_option_eliminations": "Contradiction: the statement reverses the given comparison of airflow.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The first paragraph expressly reverses the claimed solid-panel airflow comparison.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        },
+        {
+          "question_id": "d66695e8-722b-485d-8bbb-adcd35f4eb7a",
+          "order_index": 1,
+          "independent_answer": "True",
+          "provided_answer": "True",
+          "answer_agrees": true,
+          "evidence": "Paragraph 2 lists three features examined: strand thickness, gaps between strands, and surface coating.",
+          "relationship_or_option_eliminations": "Entailment: all three listed features match the statement.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The three studied variables are explicitly listed in paragraph 2.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        },
+        {
+          "question_id": "913ef3de-1793-473a-97d1-59cc056be21a",
+          "order_index": 2,
+          "independent_answer": "Can't tell",
+          "provided_answer": "Can't tell",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3 discusses several meshes in series but says no measured annual yield for such a series is given.",
+          "relationship_or_option_eliminations": "Unresolved: the passage provides no basis for the exact three-screen doubling claim, and it does not rule it out.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "hard",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The exact three-screen annual doubling claim remains unresolved; the passage supplies no measured annual series yield.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        },
+        {
+          "question_id": "717397ca-99be-4ced-9ad8-4d3f1fbfbd83",
+          "order_index": 3,
+          "independent_answer": "True",
+          "provided_answer": "True",
+          "answer_agrees": true,
+          "evidence": "Paragraph 3 says a mesh cannot collect droplets that never reach it; paragraph 2 identifies the finer mesh as an improvement under particular conditions.",
+          "relationship_or_option_eliminations": "Entailment: the stated physical requirement applies to the improved mesh too.",
+          "confidence": "high",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": "",
+          "difficulty": "normal",
+          "difficulty_review": "appropriate",
+          "explanation_quality": "pass",
+          "logic_and_explanation_note": "The dependence on fog droplets reaching even an improved mesh follows from the physical limit stated in paragraph 3.",
+          "ambiguity_review": "None.",
+          "option_quality": "not applicable: TFC"
+        }
+      ],
+      "source_reviews": [
+        {
+          "title": "MIT News, How to get fresh water out of thin air",
+          "url": "https://news.mit.edu/2013/how-to-get-fresh-water-out-of-thin-air-0830",
+          "access_status": "opened and checked"
+        },
+        {
+          "title": "MIT News, Out of thick air",
+          "url": "https://news.mit.edu/2011/fog-harvesting-0421",
+          "access_status": "opened and checked"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "passed_questions": 20,
+    "revised_questions": 0,
+    "rejected_questions": 0,
+    "passed_passages": 5,
+    "blocking_issues": [],
+    "nonblocking_note": "Cork question 2's answer reason could explicitly dismiss the newly planted-tree distractor, although the first-harvest age in the passage and correct third-crop explanation make the answer clear.",
+    "nonblocking_source_note": "The manifest's WWF cork article returned HTTP 403 during this audit; APCOR's two accessible pages independently support the relevant cork claims."
+  },
+  "brief_path": "content-authoring\\reports\\vr-practice-20.brief.json",
+  "manifest_path": "content-authoring\\reports\\vr-practice-20-v3.manifest.json",
+  "blind_response_path": "content-authoring\\reports\\vr-practice-20-v3.blind-response.json",
+  "corpus_run_id": "vr-sync-20260929204620",
+  "corpus_scope": {
+    "passages": 144,
+    "practice": 100,
+    "timed": 44
+  },
+  "deterministic_gate": {
+    "verdict": "pass",
+    "errors": 0,
+    "warnings": 0
+  },
+  "editorial_audit": {
+    "passage_word_counts": {
+      "Harvesting Cork Without Felling the Oak": 287,
+      "Patterns on a Marbling Bath": 280,
+      "Working to the Rhythm of a Tide Mill": 292,
+      "Fire in the Walls of Scottish Hillforts": 279,
+      "Catching Water from Coastal Fog": 300
+    },
+    "mc_answer_position_counts": {
+      "1": 3,
+      "2": 3,
+      "3": 3,
+      "4": 3
+    },
+    "difficulty_counts": {
+      "normal": 15,
+      "hard": 5
+    },
+    "format_counts": {
+      "mc_passages": 3,
+      "tfc_passages": 2
+    },
+    "within_batch_novelty": "pass: five distinct topics, processes, tested evidence and inference chains; no passage or question logic is reused across the pending batch.",
+    "option_clueing": "pass: MC answer positions are exactly balanced at three each; no correct option is identified by a consistent length, grammar, specificity or tone cue.",
+    "trap_and_purpose_variety": "pass: MC items span retrieval, direct comprehension, main idea, purpose, evidence evaluation and conditional inference; TFC sets distinguish explicit evidence, contradiction and unresolved identity or yield."
+  }
+}

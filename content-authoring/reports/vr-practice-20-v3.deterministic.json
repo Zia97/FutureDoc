@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-29T21:05:21.288Z",
+  "input": "content-authoring\\candidates\\vr-practice-20-v3.json",
+  "mode": "practice",
+  "counts": {
+    "passages": 5,
+    "questions": 20,
+    "mc_passages": 3,
+    "tfc_passages": 2,
+    "errors": 0,
+    "warnings": 0
+  },
+  "deterministic_verdict": "pass",
+  "issues": [],
+  "nearest_existing_content": [
+    {
+      "candidate_id": "6790da18-9bee-49c2-a98b-b044d434ecf0",
+      "candidate_title": "Harvesting Cork Without Felling the Oak",
+      "passage_matches": [],
+      "question_matches": [
+        {
+          "candidate_order_index": 3,
+          "existing_id": "d2e3f4a5-2003-4b03-9b03-000000000003",
+          "passage_title": "The Amber Road",
+          "mode": "practice",
+          "question_text": "Which of the following best summarises the passage's main point?",
+          "score": 0.3227
+        }
+      ]
+    },
+    {
+      "candidate_id": "e63d2f47-245b-463c-b038-7406b1264c96",
+      "candidate_title": "Patterns on a Marbling Bath",
+      "passage_matches": [
+        {
+          "existing_id": "78d38f38-480e-4ecb-b283-226fd3142530",
+          "mode": "practice",
+          "title": "Mycorrhizal Networks in Forest Ecosystems",
+          "score": 0.1805
+        }
+      ],
+      "question_matches": []
+    },
+    {
+      "candidate_id": "2ec286c7-0754-4e7c-b994-202d18e04bc1",
+      "candidate_title": "Working to the Rhythm of a Tide Mill",
+      "passage_matches": [],
+      "question_matches": []
+    },
+    {
+      "candidate_id": "cd520cf5-93e8-452f-847f-d0775a298a56",
+      "candidate_title": "Fire in the Walls of Scottish Hillforts",
+      "passage_matches": [
+        {
+          "existing_id": "38964db3-6e34-4401-9b12-755e96eafb1c",
+          "mode": "timed",
+          "title": "Linguistic Relativity",
+          "score": 0.1854
+        },
+        {
+          "existing_id": "c4a1b8e2-0812-4a01-9f11-000000000001",
+          "mode": "practice",
+          "title": "Peat Bog Preservation and Bog Bodies",
+          "score": 0.1833
+        }
+      ],
+      "question_matches": []
+    },
+    {
+      "candidate_id": "2ce4672d-1921-4669-bfe8-8228e7d280d1",
+      "candidate_title": "Catching Water from Coastal Fog",
+      "passage_matches": [
+        {
+          "existing_id": "99356696-d87c-4aef-a8ab-739e5b7365d2",
+          "mode": "timed",
+          "title": "The Enclosure Movement",
+          "score": 0.1801
+        }
+      ],
+      "question_matches": []
+    }
+  ],
+  "note": "A pass means the machine-checkable contract passed. It is not an answer-correctness verdict."
+}

@@ -1,0 +1,674 @@
+{
+  "schema_version": 1,
+  "run_id": "qr-practice-20-20260929-01",
+  "section": "qr",
+  "brief_path": "content-authoring/reports/qr-practice-20-v3.brief.json",
+  "candidate_path": "content-authoring/candidates/qr-practice-20-v3.json",
+  "corpus_run_id": "qr-sync-20260929204555",
+  "generator": {
+    "model": "gpt-6-astra",
+    "completed_at": "2026-09-29T21:01:39.377140+00:00"
+  },
+  "units": [
+    {
+      "unit_id": "47146d21-b326-48ee-8105-a2aa76c87d05",
+      "working_topic": "soap bottling",
+      "type_or_skill": "stimulus:table",
+      "novelty_rationale": "Fictional context and a distinct stimulus layout with its own derived values and calculation routes; screened against the full 156-unit practice and timed inventory and the relevant nearest-match report.",
+      "semantic_fingerprint": {
+        "domain": "small-batch soap bottling quality control",
+        "stimulus_dimensions": "4 by 5 table; run-level filled, rejected, time and volume",
+        "missing_data_mechanism": "none; accepted bottles are derived by subtraction",
+        "skills": [
+          "subtraction",
+          "percentage",
+          "volume conversion",
+          "combined work rate"
+        ],
+        "calculation_routes": [
+          "accepted count",
+          "rejection fraction",
+          "accepted count times bottle volume",
+          "sum accepted output divided by sum of run times"
+        ]
+      },
+      "nearest_existing": [
+        {
+          "id": "a3b61ed4-90d5-461e-90ee-88878a5431ad",
+          "title": "Recipe Scaling for a Dinner Party",
+          "material_difference": "The new set uses small-batch soap bottling quality control with accepted count, rejection fraction, accepted count times bottle volume, sum accepted output divided by sum of run times, rather than the existing unit's setting and calculation sequence."
+        },
+        {
+          "id": "a9c928b7-6add-491c-8382-f01ef6707b91",
+          "title": "Swimming Pool Filling",
+          "material_difference": "The new set uses small-batch soap bottling quality control with accepted count, rejection fraction, accepted count times bottle volume, sum accepted output divided by sum of run times, rather than the existing unit's setting and calculation sequence."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "4305eca6-c29f-4b2b-bd47-dfff20bd4216",
+          "purpose": "How many bottles from run A passed inspection?",
+          "independent_derivation_or_rating_basis": "Run A filled 840 bottles, of which 42 were rejected. Accepted bottles = 840 - 42 = 798 bottles. The answer is 798 bottles.",
+          "verification_ledger": {
+            "source_values": {
+              "filled": 840,
+              "rejected": 42
+            },
+            "expression": "840 - 42",
+            "unrounded_result": 798,
+            "rounded_result": 798,
+            "units": "bottles",
+            "matching_option_label": "A",
+            "matching_option_text": "798 bottles"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "4dba068c-fc76-4a39-987f-cfec79905174",
+          "purpose": "What percentage of run B's filled bottles were rejected?",
+          "independent_derivation_or_rating_basis": "For run B, divide the 72 rejected bottles by 960 filled bottles: 72 / 960 x 100 = 7.5%. The answer is 7.5%.",
+          "verification_ledger": {
+            "source_values": {
+              "rejected": 72,
+              "filled": 960
+            },
+            "expression": "72 / 960 * 100",
+            "unrounded_result": 7.5,
+            "rounded_result": 7.5,
+            "units": "%",
+            "matching_option_label": "C",
+            "matching_option_text": "7.5%"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "b457b1a4-5d19-4ed9-9bf1-6ea5f20d459c",
+          "purpose": "How many litres of soap are in the accepted bottles from run C?",
+          "independent_derivation_or_rating_basis": "Run C accepted 750 - 30 = 720 bottles. At 500 mL each, they contain 720 x 500 = 360,000 mL. Divide by 1,000 to get 360 L. The answer is 360 L.",
+          "verification_ledger": {
+            "source_values": {
+              "filled": 750,
+              "rejected": 30,
+              "mL_per_bottle": 500
+            },
+            "expression": "(750 - 30) * 500 / 1000",
+            "unrounded_result": 360,
+            "rounded_result": 360,
+            "units": "L",
+            "matching_option_label": "E",
+            "matching_option_text": "360 L"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "a0110c90-aa49-4f09-abf1-9dfb948a193c",
+          "purpose": "Across runs C and D together, how many accepted bottles were produced per minute of run time, to 2 decimal places?",
+          "independent_derivation_or_rating_basis": "Run C accepted 750 - 30 = 720 bottles and run D accepted 900 - 45 = 855. Together that is 1,575 accepted bottles over 60 + 75 = 135 minutes. 1,575 / 135 = 11.666...; to 2 decimal places this is 11.67 bottles/min. The answer is 11.67 bottles/min.",
+          "verification_ledger": {
+            "source_values": {
+              "C_filled": 750,
+              "C_rejected": 30,
+              "D_filled": 900,
+              "D_rejected": 45,
+              "C_minutes": 60,
+              "D_minutes": 75
+            },
+            "expression": "((750 - 30) + (900 - 45)) / (60 + 75)",
+            "unrounded_result": 11.666666666666666,
+            "rounded_result": 11.67,
+            "units": "bottles/min",
+            "matching_option_label": "B",
+            "matching_option_text": "11.67 bottles/min"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "71813af5-b73f-4e54-b2e1-cc5a6d7faf11",
+      "working_topic": "bicycle repair workshop",
+      "type_or_skill": "stimulus:bar_chart",
+      "novelty_rationale": "Fictional context and a distinct stimulus layout with its own derived values and calculation routes; screened against the full 156-unit practice and timed inventory and the relevant nearest-match report.",
+      "semantic_fingerprint": {
+        "domain": "bicycle workshop job mix and receipts",
+        "stimulus_dimensions": "grouped bar chart, two job types over four days",
+        "missing_data_mechanism": "none; job totals and receipts are derived",
+        "skills": [
+          "addition",
+          "percentage of total",
+          "arithmetic mean",
+          "weighted revenue"
+        ],
+        "calculation_routes": [
+          "within-day sum",
+          "standard share of Thursday jobs",
+          "mean complex jobs",
+          "cross-day type-weighted receipts"
+        ]
+      },
+      "nearest_existing": [
+        {
+          "id": "e4eebb57-b5da-4e22-b060-9488f1912044",
+          "title": "Greenfields Dental Clinic Workload",
+          "material_difference": "The new set uses bicycle workshop job mix and receipts with within-day sum, standard share of Thursday jobs, mean complex jobs, cross-day type-weighted receipts, rather than the existing unit's setting and calculation sequence."
+        },
+        {
+          "id": "f768ee02-ba53-4854-b189-f600afc85ce6",
+          "title": "DIY Paint Project: Wall Areas",
+          "material_difference": "The new set uses bicycle workshop job mix and receipts with within-day sum, standard share of Thursday jobs, mean complex jobs, cross-day type-weighted receipts, rather than the existing unit's setting and calculation sequence."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "8e484ab2-5a8e-4ff0-a457-02b69a8adeba",
+          "purpose": "How many jobs were completed on Wednesday?",
+          "independent_derivation_or_rating_basis": "Wednesday has 28 standard and 14 complex jobs. Their sum is 28 + 14 = 42 jobs. The answer is 42 jobs.",
+          "verification_ledger": {
+            "source_values": {
+              "Wednesday_standard": 28,
+              "Wednesday_complex": 14
+            },
+            "expression": "28 + 14",
+            "unrounded_result": 42,
+            "rounded_result": 42,
+            "units": "jobs",
+            "matching_option_label": "D",
+            "matching_option_text": "42 jobs"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "6fc38f84-f75a-4a2d-b370-4522ce3e73fe",
+          "purpose": "What percentage of Thursday's completed jobs were standard jobs?",
+          "independent_derivation_or_rating_basis": "Thursday had 36 standard and 12 complex jobs, for 48 in total. Standard jobs made up 36 / 48 x 100 = 75%. The answer is 75%.",
+          "verification_ledger": {
+            "source_values": {
+              "Thursday_standard": 36,
+              "Thursday_complex": 12
+            },
+            "expression": "36 / (36 + 12) * 100",
+            "unrounded_result": 75,
+            "rounded_result": 75,
+            "units": "%",
+            "matching_option_label": "B",
+            "matching_option_text": "75%"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "803c4093-f9a6-4695-bdc9-dfcfc0f263cb",
+          "purpose": "What was the mean number of complex jobs completed per day across the four days?",
+          "independent_derivation_or_rating_basis": "The complex job counts are 8, 10, 14 and 12. Their sum is 44; divide by four days to get 11 jobs per day. The answer is 11 jobs.",
+          "verification_ledger": {
+            "source_values": {
+              "complex_jobs": [
+                8,
+                10,
+                14,
+                12
+              ],
+              "days": 4
+            },
+            "expression": "(8 + 10 + 14 + 12) / 4",
+            "unrounded_result": 11,
+            "rounded_result": 11,
+            "units": "jobs",
+            "matching_option_label": "A",
+            "matching_option_text": "11 jobs"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "17bc795c-d314-4d4c-96b2-26fb08551075",
+          "purpose": "How much did the workshop receive in total for jobs completed on Tuesday and Thursday?",
+          "independent_derivation_or_rating_basis": "Tuesday and Thursday together had 30 + 36 = 66 standard jobs and 10 + 12 = 22 complex jobs. Receipts are 66 x GBP 18 = GBP 1,188 and 22 x GBP 35 = GBP 770. Total = GBP 1,958. The answer is GBP 1,958.",
+          "verification_ledger": {
+            "source_values": {
+              "Tuesday_standard": 30,
+              "Thursday_standard": 36,
+              "Tuesday_complex": 10,
+              "Thursday_complex": 12,
+              "standard_price_GBP": 18,
+              "complex_price_GBP": 35
+            },
+            "expression": "(30 + 36) * 18 + (10 + 12) * 35",
+            "unrounded_result": 1958,
+            "rounded_result": 1958,
+            "units": "GBP",
+            "matching_option_label": "E",
+            "matching_option_text": "GBP 1,958"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "749e81cd-845f-45bb-b50f-804bc9a4ddcd",
+      "working_topic": "reservoir storage readings",
+      "type_or_skill": "stimulus:line_graph",
+      "novelty_rationale": "Fictional context and a distinct stimulus layout with its own derived values and calculation routes; screened against the full 156-unit practice and timed inventory and the relevant nearest-match report.",
+      "semantic_fingerprint": {
+        "domain": "paired reservoir storage and redistribution",
+        "stimulus_dimensions": "two-series line graph over five morning readings",
+        "missing_data_mechanism": "none; transfer amount derived from equalisation condition",
+        "skills": [
+          "change over time",
+          "series aggregation",
+          "balancing two quantities"
+        ],
+        "calculation_routes": [
+          "Friday minus Monday",
+          "sum two Wednesday readings",
+          "half the Friday difference"
+        ]
+      },
+      "nearest_existing": [
+        {
+          "id": "afc3ac62-e9ec-4997-ba27-6d819f65d3b9",
+          "title": "Industrial Water Tank Flow",
+          "material_difference": "The new set uses paired reservoir storage and redistribution with Friday minus Monday, sum two Wednesday readings, half the Friday difference, rather than the existing unit's setting and calculation sequence."
+        },
+        {
+          "id": "2be0bc2c-b82d-4f05-9480-789406e28a85",
+          "title": "Daily Commute Times",
+          "material_difference": "The new set uses paired reservoir storage and redistribution with Friday minus Monday, sum two Wednesday readings, half the Friday difference, rather than the existing unit's setting and calculation sequence."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "105009e0-8674-4173-b4c7-46dcad68952c",
+          "purpose": "How much did the East Reservoir's stored water increase from Monday to Friday?",
+          "independent_derivation_or_rating_basis": "The East Reservoir rose from 42 ML on Monday to 54 ML on Friday. The increase is 54 - 42 = 12 ML. The answer is 12 ML.",
+          "verification_ledger": {
+            "source_values": {
+              "East_Monday_ML": 42,
+              "East_Friday_ML": 54
+            },
+            "expression": "54 - 42",
+            "unrounded_result": 12,
+            "rounded_result": 12,
+            "units": "ML",
+            "matching_option_label": "C",
+            "matching_option_text": "12 ML"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "877332c6-c782-46ef-aaa9-76c6e75fa709",
+          "purpose": "How much water was stored in the two reservoirs combined on Wednesday morning?",
+          "independent_derivation_or_rating_basis": "On Wednesday, East held 43 ML and West held 39 ML. Combined storage = 43 + 39 = 82 ML. The answer is 82 ML.",
+          "verification_ledger": {
+            "source_values": {
+              "East_Wednesday_ML": 43,
+              "West_Wednesday_ML": 39
+            },
+            "expression": "43 + 39",
+            "unrounded_result": 82,
+            "rounded_result": 82,
+            "units": "ML",
+            "matching_option_label": "D",
+            "matching_option_text": "82 ML"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "f8c5cfcd-0c09-45c3-a81b-1a3f7f6ff072",
+          "purpose": "On Friday morning, how many ML must be transferred from East to West so that both reservoirs hold the same amount?",
+          "independent_derivation_or_rating_basis": "Friday readings are 54 ML in East and 42 ML in West. The gap is 12 ML. Each ML transferred lowers East by 1 ML and raises West by 1 ML, closing the gap by 2 ML. Transfer 12 / 2 = 6 ML, leaving 48 ML in each. The answer is 6 ML.",
+          "verification_ledger": {
+            "source_values": {
+              "East_Friday_ML": 54,
+              "West_Friday_ML": 42
+            },
+            "expression": "(54 - 42) / 2",
+            "unrounded_result": 6,
+            "rounded_result": 6,
+            "units": "ML",
+            "matching_option_label": "E",
+            "matching_option_text": "6 ML"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "7bbf22b7-6003-4252-8dc6-bfa23db59abe",
+      "working_topic": "compost batch ingredients",
+      "type_or_skill": "stimulus:pie_chart",
+      "novelty_rationale": "Fictional context with a five-segment ingredient pie; the final item combines uniform mass loss and addition of new material before recalculating the resulting composition. Screened against the full 156-unit practice and timed inventory and relevant nearest-match report.",
+      "semantic_fingerprint": {
+        "domain": "compost recipe by mass",
+        "stimulus_dimensions": "five-segment percentage pie summing to 100",
+        "missing_data_mechanism": "none; masses derived from total batch weight",
+        "skills": [
+          "percentage of mass",
+          "combine percentage shares",
+          "uniform proportional loss followed by mass addition and rebalancing"
+        ],
+        "calculation_routes": [
+          "one segment times total mass",
+          "sum two segment shares then scale",
+          "remaining ingredient and batch mass after loss, add new leaves, then calculate updated share"
+        ]
+      },
+      "nearest_existing": [
+        {
+          "id": "a103302b-5a66-4348-9113-9ce40fffb009",
+          "title": "Local Council Waste Disposal (2025)",
+          "material_difference": "The new set uses compost recipe by mass with one segment times total mass, sum two segment shares then scale, ingredient mass times remaining proportion, rather than the existing unit's setting and calculation sequence."
+        },
+        {
+          "id": "ed2c3b2c-49f3-4da3-a7a4-83e87b05dec8",
+          "title": "Public Library Loans by Category",
+          "material_difference": "The new set uses compost recipe by mass with one segment times total mass, sum two segment shares then scale, ingredient mass times remaining proportion, rather than the existing unit's setting and calculation sequence."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "8b8b9389-0bc8-4d40-ad43-b7139ce6f8d1",
+          "purpose": "How many kilograms of leaves are in the original batch?",
+          "independent_derivation_or_rating_basis": "Leaves are 25% of the 2,400 kg original batch. 0.25 x 2,400 = 600 kg. The answer is 600 kg.",
+          "verification_ledger": {
+            "source_values": {
+              "total_kg": 2400,
+              "leaves_percent": 25
+            },
+            "expression": "2400 * 25 / 100",
+            "unrounded_result": 600,
+            "rounded_result": 600,
+            "units": "kg",
+            "matching_option_label": "B",
+            "matching_option_text": "600 kg"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "1181c5e3-8af4-4edb-b002-0b553490885c",
+          "purpose": "What is the combined original mass of wood chips and cardboard?",
+          "independent_derivation_or_rating_basis": "Wood chips and cardboard make up 20% + 12% = 32% of the batch. 0.32 x 2,400 = 768 kg. The answer is 768 kg.",
+          "verification_ledger": {
+            "source_values": {
+              "total_kg": 2400,
+              "wood_percent": 20,
+              "cardboard_percent": 12
+            },
+            "expression": "2400 * (20 + 12) / 100",
+            "unrounded_result": 768,
+            "rounded_result": 768,
+            "units": "kg",
+            "matching_option_label": "D",
+            "matching_option_text": "768 kg"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "34a5bc82-cd6c-4a86-8252-9c0852a480e0",
+          "purpose": "After the original batch loses 25% of its mass uniformly across all ingredients, 300 kg of leaves are added. What percentage of the resulting batch is leaves, to the nearest whole percent?",
+          "independent_derivation_or_rating_basis": "The original batch contains 25% x 2,400 = 600 kg of leaves. After the uniform 25% loss, 600 x 0.75 = 450 kg of those leaves remain, and the total batch weighs 2,400 x 0.75 = 1,800 kg. Adding 300 kg of leaves gives 750 kg leaves in a 2,100 kg final batch. 750 / 2,100 x 100 = 35.714...%, which rounds to 36%. The answer is 36%.",
+          "verification_ledger": {
+            "source_values": {
+              "original_batch_kg": 2400,
+              "original_leaves_percent": 25,
+              "uniform_mass_loss_percent": 25,
+              "added_leaves_kg": 300
+            },
+            "expression": "((2400 * 25 / 100) * (1 - 25 / 100) + 300) / (2400 * (1 - 25 / 100) + 300) * 100",
+            "unrounded_result": 35.714285714285715,
+            "rounded_result": 36,
+            "units": "%",
+            "matching_option_label": "A",
+            "matching_option_text": "36%"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "9cf5099f-1160-432b-9d85-6d966830f398",
+      "working_topic": "cycle share battery charging",
+      "type_or_skill": "stimulus:text",
+      "novelty_rationale": "Fictional context and a distinct stimulus layout with its own derived values and calculation routes; screened against the full 156-unit practice and timed inventory and the relevant nearest-match report.",
+      "semantic_fingerprint": {
+        "domain": "cycle-share battery charging",
+        "stimulus_dimensions": "text with battery capacity, starting and ending charge, efficiency, tariff and charger power",
+        "missing_data_mechanism": "stored energy and supply energy derived from charge fractions and efficiency",
+        "skills": [
+          "fraction of capacity",
+          "efficiency conversion",
+          "unit price",
+          "energy-to-time conversion"
+        ],
+        "calculation_routes": [
+          "capacity times charge difference",
+          "stored energy divided by efficiency times unit price",
+          "fleet input energy divided by charger power"
+        ]
+      },
+      "nearest_existing": [
+        {
+          "id": "15e823f4-fa20-405d-934f-4d1088306325",
+          "title": "Electric Vehicle Range and Charging",
+          "material_difference": "The new set uses cycle-share battery charging with capacity times charge difference, stored energy divided by efficiency times unit price, fleet input energy divided by charger power, rather than the existing unit's setting and calculation sequence."
+        },
+        {
+          "id": "f66e43a7-85c3-40d1-993e-78f5234b1958",
+          "title": "Central Docking Station Hourly Trips",
+          "material_difference": "The new set uses cycle-share battery charging with capacity times charge difference, stored energy divided by efficiency times unit price, fleet input energy divided by charger power, rather than the existing unit's setting and calculation sequence."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "2c8c2fd3-2bfd-46a6-9683-31ab0c0b03b1",
+          "purpose": "How much energy is added to one battery during charging?",
+          "independent_derivation_or_rating_basis": "The charge rises from 20% to 80%, a gain of 60 percentage points. Stored energy added = 0.60 x 0.75 kWh = 0.45 kWh. The answer is 0.45 kWh.",
+          "verification_ledger": {
+            "source_values": {
+              "capacity_kWh": 0.75,
+              "start_percent": 20,
+              "end_percent": 80
+            },
+            "expression": "0.75 * (80 - 20) / 100",
+            "unrounded_result": 0.45,
+            "rounded_result": 0.45,
+            "units": "kWh",
+            "matching_option_label": "C",
+            "matching_option_text": "0.45 kWh"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "6637f3e7-b900-40a8-b473-48a97ed8ac27",
+          "purpose": "What is the electricity cost of charging 10 bikes from 20% to 80%?",
+          "independent_derivation_or_rating_basis": "Each battery stores 0.45 kWh during charging. At 75% efficiency, it draws 0.45 / 0.75 = 0.60 kWh from the supply. Ten bikes draw 6.0 kWh, costing 6.0 x GBP 0.24 = GBP 1.44. The answer is GBP 1.44.",
+          "verification_ledger": {
+            "source_values": {
+              "capacity_kWh": 0.75,
+              "charge_gain_fraction": 0.6,
+              "efficiency": 0.75,
+              "bikes": 10,
+              "price_GBP_per_kWh": 0.24
+            },
+            "expression": "0.75 * 0.6 / 0.75 * 10 * 0.24",
+            "unrounded_result": 1.44,
+            "rounded_result": 1.44,
+            "units": "GBP",
+            "matching_option_label": "C",
+            "matching_option_text": "GBP 1.44"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "b66cbc64-c846-4f4b-ad85-f145d2890889",
+          "purpose": "How many hours will the 3 kW charger take to charge 18 bikes from 20% to 80%, assuming constant power draw?",
+          "independent_derivation_or_rating_basis": "Each bike draws 0.45 / 0.75 = 0.60 kWh from the supply. Eighteen bikes draw 18 x 0.60 = 10.8 kWh. At 3 kW, time = 10.8 / 3 = 3.6 hours. The answer is 3.6 hours.",
+          "verification_ledger": {
+            "source_values": {
+              "capacity_kWh": 0.75,
+              "charge_gain_fraction": 0.6,
+              "efficiency": 0.75,
+              "bikes": 18,
+              "charger_kW": 3
+            },
+            "expression": "0.75 * 0.6 / 0.75 * 18 / 3",
+            "unrounded_result": 3.6,
+            "rounded_result": 3.6,
+            "units": "hours",
+            "matching_option_label": "E",
+            "matching_option_text": "3.6 hours"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "96dbb0c1-4881-4c67-8131-a3a9c05cd290",
+      "working_topic": "museum audio guide rentals",
+      "type_or_skill": "stimulus:multi",
+      "novelty_rationale": "Fictional context and a distinct stimulus layout with its own derived values and calculation routes; screened against the full 156-unit practice and timed inventory and the relevant nearest-match report.",
+      "semantic_fingerprint": {
+        "domain": "museum audio guide uptake and daily receipts",
+        "stimulus_dimensions": "multi stimulus: explanatory text plus 3 by 3 visitor and rate table",
+        "missing_data_mechanism": "hires derived separately for each visitor category",
+        "skills": [
+          "percentage to count",
+          "sum of category counts",
+          "weighted revenue"
+        ],
+        "calculation_routes": [
+          "adult count times rate",
+          "sum category hires",
+          "category hires times category prices, then sum"
+        ]
+      },
+      "nearest_existing": [
+        {
+          "id": "ed2c3b2c-49f3-4da3-a7a4-83e87b05dec8",
+          "title": "Public Library Loans by Category",
+          "material_difference": "The new set uses museum audio guide uptake and daily receipts with adult count times rate, sum category hires, category hires times category prices, then sum, rather than the existing unit's setting and calculation sequence."
+        },
+        {
+          "id": "1af255f1-d926-4336-939b-3faad29a599f",
+          "title": "Freelance Graphic Designer Hourly Rate Tiers",
+          "material_difference": "The new set uses museum audio guide uptake and daily receipts with adult count times rate, sum category hires, category hires times category prices, then sum, rather than the existing unit's setting and calculation sequence."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "3eaec3a3-70b4-4b48-9aed-099a8df155d3",
+          "purpose": "How many adult visitors hired an audio guide?",
+          "independent_derivation_or_rating_basis": "Adult hires are 25% of 240 adult visitors. 0.25 x 240 = 60 visitors. The answer is 60 visitors.",
+          "verification_ledger": {
+            "source_values": {
+              "adult_visitors": 240,
+              "adult_hire_percent": 25
+            },
+            "expression": "240 * 25 / 100",
+            "unrounded_result": 60,
+            "rounded_result": 60,
+            "units": "visitors",
+            "matching_option_label": "A",
+            "matching_option_text": "60 visitors"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "b0a818f0-43d9-4edb-92a8-210356889a5b",
+          "purpose": "How many audio guides were hired in total that day?",
+          "independent_derivation_or_rating_basis": "Adult hires = 240 x 25% = 60; child hires = 180 x 10% = 18; senior hires = 120 x 20% = 24. Total = 60 + 18 + 24 = 102 guides. The answer is 102 guides.",
+          "verification_ledger": {
+            "source_values": {
+              "adult_visitors": 240,
+              "adult_percent": 25,
+              "child_visitors": 180,
+              "child_percent": 10,
+              "senior_visitors": 120,
+              "senior_percent": 20
+            },
+            "expression": "240 * .25 + 180 * .10 + 120 * .20",
+            "unrounded_result": 102,
+            "rounded_result": 102,
+            "units": "guides",
+            "matching_option_label": "D",
+            "matching_option_text": "102 guides"
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "8bdc5f84-cb2a-485d-820d-a49a4d151be8",
+          "purpose": "How much hire revenue did the museum receive that day?",
+          "independent_derivation_or_rating_basis": "Adult hires = 240 x 25% = 60; child hires = 180 x 10% = 18; and senior hires = 120 x 20% = 24. Adult receipts are 60 x GBP 4 = GBP 240; child receipts are 18 x GBP 2 = GBP 36; and senior receipts are 24 x GBP 4 = GBP 96. Total revenue = GBP 240 + GBP 36 + GBP 96 = GBP 372. The answer is GBP 372.",
+          "verification_ledger": {
+            "source_values": {
+              "adult_visitors": 240,
+              "adult_hire_percent": 25,
+              "child_visitors": 180,
+              "child_hire_percent": 10,
+              "senior_visitors": 120,
+              "senior_hire_percent": 20,
+              "adult_price_GBP": 4,
+              "child_price_GBP": 2,
+              "senior_price_GBP": 4
+            },
+            "expression": "(240 * 25 / 100) * 4 + (180 * 10 / 100) * 2 + (120 * 20 / 100) * 4",
+            "unrounded_result": 372,
+            "rounded_result": 372,
+            "units": "GBP",
+            "matching_option_label": "B",
+            "matching_option_text": "GBP 372"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    }
+  ],
+  "revision_from": "content-authoring/candidates/qr-practice-20-v2.json",
+  "revision_reason": "Independent validation requested a nonperiodic answer-label pattern and explicit percentage derivations for the museum revenue explanation."
+}

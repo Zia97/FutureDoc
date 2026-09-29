@@ -39,19 +39,21 @@ For generation or revision, read the generator reference. For review, read the v
 
 1. Confirm `section`, `mode` (`practice` or `timed`), and question count. Full timed counts are fixed: VR 44/22 minutes, DM 35/37, QR 36/26, SJ 69/26. Otherwise default to practice. VR practice totals must be divisible by four.
 2. Refresh that section's read-only corpus from Supabase. If remote access fails, use the preview fallback and label the run as potentially incomplete.
-3. Generate the compact corpus inventory, search it for the proposed topics, and record the nearest existing matches.
+3. Generate the compact corpus inventory, search it for the proposed topics, and record the nearest existing matches. For QR practice, also inspect `src/dev/preview-qr.json` so a new batch does not duplicate accepted questions still in the local preview.
 4. Create a generation brief. Use `assets/generation-brief.template.json` for VR or `assets/section-generation-brief.template.json` for DM/QR/SJ. Copy the current corpus `run_id`; set exact unit/question counts, type/format and difficulty allocations, exclusions, and output paths before generating.
 5. Use an isolated generator agent/context to produce candidate JSON and a provenance manifest. Use `assets/generation-manifest.template.json` for VR or `assets/section-generation-manifest.template.json` for DM/QR/SJ. Give it the brief, generator references, corpus inventory, and nearest relevant matches. Do not give it permission to create a migration.
 6. Run the deterministic checker with `--brief`. Schema, allocation, corpus-run, or high-similarity failures return to the generator/reviser before qualitative review.
 7. Create a blind-review packet and separate response form. Use a different validator agent/context to fill and save the response form before it sees the supplied answers or explanations.
 8. After the blind response is committed, reveal the original candidate, provenance, deterministic report, and nearest matches. The validator checks answer agreement, ambiguity, explanation quality, factual support, and semantic novelty. It writes a structured report using the VR or section validation-report template and does not edit the candidate.
 9. If revision is required, the generator/reviser writes a new version. A fresh validator pass repeats the full workflow; do not validate only the changed lines.
-10. Present the accepted JSON and report to the user. For a simple generation request covered by the contract above, install it into the local developer preview automatically after acceptance; otherwise install only when requested. Preview installation is not database approval.
+10. Present the accepted JSON and report to the user. For a simple generation request covered by the contract above, install it into the local developer preview automatically after acceptance; otherwise install only when requested. For QR practice, use the preview installer's `--append` option so accepted batches accumulate in one app-loaded JSON file. Preview installation is not database approval.
 11. Generate SQL only after a separate explicit approval. Generating SQL is not permission to apply it.
 
 If delegation is unavailable, perform generation and validation in separate contexts and disclose that independence is reduced.
 
 For a 20-question practice run, prefer the section-specific `dm-practice-20-brief.template.json`, `qr-practice-20-brief.template.json`, or `sj-practice-20-brief.template.json`. They provide reproducible default allocations. Change them only when the user requests a different mix.
+
+For DM, preserve the Venn variety constraints when adapting a brief to another count. The DM generator and validator references define the qualitative mix and diagram checks; the brief and deterministic checker gate the measurable parts. An explicit user preference for a different Venn mix takes precedence.
 
 For review-only requests, use the original brief and manifest when available. If either is missing, still run structural/count/corpus screening with `--expected-questions`, but label provenance and allocation validation incomplete; do not reconstruct a post-hoc brief and present it as original evidence.
 

@@ -8,4 +8,6 @@ Syllogism and interpreting-information questions use five independently answerab
 
 Venn diagrams must use renderer-supported shapes and region keys. Diagram construction must be deterministic and successfully bake/render; never approve merely because JSON parses. A blind reviewer must independently solve logic, probability, puzzle, and five-statement questions.
 
+Plan Venn questions as a varied set, not repeated two- or three-circle count lookups. When a batch has four or more Venn questions, include both diagram-selection and stimulus-interpretation formats, use mixed shapes in at least half, and vary set count and region topology. The 20-question practice brief sets a stronger target of three mixed-shape Venn questions out of four. Mix the reasoning task as well: for example, selecting a diagram, locating a region, combining exclusive regions, or deriving a missing count. The brief's measurable Venn constraints are release gates; an explicit user-requested mix can override their defaults.
+
 Official current section timing/count source: <https://www.ucat.ac.uk/about-ucat/test-format-and-scoring/>.

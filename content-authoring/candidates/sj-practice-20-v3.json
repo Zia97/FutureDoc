@@ -1,0 +1,231 @@
+[
+  {
+    "id": "6570faba-36ae-415b-b6d2-121f8211b160",
+    "body": "On an outpatient day unit, third-year medical student Amina sees two spare beds parked across the signed step-free route from treatment bays to the exit. Patients using walking aids are currently in the bays. The unit coordinator says porters will collect the beds at closing time because storage is crowded. Amina cannot move the heavy beds safely alone, but the nurse in charge is nearby and can arrange help now.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "ed564217-441f-42bf-9e1a-32c3ef743b89",
+        "label_set": 1,
+        "question_text": "How important is it that the obstructed route is the signed step-free way out for patients who use walking aids?",
+        "correct_answer": "Very important",
+        "answer_reason": "This identifies a present access and safety risk for patients who may need that route, including if they must leave promptly. It is very important rather than merely important because the obstruction directly affects their ability to move safely; waiting until closing does not address today's risk.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "78a5f19e-abde-4287-ba5f-71f299e51c68",
+        "label_set": 1,
+        "question_text": "How important is it that Amina cannot move the heavy beds safely on her own when deciding what action she should take?",
+        "correct_answer": "Very important",
+        "answer_reason": "Amina should act on the hazard but must not create another injury risk by trying to move heavy beds alone. It is very important rather than merely important because it determines the safe response within her competence: alert the nurse and arrange suitable help now.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "e466526f-a6c2-4b6f-8b02-61a8cb39f835",
+        "label_set": 2,
+        "question_text": "Amina tells the nurse in charge promptly, asks for the beds to be moved safely now, and helps direct patients away from the obstruction until the route is clear.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "Amina raises a current premises risk with someone who can organise safe action, while staying within her student role. This is very appropriate rather than merely acceptable because it protects patients now and avoids both delay until closing and unsafe solo handling.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "b3efd936-dad2-47b8-bf25-ea2b02b74698",
+    "body": "Dr Mensah, an F1, is preparing discharge advice for a patient who has low vision. The patient is ready to leave later today and says large print is much easier for her than the usual small-print leaflet; she does not want to rely on her daughter to read private health information. The ward printer cannot enlarge the standard leaflet. A nurse can help Dr Mensah prepare a readable version and check the instructions with the patient before she leaves.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "d42eda44-5e01-4d95-a338-eb68891e74f2",
+        "label_set": 1,
+        "question_text": "How important is the patient's stated preference to read the instructions herself when Dr Mensah chooses how to give discharge information?",
+        "correct_answer": "Very important",
+        "answer_reason": "Her preference directly affects whether she can use the advice and preserve her privacy. It is very important, rather than simply important, because a small-print handout that she cannot read would fail the immediate purpose of discharge communication despite being the standard format.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "02a8c878-2521-4031-a66e-77739053779c",
+        "label_set": 2,
+        "question_text": "Dr Mensah explains the advice aloud, arranges a readable copy with the nurse, and checks with the patient that the key steps are clear before discharge.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "This combines an immediate explanation with the accessible copy the patient requested and checks understanding while support is available. It is very appropriate, rather than merely appropriate, because it meets the patient's communication and privacy needs without delaying necessary advice.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "2546b8a4-6bff-436c-a04e-9001d3e35630",
+        "label_set": 2,
+        "question_text": "Dr Mensah gives the patient's small-print discharge sheet, which includes her diagnosis and treatment plan, to the daughter to read later, without asking the patient whether she wants her daughter involved.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "Dr Mensah has already disclosed the patient's private diagnosis and treatment plan to her daughter without the patient's permission, despite her stated wish to read the advice herself. This is very inappropriate rather than a lesser lapse because the unwanted disclosure has occurred and the small print still leaves the patient unable to use the advice independently; a later correction cannot undo the disclosure.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "626cb4cd-1a0b-4cb4-9dbd-53f3683ae76e",
+    "body": "During a ward handover, Dr Qureshi, an F1, notices that the voice recorder on his personal phone was accidentally switched on in his pocket. It has captured several minutes of identifiable patient discussion. The recording has not been shared and the phone is locked. The hospital has an information governance team and a local incident reporting process. The next shift is about to begin, but a colleague can cover Dr Qureshi's first routine task.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "e7ed5400-b05d-4ccd-88b1-44ebd87be24c",
+        "label_set": 1,
+        "question_text": "How important is it that the recording contains identifiable patient information when Dr Qureshi decides what to do?",
+        "correct_answer": "Very important",
+        "answer_reason": "Identifiable clinical discussion on a personal device creates a confidentiality risk that requires prompt containment and advice under local process. It is very important rather than merely important because the presence of identifiable information determines the nature of the incident even though the file has not been shared.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "6ee9d056-02f0-4590-8dfd-14026ee27d77",
+        "label_set": 2,
+        "question_text": "Dr Qureshi keeps the phone secure, tells the appropriate senior or information governance contact promptly, and follows their instructions about the recording and incident report.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "Securing the device limits further exposure; reporting allows the organisation to assess and manage the incident. This is very appropriate rather than just reasonable because it combines containment with accountable action and avoids an improvised deletion that might bypass local policy.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "a2207a27-aa15-4252-8a3b-f4f27a73680c",
+        "label_set": 2,
+        "question_text": "Dr Qureshi quietly deletes the recording, tells no one because it was accidental, and carries on with the shift.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "Deleting it privately may remove the immediate file but hides an identifiable information incident from the people responsible for assessing any remaining risk and learning from it. It is very inappropriate rather than a lesser lapse because the deliberate concealment prevents proper review; the accidental activation itself need not be treated as deliberate misconduct.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "1be908f0-fc43-4b8f-a67a-ba7280bcb64a",
+    "body": "Dr Byrne, a GP, is discussing physiotherapy options with a patient with a persistent but non-urgent knee problem. An NHS referral is available, although the wait is longer. Dr Byrne also works one evening a week for a private physiotherapy centre and receives a fee for each session he provides there. He believes either service could be suitable. The patient asks which option Dr Byrne recommends and whether private care is necessary.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "c6830a34-70b1-4944-9b42-d4f645f6b0fa",
+        "label_set": 1,
+        "question_text": "How important is Dr Byrne's financial connection with the private centre when he advises the patient?",
+        "correct_answer": "Very important",
+        "answer_reason": "The fee creates an interest that could affect, or appear to affect, his recommendation, so openness is central to an informed choice. It is very important rather than just important because the patient is directly asking whether the paid option is needed and must be able to judge the advice in light of that interest.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "cf41e81e-e926-4f70-9024-12206081f653",
+        "label_set": 2,
+        "question_text": "Dr Byrne explains that private care is not clinically necessary because either route is suitable. He discloses his paid work, explains both options, and recommends the NHS route for this non-urgent problem unless the patient prefers to pay for faster access.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "He directly answers whether private care is needed, recommends an appropriate NHS route for this non-urgent problem, explains the faster paid alternative, and discloses his interest. This is very appropriate rather than merely acceptable because it answers the patient's questions and supports an informed decision without steering them towards his paid work.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "8aff820d-cf99-4d6b-b3bf-1d1b792de402",
+        "label_set": 2,
+        "question_text": "Dr Byrne recommends his private centre as the only sensible route because it is faster, without mentioning the NHS option or his paid work there.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "Presenting a suitable paid route as the only sensible option withholds both an available alternative and a material financial interest. It is very inappropriate, rather than a small omission, because it risks steering the patient's spending and treatment choice for reasons the patient cannot assess.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "420e6fc9-78a2-4fba-8050-a23c4e92a1b3",
+    "body": "Fourth-year medical student Imogen observes a consultant inviting a patient to join a questionnaire study during an outpatient visit; the patient's planned scan is already booked and does not depend on joining. When the patient asks if declining will delay the scan, the consultant says, 'It might be easier to keep everything moving if you agree.' The patient has not signed anything, and a study team is available to explain participation separately.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "9746b587-4071-4481-b131-ce5db2a72964",
+        "label_set": 1,
+        "question_text": "How important is the patient's belief that declining the study might delay the scan when Imogen considers whether to intervene?",
+        "correct_answer": "Very important",
+        "answer_reason": "If the patient thinks routine care depends on research participation, the decision may not be freely made. This is very important rather than simply important because correcting that misunderstanding before consent is central to protecting the patient's choice.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "22f16cd8-89b4-440b-9406-12fa3f50643a",
+        "label_set": 1,
+        "question_text": "How important is it that the patient understands what completing the study questionnaire will involve before deciding whether to participate?",
+        "correct_answer": "Very important",
+        "answer_reason": "Understanding what the questionnaire involves is necessary for the patient to decide whether to join the study. It is very important rather than merely important because correcting the misleading scan implication alone does not give the patient enough information to make an informed participation choice.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "e746cc01-377e-47bd-a63c-9b29c7d0d06c",
+        "label_set": 2,
+        "question_text": "Imogen checks with the consultant, in front of the patient, whether the booked scan will go ahead regardless of the study decision, and suggests that the study team explain participation before any form is signed.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "A respectful clarification lets the patient hear that standard care is separate from research before deciding, and the study team can answer detailed questions. It is very appropriate rather than merely appropriate because it corrects possible pressure at the point of consent while keeping Imogen within her student role.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "687960af-5f60-4c26-8400-81b3652662c6",
+    "body": "Medical student Nadia is preparing a summary of anonymous patient feedback for a ward quality meeting that will decide whether a new discharge leaflet needs changing. The forms were collected last week, after the leaflet was introduced, and several patients say its instructions are confusing. A senior trainee asks Nadia to omit those comments because the meeting is short. Nadia has the original forms, and the chair can decide how much detail to discuss; there is no immediate patient emergency.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "d920a455-a97e-439b-9d61-c7c22497df64",
+        "label_set": 1,
+        "question_text": "How important is it that patients reported confusing instructions after the new leaflet was introduced?",
+        "correct_answer": "Very important",
+        "answer_reason": "The meeting is deciding whether this very leaflet needs changing, so feedback gathered after its introduction is directly relevant evidence. It is very important rather than merely important because excluding it could make the meeting's central decision falsely reassuring; the comments need fair presentation even though they do not prove every patient has difficulty.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "79086841-5b77-4d09-a4e8-ef428202e9fe",
+        "label_set": 2,
+        "question_text": "Nadia includes a concise, accurate count and summary of the discharge comments and tells the trainee that the chair can decide how to discuss them.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "A short factual summary preserves the patient voice without taking over the meeting or blaming the team. This is very appropriate rather than merely acceptable because it meets the time constraint while giving the chair relevant evidence for quality improvement.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "d14847e7-971f-42dd-b984-9c2b69977635",
+        "label_set": 2,
+        "question_text": "Nadia presents the final slide as a representative summary, deliberately leaves out all comments about confusing instructions, and does not tell the chair they were omitted.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "Nadia knowingly gives the decision-makers a misleading account of feedback on the very leaflet they are reviewing. This is very inappropriate rather than a lesser omission because the final summary is presented as representative and the chair is kept unaware; retaining the original forms does not correct what the meeting is told.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "94dc8199-0235-4ea3-8a06-111f909ae156",
+    "body": "Dr Evans, an F1 in an outpatient clinic, is told that a patient phoned twice about a test result after the clinic doctor promised a callback. The result is in the record but Dr Evans has not reviewed it and does not know whether it changes care. The clinic doctor is seeing patients for another hour, and the duty clinician is available to review time-sensitive results. The caller has left a number and is expecting an update today.",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "d2644558-93e4-4f71-a111-902d855b9f8f",
+        "label_set": 2,
+        "question_text": "Dr Evans asks the duty clinician to review whether the result needs action today, and arranges a clear callback plan with the clinic team.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "Dr Evans cannot interpret an unchecked result for the patient, but can ensure a qualified clinician assesses urgency and the promised communication is assigned. This is very appropriate rather than merely adequate because it deals with both possible clinical risk and the missed callback before the day ends.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "4c5f6620-891f-4a04-8a9e-672aa1965a7b",
+        "label_set": 2,
+        "question_text": "Dr Evans leaves a note for the clinic doctor to call the patient after finishing consultations, but does not arrange a review of the result or confirm who will make the call.",
+        "correct_answer": "Inappropriate, but not awful",
+        "answer_reason": "A note may help continuity, but without a review or agreed owner the patient's concern and any time-sensitive result could remain unattended. It is inappropriate rather than appropriate but not ideal because the current uncertainty calls for a definite plan; it is not the worst rating because Dr Evans does pass the message to the clinician responsible for the clinic.",
+        "order_index": 1,
+        "difficulty": "normal"
+      }
+    ]
+  }
+]

@@ -104,7 +104,22 @@ function validateDm(input, mode, add, registerId) {
       if (yes !== 2 || no !== 2) add('error', 'dm.assumption_balance', 'Recognising-assumptions options must contain two Yes and two No judgements.', loc);
     }
     if (q?.type === 'venn_diagram') {
-      const configs = [q.stimulus_diagram, q.stimulusDiagram, ...options.map((o) => o.option_data ?? o.vennConfig)].filter(Boolean);
+      const stimulus = q.stimulus_diagram ?? q.stimulusDiagram;
+      const optionConfigs = options.map((o) => o.option_data ?? o.vennConfig);
+      const hasOptionDiagrams = optionConfigs.some(Boolean);
+      if (hasOptionDiagrams && optionConfigs.some((config) => !config)) {
+        add('error', 'dm.venn_option_diagrams', 'Diagram-selection questions need a diagram in every A-D option.', loc);
+      }
+      if (hasOptionDiagrams && optionConfigs.every((config) => Array.isArray(config?.sets))) {
+        const signatures = optionConfigs.map((config) => JSON.stringify(config.sets.map((set) => [set.id, set.label, set.shape || 'circle'])));
+        if (new Set(signatures).size !== 1) {
+          add('error', 'dm.venn_option_key', 'All diagram options must use the same set labels and shapes because the renderer shows one shared key.', loc);
+        }
+      }
+      if (stimulus && hasOptionDiagrams) {
+        add('error', 'dm.venn_format', 'Use either a stimulus diagram or diagram options, not both.', loc);
+      }
+      const configs = [stimulus, ...optionConfigs].filter(Boolean);
       if (!configs.length) add('error', 'dm.venn_missing', 'Venn question needs a stimulus diagram or diagram options.', loc);
       configs.forEach((config, configIndex) => validateDmVenn(config, add, `${loc}.venn[${configIndex}]`));
     }
@@ -395,6 +410,24 @@ function validateBrief({ brief, corpus, section, mode, questionCount, stats, add
     if (Number(interpreting.table_based_min || 0) > stats.dm_interpreting_table) add('error', 'brief.dm_interpreting_table', `Brief requires at least ${interpreting.table_based_min} table-based interpreting-information questions; found ${stats.dm_interpreting_table}.`);
     if (Number(interpreting.passage_only_min || 0) > stats.dm_interpreting_passage) add('error', 'brief.dm_interpreting_passage', `Brief requires at least ${interpreting.passage_only_min} passage-only interpreting-information questions; found ${stats.dm_interpreting_passage}.`);
   }
+  if (section === 'dm') {
+    const statsVenn = stats.dm_venn;
+    const defaults = statsVenn.total >= 4 ? {
+      mixed_shape_min: Math.ceil(statsVenn.total / 2),
+      select_diagram_min: 1,
+      stimulus_diagram_min: 1,
+      distinct_set_counts_min: 2,
+      distinct_shape_types_min: 4,
+      distinct_region_patterns_min: 3,
+    } : {};
+    const requirements = { ...defaults, ...brief.section_constraints?.venn_diagram };
+    for (const [key, minimum] of Object.entries(requirements)) {
+      const actual = statsVenn[key.replace(/_min$/, '')];
+      if (actual != null && Number(minimum) > actual) {
+        add('error', `brief.dm_venn_${key}`, `Brief requires at least ${minimum} for ${key}, but found ${actual}.`);
+      }
+    }
+  }
   if (corpus && !brief.corpus_run_id) add('error', 'brief.corpus_run_id_missing', 'Brief must record the corpus run_id.');
   if (corpus && brief.corpus_run_id && brief.corpus_run_id !== corpus.run_id) add('error', 'brief.corpus_run_id', `Brief used ${brief.corpus_run_id}, but checker loaded ${corpus.run_id}.`);
 }
@@ -406,6 +439,18 @@ function candidateStats(section, input, mode) {
   const unitQuestionCounts = [];
   let dmInterpretingTable = 0;
   let dmInterpretingPassage = 0;
+  const dmVenn = {
+    total: 0,
+    mixed_shape: 0,
+    select_diagram: 0,
+    stimulus_diagram: 0,
+    distinct_set_counts: 0,
+    distinct_shape_types: 0,
+    distinct_region_patterns: 0,
+  };
+  const vennSetCounts = new Set();
+  const vennShapeTypes = new Set();
+  const vennRegionPatterns = new Set();
   const addDifficulty = (value) => { difficulties[value] = (difficulties[value] || 0) + 1; };
   const addType = (value, amount = 1) => { types[value] = (types[value] || 0) + amount; };
   if (section === 'dm') {
@@ -418,6 +463,24 @@ function candidateStats(section, input, mode) {
       if (q.type === 'interpreting_info') {
         if (q.table_data != null) dmInterpretingTable += 1;
         else dmInterpretingPassage += 1;
+      }
+      if (q.type === 'venn_diagram') {
+        dmVenn.total += 1;
+        const options = q.options || q.decision_making_question_options || [];
+        const hasOptionDiagrams = options.some((option) => option.option_data ?? option.vennConfig);
+        if (hasOptionDiagrams) dmVenn.select_diagram += 1;
+        else if (q.stimulus_diagram ?? q.stimulusDiagram) dmVenn.stimulus_diagram += 1;
+        const selectedOption = options.find((option) => option.label === q.correct_answer);
+        const config = hasOptionDiagrams
+          ? (selectedOption?.option_data ?? selectedOption?.vennConfig)
+          : (q.stimulus_diagram ?? q.stimulusDiagram);
+        if (Array.isArray(config?.sets)) {
+          vennSetCounts.add(config.sets.length);
+          vennRegionPatterns.add(vennRegionPattern(config));
+          const shapes = config.sets.map((set) => set.shape || 'circle');
+          shapes.forEach((shape) => vennShapeTypes.add(shape));
+          if (new Set(shapes).size > 1) dmVenn.mixed_shape += 1;
+        }
       }
     });
   } else if (section === 'qr') {
@@ -450,7 +513,27 @@ function candidateStats(section, input, mode) {
     types,
     dm_interpreting_table: dmInterpretingTable,
     dm_interpreting_passage: dmInterpretingPassage,
+    dm_venn: {
+      ...dmVenn,
+      distinct_set_counts: vennSetCounts.size,
+      distinct_shape_types: vennShapeTypes.size,
+      distinct_region_patterns: vennRegionPatterns.size,
+    },
   };
+}
+
+function vennRegionPattern(config) {
+  const ids = config.sets.map((set) => set.id);
+  const regionSizes = Array(ids.length).fill(0);
+  const setProfiles = ids.map(() => Array(ids.length).fill(0));
+  for (const key of Object.keys(config.regions || {})) {
+    if (key === 'outside') continue;
+    const members = ids.flatMap((id, index) => new RegExp(`(?:^|_)${id}(?:_|$)`).test(key) ? [index] : []);
+    if (!members.length) continue;
+    regionSizes[members.length - 1] += 1;
+    members.forEach((index) => { setProfiles[index][members.length - 1] += 1; });
+  }
+  return `${ids.length}:${regionSizes.join(',')}:${setProfiles.map((profile) => profile.join(',')).sort().join(';')}`;
 }
 
 function compareNovelty(candidate, existing, add) {

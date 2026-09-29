@@ -46,6 +46,6 @@ yarn-error.*
 
 .env.local
 
-# Generated question-corpus cache (contains no user data and is rebuilt on demand)
-content-authoring/cache/*.json
+# Local question-authoring cache and temporary drafting scripts
+content-authoring/cache/*
 !content-authoring/cache/.gitignore

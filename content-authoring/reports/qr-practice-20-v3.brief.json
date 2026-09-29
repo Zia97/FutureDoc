@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "run_id": "qr-practice-20-20260929-01",
+  "section": "qr",
+  "mode": "practice",
+  "question_count": 20,
+  "unit_count": 6,
+  "unit_question_counts": [
+    4,
+    4,
+    3,
+    3,
+    3,
+    3
+  ],
+  "difficulty_allocation": {
+    "normal_questions": 15,
+    "hard_questions": 5
+  },
+  "type_or_skill_allocation": {
+    "stimulus:table:sets": 1,
+    "stimulus:bar_chart:sets": 1,
+    "stimulus:line_graph:sets": 1,
+    "stimulus:pie_chart:sets": 1,
+    "stimulus:text:sets": 1,
+    "stimulus:multi:sets": 1
+  },
+  "is_free": true,
+  "editorial_requirements": [
+    "Cover at least six distinct calculation skills.",
+    "Every question needs an independent arithmetic verification ledger.",
+    "Use fictional but realistic data and state every assumption needed for an answer.",
+    "All five numeric options for each question must be in ascending order.",
+    "Answer labels must be reasonably balanced without a detectable repeated cycle."
+  ],
+  "excluded_topics": [
+    "Income tax bands, drug dosage, hospital bed occupancy, train fares, household energy mix, charity fundraising, gym memberships, and swimming pools are already heavily represented."
+  ],
+  "corpus_run_id": "qr-sync-20260929220816",
+  "corpus_generated_at": "2026-09-29T20:45:55.509Z",
+  "inventory_path": "content-authoring/cache/qr-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/qr-practice-20-v3.json",
+  "manifest_path": "content-authoring/reports/qr-practice-20-v3.manifest.json",
+  "validation_report_path": "content-authoring/reports/qr-practice-20-v3.validation.json"
+}
