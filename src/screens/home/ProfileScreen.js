@@ -378,7 +378,7 @@ export default function ProfileScreen() {
           <Animated.View style={[styles.section, contentAnim]}>
             <Text style={[styles.sectionHeading, { color: colors.text }]}>Developer</Text>
             <Text style={[styles.helperText, { color: colors.textMuted }]}>
-              Load questions from a local JSON file instead of the database. Reload the app after placing content in src/dev/.
+              Each toggle loads both practice and timed JSON for that section instead of the database. Reload after installing content in src/dev/.
             </Text>
             <View
               style={[
@@ -400,7 +400,7 @@ export default function ProfileScreen() {
                     <View style={styles.devLabel}>
                       <Text style={[styles.devTitle, { color: colors.text }]}>{section.label}</Text>
                       <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>
-                        preview-{section.id}.json
+                        preview-{section.id}.json + preview-{section.id}-timed.json
                       </Text>
                     </View>
                     <Switch

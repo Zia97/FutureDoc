@@ -187,6 +187,7 @@ export function useTimedQRExamProgress() {
       timeTakenSeconds,
       answerMap,
       flags: flagsArr,
+      isPreview: test.isPreview === true,
     };
 
     // ── 1. Save to local storage (fast, device-first) ──────────────────────
@@ -196,14 +197,16 @@ export function useTimedQRExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
-      recordActivity();
-      setLastActivity({ kind: 'timedList', section: 'QR' });
+      if (!test.isPreview) {
+        recordActivity();
+        setLastActivity({ kind: 'timedList', section: 'QR' });
+      }
     } catch (err) {
       reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort) ─────────────────────────────────────
-    if (!user) return;
+    if (test.isPreview || !user) return;
 
     // Only persist answered questions; the review screen treats absent
     // entries as unanswered the same way local cache does.
@@ -249,9 +252,11 @@ export function useTimedQRExamProgress() {
   }
 
   async function deleteAttempt(testId) {
+    let isPreviewAttempt = false;
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       const current = raw ? JSON.parse(raw) : {};
+      isPreviewAttempt = current[testId]?.isPreview === true;
       delete current[testId];
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
@@ -259,7 +264,7 @@ export function useTimedQRExamProgress() {
       reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
-    if (!user) return;
+    if (isPreviewAttempt || !user) return;
     const numericId = numericTestIdFromKey(testId);
     try {
       await db.deleteTimedQRAttempt(numericId);

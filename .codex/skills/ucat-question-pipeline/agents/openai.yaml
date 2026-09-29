@@ -1,0 +1,4 @@
+interface:
+  display_name: "UCAT Question Pipeline"
+  short_description: "Generate and independently validate novel UCAT questions"
+  default_prompt: "Use $ucat-question-pipeline to generate 20 DM practice questions."

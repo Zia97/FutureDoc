@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "candidate_path": "",
+  "validator": {
+    "model": "",
+    "run_at": ""
+  },
+  "deterministic_report_path": "",
+  "blind_review_completed": false,
+  "batch_verdict": "revise",
+  "passages": [
+    {
+      "passage_id": "",
+      "title": "",
+      "verdict": "revise",
+      "factual_provenance": "pass",
+      "novelty": "pass",
+      "nearest_matches": [],
+      "questions": [
+        {
+          "question_id": "",
+          "order_index": 0,
+          "independent_answer": "",
+          "provided_answer": "",
+          "answer_agrees": false,
+          "evidence": "",
+          "relationship_or_option_eliminations": "",
+          "confidence": "high",
+          "verdict": "revise",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "passed_questions": 0,
+    "revised_questions": 0,
+    "rejected_questions": 0,
+    "blocking_issues": []
+  }
+}

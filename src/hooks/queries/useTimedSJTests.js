@@ -28,12 +28,14 @@ function mapDevTests(data) {
             answer: i.correct_answer,
             answeringReason: i.answer_reason,
             difficulty: i.difficulty ?? 'normal',
-            labelSet: i.label_set ?? 2,
+            labelSet: i.label_set ?? (i.type === 'importance' ? 1 : 2),
           })),
       }));
     return addFlatQuestions({
       id: test.id,
       title: test.title,
+      isFree: true,
+      isPreview: true,
       scenarioCount: scenarios.length,
       questionCount: test.question_count,
       timeMinutes: test.time_minutes,

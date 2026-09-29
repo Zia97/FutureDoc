@@ -129,6 +129,7 @@ export function useTimedDMExamProgress() {
       timeTakenSeconds,
       answerMap: answers,
       flags: flagsArr,
+      isPreview: test.isPreview === true,
     };
 
     // ── 1. Save to local storage (fast, device-first) ───────────────────────
@@ -138,14 +139,16 @@ export function useTimedDMExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
-      recordActivity();
-      setLastActivity({ kind: 'timedList', section: 'DM' });
+      if (!test.isPreview) {
+        recordActivity();
+        setLastActivity({ kind: 'timedList', section: 'DM' });
+      }
     } catch (err) {
       reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
-    if (!user) return;
+    if (test.isPreview || !user) return;
 
     const dbAnswers = answerList
       .filter((a) => a.selectedAnswer != null && a.selectedAnswer !== '')
@@ -187,9 +190,11 @@ export function useTimedDMExamProgress() {
   }
 
   async function deleteAttempt(testId) {
+    let isPreviewAttempt = false;
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       const current = raw ? JSON.parse(raw) : {};
+      isPreviewAttempt = current[testId]?.isPreview === true;
       delete current[testId];
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
@@ -197,7 +202,7 @@ export function useTimedDMExamProgress() {
       reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
-    if (!user) return;
+    if (isPreviewAttempt || !user) return;
     try {
       await db.deleteTimedDMAttempt(testId);
       await removePending({ userId: user.id, section: SECTION, testKey: testId });

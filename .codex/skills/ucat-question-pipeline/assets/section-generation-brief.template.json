@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "run_id": "section-practice-YYYYMMDD-NN",
+  "section": "dm",
+  "mode": "practice",
+  "question_count": 20,
+  "unit_count": 0,
+  "difficulty_allocation": {
+    "normal_questions": 15,
+    "hard_questions": 5
+  },
+  "type_or_skill_allocation": {},
+  "is_free": true,
+  "editorial_requirements": [],
+  "excluded_topics": [],
+  "corpus_run_id": "",
+  "corpus_generated_at": "",
+  "inventory_path": "content-authoring/cache/section-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/section-practice-20-v1.json",
+  "manifest_path": "content-authoring/reports/section-practice-20-v1.manifest.json",
+  "validation_report_path": "content-authoring/reports/section-practice-20-v1.validation.json"
+}

@@ -153,6 +153,7 @@ export function useTimedSJExamProgress() {
       timeTakenSeconds,
       answerMap,
       flags: flagsArr,
+      isPreview: test.isPreview === true,
     };
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
@@ -160,14 +161,16 @@ export function useTimedSJExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
-      recordActivity();
-      setLastActivity({ kind: 'timedList', section: 'SJ' });
+      if (!test.isPreview) {
+        recordActivity();
+        setLastActivity({ kind: 'timedList', section: 'SJ' });
+      }
     } catch (err) {
       reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
-    if (!user) return;
+    if (test.isPreview || !user) return;
 
     const dbAnswers = answers
       .filter((a) => a.selectedAnswer)
@@ -210,9 +213,11 @@ export function useTimedSJExamProgress() {
 
   // Removes a completed attempt from local storage and cloud.
   async function deleteAttempt(testId) {
+    let isPreviewAttempt = false;
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       const current = raw ? JSON.parse(raw) : {};
+      isPreviewAttempt = current[testId]?.isPreview === true;
       delete current[testId];
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
@@ -220,7 +225,7 @@ export function useTimedSJExamProgress() {
       reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
-    if (!user) return;
+    if (isPreviewAttempt || !user) return;
     const numericId = numericTestIdFromKey(testId);
     try {
       await db.deleteTimedSJAttempt(numericId);

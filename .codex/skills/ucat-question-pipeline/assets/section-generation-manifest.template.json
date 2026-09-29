@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "run_id": "",
+  "section": "dm",
+  "brief_path": "",
+  "candidate_path": "",
+  "corpus_run_id": "",
+  "generator": {
+    "model": "",
+    "completed_at": ""
+  },
+  "units": [
+    {
+      "unit_id": "",
+      "working_topic": "",
+      "type_or_skill": "",
+      "novelty_rationale": "",
+      "semantic_fingerprint": {},
+      "nearest_existing": [
+        {
+          "id": "",
+          "title": "",
+          "material_difference": ""
+        }
+      ],
+      "sources": [
+        {
+          "title": "",
+          "url": "",
+          "accessed_at": "",
+          "facts_used": []
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "",
+          "purpose": "",
+          "independent_derivation_or_rating_basis": "",
+          "verification_ledger": {},
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": false,
+        "derivations_recorded": false,
+        "factual_claims_mapped": false,
+        "batch_internal_novelty": false,
+        "option_clueing_reviewed": false
+      }
+    }
+  ]
+}

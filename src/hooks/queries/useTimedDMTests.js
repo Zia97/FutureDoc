@@ -50,13 +50,14 @@ function mapQuestion(q) {
   };
 }
 
-function mapTests(data) {
+function mapTests(data, isPreview = false) {
   return data.map((test) => {
     const questions = test.timed_decision_making_questions ?? test.questions ?? [];
     return {
       id: test.id,
       title: test.title,
-      isFree: test.is_free ?? test.isFree ?? false,
+      isFree: isPreview ? true : (test.is_free ?? test.isFree ?? false),
+      isPreview,
       passageCount: 0,
       questionCount: test.question_count ?? questions.length,
       timeMinutes: test.time_minutes,
@@ -86,7 +87,7 @@ export function useTimedDMTests() {
       if (enabled) {
         const data = require('../../dev/preview-dm-timed.json');
         if (data?.length > 0) {
-          setTests(mapTests(data));
+          setTests(mapTests(data, true));
           setLoading(false);
           return;
         }

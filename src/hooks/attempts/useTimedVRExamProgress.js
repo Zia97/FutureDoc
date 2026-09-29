@@ -141,6 +141,7 @@ export function useTimedVRExamProgress() {
       timeTakenSeconds,
       answerMap,
       flags: flagsArr,
+      isPreview: test.isPreview === true,
     };
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
@@ -148,14 +149,16 @@ export function useTimedVRExamProgress() {
       current[test.id] = attemptData;
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts(current);
-      recordActivity();
-      setLastActivity({ kind: 'timedList', section: 'VR' });
+      if (!test.isPreview) {
+        recordActivity();
+        setLastActivity({ kind: 'timedList', section: 'VR' });
+      }
     } catch (err) {
       reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
     }
 
     // ── 2. Sync to cloud (best effort — local already saved) ────────────────
-    if (!user) return;
+    if (test.isPreview || !user) return;
 
     // Only persist answered questions; the review screen treats absent
     // entries as unanswered the same way local cache does.
@@ -201,10 +204,12 @@ export function useTimedVRExamProgress() {
   }
 
   async function deleteAttempt(testId) {
+    let isPreviewAttempt = false;
     // Local first so the UI updates immediately, then mirror to cloud.
     try {
       const raw = await AsyncStorage.getItem(COMPLETED_KEY);
       const current = raw ? JSON.parse(raw) : {};
+      isPreviewAttempt = current[testId]?.isPreview === true;
       delete current[testId];
       await AsyncStorage.setItem(COMPLETED_KEY, JSON.stringify(current));
       setCompletedAttempts({ ...current });
@@ -212,7 +217,7 @@ export function useTimedVRExamProgress() {
       reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local delete failed' } });
     }
 
-    if (!user) return;
+    if (isPreviewAttempt || !user) return;
     try {
       await db.deleteTimedVRAttempt(testId);
       await removePending({ userId: user.id, section: SECTION, testKey: testId });

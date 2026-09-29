@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "section": "dm",
+  "candidate_path": "",
+  "validator": {
+    "model": "",
+    "run_at": ""
+  },
+  "deterministic_report_path": "",
+  "blind_response_path": "",
+  "blind_review_completed": false,
+  "batch_verdict": "revise",
+  "units": [
+    {
+      "unit_id": "",
+      "verdict": "revise",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [],
+      "items": [
+        {
+          "item_id": "",
+          "independent_answer": "",
+          "provided_answer": "",
+          "answer_agrees": false,
+          "working_or_rationale": "",
+          "confidence": "high",
+          "ambiguity": false,
+          "verdict": "revise",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "passed_items": 0,
+    "revised_items": 0,
+    "rejected_items": 0,
+    "blocking_issues": []
+  }
+}

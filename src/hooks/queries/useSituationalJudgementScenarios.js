@@ -7,11 +7,12 @@ import { flattenSJScenarios } from '../../lib/flattenQuestions';
 
 const SECTION = 'situational_judgement';
 
-function mapScenarios(data) {
+function mapScenarios(data, isPreview = false) {
   return data.map((s) => ({
     id: s.id,
     scenarioId: s.id,
-    isFree: s.is_free ?? s.isFree ?? false,
+    isFree: isPreview ? true : (s.is_free ?? s.isFree ?? false),
+    isPreview,
     resource: s.body,
     questions: [...s.situational_judgement_questions]
       .sort((a, b) => a.order_index - b.order_index)
@@ -21,6 +22,7 @@ function mapScenarios(data) {
         answer: q.correct_answer,
         answeringReason: q.answer_reason,
         labelSet: q.label_set ?? s.label_set,
+        difficulty: q.difficulty ?? 'normal',
       })),
   }));
 }
@@ -44,7 +46,7 @@ export function useSituationalJudgementScenarios() {
       if (enabled) {
         const data = require('../../dev/preview-sj.json');
         if (data?.length > 0) {
-          setScenarios(mapScenarios(data));
+          setScenarios(mapScenarios(data, true));
           setLoading(false);
           return;
         }

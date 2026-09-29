@@ -132,6 +132,7 @@ function SJScenarioScreenInner({ index }) {
       totalQuestions: item.stemQuestionCount,
       timeSpentMs: meta.timeSpentMs ?? null,
       isCorrect,
+      isPreview: item.isPreview,
     });
   }
 

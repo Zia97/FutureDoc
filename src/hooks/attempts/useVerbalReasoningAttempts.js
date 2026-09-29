@@ -90,6 +90,7 @@ export function useVerbalReasoningAttempts() {
     totalQuestions,
     timeSpentMs = null,
     isCorrect = null,
+    isPreview = false,
   }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
@@ -97,16 +98,18 @@ export function useVerbalReasoningAttempts() {
     try {
       const attempts = await saveToCache(questionId, passageId, selectedAnswer, timeSpentMs);
       if (attempts) await updateProgressCache(passageId, totalQuestions, attempts);
-      recordActivity();
-      maybeRequestReview();
-      setLastActivity({ kind: 'practice', section: 'VR' });
-      recordPracticeAttempt({
-        section: 'vr',
-        questionId,
-        selectedAnswer,
-        isCorrect,
-        timeSpentMs,
-      });
+      if (!isPreview) {
+        recordActivity();
+        maybeRequestReview();
+        setLastActivity({ kind: 'practice', section: 'VR' });
+        recordPracticeAttempt({
+          section: 'vr',
+          questionId,
+          selectedAnswer,
+          isCorrect,
+          timeSpentMs,
+        });
+      }
     } finally {
       submitting.current.delete(questionId);
     }

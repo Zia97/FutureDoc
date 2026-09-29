@@ -21,14 +21,15 @@ function mapOptions(q) {
     }));
 }
 
-function mapQuestions(data) {
+function mapQuestions(data, isPreview = false) {
   return data.map((q) => ({
     id: q.id,
     title: q.title,
     type: q.type,
     difficulty: q.difficulty ?? null,
     stem: q.stem,
-    isFree: q.is_free ?? q.isFree ?? false,
+    isFree: isPreview ? true : (q.is_free ?? q.isFree ?? false),
+    isPreview,
     tableData: q.table_data,
     stimulusDiagram: q.stimulus_diagram ?? q.stimulusDiagram,
     stimulusVennGeometry: q.venn_geometry ?? null,
@@ -71,7 +72,7 @@ export function useDecisionMakingQuestions() {
       if (enabled) {
         const data = require('../../dev/preview-dm.json');
         if (data?.length > 0) {
-          setQuestions(mapQuestions(data));
+          setQuestions(mapQuestions(data, true));
           setLoading(false);
           return;
         }

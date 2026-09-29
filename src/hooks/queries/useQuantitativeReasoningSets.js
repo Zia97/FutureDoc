@@ -7,7 +7,7 @@ import { flattenQRSets } from '../../lib/flattenQuestions';
 
 const SECTION = 'quantitative_reasoning';
 
-function mapSets(data) {
+function mapSets(data, isPreview = false) {
   const seen = new Set();
   const unique = [];
   for (const s of data) {
@@ -19,7 +19,8 @@ function mapSets(data) {
     id: s.id,
     setId: s.id,
     title: s.title,
-    isFree: s.is_free ?? s.isFree ?? false,
+    isFree: isPreview ? true : (s.is_free ?? s.isFree ?? false),
+    isPreview,
     stimulus: s.stimulus,
     questions: [...s.quantitative_reasoning_questions]
       .sort((a, b) => a.order_index - b.order_index)
@@ -29,6 +30,7 @@ function mapSets(data) {
         options: q.options,
         answer: q.correct_answer,
         answeringReason: q.answer_reason,
+        difficulty: q.difficulty ?? 'normal',
       })),
   }));
 }
@@ -52,7 +54,7 @@ export function useQuantitativeReasoningSets() {
       if (enabled) {
         const data = require('../../dev/preview-qr.json');
         if (data?.length > 0) {
-          setSets(mapSets(data));
+          setSets(mapSets(data, true));
           setLoading(false);
           return;
         }

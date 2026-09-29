@@ -85,6 +85,7 @@ export function useSituationalJudgementAttempts() {
     totalQuestions,
     timeSpentMs = null,
     isCorrect = null,
+    isPreview = false,
   }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
@@ -92,16 +93,18 @@ export function useSituationalJudgementAttempts() {
     try {
       const attempts = await saveToCache(questionId, scenarioId, selectedAnswer, timeSpentMs);
       if (attempts) await updateProgressCache(scenarioId, totalQuestions, attempts);
-      recordActivity();
-      maybeRequestReview();
-      setLastActivity({ kind: 'practice', section: 'SJ' });
-      recordPracticeAttempt({
-        section: 'sj',
-        questionId,
-        selectedAnswer,
-        isCorrect,
-        timeSpentMs,
-      });
+      if (!isPreview) {
+        recordActivity();
+        maybeRequestReview();
+        setLastActivity({ kind: 'practice', section: 'SJ' });
+        recordPracticeAttempt({
+          section: 'sj',
+          questionId,
+          selectedAnswer,
+          isCorrect,
+          timeSpentMs,
+        });
+      }
     } finally {
       submitting.current.delete(questionId);
     }

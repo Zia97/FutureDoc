@@ -388,6 +388,7 @@ function DMQuestionScreenInner({ route, navigation }) {
       answer: currentAnswer,
       timeSpentMs,
       statementCorrectness,
+      isPreview: question.isPreview,
     });
   }
 

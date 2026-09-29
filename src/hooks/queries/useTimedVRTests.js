@@ -38,7 +38,7 @@ function mapTestsFromNested(rows) {
   });
 }
 
-function mapTests(data) {
+function mapTests(data, isPreview = false) {
   return data.map((test) => {
     const rawPassages = test.timed_verbal_reasoning_passages ?? test.passages ?? [];
     const passages = rawPassages.map((p) => ({
@@ -59,7 +59,8 @@ function mapTests(data) {
     return {
       id: test.id,
       title: test.title,
-      isFree: test.is_free ?? test.isFree ?? false,
+      isFree: isPreview ? true : (test.is_free ?? test.isFree ?? false),
+      isPreview,
       passageCount: test.passage_count ?? passages.length,
       questionCount: test.question_count ?? passages.reduce((n, p) => n + p.questions.length, 0),
       timeMinutes: test.time_minutes ?? 22,
@@ -92,7 +93,7 @@ export function useTimedVRTests() {
       if (enabled) {
         const data = require('../../dev/preview-vr-timed.json');
         if (data?.length > 0) {
-          setTests(mapTests(data));
+          setTests(mapTests(data, true));
           setLoading(false);
           return;
         }

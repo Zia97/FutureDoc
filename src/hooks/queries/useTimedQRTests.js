@@ -32,6 +32,8 @@ function mapDevTests(data) {
     return addFlatQuestions({
       id: test.id,
       title: test.title,
+      isFree: true,
+      isPreview: true,
       questionCount: test.question_count,
       timeMinutes: test.time_minutes,
       sets,

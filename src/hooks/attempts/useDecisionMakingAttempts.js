@@ -72,18 +72,23 @@ export function useDecisionMakingAttempts() {
     answer,
     timeSpentMs = null,
     statementCorrectness = null,
+    isPreview = false,
   }) {
     if (submitting.current.has(questionId)) return;
     submitting.current.add(questionId);
 
     try {
       await saveToCache(questionId, answer, timeSpentMs);
-      recordActivity();
-      maybeRequestReview();
-      setLastActivity({ kind: 'practice', section: 'DM' });
+      if (!isPreview) {
+        recordActivity();
+        maybeRequestReview();
+        setLastActivity({ kind: 'practice', section: 'DM' });
+      }
 
       // DM Yes/No questions: emit one telemetry row per statement.
-      if (answer && typeof answer === 'object') {
+      if (isPreview) {
+        return;
+      } else if (answer && typeof answer === 'object') {
         for (const [key, value] of Object.entries(answer)) {
           const idx = Number(key);
           if (!Number.isInteger(idx)) continue;

@@ -7,11 +7,12 @@ import { flattenVRPassages } from '../../lib/flattenQuestions';
 
 const SECTION = 'verbal_reasoning';
 
-function mapPassages(data) {
+function mapPassages(data, isPreview = false) {
   return data.map((p) => ({
     id: p.id,
     title: p.title,
-    isFree: p.is_free ?? p.isFree ?? false,
+    isFree: isPreview ? true : (p.is_free ?? p.isFree ?? false),
+    isPreview,
     resource: p.body,
     questions: [...p.verbal_reasoning_questions]
       .sort((a, b) => a.order_index - b.order_index)
@@ -21,6 +22,7 @@ function mapPassages(data) {
         options: q.options,
         answer: q.correct_answer,
         answeringReason: q.answer_reason,
+        difficulty: q.difficulty ?? 'normal',
       })),
   }));
 }
@@ -44,7 +46,7 @@ export function useVerbalReasoningPassages() {
       if (enabled) {
         const data = require('../../dev/preview-vr.json');
         if (data?.length > 0) {
-          setPassages(mapPassages(data));
+          setPassages(mapPassages(data, true));
           setLoading(false);
           return;
         }

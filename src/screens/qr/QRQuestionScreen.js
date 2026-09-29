@@ -311,6 +311,7 @@ function QRQuestionScreenInner({ route, navigation }) {
       totalQuestions: item.stemQuestionCount,
       timeSpentMs,
       isCorrect: correctness,
+      isPreview: item.isPreview,
     });
   }
 
