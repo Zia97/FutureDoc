@@ -1,4 +1,4 @@
-import { LABEL_SETS } from '../constants/sjLabelSets';
+import { getSJMark, SJ_FULL_MARK, SJ_PARTIAL_MARK } from './sjScoring';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Builds the pre-aggregated analytics_summary JSONB that gets stored on the
@@ -184,7 +184,7 @@ export function buildSJAnalyticsSummary({ test, getAnswer, timeMsByQid }) {
   let answered = 0;
   let normalCorrect = 0, normalTotal = 0, hardCorrect = 0, hardTotal = 0;
   let fullMarks = 0, partialMarks = 0, zeroMarks = 0;
-  const correctQids = new Set(); // "correct" = exact match (4 marks)
+  const correctQids = new Set(); // "correct" = exact match (1 mark)
   const allQids = [];
 
   for (const scenario of test.scenarios) {
@@ -193,22 +193,18 @@ export function buildSJAnalyticsSummary({ test, getAnswer, timeMsByQid }) {
       const selected = getAnswer(scenario.scenarioId, item.itemId);
       if (selected) answered++;
 
-      const labelSet = LABEL_SETS[item.labelSet] ?? LABEL_SETS[2];
-      const si = selected ? labelSet.indexOf(selected) : -1;
-      const ci = labelSet.indexOf(item.answer);
-      const diff = si === -1 || ci === -1 ? 99 : Math.abs(si - ci);
-      const marks = diff === 0 ? 4 : diff === 1 ? 2 : 0;
+      const marks = getSJMark(selected, item.answer, item);
 
-      if (marks === 4) { fullMarks++; correctQids.add(item.itemId); }
-      else if (marks === 2) partialMarks++;
+      if (marks === SJ_FULL_MARK) { fullMarks++; correctQids.add(item.itemId); }
+      else if (marks === SJ_PARTIAL_MARK) partialMarks++;
       else zeroMarks++;
 
       if (item.difficulty === 'hard') {
         hardTotal++;
-        if (marks === 4) hardCorrect++;
+        if (marks === SJ_FULL_MARK) hardCorrect++;
       } else {
         normalTotal++;
-        if (marks === 4) normalCorrect++;
+        if (marks === SJ_FULL_MARK) normalCorrect++;
       }
     }
   }

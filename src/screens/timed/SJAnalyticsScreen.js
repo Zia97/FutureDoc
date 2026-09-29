@@ -455,7 +455,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
           <AnalyticsCard t={t}>
             <Text style={[styles.cardTitle, { color: t.text }]}>Mark quality</Text>
             <Text style={[styles.cardSub, { color: t.textSecondary }]}>
-              SJ uses partial credit: 4 marks for exact match, 2 for one position off, 0 for
+              SJ uses partial credit: 1 mark for an exact match, ½ for one position off, and 0 for
               further away. Higher full-mark rate means stronger judgement alignment.
             </Text>
             <View style={{ marginTop: 14 }}>
@@ -466,8 +466,8 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
                 t={t}
               />
               <View style={[styles.markLegend, { marginTop: 12 }]}>
-                <LegendItem color={t.correct} label="Full (4)" value={`${stats.markBreakdown.full.pct}%`} textColor={t.text} />
-                <LegendItem color="#d97706" label="Partial (2)" value={`${stats.markBreakdown.partial.pct}%`} textColor={t.text} />
+                <LegendItem color={t.correct} label="Full (1)" value={`${stats.markBreakdown.full.pct}%`} textColor={t.text} />
+                <LegendItem color="#d97706" label="Partial (½)" value={`${stats.markBreakdown.partial.pct}%`} textColor={t.text} />
                 <LegendItem color={t.danger} label="Zero (0)" value={`${stats.markBreakdown.zero.pct}%`} textColor={t.text} />
               </View>
             </View>
@@ -526,7 +526,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
           )}
         </AnalyticsCard>
 
-        {/* Difficulty breakdown — exact matches only (4 marks) */}
+        {/* Difficulty breakdown — exact matches only (1 mark) */}
         <AnalyticsCard t={t}>
           <Text style={[styles.cardTitle, { color: t.text }]}>Exact match by difficulty</Text>
           <Text style={[styles.cardSub, { color: t.textSecondary }]}>
@@ -594,7 +594,7 @@ export default function SJAnalyticsScreen({ route, preloadedRows }) {
             derived from community data — your actual UCAT SJ band may differ.
           </Text>
           <Text style={[styles.disclaimerBody, { color: t.textSecondary, marginTop: 8 }]}>
-            SJ uses partial credit: you receive 4 marks for the exact answer, 2 marks if
+            SJ uses partial credit: you receive 1 mark for the exact answer, ½ mark if
             one position away, and 0 marks if two or more positions away.
           </Text>
         </AnalyticsCard>

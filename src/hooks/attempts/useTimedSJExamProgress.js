@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
 import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
 import { buildSJAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
-import { LABEL_SETS } from '../../constants/sjLabelSets';
+import { getSJMark, SJ_FULL_MARK } from '../../lib/sjScoring';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
 import { setLastActivity } from '../../services/lastActivityService';
@@ -23,7 +23,7 @@ function keyFromNumericTestId(id) {
 }
 
 // Computes UCAT SJ marks and builds the answers array for DB insertion.
-// Mark scheme: 4 marks (exact), 2 marks (1 position off), 0 marks (2+ off or unanswered)
+// Mark scheme: 1 mark (exact), 0.5 marks (1 position off), 0 marks otherwise.
 function computeScores(scenarios, getAnswer) {
   const answers = [];
   let totalMarks = 0;
@@ -32,14 +32,10 @@ function computeScores(scenarios, getAnswer) {
   for (const scenario of scenarios) {
     for (const item of scenario.items) {
       const selected = getAnswer(scenario.scenarioId, item.itemId);
-      const labelSet = LABEL_SETS[item.type === 'importance' ? 1 : 2];
-      const si = selected ? labelSet.indexOf(selected) : -1;
-      const ci = labelSet.indexOf(item.answer);
-      const diff = si === -1 || ci === -1 ? 99 : Math.abs(si - ci);
-      const marks = diff === 0 ? 4 : diff === 1 ? 2 : 0;
+      const marks = getSJMark(selected, item.answer, item);
 
       totalMarks += marks;
-      if (diff === 0) correctCount++;
+      if (marks === SJ_FULL_MARK) correctCount++;
 
       answers.push({
         questionId: item.itemId,
@@ -49,7 +45,7 @@ function computeScores(scenarios, getAnswer) {
     }
   }
 
-  const maxMarks = answers.length * 4;
+  const maxMarks = answers.length;
   const scorePercent = maxMarks > 0 ? Math.round((totalMarks / maxMarks) * 100) : 0;
 
   return { answers, correctCount, scorePercent };

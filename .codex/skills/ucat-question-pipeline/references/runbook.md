@@ -30,6 +30,8 @@ If Supabase cannot be reached, replace `sync:<section>` with `sync:<section>:pre
 
 ## Validate a candidate
 
+For new DM diagrams with independently positioned, resized and rotated shapes, run `npm run questions:venn:generate`. This creates seeded v2 diagram JSON, a region/answer ledger and an HTML gallery under the ignored cache. For example: `npm run questions:venn:generate -- -- --seed "training" --sets "4,5,6"`. These are authoring inputs, not accepted question batches. See [the engine guide](../../../../docs/VENN_DIAGRAM_ENGINE.md), then follow the normal question validation workflow below.
+
 Replace `dm` with `qr` or `sj` in the following commands.
 
 ```powershell

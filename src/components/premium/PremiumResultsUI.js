@@ -7,12 +7,14 @@ import PremiumIcon from './PremiumIcon';
 
 const RESULT_META = {
   correct: { label: 'Correct' },
+  partial: { label: 'Half mark' },
   incorrect: { label: 'Incorrect' },
   unanswered: { label: 'Unanswered' },
 };
 
 function getResultColor(result, colors, isDark) {
   if (result === 'correct') return isDark ? '#34D399' : '#059669';
+  if (result === 'partial') return colors.amber;
   if (result === 'incorrect') return colors.red;
   return colors.textMuted;
 }
@@ -33,6 +35,7 @@ export function ResultsHeader({ title, accent, colors }) {
 export function ScoreOverviewCard({
   pct,
   correctCount,
+  partialCount = null,
   incorrectCount,
   unansweredCount,
   total,
@@ -40,6 +43,9 @@ export function ScoreOverviewCard({
   colors,
   isDark,
   showUnanswered = true,
+  scoreSubLabel = null,
+  correctLabel = 'Correct',
+  incorrectLabel = 'Incorrect',
 }) {
   const correctColor = isDark ? '#34D399' : '#059669';
   return (
@@ -56,13 +62,19 @@ export function ScoreOverviewCard({
       >
         <Text style={[resultsStyles.scorePercent, { color: colors.text }]}>{pct}%</Text>
         <Text style={[resultsStyles.scoreSubLabel, { color: colors.textSecondary }]}>
-          {correctCount} of {total} correct
+          {scoreSubLabel ?? `${correctCount} of ${total} correct`}
         </Text>
 
         <View style={resultsStyles.scoreStats}>
-          <ScoreStat label="Correct" value={correctCount} color={correctColor} colors={colors} />
+          <ScoreStat label={correctLabel} value={correctCount} color={correctColor} colors={colors} />
+          {partialCount != null ? (
+            <>
+              <ScoreDivider colors={colors} />
+              <ScoreStat label="Half mark" value={partialCount} color={colors.amber} colors={colors} />
+            </>
+          ) : null}
           <ScoreDivider colors={colors} />
-          <ScoreStat label="Incorrect" value={incorrectCount} color={colors.red} colors={colors} />
+          <ScoreStat label={incorrectLabel} value={incorrectCount} color={colors.red} colors={colors} />
           {showUnanswered ? (
             <>
               <ScoreDivider colors={colors} />

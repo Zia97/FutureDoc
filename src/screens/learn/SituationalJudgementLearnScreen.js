@@ -156,7 +156,7 @@ export const MODULES = [
           },
           {
             title: 'How partial credit works',
-            body: 'Full marks if your answer matches the model answer. Partial marks if your answer is one position away on the scale (for example, model answer is "Very appropriate" and you choose "Appropriate, but not ideal"). Two positions away usually scores nothing. Drag-and-drop questions are different — they award no partial credit, so both selections must be correct.',
+            body: 'You earn 1 mark if your answer matches the model answer and ½ mark if it is one position away on the scale (for example, the model answer is "Very appropriate" and you choose "Appropriate, but not ideal"). Answers two or more positions away score nothing. Drag-and-drop questions are different — they award no partial credit, so both selections must be correct.',
           },
           {
             kind: 'rule',
@@ -185,7 +185,7 @@ export const MODULES = [
               'You score negative marks.',
             ],
             correctIndex: 1,
-            explanation: 'Neighbour ratings get partial credit. Two positions out (e.g. picking "Inappropriate, but not awful") usually scores nothing, and there is no negative marking.',
+            explanation: 'Neighbour ratings earn ½ mark. Two positions out (e.g. picking "Inappropriate, but not awful") scores nothing, and there is no negative marking.',
           },
           {
             kind: 'tip',
@@ -1273,7 +1273,7 @@ export const MODULES = [
           },
           {
             title: 'The official rule',
-            body: 'You get full marks if your answer matches the correct answer, and partial marks if your answer is close to the correct answer. UCAT does not publicly define "close", but the safest working assumption is that partial marks apply only to answers ONE position away from the correct one.',
+            body: 'You earn 1 mark if your answer matches the correct answer and ½ mark if it is ONE position away on the four-point scale. Answers two or more positions away score nothing.',
           },
           {
             title: 'Worked example',

@@ -6,6 +6,7 @@ import {
   Modal,
   StyleSheet,
   useWindowDimensions,
+  ScrollView,
 } from 'react-native';
 import AnswerOptionButton from '../AnswerOptionButton';
 import ZoomableView from '../ZoomableView';
@@ -36,21 +37,24 @@ function useQuestionMeta(question, screenWidth) {
   const vennKeySets  = isVenn
     ? (stimDiagram?.sets ?? question.options?.[0]?.vennConfig?.sets ?? question.options?.[0]?.option_data?.sets ?? null)
     : null;
+  const vennSchemaVersion = stimDiagram?.schemaVersion ??
+    (question.options?.[0]?.vennConfig ?? question.options?.[0]?.option_data)?.schemaVersion;
   const contentWidth     = screenWidth - 40;
   const stimulusWidthPx  = contentWidth;
   const expandedWidthPx  = screenWidth  - 80;          // modal padding ~40 each side
-  return { isYesNo, isMCQ, isVenn, isSelectVenn, isInterpVenn, vennKeySets, stimDiagram, contentWidth, stimulusWidthPx, expandedWidthPx };
+  return { isYesNo, isMCQ, isVenn, isSelectVenn, isInterpVenn, vennKeySets, vennSchemaVersion, stimDiagram, contentWidth, stimulusWidthPx, expandedWidthPx };
 }
 
 // Renders the stem, data table, diagram stimulus — everything except the answer inputs
 export function DMStemContent({ question, showLabel = true }) {
-  const { width: screenWidth } = useWindowDimensions();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
   const sectionColor = colors.teal;
   const [diagramExpanded, setDiagramExpanded] = useState(false);
-  const { isInterpVenn, vennKeySets, stimDiagram, stimulusWidthPx, expandedWidthPx } = useQuestionMeta(question, screenWidth);
+  const [diagramZoom, setDiagramZoom] = useState(1);
+  const { isInterpVenn, vennKeySets, vennSchemaVersion, stimDiagram, stimulusWidthPx, expandedWidthPx } = useQuestionMeta(question, screenWidth);
 
   const stemScaled = {
     fontSize: Math.round(styles.stem.fontSize * multiplier),
@@ -62,7 +66,7 @@ export function DMStemContent({ question, showLabel = true }) {
       {showLabel && <Text style={[styles.sectionLabel, { color: sectionColor }]}>STEM</Text>}
       <Text style={[styles.stem, stemScaled, { color: colors.text }]}>{question.stem}</Text>
 
-      {vennKeySets && !question.hideLabels && <VennDiagramKey sets={vennKeySets} />}
+      {vennKeySets && !question.hideLabels && <VennDiagramKey sets={vennKeySets} schemaVersion={vennSchemaVersion} />}
 
       {question.tableData && <DataTable tableData={question.tableData} />}
 
@@ -76,7 +80,7 @@ export function DMStemContent({ question, showLabel = true }) {
                 borderColor: colors.border,
               },
             ]}
-            onPress={() => setDiagramExpanded(true)}
+            onPress={() => { setDiagramZoom(1); setDiagramExpanded(true); }}
             activeOpacity={0.85}
           >
             <VennDiagramRenderer vennConfig={stimDiagram} widthPx={stimulusWidthPx} bakedGeometry={question.stimulusVennGeometry} />
@@ -89,18 +93,38 @@ export function DMStemContent({ question, showLabel = true }) {
             animationType="fade"
             onRequestClose={() => setDiagramExpanded(false)}
           >
-            <TouchableOpacity
-              style={styles.modalOverlay}
-              onPress={() => setDiagramExpanded(false)}
-              activeOpacity={1}
-            >
+            <View style={styles.modalOverlay}>
+              <TouchableOpacity style={StyleSheet.absoluteFillObject}
+                accessibilityLabel="Close diagram" onPress={() => setDiagramExpanded(false)} />
               <View style={[styles.modalCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-                <ZoomableView maxZoom={4}>
-                  <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} bakedGeometry={question.stimulusVennGeometry} />
-                </ZoomableView>
-                <Text style={[styles.modalDismiss, { color: sectionColor }]}>Tap anywhere to close</Text>
+                {vennSchemaVersion === 2 ? (
+                  <>
+                    <View style={styles.diagramZoomControls}>
+                      <TouchableOpacity accessibilityLabel="Zoom out" accessibilityRole="button" disabled={diagramZoom <= 1}
+                        onPress={() => setDiagramZoom(z => Math.max(1, z - 0.25))}>
+                        <Text style={{ color: sectionColor, fontSize: 16, padding: 8 }}>−</Text>
+                      </TouchableOpacity>
+                      <Text style={{ color: colors.text }}>{Math.round(diagramZoom * 100)}%</Text>
+                      <TouchableOpacity accessibilityLabel="Zoom in" accessibilityRole="button" disabled={diagramZoom >= 3}
+                        onPress={() => setDiagramZoom(z => Math.min(3, z + 0.25))}>
+                        <Text style={{ color: sectionColor, fontSize: 16, padding: 8 }}>+</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <ScrollView nestedScrollEnabled style={{ maxHeight: screenHeight * 0.65, width: expandedWidthPx }}>
+                      {!question.hideLabels && <VennDiagramKey sets={vennKeySets} schemaVersion={2} />}
+                      <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} zoom={diagramZoom} />
+                    </ScrollView>
+                  </>
+                ) : (
+                  <ZoomableView maxZoom={4}>
+                    <VennDiagramRenderer vennConfig={stimDiagram} widthPx={expandedWidthPx} bakedGeometry={question.stimulusVennGeometry} />
+                  </ZoomableView>
+                )}
+                <TouchableOpacity onPress={() => setDiagramExpanded(false)} accessibilityRole="button">
+                  <Text style={[styles.modalDismiss, { color: sectionColor }]}>Close</Text>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
+            </View>
           </Modal>
         </>
       )}
@@ -364,6 +388,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalDismiss: { fontSize: 12, marginTop: 14, opacity: 0.7 },
+  diagramZoomControls: { flexDirection: 'row', alignItems: 'center', gap: 18, marginBottom: 8 },
   explanation: {
     borderRadius: 10,
     borderLeftWidth: 3,

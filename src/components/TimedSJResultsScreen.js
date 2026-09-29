@@ -15,6 +15,13 @@ import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import { PremiumScreen } from './premium/PremiumPracticeUI';
 import { LABEL_SETS } from '../constants/sjLabelSets';
+import {
+  formatSJMark,
+  getSJLabelSet,
+  getSJMark,
+  getSJResult,
+  SJ_PARTIAL_MARK,
+} from '../lib/sjScoring';
 import AnswerOptionButton from './AnswerOptionButton';
 import FeedbackBox from './FeedbackBox';
 import {
@@ -33,18 +40,6 @@ import {
   ReviewNavBar,
   resultsStyles,
 } from './premium/PremiumResultsUI';
-
-// UCAT SJ mark scheme: 4 (exact), 2 (1 off), 0 (2+ off / unanswered)
-function sjMarkForQuestion(selected, correct, labelSet) {
-  if (!selected) return 0;
-  const si = labelSet.indexOf(selected);
-  const ci = labelSet.indexOf(correct);
-  if (si === -1 || ci === -1) return 0;
-  const diff = Math.abs(si - ci);
-  if (diff === 0) return 4;
-  if (diff === 1) return 2;
-  return 0;
-}
 
 function getANZScaledScore(rawPct) {
   return Math.round(300 + (rawPct / 100) * 600);
@@ -83,9 +78,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
       const scenarioTitle = deriveScenarioTitle(s.stem, `Scenario ${sIdx + 1}`);
       s.items.forEach((item, iIdx) => {
         const selected = getAnswer(s.scenarioId, item.itemId);
-        const answered = !!selected;
-        const correct = answered && selected === item.answer;
-        const result = !answered ? 'unanswered' : correct ? 'correct' : 'incorrect';
+        const result = getSJResult(selected, item.answer, item);
         list.push({
           globalIndex: list.length,
           passageIndex: sIdx,
@@ -105,10 +98,9 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
     let max = 0;
     scenarios.forEach((s) => {
       s.items.forEach((item) => {
-        const labelSet = item.type === 'importance' ? LABEL_SETS[1] : LABEL_SETS[2];
         const selected = getAnswer(s.scenarioId, item.itemId);
-        raw += sjMarkForQuestion(selected, item.answer, labelSet);
-        max += 4;
+        raw += getSJMark(selected, item.answer, item);
+        max += 1;
       });
     });
     return { rawScore: raw, maxRawScore: max };
@@ -119,10 +111,11 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
   const anzScore = getANZScaledScore(rawPct);
 
   const correctCount = flatQuestions.filter((q) => q.result === 'correct').length;
+  const partialCount = flatQuestions.filter((q) => q.result === 'partial').length;
   const incorrectCount = flatQuestions.filter((q) => q.result === 'incorrect').length;
   const unansweredCount = flatQuestions.filter((q) => q.result === 'unanswered').length;
   const total = flatQuestions.length;
-  const pct = total > 0 ? Math.round((correctCount / total) * 100) : 0;
+  const pct = Math.round(rawPct);
 
   if (reviewItem !== null) {
     const { passageIndex, questionIndex } = reviewItem;
@@ -130,7 +123,8 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
     const item = scenario.items[questionIndex];
     const selectedAnswer = getAnswer(scenario.scenarioId, item.itemId);
     const isCorrect = !!selectedAnswer && selectedAnswer === item.answer;
-    const labelSet = item.type === 'importance' ? LABEL_SETS[1] : LABEL_SETS[2];
+    const labelSet = getSJLabelSet(item) ?? LABEL_SETS[1];
+    const isPartial = getSJMark(selectedAnswer, item.answer, labelSet) === SJ_PARTIAL_MARK;
 
     const currentGlobal = flatQuestions.findIndex(
       (q) => q.passageIndex === passageIndex && q.questionIndex === questionIndex,
@@ -140,7 +134,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
 
     function getOptionState(opt) {
       if (opt === item.answer) return 'correct';
-      if (selectedAnswer && opt === selectedAnswer && !isCorrect) return 'incorrect';
+      if (selectedAnswer && opt === selectedAnswer && !isCorrect) return isPartial ? 'partial' : 'incorrect';
       return 'idle';
     }
 
@@ -194,6 +188,8 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
               </View>
               <FeedbackBox
                 isCorrect={isCorrect}
+                 isPartial={isPartial}
+                 usesPartialCredit
                 correctAnswer={item.answer}
                 reason={item.answeringReason}
                 showReason
@@ -227,12 +223,16 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
           <ScoreOverviewCard
             pct={pct}
             correctCount={correctCount}
+            partialCount={partialCount}
             incorrectCount={incorrectCount}
             unansweredCount={unansweredCount}
             total={total}
             accent={accent}
             colors={colors}
             isDark={isDark}
+            scoreSubLabel={`${formatSJMark(rawScore)} of ${formatSJMark(maxRawScore)} marks`}
+            correctLabel="Full mark"
+            incorrectLabel="No mark"
           />
 
           <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>UCAT SCORE</Text>
@@ -240,7 +240,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
             <SJScoreCard
               region="UK"
               badgeText={`Band ${ukBand.band}`}
-              raw={`${rawScore} / ${maxRawScore} marks`}
+              raw={`${formatSJMark(rawScore)} / ${formatSJMark(maxRawScore)} marks`}
               description={ukBand.description}
               disclaimer="* Approximate — official band thresholds vary each year"
               bandColor={ukBand.color}
@@ -250,7 +250,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
             <SJScoreCard
               region="AU / NZ"
               badgeText={`${anzScore} ±${SCORE_UNCERTAINTY}`}
-              raw={`${rawScore} / ${maxRawScore} marks`}
+              raw={`${formatSJMark(rawScore)} / ${formatSJMark(maxRawScore)} marks`}
               description={`Band ${ukBand.band} · ${ukBand.description}`}
               disclaimer={`* ${UCAT_SCORE_DISCLAIMER_SHORT}`}
               bandColor={ukBand.color}

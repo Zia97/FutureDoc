@@ -29,6 +29,7 @@ export default function SJInstructionScreen({ navigation, route }) {
       }}
       paragraphs={[
         'For some questions you may only select one response. Others require you to choose the most and least appropriate action to take in response to the scenario, from the three actions provided.',
+        'For four-point rating questions, an exact match earns 1 mark and an answer one position away earns ½ mark. Answers further away earn no marks.',
         'Answer every question — there is no penalty for an incorrect answer. Any unanswered question will be marked as wrong.',
         <Text>
           The <Text style={{ fontWeight: '800' }}>'Navigator'</Text> at the bottom of the screen lets you jump to any question within the test.

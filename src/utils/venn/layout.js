@@ -9,6 +9,7 @@ import polygonClipping from 'polygon-clipping';
 import polylabel from 'polylabel';
 import { shapeToPolygon, shapeToSvgSpec } from './shapes.js';
 import { seedPositions, stableHash } from './topologies.js';
+import { layoutExplicitDiagram } from './arrangement.js';
 
 // Label contract
 export const MIN_FONT_SIZE = 12;
@@ -158,6 +159,8 @@ function minDistFor(textLen) {
 // ---------------------------------------------------------------------------
 
 export function computeLayout(vennConfig, options = {}) {
+  if (vennConfig?.schemaVersion === 2) return layoutExplicitDiagram(vennConfig, options);
+  if (vennConfig?.schemaVersion != null && vennConfig.schemaVersion !== 1) throw new Error('Unsupported Venn schemaVersion.');
   if (!vennConfig || !vennConfig.sets || !vennConfig.regions) {
     throw new Error('computeLayout: vennConfig missing sets or regions');
   }
@@ -586,6 +589,8 @@ function entryAllLabelsOk(entry) {
 // maxWidthPx is smaller than 300 (e.g. a narrow option card), this caps at
 // maxWidthPx so we never exceed the caller's budget.
 export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 300, maxWidthPx, minHeightPx = 180 }) {
+  if (vennConfig?.schemaVersion === 2) return layoutExplicitDiagram(vennConfig, { targetWidthPx: maxWidthPx });
+  if (vennConfig?.schemaVersion != null && vennConfig.schemaVersion !== 1) throw new Error('Unsupported Venn schemaVersion.');
   minWidthPx = Math.min(minWidthPx, maxWidthPx);
   const allSetIds     = vennConfig.sets.map(s => s.id);
   const idToShape     = Object.fromEntries(vennConfig.sets.map(s => [s.id, s.shape || 'circle']));
@@ -643,12 +648,24 @@ export function findOptimalLayoutWidth(vennConfig, { minWidthPx = 300, maxWidthP
 const _cache = new Map();
 
 function cacheKey(vennConfig, options) {
+  if (vennConfig.schemaVersion === 2) {
+    // Full keys avoid 32-bit hash collisions substituting another diagram.
+    return JSON.stringify([2, vennConfig.sets.map(s => [s.id, s.label, s.shape,
+      s.geometry?.cx, s.geometry?.cy, s.geometry?.width, s.geometry?.height, s.geometry?.rotationDeg ?? 0]),
+    vennConfig.regions, vennConfig.labelStyle, options?.targetWidthPx ?? options?.maxWidthPx ?? 360, options?.fontScale ?? 1,
+    options?.strictWidth ?? false, options?.maxCanvasWidth ?? 1200, options?.maxCanvasHeight ?? 1800]);
+  }
   // stableHash is order-independent so JSONB / JSON drift doesn't bust the cache
   return stableHash({
+    schemaVersion: vennConfig.schemaVersion || 1,
     sets: vennConfig.sets,
     regions: vennConfig.regions,
     variant: vennConfig.layoutVariant || null,
     targetWidthPx: options?.targetWidthPx ?? null,
+    fontScale: options?.fontScale ?? 1,
+    strictWidth: options?.strictWidth ?? false,
+    maxCanvasWidth: options?.maxCanvasWidth ?? null,
+    maxCanvasHeight: options?.maxCanvasHeight ?? null,
   });
 }
 
@@ -657,12 +674,15 @@ export function getLayout(vennConfig, options = {}) {
   let entry = _cache.get(key);
   if (!entry) {
     entry = computeLayout(vennConfig, options);
+    if (_cache.size >= 128) _cache.delete(_cache.keys().next().value);
     _cache.set(key, entry);
   }
   return entry;
 }
 
-export function getLayoutAdaptive(vennConfig, { maxWidthPx, minHeightPx = 180 }) {
+export function getLayoutAdaptive(vennConfig, { maxWidthPx, minHeightPx = 180, fontScale = 1 }) {
+  if (vennConfig?.schemaVersion === 2) return getLayout(vennConfig, { targetWidthPx: maxWidthPx, fontScale });
+  if (vennConfig?.schemaVersion != null && vennConfig.schemaVersion !== 1) throw new Error('Unsupported Venn schemaVersion.');
   const key = stableHash({
     sets:       vennConfig.sets,
     regions:    vennConfig.regions,
@@ -674,6 +694,7 @@ export function getLayoutAdaptive(vennConfig, { maxWidthPx, minHeightPx = 180 })
   let entry = _cache.get(key);
   if (!entry) {
     entry = findOptimalLayoutWidth(vennConfig, { maxWidthPx, minHeightPx });
+    if (_cache.size >= 128) _cache.delete(_cache.keys().next().value);
     _cache.set(key, entry);
   }
   return entry;

@@ -153,6 +153,49 @@ function ExamCountdownClock({ examDate, isDark, colors, onPress }) {
   );
 }
 
+function StudyStreakCard({ streak, isDark, colors }) {
+  const current = streak.currentStreak ?? 0;
+  const longest = streak.longestStreak ?? 0;
+  const hasStreak = current > 0;
+  const dayLabel = current === 1 ? 'day' : 'days';
+  const status = hasStreak ? 'Active streak' : 'Start a streak today';
+
+  return (
+    <View
+      style={[
+        styles.streakCard,
+        {
+          borderColor: hexToRgba(colors.amber, isDark ? 0.34 : 0.3),
+          backgroundColor: isDark ? 'rgba(5, 12, 26, 0.52)' : 'rgba(255, 255, 255, 0.72)',
+        },
+      ]}
+    >
+      <View style={[styles.streakIconWrap, { backgroundColor: hexToRgba(colors.amber, isDark ? 0.18 : 0.12), borderColor: hexToRgba(colors.amber, 0.34) }]}>
+        <PremiumIcon name="flame" size={22} color={colors.amber} />
+      </View>
+
+      <View style={styles.streakCopy}>
+        <Text style={[styles.streakEyebrow, { color: colors.textMuted }]} numberOfLines={1}>
+          {status}
+        </Text>
+        <View style={styles.streakValueRow}>
+          <Text style={[styles.streakValue, { color: colors.text }]}>{current}</Text>
+          <Text style={[styles.streakUnit, { color: colors.textSecondary }]}>{dayLabel}</Text>
+        </View>
+      </View>
+
+      <View style={[styles.streakBestBox, { borderLeftColor: isDark ? 'rgba(116, 154, 209, 0.2)' : 'rgba(69, 94, 140, 0.16)' }]}>
+        <Text style={[styles.streakBestLabel, { color: colors.textMuted }]} numberOfLines={1}>
+          Best
+        </Text>
+        <Text style={[styles.streakBestValue, { color: colors.teal }]} numberOfLines={1}>
+          {longest}
+        </Text>
+      </View>
+    </View>
+  );
+}
+
 function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
   const avatarTint = isDark ? '#BDE2FF' : colors.blue;
   const insets = useSafeAreaInsets();
@@ -257,8 +300,6 @@ export default function HomeScreen({ navigation }) {
       navigation.navigate('PracticeMode');
     }
   };
-  const streakLabel = `${streak.currentStreak} Day Streak`;
-
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
@@ -290,16 +331,7 @@ export default function HomeScreen({ navigation }) {
                 onPress={() => navigation.navigate('ExamDate')}
               />
 
-              <View style={[styles.streakRow, { borderColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)', backgroundColor: isDark ? 'rgba(5, 12, 26, 0.5)' : 'rgba(255, 255, 255, 0.64)' }]}>
-                <View style={styles.streakPill}>
-                  <PremiumIcon name="refresh" size={16} color={colors.teal} strokeWidth={2.4} />
-                  <Text style={[styles.streakText, { color: colors.teal }]}>{streakLabel}</Text>
-                </View>
-                <View style={[styles.firePill, { borderLeftColor: isDark ? 'rgba(116, 154, 209, 0.18)' : 'rgba(69, 94, 140, 0.18)' }]}>
-                  <PremiumIcon name="flame" size={15} color={colors.amber} />
-                  <Text style={[styles.fireText, { color: colors.text }]}>{streak.currentStreak}</Text>
-                </View>
-              </View>
+              <StudyStreakCard streak={streak} isDark={isDark} colors={colors} />
 
               {resumeVisuals ? (
                 <TouchableOpacity
@@ -493,44 +525,77 @@ const styles = StyleSheet.create({
     marginTop: 22,
     maxWidth: 260,
   },
-  streakRow: {
+  streakCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'flex-start',
     borderWidth: 1,
-    borderColor: 'rgba(116, 154, 209, 0.18)',
-    borderRadius: 999,
+    borderColor: 'rgba(255, 159, 67, 0.34)',
+    borderRadius: 18,
     backgroundColor: 'rgba(5, 12, 26, 0.5)',
     marginTop: 14,
+    paddingHorizontal: 13,
+    paddingVertical: 12,
+    minHeight: 72,
     overflow: 'hidden',
   },
-  streakPill: {
-    flexDirection: 'row',
+  streakIconWrap: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    borderWidth: 1,
     alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
+    justifyContent: 'center',
+    marginRight: 12,
   },
-  firePill: {
+  streakCopy: {
+    flex: 1,
+    minWidth: 0,
+  },
+  streakEyebrow: {
+    fontSize: 11,
+    lineHeight: 14,
+    fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
+  },
+  streakValueRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-    paddingHorizontal: 11,
-    paddingVertical: 6,
+    alignItems: 'baseline',
+    marginTop: 2,
+    gap: 6,
+  },
+  streakValue: {
+    fontSize: 30,
+    lineHeight: 34,
+    fontWeight: '900',
+    fontVariant: ['tabular-nums'],
+  },
+  streakUnit: {
+    fontSize: 14,
+    lineHeight: 18,
+    fontWeight: '800',
+  },
+  streakBestBox: {
+    minWidth: 54,
     borderLeftWidth: 1,
     borderLeftColor: 'rgba(116, 154, 209, 0.18)',
+    paddingLeft: 13,
+    marginLeft: 12,
+    alignItems: 'center',
   },
-  streakText: {
-    color: premiumColors.teal,
-    fontSize: 12,
-    lineHeight: 16,
+  streakBestLabel: {
+    fontSize: 10,
+    lineHeight: 13,
     fontWeight: '800',
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
   },
-  fireText: {
-    color: premiumColors.text,
-    fontSize: 12,
-    lineHeight: 16,
-    fontWeight: '800',
+  streakBestValue: {
+    fontSize: 22,
+    lineHeight: 28,
+    fontWeight: '900',
+    fontVariant: ['tabular-nums'],
+    marginTop: 3,
   },
   clockCard: {
     alignSelf: 'stretch',

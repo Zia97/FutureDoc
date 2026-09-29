@@ -4,6 +4,7 @@ import Svg, { Circle, Rect, Polygon, Ellipse } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 import { useTextSize } from '../../context/TextSizeContext';
 import { shapeToSvgSpec } from '../../utils/venn/shapes';
+import { explicitKeyPolygon, explicitSetDash } from '../../utils/venn/explicitShapes';
 
 const SIZE = 30;
 const MID = SIZE / 2;
@@ -57,7 +58,7 @@ function KeyShape({ shape, stroke }) {
   }
 }
 
-export default function VennDiagramKey({ sets }) {
+export default function VennDiagramKey({ sets, schemaVersion }) {
   const { practiceTheme: t } = useTheme();
   const { multiplier } = useTextSize();
   const itemLabelScaled = {
@@ -71,16 +72,20 @@ export default function VennDiagramKey({ sets }) {
   // In this case the diagram itself carries per-shape labels (handled by the
   // baker), and the legend is suppressed.
   const shapes = sets.map((s) => s.shape || 'circle');
-  if (shapes.length > 1 && new Set(shapes).size === 1) return null;
+  if (schemaVersion !== 2 && shapes.length > 1 && new Set(shapes).size === 1) return null;
 
   return (
     <View style={[styles.container, { backgroundColor: t.bgCard, borderColor: t.border }]}>
       <Text style={[styles.keyLabel, { color: t.textSecondary }]}>Key</Text>
       <View style={styles.items}>
-        {sets.map((s) => (
+        {sets.map((s, index) => (
           <View key={s.id} style={styles.item}>
             <Svg width={SIZE} height={SIZE}>
-              <KeyShape shape={s.shape || 'circle'} stroke={t.text} />
+              {schemaVersion === 2 ? (
+                <Polygon points={explicitKeyPolygon(s).map(p => p.join(',')).join(' ')}
+                  stroke={t.text} strokeWidth={STROKE_W} fill="none" strokeLinejoin="round"
+                  strokeDasharray={explicitSetDash(sets, index)} />
+              ) : <KeyShape shape={s.shape || 'circle'} stroke={t.text} />}
             </Svg>
             <Text style={[styles.itemLabel, itemLabelScaled, { color: t.text }]}>{s.label}</Text>
           </View>

@@ -22,6 +22,7 @@ import FeedbackBox from './FeedbackBox';
 import NotesModal from './NotesModal';
 import BottomToolbar from './BottomToolbar';
 import PremiumIcon from './premium/PremiumIcon';
+import { getSJMark, SJ_PARTIAL_MARK } from '../lib/sjScoring';
 import {
   PremiumQuestionScaffold,
   QuestionTopBar,
@@ -86,6 +87,11 @@ export default function PassageLayout({
   const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
   const isCorrect = selectedAnswer === item.question.answer;
+  const sjLabelSet = section === 'sj' && getQuestionOptions
+    ? getQuestionOptions(item, item.question)
+    : null;
+  const isPartial = section === 'sj'
+    && getSJMark(selectedAnswer, item.question.answer, sjLabelSet) === SJ_PARTIAL_MARK;
 
   const timer = useActiveTimer({ resetKey: `${item.stemId}:${qid}` });
   useEffect(() => {
@@ -100,7 +106,7 @@ export default function PassageLayout({
   function getOptionState(option) {
     if (!hasAnswered) return option === pendingAnswer ? 'selected' : 'idle';
     if (option === item.question.answer) return 'correct';
-    if (option === selectedAnswer) return 'incorrect';
+    if (option === selectedAnswer) return isPartial ? 'partial' : 'incorrect';
     return 'idle';
   }
 
@@ -169,6 +175,8 @@ export default function PassageLayout({
           {hasAnswered ? (
             <FeedbackBox
               isCorrect={isCorrect}
+              isPartial={isPartial}
+              usesPartialCredit={section === 'sj'}
               correctAnswer={item.question.answer}
               reason={item.question.answeringReason}
               showReason={alwaysShowReason || true}

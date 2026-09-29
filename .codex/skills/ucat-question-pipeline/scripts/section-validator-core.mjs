@@ -1,6 +1,7 @@
 import { isUuidV4, lexicalSimilarity, normaliseText, wordCount } from './vr-common.mjs';
 import { normalisePreview } from './section-common.mjs';
 import { computeLayout } from '../../../../src/utils/venn/layout.js';
+import { inspectExplicitDiagram, vennFingerprints } from '../../../../src/utils/venn/arrangement.js';
 
 export const DM_TYPES = [
   'syllogism', 'logic_puzzle', 'interpreting_info',
@@ -111,7 +112,8 @@ function validateDm(input, mode, add, registerId) {
         add('error', 'dm.venn_option_diagrams', 'Diagram-selection questions need a diagram in every A-D option.', loc);
       }
       if (hasOptionDiagrams && optionConfigs.every((config) => Array.isArray(config?.sets))) {
-        const signatures = optionConfigs.map((config) => JSON.stringify(config.sets.map((set) => [set.id, set.label, set.shape || 'circle'])));
+        const signatures = optionConfigs.map((config) => JSON.stringify([config.schemaVersion || 1,
+          config.sets.map((set) => [set.id, set.label, set.shape || 'circle'])]));
         if (new Set(signatures).size !== 1) {
           add('error', 'dm.venn_option_key', 'All diagram options must use the same set labels and shapes because the renderer shows one shared key.', loc);
         }
@@ -274,6 +276,16 @@ function validateSj(input, mode, add, registerId) {
 }
 
 function validateDmVenn(config, add, loc) {
+  if (config?.schemaVersion === 2) {
+    try {
+      inspectExplicitDiagram(config);
+      // Dense layouts may scroll on a phone, but must never shrink labels to
+      // meet the viewport. Reject geometry needing an impractically large view.
+      const layout = computeLayout(config, { targetWidthPx: 320, maxCanvasWidth: 960, maxCanvasHeight: 1400 });
+      if (layout.labels.some(label => label.fontSize < 12)) throw new Error('A region label is smaller than 12 px.');
+    } catch (error) { add('error', 'dm.venn_geometry', error.message, loc); }
+    return;
+  }
   if (!config || typeof config !== 'object' || !Array.isArray(config.sets) || config.sets.length < 2 || !config.regions || typeof config.regions !== 'object') {
     add('error', 'dm.venn_schema', 'Venn config requires sets and regions.', loc);
     return;
@@ -523,10 +535,15 @@ function candidateStats(section, input, mode) {
 }
 
 function vennRegionPattern(config) {
+  if (config.schemaVersion === 2) {
+    try { return `v2:${vennFingerprints(config).topologySignature}`; }
+    catch { return 'invalid-v2'; } // The schema/geometry check already records the error.
+  }
   const ids = config.sets.map((set) => set.id);
   const regionSizes = Array(ids.length).fill(0);
   const setProfiles = ids.map(() => Array(ids.length).fill(0));
-  for (const key of Object.keys(config.regions || {})) {
+  const regionKeys = Object.keys(config.regions || {});
+  for (const key of regionKeys) {
     if (key === 'outside') continue;
     const members = ids.flatMap((id, index) => new RegExp(`(?:^|_)${id}(?:_|$)`).test(key) ? [index] : []);
     if (!members.length) continue;

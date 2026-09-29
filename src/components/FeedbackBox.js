@@ -10,6 +10,8 @@ import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 
 export default function FeedbackBox({
   isCorrect,
+  isPartial = false,
+  usesPartialCredit = false,
   correctAnswer,
   reason,
   showReason = true,
@@ -23,6 +25,7 @@ export default function FeedbackBox({
   const { practiceTheme: t, isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
+  const feedbackColor = isCorrect ? t.correct : isPartial ? colors.amber : t.incorrect;
   const reasonScaled = {
     fontSize: Math.round(styles.reason.fontSize * multiplier),
     lineHeight: Math.round(styles.reason.lineHeight * multiplier),
@@ -65,11 +68,16 @@ export default function FeedbackBox({
     <>
       <View style={[
         styles.box,
-        isCorrect
-          ? { backgroundColor: hexToRgba(t.correct, isDark ? 0.14 : 0.1), borderColor: t.correct }
-          : { backgroundColor: hexToRgba(t.incorrect, isDark ? 0.14 : 0.1), borderColor: t.incorrect },
+        {
+          backgroundColor: hexToRgba(feedbackColor, isDark ? 0.14 : 0.1),
+          borderColor: feedbackColor,
+        },
       ]}>
-        <Text style={[styles.title, { color: colors.text }]}>{isCorrect ? 'Correct' : 'Incorrect'}</Text>
+        <Text style={[styles.title, { color: isPartial ? colors.amber : colors.text }]}>
+          {usesPartialCredit
+            ? (isCorrect ? 'Full mark' : isPartial ? 'Partial credit — ½ mark' : 'No mark')
+            : (isCorrect ? 'Correct' : 'Incorrect')}
+        </Text>
         {(!isCorrect || showReason) && (
           <>
             {!isCorrect && (

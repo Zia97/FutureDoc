@@ -32,6 +32,7 @@
     "questions:blind-review:sj": "node .codex/skills/ucat-question-pipeline/scripts/make-section-blind-review.mjs --section sj",
     "questions:migration:sj": "node .codex/skills/ucat-question-pipeline/scripts/section-practice-to-sql.mjs --section sj",
     "questions:preview:install": "node .codex/skills/ucat-question-pipeline/scripts/install-preview.mjs",
+    "questions:venn:generate": "node .codex/skills/ucat-question-pipeline/scripts/generate-venn-diagrams.mjs",
     "questions:test:vr": "node --test .codex/skills/ucat-question-pipeline/tests/vr-pipeline.test.mjs",
     "questions:test": "node --test .codex/skills/ucat-question-pipeline/tests/*.test.mjs"
   },
