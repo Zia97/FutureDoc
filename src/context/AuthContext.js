@@ -226,8 +226,11 @@ export function AuthProvider({ children }) {
     });
 
   const deleteAccount = async () => {
-    const { error } = await supabase.rpc('delete_user_account');
-    if (error) throw error;
+    // The server removes private forum screenshots before deleting the auth
+    // row. Database cascades clear private account data and anonymise public
+    // discussion text so existing replies keep their context.
+    const { data, error } = await supabase.functions.invoke('delete-account');
+    if (error || !data?.ok) throw error ?? new Error(data?.error ?? 'Account deletion failed.');
     await clearLocalUserData();
     await supabase.auth.signOut();
   };

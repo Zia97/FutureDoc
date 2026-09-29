@@ -146,13 +146,6 @@ export default function ProfileScreen() {
     }
   };
 
-  const dismissToHome = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'MainTabs', state: { index: 0, routes: [{ name: 'Home' }] } }],
-    });
-  };
-
   const handleSignOut = () => {
     Alert.alert('Sign Out', 'Are you sure you want to sign out?', [
       { text: 'Cancel', style: 'cancel' },
@@ -161,7 +154,6 @@ export default function ProfileScreen() {
         style: 'destructive',
         onPress: async () => {
           await signOut();
-          dismissToHome();
         },
       },
     ]);
@@ -189,7 +181,6 @@ export default function ProfileScreen() {
                     setDeleting(true);
                     try {
                       await deleteAccount();
-                      dismissToHome();
                     } catch {
                       setDeleting(false);
                       Alert.alert('Error', 'Could not delete account. Please try again or contact support.');

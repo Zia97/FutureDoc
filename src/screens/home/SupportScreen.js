@@ -81,7 +81,7 @@ export default function SupportScreen() {
 
   const handleClose = () => {
     if (navigation.canGoBack()) navigation.goBack();
-    else navigation.navigate('MainTabs', { screen: 'Profile' });
+    else navigation.navigate('MainTabs', { screen: 'Home' });
   };
 
   return (

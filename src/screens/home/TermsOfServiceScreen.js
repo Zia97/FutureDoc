@@ -15,7 +15,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '1 May 2026';
+const LAST_UPDATED = '28 September 2026';
 
 const SECTIONS = [
   {
@@ -36,7 +36,7 @@ const SECTIONS = [
   {
     title: '4. Data and Privacy',
     body:
-      'We only store the data needed to provide the app: your email address for account creation, your test and practice performance so it can be retrieved and analysed, and the questions or messages you send to the AI tutor so we can detect and prevent abuse of the service. We do not process it for unrelated purposes, sell, rent, trade, profile, advertise with, train models on, or otherwise use your data for anything outside those purposes.',
+      'We only store the data needed to provide the app: your account details, test and practice performance, AI tutor messages, and content you choose to submit to the student community. Community posts, replies, public display names, and approved screenshots are visible to other signed-in users. Submissions may be processed automatically and reviewed by an administrator to keep the service safe. See the Privacy Policy for more information.',
   },
   {
     title: '5. Subscriptions & Payments',
@@ -46,7 +46,12 @@ const SECTIONS = [
   {
     title: '6. Intellectual Property',
     body:
-      'All content in the app — including questions, explanations, diagrams, and UI design — is the intellectual property of UCAT Genius. You may not reproduce, distribute, or create derivative works from our content without written permission.',
+      'Questions, explanations, diagrams, and UI design supplied by UCAT Genius remain our intellectual property and may not be reproduced or distributed without permission. You retain ownership of original content you submit to the community. By posting it, you grant UCAT Genius a non-exclusive, worldwide, royalty-free licence to store, moderate, display, and technically reproduce it only as needed to operate and protect the community. You must have the right to share every screenshot or other item you upload.',
+  },
+  {
+    title: '6A. Student Community',
+    body:
+      'Before posting, you must accept the Community Guidelines. You must not submit harassment, hate, threats, bullying, sexual or graphic content, personal information, spam, scams, impersonation, confidential live-exam material, or pirated paid resources. Do not use the community to identify, target, or humiliate another person.\n\nPosts, replies, public display names, and screenshots may be checked by automated safety systems and human administrators. We may hold, reject, remove, lock, or limit access to content, and may restrict an account from posting. Users can report content and separately block other users. Automated decisions may be referred for human review by contacting ucatgenius@gmail.com.',
   },
   {
     title: '7. Disclaimer',
@@ -61,12 +66,12 @@ const SECTIONS = [
   {
     title: '9. Account Deletion',
     body:
-      'You may delete your account at any time from the Profile screen. Upon deletion, your email, performance data, AI tutor question logs, and associated account data will be permanently removed. Active subscriptions should be cancelled separately through your device’s account settings.',
+      'You may delete your account at any time from the Profile screen. Your email, performance data, AI tutor logs, private forum-account mapping, and uploaded screenshots will be removed. Text already contributed to public discussions may remain in anonymised form as “Deleted user” so replies keep their context, unless removal is required by law or you delete it before deleting your account. Security and moderation records may be retained where reasonably necessary to handle reports, prevent abuse, or meet legal obligations. Active subscriptions should be cancelled separately through your device’s account settings.',
   },
   {
     title: '10. Termination',
     body:
-      'We reserve the right to suspend or terminate your account if you violate these terms, abuse the service, or engage in fraudulent activity.',
+      'We may make the community read-only for an account, suspend community posting, remove content, or suspend or terminate the full account if these terms are violated, the service is abused, or fraudulent activity occurs. Serious or repeated violations may lead to a permanent restriction.',
   },
   {
     title: '11. Changes to Terms',

@@ -251,6 +251,7 @@ export function GlassMenuCard({
   accent = premiumColors.blue,
   onPress,
   badge,
+  badgePosition = 'inline',
   highlighted = false,
   style,
   iconSize = 66,
@@ -264,6 +265,11 @@ export function GlassMenuCard({
   const containerProps = onPress
     ? { activeOpacity: 0.86, onPress, accessibilityRole: 'button' }
     : {};
+  const badgeView = badge ? (
+    <View style={[styles.badge, badgePosition === 'topRight' && styles.badgeTopRight, { borderColor: hexToRgba(accent, 0.36), backgroundColor: hexToRgba(accent, 0.1) }]}>
+      <Text style={[styles.badgeText, { color: accent }]}>{badge}</Text>
+    </View>
+  ) : null;
 
   return (
     <Container
@@ -308,11 +314,7 @@ export function GlassMenuCard({
         <View style={styles.cardCopy}>
           <View style={styles.cardTitleRow}>
             <Text style={[styles.cardTitle, { color: colors.text }]} numberOfLines={2}>{title}</Text>
-            {badge ? (
-              <View style={[styles.badge, { borderColor: hexToRgba(accent, 0.36), backgroundColor: hexToRgba(accent, 0.1) }]}>
-                <Text style={[styles.badgeText, { color: accent }]}>{badge}</Text>
-              </View>
-            ) : null}
+            {badgePosition !== 'topRight' ? badgeView : null}
           </View>
           <Text style={[styles.cardDescription, { color: colors.textSecondary }]}>{description}</Text>
         </View>
@@ -322,6 +324,8 @@ export function GlassMenuCard({
             <PremiumIcon name="chevron-right" size={24} color={accent} strokeWidth={2.4} />
           </View>
         ) : null}
+
+        {badgePosition === 'topRight' ? badgeView : null}
       </LinearGradient>
     </Container>
   );
@@ -476,6 +480,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 9,
     paddingVertical: 4,
+  },
+  badgeTopRight: {
+    position: 'absolute',
+    top: 14,
+    right: 14,
   },
   badgeText: {
     fontSize: 10,

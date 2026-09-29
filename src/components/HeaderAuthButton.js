@@ -15,7 +15,7 @@ export default function HeaderAuthButton() {
   return (
     <TouchableOpacity
       style={[styles.profileButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
-      onPress={() => navigation.navigate('MainTabs', { screen: 'Profile' })}
+      onPress={() => navigation.navigate('Profile')}
       activeOpacity={0.8}
     >
       <Text style={[styles.profileInitial, { color: t.accent }]}>{initial}</Text>

@@ -12,7 +12,7 @@ import PracticeSectionsScreen from '../screens/practice/PracticeSectionsScreen';
 import TimedTestListScreen from '../screens/timed/TimedTestListScreen';
 import TimedPracticeSectionsScreen from '../screens/practice/TimedPracticeSectionsScreen';
 import PerformanceAnalyticsScreen from '../screens/timed/PerformanceAnalyticsScreen';
-import ProfileScreen from '../screens/home/ProfileScreen';
+import ForumScreen from '../screens/forum/ForumScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -28,7 +28,7 @@ const TABS = [
   { name: 'PracticeSections', component: PracticeSectionsScreen, label: 'Practice', icon: 'book', iconOutline: 'book-outline' },
   { name: 'TimedTestList', component: TimedTabScreen, label: 'Timed', icon: 'timer', iconOutline: 'timer-outline' },
   { name: 'PerformanceAnalytics', component: PerformanceAnalyticsScreen, label: 'Analytics', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
-  { name: 'Profile', component: ProfileScreen, label: 'Profile', icon: 'person', iconOutline: 'person-outline' },
+  { name: 'Community', component: ForumScreen, label: 'Community', icon: 'people', iconOutline: 'people-outline' },
 ];
 
 const BAR_CONTENT_HEIGHT = 56;

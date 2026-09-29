@@ -225,7 +225,8 @@ export default function HomeScreen({ navigation }) {
   const action2Anim = useFadeSlide(260, 18);
   const action3Anim = useFadeSlide(330, 18);
   const action4Anim = useFadeSlide(400, 18);
-  const footerAnim = useFadeSlide(480, 18);
+  const action5Anim = useFadeSlide(470, 18);
+  const footerAnim = useFadeSlide(540, 18);
 
   const [streak, setStreak] = useState({ currentStreak: 0, longestStreak: 0 });
   const [lastActivity, setLastActivityState] = useState(null);
@@ -354,10 +355,23 @@ export default function HomeScreen({ navigation }) {
 
         <Animated.View style={action4Anim}>
           <GlassMenuCard
+            title="Student Community"
+            description="Ask questions, share techniques, and learn with other UCAT students."
+            icon="chat"
+            accent={colors.purple}
+            badge="New"
+            badgePosition="topRight"
+            onPress={() => navigation.navigate('MainTabs', { screen: 'Community' })}
+            style={styles.actionCard}
+          />
+        </Animated.View>
+
+        <Animated.View style={action5Anim}>
+          <GlassMenuCard
             title="About the UCAT"
             description="General knowledge about the UCAT"
             icon="book"
-            accent={colors.purple}
+            accent={colors.amber}
             onPress={() => navigation.navigate('AboutUCAT')}
             style={styles.actionCard}
           />

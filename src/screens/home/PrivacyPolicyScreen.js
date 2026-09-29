@@ -15,38 +15,38 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '1 May 2026';
+const LAST_UPDATED = '28 September 2026';
 
 const SECTIONS = [
   {
     title: '1. Information We Collect',
     body:
-      'We keep data collection limited to what is needed for the app to work:\n\n- Your email address, used only to create and manage your account\n- Your test and practice performance, including answers, scores, timings, and analytics summaries, so your results can be retrieved and we can help you analyse your progress\n- Questions or messages you send to the AI tutor, stored so we can protect the service, detect abuse, and investigate misuse if needed',
+      'We keep data collection limited to what is needed for the app to work:\n\n- Your email address and account identifier\n- Your display name and five-digit public community tag\n- Your test and practice performance, including answers, scores, timings, and analytics summaries\n- Questions or messages you send to the AI tutor\n- Community posts, replies, screenshots, reports, blocked-user choices, and your acceptance of the Community Guidelines\n- Safety classifications, moderation actions, and limited technical information needed to prevent spam and abuse',
   },
   {
     title: '2. How We Use Your Information',
     body:
-      'We only use your information for the limited purposes above: account access, saving and showing your performance, helping you analyse your results, and preventing abuse of the AI tutor. We do not process it for unrelated purposes, sell, rent, trade, profile, advertise with, train models on, or otherwise use your data for anything outside those purposes.',
+      'We use this information for account access, learning and performance features, operating the student community, searching discussions, enforcing rate limits, detecting unsafe or abusive submissions, responding to reports, and securing the service. We do not sell, rent, trade, advertise with, or train our own models on your personal data.',
   },
   {
     title: '3. Data Storage & Security',
     body:
-      'Your data is stored securely using Supabase. We use industry-standard encryption in transit (TLS) and at rest. Access is limited to what is needed to operate the app, retrieve your progress, support performance analysis, and enforce abuse-prevention safeguards.',
+      'Your data is stored using Supabase with encryption in transit and at rest. Community screenshots are kept in private storage and delivered through time-limited links. Pending submissions are visible only to their author and administrators; other students receive only approved content. Access is limited through server-side authorisation and row-level security.',
   },
   {
     title: '4. Third-Party Services',
     body:
-      'We use trusted third-party services only where they are needed to run the app, such as authentication, secure storage, subscription management, app updates, and the AI tutor. We do not allow those services to use your data for our marketing, advertising, resale, profiling, or unrelated analytics. Each service has its own privacy policy governing how it handles data.',
+      'We use trusted third-party services where needed for authentication, secure storage, subscription management, app updates, error monitoring, the AI tutor, and community safety moderation. Community text and screenshots may be sent to a safety provider solely to classify them for harmful or prohibited content. We do not permit these services to use your data for our marketing, advertising, or resale. Each provider has its own privacy terms.',
   },
   {
     title: '5. Your Rights',
     body:
-      'You can:\n\n- Access your performance data through the app\n- Delete your account and associated data at any time from the Profile screen\n- Contact us to request a copy of the data we hold about you\n\nIf you are in the UK or EU, you have additional rights under UK GDPR / EU GDPR including the right to rectification, restriction of processing, and data portability.',
+      'You can:\n\n- Access your performance and public community content through the app\n- Delete your own forum posts and replies\n- Report content and block other community members\n- Delete your account from the Profile screen\n- Contact us to request access, correction, an export, human review of a moderation decision, or deletion where applicable\n\nIf you are in the UK or EU, you may also have rights to rectification, restriction, objection, and data portability.',
   },
   {
     title: '6. Data Retention',
     body:
-      'We retain your data for as long as your account is active. If you delete your account, all personal data is permanently removed within 30 days.',
+      'We retain account data while your account is active. When you delete it, identifying account data and screenshots are scheduled for removal within 30 days. Public discussion text may remain only in anonymised form to preserve conversation context. Reports, moderation decisions, and audit records may be retained for a reasonable period where necessary to protect users, resolve complaints, prevent repeat abuse, or comply with law.',
   },
   {
     title: '7. Children’s Privacy',

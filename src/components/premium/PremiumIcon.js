@@ -65,6 +65,15 @@ export default function PremiumIcon({
             <Path d="M8.8 17.8h3.6" />
           </G>
         );
+      case 'chat':
+        return (
+          <G {...strokeProps} fill="none">
+            <Path d="M5 5.2h14a1.8 1.8 0 0 1 1.8 1.8v8a1.8 1.8 0 0 1-1.8 1.8h-8.2L6 20v-3.2H5A1.8 1.8 0 0 1 3.2 15V7A1.8 1.8 0 0 1 5 5.2Z" />
+            <Circle cx="8" cy="11" r="0.8" fill={color} stroke="none" />
+            <Circle cx="12" cy="11" r="0.8" fill={color} stroke="none" />
+            <Circle cx="16" cy="11" r="0.8" fill={color} stroke="none" />
+          </G>
+        );
       case 'list':
         return (
           <G {...strokeProps} fill="none">

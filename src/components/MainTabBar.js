@@ -11,7 +11,7 @@ const TABS = [
   { name: 'PracticeSections', label: 'Practice', icon: 'book', iconOutline: 'book-outline' },
   { name: 'TimedTestList', label: 'Timed', icon: 'timer', iconOutline: 'timer-outline' },
   { name: 'PerformanceAnalytics', label: 'Analytics', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
-  { name: 'Profile', label: 'Profile', icon: 'person', iconOutline: 'person-outline' },
+  { name: 'Community', label: 'Community', icon: 'people', iconOutline: 'people-outline' },
 ];
 
 const BAR_CONTENT_HEIGHT = 56;

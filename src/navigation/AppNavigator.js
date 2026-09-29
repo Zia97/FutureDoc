@@ -31,6 +31,7 @@ import WhatsNewModal from '../components/WhatsNewModal';
 import TrialExpiredModal from '../components/TrialExpiredModal';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
 import PaywallScreen from '../screens/home/PaywallScreen';
+import ProfileScreen from '../screens/home/ProfileScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
 import TermsOfServiceScreen from '../screens/home/TermsOfServiceScreen';
 import SupportScreen from '../screens/home/SupportScreen';
@@ -69,8 +70,17 @@ import DMQuestionListScreen from '../screens/dm/DMQuestionListScreen';
 import DMQuestionScreen from '../screens/dm/DMQuestionScreen';
 import QRQuestionListScreen from '../screens/qr/QRQuestionListScreen';
 import QRQuestionScreen from '../screens/qr/QRQuestionScreen';
+import CreateForumPostScreen from '../screens/forum/CreateForumPostScreen';
+import ForumThreadScreen from '../screens/forum/ForumThreadScreen';
+import ForumAdminScreen from '../screens/forum/ForumAdminScreen';
+import ForumBlockedUsersScreen from '../screens/forum/ForumBlockedUsersScreen';
 
 const Stack = createNativeStackNavigator();
+
+function hasValidDisplayName(value) {
+  const name = String(value ?? '').trim();
+  return name.length >= 2 && name.length <= 40 && !/[\u0000-\u001F\u007F]/.test(name);
+}
 
 function AppStack() {
   const { theme: t } = useTheme();
@@ -130,9 +140,14 @@ function AppStack() {
       <Stack.Screen name="ExamDate" component={ExamDateScreen} options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Paywall" component={PaywallScreen} options={{ headerShown: false, presentation: 'modal' }} />
+      <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CreateForumPost" component={CreateForumPostScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ForumThread" component={ForumThreadScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ForumAdmin" component={ForumAdminScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ForumBlockedUsers" component={ForumBlockedUsersScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
     </>
   );
@@ -272,7 +287,7 @@ export default function AppNavigator() {
   // Users must have a display_name set before entering the app. Email signups
   // stage it in user_metadata and AuthContext promotes it to user_profiles on
   // first verified sign-in; OAuth users hit this screen.
-  const needsDisplayName = user && !displayNameLoading && !displayName;
+  const needsDisplayName = user && !displayNameLoading && !hasValidDisplayName(displayName);
 
   const getStack = () => {
     if (passwordRecovery) return <RecoveryStack />;

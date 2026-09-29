@@ -21,8 +21,8 @@ export default function SetDisplayNameScreen() {
 
   const handleSave = async () => {
     const trimmed = name.trim();
-    if (!trimmed) {
-      Alert.alert('Error', 'Please enter a display name.');
+    if (trimmed.length < 2 || trimmed.length > 40 || /[\u0000-\u001F\u007F]/.test(trimmed)) {
+      Alert.alert('Error', 'Please enter a display name between 2 and 40 characters.');
       return;
     }
     setSaving(true);
