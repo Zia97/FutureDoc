@@ -94,7 +94,7 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
     const questionContext = {
       questionId: q.questionId ?? q.id,
       question: q.stem ?? q.questionText,
-      questionType: 'quantitative_reasoning',
+      questionType: set.stimulus?.type ?? 'quantitative_reasoning',
       section: 'qr',
       options: q.options?.map((o) => `${o.label}. ${o.text}`),
       correctAnswer: q.answer,

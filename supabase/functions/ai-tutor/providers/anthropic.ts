@@ -1,12 +1,18 @@
-import { AIProvider, ChatMessage } from './types.ts';
+import type { AIProvider, TutorRequest, TutorResult } from './types.ts';
 
+/**
+ * Legacy provider adapter retained as reference code. The tutor entry point no
+ * longer imports it or selects providers through AI_PROVIDER; every live tutor
+ * section uses OpenAI/GPT-6 Luna.
+ */
 export class AnthropicProvider implements AIProvider {
   constructor(
     private apiKey: string,
     private model = 'claude-haiku-4-5-20251001',
   ) {}
 
-  async chat(system: string, messages: ChatMessage[]): Promise<Response> {
+  async chat(request: TutorRequest): Promise<TutorResult> {
+    const startedAt = Date.now();
     const upstream = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -17,9 +23,9 @@ export class AnthropicProvider implements AIProvider {
       body: JSON.stringify({
         model: this.model,
         max_tokens: 1024,
-        stream: true,
-        system,
-        messages,
+        stream: false,
+        system: `${request.instructions}\n\n${request.questionContext}`,
+        messages: request.messages,
       }),
     });
 
@@ -28,46 +34,35 @@ export class AnthropicProvider implements AIProvider {
       throw new Error(`Anthropic error ${upstream.status}: ${err}`);
     }
 
-    // Normalize Anthropic SSE → our simple SSE format
-    const stream = new ReadableStream({
-      async start(controller) {
-        const reader = upstream.body!.getReader();
-        const decoder = new TextDecoder();
+    const json = await upstream.json();
+    const content = (json.content ?? [])
+      .filter((item: { type?: string }) => item.type === 'text')
+      .map((item: { text?: string }) => item.text ?? '')
+      .join('')
+      .trim();
+    if (!content) throw new Error('Anthropic returned no tutor message.');
 
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = decoder.decode(value, { stream: true });
-            for (const line of chunk.split('\n')) {
-              const trimmed = line.trim();
-              if (!trimmed.startsWith('data:')) continue;
-              const raw = trimmed.slice(5).trim();
-              try {
-                const json = JSON.parse(raw);
-                if (json.type === 'content_block_delta' && json.delta?.type === 'text_delta') {
-                  const out = `data: ${JSON.stringify({ content: json.delta.text })}\n\n`;
-                  controller.enqueue(new TextEncoder().encode(out));
-                } else if (json.type === 'message_stop') {
-                  controller.enqueue(new TextEncoder().encode('data: [DONE]\n\n'));
-                }
-              } catch {
-                // skip malformed chunks
-              }
-            }
-          }
-        } finally {
-          controller.close();
-        }
+    return {
+      content,
+      diagnostics: {
+        teachingSkill: null,
+        misconception: null,
+        recordStatus: 'consistent',
+        recordConcern: null,
       },
-    });
-
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
+      provider: 'anthropic',
+      model: json.model ?? this.model,
+      responseId: json.id ?? null,
+      latencyMs: Date.now() - startedAt,
+      toolCalls: 0,
+      usage: {
+        inputTokens: json.usage?.input_tokens ?? 0,
+        cachedInputTokens: json.usage?.cache_read_input_tokens ?? 0,
+        cacheWriteTokens: json.usage?.cache_creation_input_tokens ?? 0,
+        outputTokens: json.usage?.output_tokens ?? 0,
+        reasoningTokens: 0,
+        estimatedCostUsd: 0,
       },
-    });
+    };
   }
 }

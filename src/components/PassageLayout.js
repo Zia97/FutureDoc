@@ -180,7 +180,9 @@ export default function PassageLayout({
               questionContext={{
                 questionId: qid,
                 question: item.question.questionText,
-                questionType: section === 'sj' ? 'situational_judgement' : 'true_false_cant_tell',
+                questionType: section === 'sj'
+                  ? (item.question.type ?? item.type ?? 'situational_judgement')
+                  : 'true_false_cant_tell',
                 section,
                 passage: item.resource ?? undefined,
                 options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,

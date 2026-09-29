@@ -15,18 +15,18 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '28 September 2026';
+const LAST_UPDATED = '29 September 2026';
 
 const SECTIONS = [
   {
     title: '1. Information We Collect',
     body:
-      'We keep data collection limited to what is needed for the app to work:\n\n- Your email address and account identifier\n- Your display name and five-digit public community tag\n- Your test and practice performance, including answers, scores, timings, and analytics summaries\n- Questions or messages you send to the AI tutor\n- Community posts, replies, screenshots, reports, blocked-user choices, and your acceptance of the Community Guidelines\n- Safety classifications, moderation actions, and limited technical information needed to prevent spam and abuse',
+      'We keep data collection limited to what is needed for the app to work:\n\n- Your email address and account identifier\n- Your display name and five-digit public community tag\n- Your test and practice performance, including answers, scores, timings, and analytics summaries\n- Questions and messages you send to the AI tutor, the tutor replies, optional helpful/not-helpful feedback, and technical usage information such as response time and token counts\n- Community posts, replies, screenshots, reports, blocked-user choices, and your acceptance of the Community Guidelines\n- Safety classifications, moderation actions, and limited technical information needed to prevent spam and abuse',
   },
   {
     title: '2. How We Use Your Information',
     body:
-      'We use this information for account access, learning and performance features, operating the student community, searching discussions, enforcing rate limits, detecting unsafe or abusive submissions, responding to reports, and securing the service. We do not sell, rent, trade, advertise with, or train our own models on your personal data.',
+      'We use this information for account access, learning and performance features, improving and monitoring AI tutor quality and cost, personalising explanations from previously observed learning difficulties, operating the student community, searching discussions, enforcing rate limits, detecting unsafe or abusive submissions, responding to reports, and securing the service. We do not sell, rent, trade, advertise with, or train our own models on your personal data.',
   },
   {
     title: '3. Data Storage & Security',
@@ -36,7 +36,7 @@ const SECTIONS = [
   {
     title: '4. Third-Party Services',
     body:
-      'We use trusted third-party services where needed for authentication, secure storage, subscription management, app updates, error monitoring, the AI tutor, and community safety moderation. Community text and screenshots may be sent to a safety provider solely to classify them for harmful or prohibited content. We do not permit these services to use your data for our marketing, advertising, or resale. Each provider has its own privacy terms.',
+      'We use trusted third-party services where needed for authentication, secure storage, subscription management, app updates, error monitoring, the AI tutor, and community safety moderation. AI tutor question context and chat messages are sent to OpenAI to generate the reply. Community text and screenshots may be sent to a safety provider solely to classify them for harmful or prohibited content. We do not permit these services to use your data for our marketing, advertising, or resale. Each provider has its own privacy terms.',
   },
   {
     title: '5. Your Rights',

@@ -1,8 +1,9 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { OpenAIProvider } from './providers/openai.ts';
-import { AnthropicProvider } from './providers/anthropic.ts';
-import { ChatMessage } from './providers/types.ts';
-import { getSectionPrompt, buildQuestionContext } from './prompt.ts';
+import type { ChatMessage, TutorResult } from './providers/types.ts';
+import { getTutorInstructions, buildQuestionContext } from './prompt-v2.ts';
+
+const PROMPT_VERSION = 'tutor-v2-2026-09-29';
 
 // ── Limits ────────────────────────────────────────────────────────────────────
 const FREE_LIFETIME_LIMIT = 5;
@@ -68,10 +69,6 @@ async function isKillSwitchEnabled(
 
 // ── Provider factory ──────────────────────────────────────────────────────────
 function getProvider() {
-  const provider = Deno.env.get('AI_PROVIDER') ?? 'openai';
-  if (provider === 'anthropic') {
-    return new AnthropicProvider(Deno.env.get('ANTHROPIC_API_KEY') ?? '');
-  }
   return new OpenAIProvider(Deno.env.get('OPENAI_API_KEY') ?? '');
 }
 
@@ -79,7 +76,7 @@ function getProvider() {
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...corsHeaders() },
   });
 }
 
@@ -155,7 +152,7 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders() });
   }
 
-  console.log('[ai-tutor] env check — AI_PROVIDER:', Deno.env.get('AI_PROVIDER') ?? '(not set)', '| OPENAI_API_KEY present:', !!Deno.env.get('OPENAI_API_KEY'));
+  console.log('[ai-tutor] env check — model: gpt-6-luna | OPENAI_API_KEY present:', !!Deno.env.get('OPENAI_API_KEY'));
 
   // 0. Reject oversized requests before parsing the body. Content-Length is
   // a hint, not a guarantee, but it catches the obvious cost-amplification
@@ -209,6 +206,30 @@ Deno.serve(async (req) => {
   } catch {
     return json({ error: 'invalid_json' }, 400);
   }
+
+  // Feedback is a lightweight authenticated action. It must not consume an AI
+  // credit or call the model.
+  if (parsed?.action === 'feedback') {
+    const logId = Number(parsed.logId);
+    const rating = parsed.rating;
+    if (!Number.isSafeInteger(logId) || !['helpful', 'not_helpful'].includes(rating)) {
+      return json({ error: 'invalid_feedback' }, 400);
+    }
+    const { data: updated, error: feedbackError } = await supabase
+      .from('ai_tutor_logs')
+      .update({ feedback: rating, feedback_at: new Date().toISOString() })
+      .eq('id', logId)
+      .eq('user_id', user.id)
+      .select('id')
+      .maybeSingle();
+    if (feedbackError) {
+      console.error('[ai-tutor] feedback update failed:', feedbackError.message);
+      return json({ error: 'feedback_failed' }, 500);
+    }
+    if (!updated) return json({ error: 'feedback_not_found' }, 404);
+    return json({ ok: true });
+  }
+
   const {
     questionId,
     question,
@@ -242,6 +263,18 @@ Deno.serve(async (req) => {
   } = parsed;
 
   if (
+    typeof question !== 'string' || question.trim().length === 0 ||
+    typeof questionType !== 'string' || questionType.trim().length === 0 ||
+    typeof section !== 'string' || !['vr', 'dm', 'qr', 'sj'].includes(section.toLowerCase()) ||
+    typeof correctAnswer !== 'string' ||
+    typeof userAnswer !== 'string' ||
+    typeof explanation !== 'string' ||
+    (options != null && (!Array.isArray(options) || options.some((option) => typeof option !== 'string')))
+  ) {
+    return json({ error: 'invalid_request' }, 400);
+  }
+
+  if (
     tooLong('question', question, MAX_QUESTION_CHARS) ||
     tooLong('explanation', explanation, MAX_EXPLANATION_CHARS) ||
     tooLong('passage', passage, MAX_PASSAGE_CHARS) ||
@@ -258,7 +291,7 @@ Deno.serve(async (req) => {
     ? messages
         .slice(-MAX_MESSAGES)
         .map((m) => ({
-          role: m.role,
+          role: m.role === 'assistant' ? 'assistant' as const : 'user' as const,
           content: typeof m.content === 'string'
             ? m.content.slice(0, MAX_MESSAGE_CHARS)
             : '',
@@ -315,33 +348,27 @@ Deno.serve(async (req) => {
     }
   }
 
-  // 5. Fetch user context (top struggles)
+  // 5. Fetch learner context. Broad help-topic counts are retained for
+  // analytics; model-labelled misconceptions provide more useful tutoring.
   const { data: context } = await supabase
     .from('user_ai_context')
-    .select('struggles')
+    .select('struggles, misconceptions')
     .eq('user_id', user.id)
     .single();
 
-  const struggles = context?.struggles ?? {};
-  const topStruggles = Object.entries(struggles as Record<string, number>)
+  const misconceptions = context?.misconceptions ?? {};
+  const learnerInsights = Object.entries(misconceptions as Record<string, number>)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 3)
-    .map(([topic, count]) => `${topic.replace(/_/g, ' ')} (asked ${count}x)`);
+    .map(([topic, count]) => `${topic} (observed ${count}x)`);
 
-  // 6. Update struggle counter for this question type
-  const updatedStruggles = {
-    ...struggles,
-    [questionType]: ((struggles as Record<string, number>)[questionType] ?? 0) + 1,
-  };
-  await supabase.from('user_ai_context').upsert({
-    user_id: user.id,
-    struggles: updatedStruggles,
-    updated_at: new Date().toISOString(),
-  });
-
-  // 7. Build system prompt
-  const systemPrompt = getSectionPrompt(section) + '\n\n' + buildQuestionContext({
+  // 6. Build a stable curriculum prefix plus changing question context.
+  // Keeping them separate enables prompt caching and avoids sending every
+  // lesson rule to every question type.
+  const instructions = getTutorInstructions(section, questionType);
+  const questionContext = buildQuestionContext({
     section,
+    questionType,
     question,
     userAnswer,
     correctAnswer,
@@ -350,38 +377,98 @@ Deno.serve(async (req) => {
     options,
     stimulusData,
     vennDiagrams,
-    topStruggles,
+    learnerInsights,
+    isTimed,
   });
 
-  // 8. Log the user's message for abuse monitoring
+  // 7. Create the telemetry row before calling the provider so failures are
+  // visible as well as successes.
   const lastUserMsg = safeMessages.filter((m: ChatMessage) => m.role === 'user').pop();
+  let logId: number | null = null;
   if (lastUserMsg?.content) {
-    const { error: logError } = await supabase.from('ai_tutor_logs').insert({
-      user_id: user.id,
-      message: lastUserMsg.content.slice(0, 1000),
-      section,
-      question_id: questionId ?? null,
-      is_timed: isTimed ?? false,
-    });
+    const { data: logRow, error: logError } = await supabase
+      .from('ai_tutor_logs')
+      .insert({
+        user_id: user.id,
+        message: lastUserMsg.content.slice(0, 1000),
+        section,
+        question_id: questionId ?? null,
+        is_timed: isTimed ?? false,
+      })
+      .select('id')
+      .single();
     if (logError) {
       console.error('[ai-tutor] failed to insert log:', logError.message, logError.details);
+    } else {
+      logId = logRow?.id ?? null;
     }
   }
 
-
   const provider = getProvider();
-  let aiResponse: Response;
+  let result: TutorResult;
   try {
-    aiResponse = await provider.chat(systemPrompt, safeMessages);
+    result = await provider.chat({
+      instructions,
+      questionContext,
+      messages: safeMessages,
+      section,
+    });
   } catch (err) {
     console.error('[ai-tutor] provider error:', err);
-    return json({ error: 'provider_error', detail: String(err) }, 500);
+    if (logId != null) {
+      await supabase
+        .from('ai_tutor_logs')
+        .update({ error_code: 'provider_error', success: false })
+        .eq('id', logId);
+    }
+    return json({ error: 'provider_error' }, 500);
   }
 
-  const headers = new Headers(aiResponse.headers);
-  for (const [k, v] of Object.entries(corsHeaders())) {
-    headers.set(k, v);
+  // 8. Finish telemetry and update learner memory only after a successful
+  // response. A failed model call should not become a claimed misconception.
+  if (logId != null) {
+    const { error: updateError } = await supabase
+      .from('ai_tutor_logs')
+      .update({
+        question_type: questionType,
+        question_text: question.slice(0, MAX_QUESTION_CHARS),
+        user_answer: userAnswer.slice(0, 1000),
+        // correct_answer is intentionally omitted until the hosted PostgREST
+        // schema cache consistently exposes this legacy column. question_id
+        // remains sufficient to join the authoritative answer when reviewing.
+        provider: result.provider,
+        model: result.model,
+        response_id: result.responseId,
+        assistant_response: result.content.slice(0, 6000),
+        teaching_skill: result.diagnostics.teachingSkill,
+        misconception: result.diagnostics.misconception,
+        record_status: result.diagnostics.recordStatus,
+        record_concern: result.diagnostics.recordConcern,
+        input_tokens: result.usage.inputTokens,
+        cached_input_tokens: result.usage.cachedInputTokens,
+        cache_write_tokens: result.usage.cacheWriteTokens,
+        output_tokens: result.usage.outputTokens,
+        reasoning_tokens: result.usage.reasoningTokens,
+        estimated_cost_usd: result.usage.estimatedCostUsd,
+        latency_ms: result.latencyMs,
+        tool_calls: result.toolCalls,
+        success: true,
+        error_code: null,
+      })
+      .eq('id', logId);
+    if (updateError) {
+      console.error('[ai-tutor] failed to update telemetry:', updateError.message);
+    }
   }
 
-  return new Response(aiResponse.body, { headers });
+  const { error: insightError } = await supabase.rpc('record_ai_tutor_insight', {
+    p_user_id: user.id,
+    p_question_type: questionType || 'unspecified',
+    p_misconception: result.diagnostics.misconception,
+  });
+  if (insightError) {
+    console.error('[ai-tutor] failed to update learner insight:', insightError.message);
+  }
+
+  return json({ content: result.content, messageId: logId });
 });

@@ -147,7 +147,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
     const questionContext = {
       questionId: item.itemId ?? item.questionId ?? item.id,
       question: item.text ?? item.questionText,
-      questionType: 'situational_judgement',
+      questionType: item.type ?? 'situational_judgement',
       section: 'sj',
       passage: scenario.stem,
       options: labelSet,

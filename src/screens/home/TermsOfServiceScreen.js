@@ -15,7 +15,7 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '28 September 2026';
+const LAST_UPDATED = '29 September 2026';
 
 const SECTIONS = [
   {
@@ -36,7 +36,7 @@ const SECTIONS = [
   {
     title: '4. Data and Privacy',
     body:
-      'We only store the data needed to provide the app: your account details, test and practice performance, AI tutor messages, and content you choose to submit to the student community. Community posts, replies, public display names, and approved screenshots are visible to other signed-in users. Submissions may be processed automatically and reviewed by an administrator to keep the service safe. See the Privacy Policy for more information.',
+      'We only store the data needed to provide and improve the app: your account details, test and practice performance, AI tutor conversations and optional answer feedback, technical AI usage information, and content you choose to submit to the student community. Community posts, replies, public display names, and approved screenshots are visible to other signed-in users. Submissions may be processed automatically and reviewed by an administrator to keep the service safe. See the Privacy Policy for more information.',
   },
   {
     title: '5. Subscriptions & Payments',

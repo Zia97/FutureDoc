@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
-import { streamAITutor } from '../../services/aiTutor';
+import { rateAITutorResponse, streamAITutor } from '../../services/aiTutor';
 
 export const TUTOR_ERROR = {
   DAILY_LIMIT: 'daily_limit_reached',
@@ -80,8 +80,13 @@ export function useAITutor(questionContext, options = {}) {
         accumulated += chunk;
         setStreamingContent(accumulated);
       },
-      onDone: () => {
-        const assistantMessage = { role: 'assistant', content: accumulated };
+      onDone: ({ messageId } = {}) => {
+        const assistantMessage = {
+          role: 'assistant',
+          content: accumulated,
+          messageId: messageId ?? null,
+          feedback: null,
+        };
         historyRef.current = [...historyRef.current, assistantMessage];
         setMessages((prev) => [...prev, assistantMessage]);
         setStreamingContent('');
@@ -108,6 +113,20 @@ export function useAITutor(questionContext, options = {}) {
     });
   }, [isStreaming, normalizedQuestionContext, isDemo]);
 
+  const rateMessage = useCallback(async (messageId, rating) => {
+    if (!messageId || !['helpful', 'not_helpful'].includes(rating)) return;
+    setMessages((prev) => prev.map((message) => (
+      message.messageId === messageId ? { ...message, feedback: rating } : message
+    )));
+    try {
+      await rateAITutorResponse(messageId, rating);
+    } catch {
+      setMessages((prev) => prev.map((message) => (
+        message.messageId === messageId ? { ...message, feedback: null } : message
+      )));
+    }
+  }, []);
+
   // Reset the session when the question changes (new question = fresh chat)
   useEffect(() => {
     setMessages([]);
@@ -131,6 +150,7 @@ export function useAITutor(questionContext, options = {}) {
     isStreaming,
     error,
     sendMessage,
+    rateMessage,
     reset,
   };
 }

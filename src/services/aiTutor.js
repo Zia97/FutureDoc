@@ -90,10 +90,36 @@ export async function streamAITutor({
   }
 
   try {
-    const { content } = await response.json();
+    const { content, messageId } = await response.json();
     if (content) onChunk(content);
-    onDone();
+    onDone({ messageId: messageId ?? null });
   } catch (err) {
     onError(err);
   }
+}
+
+export async function rateAITutorResponse(logId, rating) {
+  if (!getIsOnline()) throw new Error('offline');
+  if (!Number.isSafeInteger(Number(logId))) throw new Error('invalid_log_id');
+  if (!['helpful', 'not_helpful'].includes(rating)) throw new Error('invalid_rating');
+
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) throw new Error('Not authenticated');
+
+  const response = await fetch(FUNCTION_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${session.access_token}`,
+      'X-Platform': Platform.OS,
+      'X-App-Version': APP_VERSION,
+    },
+    body: JSON.stringify({
+      action: 'feedback',
+      logId: Number(logId),
+      rating,
+    }),
+  });
+
+  if (!response.ok) throw new Error('feedback_failed');
 }

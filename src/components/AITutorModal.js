@@ -8,6 +8,7 @@ import {
   Keyboard,
   Platform,
   ActivityIndicator,
+  Animated,
   StatusBar,
   StyleSheet,
 } from 'react-native';
@@ -48,7 +49,14 @@ export default function AITutorModal({
   onCreditUsed,
   isDemo = false,
 }) {
-  const { messages, streamingContent, isStreaming, error, sendMessage: rawSendMessage } = tutorState;
+  const {
+    messages,
+    streamingContent,
+    isStreaming,
+    error,
+    sendMessage: rawSendMessage,
+    rateMessage,
+  } = tutorState;
   const navigation = useNavigation();
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
@@ -274,7 +282,19 @@ export default function AITutorModal({
             ) : null
           }
           ListEmptyComponent={<WelcomePrompt colors={colors} isDark={isDark} />}
-          renderItem={({ item }) => <MessageBubble message={item} colors={colors} isDark={isDark} />}
+          ListFooterComponent={
+            isStreaming && !streamingContent ? (
+              <ThinkingBubble colors={colors} isDark={isDark} />
+            ) : null
+          }
+          renderItem={({ item }) => (
+            <MessageBubble
+              message={item}
+              colors={colors}
+              isDark={isDark}
+              onRate={rateMessage}
+            />
+          )}
         />
 
         {error && <ErrorBanner error={error} onUpgrade={handleUpgrade} colors={colors} isDark={isDark} />}
@@ -498,7 +518,89 @@ function renderFormattedText(text, baseStyle) {
   });
 }
 
-function MessageBubble({ message, colors, isDark }) {
+function ThinkingBubble({ colors, isDark }) {
+  const dotAnimations = useRef([
+    new Animated.Value(0),
+    new Animated.Value(0),
+    new Animated.Value(0),
+  ]).current;
+
+  useEffect(() => {
+    const bounce = (value) => Animated.sequence([
+      Animated.timing(value, {
+        toValue: 1,
+        duration: 210,
+        useNativeDriver: true,
+      }),
+      Animated.timing(value, {
+        toValue: 0,
+        duration: 210,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.stagger(120, dotAnimations.map(bounce)),
+        Animated.delay(260),
+      ]),
+    );
+    animation.start();
+
+    return () => {
+      animation.stop();
+      dotAnimations.forEach((value) => value.setValue(0));
+    };
+  }, [dotAnimations]);
+
+  return (
+    <View
+      style={[
+        styles.thinkingBubble,
+        {
+          backgroundColor: isDark ? 'rgba(13, 26, 49, 0.96)' : 'rgba(255, 255, 255, 0.98)',
+          borderColor: hexToRgba(colors.blue, isDark ? 0.28 : 0.18),
+        },
+      ]}
+      accessible
+      accessibilityRole="text"
+      accessibilityLabel="AI tutor is thinking"
+      accessibilityLiveRegion="polite"
+    >
+      {dotAnimations.map((value, index) => (
+        <Animated.View
+          key={index}
+          style={[
+            styles.thinkingDot,
+            {
+              backgroundColor: colors.cyan,
+              opacity: value.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0.42, 1],
+              }),
+              transform: [
+                {
+                  translateY: value.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, -5],
+                  }),
+                },
+                {
+                  scale: value.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0.85, 1.08],
+                  }),
+                },
+              ],
+            },
+          ]}
+        />
+      ))}
+    </View>
+  );
+}
+
+function MessageBubble({ message, colors, isDark, onRate }) {
   const { multiplier } = useTextSize();
   const isUser = message.role === 'user';
   const bubbleScaled = {
@@ -521,7 +623,8 @@ function MessageBubble({ message, colors, isDark }) {
   }
 
   return (
-    <View
+    <View style={styles.aiMessageWrap}>
+      <View
       style={[
         styles.bubble,
         styles.aiBubble,
@@ -535,6 +638,44 @@ function MessageBubble({ message, colors, isDark }) {
         {renderFormattedText(message.content, baseStyle)}
         {message.streaming && <Text style={[styles.cursor, { color: colors.cyan }]}>▌</Text>}
       </Text>
+      </View>
+      {!message.streaming && message.messageId && onRate ? (
+        <View style={styles.feedbackRow}>
+          <Text style={[styles.feedbackPrompt, { color: colors.textMuted }]}>Was this helpful?</Text>
+          <TouchableOpacity
+            onPress={() => onRate(message.messageId, 'helpful')}
+            accessibilityRole="button"
+            accessibilityLabel="Mark tutor answer as helpful"
+            style={[
+              styles.feedbackButton,
+              {
+                borderColor: hexToRgba(colors.mint, message.feedback === 'helpful' ? 0.8 : 0.3),
+                backgroundColor: message.feedback === 'helpful'
+                  ? hexToRgba(colors.mint, isDark ? 0.2 : 0.14)
+                  : 'transparent',
+              },
+            ]}
+          >
+            <Text style={[styles.feedbackButtonText, { color: colors.mint }]}>Helpful</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => onRate(message.messageId, 'not_helpful')}
+            accessibilityRole="button"
+            accessibilityLabel="Mark tutor answer as not helpful"
+            style={[
+              styles.feedbackButton,
+              {
+                borderColor: hexToRgba(colors.red, message.feedback === 'not_helpful' ? 0.8 : 0.3),
+                backgroundColor: message.feedback === 'not_helpful'
+                  ? hexToRgba(colors.red, isDark ? 0.2 : 0.12)
+                  : 'transparent',
+              },
+            ]}
+          >
+            <Text style={[styles.feedbackButtonText, { color: colors.red }]}>Not helpful</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
     </View>
   );
 }
@@ -842,6 +983,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 10,
   },
+  aiMessageWrap: {
+    alignSelf: 'flex-start',
+    maxWidth: '85%',
+    marginBottom: 10,
+  },
+  thinkingBubble: {
+    alignSelf: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    minWidth: 58,
+    height: 38,
+    paddingHorizontal: 14,
+    marginBottom: 10,
+    borderRadius: 18,
+    borderBottomLeftRadius: 6,
+    borderWidth: 1,
+  },
+  thinkingDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+  },
   userBubble: {
     alignSelf: 'flex-end',
     borderBottomRightRadius: 6,
@@ -851,8 +1015,32 @@ const styles = StyleSheet.create({
   },
   aiBubble: {
     alignSelf: 'flex-start',
+    maxWidth: '100%',
+    marginBottom: 6,
     borderBottomLeftRadius: 6,
     borderWidth: 1,
+  },
+  feedbackRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: 6,
+    paddingLeft: 4,
+  },
+  feedbackPrompt: {
+    fontSize: 10,
+    fontWeight: '600',
+    marginRight: 2,
+  },
+  feedbackButton: {
+    borderRadius: 999,
+    borderWidth: 1,
+    paddingHorizontal: 9,
+    paddingVertical: 4,
+  },
+  feedbackButtonText: {
+    fontSize: 10,
+    fontWeight: '800',
   },
   bubbleText: {
     fontSize: 14,
