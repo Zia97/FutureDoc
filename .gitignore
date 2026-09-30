@@ -49,3 +49,10 @@ yarn-error.*
 # Local question-authoring cache and temporary drafting scripts
 content-authoring/cache/*
 !content-authoring/cache/.gitignore
+
+# Local question-authoring evidence. Keep these artifacts for local audit and
+# revision, but do not include generated candidates/reports in normal commits.
+content-authoring/candidates/*
+!content-authoring/candidates/.gitkeep
+content-authoring/reports/*
+!content-authoring/reports/.gitkeep

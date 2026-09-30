@@ -1,1133 +1,741 @@
 [
   {
-    "id": "timed-qr-test-004",
-    "title": "QR Timed Test 4",
+    "id": "timed-qr-test-005",
+    "title": "QR Timed Test 5",
     "question_count": 36,
     "time_minutes": 26,
+    "is_free": true,
     "sets": [
       {
-        "set_id": "qr4-set-01",
-        "title": "Commuter Survey by Borough",
+        "set_id": "3e43934f-148c-4fe6-b648-4cf94e5d075c",
+        "title": "Film Archive Restoration",
         "stimulus": {
           "type": "table",
-          "context": "A commuter survey of 2,900 residents across four boroughs recorded where each person lives (rows) and where they work (columns).",
+          "context": "A film archive inspected reels from five collections. Two technicians share the restoration work; each is scheduled for 6 hours per day and spends 80% of that time actively restoring reels.",
           "data": {
             "headers": [
-              "Home \\ Workplace",
-              "Eastham",
-              "Northwick",
-              "Westford",
-              "Southley",
-              "Home Total"
+              "Collection",
+              "Reels received",
+              "Usable reels",
+              "Minutes per usable reel"
             ],
             "rows": [
               [
-                "Eastham",
-                "480",
-                "160",
-                "80",
-                "80",
-                "800"
+                "Documentary",
+                "240",
+                "204",
+                "16"
               ],
               [
-                "Northwick",
+                "Drama",
+                "180",
+                "162",
+                "22"
+              ],
+              [
+                "Science",
+                "150",
+                "114",
+                "18"
+              ],
+              [
+                "Animation",
                 "120",
-                "360",
-                "120",
-                "100",
-                "700"
+                "108",
+                "25"
               ],
               [
-                "Westford",
-                "60",
-                "90",
-                "400",
-                "50",
-                "600"
-              ],
-              [
-                "Southley",
-                "40",
-                "90",
-                "100",
-                "570",
-                "800"
-              ],
-              [
-                "Workplace Total",
-                "700",
-                "700",
-                "700",
-                "800",
-                "2900"
+                "Newsreel",
+                "210",
+                "189",
+                "12"
               ]
             ]
           }
         },
         "questions": [
           {
-            "id": "qr4-s01-q1",
-            "stem": "How many people live in Westford and commute to Northwick for work?",
+            "id": "0cd6da0f-423c-488b-a882-5fcdc4c1033d",
+            "stem": "What percentage of the Documentary reels were usable?",
             "options": [
               {
                 "label": "A",
-                "text": "50"
+                "text": "80%"
               },
               {
                 "label": "B",
-                "text": "60"
+                "text": "82%"
               },
               {
                 "label": "C",
-                "text": "90"
+                "text": "85%"
               },
               {
                 "label": "D",
-                "text": "100"
+                "text": "88%"
               },
               {
                 "label": "E",
-                "text": "120"
+                "text": "90%"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "From the cross-tabulation table, find the Westford row (home borough) and the Northwick column (workplace). The intersection shows 90. A common error is reading the reversed cell — Northwick residents working in Westford (120) — by confusing rows and columns. The answer is 90.",
-            "order_index": 0
+            "answer_reason": "Usable percentage = 204 ÷ 240 × 100 = 85%. No rounding is required. The answer is 85%.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s01-q2",
-            "stem": "What percentage of Northwick residents work outside their own borough, to the nearest 0.1%?",
+            "id": "263a9971-401b-4675-92f4-ad2e008c38db",
+            "stem": "How many hours of restoration work are required for all usable Drama reels?",
             "options": [
               {
                 "label": "A",
-                "text": "34.0%"
+                "text": "54.0 hours"
               },
               {
                 "label": "B",
-                "text": "42.5%"
+                "text": "56.7 hours"
               },
               {
                 "label": "C",
-                "text": "48.6%"
+                "text": "59.4 hours"
               },
               {
                 "label": "D",
-                "text": "51.4%"
+                "text": "60.0 hours"
               },
               {
                 "label": "E",
-                "text": "56.3%"
+                "text": "66.0 hours"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: From the Northwick row, the total number of Northwick residents is 700 (Home Total). Step 2: Northwick residents working IN Northwick (the diagonal cell) = 360. Step 3: Northwick residents working OUTSIDE = 700 − 360 = 340. Step 4: Percentage = 340 ÷ 700 × 100 = 48.6%. A common error is calculating the percentage working IN Northwick (360 ÷ 700 = 51.4%) instead of outside. The answer is 48.6%.",
-            "order_index": 1
+            "answer_reason": "The Drama collection has 162 usable reels. Work time = 162 × 22 = 3,564 minutes. Converting to hours gives 3,564 ÷ 60 = 59.4 hours. The answer is 59.4 hours.",
+            "order_index": 1,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s01-q3",
-            "stem": "How many Westford residents who work in Northwick commute more than 10 km?",
+            "id": "d7526cd4-0479-4885-86f5-2ce32c219278",
+            "stem": "What is the minimum number of whole working days the two technicians need to restore all usable Science reels?",
             "options": [
               {
                 "label": "A",
-                "text": "18"
+                "text": "2 days"
               },
               {
                 "label": "B",
-                "text": "36"
+                "text": "3 days"
               },
               {
                 "label": "C",
-                "text": "54"
+                "text": "4 days"
               },
               {
                 "label": "D",
-                "text": "90"
+                "text": "5 days"
               },
               {
                 "label": "E",
-                "text": "Can't Tell"
-              }
-            ],
-            "correct_answer": "E",
-            "answer_reason": "The survey records where people live and where they work. It does not include any information about travel distances between boroughs or the specific locations of individuals within each borough. Without distance data, the number commuting more than 10 km cannot be determined. The answer is Can't Tell.",
-            "order_index": 2
-          },
-          {
-            "id": "qr4-s01-q4",
-            "stem": "The council plans to build a new business park in Westford, creating 350 new jobs. These jobs will be filled by residents of all four boroughs in the same proportions as the current Westford workplace column. How many of the new jobs would be filled by Northwick residents?",
-            "options": [
-              {
-                "label": "A",
-                "text": "40"
-              },
-              {
-                "label": "B",
-                "text": "50"
-              },
-              {
-                "label": "C",
-                "text": "60"
-              },
-              {
-                "label": "D",
-                "text": "120"
-              },
-              {
-                "label": "E",
-                "text": "200"
+                "text": "6 days"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: From the Westford workplace column, total workers = 700. Of these, 120 are Northwick residents. Step 2: Northwick's proportion = 120/700. Step 3: Of 350 new jobs, Northwick share = 350 × (120 ÷ 700) = 350 × 120 ÷ 700 = 60. A common error is reading the wrong cell — e.g. using 80 (Eastham→Westford) or 90 (Westford→Northwick, reading the row instead of the column). The answer is 60.",
-            "order_index": 3
+            "answer_reason": "Science restoration requires 114 × 18 = 2,052 minutes. The two technicians provide 2 × 6 × 60 × 0.80 = 576 active minutes per day. The work takes 2,052 ÷ 576 = 3.5625 days, so a fourth whole day is required. The answer is 4 days.",
+            "order_index": 2,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "qr4-set-02",
-        "title": "Annual Visitor Numbers at UK Heritage Sites",
+        "set_id": "0e8ceeef-93aa-4b26-9daf-f90249e2d064",
+        "title": "Coastal Water Sample Processing",
+        "stimulus": {
+          "type": "table",
+          "context": "A coastal laboratory processed water readings from four monitoring stations. Each positive reading requires a £6 confirmation test. The project also has a fixed setup cost of £450.",
+          "data": {
+            "headers": [
+              "Station",
+              "Readings scheduled",
+              "Valid readings",
+              "Positive readings",
+              "Cost per valid reading"
+            ],
+            "rows": [
+              [
+                "North",
+                "160",
+                "148",
+                "37",
+                "£2.40"
+              ],
+              [
+                "East",
+                "200",
+                "184",
+                "46",
+                "£2.10"
+              ],
+              [
+                "South",
+                "180",
+                "153",
+                "51",
+                "£2.60"
+              ],
+              [
+                "West",
+                "140",
+                "126",
+                "21",
+                "£2.30"
+              ]
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "5118442f-ab22-42aa-982e-eec1b1c8bd8c",
+            "stem": "What percentage of the scheduled readings at East station were valid?",
+            "options": [
+              {
+                "label": "A",
+                "text": "84%"
+              },
+              {
+                "label": "B",
+                "text": "88%"
+              },
+              {
+                "label": "C",
+                "text": "90%"
+              },
+              {
+                "label": "D",
+                "text": "92%"
+              },
+              {
+                "label": "E",
+                "text": "96%"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Valid percentage = 184 ÷ 200 × 100 = 92%. The answer is 92%.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "1ed62118-86b2-4eb4-a14f-616614cdd1b9",
+            "stem": "Across all four stations, what percentage of valid readings were positive, to the nearest 0.1%?",
+            "options": [
+              {
+                "label": "A",
+                "text": "22.8%"
+              },
+              {
+                "label": "B",
+                "text": "24.1%"
+              },
+              {
+                "label": "C",
+                "text": "25.4%"
+              },
+              {
+                "label": "D",
+                "text": "26.7%"
+              },
+              {
+                "label": "E",
+                "text": "28.0%"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Total positives = 37 + 46 + 51 + 21 = 155. Total valid readings = 148 + 184 + 153 + 126 = 611. The percentage is 155 ÷ 611 × 100 = 25.368...%, which rounds to 25.4%. The answer is 25.4%.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "9627c16b-0f4f-4b84-8a9b-b52fd238b890",
+            "stem": "What was the total project cost, including processing, all confirmation tests and the fixed setup cost?",
+            "options": [
+              {
+                "label": "A",
+                "text": "£2,359.20"
+              },
+              {
+                "label": "B",
+                "text": "£2,739.20"
+              },
+              {
+                "label": "C",
+                "text": "£2,809.20"
+              },
+              {
+                "label": "D",
+                "text": "£2,905.20"
+              },
+              {
+                "label": "E",
+                "text": "£3,289.20"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Processing costs are 148 × £2.40 + 184 × £2.10 + 153 × £2.60 + 126 × £2.30 = £1,429.20. Confirmation tests cost 155 × £6 = £930. Adding the £450 setup cost gives £1,429.20 + £930 + £450 = £2,809.20. The answer is £2,809.20.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "53642c29-aacc-44c0-90ae-571ecbbdc107",
+        "title": "Archaeological Trench Finds",
         "stimulus": {
           "type": "bar_chart",
+          "context": "An archaeological survey classified finds from five trenches as organic material or ceramic material. The bars show the number of finds in each category.",
           "data": {
-            "title": "Annual Visitors by Heritage Site (2025)",
+            "title": "Finds by Trench and Material",
             "labels": [
-              "Castle Moor",
-              "Abbey Fields",
-              "Roman Baths",
-              "Harbour Fort",
-              "Cathedral Close"
+              "Trench A",
+              "Trench B",
+              "Trench C",
+              "Trench D",
+              "Trench E"
             ],
             "series": [
               {
-                "name": "Adult Visitors",
+                "name": "Organic",
                 "values": [
-                  16000,
-                  12000,
-                  24000,
-                  10000,
-                  15000
+                  48,
+                  60,
+                  36,
+                  72,
+                  40
                 ]
               },
               {
-                "name": "Child Visitors",
+                "name": "Ceramic",
                 "values": [
-                  8000,
-                  9000,
-                  16000,
-                  2500,
-                  6000
+                  32,
+                  45,
+                  54,
+                  24,
+                  50
                 ]
               }
             ],
-            "yAxisLabel": "Number of Visitors",
-            "unit": ""
+            "yAxisLabel": "Number of finds",
+            "unit": "finds"
           }
         },
         "questions": [
           {
-            "id": "qr4-s02-q1",
-            "stem": "What was the total number of visitors to Roman Baths in 2025?",
+            "id": "69e312cd-df44-4ce7-8158-073659b3cd3b",
+            "stem": "How many finds were recorded in Trench C altogether?",
             "options": [
               {
                 "label": "A",
-                "text": "16,000"
+                "text": "72"
               },
               {
                 "label": "B",
-                "text": "24,000"
+                "text": "84"
               },
               {
                 "label": "C",
-                "text": "33,000"
+                "text": "90"
               },
               {
                 "label": "D",
-                "text": "40,000"
+                "text": "96"
               },
               {
                 "label": "E",
-                "text": "48,000"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Roman Baths adult visitors = 24,000. Step 2: Roman Baths child visitors = 16,000. Step 3: Total = 24,000 + 16,000 = 40,000. A common error is reading only the adult bar (24,000) and forgetting to add child visitors. The answer is 40,000.",
-            "order_index": 0
-          },
-          {
-            "id": "qr4-s02-q2",
-            "stem": "What percentage of visitors to Abbey Fields were children, to the nearest whole percent?",
-            "options": [
-              {
-                "label": "A",
-                "text": "33%"
-              },
-              {
-                "label": "B",
-                "text": "38%"
-              },
-              {
-                "label": "C",
-                "text": "43%"
-              },
-              {
-                "label": "D",
-                "text": "57%"
-              },
-              {
-                "label": "E",
-                "text": "75%"
+                "text": "108"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: Abbey Fields children = 9,000, adults = 12,000. Step 2: Total = 12,000 + 9,000 = 21,000. Step 3: Percentage = (9,000 ÷ 21,000) × 100 = 42.9% ≈ 43%. A common error is dividing children by adults only (9,000 ÷ 12,000 = 75%) instead of by total visitors. Another error is calculating the adult percentage (12,000 ÷ 21,000 = 57%). The answer is 43%.",
-            "order_index": 1
+            "answer_reason": "Trench C contains 36 organic finds and 54 ceramic finds. Total = 36 + 54 = 90 finds. The answer is 90.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s02-q3",
-            "stem": "Which site had the highest ratio of adult visitors to child visitors?",
+            "id": "2112a8ed-4a6a-4a39-ace4-0bd3adc3790c",
+            "stem": "What percentage of the finds in Trench B were ceramic, to the nearest 0.1%?",
             "options": [
               {
                 "label": "A",
-                "text": "Abbey Fields"
+                "text": "37.5%"
               },
               {
                 "label": "B",
-                "text": "Castle Moor"
+                "text": "40.0%"
               },
               {
                 "label": "C",
-                "text": "Cathedral Close"
+                "text": "42.9%"
               },
               {
                 "label": "D",
-                "text": "Harbour Fort"
+                "text": "45.0%"
               },
               {
                 "label": "E",
-                "text": "Roman Baths"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Calculate the adult:child ratio for each site: Castle Moor = 16,000 ÷ 8,000 = 2.00; Abbey Fields = 12,000 ÷ 9,000 = 1.33; Roman Baths = 24,000 ÷ 16,000 = 1.50; Harbour Fort = 10,000 ÷ 2,500 = 4.00; Cathedral Close = 15,000 ÷ 6,000 = 2.50. The highest ratio is Harbour Fort at 4.00. A common error is selecting Roman Baths because it has the most adult visitors in absolute terms (24,000), without considering the ratio. The answer is Harbour Fort.",
-            "order_index": 2
-          },
-          {
-            "id": "qr4-s02-q4",
-            "stem": "A marketing campaign increases child visitors at Harbour Fort by 60% the following year, while adult visitors remain the same. What would be the new total number of visitors to Harbour Fort?",
-            "options": [
-              {
-                "label": "A",
-                "text": "11,000"
-              },
-              {
-                "label": "B",
-                "text": "11,500"
-              },
-              {
-                "label": "C",
-                "text": "12,500"
-              },
-              {
-                "label": "D",
-                "text": "14,000"
-              },
-              {
-                "label": "E",
-                "text": "16,000"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Current child visitors = 2,500. After 60% increase: 2,500 × 1.60 = 4,000. Step 2: Adult visitors remain at 10,000. Step 3: New total = 10,000 + 4,000 = 14,000. A common error is calculating 60% of 2,500 as the new count (1,500) instead of the increase, giving 10,000 + 1,500 = 11,500. Another error is using the original total of 12,500 without applying the increase. The answer is 14,000.",
-            "order_index": 3
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-03",
-        "title": "Cylindrical Grain Silo",
-        "stimulus": {
-          "type": "text",
-          "text": "A grain silo has a cylindrical body with an internal diameter of 6 metres and a height of 14 metres. One cubic metre of grain weighs 720 kg. Use π = 3.14."
-        },
-        "questions": [
-          {
-            "id": "qr4-s03-q1",
-            "stem": "What is the maximum weight of grain the silo can hold, to the nearest tonne? [1 tonne = 1,000 kg]",
-            "options": [
-              {
-                "label": "A",
-                "text": "190 tonnes"
-              },
-              {
-                "label": "B",
-                "text": "285 tonnes"
-              },
-              {
-                "label": "C",
-                "text": "396 tonnes"
-              },
-              {
-                "label": "D",
-                "text": "570 tonnes"
-              },
-              {
-                "label": "E",
-                "text": "1,140 tonnes"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Step 1: The diameter is 6 m, so radius = 6 ÷ 2 = 3 m. Step 2: Volume = π × r² × h = 3.14 × 9 × 14 = 3.14 × 126 = 395.64 m³. Step 3: Weight = 395.64 × 720 = 284,861 kg. Step 4: Convert: 284,861 ÷ 1,000 = 285 tonnes (to the nearest tonne). The key trap is using the diameter (6 m) directly as the radius, which gives π × 36 × 14 = 1,582.56 m³ and a weight of 1,140 tonnes — four times too large. The answer is 285 tonnes.",
-            "order_index": 0
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-04",
-        "title": "Monthly Average Temperature in Three UK Cities",
-        "stimulus": {
-          "type": "line_graph",
-          "data": {
-            "title": "Monthly Average Temperature (2025)",
-            "labels": [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "May",
-              "Jun",
-              "Jul",
-              "Aug"
-            ],
-            "series": [
-              {
-                "name": "London",
-                "values": [
-                  5,
-                  6,
-                  9,
-                  12,
-                  16,
-                  19,
-                  23,
-                  20
-                ]
-              },
-              {
-                "name": "Manchester",
-                "values": [
-                  4,
-                  5,
-                  7,
-                  10,
-                  14,
-                  17,
-                  19,
-                  18
-                ]
-              },
-              {
-                "name": "Edinburgh",
-                "values": [
-                  3,
-                  4,
-                  6,
-                  9,
-                  12,
-                  14,
-                  17,
-                  16
-                ]
-              }
-            ],
-            "yAxisLabel": "Temperature (°C)",
-            "unit": ""
-          }
-        },
-        "questions": [
-          {
-            "id": "qr4-s04-q1",
-            "stem": "What was the average temperature in Edinburgh in May?",
-            "options": [
-              {
-                "label": "A",
-                "text": "9°C"
-              },
-              {
-                "label": "B",
-                "text": "12°C"
-              },
-              {
-                "label": "C",
-                "text": "14°C"
-              },
-              {
-                "label": "D",
-                "text": "16°C"
-              },
-              {
-                "label": "E",
-                "text": "19°C"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "From the line graph, read the Edinburgh line at May: the value is 12°C. A common error is reading the Manchester line (14°C) or the London line (16°C) instead of Edinburgh. The answer is 12°C.",
-            "order_index": 0
-          },
-          {
-            "id": "qr4-s04-q2",
-            "stem": "In which month was the difference in average temperature between London and Edinburgh greatest?",
-            "options": [
-              {
-                "label": "A",
-                "text": "April"
-              },
-              {
-                "label": "B",
-                "text": "May"
-              },
-              {
-                "label": "C",
-                "text": "June"
-              },
-              {
-                "label": "D",
-                "text": "July"
-              },
-              {
-                "label": "E",
-                "text": "August"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Calculate the difference (London − Edinburgh) for each month: Jan = 5−3 = 2, Feb = 6−4 = 2, Mar = 9−6 = 3, Apr = 12−9 = 3, May = 16−12 = 4, Jun = 19−14 = 5, Jul = 23−17 = 6, Aug = 20−16 = 4. The greatest difference is 6°C in July. A common error is selecting June (difference of 5°C) or confusing the largest absolute temperature (July, London = 23°C) with the largest difference. The answer is July.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s04-q3",
-            "stem": "What was the mean average temperature in Manchester across all eight months, to the nearest 0.1°C?",
-            "options": [
-              {
-                "label": "A",
-                "text": "10.5°C"
-              },
-              {
-                "label": "B",
-                "text": "11.0°C"
-              },
-              {
-                "label": "C",
-                "text": "11.5°C"
-              },
-              {
-                "label": "D",
-                "text": "11.8°C"
-              },
-              {
-                "label": "E",
-                "text": "12.5°C"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Sum Manchester temperatures: 4 + 5 + 7 + 10 + 14 + 17 + 19 + 18 = 94. Step 2: Mean = 94 ÷ 8 = 11.75°C, which rounds to 11.8°C. A common error is dividing by 12 (for all months in a year) instead of 8 (the number of months shown): 94 ÷ 12 = 7.8°C, or summing incorrectly. The answer is 11.8°C.",
-            "order_index": 2
-          },
-          {
-            "id": "qr4-s04-q4",
-            "stem": "An outdoor café opens only in months where the average temperature is at least 15°C in both London and Edinburgh. In how many of the eight months shown was the café open?",
-            "options": [
-              {
-                "label": "A",
-                "text": "1"
-              },
-              {
-                "label": "B",
-                "text": "2"
-              },
-              {
-                "label": "C",
-                "text": "3"
-              },
-              {
-                "label": "D",
-                "text": "4"
-              },
-              {
-                "label": "E",
-                "text": "5"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Step 1: Identify months where London ≥ 15°C: May (16), June (19), July (23), August (20) = 4 months. Step 2: Identify months where Edinburgh ≥ 15°C: July (17), August (16) = 2 months. Step 3: Both conditions met: July and August = 2 months. The key trap is counting London alone (4 months) without checking Edinburgh. Edinburgh’s June temperature is only 14°C, which fails the ≥ 15°C threshold. The answer is 2.",
-            "order_index": 3
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-05",
-        "title": "Greenhouse Gas Intensity by Sector",
-        "stimulus": {
-          "type": "multi",
-          "items": [
-            {
-              "type": "table",
-              "data": {
-                "headers": [
-                  "Sector",
-                  "Emissions (kt CO₂e)",
-                  "Revenue (£m)",
-                  "Employees (000s)"
-                ],
-                "rows": [
-                  [
-                    "Manufacturing",
-                    "420",
-                    "2800",
-                    "85"
-                  ],
-                  [
-                    "Agriculture",
-                    "270",
-                    "900",
-                    "42"
-                  ],
-                  [
-                    "Transport",
-                    "640",
-                    "3200",
-                    "120"
-                  ],
-                  [
-                    "Energy",
-                    "700",
-                    "5000",
-                    "38"
-                  ],
-                  [
-                    "Construction",
-                    "240",
-                    "1500",
-                    "65"
-                  ]
-                ]
-              }
-            },
-            {
-              "type": "text",
-              "text": "Carbon Intensity = Emissions (kt CO₂e) ÷ Revenue (£m). A lower carbon intensity indicates a more carbon-efficient sector."
-            }
-          ]
-        },
-        "questions": [
-          {
-            "id": "qr4-s05-q1",
-            "stem": "What is the carbon intensity of the Manufacturing sector?",
-            "options": [
-              {
-                "label": "A",
-                "text": "0.10"
-              },
-              {
-                "label": "B",
-                "text": "0.12"
-              },
-              {
-                "label": "C",
-                "text": "0.15"
-              },
-              {
-                "label": "D",
-                "text": "0.17"
-              },
-              {
-                "label": "E",
-                "text": "0.20"
+                "text": "57.1%"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Using the formula: Carbon Intensity = Emissions ÷ Revenue. Manufacturing: 420 ÷ 2,800 = 0.15. A common error is dividing Revenue by Emissions (2,800 ÷ 420 = 6.67) — the inverse. The answer is 0.15.",
-            "order_index": 0
+            "answer_reason": "Trench B has 60 + 45 = 105 finds. The ceramic share is 45 ÷ 105 × 100 = 42.857...%, which rounds to 42.9%. The answer is 42.9%.",
+            "order_index": 1,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s05-q2",
-            "stem": "Which sector is the most carbon-efficient?",
+            "id": "e8715e88-7145-4fe0-8afb-a66846b88127",
+            "stem": "Across all five trenches, 15% of organic finds and 20% of ceramic finds are expected to need conservation. What is the estimated total number needing conservation, to the nearest whole find?",
             "options": [
               {
                 "label": "A",
-                "text": "Agriculture"
-              },
-              {
-                "label": "B",
-                "text": "Construction"
-              },
-              {
-                "label": "C",
-                "text": "Energy"
-              },
-              {
-                "label": "D",
-                "text": "Manufacturing"
-              },
-              {
-                "label": "E",
-                "text": "Transport"
-              }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Calculate carbon intensity for each: Manufacturing = 420/2800 = 0.15; Agriculture = 270/900 = 0.30; Transport = 640/3200 = 0.20; Energy = 700/5000 = 0.14; Construction = 240/1500 = 0.16. The lowest (most efficient) is Energy at 0.14. A common error is selecting the sector with the lowest absolute emissions — Construction at 240 kt — without applying the formula. The answer is Energy.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s05-q3",
-            "stem": "If Transport reduces its emissions by 15% while revenue stays the same, what would its new carbon intensity be?",
-            "options": [
-              {
-                "label": "A",
-                "text": "0.15"
-              },
-              {
-                "label": "B",
-                "text": "0.17"
-              },
-              {
-                "label": "C",
-                "text": "0.19"
-              },
-              {
-                "label": "D",
-                "text": "0.20"
-              },
-              {
-                "label": "E",
-                "text": "0.23"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Step 1: Transport's current emissions = 640 kt. After 15% reduction: 640 × 0.85 = 544 kt. Step 2: Revenue stays at £3,200m. Step 3: New carbon intensity = 544 ÷ 3,200 = 0.17. A common error is using the original carbon intensity (0.20) without applying the reduction. The answer is 0.17.",
-            "order_index": 2
-          },
-          {
-            "id": "qr4-s05-q4",
-            "stem": "The government has set a target carbon intensity of below 0.20 for all sectors. How many sectors currently meet this target?",
-            "options": [
-              {
-                "label": "A",
-                "text": "1"
-              },
-              {
-                "label": "B",
-                "text": "2"
-              },
-              {
-                "label": "C",
-                "text": "3"
-              },
-              {
-                "label": "D",
-                "text": "4"
-              },
-              {
-                "label": "E",
-                "text": "5"
-              }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Carbon intensities: Manufacturing = 0.15, Agriculture = 0.30, Transport = 0.20, Energy = 0.14, Construction = 0.16. The target is strictly below 0.20. Sectors meeting this: Energy (0.14), Manufacturing (0.15), Construction (0.16) = 3 sectors. The key trap is including Transport, which has a carbon intensity of exactly 0.20 — equal to the target but NOT below it. The answer is 3.",
-            "order_index": 3
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-06",
-        "title": "Loyalty Weekend Electronics Discount",
-        "stimulus": {
-          "type": "text",
-          "text": "An electronics store runs a 'Loyalty Weekend' promotion: first, a 15% discount is applied to the marked price, then a further 10% discount is applied to the already-reduced price. The discounts cannot be combined into a single reduction."
-        },
-        "questions": [
-          {
-            "id": "qr4-s06-q1",
-            "stem": "A customer buys a laptop with a marked price of £840. What is the final price the customer pays?",
-            "options": [
-              {
-                "label": "A",
-                "text": "£588.00"
-              },
-              {
-                "label": "B",
-                "text": "£630.00"
-              },
-              {
-                "label": "C",
-                "text": "£642.60"
-              },
-              {
-                "label": "D",
-                "text": "£714.00"
-              },
-              {
-                "label": "E",
-                "text": "£756.00"
-              }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Apply the 15% discount: £840 × 0.85 = £714.00. Step 2: Apply the 10% discount to the reduced price: £714 × 0.90 = £642.60. The key trap is adding the discounts (15% + 10% = 25%) and applying a single 25% reduction: £840 × 0.75 = £630.00. Sequential discounts must be applied multiplicatively (0.85 × 0.90 = 0.765), not additively. The answer is £642.60.",
-            "order_index": 0
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-07",
-        "title": "Cereal Nutrition Comparison",
-        "stimulus": {
-          "type": "table",
-          "context": "Nutritional information per 100g for five cereals, with recommended serving sizes.",
-          "data": {
-            "headers": [
-              "Cereal",
-              "Energy (kcal)",
-              "Protein (g)",
-              "Fibre (g)",
-              "Sugar (g)",
-              "Fat (g)",
-              "Serving Size (g)"
-            ],
-            "rows": [
-              [
-                "Oat Crunch",
-                "380",
-                "11",
-                "8.5",
-                "14",
-                "7",
-                "45"
-              ],
-              [
-                "Wheat Flakes",
-                "360",
-                "10",
-                "3.5",
-                "20",
-                "2",
-                "30"
-              ],
-              [
-                "Bran Bites",
-                "320",
-                "9",
-                "15",
-                "12",
-                "3",
-                "40"
-              ],
-              [
-                "Honey Puffs",
-                "400",
-                "6",
-                "2",
-                "28",
-                "5",
-                "35"
-              ],
-              [
-                "Granola Mix",
-                "450",
-                "8",
-                "6",
-                "22",
-                "18",
-                "50"
-              ]
-            ]
-          }
-        },
-        "questions": [
-          {
-            "id": "qr4-s07-q1",
-            "stem": "Which cereal has the highest fibre content per 100g?",
-            "options": [
-              {
-                "label": "A",
-                "text": "Bran Bites"
-              },
-              {
-                "label": "B",
-                "text": "Granola Mix"
-              },
-              {
-                "label": "C",
-                "text": "Honey Puffs"
-              },
-              {
-                "label": "D",
-                "text": "Oat Crunch"
-              },
-              {
-                "label": "E",
-                "text": "Wheat Flakes"
-              }
-            ],
-            "correct_answer": "A",
-            "answer_reason": "Comparing the Fibre column: Oat Crunch = 8.5g, Wheat Flakes = 3.5g, Bran Bites = 15g, Honey Puffs = 2g, Granola Mix = 6g. The highest fibre per 100g is Bran Bites at 15g. The answer is Bran Bites.",
-            "order_index": 0
-          },
-          {
-            "id": "qr4-s07-q2",
-            "stem": "How many grams of protein are in one recommended serving of Oat Crunch?",
-            "options": [
-              {
-                "label": "A",
-                "text": "3.15g"
-              },
-              {
-                "label": "B",
-                "text": "4.50g"
-              },
-              {
-                "label": "C",
-                "text": "4.95g"
-              },
-              {
-                "label": "D",
-                "text": "5.50g"
-              },
-              {
-                "label": "E",
-                "text": "11.00g"
-              }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Oat Crunch has 11g protein per 100g and a serving size of 45g. Step 2: Protein per serving = 11 × (45 ÷ 100) = 11 × 0.45 = 4.95g. A common error is using the per-100g value directly (11g, option E) without scaling to the serving size. The answer is 4.95g.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s07-q3",
-            "stem": "Which cereal contains the most sugar per recommended serving?",
-            "options": [
-              {
-                "label": "A",
-                "text": "Bran Bites"
-              },
-              {
-                "label": "B",
-                "text": "Granola Mix"
-              },
-              {
-                "label": "C",
-                "text": "Honey Puffs"
-              },
-              {
-                "label": "D",
-                "text": "Oat Crunch"
-              },
-              {
-                "label": "E",
-                "text": "Wheat Flakes"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Calculate sugar per serving for each: Oat Crunch = 14 × 0.45 = 6.30g; Wheat Flakes = 20 × 0.30 = 6.00g; Bran Bites = 12 × 0.40 = 4.80g; Honey Puffs = 28 × 0.35 = 9.80g; Granola Mix = 22 × 0.50 = 11.00g. The highest is Granola Mix at 11.00g. The trap is selecting Honey Puffs, which has the highest sugar per 100g (28g) but a smaller serving size (35g), so less sugar per serving than Granola Mix (50g serving). The answer is Granola Mix.",
-            "order_index": 2
-          },
-          {
-            "id": "qr4-s07-q4",
-            "stem": "Alex eats 60g of Bran Bites for breakfast and 40g of Granola Mix as a snack. What is the total energy intake from these two portions?",
-            "options": [
-              {
-                "label": "A",
-                "text": "180 kcal"
-              },
-              {
-                "label": "B",
-                "text": "192 kcal"
-              },
-              {
-                "label": "C",
-                "text": "308 kcal"
-              },
-              {
-                "label": "D",
-                "text": "372 kcal"
-              },
-              {
-                "label": "E",
-                "text": "770 kcal"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Energy from 60g Bran Bites: 320 × (60 ÷ 100) = 320 × 0.6 = 192 kcal. Step 2: Energy from 40g Granola Mix: 450 × (40 ÷ 100) = 450 × 0.4 = 180 kcal. Step 3: Total = 192 + 180 = 372 kcal. A common error is adding the per-100g values directly: 320 + 450 = 770 kcal, without scaling to actual portions. The answer is 372 kcal.",
-            "order_index": 3
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-08",
-        "title": "School Subject Enrolment",
-        "stimulus": {
-          "type": "pie_chart",
-          "data": {
-            "title": "Subject Enrolment at Greenfield Academy",
-            "segments": [
-              {
-                "label": "English",
-                "value": 320
-              },
-              {
-                "label": "Mathematics",
-                "value": 280
-              },
-              {
-                "label": "Sciences",
-                "value": null
-              },
-              {
-                "label": "Humanities",
-                "value": 210
-              },
-              {
-                "label": "Arts",
-                "value": 90
-              }
-            ],
-            "total": 1200
-          }
-        },
-        "questions": [
-          {
-            "id": "qr4-s08-q1",
-            "stem": "How many students are enrolled in Sciences?",
-            "options": [
-              {
-                "label": "A",
-                "text": "210"
-              },
-              {
-                "label": "B",
-                "text": "260"
-              },
-              {
-                "label": "C",
-                "text": "280"
-              },
-              {
-                "label": "D",
-                "text": "300"
-              },
-              {
-                "label": "E",
-                "text": "320"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Total enrolment = 1,200. Sum of known subjects: English (320) + Mathematics (280) + Humanities (210) + Arts (90) = 900. Step 2: Sciences = 1,200 − 900 = 300. A common error is confusing segment values and reading an existing value instead of calculating the missing one. The answer is 300.",
-            "order_index": 0
-          },
-          {
-            "id": "qr4-s08-q2",
-            "stem": "What percentage of students are enrolled in Humanities?",
-            "options": [
-              {
-                "label": "A",
-                "text": "14.0%"
-              },
-              {
-                "label": "B",
-                "text": "16.5%"
-              },
-              {
-                "label": "C",
-                "text": "17.5%"
-              },
-              {
-                "label": "D",
-                "text": "21.0%"
-              },
-              {
-                "label": "E",
-                "text": "25.0%"
-              }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Humanities = 210 students. Total = 1,200. Step 2: Percentage = (210 ÷ 1,200) × 100 = 17.5%. A common error is dividing by 900 (the sum of visible segments only) instead of the stated total of 1,200, giving 23.3%. The answer is 17.5%.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s08-q3",
-            "stem": "The school plans to increase total enrolment to 1,500 next year, keeping the same proportion in each subject. How many additional Mathematics students would be needed?",
-            "options": [
-              {
-                "label": "A",
-                "text": "35"
-              },
-              {
-                "label": "B",
-                "text": "56"
-              },
-              {
-                "label": "C",
                 "text": "70"
               },
               {
+                "label": "B",
+                "text": "75"
+              },
+              {
+                "label": "C",
+                "text": "79"
+              },
+              {
                 "label": "D",
-                "text": "280"
+                "text": "80"
               },
               {
                 "label": "E",
-                "text": "350"
+                "text": "82"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: Current Mathematics proportion = 280 out of 1,200. Step 2: At 1,500 total: new Mathematics = 1,500 × (280 ÷ 1,200) = 1,500 × 280 ÷ 1,200 = 350. Step 3: Additional = 350 − 280 = 70. A common error is reporting 350 (the new total) instead of the increase of 70. The answer is 70 additional students.",
-            "order_index": 2
+            "answer_reason": "There are 48 + 60 + 36 + 72 + 40 = 256 organic finds and 32 + 45 + 54 + 24 + 50 = 205 ceramic finds. Expected conservation work = 0.15 × 256 + 0.20 × 205 = 38.4 + 41 = 79.4 finds. Rounding the final total to the nearest whole find gives 79. The answer is 79.",
+            "order_index": 2,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "qr4-set-09",
-        "title": "Marathon Training and Finish Times",
+        "set_id": "189f0537-9ec8-4eea-a36d-53d57b28a8d5",
+        "title": "Laser Sensor Calibration",
         "stimulus": {
-          "type": "scatter_plot",
+          "type": "line_graph",
+          "context": "Two laser sensors were tested over six calibration cycles. The graph shows each sensor's absolute measurement deviation in micrometres (µm).",
           "data": {
-            "title": "Marathon Training Volume vs Finish Time",
-            "xAxisLabel": "Training Volume (km per week)",
-            "yAxisLabel": "Finish Time (minutes)",
+            "title": "Absolute Deviation by Calibration Cycle",
+            "labels": [
+              "Cycle 1",
+              "Cycle 2",
+              "Cycle 3",
+              "Cycle 4",
+              "Cycle 5",
+              "Cycle 6"
+            ],
             "series": [
               {
-                "name": "Runners",
+                "name": "Sensor A",
+                "values": [
+                  2,
+                  3,
+                  5,
+                  4,
+                  6,
+                  8
+                ]
+              },
+              {
+                "name": "Sensor B",
+                "values": [
+                  7,
+                  6,
+                  6,
+                  5,
+                  4,
+                  3
+                ]
+              }
+            ],
+            "yAxisLabel": "Absolute deviation (µm)",
+            "unit": "µm"
+          }
+        },
+        "questions": [
+          {
+            "id": "62436299-2d20-49e1-91a6-9cae566c1098",
+            "stem": "What was the difference between the two sensor deviations in Cycle 1?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 µm"
+              },
+              {
+                "label": "B",
+                "text": "3 µm"
+              },
+              {
+                "label": "C",
+                "text": "4 µm"
+              },
+              {
+                "label": "D",
+                "text": "5 µm"
+              },
+              {
+                "label": "E",
+                "text": "7 µm"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "In Cycle 1, Sensor A deviated by 2 µm and Sensor B by 7 µm. The difference is 7 − 2 = 5 µm. The answer is 5 µm.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "e32c7164-6cb1-4040-9c34-10e146201973",
+            "stem": "What was Sensor A's mean deviation across the six cycles, to the nearest 0.1 µm?",
+            "options": [
+              {
+                "label": "A",
+                "text": "4.2 µm"
+              },
+              {
+                "label": "B",
+                "text": "4.5 µm"
+              },
+              {
+                "label": "C",
+                "text": "4.7 µm"
+              },
+              {
+                "label": "D",
+                "text": "5.0 µm"
+              },
+              {
+                "label": "E",
+                "text": "5.3 µm"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Sensor A's deviations sum to 2 + 3 + 5 + 4 + 6 + 8 = 28 µm. Mean = 28 ÷ 6 = 4.666... µm, which rounds to 4.7 µm. The answer is 4.7 µm.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "027a10d2-8511-4d7f-bdc0-9ff67fbbc391",
+            "stem": "A technician spends 12 minutes correcting each micrometre by which a reading exceeds 4 µm. How much correction time is needed for all readings from both sensors?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 hours 12 minutes"
+              },
+              {
+                "label": "B",
+                "text": "2 hours 36 minutes"
+              },
+              {
+                "label": "C",
+                "text": "3 hours"
+              },
+              {
+                "label": "D",
+                "text": "3 hours 24 minutes"
+              },
+              {
+                "label": "E",
+                "text": "4 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Sensor A exceeds 4 µm by 1 + 2 + 4 = 7 µm in total. Sensor B exceeds 4 µm by 3 + 2 + 2 + 1 = 8 µm. Total excess = 15 µm, so correction time = 15 × 12 = 180 minutes = 3 hours. The answer is 3 hours.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "723b2310-87fe-427a-9262-5902eeed8c02",
+        "title": "Recovered Pottery Glazes",
+        "stimulus": {
+          "type": "pie_chart",
+          "context": "A conservation store contains 2,400 pottery fragments. The pie chart shows the number in each glaze category.",
+          "data": {
+            "title": "Pottery Fragments by Glaze Category",
+            "segments": [
+              {
+                "label": "Blue glaze",
+              "value": 720
+              },
+              {
+                "label": "Green glaze",
+              "value": 528
+              },
+              {
+                "label": "Brown glaze",
+              "value": 432
+              },
+              {
+                "label": "White glaze",
+              "value": 360
+              },
+              {
+                "label": "Unglazed",
+              "value": 360
+              }
+            ],
+            "unit": "fragments",
+            "total": 2400
+          }
+        },
+        "questions": [
+          {
+            "id": "c46d548c-8868-4673-8cc3-2c7d669fc9a5",
+            "stem": "How many fragments have green glaze?",
+            "options": [
+              {
+                "label": "A",
+                "text": "432"
+              },
+              {
+                "label": "B",
+                "text": "480"
+              },
+              {
+                "label": "C",
+                "text": "528"
+              },
+              {
+                "label": "D",
+                "text": "600"
+              },
+              {
+                "label": "E",
+                "text": "720"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Green glaze accounts for 22% of 2,400. The number is 0.22 × 2,400 = 528 fragments. The answer is 528.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "8f5eadef-fc1e-4790-b2c2-cb577f11aec3",
+            "stem": "How many more fragments have blue glaze than white glaze?",
+            "options": [
+              {
+                "label": "A",
+                "text": "240"
+              },
+              {
+                "label": "B",
+                "text": "300"
+              },
+              {
+                "label": "C",
+                "text": "360"
+              },
+              {
+                "label": "D",
+                "text": "420"
+              },
+              {
+                "label": "E",
+                "text": "480"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The percentage-point difference is 30% − 15% = 15%. The number difference is 0.15 × 2,400 = 360 fragments. The answer is 360.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "cab4e67f-5a37-4a73-b8d6-8ef9b52a09e4",
+            "stem": "A further 120 unglazed fragments are added to the store. What percentage of the new total is unglazed, to the nearest 0.1%?",
+            "options": [
+              {
+                "label": "A",
+                "text": "17.1%"
+              },
+              {
+                "label": "B",
+                "text": "18.0%"
+              },
+              {
+                "label": "C",
+                "text": "19.0%"
+              },
+              {
+                "label": "D",
+                "text": "20.0%"
+              },
+              {
+                "label": "E",
+                "text": "21.4%"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Initially, 15% of 2,400 = 360 fragments are unglazed. After adding 120, there are 480 unglazed out of 2,520 total. The percentage is 480 ÷ 2,520 × 100 = 19.0476...%, which rounds to 19.0%. The answer is 19.0%.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "7424c66c-e1d1-4b05-b67f-f2722fce1409",
+        "title": "Telescope Exposure Trials",
+        "stimulus": {
+          "type": "scatter_plot",
+          "context": "An observatory tested eight image exposures. Each labelled point shows exposure time and the number of faint objects detected in that image.",
+          "data": {
+            "title": "Exposure Time and Faint Objects Detected",
+            "xAxisLabel": "Exposure time (minutes)",
+            "yAxisLabel": "Objects detected",
+            "series": [
+              {
+                "name": "Exposure trials",
                 "points": [
                   {
+                    "x": 10,
+                    "y": 18,
+                    "label": "A"
+                  },
+                  {
+                    "x": 15,
+                    "y": 24,
+                    "label": "B"
+                  },
+                  {
+                    "x": 20,
+                    "y": 29,
+                    "label": "C"
+                  },
+                  {
+                    "x": 25,
+                    "y": 35,
+                    "label": "D"
+                  },
+                  {
                     "x": 30,
-                    "y": 295,
+                    "y": 38,
+                    "label": "E"
+                  },
+                  {
+                    "x": 35,
+                    "y": 46,
                     "label": "F"
                   },
                   {
                     "x": 40,
-                    "y": 265,
-                    "label": "E"
-                  },
-                  {
-                    "x": 50,
-                    "y": 248,
-                    "label": "D"
-                  },
-                  {
-                    "x": 55,
-                    "y": 280,
+                    "y": 44,
                     "label": "G"
                   },
                   {
-                    "x": 65,
-                    "y": 230,
-                    "label": "C"
-                  },
-                  {
-                    "x": 80,
-                    "y": 218,
-                    "label": "B"
-                  },
-                  {
-                    "x": 100,
-                    "y": 195,
-                    "label": "A"
+                    "x": 45,
+                    "y": 55,
+                    "label": "H"
                   }
                 ]
               }
@@ -1136,353 +744,716 @@
         },
         "questions": [
           {
-            "id": "qr4-s09-q1",
-            "stem": "What is the difference in finish time between Runner A and Runner F?",
+            "id": "6dab5ff7-12fb-4f44-81bc-b06bc7a422ca",
+            "stem": "How many objects were detected in the 35-minute exposure?",
             "options": [
               {
                 "label": "A",
-                "text": "70 minutes"
+                "text": "35"
               },
               {
                 "label": "B",
-                "text": "85 minutes"
+                "text": "38"
               },
               {
                 "label": "C",
-                "text": "100 minutes"
+                "text": "44"
               },
               {
                 "label": "D",
-                "text": "195 minutes"
+                "text": "46"
               },
               {
                 "label": "E",
-                "text": "295 minutes"
+                "text": "55"
               }
             ],
-            "correct_answer": "C",
-            "answer_reason": "From the scatter plot: Runner A finishes in 195 minutes, Runner F finishes in 295 minutes. Difference = 295 − 195 = 100 minutes. A common error is reading the value for a single runner (195 or 295) instead of calculating the difference. The answer is 100 minutes.",
-            "order_index": 0
+            "correct_answer": "D",
+            "answer_reason": "The point with an exposure time of 35 minutes is F, whose y-value is 46 objects. The answer is 46.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s09-q2",
-            "stem": "Which runner appears to be the most significant outlier from the general trend?",
+            "id": "48529b87-35de-45b0-b778-62bd80e4d2f2",
+            "stem": "Which labelled exposure detected the greatest number of objects per minute?",
             "options": [
               {
                 "label": "A",
-                "text": "Runner A"
+                "text": "A"
               },
               {
                 "label": "B",
-                "text": "Runner C"
+                "text": "B"
               },
               {
                 "label": "C",
-                "text": "Runner D"
+                "text": "D"
               },
               {
                 "label": "D",
-                "text": "Runner F"
+                "text": "F"
               },
               {
                 "label": "E",
-                "text": "Runner G"
-              }
-            ],
-            "correct_answer": "E",
-            "answer_reason": "The general trend shows more training associated with faster (lower) finish times. Runner G trains 55 km/week but finishes in 280 minutes — much slower than nearby runners: D trains 50 km and finishes in 248 min, C trains 65 km and finishes in 230 min. G's time of 280 is far above what the trend predicts, making G the most significant outlier. The answer is Runner G.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s09-q3",
-            "stem": "How many runners completed the marathon in under 4 hours 30 minutes?",
-            "options": [
-              {
-                "label": "A",
-                "text": "3"
-              },
-              {
-                "label": "B",
-                "text": "4"
-              },
-              {
-                "label": "C",
-                "text": "5"
-              },
-              {
-                "label": "D",
-                "text": "6"
-              },
-              {
-                "label": "E",
-                "text": "7"
-              }
-            ],
-            "correct_answer": "C",
-            "answer_reason": "Step 1: Convert 4 hours 30 minutes to minutes: 4 × 60 + 30 = 270 minutes. Step 2: Count runners with times strictly below 270: A (195), B (218), C (230), D (248), E (265) = 5 runners. F (295) and G (280) are both above 270. A common error is miscounting or converting the time incorrectly. The answer is 5.",
-            "order_index": 2
-          }
-        ]
-      },
-      {
-        "set_id": "qr4-set-10",
-        "title": "Swimming Pool Filling",
-        "stimulus": {
-          "type": "text",
-          "text": "A swimming pool has a capacity of 48,000 litres. Pump A fills the pool at a rate of 200 litres per minute. Pump B fills at a rate of 120 litres per minute. The pool’s filtration system uses 1.5 kWh of electricity per hour."
-        },
-        "questions": [
-          {
-            "id": "qr4-s10-q1",
-            "stem": "How long would it take to fill the pool from empty using both pumps together? Give your answer in hours and minutes.",
-            "options": [
-              {
-                "label": "A",
-                "text": "2 hours 30 minutes"
-              },
-              {
-                "label": "B",
-                "text": "3 hours 20 minutes"
-              },
-              {
-                "label": "C",
-                "text": "4 hours"
-              },
-              {
-                "label": "D",
-                "text": "5 hours"
-              },
-              {
-                "label": "E",
-                "text": "5 hours 20 minutes"
+                "text": "H"
               }
             ],
             "correct_answer": "A",
-            "answer_reason": "Step 1: Combined fill rate = 200 + 120 = 320 litres per minute. Step 2: Time = 48,000 ÷ 320 = 150 minutes = 2 hours 30 minutes. A common error is using the average rate instead of the combined rate: (200 + 120) ÷ 2 = 160 L/min, giving 48,000 ÷ 160 = 300 min = 5 hours. Another error is taking the arithmetic mean of the individual fill times: Pump A alone = 48,000 ÷ 200 = 240 min = 4 hours, Pump B alone = 48,000 ÷ 120 = 400 min = 6 hr 40 min, average = (240 + 400) ÷ 2 = 320 min = 5 hours 20 minutes. The answer is 2 hours 30 minutes.",
-            "order_index": 0
+            "answer_reason": "Objects per minute are A: 18 ÷ 10 = 1.8; B: 24 ÷ 15 = 1.6; D: 35 ÷ 25 = 1.4; F: 46 ÷ 35 = 1.31; H: 55 ÷ 45 = 1.22. The greatest rate is 1.8 objects per minute at A. The answer is A.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "92a5a40e-179d-426e-a85a-a1ec243c1b4c",
+            "stem": "Among exposures lasting at least 25 minutes, which also detected at least 1.3 objects per minute? What is the total number of objects detected by those qualifying exposures?",
+            "options": [
+              {
+                "label": "A",
+                "text": "73"
+              },
+              {
+                "label": "B",
+                "text": "79"
+              },
+              {
+                "label": "C",
+                "text": "81"
+              },
+              {
+                "label": "D",
+                "text": "90"
+              },
+              {
+                "label": "E",
+                "text": "136"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "For exposures of at least 25 minutes, the rates are D: 35 ÷ 25 = 1.40, E: 38 ÷ 30 = 1.27, F: 46 ÷ 35 = 1.31, G: 44 ÷ 40 = 1.10 and H: 55 ÷ 45 = 1.22 objects per minute. Only D and F meet at least 1.3, giving 35 + 46 = 81 objects. The answer is 81.",
+            "order_index": 2,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "qr4-set-11",
-        "title": "Rental Property Income Comparison",
+        "set_id": "71bff59d-3a6f-47cf-80b5-0cc6f26d1cae",
+        "title": "Marine Inspection Drone Routes",
         "stimulus": {
-          "type": "table",
-          "context": "The mean annual occupancy across all 5 properties is 11 months.",
+          "type": "network_diagram",
+          "context": "An inspection drone can travel along the links shown. Edge labels give one-way flight times in minutes, and links can be used in either direction.",
           "data": {
-            "headers": [
-              "Property",
-              "Monthly Rent (£)",
-              "Occupancy (months/yr)",
-              "Annual Maintenance (£)",
-              "Property Type"
+            "title": "Drone Flight Times Between Inspection Points",
+            "nodes": [
+              {
+                "id": "base",
+                "label": "Base",
+                "x": 0.1,
+                "y": 0.45
+              },
+              {
+                "id": "reef",
+                "label": "Reef",
+                "x": 0.32,
+                "y": 0.18
+              },
+              {
+                "id": "buoy",
+                "label": "Buoy",
+                "x": 0.34,
+                "y": 0.72
+              },
+              {
+                "id": "tower",
+                "label": "Tower",
+                "x": 0.58,
+                "y": 0.3
+              },
+              {
+                "id": "cove",
+                "label": "Cove",
+                "x": 0.62,
+                "y": 0.78
+              },
+              {
+                "id": "rig",
+                "label": "Rig",
+                "x": 0.88,
+                "y": 0.52
+              }
             ],
-            "rows": [
-              [
-                "14 Elm Close",
-                "850",
-                "11",
-                "1200",
-                "Terraced"
-              ],
-              [
-                "7 Park Lane",
-                "1200",
-                "12",
-                "2400",
-                "Semi-detached"
-              ],
-              [
-                "22 Oak Avenue",
-                "675",
-                "?",
-                "800",
-                "Flat"
-              ],
-              [
-                "3 Church Street",
-                "1100",
-                "10",
-                "1500",
-                "Detached"
-              ],
-              [
-                "9 River Walk",
-                "950",
-                "12",
-                "1800",
-                "Terraced"
-              ]
+            "edges": [
+              {
+                "from": "base",
+                "to": "reef",
+                "label": "14 min"
+              },
+              {
+                "from": "base",
+                "to": "buoy",
+                "label": "20 min"
+              },
+              {
+                "from": "reef",
+                "to": "tower",
+                "label": "16 min"
+              },
+              {
+                "from": "buoy",
+                "to": "tower",
+                "label": "8 min"
+              },
+              {
+                "from": "buoy",
+                "to": "cove",
+                "label": "12 min"
+              },
+              {
+                "from": "tower",
+                "to": "rig",
+                "label": "18 min"
+              },
+              {
+                "from": "cove",
+                "to": "rig",
+                "label": "11 min"
+              },
+              {
+                "from": "reef",
+                "to": "cove",
+                "label": "25 min"
+              }
             ]
           }
         },
         "questions": [
           {
-            "id": "qr4-s11-q1",
-            "stem": "What is the total annual maintenance cost across all five properties?",
+            "id": "a8cbb443-7e21-45d6-b058-7ae2ba1331fa",
+            "stem": "How long is the direct flight from Buoy to Tower?",
             "options": [
               {
                 "label": "A",
-                "text": "£5,900"
+                "text": "8 minutes"
               },
               {
                 "label": "B",
-                "text": "£6,500"
+                "text": "11 minutes"
               },
               {
                 "label": "C",
-                "text": "£7,200"
+                "text": "12 minutes"
               },
               {
                 "label": "D",
-                "text": "£7,700"
+                "text": "16 minutes"
               },
               {
                 "label": "E",
-                "text": "£8,200"
+                "text": "20 minutes"
               }
             ],
-            "correct_answer": "D",
-            "answer_reason": "Sum the Annual Maintenance column: £1,200 + £2,400 + £800 + £1,500 + £1,800 = £7,700. A common error is omitting one property from the sum — for example, missing River Walk gives £5,900. The answer is £7,700.",
-            "order_index": 0
+            "correct_answer": "A",
+            "answer_reason": "The direct edge between Buoy and Tower is labelled 8 minutes. The answer is 8 minutes.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s11-q2",
-            "stem": "How many months per year is 22 Oak Avenue occupied?",
+            "id": "2c2e03db-e253-4e17-8a36-8b8099a1c02c",
+            "stem": "What is the shortest flight time from Base to Tower?",
             "options": [
               {
                 "label": "A",
-                "text": "8"
+                "text": "22 minutes"
               },
               {
                 "label": "B",
-                "text": "9"
+                "text": "28 minutes"
               },
               {
                 "label": "C",
-                "text": "10"
+                "text": "30 minutes"
               },
               {
                 "label": "D",
-                "text": "11"
+                "text": "34 minutes"
               },
               {
                 "label": "E",
-                "text": "12"
+                "text": "38 minutes"
+              }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Via Buoy, the time is 20 + 8 = 28 minutes. Via Reef, it is 14 + 16 = 30 minutes, and other routes are longer. The shortest flight time is 28 minutes.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "4887b62d-6932-40d5-a6d1-14e245662abf",
+            "stem": "The drone flies from Base to Rig by the quickest route, performs an inspection using 8 kWh, and returns to Base along the same route. Flying uses 0.6 kWh per minute. How much energy does the complete mission use?",
+            "options": [
+              {
+                "label": "A",
+                "text": "51.6 kWh"
+              },
+              {
+                "label": "B",
+                "text": "55.8 kWh"
+              },
+              {
+                "label": "C",
+                "text": "59.6 kWh"
+              },
+              {
+                "label": "D",
+                "text": "63.2 kWh"
+              },
+              {
+                "label": "E",
+                "text": "67.6 kWh"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: Mean occupancy = 11 months across 5 properties. Total = 11 × 5 = 55 months. Step 2: Sum of known occupancies = 11 + 12 + 10 + 12 = 45. Step 3: 22 Oak Avenue = 55 − 45 = 10 months. A common error is assuming the missing value equals the mean (11 months). The answer is 10 months.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s11-q3",
-            "stem": "What is the annual net rental income from 7 Park Lane? [Net income = Gross rental income − Annual maintenance]",
-            "options": [
-              {
-                "label": "A",
-                "text": "£9,600"
-              },
-              {
-                "label": "B",
-                "text": "£12,000"
-              },
-              {
-                "label": "C",
-                "text": "£12,600"
-              },
-              {
-                "label": "D",
-                "text": "£13,200"
-              },
-              {
-                "label": "E",
-                "text": "£14,400"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Step 1: Gross income = £1,200 × 12 months = £14,400. Step 2: Net income = £14,400 − £2,400 = £12,000. A common error is reporting £14,400 (the gross income without subtracting maintenance). Another error is using the wrong property's maintenance — e.g. £1,800 (River Walk) gives £12,600, or £1,200 (Elm Close) gives £13,200. The answer is £12,000.",
-            "order_index": 2
-          },
-          {
-            "id": "qr4-s11-q4",
-            "stem": "Net income per pound of maintenance is defined as: (Monthly rent × Occupancy − Annual maintenance) ÷ Annual maintenance. Which property has the highest net income per pound of maintenance?",
-            "options": [
-              {
-                "label": "A",
-                "text": "14 Elm Close"
-              },
-              {
-                "label": "B",
-                "text": "22 Oak Avenue"
-              },
-              {
-                "label": "C",
-                "text": "3 Church Street"
-              },
-              {
-                "label": "D",
-                "text": "7 Park Lane"
-              },
-              {
-                "label": "E",
-                "text": "9 River Walk"
-              }
-            ],
-            "correct_answer": "B",
-            "answer_reason": "Calculate for each property: 14 Elm Close = (850×11 − 1200) ÷ 1200 = 8150 ÷ 1200 = 6.79. 7 Park Lane = (1200×12 − 2400) ÷ 2400 = 12000 ÷ 2400 = 5.00. 22 Oak Avenue = (675×10 − 800) ÷ 800 = 5950 ÷ 800 = 7.44. 3 Church Street = (1100×10 − 1500) ÷ 1500 = 9500 ÷ 1500 = 6.33. 9 River Walk = (950×12 − 1800) ÷ 1800 = 9600 ÷ 1800 = 5.33. The highest is 22 Oak Avenue at 7.44. A common error is selecting the property with the highest gross income (7 Park Lane) without accounting for maintenance efficiency. The answer is 22 Oak Avenue.",
-            "order_index": 3
+            "answer_reason": "The quickest Base-to-Rig route is Base–Buoy–Cove–Rig: 20 + 12 + 11 = 43 minutes. A return along the same route makes 86 flight minutes. Flight energy = 86 × 0.6 = 51.6 kWh; adding 8 kWh for inspection gives 59.6 kWh. The answer is 59.6 kWh.",
+            "order_index": 2,
+            "difficulty": "hard"
           }
         ]
       },
       {
-        "set_id": "qr4-set-12",
-        "title": "Mobile Data Plans and Charges",
+        "set_id": "9a400fc4-1ab9-4083-a336-b0cbb2a48b20",
+        "title": "Trapezoidal Solar Test Panel",
+        "stimulus": {
+          "type": "geometry_diagram",
+          "context": "The panel is a trapezium. Its parallel sides are 8 m and 12 m, its perpendicular height is 5 m, and each sloping side is 5.4 m.",
+          "data": {
+            "title": "Solar Test Panel (not to scale)",
+            "viewBox": {
+              "width": 300,
+              "height": 210
+            },
+            "shapes": [
+              {
+                "type": "polygon",
+                "points": [
+                  [
+                    70,
+                    45
+                  ],
+                  [
+                    230,
+                    45
+                  ],
+                  [
+                    270,
+                    155
+                  ],
+                  [
+                    30,
+                    155
+                  ]
+                ],
+                "fill": "none",
+                "stroke": "#2d3748"
+              }
+            ],
+            "dimensions": [
+              {
+                "from": [
+                  70,
+                  28
+                ],
+                "to": [
+                  230,
+                  28
+                ],
+                "label": "8 m",
+                "side": "top"
+              },
+              {
+                "from": [
+                  30,
+                  178
+                ],
+                "to": [
+                  270,
+                  178
+                ],
+                "label": "12 m",
+                "side": "bottom"
+              },
+              {
+                "from": [
+                  150,
+                  45
+                ],
+                "to": [
+                  150,
+                  155
+                ],
+                "label": "5 m",
+                "side": "right"
+              },
+              {
+                "from": [
+                  30,
+                  155
+                ],
+                "to": [
+                  70,
+                  45
+                ],
+                "label": "5.4 m",
+                "side": "left"
+              },
+              {
+                "from": [
+                  230,
+                  45
+                ],
+                "to": [
+                  270,
+                  155
+                ],
+                "label": "5.4 m",
+                "side": "right"
+              }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "9c8ab0cf-c9b3-4706-ba7a-b5666c678806",
+            "stem": "What is the area of the panel?",
+            "options": [
+              {
+                "label": "A",
+                "text": "40 m²"
+              },
+              {
+                "label": "B",
+                "text": "45 m²"
+              },
+              {
+                "label": "C",
+                "text": "50 m²"
+              },
+              {
+                "label": "D",
+                "text": "60 m²"
+              },
+              {
+                "label": "E",
+                "text": "100 m²"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Area of a trapezium = ½ × (sum of parallel sides) × perpendicular height. Therefore, area = ½ × (8 + 12) × 5 = 50 m². The answer is 50 m².",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "3679d80c-68ce-49de-855e-807eb87d25cf",
+            "stem": "What is the perimeter of the panel?",
+            "options": [
+              {
+                "label": "A",
+                "text": "25.4 m"
+              },
+              {
+                "label": "B",
+                "text": "28.0 m"
+              },
+              {
+                "label": "C",
+                "text": "30.8 m"
+              },
+              {
+                "label": "D",
+                "text": "33.4 m"
+              },
+              {
+                "label": "E",
+                "text": "35.8 m"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Perimeter = 8 + 12 + 5.4 + 5.4 = 30.8 m. The answer is 30.8 m.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "ef456bbd-f649-4973-8582-d9b0701545e7",
+            "stem": "A scale model uses a length scale of 1:25. What is the area of the model panel in cm²?",
+            "options": [
+              {
+                "label": "A",
+                "text": "80 cm²"
+              },
+              {
+                "label": "B",
+                "text": "200 cm²"
+              },
+              {
+                "label": "C",
+                "text": "500 cm²"
+              },
+              {
+                "label": "D",
+                "text": "800 cm²"
+              },
+              {
+                "label": "E",
+                "text": "2,000 cm²"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "The real area is 50 m² = 500,000 cm². A 1:25 length scale gives an area scale of 1:25² = 1:625. Model area = 500,000 ÷ 625 = 800 cm². The answer is 800 cm².",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "013e9928-a525-422a-befa-a400615c4545",
+        "title": "Orchard Imaging Mission",
+        "stimulus": {
+          "type": "text",
+          "text": "A mapping drone must image a 54-hectare orchard. One battery covers 9 hectares during a 24-minute flight. Changing a battery takes 6 minutes between flights. Imaging produces 1.8 GB per hectare before compression; compression reduces the data to 40% of its original size. The upload connection transfers 12 GB per hour."
+        },
+        "questions": [
+          {
+            "id": "91e58952-653a-48d8-9e63-19c58953a54f",
+            "stem": "How many battery flights are required to image the whole orchard?",
+            "options": [
+              {
+                "label": "A",
+                "text": "4"
+              },
+              {
+                "label": "B",
+                "text": "5"
+              },
+              {
+                "label": "C",
+                "text": "6"
+              },
+              {
+                "label": "D",
+                "text": "7"
+              },
+              {
+                "label": "E",
+                "text": "8"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Flights required = 54 hectares ÷ 9 hectares per flight = 6 flights. The answer is 6.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "d36f4cbd-2c13-452f-a257-07d396f3b31d",
+            "stem": "How long will the six flights and the battery changes between them take in total?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 hours 24 minutes"
+              },
+              {
+                "label": "B",
+                "text": "2 hours 42 minutes"
+              },
+              {
+                "label": "C",
+                "text": "2 hours 54 minutes"
+              },
+              {
+                "label": "D",
+                "text": "3 hours"
+              },
+              {
+                "label": "E",
+                "text": "3 hours 6 minutes"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Six flights take 6 × 24 = 144 minutes. There are five changes between six flights, taking 5 × 6 = 30 minutes. Total = 174 minutes = 2 hours 54 minutes. The answer is 2 hours 54 minutes.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "44bc31be-a226-4121-aa51-9534c1113c6a",
+            "stem": "How long will the compressed data take to upload, to the nearest minute?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 hours 42 minutes"
+              },
+              {
+                "label": "B",
+                "text": "3 hours"
+              },
+              {
+                "label": "C",
+                "text": "3 hours 14 minutes"
+              },
+              {
+                "label": "D",
+                "text": "3 hours 24 minutes"
+              },
+              {
+                "label": "E",
+                "text": "8 hours 6 minutes"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Original data = 54 × 1.8 = 97.2 GB. Compressed data = 97.2 × 0.40 = 38.88 GB. Upload time = 38.88 ÷ 12 = 3.24 hours = 3 hours 14.4 minutes, which rounds to 3 hours 14 minutes. The answer is 3 hours 14 minutes.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "ee53384c-cf78-4cff-94eb-25fe2996044c",
+        "title": "Pottery Glaze Batch",
+        "stimulus": {
+          "type": "text",
+          "text": "A pottery studio makes a dry glaze mixture using 5 parts silica, 3 parts clay and 2 parts pigment by mass. A batch contains 36 kg of dry mixture. During preparation, 8% of the mixture is wasted. Each finished piece uses 0.69 kg of the remaining mixture. Silica costs £1.20 per kg, clay £0.80 per kg and pigment £3.50 per kg."
+        },
+        "questions": [
+          {
+            "id": "02eca746-b90e-4995-9f39-682d4c8718bc",
+            "stem": "How much pigment is in the 36 kg dry batch?",
+            "options": [
+              {
+                "label": "A",
+                "text": "3.6 kg"
+              },
+              {
+                "label": "B",
+                "text": "5.4 kg"
+              },
+              {
+                "label": "C",
+                "text": "7.2 kg"
+              },
+              {
+                "label": "D",
+                "text": "9.0 kg"
+              },
+              {
+                "label": "E",
+                "text": "10.8 kg"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "There are 5 + 3 + 2 = 10 total parts, of which 2 are pigment. Pigment mass = 36 × 2 ÷ 10 = 7.2 kg. The answer is 7.2 kg.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "7b2de1ca-4e19-4c3c-9067-4c17ff6edbc3",
+            "stem": "What is the maximum number of finished pieces that can be glazed after the 8% preparation waste?",
+            "options": [
+              {
+                "label": "A",
+                "text": "44"
+              },
+              {
+                "label": "B",
+                "text": "46"
+              },
+              {
+                "label": "C",
+                "text": "48"
+              },
+              {
+                "label": "D",
+                "text": "50"
+              },
+              {
+                "label": "E",
+                "text": "52"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Remaining mixture = 36 × 0.92 = 33.12 kg. Number of pieces = 33.12 ÷ 0.69 = 48 exactly. The answer is 48 pieces.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "6dcaa8bd-9b63-42b2-a39f-038dd05c77fb",
+            "stem": "What is the ingredient cost of the full 36 kg dry batch?",
+            "options": [
+              {
+                "label": "A",
+                "text": "£47.52"
+              },
+              {
+                "label": "B",
+                "text": "£52.20"
+              },
+              {
+                "label": "C",
+                "text": "£55.44"
+              },
+              {
+                "label": "D",
+                "text": "£58.68"
+              },
+              {
+                "label": "E",
+                "text": "£63.00"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The batch contains 18 kg silica, 10.8 kg clay and 7.2 kg pigment. Cost = 18 × £1.20 + 10.8 × £0.80 + 7.2 × £3.50 = £21.60 + £8.64 + £25.20 = £55.44. The answer is £55.44.",
+            "order_index": 2,
+            "difficulty": "normal"
+          }
+        ]
+      },
+      {
+        "set_id": "30a0e16c-14af-4559-9738-b0185fee7eea",
+        "title": "Cold-Chain Crate Freight",
         "stimulus": {
           "type": "multi",
           "items": [
             {
               "type": "text",
-              "text": "A mobile network offers four data plans. Customers who exceed their monthly data allowance are charged per additional GB used. Monthly line rental is charged separately. All prices shown exclude VAT at 20%."
+              "text": "A carrier charges freight using the greater of each crate's actual mass and volumetric mass. The shipment also has one £42 handling fee."
+            },
+            {
+              "type": "formula",
+              "text": "Volumetric mass (kg) = length (cm) × width (cm) × height (cm) ÷ 5,000"
             },
             {
               "type": "table",
+              "context": "Crate sizes, actual masses and quantities are shown below.",
               "data": {
                 "headers": [
-                  "Plan",
-                  "Monthly Data (GB)",
-                  "Monthly Line Rental (£)",
-                  "Excess Data (£ per GB)",
-                  "Contract Length"
+                  "Crate type",
+                  "Dimensions (cm)",
+                  "Actual mass per crate",
+                  "Number of crates"
                 ],
                 "rows": [
                   [
-                    "Lite",
-                    "2",
-                    "8.00",
-                    "4.00",
-                    "1 month"
+                    "Culture kit",
+                    "40 × 30 × 25",
+                    "7.2 kg",
+                    "12"
                   ],
                   [
-                    "Basic",
-                    "5",
-                    "12.00",
-                    "3.50",
-                    "12 months"
+                    "Reagent pack",
+                    "50 × 40 × 30",
+                    "9.5 kg",
+                    "8"
                   ],
                   [
-                    "Standard",
-                    "15",
-                    "22.00",
-                    "2.50",
-                    "18 months"
-                  ],
-                  [
-                    "Premium",
-                    "Unlimited",
-                    "35.00",
-                    "N/A",
-                    "24 months"
+                    "Sensor case",
+                    "60 × 35 × 25",
+                    "11.0 kg",
+                    "10"
                   ]
                 ]
               }
@@ -1491,91 +1462,241 @@
         },
         "questions": [
           {
-            "id": "qr4-s12-q1",
-            "stem": "How much does a Basic plan customer pay per month for line rental, including VAT?",
+            "id": "d6acab21-fec3-44d5-9ddc-112d30949b75",
+            "stem": "What billable mass is used for one Reagent pack crate?",
             "options": [
               {
                 "label": "A",
-                "text": "£12.00"
+                "text": "9.5 kg"
               },
               {
                 "label": "B",
-                "text": "£12.40"
+                "text": "10.0 kg"
               },
               {
                 "label": "C",
-                "text": "£13.20"
+                "text": "11.0 kg"
               },
               {
                 "label": "D",
-                "text": "£14.40"
+                "text": "12.0 kg"
               },
               {
                 "label": "E",
-                "text": "£15.00"
+                "text": "15.0 kg"
               }
             ],
             "correct_answer": "D",
-            "answer_reason": "Step 1: Basic plan line rental = £12.00 (before VAT). Step 2: Add VAT at 20%: £12.00 × 1.20 = £14.40. A common error is forgetting to add VAT (£12.00) or applying 10% instead of 20% (£12 × 1.10 = £13.20). The answer is £14.40.",
-            "order_index": 0
+            "answer_reason": "The volumetric mass is 50 × 40 × 30 ÷ 5,000 = 12 kg. This is greater than the 9.5 kg actual mass, so the billable mass is 12.0 kg. The answer is 12.0 kg.",
+            "order_index": 0,
+            "difficulty": "normal"
           },
           {
-            "id": "qr4-s12-q2",
-            "stem": "A Standard plan customer uses 22 GB in one month. What is their total bill for that month, including VAT?",
+            "id": "54371b97-73d1-476f-8568-fdfdbe1fb064",
+            "stem": "What is the total billable mass of all 30 crates?",
             "options": [
               {
                 "label": "A",
-                "text": "£26.40"
+                "text": "273.4 kg"
               },
               {
                 "label": "B",
-                "text": "£39.50"
+                "text": "282.0 kg"
               },
               {
                 "label": "C",
-                "text": "£43.90"
+                "text": "292.4 kg"
               },
               {
                 "label": "D",
-                "text": "£47.40"
+                "text": "302.0 kg"
               },
               {
                 "label": "E",
-                "text": "£55.80"
-              }
-            ],
-            "correct_answer": "D",
-            "answer_reason": "Step 1: Standard plan allowance = 15 GB. Excess = 22 − 15 = 7 GB. Step 2: Excess charge = 7 × £2.50 = £17.50. Step 3: Subtotal = £22.00 + £17.50 = £39.50. Step 4: Add VAT at 20%: £39.50 × 1.20 = £47.40. A common error is forgetting VAT (giving £39.50) or applying VAT only to the line rental: £22 × 1.20 + £17.50 = £43.90. The answer is £47.40.",
-            "order_index": 1
-          },
-          {
-            "id": "qr4-s12-q3",
-            "stem": "A customer on the Basic plan uses exactly 8 GB every month for 12 months. What is their total annual cost, before VAT?",
-            "options": [
-              {
-                "label": "A",
-                "text": "£144"
-              },
-              {
-                "label": "B",
-                "text": "£186"
-              },
-              {
-                "label": "C",
-                "text": "£270"
-              },
-              {
-                "label": "D",
-                "text": "£336"
-              },
-              {
-                "label": "E",
-                "text": "£480"
+                "text": "316.4 kg"
               }
             ],
             "correct_answer": "C",
-            "answer_reason": "Step 1: Monthly usage = 8 GB, Basic plan allowance = 5 GB. Excess = 8 − 5 = 3 GB per month. Step 2: Monthly excess charge = 3 × £3.50 = £10.50. Step 3: Monthly total = £12.00 + £10.50 = £22.50. Step 4: Annual total = £22.50 × 12 = £270. A common error is charging all 8 GB as excess (ignoring the 5 GB allowance): annual line rental £144 + 8 × £3.50 × 12 = £144 + £336 = £480. The answer is £270.",
-            "order_index": 2
+            "answer_reason": "Culture kits have volumetric mass 6 kg, so use actual mass: 12 × 7.2 = 86.4 kg. Reagent packs use volumetric mass: 8 × 12 = 96 kg. Sensor cases have volumetric mass 10.5 kg, so use actual mass: 10 × 11 = 110 kg. Total = 86.4 + 96 + 110 = 292.4 kg. The answer is 292.4 kg.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "a72bc8e6-5710-4a59-95bf-b438a9f7d6c9",
+            "stem": "Freight costs £1.85 per billable kilogram. What is the total charge including the handling fee?",
+            "options": [
+              {
+                "label": "A",
+                "text": "£540.94"
+              },
+              {
+                "label": "B",
+                "text": "£562.94"
+              },
+              {
+                "label": "C",
+                "text": "£582.94"
+              },
+              {
+                "label": "D",
+                "text": "£598.40"
+              },
+              {
+                "label": "E",
+                "text": "£625.94"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The total billable mass is 292.4 kg. Freight costs 292.4 × £1.85 = £540.94. Adding the £42 handling fee gives £582.94. The answer is £582.94.",
+            "order_index": 2,
+            "difficulty": "normal"
+          }
+        ]
+      },
+      {
+        "set_id": "77aa1d04-6f9c-48be-99b8-a4578f48cda8",
+        "title": "Radio Telescope Project Schedule",
+        "stimulus": {
+          "type": "multi",
+          "items": [
+            {
+              "type": "text",
+              "text": "A radio telescope records data only during completed observing hours. An identical backup copy of all recorded data is required. Storage may be pooled across all purchased drives; original files and their backup copies do not need to occupy disjoint drives. Use 1 TB = 1,000 GB."
+            },
+            {
+              "type": "formula",
+              "text": "Completed hours = requested hours × completion percentage"
+            },
+            {
+              "type": "table",
+              "context": "The table summarises four fictional observing projects.",
+              "data": {
+                "headers": [
+                  "Project",
+                  "Requested hours",
+                  "Completion",
+                  "Data per completed hour"
+                ],
+                "rows": [
+                  [
+                    "Aurora",
+                    "48",
+                    "75%",
+                    "18 GB"
+                  ],
+                  [
+                    "Pulsar",
+                    "60",
+                    "80%",
+                    "15 GB"
+                  ],
+                  [
+                    "Quasar",
+                    "40",
+                    "90%",
+                    "24 GB"
+                  ],
+                  [
+                    "Galaxy",
+                    "72",
+                    "62.5%",
+                    "12 GB"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "b68666e4-9ab4-48f2-9868-3558f5241c8c",
+            "stem": "How many observing hours were completed for the Quasar project?",
+            "options": [
+              {
+                "label": "A",
+                "text": "30 hours"
+              },
+              {
+                "label": "B",
+                "text": "32 hours"
+              },
+              {
+                "label": "C",
+                "text": "36 hours"
+              },
+              {
+                "label": "D",
+                "text": "38 hours"
+              },
+              {
+                "label": "E",
+                "text": "40 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Completed Quasar hours = 40 × 0.90 = 36 hours. The answer is 36 hours.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "ef51a260-d7c9-41cc-b91a-b409b5cba3d8",
+            "stem": "How many observing hours were completed across all four projects?",
+            "options": [
+              {
+                "label": "A",
+                "text": "153 hours"
+              },
+              {
+                "label": "B",
+                "text": "159 hours"
+              },
+              {
+                "label": "C",
+                "text": "165 hours"
+              },
+              {
+                "label": "D",
+                "text": "171 hours"
+              },
+              {
+                "label": "E",
+                "text": "180 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Completed hours are Aurora 48 × 75% = 36, Pulsar 60 × 80% = 48, Quasar 40 × 90% = 36, and Galaxy 72 × 62.5% = 45. Total = 36 + 48 + 36 + 45 = 165 hours. The answer is 165 hours.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "4be57c0b-d6b4-4835-93a2-64aa7091ae55",
+            "stem": "Assuming files may be distributed across all purchased drives and only their combined storage capacity matters, how many 2 TB drives are needed to hold all recorded data and one additional copy?",
+            "options": [
+              {
+                "label": "A",
+                "text": "1 drive"
+              },
+              {
+                "label": "B",
+                "text": "2 drives"
+              },
+              {
+                "label": "C",
+                "text": "3 drives"
+              },
+              {
+                "label": "D",
+                "text": "4 drives"
+              },
+              {
+                "label": "E",
+                "text": "5 drives"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Recorded data are Aurora 36 × 18 = 648 GB, Pulsar 48 × 15 = 720 GB, Quasar 36 × 24 = 864 GB, and Galaxy 45 × 12 = 540 GB. Total = 2,772 GB. Including an identical backup requires 5,544 GB. Each drive holds 2,000 GB, so 5,544 ÷ 2,000 = 2.772 and 3 whole drives are required. The answer is 3 drives.",
+            "order_index": 2,
+            "difficulty": "normal"
           }
         ]
       }

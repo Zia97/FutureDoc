@@ -273,6 +273,40 @@ test('QR preview append keeps existing sets and is idempotent', () => {
   }
 });
 
+test('QR preview append tolerates only pre-existing legacy validation errors', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'ucat-qr-preview-legacy-'));
+  try {
+    const script = path.resolve('.codex/skills/ucat-question-pipeline/scripts/install-preview.mjs');
+    const previewDir = path.join(dir, 'src', 'dev');
+    fs.mkdirSync(previewDir, { recursive: true });
+    const previewPath = path.join(previewDir, 'preview-qr.json');
+    const legacy = qrSet();
+    legacy.id = 'practice-qr-set-01';
+    delete legacy.is_free;
+    legacy.quantitative_reasoning_questions[0].id = 'practice-qr-set-01-q1';
+    fs.writeFileSync(previewPath, JSON.stringify([legacy]));
+
+    const incoming = qrSet();
+    incoming.title = 'Pottery kiln batches';
+    incoming.stimulus.context = 'The table shows pots fired in a pottery kiln.';
+    incoming.stimulus.data.headers = ['Batch', 'Pots'];
+    incoming.stimulus.data.rows = [['First', '120']];
+    incoming.quantitative_reasoning_questions[0].question_text = 'How many pots were fired in the first kiln batch?';
+    const candidatePath = path.join(dir, 'incoming.json');
+    const briefPath = path.join(dir, 'brief.json');
+    fs.writeFileSync(candidatePath, JSON.stringify([incoming]));
+    fs.writeFileSync(briefPath, JSON.stringify(briefFor('qr', [incoming])));
+    const output = execFileSync(process.execPath, [
+      script, candidatePath, '--section', 'qr', '--mode', 'practice', '--brief', briefPath, '--append',
+    ], { cwd: dir, encoding: 'utf8' });
+
+    assert(output.includes('2 set(s), 2 question(s)'));
+    assert.equal(JSON.parse(fs.readFileSync(previewPath, 'utf8')).length, 1);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 function dmQuestion(overrides = {}) {
   return {
     id: randomUUID(), title: 'Workshop allocation', type: 'logic_puzzle', difficulty: 'normal', is_free: true,

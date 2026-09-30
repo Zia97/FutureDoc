@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text } from 'react-native';
 import Svg, {
   Circle,
   Rect,
@@ -10,6 +10,7 @@ import Svg, {
 import { useTheme } from '../../context/ThemeContext';
 import { useTextSize } from '../../context/TextSizeContext';
 import { getLayout, getLayoutAdaptive } from '../../utils/venn/layout';
+import { fitVennCanvasToWidth } from '../../utils/venn/display';
 
 const STROKE_WIDTH = 2;
 
@@ -44,11 +45,9 @@ export function getCanvasSize(_layoutName, vennConfig, widthPx) {
 
 // Props:
 //   vennConfig — required, the abstract spec
-//   widthPx    — available viewport width. V2 diagrams scroll if their readable
-//                canvas is wider. Legacy diagrams use the adaptive fit.
+//   widthPx    — available viewport width. Every diagram is scaled to fit it.
 //   scale      — legacy. Used only when widthPx is not provided.
-//   zoom       — V2 only. Enlarges the scrollable canvas and all its labels.
-export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry, scale = 1, zoom = 1 }) {
+export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry, scale = 1 }) {
   const { practiceTheme: t } = useTheme();
   const { svgMultiplier } = useTextSize();
   // Use a gentler multiplier than other diagrams since the baker tuned label
@@ -83,22 +82,12 @@ export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry
   if (!baked) return <Text style={{ color: t.textSecondary }}>This diagram could not be displayed.</Text>;
   const { canvas, shapes, labels } = baked;
 
-  // V2 uses the computed readable canvas. Legacy diagrams retain their fit.
-  let w = canvas.width;
-  let h = canvas.height;
-  if (!isExplicit && widthPx && w > widthPx) {
-    const s = widthPx / w;
-    w = widthPx;
-    h = h * s;
-  }
-  if (isExplicit) {
-    const displayZoom = Math.max(1, Math.min(3, zoom));
-    w *= displayZoom;
-    h *= displayZoom;
-  } else if (!widthPx) {
-    w = w * scale;
-    h = h * scale;
-  }
+  // The baker may choose a wider canvas to preserve its authoring-time label
+  // minimum. Scale that complete canvas into the viewport so no region is
+  // hidden and the diagram never introduces a horizontal gesture.
+  const displaySize = fitVennCanvasToWidth(canvas, widthPx, isExplicit ? 1 : scale);
+  const w = displaySize.width;
+  const h = displaySize.height;
 
   const diagram = (
     <View style={{ width: w, height: h }}>
@@ -124,16 +113,5 @@ export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry
       </Svg>
     </View>
   );
-  if (!isExplicit || !widthPx || w <= widthPx) return diagram;
-  return (
-    <View style={{ width: widthPx }}>
-      <ScrollView horizontal nestedScrollEnabled showsHorizontalScrollIndicator
-        style={{ width: widthPx }} accessibilityLabel="Scrollable set diagram">
-        {diagram}
-      </ScrollView>
-      <Text style={{ color: t.textSecondary, fontSize: 12, paddingTop: 6 }}>
-        Swipe sideways to see the full diagram
-      </Text>
-    </View>
-  );
+  return diagram;
 }

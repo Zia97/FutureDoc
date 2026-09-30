@@ -1,722 +1,1032 @@
 [
   {
-    "id": "timed-dm-test-003",
-    "title": "DM Timed Test 3",
+    "id": "timed-dm-test-preview-20260930-01",
+    "title": "DM Practice Test 5",
     "question_count": 35,
     "time_minutes": 37,
+    "is_free": true,
     "questions": [
       {
-        "id": "dm3r-023-venn",
-        "title": "Library Catalogue",
-        "type": "venn_diagram",
+        "id": "cabedf8f-b975-46c0-ab61-53db6872d42d",
+        "title": "Concert Programme Classification",
+        "type": "syllogism",
         "difficulty": "normal",
-        "stem": "A library holds 80 books. 30 are hardbacks, 38 are fiction, and 22 are children's books. 12 are both hardback and fiction. 8 are both hardback and children's. 10 are both fiction and children's. 4 books fall into all three categories. 16 books fit none of these categories.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
+        "stem": "For a fictional concert programme: some oboe pieces are nocturnes; no nocturne is accompanied; every encore is accompanied; some encores are modern pieces; and no modern piece is an oboe piece. For each conclusion, answer Yes if it follows and No if it does not.",
+        "order_index": 1,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
           {
-            "label": "A",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Hardback",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Fiction",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Children's",
-                  "shape": "oval"
-                }
-              ],
-              "regions": {
-                "set1_only": 14,
-                "set2_only": 20,
-                "set3_only": 8,
-                "set1_set2": 8,
-                "set1_set3": 4,
-                "set2_set3": 6,
-                "set1_set2_set3": 4,
-                "outside": 16
-              }
-            },
+            "statement_text": "Some oboe pieces are not accompanied.",
+            "correct_answer": "Yes",
+            "answer_reason": "The stated oboe nocturnes cannot be accompanied because no nocturne is accompanied.",
             "order_index": 1
           },
           {
-            "label": "B",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Hardback",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Fiction",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Children's",
-                  "shape": "oval"
-                }
-              ],
-              "regions": {
-                "set1_only": 14,
-                "set2_only": 20,
-                "set3_only": 8,
-                "set1_set2": 8,
-                "set1_set3": 4,
-                "set2_set3": 6,
-                "set1_set2_set3": 6,
-                "outside": 14
-              }
-            },
+            "statement_text": "No encore is a nocturne.",
+            "correct_answer": "Yes",
+            "answer_reason": "Every encore is accompanied, whereas no nocturne is accompanied, so the two categories cannot overlap.",
             "order_index": 2
           },
           {
-            "label": "C",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Hardback",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Fiction",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Children's",
-                  "shape": "oval"
-                }
-              ],
-              "regions": {
-                "set1_only": 20,
-                "set2_only": 20,
-                "set3_only": 8,
-                "set1_set2": 8,
-                "set1_set3": 4,
-                "set2_set3": 6,
-                "set1_set2_set3": 4,
-                "outside": 10
-              }
-            },
+            "statement_text": "Some modern pieces are accompanied.",
+            "correct_answer": "Yes",
+            "answer_reason": "Some encores are modern pieces and every encore is accompanied.",
             "order_index": 3
           },
           {
-            "label": "D",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Hardback",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set2",
-                  "label": "Fiction",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Children's",
-                  "shape": "oval"
-                }
-              ],
-              "regions": {
-                "set1_only": 14,
-                "set2_only": 20,
-                "set3_only": 8,
-                "set1_set2": 12,
-                "set1_set3": 8,
-                "set2_set3": 10,
-                "set1_set2_set3": 4,
-                "outside": 4
-              }
-            },
+            "statement_text": "Some nocturnes are modern pieces.",
+            "correct_answer": "No",
+            "answer_reason": "The premises establish a modern encore and an oboe nocturne, but do not require any modern piece to be a nocturne.",
             "order_index": 4
+          },
+          {
+            "statement_text": "No oboe piece is an encore.",
+            "correct_answer": "No",
+            "answer_reason": "Only the stated oboe nocturnes are known to be unaccompanied; other oboe pieces could be accompanied encores, provided they are not modern.",
+            "order_index": 5
           }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Two freebies: 4 books are in all three categories (the centre) and 16 fit none (outside). Scan — B shows 6 in the centre, stem says 4 — eliminate B. C shows 10 outside, stem says 16 — eliminate C. That leaves A and D. The stem says 12 are both hardback and fiction; 4 of those are also children's, so hardback-and-fiction only = 12 − 4 = 8. A shows 8 ✓. D shows 12 — eliminate D. Answer: A.",
-        "order_index": 23
+        ]
       },
       {
-        "id": "dm3r-024-venn",
-        "title": "Bootcamp Student Skills",
-        "type": "venn_diagram",
+        "id": "1e93e6ab-fa69-497f-b660-6fa681d29ada",
+        "title": "Beacon Power Classification",
+        "type": "syllogism",
         "difficulty": "normal",
-        "stem": "A coding bootcamp tracks 50 students by their skill areas. 15 are strong in Frontend, 14 in Backend, 13 in Database, and 14 in DevOps. 4 students are strong in both Frontend and Backend. 3 are strong in both Backend and Database. 4 are strong in both Database and DevOps. 5 students are not strong in any of these areas.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
+        "stem": "In a fictional signalling yard: every amber beacon emits pulses; a beacon emits pulses only if it is powered; no portable beacon is powered; some amber beacons have serial tags; and no serial-tagged beacon is portable. Decide whether each conclusion follows.",
+        "order_index": 2,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
           {
-            "label": "A",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Frontend",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Backend",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set3",
-                  "label": "Database",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "DevOps",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 11,
-                "set2_only": 7,
-                "set3_only": 6,
-                "set4_only": 10,
-                "set1_set2": 4,
-                "set2_set3": 3,
-                "set3_set4": 4,
-                "outside": 5
-              }
-            },
+            "statement_text": "Every amber beacon is powered.",
+            "correct_answer": "Yes",
+            "answer_reason": "Amber beacons emit pulses, and pulse-emitting beacons must be powered.",
             "order_index": 1
           },
           {
-            "label": "B",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Frontend",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Backend",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set3",
-                  "label": "Database",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "DevOps",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 11,
-                "set2_only": 7,
-                "set3_only": 6,
-                "set4_only": 10,
-                "set1_set2": 3,
-                "set2_set3": 4,
-                "set3_set4": 4,
-                "outside": 5
-              }
-            },
+            "statement_text": "No amber beacon is portable.",
+            "correct_answer": "Yes",
+            "answer_reason": "Amber beacons are powered, while no portable beacon is powered.",
             "order_index": 2
           },
           {
-            "label": "C",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Frontend",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Backend",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set3",
-                  "label": "Database",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "DevOps",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 15,
-                "set2_only": 7,
-                "set3_only": 6,
-                "set4_only": 10,
-                "set1_set2": 4,
-                "set2_set3": 3,
-                "set3_set4": 4,
-                "outside": 1
-              }
-            },
+            "statement_text": "Some serial-tagged beacons are powered.",
+            "correct_answer": "Yes",
+            "answer_reason": "Some amber beacons have serial tags, and every amber beacon is powered.",
             "order_index": 3
           },
           {
-            "label": "D",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Frontend",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set2",
-                  "label": "Backend",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set3",
-                  "label": "Database",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "DevOps",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 10,
-                "set2_only": 7,
-                "set3_only": 6,
-                "set4_only": 11,
-                "set1_set2": 4,
-                "set2_set3": 3,
-                "set3_set4": 4,
-                "outside": 5
-              }
-            },
+            "statement_text": "Some amber beacons are portable.",
+            "correct_answer": "No",
+            "answer_reason": "No amber beacon can be portable because amber beacons are powered.",
             "order_index": 4
+          },
+          {
+            "statement_text": "Some pulse-emitting beacons have serial tags.",
+            "correct_answer": "Yes",
+            "answer_reason": "The serial-tagged amber beacon emits pulses.",
+            "order_index": 5
           }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "Four values are freebies — the overlap counts 4, 3, 4 and the 5 students outside. Scan — C shows 1 outside (stem says 5) — eliminate C. B shows 3 in the Frontend-and-Backend overlap (stem says 4) — eliminate B. That leaves A and D, which differ in the Frontend-only and DevOps-only values. Frontend total = 15, minus the 4 also strong in Backend, leaves 11 Frontend-only. D shows 10 there — eliminate D. A shows 11 — correct. Answer: A.",
-        "order_index": 24
+        ]
       },
       {
-        "id": "dm3r-025-venn",
-        "title": "Greenhouse Plants",
-        "type": "venn_diagram",
-        "difficulty": "normal",
-        "hide_labels": true,
-        "stem": "A school greenhouse has 40 plants, each classified as succulent, flowering, or trailing. 12 plants are succulent, 18 are flowering, and 14 are trailing. 5 plants are both succulent and flowering. 6 plants are both flowering and trailing. 7 plants are none of these types.\n\nWhich of the following diagrams is consistent with the data?",
-        "options": [
-          {
-            "label": "A",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Succulent",
-                  "shape": "star"
-                },
-                {
-                  "id": "set2",
-                  "label": "Flowering",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Trailing",
-                  "shape": "octagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 7,
-                "set2_only": 7,
-                "set3_only": 8,
-                "set1_set2": 5,
-                "set2_set3": 6,
-                "outside": 7
-              }
-            },
-            "order_index": 1
-          },
-          {
-            "label": "B",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Succulent",
-                  "shape": "star"
-                },
-                {
-                  "id": "set2",
-                  "label": "Flowering",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Trailing",
-                  "shape": "octagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 8,
-                "set2_only": 7,
-                "set3_only": 7,
-                "set1_set2": 5,
-                "set2_set3": 6,
-                "outside": 7
-              }
-            },
-            "order_index": 2
-          },
-          {
-            "label": "C",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Succulent",
-                  "shape": "star"
-                },
-                {
-                  "id": "set2",
-                  "label": "Flowering",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Trailing",
-                  "shape": "octagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 7,
-                "set2_only": 10,
-                "set3_only": 8,
-                "set1_set2": 5,
-                "set2_set3": 6,
-                "outside": 4
-              }
-            },
-            "order_index": 3
-          },
-          {
-            "label": "D",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Succulent",
-                  "shape": "star"
-                },
-                {
-                  "id": "set2",
-                  "label": "Flowering",
-                  "shape": "trapezoid"
-                },
-                {
-                  "id": "set3",
-                  "label": "Trailing",
-                  "shape": "octagon"
-                }
-              ],
-              "regions": {
-                "set1_only": 7,
-                "set2_only": 7,
-                "set3_only": 8,
-                "set1_set2": 6,
-                "set2_set3": 5,
-                "outside": 7
-              }
-            },
-            "order_index": 4
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "The category totals are Succulent 12, Flowering 18, Trailing 14, and only flowering overlaps with the other two — so one shape must total 18 and overlap with both sides. Work out each shape's total in every option. Option C has the middle shape totalling 10 + 5 + 6 = 21 — no category has that total — eliminate C. Option D has side shapes totalling 7 + 6 = 13 and 8 + 5 = 13 — neither matches Succulent 12 or Trailing 14 — eliminate D. Option B has sides totalling 8 + 5 = 13 and 7 + 6 = 13 — same problem — eliminate B. Only Option A has sides totalling 7 + 5 = 12 (Succulent) and 8 + 6 = 14 (Trailing), with the middle shape at 7 + 5 + 6 = 18 (Flowering). Answer: A.",
-        "order_index": 25
-      },
-      {
-        "id": "dm3r-026-venn",
-        "title": "Office Task Classification",
-        "type": "venn_diagram",
-        "difficulty": "normal",
-        "stem": "The diagram shows office tasks categorised by five attributes. Each letter marks a different region.\n\nWhich letter represents a task that is urgent and requires approval, but is not recurring, does not need a manager, and is not automated?",
-        "stimulus_diagram": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Urgent",
-              "shape": "rectangle"
-            },
-            {
-              "id": "set2",
-              "label": "Approval",
-              "shape": "pentagon"
-            },
-            {
-              "id": "set3",
-              "label": "Recurring",
-              "shape": "diamond"
-            },
-            {
-              "id": "set4",
-              "label": "Manager",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set5",
-              "label": "Automated",
-              "shape": "star"
-            }
-          ],
-          "regions": {
-            "set1_only": "V",
-            "set1_set2": "P",
-            "set1_set3": "Q",
-            "set1_set4": "R",
-            "set1_set5": "S",
-            "set2_only": "T",
-            "set3_only": "U",
-            "set4_only": "W",
-            "set5_only": "X",
-            "outside": "Y"
-          }
-        },
-        "options": [
-          {
-            "label": "A",
-            "text": "Letter P",
-            "order_index": 1
-          },
-          {
-            "label": "B",
-            "text": "Letter T",
-            "order_index": 2
-          },
-          {
-            "label": "C",
-            "text": "Letter V",
-            "order_index": 3
-          },
-          {
-            "label": "D",
-            "text": "Letter R",
-            "order_index": 4
-          }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "The question needs a task that is urgent (inside the rectangle) and requires approval (inside the pentagon), but outside the diamond (recurring), hexagon (manager), and star (automated). Letter T sits in the pentagon only — missing urgent. Letter V sits in the rectangle only — missing approval. Letter R sits where the rectangle and hexagon overlap — that includes the manager, which is excluded. Letter P sits where the rectangle and pentagon overlap, outside every other shape — matching every condition. Option A.",
-        "order_index": 26
-      },
-      {
-        "id": "dm3r-027-venn",
-        "title": "Employee Training Records",
-        "type": "venn_diagram",
+        "id": "51ef6a2c-72a2-4f94-92f4-0d3be2552dc3",
+        "title": "Harbour Marker Classification",
+        "type": "syllogism",
         "difficulty": "hard",
-        "stem": "The diagram shows 150 workers at a company, categorised by employment type and training records. Every completed induction and every safety certification belongs to a full-time staff member. Contract staff are not full-time and hold neither induction nor safety certification. Each letter marks a different region.\n\nWhich letter represents a full-time staff member who has completed induction, but has not completed safety certification and is not contract staff?",
-        "stimulus_diagram": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Full-time staff",
-              "shape": "rectangle"
-            },
-            {
-              "id": "set2",
-              "label": "Induction done",
-              "shape": "circle"
-            },
-            {
-              "id": "set3",
-              "label": "Safety certified",
-              "shape": "pentagon"
-            },
-            {
-              "id": "set4",
-              "label": "Contract staff",
-              "shape": "diamond"
-            }
-          ],
-          "regions": {
-            "set1_only": "P",
-            "set1_set2": "Q",
-            "set1_set2_set3": "R",
-            "set1_set3": "S",
-            "set4_only": "T",
-            "outside": "U"
-          }
-        },
-        "options": [
+        "stem": "In a fictional marker system: every silver marker is either reflective or numbered, but not both. Every reflective marker is calibrated. No calibrated marker is wooden. Every harbour marker is wooden. Some ridge markers are both silver and numbered. Some harbour markers are silver. Decide whether each conclusion follows.",
+        "order_index": 3,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
           {
-            "label": "A",
-            "text": "Letter Q",
+            "statement_text": "Some ridge markers are not reflective.",
+            "correct_answer": "Yes",
+            "answer_reason": "The stated ridge markers are silver and numbered; a silver marker cannot be both numbered and reflective.",
             "order_index": 1
           },
           {
-            "label": "B",
-            "text": "Letter R",
+            "statement_text": "No reflective marker is a harbour marker.",
+            "correct_answer": "Yes",
+            "answer_reason": "Reflective markers are calibrated and therefore not wooden, whereas every harbour marker is wooden.",
             "order_index": 2
           },
           {
-            "label": "C",
-            "text": "Letter P",
+            "statement_text": "Some silver markers are wooden.",
+            "correct_answer": "Yes",
+            "answer_reason": "Some harbour markers are silver, and every harbour marker is wooden.",
             "order_index": 3
           },
           {
-            "label": "D",
-            "text": "Letter T",
+            "statement_text": "Every numbered marker is silver.",
+            "correct_answer": "No",
+            "answer_reason": "Silver markers must be reflective or numbered, but nothing says that all numbered markers are silver.",
             "order_index": 4
+          },
+          {
+            "statement_text": "Some harbour markers are numbered.",
+            "correct_answer": "Yes",
+            "answer_reason": "The silver harbour markers are wooden, so they cannot be reflective; the exclusive silver rule therefore makes them numbered.",
+            "order_index": 5
           }
-        ],
-        "correct_answer": "A",
-        "answer_reason": "The question needs a full-time staff member (inside the rectangle) who has completed induction (inside the circle), but has not completed safety certification (outside the pentagon) and is not contract staff (outside the diamond). Letter R sits where the rectangle, circle, and pentagon all overlap — that includes safety certified, which is excluded. Letter P is inside the rectangle only — missing induction. Letter T is inside the diamond, outside the rectangle — not full-time staff at all. Letter Q sits inside the rectangle and circle but outside the pentagon and diamond — matching every condition. Option A.",
-        "order_index": 27
+        ]
       },
       {
-        "id": "dm3r-028-venn",
-        "title": "Engineer Certification Hierarchy",
-        "type": "venn_diagram",
+        "id": "74a98d3e-61f3-471e-b226-a85b9dbaf580",
+        "title": "Workshop Badge Logic",
+        "type": "syllogism",
         "difficulty": "normal",
-        "stem": "The diagram shows the engineering staff at a firm. All senior engineers are engineers. All principal engineers are senior engineers. Each letter marks a different region.\n\nWhich letter represents an engineer who is senior but not principal?",
-        "stimulus_diagram": {
-          "diagramLayout": "auto",
-          "sets": [
-            {
-              "id": "set1",
-              "label": "Engineer",
-              "shape": "octagon"
-            },
-            {
-              "id": "set2",
-              "label": "Senior engineer",
-              "shape": "square"
-            },
-            {
-              "id": "set3",
-              "label": "Principal engineer",
-              "shape": "circle"
-            }
-          ],
-          "regions": {
-            "set1_only": "P",
-            "set1_set2": "Q",
-            "set1_set2_set3": "R",
-            "outside": "S"
+        "stem": "At a fictional workshop: all mentor badges are green; some green badges are magnetic; no magnetic badge is paper; every visitor badge is paper; and no mentor badge is temporary. For each conclusion, answer Yes if it follows and No if it does not.",
+        "order_index": 4,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Some green badges are not paper.",
+            "correct_answer": "Yes",
+            "answer_reason": "Some green badges are magnetic, and magnetic badges are not paper.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "No visitor badge is magnetic.",
+            "correct_answer": "Yes",
+            "answer_reason": "All visitor badges are paper and no magnetic badge is paper.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "Some mentor badges are magnetic.",
+            "correct_answer": "No",
+            "answer_reason": "Mentor badges are green, but the magnetic green badges need not be mentor badges.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "No temporary badge is a mentor badge.",
+            "correct_answer": "Yes",
+            "answer_reason": "No mentor badge is temporary, which is the same disjoint relation.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Every paper badge is a visitor badge.",
+            "correct_answer": "No",
+            "answer_reason": "All visitor badges are paper does not imply that all paper badges are visitor badges.",
+            "order_index": 5
           }
-        },
-        "options": [
+        ]
+      },
+      {
+        "id": "f672b0f8-6694-4727-af6e-b20c2c632e30",
+        "title": "Container Status Classification",
+        "type": "syllogism",
+        "difficulty": "hard",
+        "stem": "In a fictional depot: every tracked container is either labelled or sealed, but not both. Every insulated container is sealed. No collapsible container is sealed. Some tracked containers are insulated. Every labelled container is recyclable. Some collapsible containers are labelled. Decide whether each conclusion follows.",
+        "order_index": 5,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Some tracked containers are not labelled.",
+            "correct_answer": "Yes",
+            "answer_reason": "The tracked insulated containers are sealed, and a tracked container cannot be both sealed and labelled.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "No insulated container is collapsible.",
+            "correct_answer": "Yes",
+            "answer_reason": "Every insulated container is sealed, while no collapsible container is sealed.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "Some recyclable containers are collapsible.",
+            "correct_answer": "Yes",
+            "answer_reason": "The stated collapsible labelled containers exist, and every labelled container is recyclable.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Every recyclable container is tracked.",
+            "correct_answer": "No",
+            "answer_reason": "Only labelled containers are guaranteed recyclable; recyclability does not imply tracking.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Some tracked containers are recyclable.",
+            "correct_answer": "No",
+            "answer_reason": "The tracked insulated witnesses are sealed and therefore not labelled; no premise guarantees that any tracked container is recyclable.",
+            "order_index": 5
+          }
+        ]
+      },
+      {
+        "id": "b9daef8f-d433-4d21-9cbb-0c8870a7bde4",
+        "title": "Sample Bench Allocation",
+        "type": "logic_puzzle",
+        "difficulty": "normal",
+        "stem": "Four samples J, K, L and M are divided between Red and Blue benches, with exactly two samples at each bench. J and K must be at the same bench. L is at the Blue bench. Which sample other than L must also be at the Blue bench?",
+        "correct_answer": "C",
+        "answer_reason": "J and K must stay together. They cannot both be at Blue because L is already there and Blue holds exactly two samples. Therefore J and K are at Red, leaving M with L at Blue.",
+        "order_index": 6,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
-            "text": "Letter P",
+            "option_text": "J",
+            "option_data": null,
             "order_index": 1
           },
           {
             "label": "B",
-            "text": "Letter Q",
+            "option_text": "K",
+            "option_data": null,
             "order_index": 2
           },
           {
             "label": "C",
-            "text": "Letter R",
+            "option_text": "M",
+            "option_data": null,
             "order_index": 3
           },
           {
             "label": "D",
-            "text": "Letter S",
+            "option_text": "Cannot be determined",
+            "option_data": null,
             "order_index": 4
           }
         ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "98801569-48c0-450f-9bf5-029476a11c31",
+        "title": "Delivery Team Districts",
+        "type": "logic_puzzle",
+        "difficulty": "normal",
+        "stem": "Three delivery teams--Harbour, Juniper and Kestrel--are assigned different districts (North, East and West) and different shifts (morning, afternoon and evening). Harbour is not assigned North and works later than Juniper. The team assigned East works in the afternoon. Kestrel works in the morning. Juniper is not assigned West. Which district is assigned to Harbour?",
+        "correct_answer": "C",
+        "answer_reason": "Kestrel works in the morning, so Kestrel cannot be the East team, which works in the afternoon. The remaining shifts for Harbour and Juniper are afternoon and evening; because Harbour works later, Juniper is afternoon and therefore East. Juniper is not West, Harbour is not North, so Harbour must be West.",
+        "order_index": 7,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "North",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "East",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "West",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "Cannot be determined",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "c43380e1-28e0-474b-bced-703e8319ec76",
+        "title": "Archive Review Days",
+        "type": "logic_puzzle",
+        "difficulty": "normal",
+        "stem": "Four files--Amber, Birch, Cedar and Dune--are reviewed on Monday, Tuesday, Wednesday and Thursday, one per day. Amber is reviewed before Cedar. Birch is reviewed on Thursday. Dune is reviewed immediately before Cedar. On which day is Amber reviewed?",
+        "correct_answer": "A",
+        "answer_reason": "Birch occupies Thursday. The consecutive pair Dune,Cedar can only be Tuesday,Wednesday because Amber must be earlier than Cedar. Therefore Amber is Monday.",
+        "order_index": 8,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Monday",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Tuesday",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "Wednesday",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "Thursday",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "baf8e627-683f-428a-b860-9d9e4f5275f1",
+        "title": "Six-Relay Control Panel",
+        "type": "logic_puzzle",
+        "difficulty": "hard",
+        "stem": "A control panel has six relays P, Q, R, S, T and U. Exactly three relays are on. P and Q always have the same state. R and S cannot both be on. T is on if and only if exactly one of R and S is on. U can be on only when P is off. At least one of P and R is on. Which three relays are on?",
+        "correct_answer": "C",
+        "answer_reason": "If P and Q were on, they would use two of the three on positions. R and S cannot both be on; switching either one on would also switch T on, producing at least four on relays, while switching both off leaves no valid third relay because U requires P off. Therefore P and Q are off. At least one of P and R is on, so R is on and S is off. The biconditional makes T on, and U supplies the third on relay. The on relays are R, T and U.",
+        "order_index": 9,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "P, Q and R",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "P, Q and T",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "R, T and U",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "S, T and U",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "1ab4696b-fa82-4917-86c4-df8f3dcdc960",
+        "title": "Festival Rank Order",
+        "type": "logic_puzzle",
+        "difficulty": "normal",
+        "stem": "Five exhibits--Fern, Glass, Loom, Mural and Stone--receive distinct ranks from first to fifth. Loom ranks immediately ahead of Mural. Fern ranks first. Stone ranks fifth. Glass ranks ahead of Loom. Which exhibit ranks third?",
+        "correct_answer": "C",
+        "answer_reason": "Fern is first and Stone fifth. Glass must be ahead of the adjacent Loom,Mural pair, so Glass is second, Loom third and Mural fourth.",
+        "order_index": 10,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Fern",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Glass",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "Loom",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "Mural",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "28da56d9-e1ee-44be-a830-36bff05d2aca",
+        "title": "Research Team Inference",
+        "type": "logic_puzzle",
+        "difficulty": "hard",
+        "stem": "Exactly three of Asha, Ben, Cora, Dina, Ewan and Farid are selected for a research team. Asha and Ben cannot both be selected. Exactly one of Cora and Dina is selected. Ewan is selected if and only if Ben is selected. If Dina is selected, Farid is selected. At least one of Asha and Ewan is selected. Which statement must be true?",
+        "correct_answer": "A",
+        "answer_reason": "Because Ewan is selected exactly when Ben is selected, the rule requiring at least one of Asha and Ewan means at least one of Asha and Ben is selected. The first rule prevents both, so exactly one of Asha and Ben must be selected. The other statements fail in valid teams such as Ben-Cora-Ewan, Asha-Cora-Farid and Asha-Dina-Farid.",
+        "order_index": 11,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Exactly one of Asha and Ben is selected.",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Cora and Farid are always selected together.",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "Ewan is selected whenever Cora is selected.",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "Dina can be selected without Farid.",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "f6480fca-ee61-49e4-82ce-87b928de1d37",
+        "title": "Prototype Output Table",
+        "type": "interpreting_info",
+        "difficulty": "normal",
+        "stem": "A fictional studio recorded completed prototypes and those requiring rework. Use only the table. Each prototype belongs to exactly one row.",
+        "order_index": 12,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "More than 20% of all completed prototypes required rework.",
+            "correct_answer": "Yes",
+            "answer_reason": "There were 21 reworks out of 89 completed prototypes, about 23.6%.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "The clay line completed exactly twice as many prototypes as the wood line.",
+            "correct_answer": "No",
+            "answer_reason": "Clay completed 28 and wood completed 16; twice 16 is 32.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "The metal line had the lowest rework rate.",
+            "correct_answer": "No",
+            "answer_reason": "The rates are clay 7/28, metal 5/24, resin 6/21 and wood 3/16; 3/16 is actually lowest, so this statement is No.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Clay and resin together accounted for more than half of all reworks.",
+            "correct_answer": "Yes",
+            "answer_reason": "Clay and resin had 13 of 21 reworks, which is more than half.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "If one completed prototype is chosen, it is more likely to be metal than resin.",
+            "correct_answer": "Yes",
+            "answer_reason": "There are 24 metal prototypes and 21 resin prototypes.",
+            "order_index": 5
+          }
+        ],
+        "table_data": {
+          "headers": [
+            "Line",
+            "Completed",
+            "Required rework"
+          ],
+          "rows": [
+            [
+              "Clay",
+              "28",
+              "7"
+            ],
+            [
+              "Metal",
+              "24",
+              "5"
+            ],
+            [
+              "Resin",
+              "21",
+              "6"
+            ],
+            [
+              "Wood",
+              "16",
+              "3"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "abd51db1-355a-433c-b5c7-3e0aa4adf1b1",
+        "title": "Canal Cargo Table",
+        "type": "interpreting_info",
+        "difficulty": "normal",
+        "stem": "A fictional canal recorded cargo moved through three locks. Use only the table. Tonnages are exact and consignments do not overlap.",
+        "order_index": 13,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Lock Beta moved the greatest total tonnage.",
+            "correct_answer": "Yes",
+            "answer_reason": "Beta moved 34+28=62 tonnes, compared with Alpha 60 and Gamma 58.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Across all locks, more timber than grain was moved.",
+            "correct_answer": "Yes",
+            "answer_reason": "Timber totals 97 tonnes and grain totals 83 tonnes.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "At Alpha, timber represented exactly 60% of the recorded tonnage.",
+            "correct_answer": "Yes",
+            "answer_reason": "Alpha moved 36 of 60 tonnes as timber, which is 60%.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Gamma moved 10 tonnes less grain than Beta.",
+            "correct_answer": "No",
+            "answer_reason": "Gamma moved 31 tonnes of grain and Beta 28, so Gamma moved 3 more.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "The combined tonnage was 180 tonnes.",
+            "correct_answer": "Yes",
+            "answer_reason": "The lock totals are 60, 62 and 58, summing to 180.",
+            "order_index": 5
+          }
+        ],
+        "table_data": {
+          "headers": [
+            "Lock",
+            "Timber (t)",
+            "Grain (t)"
+          ],
+          "rows": [
+            [
+              "Alpha",
+              "36",
+              "24"
+            ],
+            [
+              "Beta",
+              "34",
+              "28"
+            ],
+            [
+              "Gamma",
+              "27",
+              "31"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "231a87ae-a1c7-4ab5-98fa-af0ce51a2b8c",
+        "title": "Museum Entry Table",
+        "type": "interpreting_info",
+        "difficulty": "normal",
+        "stem": "A fictional museum counted adult and child entries in three galleries. Use only the table; each entry is counted once per gallery visit.",
+        "order_index": 14,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Gallery C had the largest total number of entries.",
+            "correct_answer": "Yes",
+            "answer_reason": "Totals are A 125, B 130 and C 140.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Exactly 45% of Gallery B entries were child entries.",
+            "correct_answer": "No",
+            "answer_reason": "Gallery B had 50 child entries out of 130, about 38.5%.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "Adult entries exceeded child entries in every gallery.",
+            "correct_answer": "Yes",
+            "answer_reason": "The adult counts 70, 80 and 75 exceed the corresponding child counts 55, 50 and 65.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Across all galleries, there were 95 more adult than child entries.",
+            "correct_answer": "No",
+            "answer_reason": "Adults total 225 and children 170, a difference of 55.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Gallery A and Gallery C together recorded 265 entries.",
+            "correct_answer": "Yes",
+            "answer_reason": "Gallery A recorded 125 and Gallery C 140, totalling 265.",
+            "order_index": 5
+          }
+        ],
+        "table_data": {
+          "headers": [
+            "Gallery",
+            "Adult entries",
+            "Child entries"
+          ],
+          "rows": [
+            [
+              "A",
+              "70",
+              "55"
+            ],
+            [
+              "B",
+              "80",
+              "50"
+            ],
+            [
+              "C",
+              "75",
+              "65"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "9fa1774f-3b63-43fb-9e59-dc91105fff5e",
+        "title": "Magazine Delivery Survey",
+        "type": "interpreting_info",
+        "difficulty": "normal",
+        "stem": "A fictional magazine surveyed 200 subscribers. Exactly 120 receive the print edition, 95 receive the digital edition, and 45 receive both. Of those who receive neither edition, 18 also attend subscriber events. No other information about event attendance was collected. For each statement, answer Yes if it follows and No if it does not.",
+        "order_index": 15,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Exactly 170 subscribers receive at least one edition.",
+            "correct_answer": "Yes",
+            "answer_reason": "By inclusion-exclusion, 120+95-45=170.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Exactly 30 subscribers receive neither edition.",
+            "correct_answer": "Yes",
+            "answer_reason": "There are 200-170=30 subscribers who receive neither.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "More subscribers receive print only than digital only.",
+            "correct_answer": "Yes",
+            "answer_reason": "Print only is 120-45=75; digital only is 95-45=50.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Every event attendee receives neither edition.",
+            "correct_answer": "No",
+            "answer_reason": "Only event attendance among the neither group is described; attendees in other groups are unknown.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Exactly 12 subscribers receive neither edition and do not attend events.",
+            "correct_answer": "Yes",
+            "answer_reason": "Of 30 receiving neither edition, 18 attend events, leaving 12 who do not.",
+            "order_index": 5
+          }
+        ]
+      },
+      {
+        "id": "b8a95b50-b12b-4249-873e-330ef2363f26",
+        "title": "Habitat Parcel Review",
+        "type": "interpreting_info",
+        "difficulty": "hard",
+        "stem": "A fictional habitat review covers 150 parcels. Sixty contain scrub, 72 contain wetland and 54 contain meadow. Twenty contain both scrub and wetland, 18 contain both wetland and meadow, and 15 contain both scrub and meadow. Eight contain all three habitats. Pair totals include parcels in all three. For each statement, answer Yes if it follows and No if it does not.",
+        "order_index": 16,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Exactly 41 parcels contain only scrub.",
+            "correct_answer": "No",
+            "answer_reason": "Scrub only is 60-(20-8)-(15-8)-8=33, so this statement is No.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "Exactly 103 parcels contain at least one of the three habitats.",
+            "correct_answer": "No",
+            "answer_reason": "Inclusion-exclusion gives 60+72+54-20-18-15+8=141, not 103.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "Exactly 9 parcels contain wetland and meadow but not scrub.",
+            "correct_answer": "No",
+            "answer_reason": "Wetland-and-meadow only is 18-8=10.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "More parcels contain exactly two habitats than all three.",
+            "correct_answer": "Yes",
+            "answer_reason": "Exactly two totals (20-8)+(18-8)+(15-8)=29, exceeding 8.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "Fewer than 10 parcels contain none of the habitats.",
+            "correct_answer": "Yes",
+            "answer_reason": "The union is 141, so 150-141=9 contain none; 9 is fewer than 10, making this Yes.",
+            "order_index": 5
+          }
+        ]
+      },
+      {
+        "id": "7ea355f4-e7ab-4e99-9fe8-22e2156f5e78",
+        "title": "Instrument Inspection Record",
+        "type": "interpreting_info",
+        "difficulty": "normal",
+        "stem": "A fictional laboratory inspected 90 instruments. Forty passed calibration on the first attempt. Of the remaining 50, 32 passed after adjustment and 18 were withdrawn. Among the 72 instruments that eventually passed, 27 were optical instruments. Ten of the withdrawn instruments were optical. For each statement, answer Yes if it follows and No if it does not.",
+        "order_index": 17,
+        "is_free": true,
+        "decision_making_question_options": [],
+        "decision_making_question_statements": [
+          {
+            "statement_text": "Exactly 80% of inspected instruments eventually passed.",
+            "correct_answer": "Yes",
+            "answer_reason": "Seventy-two of 90 passed, which is 80%.",
+            "order_index": 1
+          },
+          {
+            "statement_text": "More instruments passed after adjustment than passed first time.",
+            "correct_answer": "No",
+            "answer_reason": "Thirty-two passed after adjustment, fewer than the 40 first-time passes.",
+            "order_index": 2
+          },
+          {
+            "statement_text": "Exactly 37 inspected instruments were optical.",
+            "correct_answer": "Yes",
+            "answer_reason": "There were 27 optical instruments among passes and 10 among withdrawals.",
+            "order_index": 3
+          },
+          {
+            "statement_text": "Every non-optical instrument eventually passed.",
+            "correct_answer": "No",
+            "answer_reason": "Eight withdrawn instruments were non-optical, because 18 were withdrawn and 10 were optical.",
+            "order_index": 4
+          },
+          {
+            "statement_text": "An optical instrument was more likely to pass than a non-optical instrument.",
+            "correct_answer": "No",
+            "answer_reason": "Optical pass rate is 27/37, while non-optical pass rate is 45/53; 27/37 is lower.",
+            "order_index": 5
+          }
+        ]
+      },
+      {
+        "id": "7555bf10-b697-4545-879b-6dd33a740044",
+        "title": "Wayfinding Sign Proposal",
+        "type": "recognising_assumptions",
+        "difficulty": "normal",
+        "stem": "A town is deciding whether to replace faded pedestrian wayfinding signs. Which option gives the strongest argument?",
+        "correct_answer": "A",
+        "answer_reason": "Option A is strongest because it uses local, task-specific evidence and directly measures failure at the required reading distance. B measures aesthetic preference rather than successful navigation. C establishes a cheaper process without showing that repainting restores legibility or durability. D quantifies a temporary inconvenience rather than the continuing navigation problem.",
+        "order_index": 18,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Yes, because a local audit found 38% of sampled signs unreadable at the required distance, directly measuring the failure replacement is intended to solve.",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Yes, because 620 visitors rated the proposed colour scheme highly after viewing mock-ups, with similar preferences reported across every surveyed age group.",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "No, because a contractor estimated repainting would cost 32% less than replacement and could be completed two weeks sooner than installing new signs.",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "No, because replacement would close two footpaths for one weekday each and create temporary detours averaging 180 metres for affected pedestrians.",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "4a98e878-3ad1-4229-b71e-4420660ed1e1",
+        "title": "Theatre Captioning Trial",
+        "type": "recognising_assumptions",
+        "difficulty": "normal",
+        "stem": "A community theatre is deciding whether to trial captioned performances on two evenings. Which option gives the strongest argument?",
         "correct_answer": "B",
-        "answer_reason": "The diagram shows three nested shapes: the octagon (engineers) contains the square (senior engineers), which contains the circle (principal engineers). A senior engineer who is not principal sits in the ring between the square and the circle. Letter P is inside the octagon but outside the square — an engineer who is not senior. Letter R is inside all three — a principal engineer, which the question excludes. Letter S is outside all three — not an engineer at all. Letter Q is inside the octagon and square but outside the circle — matching the description. Option B.",
-        "order_index": 28
-      }
-    ]
-  },
-  {
-    "id": "timed-dm-test-004",
-    "title": "DM Timed Test 4",
-    "question_count": 35,
-    "time_minutes": 37,
-    "questions": [
+        "answer_reason": "Option B is strongest because local records evidence unmet access demand and a limited two-evening trial directly measures uptake while containing cost and commitment. A relies on a different audience and programme. C quantifies a modest operational cost but not whether benefits outweigh it. D observes only people who booked under the existing inaccessible arrangement.",
+        "order_index": 19,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Yes, because captioned performances at a theatre in another region sold 18% more tickets than its other shows and attracted many first-time visitors.",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Yes, because local booking records show repeated access requests, and a two-evening trial would measure actual uptake before any permanent programming commitment.",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "No, because technicians estimate that each captioned performance requires 15 additional setup minutes and GBP 90 of extra staffing across the trial.",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "No, because every captionless performance last season sold out, with waiting lists recorded for three shows under the theatre's existing booking arrangements.",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
       {
-        "id": "dm4r-023-venn",
-        "title": "Magazine Subscriptions",
+        "id": "b68e44f5-0396-47b7-9ec8-706a6632ca49",
+        "title": "Canal Gate Sensors",
+        "type": "recognising_assumptions",
+        "difficulty": "normal",
+        "stem": "A canal authority is deciding whether to install remote water-level sensors at two gates that currently require manual checks. Which option gives the strongest argument?",
+        "correct_answer": "C",
+        "answer_reason": "Option C is strongest because documented outages at both actual sites directly prevent the proposed system performing its core function, and no backup link is planned. A concerns sites without the decisive connectivity constraint. B tests sensor accuracy rather than communications reliability. D compares a limited routine cost measure and does not establish operational failure.",
+        "order_index": 20,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Yes, because a neighbouring canal with year-round cellular coverage recorded 31% fewer inspection callouts during the two years after installing remote sensors.",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Yes, because vendor bench tests across the expected temperature range kept water-level readings within two centimetres of calibrated manual measurements.",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "No, because documented winter network outages affect both proposed gates, and the installation plan provides no backup link for transmitting readings during those failures.",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "No, because forecast routine sensor maintenance is 5% more expensive than scheduled manual checks under the authority's current annual staffing budget.",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "23eadbde-62f2-48af-ad4b-34dc103308fc",
+        "title": "Shared Workshop Induction",
+        "type": "recognising_assumptions",
+        "difficulty": "normal",
+        "stem": "A shared workshop is deciding whether all new members should complete a short machine-safety induction before booking powered equipment. Which option gives the strongest argument?",
+        "correct_answer": "A",
+        "answer_reason": "Option A is strongest because workshop-specific incident records connect the proposed induction to the affected group and the precise hazard. B is general manufacturer guidance without local outcome evidence. C reports outcomes for experienced members rather than new users. D quantifies a capacity cost but does not outweigh the directly evidenced safety problem.",
+        "order_index": 21,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Yes, because local incident records show that 14 of the last 18 machine near-misses involved new members who had not received the current safety briefing.",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Yes, because the equipment manufacturer recommends induction before using comparable powered machines at shared facilities with a broadly similar range of tools.",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "No, because experienced members completed 2,300 powered-equipment bookings last year without a recorded injury under the workshop's existing voluntary training system.",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "No, because a weekly induction would remove one bookable machine hour, and the affected period currently operates at 62% average capacity.",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "4c0c4f8b-9ed7-473f-8af8-da6bc039a8d8",
+        "title": "Garden Irrigation Upgrade",
+        "type": "recognising_assumptions",
+        "difficulty": "normal",
+        "stem": "A community garden wants to reduce irrigation water use without lowering crop yield. Its funding rule requires the controls to repay their full costs within three years. Which option gives the strongest argument about replacing fixed timers across all plots?",
+        "correct_answer": "A",
+        "answer_reason": "Option A is strongest overall because it is local, controls crop and soil differences, directly measures both stated outcomes, and tests the mandatory payback rule under a deliberately adverse maintenance assumption. B is a substantial rival but remains vulnerable to self-selection and simultaneous mulching despite its larger, longer dataset. C reports contained faults without outcome harm. D relies on a model that excludes major whole-life variables.",
+        "order_index": 22,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "Yes, because a local matched trial found 21% lower water use with unchanged yield and a 30-month payback under doubled maintenance costs; it covered both soil types for one season.",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "Yes, because a two-season survey of 140 gardens found 19% lower adjusted water use with unchanged yield and 26-month median payback; participants self-selected and 72% also introduced mulching.",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "No, because four of 48 pilot sensors required recalibration during scheduled checks, adding 11 staff hours; none caused a missed moisture target or measurable reduction in yield.",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "No, because fixed timers cost GBP 4,800 less to purchase and install; a five-year budget model excluding water use and service life still favoured timers by GBP 900.",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "f5b5e55a-a6fe-41ff-b90d-b08548dde90a",
+        "title": "Record Status Diagram",
         "type": "venn_diagram",
         "difficulty": "normal",
-        "stem": "A newsagent stocks 90 magazine titles. 42 are weekly editions, 36 have a digital format, and 30 cover environmental topics. 15 are both weekly and digital. 12 are both weekly and environmental. 10 are both digital and environmental. 6 magazines are all three. 13 magazines fit none of these categories.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
+        "stem": "A register contains 34 records. Twenty have been reviewed, 15 have been archived, six have both statuses, and five have neither status. Which diagram represents the register? Each number is an exclusive-region count.",
+        "correct_answer": "A",
+        "answer_reason": "Reviewed only is 20-6=14 and Archived only is 15-6=9. Option A also shows six with both statuses and five with neither.",
+        "order_index": 23,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Weekly",
-                  "shape": "vertical_oval"
+                  "label": "Reviewed",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 401.88,
+                    "cy": 398.17,
+                    "width": 408.58,
+                    "height": 408.58,
+                    "rotationDeg": -166.79
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Digital",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Environmental",
-                  "shape": "pentagon"
+                  "label": "Archived",
+                  "shape": "teardrop",
+                  "geometry": {
+                    "cx": 395.66,
+                    "cy": 391.6,
+                    "width": 200,
+                    "height": 200,
+                    "rotationDeg": -166.79
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 21,
-                "set2_only": 17,
-                "set3_only": 14,
-                "set1_set2": 9,
-                "set1_set3": 6,
-                "set2_set3": 4,
-                "set1_set2_set3": 6,
-                "outside": 13
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 14
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 9
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 6
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              },
+              "outside": {
+                "id": "outside",
+                "value": 5
               }
             },
             "order_index": 1
@@ -725,33 +1035,55 @@
             "label": "B",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Weekly",
-                  "shape": "vertical_oval"
+                  "label": "Reviewed",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 401.88,
+                    "cy": 398.17,
+                    "width": 408.58,
+                    "height": 408.58,
+                    "rotationDeg": -166.79
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Digital",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Environmental",
-                  "shape": "pentagon"
+                  "label": "Archived",
+                  "shape": "teardrop",
+                  "geometry": {
+                    "cx": 395.66,
+                    "cy": 391.6,
+                    "width": 200,
+                    "height": 200,
+                    "rotationDeg": -166.79
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 21,
-                "set2_only": 17,
-                "set3_only": 14,
-                "set1_set2": 9,
-                "set1_set3": 6,
-                "set2_set3": 4,
-                "set1_set2_set3": 8,
-                "outside": 11
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 20
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 15
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 6
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              },
+              "outside": {
+                "id": "outside",
+                "value": 5
               }
             },
             "order_index": 2
@@ -760,33 +1092,55 @@
             "label": "C",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Weekly",
-                  "shape": "vertical_oval"
+                  "label": "Reviewed",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 401.88,
+                    "cy": 398.17,
+                    "width": 408.58,
+                    "height": 408.58,
+                    "rotationDeg": -166.79
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Digital",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Environmental",
-                  "shape": "pentagon"
+                  "label": "Archived",
+                  "shape": "teardrop",
+                  "geometry": {
+                    "cx": 395.66,
+                    "cy": 391.6,
+                    "width": 200,
+                    "height": 200,
+                    "rotationDeg": -166.79
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 24,
-                "set2_only": 17,
-                "set3_only": 14,
-                "set1_set2": 9,
-                "set1_set3": 6,
-                "set2_set3": 4,
-                "set1_set2_set3": 6,
-                "outside": 10
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 14
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 9
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 11
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              },
+              "outside": {
+                "id": "outside",
+                "value": 0
               }
             },
             "order_index": 3
@@ -795,84 +1149,139 @@
             "label": "D",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Weekly",
-                  "shape": "vertical_oval"
+                  "label": "Reviewed",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 401.88,
+                    "cy": 398.17,
+                    "width": 408.58,
+                    "height": 408.58,
+                    "rotationDeg": -166.79
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Digital",
-                  "shape": "hexagon"
-                },
-                {
-                  "id": "set3",
-                  "label": "Environmental",
-                  "shape": "pentagon"
+                  "label": "Archived",
+                  "shape": "teardrop",
+                  "geometry": {
+                    "cx": 395.66,
+                    "cy": 391.6,
+                    "width": 200,
+                    "height": 200,
+                    "rotationDeg": -166.79
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 21,
-                "set2_only": 17,
-                "set3_only": 14,
-                "set1_set2": 4,
-                "set1_set3": 6,
-                "set2_set3": 9,
-                "set1_set2_set3": 6,
-                "outside": 13
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 9
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 14
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 6
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              },
+              "outside": {
+                "id": "outside",
+                "value": 5
               }
             },
             "order_index": 4
           }
         ],
-        "correct_answer": "A",
-        "answer_reason": "Two values are freebies: 6 magazines are all three (the centre) and 13 fit none (outside). Scan — B shows 8 in the centre (stem says 6) — eliminate B. C shows 10 outside (stem says 13) — eliminate C. That leaves A and D. The stem says 15 are both weekly and digital; 6 of those are also environmental, so the weekly-and-digital-only area = 15 − 6 = 9. D shows 4 there — eliminate D. A shows 9 — correct. Answer: A.",
-        "order_index": 23
+        "decision_making_question_statements": [],
+        "subtype": "select_diagram"
       },
       {
-        "id": "dm4r-024-venn",
-        "title": "Restaurant Dishes",
+        "id": "57a6d42b-09fd-4eb6-bd18-6ab009488896",
+        "title": "Trail Route Categories",
         "type": "venn_diagram",
         "difficulty": "normal",
-        "stem": "A restaurant lists 70 dishes. 20 are spicy, 14 are vegetarian, 18 contain nuts, and 20 are gluten-free. 8 dishes are both spicy and vegetarian. 6 dishes both contain nuts and are gluten-free. 12 dishes fit none of these descriptions.\n\nWhich of the following diagrams best represents the data?",
-        "options": [
+        "stem": "A guide lists 28 trails. Eight are express but not scenic, seven are scenic but not express, four are both express and scenic, and nine are closed routes in a separate category. Which diagram represents these data? Each number is an exclusive-region count.",
+        "correct_answer": "A",
+        "answer_reason": "Option A shows the four stated exclusive counts: 8 express only, 7 scenic only, 4 in both, and 9 in the separate closed category.",
+        "order_index": 24,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Spicy",
-                  "shape": "hexagon"
+                  "label": "Express",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 313.68,
+                    "cy": 217.67,
+                    "width": 247.43,
+                    "height": 268.5,
+                    "rotationDeg": -124.39
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Vegetarian",
-                  "shape": "star"
+                  "label": "Scenic",
+                  "shape": "right_arrow",
+                  "geometry": {
+                    "cx": 223.33,
+                    "cy": 254.64,
+                    "width": 234.95,
+                    "height": 278.02,
+                    "rotationDeg": 50.36
+                  }
                 },
                 {
                   "id": "set3",
-                  "label": "Contains nuts",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "Gluten-free",
-                  "shape": "oval"
+                  "label": "Closed",
+                  "shape": "square",
+                  "geometry": {
+                    "cx": 504.29,
+                    "cy": 450.81,
+                    "width": 214.05,
+                    "height": 214.05,
+                    "rotationDeg": -134.36
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 12,
-                "set2_only": 6,
-                "set1_set2": 8,
-                "set3_only": 12,
-                "set4_only": 14,
-                "set3_set4": 6,
-                "outside": 12
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 8
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 7
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 4
+                },
+                {
+                  "id": "set3_only:0",
+                  "value": 9
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
               }
             },
             "order_index": 1
@@ -881,37 +1290,67 @@
             "label": "B",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Spicy",
-                  "shape": "hexagon"
+                  "label": "Express",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 313.68,
+                    "cy": 217.67,
+                    "width": 247.43,
+                    "height": 268.5,
+                    "rotationDeg": -124.39
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Vegetarian",
-                  "shape": "star"
+                  "label": "Scenic",
+                  "shape": "right_arrow",
+                  "geometry": {
+                    "cx": 223.33,
+                    "cy": 254.64,
+                    "width": 234.95,
+                    "height": 278.02,
+                    "rotationDeg": 50.36
+                  }
                 },
                 {
                   "id": "set3",
-                  "label": "Contains nuts",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "Gluten-free",
-                  "shape": "oval"
+                  "label": "Closed",
+                  "shape": "square",
+                  "geometry": {
+                    "cx": 504.29,
+                    "cy": 450.81,
+                    "width": 214.05,
+                    "height": 214.05,
+                    "rotationDeg": -134.36
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 12,
-                "set2_only": 6,
-                "set1_set2": 6,
-                "set3_only": 12,
-                "set4_only": 14,
-                "set3_set4": 8,
-                "outside": 12
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 12
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 7
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 0
+                },
+                {
+                  "id": "set3_only:0",
+                  "value": 9
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
               }
             },
             "order_index": 2
@@ -920,37 +1359,67 @@
             "label": "C",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Spicy",
-                  "shape": "hexagon"
+                  "label": "Express",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 313.68,
+                    "cy": 217.67,
+                    "width": 247.43,
+                    "height": 268.5,
+                    "rotationDeg": -124.39
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Vegetarian",
-                  "shape": "star"
+                  "label": "Scenic",
+                  "shape": "right_arrow",
+                  "geometry": {
+                    "cx": 223.33,
+                    "cy": 254.64,
+                    "width": 234.95,
+                    "height": 278.02,
+                    "rotationDeg": 50.36
+                  }
                 },
                 {
                   "id": "set3",
-                  "label": "Contains nuts",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "Gluten-free",
-                  "shape": "oval"
+                  "label": "Closed",
+                  "shape": "square",
+                  "geometry": {
+                    "cx": 504.29,
+                    "cy": 450.81,
+                    "width": 214.05,
+                    "height": 214.05,
+                    "rotationDeg": -134.36
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 14,
-                "set2_only": 6,
-                "set1_set2": 8,
-                "set3_only": 12,
-                "set4_only": 14,
-                "set3_set4": 6,
-                "outside": 10
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 8
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 11
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 4
+                },
+                {
+                  "id": "set3_only:0",
+                  "value": 5
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
               }
             },
             "order_index": 3
@@ -959,418 +1428,904 @@
             "label": "D",
             "option_text": "",
             "option_data": {
-              "diagramLayout": "auto",
+              "schemaVersion": 2,
               "sets": [
                 {
                   "id": "set1",
-                  "label": "Spicy",
-                  "shape": "hexagon"
+                  "label": "Express",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 313.68,
+                    "cy": 217.67,
+                    "width": 247.43,
+                    "height": 268.5,
+                    "rotationDeg": -124.39
+                  }
                 },
                 {
                   "id": "set2",
-                  "label": "Vegetarian",
-                  "shape": "star"
+                  "label": "Scenic",
+                  "shape": "right_arrow",
+                  "geometry": {
+                    "cx": 223.33,
+                    "cy": 254.64,
+                    "width": 234.95,
+                    "height": 278.02,
+                    "rotationDeg": 50.36
+                  }
                 },
                 {
                   "id": "set3",
-                  "label": "Contains nuts",
-                  "shape": "square"
-                },
-                {
-                  "id": "set4",
-                  "label": "Gluten-free",
-                  "shape": "oval"
+                  "label": "Closed",
+                  "shape": "square",
+                  "geometry": {
+                    "cx": 504.29,
+                    "cy": 450.81,
+                    "width": 214.05,
+                    "height": 214.05,
+                    "rotationDeg": -134.36
+                  }
                 }
               ],
-              "regions": {
-                "set1_only": 12,
-                "set2_only": 12,
-                "set1_set2": 8,
-                "set3_only": 6,
-                "set4_only": 14,
-                "set3_set4": 6,
-                "outside": 12
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 4
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 8
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 7
+                },
+                {
+                  "id": "set3_only:0",
+                  "value": 9
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
               }
             },
             "order_index": 4
           }
         ],
-        "correct_answer": "A",
-        "answer_reason": "Three values are freebies: 8 spicy-and-vegetarian, 6 nuts-and-gluten-free, and 12 outside. Scan — B shows 6 in the spicy-and-vegetarian overlap and 8 in the nuts-and-gluten-free overlap (swapped) — eliminate B. C shows 10 outside (stem says 12) — eliminate C. That leaves A and D. Vegetarian total = 14, with 8 also spicy, so vegetarian-only = 14 − 8 = 6. D shows 12 there — eliminate D. A shows 6 — correct. Answer: A.",
-        "order_index": 24
+        "decision_making_question_statements": [],
+        "subtype": "select_diagram"
       },
       {
-        "id": "dm4r-025-venn",
-        "title": "Classroom Clubs",
+        "id": "359239f8-3271-467a-8150-95f1f3db7e09",
+        "title": "Market Stall Tags",
         "type": "venn_diagram",
         "difficulty": "normal",
-        "hide_labels": true,
-        "stem": "A school records which clubs 80 students belong to. 30 are in music, 24 are in drama, and 18 are in art. 10 students are in both music and drama. 7 are in both music and art. 6 are in both drama and art. 3 students are in all three clubs. 28 students are in none of these clubs.\n\nWhich of the following diagrams is consistent with the data?",
-        "options": [
+        "stem": "The diagram classifies fictional market stalls by four tags. Each number is an exclusive-region count. How many stalls have exactly two of the four tags?",
+        "correct_answer": "B",
+        "answer_reason": "The exactly-two faces contain 7 (Ceramic and Outdoor), 3 (Outdoor and Local), and 1 (Local and New). Their sum is 11.",
+        "order_index": 25,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Music",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drama",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set3",
-                  "label": "Art",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 16,
-                "set2_only": 11,
-                "set3_only": 8,
-                "set1_set2": 7,
-                "set1_set3": 4,
-                "set2_set3": 3,
-                "set1_set2_set3": 3,
-                "outside": 28
-              }
-            },
+            "option_text": "9",
+            "option_data": null,
             "order_index": 1
           },
           {
             "label": "B",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Music",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drama",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set3",
-                  "label": "Art",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 16,
-                "set2_only": 11,
-                "set3_only": 8,
-                "set1_set2": 7,
-                "set1_set3": 4,
-                "set2_set3": 3,
-                "set1_set2_set3": 5,
-                "outside": 26
-              }
-            },
+            "option_text": "11",
+            "option_data": null,
             "order_index": 2
           },
           {
             "label": "C",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Music",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drama",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set3",
-                  "label": "Art",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 16,
-                "set2_only": 11,
-                "set3_only": 8,
-                "set1_set2": 10,
-                "set1_set3": 7,
-                "set2_set3": 6,
-                "set1_set2_set3": 3,
-                "outside": 19
-              }
-            },
+            "option_text": "13",
+            "option_data": null,
             "order_index": 3
           },
           {
             "label": "D",
-            "option_text": "",
-            "option_data": {
-              "diagramLayout": "auto",
-              "sets": [
-                {
-                  "id": "set1",
-                  "label": "Music",
-                  "shape": "circle"
-                },
-                {
-                  "id": "set2",
-                  "label": "Drama",
-                  "shape": "diamond"
-                },
-                {
-                  "id": "set3",
-                  "label": "Art",
-                  "shape": "triangle"
-                }
-              ],
-              "regions": {
-                "set1_only": 8,
-                "set2_only": 11,
-                "set3_only": 16,
-                "set1_set2": 7,
-                "set1_set3": 4,
-                "set2_set3": 3,
-                "set1_set2_set3": 3,
-                "outside": 28
-              }
-            },
+            "option_text": "15",
+            "option_data": null,
             "order_index": 4
           }
         ],
-        "correct_answer": "A",
-        "answer_reason": "One shape must total 30 (music), another 24 (drama), the third 18 (art). The centre should be 3, and the pair overlaps 10, 7, and 6. Check each option's shape totals. Option B has a centre of 5 and shape totals 32, 26, 20 — none match — eliminate B. Option C has centre 3 but one shape totals 16+10+7+3 = 36 (forgot to subtract the triple from the pair overlaps) — eliminate C. Option D has one shape totalling 8+7+4+3 = 22 — no match — eliminate D. Only Option A works: shape totals are 16+7+4+3 = 30 (music), 11+7+3+3 = 24 (drama), and 8+4+3+3 = 18 (art), with centre 3. Answer: A.",
-        "order_index": 25
-      },
-      {
-        "id": "dm4r-026-venn",
-        "title": "Library Book Handling Stages",
-        "type": "venn_diagram",
-        "difficulty": "hard",
-        "stem": "The diagram shows 120 library books categorised by five handling stages. Each letter marks a different region.\n\nWhich letter represents a book that has been shelved and wrapped, but has not been catalogued, stamped, or tagged?",
+        "decision_making_question_statements": [],
+        "subtype": "interpret_diagram",
         "stimulus_diagram": {
-          "diagramLayout": "auto",
+          "schemaVersion": 2,
           "sets": [
             {
               "id": "set1",
-              "label": "Catalogued",
-              "shape": "trapezoid"
+              "label": "Ceramic",
+              "shape": "parallelogram",
+              "geometry": {
+                "cx": 388.52,
+                "cy": 390.08,
+                "width": 208.23,
+                "height": 212.35,
+                "rotationDeg": 78.84
+              }
             },
             {
               "id": "set2",
-              "label": "Stamped",
-              "shape": "pentagon"
+              "label": "Outdoor",
+              "shape": "rounded_rectangle",
+              "geometry": {
+                "cx": 313.31,
+                "cy": 373.96,
+                "width": 282.04,
+                "height": 228.96,
+                "rotationDeg": 123.9
+              }
             },
             {
               "id": "set3",
-              "label": "Shelved",
-              "shape": "oval"
+              "label": "Local",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 185.53,
+                "cy": 345.22,
+                "width": 308.37,
+                "height": 272.27,
+                "rotationDeg": 172.37
+              }
             },
             {
               "id": "set4",
-              "label": "Wrapped",
-              "shape": "hexagon"
-            },
-            {
-              "id": "set5",
-              "label": "Tagged",
-              "shape": "square"
+              "label": "New",
+              "shape": "pentagon",
+              "geometry": {
+                "cx": 66.34,
+                "cy": 306.59,
+                "width": 255.17,
+                "height": 260.39,
+                "rotationDeg": 69.77
+              }
             }
           ],
-          "regions": {
-            "set1_only": "P",
-            "set1_set2": "Q",
-            "set2_only": "R",
-            "set2_set3": "S",
-            "set3_only": "T",
-            "set3_set4": "U",
-            "set4_only": "V",
-            "set4_set5": "W",
-            "set5_only": "X",
-            "outside": "Y"
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 8
+            },
+            {
+              "id": "set2_only:0",
+              "value": 6
+            },
+            {
+              "id": "set2_only:1",
+              "value": 4
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 7
+            },
+            {
+              "id": "set3_only:0",
+              "value": 5
+            },
+            {
+              "id": "set2_set3_only:0",
+              "value": 3
+            },
+            {
+              "id": "set1_set2_set3_only:0",
+              "value": 2
+            },
+            {
+              "id": "set4_only:0",
+              "value": 9
+            },
+            {
+              "id": "set3_set4_only:0",
+              "value": 1
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 14,
+            "preferredFontSize": 18,
+            "padding": 3
           }
-        },
-        "options": [
+        }
+      },
+      {
+        "id": "cbafbe28-de5f-40df-909d-e59f2b41190d",
+        "title": "Survey Route Flags",
+        "type": "venn_diagram",
+        "difficulty": "hard",
+        "stem": "The diagram classifies survey routes by five flags, and every shown number is an exclusive-region count. The Priority-only count is hidden by ?. Two Historic-only routes are upgraded so that they also carry the Priority flag, and four new Priority-only routes are added. After these changes, three-quarters of all routes carrying Priority or Historic carry Priority. What was the original Priority-only count?",
+        "correct_answer": "C",
+        "answer_reason": "Originally the Priority-or-Historic union contains ? + 6 + 11 = ? + 17 routes. Moving two Historic-only routes into the overlap does not change that union, while four new Priority-only routes increase it to ? + 21. The changed Priority total is ? + 6 + 2 + 4 = ? + 12. Therefore (? + 12)/(? + 21) = 3/4, so 4? + 48 = 3? + 63 and ? = 15.",
+        "order_index": 26,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
-            "text": "Letter S",
+            "option_text": "9",
+            "option_data": null,
             "order_index": 1
           },
           {
             "label": "B",
-            "text": "Letter U",
+            "option_text": "14",
+            "option_data": null,
             "order_index": 2
           },
           {
             "label": "C",
-            "text": "Letter T",
+            "option_text": "15",
+            "option_data": null,
             "order_index": 3
           },
           {
             "label": "D",
-            "text": "Letter W",
+            "option_text": "21",
+            "option_data": null,
             "order_index": 4
           }
         ],
-        "correct_answer": "B",
-        "answer_reason": "The question needs a book that is shelved (inside the oval) and wrapped (inside the hexagon), but outside the trapezoid (catalogued), pentagon (stamped), and square (tagged). Letter S sits where the pentagon and oval overlap — that includes stamped, which is excluded. Letter T sits in the oval only — missing wrapped. Letter W sits where the hexagon and square overlap — that includes tagged, which is excluded. Letter U sits where the oval and hexagon overlap, outside every other shape — matching every condition. Option B.",
-        "order_index": 26
-      },
-      {
-        "id": "dm4r-027-venn",
-        "title": "Festival Programming",
-        "type": "venn_diagram",
-        "difficulty": "hard",
-        "stem": "The diagram shows 200 festival activities. All music acts, comedy acts, and family-friendly acts take place on the main stage. Food stalls and free-entry activities do not take place on the main stage and do not overlap with the staged acts. Each letter marks a different region.\n\nWhich letter represents a main-stage act that is both comedy and family-friendly, but is not a music act?",
+        "decision_making_question_statements": [],
+        "subtype": "interpret_diagram",
         "stimulus_diagram": {
-          "diagramLayout": "auto",
+          "schemaVersion": 2,
           "sets": [
             {
               "id": "set1",
-              "label": "Main stage",
-              "shape": "rectangle"
+              "label": "Priority",
+              "shape": "rounded_rectangle",
+              "geometry": {
+                "cx": 289.34,
+                "cy": 506.06,
+                "width": 258.97,
+                "height": 341.71,
+                "rotationDeg": 8.56
+              }
             },
             {
               "id": "set2",
-              "label": "Music",
-              "shape": "circle"
+              "label": "Remote",
+              "shape": "right_arrow",
+              "geometry": {
+                "cx": 596.57,
+                "cy": 382.87,
+                "width": 265.4,
+                "height": 250.11,
+                "rotationDeg": -125.53
+              }
             },
             {
               "id": "set3",
-              "label": "Comedy",
-              "shape": "pentagon"
+              "label": "Historic",
+              "shape": "pentagon",
+              "geometry": {
+                "cx": 462.36,
+                "cy": 682.81,
+                "width": 235.57,
+                "height": 274.9,
+                "rotationDeg": 161.06
+              }
             },
             {
               "id": "set4",
-              "label": "Family-friendly",
-              "shape": "star"
+              "label": "Night",
+              "shape": "octagon",
+              "geometry": {
+                "cx": 767.87,
+                "cy": 606.78,
+                "width": 191.75,
+                "height": 259.79,
+                "rotationDeg": 119.95
+              }
             },
             {
               "id": "set5",
-              "label": "Food stall",
-              "shape": "hexagon"
+              "label": "Freight",
+              "shape": "trapezoid",
+              "geometry": {
+                "cx": 645.97,
+                "cy": 886.67,
+                "width": 260.43,
+                "height": 370.34,
+                "rotationDeg": -105.71
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": "?"
+            },
+            {
+              "id": "set2_only:0",
+              "value": 9
+            },
+            {
+              "id": "set3_only:0",
+              "value": 11
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 6
+            },
+            {
+              "id": "set4_only:0",
+              "value": 8
+            },
+            {
+              "id": "set5_only:0",
+              "value": 7
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 14,
+            "preferredFontSize": 18,
+            "padding": 3
+          }
+        }
+      },
+      {
+        "id": "a42edc2a-8e72-4622-9ef0-3e8c102753c7",
+        "title": "Information Format Requests",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "The diagram classifies fictional requests by six information formats. Each number is an exclusive-region count. How many requests specify at least two formats?",
+        "correct_answer": "C",
+        "answer_reason": "The multi-format faces contain 4, 3, 2, 1, 11 and 12 requests. Adding them once each gives 33.",
+        "order_index": 27,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "27",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "30",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "33",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "38",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": [],
+        "subtype": "interpret_diagram",
+        "stimulus_diagram": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Audio",
+              "shape": "right_arrow",
+              "geometry": {
+                "cx": 338.04,
+                "cy": 577.04,
+                "width": 301.85,
+                "height": 225.42,
+                "rotationDeg": -43.14
+              }
+            },
+            {
+              "id": "set2",
+              "label": "Braille",
+              "shape": "hexagon",
+              "geometry": {
+                "cx": 252.61,
+                "cy": 446.74,
+                "width": 270.96,
+                "height": 247.66,
+                "rotationDeg": -103.04
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Large print",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 309.3,
+                "cy": 274.4,
+                "width": 338.13,
+                "height": 311.62,
+                "rotationDeg": -152.44
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Easy read",
+              "shape": "rectangle",
+              "geometry": {
+                "cx": 463.79,
+                "cy": 249.05,
+                "width": 248.7,
+                "height": 205.95,
+                "rotationDeg": 152.94
+              }
+            },
+            {
+              "id": "set5",
+              "label": "Translation",
+              "shape": "octagon",
+              "geometry": {
+                "cx": 564.36,
+                "cy": 378.99,
+                "width": 259.97,
+                "height": 191.85,
+                "rotationDeg": -97.4
+              }
             },
             {
               "id": "set6",
-              "label": "Free entry",
-              "shape": "diamond"
+              "label": "Video",
+              "shape": "circle",
+              "geometry": {
+                "cx": 523.28,
+                "cy": 514.49,
+                "width": 289.01,
+                "height": 289.01,
+                "rotationDeg": 0
+              }
             }
           ],
-          "regions": {
-            "set1_only": "V",
-            "set1_set2": "P",
-            "set1_set2_set3": "Q",
-            "set1_set3": "R",
-            "set1_set3_set4": "S",
-            "set1_set4": "T",
-            "set5_only": "U",
-            "set6_only": "W",
-            "outside": "Y"
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 5
+            },
+            {
+              "id": "set2_only:0",
+              "value": 7
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 4
+            },
+            {
+              "id": "set3_only:0",
+              "value": 6
+            },
+            {
+              "id": "set2_set3_only:0",
+              "value": 3
+            },
+            {
+              "id": "set4_only:0",
+              "value": 8
+            },
+            {
+              "id": "set3_set4_only:0",
+              "value": 2
+            },
+            {
+              "id": "set5_only:0",
+              "value": 9
+            },
+            {
+              "id": "set4_set5_only:0",
+              "value": 1
+            },
+            {
+              "id": "set6_only:0",
+              "value": 10
+            },
+            {
+              "id": "set1_set6_only:0",
+              "value": 11
+            },
+            {
+              "id": "set5_set6_only:0",
+              "value": 12
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 14,
+            "preferredFontSize": 18,
+            "padding": 3
           }
-        },
-        "options": [
+        }
+      },
+      {
+        "id": "c06727c2-dd21-4e0a-8b17-32fb86155132",
+        "title": "Energy Project Regions",
+        "type": "venn_diagram",
+        "difficulty": "normal",
+        "stem": "The diagram classifies fictional projects by Solar, Wind and Storage. Each letter marks one connected exclusive face. Which letter marks projects that use Wind and Storage but not Solar?",
+        "correct_answer": "C",
+        "answer_reason": "The Wind-and-Storage-only face is labelled H. J is inside all three sets, while D and F represent different memberships.",
+        "order_index": 28,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
-            "text": "Letter Q",
+            "option_text": "D",
+            "option_data": null,
             "order_index": 1
           },
           {
             "label": "B",
-            "text": "Letter S",
+            "option_text": "F",
+            "option_data": null,
             "order_index": 2
           },
           {
             "label": "C",
-            "text": "Letter R",
+            "option_text": "H",
+            "option_data": null,
             "order_index": 3
           },
           {
             "label": "D",
-            "text": "Letter T",
+            "option_text": "J",
+            "option_data": null,
             "order_index": 4
           }
         ],
-        "correct_answer": "B",
-        "answer_reason": "The question needs an act on the main stage (inside the rectangle), that is comedy (inside the pentagon) and family-friendly (inside the star), but not music (outside the circle). Letter Q sits where the rectangle, circle, and pentagon overlap — that includes music, which is excluded. Letter R is where the rectangle and pentagon overlap only — missing family-friendly. Letter T is where the rectangle and star overlap only — missing comedy. Letter S sits where the rectangle, pentagon, and star overlap, outside every other shape — matching every condition. Option B.",
-        "order_index": 27
-      },
-      {
-        "id": "dm4r-028-venn",
-        "title": "Employee Competency Network",
-        "type": "venn_diagram",
-        "difficulty": "normal",
-        "stem": "The diagram shows 80 employees categorised by job role competencies. Each letter marks a different region.\n\nWhich letter represents an employee who has both manager and analyst competencies but is neither a designer nor a developer?",
+        "decision_making_question_statements": [],
+        "subtype": "interpret_diagram",
         "stimulus_diagram": {
-          "diagramLayout": "auto",
+          "schemaVersion": 2,
           "sets": [
             {
               "id": "set1",
-              "label": "Manager",
-              "shape": "pentagon"
+              "label": "Solar",
+              "shape": "triangle",
+              "geometry": {
+                "cx": 447.68,
+                "cy": 323.15,
+                "width": 381.77,
+                "height": 654.28,
+                "rotationDeg": 18.47
+              }
             },
             {
               "id": "set2",
-              "label": "Designer",
-              "shape": "oval"
+              "label": "Wind",
+              "shape": "hexagon",
+              "geometry": {
+                "cx": 318.88,
+                "cy": 327.38,
+                "width": 296.33,
+                "height": 722.81,
+                "rotationDeg": -51.53
+              }
             },
             {
               "id": "set3",
-              "label": "Developer",
-              "shape": "trapezoid"
-            },
-            {
-              "id": "set4",
-              "label": "Analyst",
-              "shape": "diamond"
+              "label": "Storage",
+              "shape": "circle",
+              "geometry": {
+                "cx": 307.92,
+                "cy": 449.26,
+                "width": 411.31,
+                "height": 411.31,
+                "rotationDeg": 0
+              }
             }
           ],
-          "regions": {
-            "set1_only": "P",
-            "set1_set2": "Q",
-            "set2_only": "R",
-            "set2_set3": "S",
-            "set3_only": "T",
-            "set3_set4": "U",
-            "set4_only": "V",
-            "set1_set4": "W",
-            "outside": "X"
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": "A"
+            },
+            {
+              "id": "set1_only:1",
+              "value": "B"
+            },
+            {
+              "id": "set2_only:0",
+              "value": "C"
+            },
+            {
+              "id": "set2_only:1",
+              "value": "D"
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": "E"
+            },
+            {
+              "id": "set3_only:0",
+              "value": "F"
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": "G"
+            },
+            {
+              "id": "set2_set3_only:0",
+              "value": "H"
+            },
+            {
+              "id": "set1_set2_set3_only:0",
+              "value": "J"
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 14,
+            "preferredFontSize": 18,
+            "padding": 3
           }
-        },
-        "options": [
+        }
+      },
+      {
+        "id": "d08e2685-8683-4865-9b77-e126836a7dfa",
+        "title": "Inspection Review Panel",
+        "type": "probabilistic",
+        "difficulty": "hard",
+        "stem": "A four-person review panel is selected at random from five field inspectors, four laboratory analysts and three project coordinators. Given that the selected panel contains at least one person from each of the three groups, what is the probability that it contains exactly two field inspectors?",
+        "correct_answer": "B",
+        "answer_reason": "With all three groups represented in a four-person panel, the group-count patterns are (2,1,1), (1,2,1) and (1,1,2). Their counts are C(5,2) x C(4,1) x C(3,1) = 120; C(5,1) x C(4,2) x C(3,1) = 90; and C(5,1) x C(4,1) x C(3,2) = 60. There are 270 eligible panels, of which 120 have two field inspectors, so the probability is 120/270 = 4/9.",
+        "order_index": 29,
+        "is_free": true,
+        "decision_making_question_options": [
           {
             "label": "A",
-            "text": "Letter W",
+            "option_text": "1/3",
+            "option_data": null,
             "order_index": 1
           },
           {
             "label": "B",
-            "text": "Letter P",
+            "option_text": "4/9",
+            "option_data": null,
             "order_index": 2
           },
           {
             "label": "C",
-            "text": "Letter V",
+            "option_text": "1/2",
+            "option_data": null,
             "order_index": 3
           },
           {
             "label": "D",
-            "text": "Letter Q",
+            "option_text": "5/9",
+            "option_data": null,
             "order_index": 4
           }
         ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "ad98d086-e667-48f4-afd5-bf50069d3fbf",
+        "title": "First Successful Upload",
+        "type": "probabilistic",
+        "difficulty": "normal",
+        "stem": "Each upload attempt succeeds with probability 1/4, independently of earlier attempts. What is the probability that the first successful upload occurs on the third attempt?",
+        "correct_answer": "B",
+        "answer_reason": "The first two attempts must fail and the third must succeed: (3/4) x (3/4) x (1/4)=9/64.",
+        "order_index": 30,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "3/64",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "9/64",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "9/16",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "27/64",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "a71c68fc-5ad2-4173-b0bf-0d85a83a173f",
+        "title": "Number Divisibility Draw",
+        "type": "probabilistic",
+        "difficulty": "normal",
+        "stem": "One integer is selected uniformly at random from 1 to 60 inclusive. What is the probability that it is divisible by 4 or by 9?",
+        "correct_answer": "C",
+        "answer_reason": "There are 15 multiples of 4 and 6 multiples of 9. One number, 36, is counted in both lists, so the union has 15+6-1=20 numbers. The probability is 20/60=1/3.",
+        "order_index": 31,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "1/4",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "3/10",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "1/3",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "7/20",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "e3793415-80aa-45be-8216-70b8efa74405",
+        "title": "Proposal Relative Order",
+        "type": "probabilistic",
+        "difficulty": "normal",
+        "stem": "Seven distinct proposals, including J, K and L, are placed in a uniformly random presentation order. What is the probability that J appears before K and K appears before L?",
+        "correct_answer": "B",
+        "answer_reason": "The other four proposals do not affect the relative order of J, K and L. Those three proposals have 3! = 6 equally likely relative orders, and only J-K-L satisfies both conditions. The probability is 1/6.",
+        "order_index": 32,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "1/7",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "1/6",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "1/3",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "1/2",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "691e68af-dd79-4681-868c-69263b07abd1",
+        "title": "Access Code Digits",
+        "type": "probabilistic",
+        "difficulty": "normal",
+        "stem": "A four-digit access code is formed by choosing each digit independently from 0 to 9, with repetition allowed. What is the probability that the code contains exactly one zero?",
         "correct_answer": "A",
-        "answer_reason": "The question needs an employee with manager (inside the pentagon) and analyst (inside the diamond) competencies, but outside the oval (designer) and trapezoid (developer). Letter P is inside the pentagon only — missing analyst. Letter V is inside the diamond only — missing manager. Letter Q is where the pentagon and oval overlap — that includes designer, which is excluded. Letter W sits where the pentagon and diamond overlap, outside both the oval and trapezoid — matching every condition. Option A.",
-        "order_index": 28
+        "answer_reason": "Choose the zero position in 4 ways and choose each other digit from 9 non-zero digits: 4 x 9^3 outcomes out of 10^4. This is 2916/10000=729/2500.",
+        "order_index": 33,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "729/2500",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "9/25",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "81/250",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "1/10",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "c23714a5-b0a9-4bc1-a724-c66855af25ed",
+        "title": "Prototype Module Pairing",
+        "type": "probabilistic",
+        "difficulty": "normal",
+        "stem": "Six distinct prototype modules are paired uniformly at random into three unordered pairs. What is the probability that two specified modules, K and L, are paired together?",
+        "correct_answer": "C",
+        "answer_reason": "Once module K is fixed, its partner is equally likely to be any of the other five modules. Exactly one possible partner is L, so the probability is 1/5.",
+        "order_index": 34,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "1/15",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "1/6",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "1/5",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "1/3",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
+      },
+      {
+        "id": "468cccb3-eb88-4712-992c-52272be6e58e",
+        "title": "Museum Display Arrangement",
+        "type": "probabilistic",
+        "difficulty": "hard",
+        "stem": "A museum store contains four distinct bronze objects, three distinct glass objects and two distinct stone objects. Three objects are selected without replacement and placed at random in left, centre and right positions. Given that at least one selected object is stone, what is the probability that the centre object is stone and the two outer objects are one bronze and one glass?",
+        "correct_answer": "B",
+        "answer_reason": "There are 9×8×7 = 504 ordered displays. Those with no stone number 7×6×5 = 210, so the condition leaves 294 displays. Favourable displays choose the centre stone in 2 ways, one bronze in 4 ways, one glass in 3 ways, and arrange bronze/glass in the two outer positions in 2 ways: 2×4×3×2 = 48. The conditional probability is 48/294 = 8/49.",
+        "order_index": 35,
+        "is_free": true,
+        "decision_making_question_options": [
+          {
+            "label": "A",
+            "option_text": "4/49",
+            "option_data": null,
+            "order_index": 1
+          },
+          {
+            "label": "B",
+            "option_text": "8/49",
+            "option_data": null,
+            "order_index": 2
+          },
+          {
+            "label": "C",
+            "option_text": "16/49",
+            "option_data": null,
+            "order_index": 3
+          },
+          {
+            "label": "D",
+            "option_text": "8/21",
+            "option_data": null,
+            "order_index": 4
+          }
+        ],
+        "decision_making_question_statements": []
       }
     ]
   }

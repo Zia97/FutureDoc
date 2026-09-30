@@ -4,69 +4,9 @@ import { getCached, saveCache } from '../../services/contentCache';
 import { withRetry } from '../../lib/withRetry';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { reportError } from '../../lib/reportError';
+import { mapTimedDMTests } from '../../utils/dm/normalizeTimedDM';
 
 const SECTION = 'timed_decision_making';
-
-function normalizeOptions(options = []) {
-  return [...options]
-    .sort((a, b) => (a.order_index ?? 0) - (b.order_index ?? 0))
-    .map((o) => ({
-      label: o.label,
-      text: o.option_text ?? o.text ?? '',
-      option_text: o.option_text ?? o.text ?? '',
-      option_data: o.option_data ?? o.vennConfig ?? null,
-      vennConfig: o.option_data ?? o.vennConfig ?? null,
-      vennGeometry: o.venn_geometry ?? o.vennGeometry ?? null,
-      order_index: o.order_index,
-    }));
-}
-
-function mapQuestion(q) {
-  return {
-    questionId: q.id,
-    title: q.title,
-    type: q.type,
-    subtype: q.subtype ?? null,
-    stem: q.stem,
-    options: q.timed_decision_making_question_options
-      ? normalizeOptions(q.timed_decision_making_question_options)
-      : normalizeOptions(q.options ?? []),
-    statements: q.timed_decision_making_question_statements
-      ? [...q.timed_decision_making_question_statements]
-          .sort((a, b) => a.order_index - b.order_index)
-          .map((s) => ({ text: s.statement_text, answer: s.correct_answer, reason: s.answer_reason ?? null }))
-      : (q.decision_making_question_statements
-          ? [...q.decision_making_question_statements]
-              .sort((a, b) => a.order_index - b.order_index)
-              .map((s) => ({ text: s.statement_text, answer: s.correct_answer, reason: s.answer_reason ?? null }))
-          : []),
-    tableData: q.table_data,
-    stimulusDiagram: q.stimulus_diagram ?? q.stimulusDiagram,
-    stimulusVennGeometry: q.venn_geometry ?? null,
-    hideLabels: q.hideLabels ?? q.hide_labels ?? false,
-    answer: q.correct_answer,
-    answeringReason: q.answer_reason,
-    difficulty: q.difficulty ?? 'normal',
-  };
-}
-
-function mapTests(data, isPreview = false) {
-  return data.map((test) => {
-    const questions = test.timed_decision_making_questions ?? test.questions ?? [];
-    return {
-      id: test.id,
-      title: test.title,
-      isFree: isPreview ? true : (test.is_free ?? test.isFree ?? false),
-      isPreview,
-      passageCount: 0,
-      questionCount: test.question_count ?? questions.length,
-      timeMinutes: test.time_minutes,
-      questions: [...questions]
-        .sort((a, b) => a.order_index - b.order_index)
-        .map(mapQuestion),
-    };
-  });
-}
 
 export function useTimedDMTests() {
   const [tests, setTests] = useState([]);
@@ -87,7 +27,7 @@ export function useTimedDMTests() {
       if (enabled) {
         const data = require('../../dev/preview-dm-timed.json');
         if (data?.length > 0) {
-          setTests(mapTests(data, true));
+          setTests(mapTimedDMTests(data, true));
           setLoading(false);
           return;
         }
@@ -128,7 +68,7 @@ export function useTimedDMTests() {
         pagesLoaded++;
         if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
       });
-      const mapped = mapTests(raw);
+      const mapped = mapTimedDMTests(raw);
       await saveCache(SECTION, versionRow.version, mapped);
       if (isMounted.current) {
         setTests(mapped);

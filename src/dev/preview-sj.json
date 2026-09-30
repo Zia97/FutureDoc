@@ -1,15 +1,341 @@
 [
   {
-    "id": "c3d4e5f6-0003-0003-0001-000000000005",
-    "body": "Priya is a third-year medical student on a clinical placement in a busy general practice. After a consultation ends, a patient approaches Priya privately in the corridor and asks her to pass a personal message to the GP. The patient explains they were too embarrassed to mention a symptom during the consultation but now feels it might be important. The message contains details of a new and potentially significant symptom.",
+    "id": "bff40713-4a83-4ec3-a838-ce399f9e609f",
+    "body": "Leila, a third-year medical student in a GP surgery, is observing an appointment with an autistic adult who requested a quieter place to wait and a written outline of what will happen during the consultation. The waiting room is unusually noisy and the appointment is running 20 minutes late. The receptionist says it would be unfair to treat one patient differently, but an unused side room is available and the GP can provide a short written outline without delaying other patients.\n\nHow important to take into account are each of the following considerations for Leila when deciding whether to raise the patient's request with the GP?",
+    "is_free": true,
     "situational_judgement_questions": [
       {
-        "id": "c3d4e5f6-0003-0003-0002-000000000006",
+        "id": "238ac6d9-5d17-4697-9bc7-25aa6946b9af",
+        "label_set": 1,
+        "question_text": "Whether the noisy, uncertain environment may make it harder for this patient to participate effectively in the consultation.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because communication should be adapted to the individual's needs. The noise and uncertainty may be a significant barrier to the patient's participation, and Leila knows that practical adjustments are available without compromising anyone else's care.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "96f583ef-5674-43cb-b6dd-0b2411ab847d",
+        "label_set": 1,
+        "question_text": "That other patients in the waiting room have not been offered the same arrangements.",
+        "correct_answer": "Of minor importance",
+        "answer_reason": "This is of minor importance. Consistency and fairness matter, but fair care does not require identical arrangements when an individual faces a specific communication or sensory barrier. The adjustment is proportionate, available and does not delay other patients, so the absence of the same offer to everyone should not prevent Leila raising it.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "225b54d8-c93d-42e6-bf38-d888ea3572a3",
+        "label_set": 1,
+        "question_text": "Whether a side room and written outline can be provided without delaying care for other patients.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because it shows that the requested support is reasonable and readily achievable. Leila should raise the request so the GP can involve the patient more effectively while maintaining the service for others.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "612d9ed9-f572-4411-9126-73bda6cfd32d",
+    "body": "Dr Mensah, an F1 doctor, uses a trust-approved drafting tool to prepare a discharge letter from information already in a patient's electronic record. Before the letter is sent, she notices that the draft has invented a follow-up appointment in two weeks; the actual plan is for the GP to arrange review within six weeks. The patient is still on the ward, and a senior doctor is available to review the corrected letter.\n\nHow appropriate are each of the following responses by Dr Mensah?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "6b87e264-c3b9-48ef-b7f8-89afab37b61e",
         "label_set": 2,
-        "question_text": "Priya takes note of the message and passes it to the GP promptly, suggesting the GP may wish to follow up with the patient.",
+        "question_text": "Dr Mensah checks the whole draft against the clinical record, corrects the follow-up plan, and asks the senior doctor to review it before it is sent.",
         "correct_answer": "A very appropriate thing to do",
-        "answer_reason": "Passing clinically relevant information to the responsible clinician promptly is a core patient safety responsibility. Priya cannot assess the significance of the symptom herself, and ensuring the GP receives the information maintains proper clinical oversight.",
-        "order_index": 0
+        "answer_reason": "This is very appropriate because Dr Mensah remains accountable for the accuracy of the letter even though an approved tool produced the first draft. Checking the complete output, correcting the invented detail and obtaining timely senior review protects continuity of care and prevents misleading information reaching the patient or GP.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "acc4c2d4-5497-4066-a618-387cb802ce2d",
+        "label_set": 2,
+        "question_text": "Dr Mensah sends the draft unchanged because the tool is trust-approved and assumes the GP will correct the follow-up timing if necessary.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because she has identified a material error before the letter is sent and has a clear opportunity to prevent harm. Approval of a tool does not transfer professional responsibility for checking clinical communications, and relying on the GP to detect the error risks delayed or confused follow-up.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "af97e892-e791-422f-9757-065940fbbb90",
+        "label_set": 2,
+        "question_text": "Dr Mensah discards the draft, writes an accurate letter manually, but does not report the unexpected output because no incorrect information was sent.",
+        "correct_answer": "Appropriate, but not ideal",
+        "answer_reason": "This is appropriate but not ideal. Rewriting the letter prevents the immediate error and is within Dr Mensah's scope, but failing to report a significant false output misses an opportunity for the organisation to assess whether the tool could create similar risks for other patients.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "29ef1c6f-15fc-4ac6-8f2a-0cd871c1132a",
+    "body": "During a dental teaching clinic, final-year student Mariam opens a sealed instrument pouch for the next patient and notices moisture inside and a tear along its heat-sealed edge. The instruments have not yet touched the patient. A colleague says they came through the steriliser this morning and suggests using them because the clinic is running late; an intact replacement pouch is available nearby.\n\nHow appropriate are each of the following responses by Mariam?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "b7b64287-8862-49e8-8670-33f72ed51895",
+        "label_set": 2,
+        "question_text": "Mariam sets the damaged pouch aside, uses the intact replacement, and alerts the dental nurse so the packaging failure can be handled through the clinic's decontamination process.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "This is very appropriate because damaged, wet packaging cannot provide reliable assurance that the instruments remained sterile. Mariam prevents exposure before it occurs, keeps care moving with the intact set and reports the problem so the affected instruments and process can be checked.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "217cd473-923a-452f-a736-fa137f55e93b",
+        "label_set": 2,
+        "question_text": "Mariam dries the outside of the pouch, checks that the instruments look clean, and uses them without mentioning the damaged seal.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because Mariam knowingly uses instruments from a wet, torn pouch whose sterile barrier is compromised, despite an intact replacement being immediately available. Drying the pouch and visually inspecting the instruments cannot restore sterility; concealing the defect and proceeding creates a direct, avoidable infection risk for the patient.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "df4ceb21-fc3a-4dd9-85c5-7160784d68cf",
+        "label_set": 2,
+        "question_text": "Mariam uses the instruments and plans to mention the damaged pouch after the session because the instruments were sterilised that morning.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because recent processing does not overcome a compromised sterile barrier, and an intact alternative is immediately available. Using the set creates an avoidable infection risk; raising the issue only after treatment is too late to protect this patient.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "4174a5d4-fea1-47e6-8209-848c60becdf1",
+    "body": "In a dental school teaching laboratory, Sora, a third-year dental student, is asked to use a plaster model of a patient's teeth during a class demonstration. The model has a label showing the patient's full name and date of birth. Students not involved in that patient's care will attend the class. An anonymised identifier can be attached in a few minutes without affecting the demonstration.\n\nHow important to take into account are each of the following considerations for Sora?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "94b32efa-2aa1-41dd-82b6-281ac293bca1",
+        "label_set": 1,
+        "question_text": "That a labelled dental model contains patient information even though it does not show the patient's face.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because the full name and date of birth directly identify the patient. Dental records and models must be handled in a way that protects confidentiality, including when they are used for teaching.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "23bd9b37-6f68-4b46-839b-9316a2361e8a",
+        "label_set": 1,
+        "question_text": "That none of the students attending the class are likely to know the patient personally.",
+        "correct_answer": "Of minor importance",
+        "answer_reason": "This is of minor importance. Familiarity could increase the chance of recognition, but confidentiality does not depend on whether Sora expects a particular audience member to know the patient. The visible identifiers are unnecessary and should still be removed or covered.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "f6472560-488e-42cd-b5a2-f0c6f55f5d36",
+        "label_set": 1,
+        "question_text": "Whether replacing the label with an anonymised identifier would preserve the educational value of the demonstration.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because it provides a proportionate way to meet the teaching aim without exposing identifiable information. Sora should use the anonymised label before the model is shown to the wider class.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "53124883-d517-43cf-a81b-ab17be3b63f1",
+    "body": "Before connecting an infusion pump to a patient, Dr Okeke, an F1 doctor, sees the pump restart when its power cable is moved slightly. No patient has received treatment from it. A nurse says the same pump gave an unexplained alarm on the previous shift, but nobody reported it. A working spare pump is available and the trust has an equipment incident process.\n\nHow important to take into account are each of the following considerations for Dr Okeke?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "07076d72-c491-4e16-afe9-264f83091949",
+        "label_set": 1,
+        "question_text": "That no patient appears to have been harmed by the pump so far.",
+        "correct_answer": "Of minor importance",
+        "answer_reason": "This is of minor importance. The absence of known harm is relevant to the immediate clinical response, but it does not make the recurrent fault safe or remove the need to prevent future use and report the near miss.",
+        "order_index": 0,
+        "difficulty": "hard"
+      },
+      {
+        "id": "74395bcd-744c-4173-85ce-b74e49f08e16",
+        "label_set": 1,
+        "question_text": "Whether the intermittent fault could recur while the pump is delivering treatment to a patient.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because an intermittent restart during treatment could interrupt or alter therapy. Dr Okeke should act on the observable risk rather than wait for a patient to be harmed.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "af4883fb-9f28-48e6-8445-affb5beb61d7",
+        "label_set": 1,
+        "question_text": "Whether taking the pump out of service and reporting the fault could protect patients on later shifts.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because isolating and clearly labelling the pump prevents accidental reuse, while formal reporting allows technical review and organisational learning. The available spare means this can be done without delaying the current patient's care.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "6d8e039f-3b48-4dcc-8392-6ca890414438",
+    "body": "Dr Rahim, an F1 doctor in an outpatient clinic, receives a call from the adult daughter of a patient who has capacity. The daughter asks for the patient's online portal password to be reset to the daughter's email address because her parent 'isn't good with phones'. The patient has not authorised proxy access, the result on the portal is routine, and clinic staff can contact the patient directly to discuss supported access.\n\nHow appropriate are each of the following responses by Dr Rahim?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "da5dd412-0bed-4466-a111-ab07fa9a301c",
+        "label_set": 2,
+        "question_text": "Dr Rahim explains that access cannot be changed without the patient's involvement, and arranges for staff to contact the patient about support or formal proxy access if the patient wants it.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "This is very appropriate because it protects the patient's control over confidential information while addressing the practical difficulty constructively. Direct contact lets the patient choose whether to receive support or authorise proxy access through the proper process.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "3c3fb9c7-db4e-47e9-b4db-9a72a9e53907",
+        "label_set": 2,
+        "question_text": "Dr Rahim changes the portal email after the daughter correctly states the patient's date of birth and address.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because confirming demographic details does not establish the patient's consent for the daughter to access the portal. Changing the account could disclose results and correspondence and deprive a capacitous patient of control over their information.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "6340fb4f-4d37-41e7-bd66-d98456fde7e7",
+        "label_set": 2,
+        "question_text": "Dr Rahim shares no information, asks the daughter to tell the patient to contact the clinic, and takes no further step to make direct contact.",
+        "correct_answer": "Appropriate, but not ideal",
+        "answer_reason": "This is appropriate but not ideal. Dr Rahim avoids an unauthorised disclosure and gives a legitimate route forward, but relying only on the daughter is less patient-centred than arranging direct contact, particularly when staff already know the patient may need help using the portal.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "523ee9de-60b8-431c-a16d-f7577d349004",
+    "body": "At evening handover, Dr Lowe, an F1 doctor, sees a colleague preparing to send identifiable patient details to the incoming doctor through a personal messaging account. The approved electronic handover system is expected to be unavailable for 20 minutes, but the patient is stable and an approved ward telephone can be used for a verbal handover.\n\nHow appropriate are each of the following responses by Dr Lowe?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "2ed05a96-600a-48b6-b204-4f80830eafa5",
+        "label_set": 2,
+        "question_text": "Dr Lowe asks the colleague not to send the message, suggests a verbal handover on the approved ward telephone, and reports the system outage through the usual route.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "This is very appropriate because it preserves an effective handover without placing identifiable information on an unapproved personal account. Reporting the outage also helps the organisation restore the secure system and manage any wider continuity risk.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "2c557ee6-7674-4638-bd49-361cee3effd2",
+        "label_set": 2,
+        "question_text": "Dr Lowe agrees that the personal account can be used because its messages are encrypted and the colleague promises to delete them after the shift.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because encryption and later deletion do not make an unapproved personal account an acceptable clinical record or communication route. A safe, authorised alternative is immediately available, so the confidentiality and governance risk is unnecessary.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "93c65df7-cb6d-491b-b961-f49bb368bb17",
+        "label_set": 2,
+        "question_text": "Dr Lowe suggests sending only the patient's initials and bed number by personal message, with a request that the incoming doctor look up the clinical details later.",
+        "correct_answer": "Inappropriate, but not awful",
+        "answer_reason": "This is inappropriate but not awful. Reducing the content limits some disclosure, but initials and location may still identify the patient, the personal channel remains unapproved, and deferring the clinical details risks an incomplete handover. The approved telephone offers a safer and more effective option.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "08e1847b-52ea-4aef-9509-9876a110fade",
+    "body": "During a GP appointment, a patient tells Dr Chen, an F1 doctor, that they have been buying weight-loss injections online. The patient asks Dr Chen not to put this in the clinical record because they wrongly believe their employer can routinely read their notes. The injections may affect future prescribing, and the patient's regular GP will continue their care.\n\nHow important to take into account are each of the following considerations for Dr Chen when responding?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "4089c4c0-80e5-452e-9be3-ef4a646aeeba",
+        "label_set": 1,
+        "question_text": "Whether an accurate record of the injections is needed for safe prescribing and continuity of care.",
+        "correct_answer": "Very important",
+        "answer_reason": "This is very important because the information may affect future treatment and needs to be available to clinicians responsible for the patient's care. Dr Chen should explain why a relevant, factual entry is necessary rather than agreeing to create an incomplete record.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "9c12d2b7-0a73-4447-a295-66114e6f49ca",
+        "label_set": 1,
+        "question_text": "That the patient's request is based on a fear that their employer can routinely access the clinical record.",
+        "correct_answer": "Important",
+        "answer_reason": "This is important because Dr Chen should take the concern seriously, correct the misunderstanding and explain how confidential records are protected. It does not outweigh the need for an accurate clinical record, but addressing it may help the patient understand and accept appropriate documentation.",
+        "order_index": 1,
+        "difficulty": "hard"
+      },
+      {
+        "id": "a3ef8844-6ae9-4474-8852-14e7f2d656bb",
+        "label_set": 1,
+        "question_text": "That respecting patient autonomy requires clinicians to omit any information a patient asks them not to record.",
+        "correct_answer": "Not important at all",
+        "answer_reason": "This is not important at all because autonomy does not give a patient an absolute right to require a misleading or clinically unsafe record. Dr Chen should listen, explain confidentiality and document relevant information accurately and proportionately.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "48854b09-9e20-4f6e-98f0-335d49b84934",
+    "body": "During a remote review, Dr Patel, an F1 doctor, notices that an adult patient's father is recording the consultation on the father's phone. The patient has capacity, wants the father present and says the recording will help them remember advice. The discussion is about a sensitive diagnosis, and nobody has discussed who will store or hear the recording.\n\nHow appropriate are each of the following responses by Dr Patel?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "163f14ff-e516-479a-bcdf-e731de026fae",
+        "label_set": 2,
+        "question_text": "Dr Patel pauses to confirm the patient's wishes, clarifies who will keep and hear the recording, and offers a written summary as an alternative before continuing.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "This is very appropriate because it respects the patient's wish to retain information while addressing the additional privacy risk created by using another person's device for a sensitive discussion. Clarifying control and alternatives supports an informed, proportionate decision without shaming the patient or father.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "0081f063-b44c-462a-9c62-b5aea6759990",
+        "label_set": 2,
+        "question_text": "Dr Patel continues once the patient confirms they want the recording, without asking how the father's phone or recording will be used afterwards.",
+        "correct_answer": "Appropriate, but not ideal",
+        "answer_reason": "This is appropriate but not ideal. The capacitous patient's clear wish carries substantial weight, so continuing is not inherently wrong. However, because the recording is on a relative's device and concerns sensitive information, a brief discussion about storage, access and sharing would better protect the patient's confidentiality.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "93f910aa-5afd-463a-a01d-0a0c7aff25fe",
+        "label_set": 2,
+        "question_text": "Dr Patel tells the father that recording is forbidden and threatens to end the consultation unless it is deleted immediately, despite the patient's stated wish.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because it is coercive, disregards the patient's expressed preference and risks withdrawing needed care without first exploring the privacy concern or reasonable alternatives. Dr Patel should discuss the situation calmly and keep the patient's interests central.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "4109ee1b-4fce-4834-b3d3-87e6e572b9dd",
+    "body": "Dr Evans, an F2 doctor, is due to conduct a routine video review but is still in a busy railway cafe. Other customers are seated close enough to overhear. A private clinic room will be free in 15 minutes, and a colleague can tell the patient about the short delay. The patient's condition is stable and the review is not urgent.\n\nHow appropriate are each of the following responses by Dr Evans?",
+    "is_free": true,
+    "situational_judgement_questions": [
+      {
+        "id": "038ccf43-acb2-42b8-9b2d-b4cf10627ce4",
+        "label_set": 2,
+        "question_text": "Dr Evans asks the colleague to explain the short delay and conducts the review from the private clinic room when it becomes available.",
+        "correct_answer": "A very appropriate thing to do",
+        "answer_reason": "This is very appropriate because the brief, communicated delay causes little clinical risk and allows the consultation to take place in a setting that protects privacy and supports open discussion.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "84d6062b-2873-48f3-a5ad-122d25cd39c2",
+        "label_set": 2,
+        "question_text": "Dr Evans starts the review in the cafe using headphones and speaks quietly without saying the patient's name.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because Dr Evans deliberately begins a non-urgent confidential consultation where nearby customers can foreseeably overhear. Headphones protect only incoming audio, and speaking quietly without using the patient's name does not prevent sensitive clinical details from identifying the patient. The breach is avoidable because a private room is available after a short, safe delay.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "65d8f885-1e48-40f8-a68c-4c3e2bd4794e",
+        "label_set": 2,
+        "question_text": "Dr Evans asks the patient to consent to continuing while he is in the cafe, reasoning that consent removes the confidentiality concern.",
+        "correct_answer": "A very inappropriate thing to do",
+        "answer_reason": "This is very inappropriate because a patient's agreement does not remove Dr Evans's responsibility to choose a suitably private environment, especially when the patient may feel pressure not to delay the appointment. There is no urgency and a safe alternative is available within minutes.",
+        "order_index": 2,
+        "difficulty": "normal"
       }
     ]
   }

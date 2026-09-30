@@ -1,562 +1,502 @@
 [
   {
-    "id": "f1a2b3c4-0001-4001-8001-000000000001",
-    "title": "The Antikythera Mechanism",
-    "body": "In 1901, sponge divers working off the Greek island of Antikythera discovered the wreck of a Roman-era cargo ship. Among bronze statues and amphorae, they recovered a corroded lump of metal that was initially overlooked. It was not until 1902 that archaeologist Valerios Stais, examining the object at the National Archaeological Museum in Athens, identified gear wheels embedded in the encrustation. The object, now known as the Antikythera Mechanism, is generally dated by its accompanying pottery to between 150 and 100 BCE.\n\nSubsequent analysis, particularly using X-ray tomography in the early 2000s, revealed at least thirty interlocking bronze gears housed in a wooden case roughly the size of a modern shoebox. The mechanism was used to predict astronomical positions and eclipses decades in advance, and it also tracked the four-year cycle of the ancient Olympic Games. Front and back dials displayed the positions of the Sun and Moon, the phase of the Moon, and the timing of athletic festivals across the Greek world.\n\nNo comparable device is known from the ancient world. Technology of similar mechanical sophistication does not reappear in the surviving historical record until the astronomical clocks of medieval Europe, more than a thousand years later. Some scholars have suggested the mechanism was produced in a workshop associated with the school of the astronomer Hipparchus on Rhodes, though this attribution remains disputed. What is clear is that the device demonstrates a Hellenistic understanding of gearing and astronomical modelling substantially more advanced than was previously credited to the period.",
+    "id": "5481075c-3b52-4edf-9b93-ff6c31daf0be",
+    "title": "Reading the Ocean with Stick Charts",
+    "body": "Marshallese navigators developed charts from lashed strips of palm or coconut material, sometimes adding shells to represent islands. Yet calling these objects maps can mislead. They did not simply shrink coastlines onto a fixed scale. Instead, their curves and crossings represented how long ocean swells were bent, reflected or interrupted by atolls. An island still below the horizon could alter the motion of a canoe, giving a skilled navigator evidence of nearby land.\n\nDifferent charts served different purposes. A mattang was a schematic teaching device: it showed general principles of swell interaction around an island rather than a particular voyage. A meddo represented part of the Marshall Islands and its characteristic swell patterns, while a rebbelib covered a larger group of atolls. Shells could mark islands, but not every chart used them, and the sticks did not share one universally readable code. Their interpretation was taught by experienced navigators.\n\nThe objects were normally studied on land rather than consulted like nautical charts at sea. During a voyage, the navigator relied on memory and on bodily sensation, sometimes crouching or lying in the canoe to feel changes in pitch and roll. This made the chart part of a wider apprenticeship rather than a substitute for practical skill.\n\nMuseum display can therefore create a paradox. Preserved behind glass, a chart looks like a self-contained store of geographical information. In use, however, it was one element in a system joining an instructor's explanation, a learner's memory and direct attention to the sea. Its open framework recorded relationships among swells and islands, but mastery resided partly in trained bodies and communities, not solely in the object.",
     "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "f1a2b3c4-0001-4001-8001-000000000002",
-        "question_text": "According to the passage, who first recognised that the corroded object contained gear wheels?",
+        "id": "3e4c3304-0c69-43c7-adb3-b396641c5da2",
+        "question_text": "What was the principal function of a mattang?",
         "options": [
-          "The sponge divers who originally recovered it in 1901",
-          "Valerios Stais, examining the object at the museum in 1902",
-          "Researchers using X-ray tomography in the early 2000s",
-          "Astronomers associated with the school of Hipparchus"
+          "To teach general patterns of swell interaction around an island",
+          "To show every atoll in the Marshall Islands at a fixed scale",
+          "To record the daily position of a canoe during a voyage",
+          "To provide a code that any navigator could read without instruction"
         ],
-        "correct_answer": "Valerios Stais, examining the object at the museum in 1902",
-        "answer_reason": "The passage states that 'in 1902, archaeologist Valerios Stais, examining the object at the National Archaeological Museum in Athens, identified gear wheels embedded in the encrustation'. The sponge divers recovered the object but 'overlooked' it, and X-ray tomography came later to reveal the internal structure in more detail.",
+        "correct_answer": "To teach general patterns of swell interaction around an island",
+        "answer_reason": "The passage explicitly calls the mattang a schematic teaching device for general swell interaction. It was not a fixed-scale map of every atoll, a voyage log, or a universally readable code, so the other three options conflict with the passage.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0001-4001-8001-000000000003",
-        "question_text": "Which of the following is most strongly supported by the passage?",
+        "id": "faf6ee57-b8ac-490b-a2ad-89a01234d112",
+        "question_text": "Why could a navigator detect an island before seeing it?",
         "options": [
-          "Hellenistic engineers routinely produced mechanisms as complex as the Antikythera device",
-          "The mechanical sophistication of the Antikythera Mechanism was not matched for over a millennium in surviving records",
-          "The Antikythera Mechanism was used primarily to schedule the Olympic Games",
-          "Medieval European clockmakers based their designs on recovered Greek devices"
+          "Shell markers floated from the island towards the canoe",
+          "The island altered swells and therefore changed the canoe's motion",
+          "The chart predicted the island's appearance from the stars alone",
+          "The navigator measured the island's coastline against a fixed scale"
         ],
-        "correct_answer": "The mechanical sophistication of the Antikythera Mechanism was not matched for over a millennium in surviving records",
-        "answer_reason": "The passage states that 'technology of similar mechanical sophistication does not reappear in the surviving historical record until the astronomical clocks of medieval Europe, more than a thousand years later'. The first option overstates the case — the passage says 'no comparable device is known', suggesting such sophistication was unusual, not routine.",
+        "correct_answer": "The island altered swells and therefore changed the canoe's motion",
+        "answer_reason": "The first paragraph states that atolls alter swells and that this can be felt through the canoe. Shells were attached to some charts, not released at sea; the passage does not attribute detection to stars; and the charts were not fixed-scale coastline maps.",
         "order_index": 1,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0001-4001-8001-000000000004",
-        "question_text": "Why does the author mention the school of Hipparchus?",
+        "id": "4c7e33e9-a75d-4970-b3f3-31ae28df59d2",
+        "question_text": "Which conclusion is best supported by the fact that charts were generally studied on land?",
         "options": [
-          "To confirm the origin of the Antikythera Mechanism",
-          "To illustrate a proposed but contested theory about where the device was made",
-          "To argue that Rhodes was the centre of Hellenistic astronomy",
-          "To contrast Hipparchus's methods with those of the mechanism's designer"
+          "Their makers considered ocean swells too changeable to be represented",
+          "They were ceremonial objects with no navigational relevance",
+          "Their value depended on learning that could later be applied without consulting the object",
+          "Navigators lacked a safe way to carry lightweight objects in canoes"
         ],
-        "correct_answer": "To illustrate a proposed but contested theory about where the device was made",
-        "answer_reason": "The passage says 'some scholars have suggested' the mechanism came from a workshop associated with Hipparchus's school 'though this attribution remains disputed'. The mention is specifically to present an unresolved hypothesis, not to confirm anything.",
+        "correct_answer": "Their value depended on learning that could later be applied without consulting the object",
+        "answer_reason": "The chart was studied during apprenticeship, then its principles were recalled while the navigator read the sea directly. Swells were represented, so they were not considered too changeable; the objects had navigational relevance, so they were not merely ceremonial; and no transport difficulty is stated.",
         "order_index": 2,
         "difficulty": "hard"
       },
       {
-        "id": "f1a2b3c4-0001-4001-8001-000000000005",
-        "question_text": "The dating of the Antikythera Mechanism to between 150 and 100 BCE is based primarily on:",
+        "id": "3348272b-1c70-4654-ad98-e36eb6fb6181",
+        "question_text": "What paradox does the author identify in museum display?",
         "options": [
-          "Radiocarbon analysis of the wooden case",
-          "The style of the bronze gears",
-          "Pottery recovered alongside it from the shipwreck",
-          "Historical records of Hipparchus's workshop"
+          "A chart may look fragile although it was originally made from metal",
+          "A chart may appear abstract although every line reproduced a measured coastline",
+          "A chart may seem ancient although all surviving examples were made recently for tourists",
+          "A chart may look self-contained although its use relied on teaching, memory and bodily skill"
         ],
-        "correct_answer": "Pottery recovered alongside it from the shipwreck",
-        "answer_reason": "The passage states the mechanism 'is generally dated by its accompanying pottery to between 150 and 100 BCE'. No mention is made of radiocarbon analysis, gear style, or historical records as dating evidence.",
+        "correct_answer": "A chart may look self-contained although its use relied on teaching, memory and bodily skill",
+        "answer_reason": "The final paragraph contrasts a self-contained museum object with a practice involving instruction, memory and bodily attention. The passage says the charts used plant strips, not metal; denies that the lines reproduce coastlines; and makes no claim that all surviving examples are modern tourist objects.",
         "order_index": 3,
         "difficulty": "normal"
       }
     ]
   },
   {
-    "id": "f1a2b3c4-0002-4002-8002-000000000001",
-    "title": "Tulip Mania",
-    "body": "Between 1634 and early 1637, the Dutch Republic experienced an episode of extraordinary speculation in tulip bulbs that has since become a standard reference point in discussions of financial bubbles. Tulips had been introduced to the Low Countries from the Ottoman Empire in the late sixteenth century, and rare variegated varieties — prized for their flame-like colour patterns, which are now known to have been caused by a mosaic virus — commanded increasingly high prices among wealthy collectors.\n\nBy 1636, trade in tulip bulbs had moved beyond collectors into taverns, where standardised contracts for the delivery of bulbs at future dates were bought and sold. A single bulb of the most coveted variety, Semper Augustus, was reported to have changed hands for a sum equivalent to the annual income of a skilled Amsterdam craftsman several times over. Contemporary pamphlets later condemned the trade as immoral, though these pamphlets were often written decades after the events they describe.\n\nThe market collapsed in February 1637, reportedly when a bulb auction in Haarlem failed to attract buyers. Prices fell to a fraction of their peak within weeks. The economic historian Anne Goldgar, writing in 2007, has argued that the long-standing narrative of nationwide ruin is exaggerated: most transactions took place among a relatively small circle of merchants, and few bankruptcies in the period can be directly attributed to tulip speculation. Nonetheless, the episode remains widely cited in discussions of speculative excess.",
+    "id": "89052d68-8561-471c-ab88-da03c30ea209",
+    "title": "When Iron Gall Ink Bites into Paper",
+    "body": "For centuries, iron gall ink was a standard writing medium in Europe. Recipes varied, but the usual ingredients were an extract of oak galls, iron sulphate, water and gum arabic. Galls contain tannins, which react with iron salts to form a dark colourant. Gum arabic helps the liquid flow from a pen and bind to the writing surface. Fresh writing could appear bluish black before ageing towards brown.\n\nThe same chemistry that made the ink useful can endanger a manuscript. Historical recipes sometimes contained more iron than the tannins could bind, and the mixtures could also be strongly acidic. Unbound iron ions promote oxidation of cellulose, while acids drive hydrolysis, a reaction that breaks cellulose chains. The result may begin as a brown halo around a line and progress to brittleness, cracks and complete loss where letters once lay. Higher moisture can help mobile iron ions and acids migrate into surrounding paper, widening the damage.\n\nConservators therefore do not treat every inked sheet by one recipe. They first assess the object, sometimes using an indicator paper to test for reactive iron. Aqueous treatment may remove or redistribute soluble material, so an ink's response to water and the paper's physical condition must be evaluated. Some treatments combine an iron-binding compound with deacidification, addressing both oxidation and acidity; fragile areas may also need local physical support.\n\nPrevention remains important even when chemical treatment is possible. Cool, dry, stable storage slows reactions and reduces migration. This does not reverse losses already present, and reinforcement alone does not neutralise the reactions. Conservation is consequently a managed choice among risks: intervention may stabilise an object, but careless treatment can move the very compounds responsible for its decay.",
     "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "f1a2b3c4-0002-4002-8002-000000000002",
-        "question_text": "The distinctive flame patterns of the most prized tulips were caused by a viral infection.",
-        "options": ["True", "False", "Can't tell"],
+        "id": "629c51ee-482f-45e2-b55c-b61f72080f31",
+        "question_text": "What role does gum arabic play in the ink as described?",
+        "options": [
+          "It supplies the iron ions that oxidise cellulose",
+          "It removes excess acid during deacidification",
+          "It improves flow and helps bind the ink to the writing surface",
+          "It changes damaged brown ink back to bluish black"
+        ],
+        "correct_answer": "It improves flow and helps bind the ink to the writing surface",
+        "answer_reason": "The first paragraph gives flow and binding as gum arabic's functions. Iron sulphate, not gum, supplies iron; deacidification is a conservation treatment rather than an ingredient function; and no reversal of aged colour is described.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "efbde862-806c-47da-8245-7703abce14ce",
+        "question_text": "Why can excess moisture enlarge the area of ink corrosion?",
+        "options": [
+          "It allows reactive iron and acids to migrate into nearby paper",
+          "It converts gum arabic directly into sulphuric acid",
+          "It makes tannins reproduce throughout the paper fibres",
+          "It permanently strengthens cellulose around the written line"
+        ],
+        "correct_answer": "It allows reactive iron and acids to migrate into nearby paper",
+        "answer_reason": "The passage directly links moisture with migration of iron ions and acids. It does not say gum becomes acid or tannins reproduce, and strengthening cellulose is the opposite of the described deterioration.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "e2819377-d42f-4e75-b651-72c17c83488f",
+        "question_text": "Why might a conservator hesitate before placing an affected sheet in an aqueous treatment?",
+        "options": [
+          "Water always erases iron gall ink immediately and completely",
+          "Aqueous treatment can address acidity but never oxidation",
+          "Indicator papers work only after a manuscript has been washed",
+          "Water could redistribute soluble damaging compounds through the sheet"
+        ],
+        "correct_answer": "Water could redistribute soluble damaging compounds through the sheet",
+        "answer_reason": "The passage identifies redistribution of soluble material as a risk requiring prior testing. It does not say water always erases the ink; some combined treatments address both acidity and oxidation; and indicator testing is described as part of assessment before treatment.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "14d01a0f-dc44-4da3-8416-b39394c60047",
+        "question_text": "Which approach best matches the passage's account of conservation?",
+        "options": [
+          "Reinforce every damaged sheet because support stops the underlying chemistry",
+          "Assess each object and balance chemical, physical and preventive measures",
+          "Apply the same deacidification formula to every manuscript",
+          "Avoid stable dry storage once chemical treatment has been completed"
+        ],
+        "correct_answer": "Assess each object and balance chemical, physical and preventive measures",
+        "answer_reason": "The passage presents conservation as case-specific risk management using assessment, possible chemical treatment, support and storage. Reinforcement alone does not stop corrosion, one recipe is explicitly rejected, and preventive storage remains important after intervention.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "e3075813-ac78-489a-ad70-ad1857366808",
+    "title": "The Thirteen Towers of Chankillo",
+    "body": "In Peru's coastal Casma Valley, thirteen stone towers stand at intervals along a low ridge. They formed the most visible part of Chankillo, a ceremonial complex used during the late Early Horizon, roughly between 250 and 200 BCE. Other structures included a triple-walled hilltop building, plazas and compounds. The site's dry landscape preserved a relationship between architecture and horizon that eventually helped researchers explain the towers.\n\nFrom an observation point west of the ridge, the towers span the annual arc of sunrise. Near one solstice the Sun rises beyond one end of the row; over succeeding months its rising position shifts along the toothed horizon, appearing beside different towers and gaps, before reaching the other end near the opposite solstice. An eastern observation point allowed a corresponding reading of sunsets. The system could therefore indicate many dates through the year, rather than marking only a single annual event.\n\nThis interpretation depends on more than the alignment of one wall. Archaeological work identified restricted viewing positions, while archaeoastronomical analysis compared their sightlines with the Sun's changing horizon positions. The western point survives clearly as an opening associated with a building; the eastern point is less visible above ground, but its foundations have been identified. The combination of two viewpoints and a complete solar arc distinguishes Chankillo from monuments aligned only on one solstice.\n\nIts calendrical precision probably mattered to a society scheduling seasonal and ceremonial activities. Access to at least some observation space appears to have been controlled, which may have linked specialist knowledge with authority. Yet the surviving structures do not disclose exactly who read the calendar or how ordinary people experienced its announcements. Chankillo demonstrates the public scale of timekeeping more clearly than it reveals the institution that managed time.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "8e64794e-861e-4517-a8db-da4e967e63a2",
+        "question_text": "The towers could be used to identify dates between the two solstices, not merely the solstices themselves.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
         "correct_answer": "True",
-        "answer_reason": "The passage states the flame-like colour patterns 'are now known to have been caused by a mosaic virus', directly supporting the statement.",
+        "answer_reason": "True. The passage says the Sun appeared beside different towers and gaps as its rising position moved, allowing the system to indicate many dates through the year. This is explicit confirmation, not an inference from outside knowledge.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0002-4002-8002-000000000003",
-        "question_text": "The collapse of the tulip market caused widespread bankruptcy across the Dutch Republic.",
-        "options": ["True", "False", "Can't tell"],
+        "id": "9ea052e8-37a4-4be5-a7b5-9bcb19ac2b29",
+        "question_text": "Both observation points are equally visible above ground today.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
         "correct_answer": "False",
-        "answer_reason": "The passage explicitly refers to Goldgar's argument that 'the long-standing narrative of nationwide ruin is exaggerated' and that 'few bankruptcies in the period can be directly attributed to tulip speculation'. This directly contradicts the statement of widespread bankruptcy.",
+        "answer_reason": "False. The western point survives clearly, whereas the eastern point is less visible above ground and is known from its foundations. The statement is specifically contradicted.",
         "order_index": 1,
-        "difficulty": "hard"
-      },
-      {
-        "id": "f1a2b3c4-0002-4002-8002-000000000004",
-        "question_text": "Tulips were native to the Dutch Republic before the seventeenth century.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "False",
-        "answer_reason": "The passage states tulips 'had been introduced to the Low Countries from the Ottoman Empire in the late sixteenth century', which contradicts the claim that they were native.",
-        "order_index": 2,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0002-4002-8002-000000000005",
-        "question_text": "The failed Haarlem auction was the sole cause of the market collapse.",
-        "options": ["True", "False", "Can't tell"],
+        "id": "a228d533-d875-4fa5-8d12-9d49a09f05fe",
+        "question_text": "The people who announced dates at Chankillo were hereditary priests.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
         "correct_answer": "Can't tell",
-        "answer_reason": "The passage says the market collapsed 'reportedly when' a Haarlem auction failed, which presents it as an associated event but does not establish it as the sole cause. No information is given on whether other factors contributed.",
-        "order_index": 3,
+        "answer_reason": "Can't tell. The passage suggests controlled access and a possible connection between specialist knowledge and authority, but it states that the institution and the identities of the calendar readers are unknown. Nothing confirms or contradicts hereditary priesthood.",
+        "order_index": 2,
         "difficulty": "hard"
+      },
+      {
+        "id": "b42d90d5-f9be-46d0-9cbe-9f6c2e89343b",
+        "question_text": "The western viewpoint was used for sunsets, while the eastern viewpoint was used for sunrises.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The passage assigns sunrise observations to the western point and corresponding sunset observations to the eastern point. The statement reverses the stated relationship.",
+        "order_index": 3,
+        "difficulty": "normal"
       }
     ]
   },
   {
-    "id": "f1a2b3c4-0003-4003-8003-000000000001",
-    "title": "Forensic Linguistics",
-    "body": "Forensic linguistics is the application of linguistic analysis to legal contexts. Its modern form is often traced to the 1968 trial of Timothy Evans in the United Kingdom, in which linguist Jan Svartvik demonstrated that portions of a disputed confession contained grammatical structures inconsistent with Evans's documented speech patterns. Svartvik's analysis contributed to the posthumous pardon of Evans, who had been executed in 1950.\n\nThe field has since expanded considerably. Practitioners analyse disputed authorship, threatening communications, plagiarism, trademark disputes, and transcripts of police interviews. In authorship attribution, analysts examine features such as sentence length distribution, function-word frequency, and idiosyncratic spelling or punctuation. The 1996 identification of Theodore Kaczynski as the Unabomber was assisted by linguistic comparison between his published manifesto and letters he had written to family members; his brother David recognised characteristic phrases and alerted the authorities.\n\nForensic linguists generally distinguish between the study of written texts and spoken language. Spoken-language analysis may be used to identify regional dialects or to determine whether a recorded voice matches a suspect. However, voice identification through linguistic features alone is considered less reliable than acoustic analysis, and most courts require corroborating evidence before admitting either type. The International Association of Forensic Linguists, founded in 1993, has developed ethical guidelines that discourage practitioners from offering opinions beyond the limits of available evidence.",
+    "id": "a9d469f6-033a-430e-a420-ad3753f65b7b",
+    "title": "Concrete Ears on the British Coast",
+    "body": "Before radar, British engineers tried to hear attacking aircraft while they were still beyond visual range. Their acoustic mirrors were concave concrete surfaces that reflected engine noise towards a focal point. A listener, and later sometimes a microphone, was positioned there. The mirror did not amplify sound electronically; its geometry concentrated sound arriving from the direction in which the structure faced.\n\nExperiments began during the First World War, when airships and aeroplanes introduced a new threat. Designs included upright dishes a few metres across, long curved walls and horizontal discs used in pairs. Installations appeared along parts of the south and east coasts. At Fan Bay near Dover, an early mirror detected aircraft moving down the Channel at a reported distance of about twelve to fifteen miles during a 1917 raid. Later work on the Kent coast included a 200-foot curved wall at Denge, intended to provide more warning and help estimate direction.\n\nThe system faced limits that engineering scale could not remove. Wind, waves, shipping and local activity produced competing noise. Atmospheric conditions changed how sound travelled. More importantly, aircraft became faster, so even a successful detection left less time to respond. Operators also had to distinguish a distant engine from background sound, making performance partly dependent on trained hearing.\n\nBy the mid-1930s, radar offered a different method: it transmitted radio waves and measured their return, rather than waiting for a target's engine noise to arrive. Radar's development made the proposed acoustic chain obsolete, although some mirrors were retained as backups or aids to searchlights. The surviving concrete forms are therefore not failed radar prototypes. They are evidence of a separate sensory technology whose usefulness narrowed as the targets it monitored changed.",
     "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "f1a2b3c4-0003-4003-8003-000000000002",
-        "question_text": "What was the outcome of Jan Svartvik's linguistic analysis in the Timothy Evans case?",
+        "id": "8786f7cc-0b3b-4c9c-b714-796df0d77baf",
+        "question_text": "How did an acoustic mirror make distant engine noise easier to detect?",
         "options": [
-          "Evans was acquitted at his original trial in 1968",
-          "Evans received a posthumous pardon after having been executed in 1950",
-          "Svartvik identified the true author of the confession",
-          "The confession was determined to be partially authentic"
+          "It converted sound directly into radio waves",
+          "It reflected sound towards a focal point",
+          "It electronically amplified every coastal noise",
+          "It forced aircraft to fly along a predictable route"
         ],
-        "correct_answer": "Evans received a posthumous pardon after having been executed in 1950",
-        "answer_reason": "The passage states Svartvik's analysis 'contributed to the posthumous pardon of Evans, who had been executed in 1950'. The 1968 trial referenced in the passage was the legal proceeding in which the analysis was presented, not Evans's original trial.",
+        "correct_answer": "It reflected sound towards a focal point",
+        "answer_reason": "The opening paragraph states that the concave surface concentrated reflected sound at a focal point. Radio-wave transmission belongs to radar; the mirror did not amplify electronically; and it had no effect on an aircraft's route.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0003-4003-8003-000000000003",
-        "question_text": "According to the passage, which of the following is NOT listed as a feature used in authorship attribution?",
+        "id": "c0080d87-2be9-4cfc-ad7c-20e62e928395",
+        "question_text": "Which change most directly reduced the practical value of a given detection range?",
         "options": [
-          "Sentence length distribution",
-          "Frequency of function words",
-          "Regional dialect variation",
-          "Idiosyncratic spelling"
+          "Concrete became unable to reflect sound",
+          "Aircraft crossed the remaining distance more quickly",
+          "Coastal waves stopped producing background noise",
+          "Operators ceased to use trained hearing"
         ],
-        "correct_answer": "Regional dialect variation",
-        "answer_reason": "The passage lists 'sentence length distribution, function-word frequency, and idiosyncratic spelling or punctuation' as features of authorship attribution. Regional dialects are mentioned separately in the context of spoken-language analysis, not authorship attribution.",
+        "correct_answer": "Aircraft crossed the remaining distance more quickly",
+        "answer_reason": "Faster aircraft shortened the response time after detection, directly reducing the value of the same range. The passage does not say concrete lost reflectivity or that background noise stopped, and trained hearing remained part of operation rather than being abandoned.",
         "order_index": 1,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0003-4003-8003-000000000004",
-        "question_text": "Which of the following can be most reasonably inferred about voice identification?",
+        "id": "2dd9c15a-77f7-4d63-b452-ac713d9519fe",
+        "question_text": "Which limitation would enlarging a mirror be least likely to solve?",
         "options": [
-          "It is rejected by most courts as unreliable",
-          "Acoustic analysis alone is sufficient for conviction",
-          "Courts generally require supporting evidence before admitting it",
-          "It has replaced traditional forensic linguistics in many jurisdictions"
+          "The decreasing response time caused by faster aircraft",
+          "The need to gather more sound from a target direction",
+          "The difficulty of detecting relatively faint engine noise",
+          "The wish to obtain warning from a greater distance"
         ],
-        "correct_answer": "Courts generally require supporting evidence before admitting it",
-        "answer_reason": "The passage states that 'most courts require corroborating evidence before admitting either type' of voice identification. The passage does not say voice identification is outright rejected, nor that acoustic analysis alone is sufficient.",
+        "correct_answer": "The decreasing response time caused by faster aircraft",
+        "answer_reason": "A larger collector might gather more sound and extend detection, addressing the other three aims. It cannot slow the aircraft after detection, so the shrinking interval for response remains. This combines the passage's discussion of scale with its separate speed constraint.",
         "order_index": 2,
-        "difficulty": "normal"
+        "difficulty": "hard"
       },
       {
-        "id": "f1a2b3c4-0003-4003-8003-000000000005",
-        "question_text": "Why does the author mention David Kaczynski?",
+        "id": "53a0a9d8-89de-4bc4-b58a-9b86213ff6f9",
+        "question_text": "Why does the author say the mirrors were not failed radar prototypes?",
         "options": [
-          "To criticise the reliability of forensic linguistic evidence",
-          "To illustrate how personal familiarity with a writer's style can assist linguistic identification",
-          "To show that forensic linguists often rely on family testimony",
-          "To demonstrate that the Unabomber case was solved without expert analysis"
+          "They were built only after radar had entered routine service",
+          "They transmitted stronger radio signals than early radar sets",
+          "They detected passively through sound and belonged to a distinct technical approach",
+          "They were intended exclusively to guide ships rather than detect aircraft"
         ],
-        "correct_answer": "To illustrate how personal familiarity with a writer's style can assist linguistic identification",
-        "answer_reason": "The passage describes David recognising 'characteristic phrases' and alerting authorities, which shows how familiarity with an individual's writing style can aid identification. The passage does not suggest the case was solved without expert analysis — linguistic comparison was involved.",
+        "correct_answer": "They detected passively through sound and belonged to a distinct technical approach",
+        "answer_reason": "The conclusion distinguishes passive acoustic detection from radar's transmitted radio waves. The mirrors predated radar, did not transmit radio signals, and were designed for aircraft warning rather than exclusively for shipping.",
         "order_index": 3,
         "difficulty": "normal"
       }
     ]
   },
   {
-    "id": "f1a2b3c4-0004-4004-8004-000000000001",
-    "title": "The Beaufort Scale",
-    "body": "The Beaufort Scale, used to describe wind force based on observable conditions, was devised by Francis Beaufort, an officer of the Royal Navy, in 1805. In its original form it related wind strength to the amount of sail a fully rigged frigate could carry in particular conditions, rather than to any numerical measurement of wind speed. The scale ran from 0, denoting calm, to 12, denoting a storm under which no canvas could be set.\n\nThe scale was adopted by the Royal Navy in 1838 and progressively modified over the following century. In 1906, the British meteorologist George Simpson extended the scale to land-based observation, linking each number to visible effects such as the movement of leaves, the swaying of trees, and structural damage to buildings. The scale was later correlated with wind-speed measurements in metres per second and kilometres per hour, though the correlations vary slightly between national meteorological services.\n\nIn 1946, the original twelve-point scale was supplemented with additional categories from 13 to 17, intended to describe tropical cyclone conditions exceeding the original maximum. These extensions, however, were never widely adopted outside Taiwan and mainland China, and the World Meteorological Organization continues to use the original scale of 0 to 12 for international reporting. Beaufort himself did not live to see his scale standardised; he retired from the Admiralty in 1855 and died two years later.",
+    "id": "f0cf8651-9bc0-42ed-896b-84b6eb350475",
+    "title": "How Wood Frogs Survive Freezing",
+    "body": "A wood frog overwintering beneath leaf litter may cool below the freezing point and allow ice to form through much of its body. Its heartbeat and breathing stop, and blood no longer circulates. This is freeze tolerance, not simply the avoidance of freezing. The distinction matters because ice is permitted in spaces around cells while intracellular ice, which can rupture membranes and disrupt cell structures, is restricted.\n\nThe onset of freezing triggers a rapid response. Glycogen stored in the liver is converted into glucose and released into the circulation before circulation ceases. Glucose enters tissues, where its high concentration helps retain water within cells and limits the shrinkage caused as extracellular water turns to ice. Wood frogs also accumulate urea before winter; experiments indicate that urea can protect tissues during freezing and thawing. These solutes are called cryoprotectants because they reduce injury, not because they keep the entire animal liquid.\n\nIce formation is itself regulated. It generally begins outside vital cells, and a controlled start gives glucose time to be distributed. Repeated mild freeze-thaw events before deep winter may increase the amount and distribution of protective solutes. Nevertheless, tolerance has limits: cooling rate, minimum temperature, duration and population all affect survival. A laboratory result for one population cannot automatically define the capacity of every wood frog.\n\nThawing reverses the visible shutdown. The heart resumes beating before normal movement returns, and the frog can become active again. Researchers understand several protective mechanisms, but the passage of a living animal from cardiac arrest back to coordinated activity is not explained by glucose alone. Freeze tolerance is therefore a coordinated physiological process, not the action of a single antifreeze substance.",
     "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "f1a2b3c4-0004-4004-8004-000000000002",
-        "question_text": "The Beaufort Scale was originally based on measurements of wind speed in metres per second.",
-        "options": ["True", "False", "Can't tell"],
+        "id": "0cf2718a-73f9-4f02-898c-7e9146af9697",
+        "question_text": "A frozen wood frog continues to circulate blood slowly throughout winter.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
         "correct_answer": "False",
-        "answer_reason": "The passage states that in its original form the scale 'related wind strength to the amount of sail a fully rigged frigate could carry in particular conditions, rather than to any numerical measurement of wind speed'. This directly contradicts the statement.",
+        "answer_reason": "False. The passage explicitly states that the heartbeat stops and blood no longer circulates. This directly contradicts continued slow circulation.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0004-4004-8004-000000000003",
-        "question_text": "Francis Beaufort died in 1857.",
-        "options": ["True", "False", "Can't tell"],
+        "id": "16cb8091-9bde-4a3a-9809-f8ea7d93afbf",
+        "question_text": "Cryoprotectants prevent all ice from forming anywhere in a wood frog's body.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. Ice is allowed in spaces around cells, and the passage explicitly says cryoprotectants reduce injury rather than keep the entire animal liquid.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "70ba2ee6-4a94-41ec-ae07-2be4b633243f",
+        "question_text": "Repeated mild freeze-thaw events always increase the amount and distribution of protective solutes.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "Can't tell",
+        "answer_reason": "Can't tell. The passage says repeated mild freeze-thaw events may increase the amount and distribution of protective solutes. That does not establish that they always do so, and the passage supplies no counterexample that would directly contradict the universal claim.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "feaff4d1-8179-490e-bec6-eb15763e88db",
+        "question_text": "The heart begins beating again before the thawed frog regains normal movement.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
         "correct_answer": "True",
-        "answer_reason": "The passage states Beaufort 'retired from the Admiralty in 1855 and died two years later'. 1855 plus two years is 1857, a necessary inference from the passage.",
-        "order_index": 1,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0004-4004-8004-000000000004",
-        "question_text": "The extensions to the Beaufort Scale numbered 13 to 17 are used internationally for reporting tropical cyclones.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "False",
-        "answer_reason": "The passage states the extensions 'were never widely adopted outside Taiwan and mainland China' and that the World Meteorological Organization 'continues to use the original scale of 0 to 12 for international reporting'. This contradicts the statement about international use.",
-        "order_index": 2,
-        "difficulty": "hard"
-      },
-      {
-        "id": "f1a2b3c4-0004-4004-8004-000000000005",
-        "question_text": "George Simpson was the first person to apply the Beaufort Scale to observation on land.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "Can't tell",
-        "answer_reason": "The passage states that in 1906 Simpson 'extended the scale to land-based observation', but does not confirm he was the first to do so. Someone else could have attempted a land-based application before him that the passage does not mention.",
-        "order_index": 3,
-        "difficulty": "hard"
-      }
-    ]
-  },
-  {
-    "id": "f1a2b3c4-0005-4005-8005-000000000001",
-    "title": "Kintsugi",
-    "body": "Kintsugi, sometimes rendered kintsukuroi, is the Japanese art of repairing broken ceramic objects using a lacquer mixed with powdered gold, silver, or platinum. The repaired vessel displays the fractures prominently as shining veins, rather than concealing them. The practice is commonly associated with an aesthetic philosophy in which damage and repair are understood as part of an object's history, not a cause for disposal.\n\nThe origins of kintsugi are not precisely documented, but a widely repeated account links its development to the late fifteenth-century shogun Ashikaga Yoshimasa, who is said to have been dissatisfied with the metal staples used to repair a damaged Chinese tea bowl and to have commissioned Japanese craftsmen to devise a more aesthetically pleasing alternative. Whether this story is historically accurate remains disputed; no contemporary documents directly confirm it. What is clear is that by the seventeenth century, repaired ceramics with visible gold seams were being collected by tea masters, and some collectors reportedly broke intact vessels deliberately in order to have them repaired in the kintsugi style.\n\nThe lacquer used in kintsugi is derived from the sap of the Toxicodendron vernicifluum tree, commonly called the Japanese lacquer tree. The sap is toxic in its raw form, causing skin reactions similar to those of poison ivy, to which the tree is related. Once hardened, however, the lacquer becomes inert and food-safe. A single repair may require months to complete, as each layer of lacquer must cure fully before the next is applied, and the final gold or silver dusting is added only to the outermost layer.",
-    "is_free": false,
-    "verbal_reasoning_questions": [
-      {
-        "id": "f1a2b3c4-0005-4005-8005-000000000002",
-        "question_text": "According to the passage, what is the relationship between kintsugi and the shogun Ashikaga Yoshimasa?",
-        "options": [
-          "Yoshimasa is historically confirmed as the inventor of kintsugi",
-          "A popular account credits him with prompting its development, though this is not documented",
-          "Yoshimasa imported the technique from China",
-          "He prohibited the use of metal staples in ceramic repair"
-        ],
-        "correct_answer": "A popular account credits him with prompting its development, though this is not documented",
-        "answer_reason": "The passage describes a 'widely repeated account' linking kintsugi's development to Yoshimasa but notes the story's historical accuracy 'remains disputed' and that 'no contemporary documents directly confirm it'. This matches the option about an undocumented popular account.",
-        "order_index": 0,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0005-4005-8005-000000000003",
-        "question_text": "Which of the following is most strongly suggested by the passage about seventeenth-century attitudes towards kintsugi?",
-        "options": [
-          "Kintsugi was universally regarded as an inferior form of repair",
-          "Some collectors valued kintsugi repairs so highly they damaged intact vessels to obtain them",
-          "Tea masters preferred staples to gold lacquer",
-          "The technique was forbidden outside the shogun's household"
-        ],
-        "correct_answer": "Some collectors valued kintsugi repairs so highly they damaged intact vessels to obtain them",
-        "answer_reason": "The passage states 'some collectors reportedly broke intact vessels deliberately in order to have them repaired in the kintsugi style', directly supporting this interpretation of their attitude.",
-        "order_index": 1,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0005-4005-8005-000000000004",
-        "question_text": "Which of the following is most likely to be true based on the passage?",
-        "options": [
-          "Handling raw lacquer could cause skin irritation similar to that caused by poison ivy",
-          "All ceramic vessels repaired with kintsugi are safe for immediate food use",
-          "Kintsugi cannot be performed on vessels older than the fifteenth century",
-          "Silver is the most commonly used metal in modern kintsugi"
-        ],
-        "correct_answer": "Handling raw lacquer could cause skin irritation similar to that caused by poison ivy",
-        "answer_reason": "The passage states the sap 'is toxic in its raw form, causing skin reactions similar to those of poison ivy'. The other options either overstate passage claims or introduce information not provided.",
-        "order_index": 2,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0005-4005-8005-000000000005",
-        "question_text": "Why does the author mention that the lacquer must cure fully before each new layer is applied?",
-        "options": [
-          "To explain why kintsugi repairs are expensive",
-          "To contrast kintsugi with Western repair methods",
-          "To account for the lengthy time required to complete a single repair",
-          "To argue that kintsugi is more durable than alternatives"
-        ],
-        "correct_answer": "To account for the lengthy time required to complete a single repair",
-        "answer_reason": "The curing detail is given directly after the statement that 'a single repair may require months to complete', and the word 'as' links the two ideas causally — the curing requirement explains the time. The passage does not discuss cost, Western methods, or durability.",
+        "answer_reason": "True. The final paragraph states that the heart resumes beating before normal movement returns, so the order is explicitly entailed.",
         "order_index": 3,
         "difficulty": "normal"
       }
     ]
   },
   {
-    "id": "f1a2b3c4-0006-4006-8006-000000000001",
-    "title": "The Drake Equation",
-    "body": "The Drake Equation, formulated by astronomer Frank Drake in 1961, is a probabilistic framework for estimating the number of active, communicative extraterrestrial civilisations in our galaxy. It was devised as the agenda for a small conference at the Green Bank Observatory in West Virginia, attended by a handful of scientists including Carl Sagan. Drake later emphasised that the equation was intended as a tool for structuring discussion rather than a method for producing a definitive numerical answer.\n\nThe equation multiplies together seven factors. These include the rate of star formation in the galaxy, the fraction of stars with planetary systems, the fraction of those planets capable of supporting life, the fraction on which life actually develops, the fraction that develop intelligent life, the fraction of intelligent civilisations that produce detectable signals, and the length of time such civilisations remain detectable. The first three factors have become considerably better constrained since 1961, particularly following the detection of thousands of exoplanets by the Kepler space telescope, launched in 2009. The later factors, however, remain largely a matter of speculation.\n\nCritics have argued that the equation's utility is limited precisely because several of its terms cannot meaningfully be estimated. The physicist Enrico Fermi, some years before Drake's formulation, had posed what became known as the Fermi Paradox: if intelligent life is common, why have we not detected any sign of it? Various resolutions have been proposed, including the possibility that technological civilisations are short-lived, that interstellar communication is more difficult than assumed, or that we have simply not been listening for long enough. None of these proposals has achieved general acceptance.",
+    "id": "9c9ef7f7-2fca-486f-b90c-00f78fb134ca",
+    "title": "Bacterial Compasses",
+    "body": "Magnetotactic bacteria are not one species but a varied group of aquatic microorganisms that respond to magnetic fields. Inside each cell are magnetosomes: membrane-bound compartments containing crystals of magnetite or greigite, both iron-bearing magnetic minerals. In many species the compartments form a chain. The combined magnetic moment turns the whole cell until its long axis lies approximately along a magnetic field line, rather like a compass needle.\n\nAlignment is not propulsion. The bacteria still swim using flagella, and chemical sensing still influences whether they continue or reverse. Magnetic alignment narrows a three-dimensional search through water or sediment into movement mainly along a field line. This can help cells locate preferred low-oxygen zones near an oxic-anoxic interface, the boundary between oxygenated and oxygen-poor conditions. Magnetotaxis and chemotaxis therefore work together rather than serving as rival navigation systems.\n\nThe direction that is useful can vary. Earth's field lines incline downwards in much of the Northern Hemisphere and upwards in much of the Southern Hemisphere. A bacterium seeking deeper, low-oxygen water may commonly swim northward in the north and southward in the south, but simple hemisphere rules are not universal: cells can reverse, environments differ, and populations near the magnetic equator may contain both polarities.\n\nMagnetosome construction is tightly controlled. Proteins regulate membrane formation, iron transport, crystal growth and chain organisation, producing crystals within a narrow size range that supports stable magnetism. The relevant genes often occur in clusters and may sometimes move between related lineages. This combination of mineral precision and biological control interests researchers studying both evolution and engineered magnetic particles. Yet proposed applications do not alter the central ecological point: the chain supplies an axis of alignment, while active movement and chemical choice remain the work of the living cell.",
     "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "f1a2b3c4-0006-4006-8006-000000000002",
-        "question_text": "According to the passage, which statement best describes Frank Drake's intention for his equation?",
+        "id": "d33ececf-0786-4f4d-b128-bf777682d06a",
+        "question_text": "What directly propels magnetotactic bacteria through their environment?",
         "options": [
-          "To produce a precise estimate of extraterrestrial civilisations",
-          "To prove that intelligent life exists elsewhere in the galaxy",
-          "To provide a framework for structuring scientific discussion",
-          "To disprove the Fermi Paradox"
+          "The passive pull of the magnetosome chain",
+          "The oxic-anoxic interface",
+          "Greigite released outside the cell",
+          "Flagella"
         ],
-        "correct_answer": "To provide a framework for structuring scientific discussion",
-        "answer_reason": "The passage states Drake 'emphasised that the equation was intended as a tool for structuring discussion rather than a method for producing a definitive numerical answer'. This directly matches the selected option.",
+        "correct_answer": "Flagella",
+        "answer_reason": "The passage distinguishes alignment from propulsion and states that the bacteria swim using flagella. Magnetosomes orient the cell, the interface is an environmental boundary, and greigite remains within magnetosomes rather than being released to propel the cell.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0006-4006-8006-000000000003",
-        "question_text": "Which of the equation's terms can be most reasonably described as now better constrained than in 1961?",
+        "id": "db290e7c-526d-4627-8140-5c4d664fe539",
+        "question_text": "How can magnetic alignment make the search for a preferred zone more efficient?",
         "options": [
-          "The length of time civilisations remain detectable",
-          "The fraction of intelligent civilisations producing detectable signals",
-          "The rate of star formation and fraction of stars with planets",
-          "The fraction of planets on which intelligent life develops"
+          "It identifies the oxygen concentration without any chemical sensing",
+          "It makes every cell swim north regardless of location",
+          "It reduces movement from a three-dimensional search to one mainly along a field line",
+          "It supplies energy by dissolving the mineral crystals"
         ],
-        "correct_answer": "The rate of star formation and fraction of stars with planets",
-        "answer_reason": "The passage states 'the first three factors have become considerably better constrained since 1961, particularly following the detection of thousands of exoplanets by Kepler'. The first three factors listed include the star formation rate and the fraction of stars with planetary systems. The later factors, per the passage, 'remain largely a matter of speculation'.",
+        "correct_answer": "It reduces movement from a three-dimensional search to one mainly along a field line",
+        "answer_reason": "The second paragraph gives this dimensional reduction as the benefit. Chemical sensing still matters, northward swimming is not universal, and the crystals provide orientation rather than energy by dissolution.",
         "order_index": 1,
-        "difficulty": "hard"
+        "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0006-4006-8006-000000000004",
-        "question_text": "If the Fermi Paradox were resolved by evidence that intelligent civilisations typically last only a few centuries, how would this affect the Drake Equation?",
+        "id": "211bf6d8-c34f-4b8a-aa52-98fd7dd3053a",
+        "question_text": "A mutation leaves a bacterium's flagella and chemical sensing intact but scatters its magnetosomes instead of arranging them in a chain. Which outcome is most supported?",
         "options": [
-          "It would invalidate the equation entirely",
-          "It would reduce the value of the final factor, lowering the estimated number of detectable civilisations",
-          "It would increase the value of the star-formation factor",
-          "It would have no effect on the equation's terms"
+          "It would align normally but lose all ability to propel itself",
+          "It would become unable to form any iron-bearing crystal",
+          "It could still swim and sense chemicals, but its magnetic alignment would likely be less effective",
+          "It would necessarily reverse its preferred oxygen level"
         ],
-        "correct_answer": "It would reduce the value of the final factor, lowering the estimated number of detectable civilisations",
-        "answer_reason": "The passage states the final factor is 'the length of time such civilisations remain detectable'. A shorter lifespan would reduce this factor, which by the equation's multiplicative structure would lower the total estimate. The equation would not be invalidated but recalibrated.",
+        "correct_answer": "It could still swim and sense chemicals, but its magnetic alignment would likely be less effective",
+        "answer_reason": "The passage separates flagellar propulsion and chemical sensing from the chain's combined magnetic alignment. Normal alignment is unlikely if the chain is disrupted; scattered crystals can still exist; and no necessary change in oxygen preference follows.",
         "order_index": 2,
         "difficulty": "hard"
       },
       {
-        "id": "f1a2b3c4-0006-4006-8006-000000000005",
-        "question_text": "Which of the following best summarises the passage?",
+        "id": "4cb4979d-4555-4b94-8458-22a0631eae6b",
+        "question_text": "Which statement best describes magnetotaxis and chemotaxis in the passage?",
         "options": [
-          "The Drake Equation has definitively estimated the number of extraterrestrial civilisations",
-          "The Drake Equation offers a structured framework for a question that remains partially beyond empirical answer",
-          "The Fermi Paradox has been resolved by the discovery of exoplanets",
-          "Carl Sagan invented the Drake Equation at a conference in Green Bank"
+          "They cooperate, with one providing alignment and the other helping guide behavioural choice",
+          "They are alternative systems, and each species possesses only one",
+          "They are identical names for movement caused by flagella",
+          "They operate only in bacteria living near the magnetic equator"
         ],
-        "correct_answer": "The Drake Equation offers a structured framework for a question that remains partially beyond empirical answer",
-        "answer_reason": "The passage describes the equation as a discussion-structuring tool, notes that some factors remain speculative, and concludes that no proposed resolutions to the related Fermi Paradox have achieved general acceptance. This matches the option describing a framework for a partially unanswerable question. The other options misattribute authorship, overstate achievements, or claim resolutions the passage denies.",
+        "correct_answer": "They cooperate, with one providing alignment and the other helping guide behavioural choice",
+        "answer_reason": "The passage explicitly says the two systems work together: magnetic fields orient while chemical sensing affects swimming decisions. It rejects rivalry, distinguishes both from propulsion, and describes broad aquatic occurrence rather than restriction to the equator.",
         "order_index": 3,
         "difficulty": "normal"
       }
     ]
   },
   {
-    "id": "f1a2b3c4-0007-4007-8007-000000000001",
-    "title": "The Canal du Midi",
-    "body": "The Canal du Midi, a 240-kilometre waterway linking the Garonne river at Toulouse with the Mediterranean port of Sète, was constructed between 1667 and 1681 under the supervision of Pierre-Paul Riquet. It was the largest civil engineering project in Europe in the seventeenth century. Riquet, a tax collector by profession rather than a trained engineer, had submitted his proposal to the minister Jean-Baptiste Colbert in 1662. The project received royal approval the following year.\n\nThe primary engineering challenge was supplying the canal's summit level with water. Riquet addressed this by constructing a network of dams and feeder channels in the Montagne Noire, a mountain range to the north of the canal's route, which collected rainwater and delivered it to the summit via a 25-kilometre feeder canal. The system was largely original to Riquet's design, although he drew in part on his personal observation of local streams and catchments during several years of informal surveying.\n\nRiquet financed much of the work himself, investing his personal fortune and mortgaging property belonging to his family. He died in October 1680, six months before the canal opened for commercial traffic. His heirs inherited substantial debts but also a share of the canal's future tolls. The canal became commercially important for the transport of wine, wheat, and textiles between the south-west of France and the Mediterranean, and it remained profitable until the expansion of the French railway network in the mid-nineteenth century made barge transport increasingly uncompetitive. The canal was designated a UNESCO World Heritage Site in 1996.",
+    "id": "1bf80f0c-615d-4165-a80d-401e17931f39",
+    "title": "Printing in Prussian Blue",
+    "body": "The cyanotype is a photographic printing process recognised by its Prussian-blue image. John Herschel described the process in 1842. Unlike many early photographic methods based on silver compounds, it uses iron salts, commonly ferric ammonium citrate and potassium ferricyanide. The two solutions are stored separately and mixed before a support such as paper or cloth is coated under subdued light.\n\nOnce dry, the sensitised surface is placed in close contact with an object or a full-sized negative and exposed to ultraviolet light. Light drives the reduction of iron from the ferric state to the ferrous state; subsequent reactions form an insoluble blue compound. Washing removes soluble, unreacted chemicals from protected areas and allows the image to develop fully through oxidation. Exposed regions become blue, while areas shielded by an opaque object remain light. Because the process normally relies on contact, the object or negative determines image size directly rather than being enlarged through a lens.\n\nAnna Atkins exploited this feature in the 1840s when she arranged algae on sensitised sheets. The specimens blocked light and left pale silhouettes, producing photograms that recorded delicate outlines without a camera. Cyanotype was also adopted for copying technical drawings: a transparent traced plan could be reproduced as a durable blue image, giving rise to the familiar blueprint. Its materials were comparatively inexpensive and its water-based processing straightforward.\n\nSimplicity does not mean complete stability. Alkalis can fade or alter Prussian blue, prolonged washing can weaken an image, and display conditions affect paper as well as pigment. A freshly washed print may also deepen as oxidation continues. The process is thus forgiving enough for repeated practical use but still governed by light, chemistry, contact and care.",
     "is_free": false,
     "verbal_reasoning_questions": [
       {
-        "id": "f1a2b3c4-0007-4007-8007-000000000002",
-        "question_text": "Pierre-Paul Riquet was professionally trained as an engineer before he proposed the Canal du Midi.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "False",
-        "answer_reason": "The passage states Riquet was 'a tax collector by profession rather than a trained engineer', directly contradicting the statement.",
+        "id": "3d3d2ac0-63cf-44c3-a3ec-406986baa639",
+        "question_text": "Which statement correctly describes preparation of the sensitiser?",
+        "options": [
+          "One solution is used only to wash the finished print",
+          "Mixing them permanently removes their sensitivity to ultraviolet light",
+          "They react only when heated inside a camera",
+          "They are stored separately as components of the light-sensitive working mixture"
+        ],
+        "correct_answer": "They are stored separately as components of the light-sensitive working mixture",
+        "answer_reason": "The passage states that the two solutions are stored separately and mixed before the support is coated, which the correct option directly restates. Neither solution is reserved only for washing; mixing does not remove ultraviolet sensitivity; and preparation requires neither heating nor a camera.",
         "order_index": 0,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0007-4007-8007-000000000003",
-        "question_text": "Riquet lived to see the canal open for commercial traffic.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "False",
-        "answer_reason": "The passage states Riquet 'died in October 1680, six months before the canal opened for commercial traffic'. The statement is directly contradicted.",
+        "id": "b2d8fe16-7d1d-4d4e-9439-52629f8072f8",
+        "question_text": "What produces the pale shape in an Atkins-style algae photogram?",
+        "options": [
+          "The specimen shields part of the sensitised sheet from ultraviolet light",
+          "The specimen releases a bleaching chemical into every exposed area",
+          "A lens enlarges a small negative of the specimen",
+          "Silver compounds darken only the paper beneath the specimen"
+        ],
+        "correct_answer": "The specimen shields part of the sensitised sheet from ultraviolet light",
+        "answer_reason": "The algae acts as an opaque object, leaving protected areas light. No bleaching secretion is described; the print is made by direct contact rather than lens enlargement; and cyanotype uses iron salts rather than silver compounds.",
         "order_index": 1,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0007-4007-8007-000000000004",
-        "question_text": "Riquet had previously worked on other canal construction projects before proposing the Canal du Midi.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "Can't tell",
-        "answer_reason": "The passage states Riquet was 'a tax collector by profession rather than a trained engineer' and refers to 'several years of informal surveying' of streams and catchments, but does not indicate whether he had worked on any other canal projects beforehand. His prior project experience is simply not addressed, so the statement cannot be confirmed or contradicted.",
+        "id": "ed78c8b8-0284-4ed3-9804-2e19b4182111",
+        "question_text": "A transparent plan is placed against sensitised paper, but a small gap remains between the two surfaces. What problem is most consistent with the passage?",
+        "options": [
+          "The final copy will automatically be enlarged beyond the original plan",
+          "The exposed regions will remain white because ultraviolet light cannot cross air",
+          "The process will switch from iron chemistry to silver chemistry",
+          "Fine details may become less sharply defined because close contact determines the image"
+        ],
+        "correct_answer": "Fine details may become less sharply defined because close contact determines the image",
+        "answer_reason": "The process depends on close contact, so a gap can weaken edge definition. Contact printing does not enlarge; ultraviolet light can cross the gap; and physical separation cannot change iron salts into a silver process.",
         "order_index": 2,
         "difficulty": "hard"
       },
       {
-        "id": "f1a2b3c4-0007-4007-8007-000000000005",
-        "question_text": "The Canal du Midi ceased to be profitable as a result of railway expansion.",
-        "options": ["True", "False", "Can't tell"],
+        "id": "0882b60a-8be3-4f98-9549-1d1625e36d5f",
+        "question_text": "Which statement best captures the author's view of cyanotype's simplicity?",
+        "options": [
+          "It ensures that every print remains unchanged under all display conditions",
+          "It makes the process practical, but does not remove chemical and conservation constraints",
+          "It means exposure time and contact have no effect on the image",
+          "It makes washing unnecessary once ultraviolet exposure is complete"
+        ],
+        "correct_answer": "It makes the process practical, but does not remove chemical and conservation constraints",
+        "answer_reason": "The final paragraph balances practical simplicity against sensitivity to alkalis, washing and display. The other options claim absolute stability or deny the importance of exposure, contact and washing, all of which the passage identifies as important.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "8c61ed74-264f-43c5-8942-3931876ddffd",
+    "title": "Islands That Survived on Maps",
+    "body": "A phantom island is land shown on charts although later investigation finds no island at the stated position. Such features arose for different reasons. A sailor might mistake a mirage or floating pumice for new land, while mistaken coordinates could relocate a genuine sighting. A copied report could then acquire authority as later mapmakers repeated it, particularly when surveying a remote ocean was expensive and a failure to sight low land did not conclusively prove absence.\n\nSome phantoms grew from stories as much as observation. Hy-Brasil, usually drawn west of Ireland, appeared in varied forms on maps for centuries and attracted voyages, despite never being verified. Frisland entered influential sixteenth-century mapping through the published Zeno narrative and was copied widely in the North Atlantic. In such cases repetition did not amount to independent confirmation: several maps could descend from one claim.\n\nModern data systems did not automatically end the problem. Sandy Island in the Coral Sea appeared in global coastline and seafloor datasets and on widely used digital maps. Yet some official hydrographic charts had already omitted it. In 2012 researchers aboard the Southern Surveyor deliberately passed through its supposed position and found deep water rather than land. The mismatch showed how an inherited coastline outline could persist in compiled datasets even after specialist charting had rejected it.\n\nRemoving a phantom requires more than deleting a name. Navigational charts prioritise hazards and attach degrees of confidence to observations, while general maps and scientific databases may inherit shapes from different sources. An island can therefore disappear from one information system while surviving in another. Phantom islands expose a weakness shared by manuscript and digital cartography: copying preserves errors efficiently unless provenance and contrary evidence travel with the copied feature.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "6d3449b4-bcdb-41a6-8dfc-818fefbdd23e",
+        "question_text": "Every phantom island originated as a deliberate deception by a mapmaker.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The passage lists mistaken clouds, pumice, misplaced real islands and stories as possible origins. These examples directly contradict the claim that every phantom was deliberate deception.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "3b3e3f36-6d6f-470e-bb19-06dfbd9fe60c",
+        "question_text": "Several maps showing Frisland could have descended from a single claim.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
         "correct_answer": "True",
-        "answer_reason": "The passage states the canal 'remained profitable until the expansion of the French railway network in the mid-nineteenth century made barge transport increasingly uncompetitive'. The necessary inference is that railway expansion led to its loss of profitability.",
-        "order_index": 3,
-        "difficulty": "normal"
-      }
-    ]
-  },
-  {
-    "id": "f1a2b3c4-0008-4008-8008-000000000001",
-    "title": "Venetian Glassmaking on Murano",
-    "body": "The Venetian glass industry was relocated from the city proper to the island of Murano by a decree of the Venetian Republic in 1291. The official justification was the prevention of fires, which were frequent in Venice's densely packed wooden buildings and were exacerbated by the intense heat of glassmaking furnaces. A secondary, less publicly acknowledged motive was the easier supervision and containment of the industry's closely guarded techniques.\n\nMuranese glassmakers enjoyed unusual privileges. Their daughters were permitted to marry into the Venetian nobility, a right denied to almost all other artisans. In return, however, they were legally prohibited from leaving the republic. Penalties for those who did leave to practise their craft abroad ranged from confiscation of family property to, in extreme cases, orders for assassination. Despite these measures, some craftsmen did emigrate, and Venetian glassmaking methods spread gradually to France, Bohemia, and England over the sixteenth and seventeenth centuries.\n\nMurano's dominance declined in the eighteenth century as cheaper lead crystal developed by English glassmakers captured a growing share of the European market. The island experienced a partial revival in the nineteenth century, particularly after 1866 when the Austrian administration that had governed the region was replaced by the newly unified Italian state. Traditional techniques such as filigrana and millefiori were deliberately revived for both domestic sale and export. Today, around fifty glassworks remain on the island, though many produce tourist goods rather than the elaborate objects for which Murano was historically famous.",
-    "is_free": false,
-    "verbal_reasoning_questions": [
-      {
-        "id": "f1a2b3c4-0008-4008-8008-000000000002",
-        "question_text": "According to the passage, what was the publicly stated reason for moving the glass industry to Murano?",
-        "options": [
-          "To allow easier supervision of the industry's techniques",
-          "To reduce the risk of fires in Venice",
-          "To permit glassmakers' daughters to marry into the nobility",
-          "To compete with English lead crystal producers"
-        ],
-        "correct_answer": "To reduce the risk of fires in Venice",
-        "answer_reason": "The passage states 'the official justification was the prevention of fires'. The supervision motive is explicitly described as a 'secondary, less publicly acknowledged motive', not the publicly stated reason.",
-        "order_index": 0,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0008-4008-8008-000000000003",
-        "question_text": "Which of the following is most strongly supported by the passage regarding the social status of Muranese glassmakers?",
-        "options": [
-          "They were considered inferior to other artisans",
-          "They held legal privileges that distinguished them from most other craftspeople",
-          "They were granted full Venetian citizenship regardless of origin",
-          "They were permitted to travel freely throughout Europe"
-        ],
-        "correct_answer": "They held legal privileges that distinguished them from most other craftspeople",
-        "answer_reason": "The passage states that glassmakers 'enjoyed unusual privileges' and specifically notes the marriage right 'denied to almost all other artisans'. The claim about free travel is directly contradicted by the passage, which describes strict prohibitions on leaving the republic.",
+        "answer_reason": "True. The passage explicitly says that several maps could descend from one claim and describes Frisland as widely copied from the Zeno narrative. The statement is directly entailed.",
         "order_index": 1,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0008-4008-8008-000000000004",
-        "question_text": "What does the passage suggest about the effectiveness of restrictions on glassmakers leaving Venice?",
+        "id": "9345713e-e0c6-440e-ac82-7ae29adbcc63",
+        "question_text": "Before the 2012 voyage, every official hydrographic service still accepted Sandy Island as real.",
         "options": [
-          "The restrictions completely prevented emigration",
-          "The restrictions were effective only until the eighteenth century",
-          "Despite the restrictions, some craftsmen emigrated and spread the techniques abroad",
-          "The restrictions led to the complete collapse of foreign glass industries"
+          "True",
+          "False",
+          "Can't tell"
         ],
-        "correct_answer": "Despite the restrictions, some craftsmen emigrated and spread the techniques abroad",
-        "answer_reason": "The passage states 'despite these measures, some craftsmen did emigrate, and Venetian glassmaking methods spread gradually to France, Bohemia, and England'. The first option is directly contradicted; the others introduce claims not made in the passage.",
+        "correct_answer": "False",
+        "answer_reason": "False. The passage explicitly says some official hydrographic charts had already omitted Sandy Island before the Southern Surveyor investigated its supposed position.",
         "order_index": 2,
         "difficulty": "normal"
       },
       {
-        "id": "f1a2b3c4-0008-4008-8008-000000000005",
-        "question_text": "If it were discovered that filigrana and millefiori techniques had actually been developed outside Murano, how would this most directly affect the passage's account?",
+        "id": "6992b836-c150-4015-8d2a-d05565da42f4",
+        "question_text": "Sandy Island persisted in global datasets because their compilers deliberately ignored the 2012 voyage.",
         "options": [
-          "It would invalidate the claim that Murano's industry declined in the eighteenth century",
-          "It would complicate the description of these techniques as traditional to Murano",
-          "It would confirm the assassination policy was ineffective",
-          "It would prove the Austrian administration was responsible for the revival"
+          "True",
+          "False",
+          "Can't tell"
         ],
-        "correct_answer": "It would complicate the description of these techniques as traditional to Murano",
-        "answer_reason": "The passage describes filigrana and millefiori as 'traditional techniques' that were 'revived' on Murano. If they were actually developed elsewhere, this characterisation as traditional to Murano would be challenged. The other options either concern unrelated claims or overstate the implication.",
-        "order_index": 3,
-        "difficulty": "hard"
-      }
-    ]
-  },
-  {
-    "id": "f1a2b3c4-0009-4009-8009-000000000001",
-    "title": "The Dvorak Keyboard",
-    "body": "The Dvorak Simplified Keyboard, patented in 1936 by August Dvorak and his brother-in-law William Dealey, was designed as an alternative to the QWERTY layout that had dominated English-language typewriters since the 1870s. Dvorak, a professor of education at the University of Washington, argued that the QWERTY arrangement had been developed to address mechanical limitations of early typewriters — specifically, to reduce the jamming of neighbouring typebars — and was therefore poorly suited to the needs of typists once those mechanical issues had been resolved.\n\nOn the Dvorak layout, the most frequently used English letters are placed on the middle row, or home row, so that a typist's fingers rest over them by default. Vowels are assigned to the left hand; the most common consonants to the right. Advocates have argued the layout reduces finger travel distance, increases typing speed, and lowers the risk of repetitive strain injury. However, a 1956 study commissioned by the United States General Services Administration, which had considered adopting the Dvorak layout for federal use, concluded that the gains in efficiency did not justify the cost and disruption of retraining. The study has been criticised by later researchers for methodological flaws, including small sample sizes and potential bias in the selection of comparison typists.\n\nDespite its claimed advantages, the Dvorak layout has not displaced QWERTY, and the latter remains the default arrangement on the overwhelming majority of keyboards sold today. The economist Paul David cited QWERTY's persistence in a 1985 paper as a classic example of path dependence in technology — the phenomenon whereby an initially arbitrary choice becomes locked in through network effects and sunk costs, even when alternatives might be more efficient.",
-    "is_free": false,
-    "verbal_reasoning_questions": [
-      {
-        "id": "f1a2b3c4-0009-4009-8009-000000000002",
-        "question_text": "The QWERTY layout was originally designed to accommodate mechanical constraints of early typewriters.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "True",
-        "answer_reason": "The passage states the QWERTY arrangement 'had been developed to address mechanical limitations of early typewriters — specifically, to reduce the jamming of neighbouring typebars', supporting this as Dvorak's documented argument.",
-        "order_index": 0,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0009-4009-8009-000000000003",
-        "question_text": "The 1956 General Services Administration study concluded that the Dvorak layout offered no efficiency advantages over QWERTY.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "False",
-        "answer_reason": "The passage states the study 'concluded that the gains in efficiency did not justify the cost and disruption of retraining'. This acknowledges efficiency gains existed but deemed them insufficient to warrant change, which contradicts the claim of no efficiency advantages.",
-        "order_index": 1,
-        "difficulty": "hard"
-      },
-      {
-        "id": "f1a2b3c4-0009-4009-8009-000000000004",
-        "question_text": "The Dvorak keyboard reduces the risk of repetitive strain injury for typists.",
-        "options": ["True", "False", "Can't tell"],
         "correct_answer": "Can't tell",
-        "answer_reason": "The passage says 'advocates have argued' the layout lowers RSI risk, but this is presented as a claim by proponents rather than an established fact. The passage neither confirms nor denies the claim independently.",
-        "order_index": 2,
-        "difficulty": "hard"
-      },
-      {
-        "id": "f1a2b3c4-0009-4009-8009-000000000005",
-        "question_text": "Paul David's 1985 paper argued that QWERTY is more efficient than alternatives.",
-        "options": ["True", "False", "Can't tell"],
-        "correct_answer": "False",
-        "answer_reason": "The passage states David cited QWERTY as an example of path dependence, where an arbitrary choice becomes locked in 'even when alternatives might be more efficient'. This implies David's argument suggested alternatives may be more, not less, efficient — contradicting the statement.",
+        "answer_reason": "Can't tell. The passage says the outline persisted through inherited data and that the 2012 voyage found no island, but it does not describe a deliberate decision by compilers to ignore that voyage. Intent is neither confirmed nor contradicted.",
         "order_index": 3,
         "difficulty": "hard"
-      }
-    ]
-  },
-  {
-    "id": "f1a2b3c4-0010-4010-8010-000000000001",
-    "title": "Lichen Biology",
-    "body": "A lichen is not a single organism but a composite life form, consisting of a fungus living in symbiotic partnership with one or more photosynthetic organisms — most commonly a green alga, though in some species a cyanobacterium fulfils this role instead. The fungus provides structural support and protection, while the photosynthetic partner supplies sugars produced through photosynthesis. This association was first characterised in 1867 by the Swiss botanist Simon Schwendener, whose proposal was initially rejected by many contemporaries who regarded lichens as simple plants.\n\nLichens are slow-growing and exceptionally long-lived. Some crustose species found in Arctic regions are estimated to be more than 8,000 years old, making them among the oldest living organisms on Earth. Their durability allows them to colonise surfaces inhospitable to most life, including bare rock, Antarctic dry valleys, and the exterior of spacecraft exposed to vacuum conditions during experiments conducted by the European Space Agency in 2005. The same characteristics, however, make lichens sensitive indicators of air quality: many species are intolerant of sulphur dioxide and are absent from industrialised areas.\n\nRecent genomic work, reported in a 2016 paper by researchers at the University of Montana, has complicated the classical two-partner model of lichen symbiosis. The researchers identified a third partner — a yeast of the Basidiomycota group — embedded within the cortex of many lichen species previously believed to involve only a single fungus and alga. The discovery has prompted a re-examination of species distinctions that had been based on chemical differences between lichens previously thought to involve the same fungal and algal partners.",
-    "is_free": false,
-    "verbal_reasoning_questions": [
-      {
-        "id": "f1a2b3c4-0010-4010-8010-000000000002",
-        "question_text": "Which of the following most accurately describes the photosynthetic partner in a lichen?",
-        "options": [
-          "Always a green alga",
-          "Usually a green alga, but sometimes a cyanobacterium",
-          "A specialised type of fungus",
-          "A yeast of the Basidiomycota group"
-        ],
-        "correct_answer": "Usually a green alga, but sometimes a cyanobacterium",
-        "answer_reason": "The passage states the photosynthetic partner is 'most commonly a green alga, though in some species a cyanobacterium fulfils this role instead'. The first option's use of 'always' is contradicted by the passage's hedging.",
-        "order_index": 0,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0010-4010-8010-000000000003",
-        "question_text": "In the phrase 'their durability allows them to colonise surfaces inhospitable to most life', the word 'their' most likely refers to:",
-        "options": [
-          "Crustose species in Arctic regions only",
-          "Lichens in general",
-          "Photosynthetic partners",
-          "Green algae and cyanobacteria"
-        ],
-        "correct_answer": "Lichens in general",
-        "answer_reason": "Although 'crustose species in Arctic regions' is the most recent noun phrase, the examples that follow — Antarctic dry valleys and the exterior of spacecraft in European Space Agency experiments — cannot plausibly refer only to Arctic crustose species. The scope of the durability claim therefore extends to lichens as a whole, consistent with the paragraph's opening statement that 'lichens are slow-growing and exceptionally long-lived'.",
-        "order_index": 1,
-        "difficulty": "hard"
-      },
-      {
-        "id": "f1a2b3c4-0010-4010-8010-000000000004",
-        "question_text": "Which of the following can be most reasonably inferred about lichens and air pollution?",
-        "options": [
-          "Lichens increase sulphur dioxide concentrations in industrialised areas",
-          "All lichen species can tolerate high sulphur dioxide levels",
-          "The absence of certain lichen species can indicate poor air quality",
-          "Lichens grown on spacecraft are immune to pollution"
-        ],
-        "correct_answer": "The absence of certain lichen species can indicate poor air quality",
-        "answer_reason": "The passage states that 'many species are intolerant of sulphur dioxide and are absent from industrialised areas', which directly supports the inference that their absence serves as an air-quality indicator — consistent with the passage's description of lichens as 'sensitive indicators of air quality'.",
-        "order_index": 2,
-        "difficulty": "normal"
-      },
-      {
-        "id": "f1a2b3c4-0010-4010-8010-000000000005",
-        "question_text": "How has the 2016 University of Montana research affected the classification of lichens?",
-        "options": [
-          "It has confirmed the traditional two-partner model of lichen symbiosis",
-          "It has prompted a reconsideration of species distinctions based on chemical differences",
-          "It has identified a new class of algae within lichen structures",
-          "It has disproved Schwendener's original symbiosis proposal"
-        ],
-        "correct_answer": "It has prompted a reconsideration of species distinctions based on chemical differences",
-        "answer_reason": "The passage states the discovery 'has prompted a re-examination of species distinctions that had been based on chemical differences'. The first option is contradicted by the passage saying the work has 'complicated' the two-partner model. The fourth option is wrong because the research adds a third partner rather than disproving the existence of a symbiotic relationship.",
-        "order_index": 3,
-        "difficulty": "normal"
       }
     ]
   }
-] 
+]

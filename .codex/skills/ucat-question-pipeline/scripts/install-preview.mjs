@@ -41,6 +41,13 @@ let addedSets = candidate.length;
 if (append && fs.existsSync(targetPath)) {
   const existing = readJson(targetPath);
   assertPreviewShape(existing, section, mode);
+  // Older checked-in QR previews predate UUID-v4 and is_free requirements.
+  // Preserve those known baseline errors while still rejecting anything the
+  // incoming candidate newly introduces, including cross-file UUID collisions.
+  const existingValidation = validateSectionCandidate({ section, input: existing, modeHint: mode });
+  const existingErrors = new Set(existingValidation.issues
+    .filter((issue) => issue.severity === 'error')
+    .map(issueSignature));
   const existingById = new Map(existing.map((set) => [set.id, set]));
   const additions = candidate.filter((set) => {
     const previous = existingById.get(set.id);
@@ -53,8 +60,10 @@ if (append && fs.existsSync(targetPath)) {
   output = [...existing, ...additions];
   addedSets = additions.length;
   const mergedValidation = validateSectionCandidate({ section, input: output, modeHint: mode });
-  if (mergedValidation.deterministic_verdict !== 'pass') {
-    const summary = mergedValidation.issues.filter((issue) => issue.severity === 'error').slice(0, 8)
+  const introducedErrors = mergedValidation.issues.filter((issue) =>
+    issue.severity === 'error' && !existingErrors.has(issueSignature(issue)));
+  if (introducedErrors.length) {
+    const summary = introducedErrors.slice(0, 8)
       .map((issue) => `${issue.code}: ${issue.message}`).join('\n- ');
     throw new Error(`Combined QR preview is invalid:\n- ${summary}`);
   }
@@ -90,6 +99,10 @@ JSON.parse(fs.readFileSync(temporaryPath, 'utf8'));
 fs.renameSync(temporaryPath, targetPath);
 console.log(`Installed: ${path.relative(process.cwd(), targetPath)}`);
 console.log('Reload the development app so Metro rebundles the JSON module.');
+
+function issueSignature(issue) {
+  return JSON.stringify([issue.code, issue.message, issue.location || null]);
+}
 
 function assertPreviewShape(value, currentSection, currentMode) {
   if (!Array.isArray(value) || value.length === 0) throw new Error('Preview candidate must be a non-empty JSON array.');

@@ -85,7 +85,9 @@ The practice converter also supports `qr` and `sj`. Timed migration conversion r
 ## Artifact locations
 
 - Live cache: `content-authoring/cache/<section>-corpus.json` (ignored by Git).
-- Versioned candidates: `content-authoring/candidates/`.
-- Briefs, manifests, blind responses and reports: `content-authoring/reports/`.
+- Fast-authoring runs: `content-authoring/cache/runs/<run_id>/` (ignored by Git). Put briefs, candidates, manifests, blind packets/responses, deterministic reports, validation reports and nearest-match notes there.
+- Release records: copy only the accepted candidate and final validation report to `content-authoring/candidates/` and `content-authoring/reports/` when the user explicitly requests a reviewable release record. Those folders are ignored for new generated files; the `.gitkeep` files remain tracked.
 - Local phone preview JSON: `src/dev/preview-<section>.json` and `preview-<section>-timed.json`.
 - Approved migration files: `supabase/migrations/`.
+
+The command examples above use the legacy `content-authoring/candidates/` and `content-authoring/reports/` paths for compatibility. For new fast-authoring work, substitute the run-directory paths and avoid creating topic-search sidecar files unless they explain a blocker.

@@ -1,23 +1,33 @@
 ---
 name: ucat-question-pipeline
-description: Generate, screen, independently validate, revise, and prepare novel UCAT question batches for FutureDoc. Use when creating or reviewing practice or timed question content, checking it against existing Supabase content, or converting approved question JSON into a migration.
+description: Generate, screen, independently validate, revise, and prepare novel UCAT question batches for FutureDoc. Use when creating or reviewing practice or timed question content, checking it against existing Supabase content, or converting approved question JSON into a migration. Default to the fast local-authoring path; run the full release audit only when preview/release/SQL preparation is requested.
 ---
 
 # UCAT question pipeline
 
 Keep generation, validation, and release as separate stages. Never write to the live database or run `supabase db push` without an explicit request made after the user sees the validated content.
 
+## Operating modes
+
+Use the fast authoring path by default. It keeps the quality gates that catch structural, arithmetic-key, and semantic problems, but avoids unnecessary full-test generation, repeated corpus refreshes, sidecar search files, preview writes, and verbose evidence in Git-visible folders.
+
+Switch to the release audit path only when the user explicitly asks to install a preview, prepare a release, create SQL, or otherwise requests release evidence. Release audit retains the complete blind/revealed review record and requires a full fresh validation after substantive revisions.
+
+If a request explicitly asks for both practice and timed content in one section, treat them as one authoring run: refresh that section's corpus once, share one inventory and `corpus_run_id`, and validate the two candidates independently in parallel where possible.
+
 ## Simple request contract
 
 Treat a request such as `Generate 20 DM practice questions` as a complete local-authoring instruction. Do not require the user to remember the workflow or repeat safety language.
 
-When the request supplies a section and count:
+When the request supplies a section and count, use fast authoring unless the user asks for release/preview handling:
 
 1. Default to `practice` unless the user explicitly asks for a timed test.
-2. Refresh the remote practice + timed corpus on every run so duplicate screening uses the current database, not an old cache.
-3. Run the complete generation, deterministic screening, blind independent validation, and revision workflow below.
-4. Only after the batch is accepted, retain the versioned candidate and reports, run the preview installer with its brief, back up the current preview, and write the accepted batch to `src/dev/preview-<section>.json`.
-5. Stop before SQL or any database write. Those always require a later explicit request.
+2. Refresh the remote practice + timed corpus once per section run so duplicate screening uses the current database, not an old cache.
+3. Run generation, deterministic preflight, and one independent blind/revealed validation pass. Do not generate a full timed test unless requested.
+4. Keep intermediate candidates, packets, manifests, reports, and topic searches under the ignored run directory described below. Promote only the accepted candidate and final report when release evidence is requested.
+5. Do not install a preview or create SQL in fast authoring. Those are explicit release actions.
+
+Fast authoring still blocks on deterministic failure and unresolved validator blockers. It does not silently accept draft content.
 
 If the remote corpus refresh fails, do not claim complete duplicate protection or install the batch automatically. Explain that the preview fallback is incomplete and wait for the user to choose whether to continue with that limitation.
 
@@ -38,18 +48,24 @@ For generation or revision, read the generator reference. For review, read the v
 ## Workflow
 
 1. Confirm `section`, `mode` (`practice` or `timed`), and question count. Full timed counts are fixed: VR 44/22 minutes, DM 35/37, QR 36/26, SJ 69/26. Otherwise default to practice. VR practice totals must be divisible by four.
-2. Refresh that section's read-only corpus from Supabase. If remote access fails, use the preview fallback and label the run as potentially incomplete.
-3. Generate the compact corpus inventory, search it for the proposed topics, and record the nearest existing matches. For QR practice, also inspect `src/dev/preview-qr.json` so a new batch does not duplicate accepted questions still in the local preview.
-4. Create a generation brief. Use `assets/generation-brief.template.json` for VR or `assets/section-generation-brief.template.json` for DM/QR/SJ. Copy the current corpus `run_id`; set exact unit/question counts, type/format and difficulty allocations, exclusions, and output paths before generating.
-5. Use an isolated generator agent/context to produce candidate JSON and a provenance manifest. Use `assets/generation-manifest.template.json` for VR or `assets/section-generation-manifest.template.json` for DM/QR/SJ. Give it the brief, generator references, corpus inventory, and nearest relevant matches. Do not give it permission to create a migration.
-6. Run the deterministic checker with `--brief`. Schema, allocation, corpus-run, or high-similarity failures return to the generator/reviser before qualitative review.
-7. Create a blind-review packet and separate response form. Use a different validator agent/context to fill and save the response form before it sees the supplied answers or explanations.
-8. After the blind response is committed, reveal the original candidate, provenance, deterministic report, and nearest matches. The validator checks answer agreement, ambiguity, explanation quality, factual support, and semantic novelty. It writes a structured report using the VR or section validation-report template and does not edit the candidate.
-9. If revision is required, the generator/reviser writes a new version. A fresh validator pass repeats the full workflow; do not validate only the changed lines.
-10. Present the accepted JSON and report to the user. For a simple generation request covered by the contract above, install it into the local developer preview automatically after acceptance; otherwise install only when requested. For QR practice, use the preview installer's `--append` option so accepted batches accumulate in one app-loaded JSON file. Preview installation is not database approval.
-11. Generate SQL only after a separate explicit approval. Generating SQL is not permission to apply it.
+2. Refresh that section's read-only corpus once per run. If remote access fails, use the preview fallback and label the run as potentially incomplete.
+3. Generate one compact inventory. Record nearest matches inline in the manifest rather than creating one sidecar file per topic. For QR practice, inspect `src/dev/preview-qr.json` only when the batch will be installed or when local preview novelty is part of the request.
+4. Create a generation brief under the run directory. Copy the current corpus `run_id`; set exact unit/question counts, type/format and difficulty allocations, exclusions, and output paths before generating.
+5. Use an isolated generator context to produce candidate JSON and a provenance manifest. Give it the brief, generator references, inventory, and nearest relevant matches. Do not give it permission to create a migration.
+6. Run deterministic preflight before blind review. In addition to schema/allocation/corpus/novelty checks, verify every answer key against its option text and manifest verification ledger, all chart/table/geometry dimensions, and all question/set ID collisions. These checks exist to prevent an avoidable full blind rerun.
+7. Create one answer-free blind packet and response form. Use a different validator context to solve every item before seeing supplied answers or explanations. Keep the packet and response in the ignored run directory.
+8. Reveal only after the blind response is committed. The validator checks answer agreement, ambiguity, explanation quality, factual support, and semantic novelty, then writes one concise report. Do not create separate nearest-match or post-install files unless they are needed to explain a blocker.
+9. If revision is required, revise only the reported blocker while preserving earlier versions in the same ignored run directory. A changed answer, option, stem, stimulus, calculation, or semantic context requires a fresh full blind/revealed pass. A metadata-only correction (path, timestamp, provenance wording, or formatting) needs deterministic recheck but not a new arithmetic blind pass.
+10. In fast authoring, present the accepted candidate and concise report without installing it. In release audit, install only after acceptance; for QR practice use `--append`, and back up the existing preview. Preview installation is not database approval.
+11. Generate SQL only after separate explicit approval. Generating SQL is not permission to apply it.
 
-If delegation is unavailable, perform generation and validation in separate contexts and disclose that independence is reduced.
+## Authoring evidence and run layout
+
+Use a unique run directory such as `content-authoring/cache/runs/<run_id>/` for briefs, candidates, manifests, deterministic reports, blind packets/responses, validation reports, and nearest-match notes. The run directory is ignored by Git. Never put credentials, user records, or attempt data in it. If a release record is needed, copy only the final accepted candidate and final validation report to a user-requested tracked location.
+
+When multiple sections are authored concurrently, give each section its own run directory and do not let agents rewrite another section's preview or evidence. A single orchestrator should fan out corpus sync, generation, deterministic checks, and independent validators where possible.
+
+If delegation is unavailable, perform generation and validation in separate contexts and disclose that independence is reduced. Do not trade away the blind answer check merely to save time.
 
 For a 20-question practice run, prefer the section-specific `dm-practice-20-brief.template.json`, `qr-practice-20-brief.template.json`, or `sj-practice-20-brief.template.json`. They provide reproducible default allocations. Change them only when the user requests a different mix.
 
@@ -61,7 +77,7 @@ For review-only requests, use the original brief and manifest when available. If
 
 - Machine checks cannot establish answer correctness or semantic originality; independent review is mandatory.
 - Compare against practice content, timed content, and the pending batch.
-- Preserve candidate and report versions rather than overwriting evidence from earlier passes.
+- Preserve candidate and report versions in the ignored run directory rather than overwriting evidence from earlier passes or leaving every intermediate file in the normal Git diff.
 - Never place credentials, user records, or attempt data in authoring artifacts.
 - Treat the Supabase corpus as current only when the generation brief records the same corpus `run_id`.
 - Stop before migration creation unless the user has approved the validated candidate.

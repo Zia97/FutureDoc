@@ -16678,5 +16678,1443 @@
         "difficulty": "hard"
       }
     ]
+  },
+  {
+    "id": "715ce681-9582-492d-8337-d0cd0fdec75f",
+    "title": "Costume Dye Batch Log",
+    "stimulus": {
+      "type": "table",
+      "context": "A theatre workshop records four fabric-dye batches. Mixture volume is concentrate plus water.",
+      "data": {
+        "headers": [
+          "Dye",
+          "Fabric dyed (kg)",
+          "Concentrate (L)",
+          "Water (L)",
+          "Panels inspected",
+          "Defective panels"
+        ],
+        "rows": [
+          [
+            "Indigo",
+            "240",
+            "18",
+            "102",
+            "600",
+            "12"
+          ],
+          [
+            "Saffron",
+            "180",
+            "12",
+            "78",
+            "450",
+            "9"
+          ],
+          [
+            "Crimson",
+            "300",
+            "21",
+            "129",
+            "750",
+            "15"
+          ],
+          [
+            "Jade",
+            "210",
+            "14",
+            "91",
+            "525",
+            "7"
+          ]
+        ]
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "f936a914-fc72-485b-90ae-2ccdad5b15d4",
+        "question_text": "What was the total dye-mixture volume used for the Crimson batch?",
+        "options": [
+          {
+            "label": "A",
+            "text": "105 L"
+          },
+          {
+            "label": "B",
+            "text": "129 L"
+          },
+          {
+            "label": "C",
+            "text": "143 L"
+          },
+          {
+            "label": "D",
+            "text": "150 L"
+          },
+          {
+            "label": "E",
+            "text": "171 L"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Crimson used 21 L of concentrate and 129 L of water. Total mixture = 21 + 129 = 150 L. No rounding is needed. The answer is 150 L.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "3d52c273-b537-4091-b315-79813c241512",
+        "question_text": "What percentage of the Indigo dye mixture was concentrate?",
+        "options": [
+          {
+            "label": "A",
+            "text": "12%"
+          },
+          {
+            "label": "B",
+            "text": "15%"
+          },
+          {
+            "label": "C",
+            "text": "17.6%"
+          },
+          {
+            "label": "D",
+            "text": "18%"
+          },
+          {
+            "label": "E",
+            "text": "20%"
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Indigo mixture volume = 18 + 102 = 120 L. Concentrate percentage = 18 / 120 × 100 = 15%. The answer is 15%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f1958b04-865c-4f6d-a4e2-61039148c64e",
+        "question_text": "How many kilograms of fabric were dyed per litre of concentrate in the Saffron batch?",
+        "options": [
+          {
+            "label": "A",
+            "text": "10 kg/L"
+          },
+          {
+            "label": "B",
+            "text": "12 kg/L"
+          },
+          {
+            "label": "C",
+            "text": "15 kg/L"
+          },
+          {
+            "label": "D",
+            "text": "18 kg/L"
+          },
+          {
+            "label": "E",
+            "text": "21 kg/L"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The Saffron batch dyed 180 kg using 12 L of concentrate. Rate = 180 / 12 = 15 kg/L. The answer is 15 kg/L.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "474d8c37-2a73-443f-8904-da4b2fcd3390",
+        "question_text": "Across all four batches, another 175 panels are inspected and 2 are defective. What is the new overall defective percentage?",
+        "options": [
+          {
+            "label": "A",
+            "text": "1.6%"
+          },
+          {
+            "label": "B",
+            "text": "1.7%"
+          },
+          {
+            "label": "C",
+            "text": "1.8%"
+          },
+          {
+            "label": "D",
+            "text": "1.9%"
+          },
+          {
+            "label": "E",
+            "text": "2.0%"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Existing defects = 12 + 9 + 15 + 7 = 43 and existing panels = 600 + 450 + 750 + 525 = 2,325. Including the new work gives 45 defects among 2,500 panels. Percentage = 45 / 2,500 × 100 = 1.8%. The answer is 1.8%.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "e8ce05bc-b74f-4ec6-9084-912ededd4219",
+    "title": "Abyssal Drone Survey",
+    "stimulus": {
+      "type": "table",
+      "context": "A marine research team records autonomous-drone surveys. Total dive time equals dives multiplied by minutes per dive.",
+      "data": {
+        "headers": [
+          "Sector",
+          "Grid area (km²)",
+          "Dives",
+          "Minutes per dive",
+          "Usable images",
+          "Raw data (GB)"
+        ],
+        "rows": [
+          [
+            "Ridge",
+            "18",
+            "6",
+            "42",
+            "1680",
+            "96"
+          ],
+          [
+            "Trench",
+            "24",
+            "8",
+            "55",
+            "2280",
+            "144"
+          ],
+          [
+            "Vent",
+            "15",
+            "5",
+            "48",
+            "1425",
+            "90"
+          ],
+          [
+            "Plain",
+            "30",
+            "10",
+            "36",
+            "2700",
+            "180"
+          ]
+        ]
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "2dbf36fe-a1f7-4683-9613-0fccc0dcb500",
+        "question_text": "How many minutes of dive time were spent surveying the Vent sector?",
+        "options": [
+          {
+            "label": "A",
+            "text": "180 min"
+          },
+          {
+            "label": "B",
+            "text": "210 min"
+          },
+          {
+            "label": "C",
+            "text": "240 min"
+          },
+          {
+            "label": "D",
+            "text": "250 min"
+          },
+          {
+            "label": "E",
+            "text": "288 min"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Vent had 5 dives of 48 minutes. Total time = 5 × 48 = 240 minutes. The answer is 240 min.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "b25a58a4-ddcf-4a64-bccf-ca7d630d88a2",
+        "question_text": "How many usable images per square kilometre were produced for the Ridge sector, to the nearest 0.1?",
+        "options": [
+          {
+            "label": "A",
+            "text": "88.0"
+          },
+          {
+            "label": "B",
+            "text": "90.0"
+          },
+          {
+            "label": "C",
+            "text": "92.3"
+          },
+          {
+            "label": "D",
+            "text": "93.3"
+          },
+          {
+            "label": "E",
+            "text": "96.0"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Ridge produced 1,680 images across 18 km². Images per km² = 1,680 / 18 = 93.333..., which rounds to 93.3. The answer is 93.3.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "63928e81-5685-48a4-92af-eb0678266bdc",
+        "question_text": "Compressed Trench data occupies 35% of its raw size. What is the compressed size?",
+        "options": [
+          {
+            "label": "A",
+            "text": "35.0 GB"
+          },
+          {
+            "label": "B",
+            "text": "43.2 GB"
+          },
+          {
+            "label": "C",
+            "text": "50.4 GB"
+          },
+          {
+            "label": "D",
+            "text": "54.6 GB"
+          },
+          {
+            "label": "E",
+            "text": "93.6 GB"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Trench raw data is 144 GB. Compressed size = 144 × 0.35 = 50.4 GB. The answer is 50.4 GB.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "a8f59488-b59a-4d57-9a7f-c35d0a9cbccc",
+        "question_text": "Which sector produced the greatest number of usable images per hour of dive time?",
+        "options": [
+          {
+            "label": "A",
+            "text": "Ridge"
+          },
+          {
+            "label": "B",
+            "text": "Trench"
+          },
+          {
+            "label": "C",
+            "text": "Vent"
+          },
+          {
+            "label": "D",
+            "text": "Plain"
+          },
+          {
+            "label": "E",
+            "text": "Ridge and Plain equal"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Convert each total dive time to hours, then divide images by hours: Ridge = 1,680 / (252/60) = 400; Trench = 2,280 / (440/60) = 310.9; Vent = 1,425 / (240/60) = 356.25; Plain = 2,700 / (360/60) = 450 images/hour. Plain is greatest. The answer is Plain.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "ce65b5ce-2a0f-4c05-b6ec-eb3179a9ac46",
+    "title": "Seed Bank Intake",
+    "stimulus": {
+      "type": "bar_chart",
+      "context": "A seed bank tested four incoming collections. 'Viable' seeds are the subset that passed germination testing.",
+      "data": {
+        "title": "Seeds received and viable",
+        "labels": [
+          "Lotus",
+          "Fir",
+          "Sedge",
+          "Orchid"
+        ],
+        "series": [
+          {
+            "name": "Received",
+            "values": [
+              480,
+              360,
+              600,
+              300
+            ]
+          },
+          {
+            "name": "Viable",
+            "values": [
+              408,
+              306,
+              510,
+              255
+            ]
+          }
+        ],
+        "yAxisLabel": "Number of seeds",
+        "unit": "seeds"
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "bc6b4a32-7acb-4e0e-9d6f-b73a74e2a35c",
+        "question_text": "How many viable seeds were recorded in total?",
+        "options": [
+          {
+            "label": "A",
+            "text": "1419"
+          },
+          {
+            "label": "B",
+            "text": "1440"
+          },
+          {
+            "label": "C",
+            "text": "1459"
+          },
+          {
+            "label": "D",
+            "text": "1479"
+          },
+          {
+            "label": "E",
+            "text": "1500"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Total viable seeds = 408 + 306 + 510 + 255 = 1,479 seeds. The answer is 1,479.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "aa2ef633-b741-482d-b7c5-fb3c8a4f1d95",
+        "question_text": "What percentage of Orchid seeds were viable?",
+        "options": [
+          {
+            "label": "A",
+            "text": "75%"
+          },
+          {
+            "label": "B",
+            "text": "80%"
+          },
+          {
+            "label": "C",
+            "text": "82%"
+          },
+          {
+            "label": "D",
+            "text": "85%"
+          },
+          {
+            "label": "E",
+            "text": "90%"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Orchid had 255 viable seeds from 300 received. Percentage = 255 / 300 × 100 = 85%. The answer is 85%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "24b77545-6f75-4066-abb9-3533d84621ac",
+        "question_text": "How many Sedge seeds failed the viability test?",
+        "options": [
+          {
+            "label": "A",
+            "text": "75"
+          },
+          {
+            "label": "B",
+            "text": "80"
+          },
+          {
+            "label": "C",
+            "text": "85"
+          },
+          {
+            "label": "D",
+            "text": "90"
+          },
+          {
+            "label": "E",
+            "text": "95"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Failed Sedge seeds = received − viable = 600 − 510 = 90 seeds. The answer is 90.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "be70c1bb-e846-49f7-b688-4cb952b9e718",
+        "question_text": "Next year Lotus intake is projected to rise by 12%, with the same viability rate. Approximately how many viable Lotus seeds are expected?",
+        "options": [
+          {
+            "label": "A",
+            "text": "449"
+          },
+          {
+            "label": "B",
+            "text": "454"
+          },
+          {
+            "label": "C",
+            "text": "457"
+          },
+          {
+            "label": "D",
+            "text": "462"
+          },
+          {
+            "label": "E",
+            "text": "480"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Current Lotus viability rate = 408 / 480 = 85%. Projected intake = 480 × 1.12 = 537.6. Expected viable = 537.6 × 0.85 = 456.96, which rounds to 457 seeds. The answer is 457.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "ea08232e-6151-4165-a9fb-7f75836fc992",
+    "title": "Coastal Beacon Batteries",
+    "stimulus": {
+      "type": "line_graph",
+      "context": "Engineers recorded the remaining charge in two solar beacon batteries during one cloudy day.",
+      "data": {
+        "title": "Battery charge through the day",
+        "labels": [
+          "06:00",
+          "09:00",
+          "12:00",
+          "15:00",
+          "18:00"
+        ],
+        "series": [
+          {
+            "name": "North Beacon",
+            "values": [
+              96,
+              88,
+              79,
+              67,
+              52
+            ]
+          },
+          {
+            "name": "South Beacon",
+            "values": [
+              92,
+              86,
+              78,
+              71,
+              65
+            ]
+          }
+        ],
+        "yAxisLabel": "Charge remaining (%)",
+        "unit": "%"
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "16c2a58c-7238-4774-8525-9c57b25130ba",
+        "question_text": "By how many percentage points did the North Beacon charge fall from 06:00 to 18:00?",
+        "options": [
+          {
+            "label": "A",
+            "text": "38"
+          },
+          {
+            "label": "B",
+            "text": "40"
+          },
+          {
+            "label": "C",
+            "text": "42"
+          },
+          {
+            "label": "D",
+            "text": "44"
+          },
+          {
+            "label": "E",
+            "text": "46"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "North Beacon fell from 96% to 52%. Decrease = 96 − 52 = 44 percentage points. The answer is 44.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "a1701e6b-4089-4da5-8efa-e0539f4dae95",
+        "question_text": "What was the mean South Beacon charge across the five readings?",
+        "options": [
+          {
+            "label": "A",
+            "text": "76.4%"
+          },
+          {
+            "label": "B",
+            "text": "77.4%"
+          },
+          {
+            "label": "C",
+            "text": "78.0%"
+          },
+          {
+            "label": "D",
+            "text": "78.4%"
+          },
+          {
+            "label": "E",
+            "text": "79.2%"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Mean = (92 + 86 + 78 + 71 + 65) / 5 = 392 / 5 = 78.4%. The answer is 78.4%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "f03aa6b2-a41a-42ae-bcb0-836fef9f5e75",
+        "question_text": "If the North Beacon continued after 18:00 at its average hourly rate of charge loss from 12:00 to 18:00, what charge would remain at 21:00?",
+        "options": [
+          {
+            "label": "A",
+            "text": "35.0%"
+          },
+          {
+            "label": "B",
+            "text": "36.5%"
+          },
+          {
+            "label": "C",
+            "text": "38.5%"
+          },
+          {
+            "label": "D",
+            "text": "40.0%"
+          },
+          {
+            "label": "E",
+            "text": "44.5%"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "From 12:00 to 18:00, charge fell from 79% to 52%: 27 points in 6 hours, or 4.5 points/hour. In the next 3 hours it would lose 13.5 points. Remaining charge = 52 − 13.5 = 38.5%. The answer is 38.5%.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "0581bbb0-7d36-47db-a882-0b1802419d6d",
+    "title": "Planetarium Ticket Allocation",
+    "stimulus": {
+      "type": "pie_chart",
+      "context": "A planetarium allocated 1,250 tickets for a science festival. The chart shows the initial allocation.",
+      "data": {
+        "title": "Initial ticket allocation",
+        "segments": [
+          {
+            "label": "School groups",
+            "value": 36
+          },
+          {
+            "label": "Families",
+            "value": 28
+          },
+          {
+            "label": "Adults",
+            "value": 22
+          },
+          {
+            "label": "Concessions",
+            "value": 14
+          }
+        ],
+        "unit": "%"
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "a042857f-e688-4f1e-a3da-fab3ad74438b",
+        "question_text": "How many tickets were allocated to families?",
+        "options": [
+          {
+            "label": "A",
+            "text": "300"
+          },
+          {
+            "label": "B",
+            "text": "325"
+          },
+          {
+            "label": "C",
+            "text": "350"
+          },
+          {
+            "label": "D",
+            "text": "375"
+          },
+          {
+            "label": "E",
+            "text": "400"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Family tickets = 28% of 1,250 = 0.28 × 1,250 = 350 tickets. The answer is 350.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "45d8b19c-5b77-450d-babc-9523f7c0571a",
+        "question_text": "What is the ratio of school-group tickets to concession tickets in its simplest form?",
+        "options": [
+          {
+            "label": "A",
+            "text": "7:18"
+          },
+          {
+            "label": "B",
+            "text": "9:4"
+          },
+          {
+            "label": "C",
+            "text": "18:7"
+          },
+          {
+            "label": "D",
+            "text": "18:14"
+          },
+          {
+            "label": "E",
+            "text": "36:7"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "The allocation ratio is 36:14. Dividing both parts by 2 gives 18:7. The answer is 18:7.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "c70460bd-0eb6-428f-b09c-6181e3b691bc",
+        "question_text": "Ten per cent of the school-group tickets are returned and all are reallocated to adults. What percentage of all 1,250 tickets is then allocated to adults?",
+        "options": [
+          {
+            "label": "A",
+            "text": "24.4%"
+          },
+          {
+            "label": "B",
+            "text": "25.0%"
+          },
+          {
+            "label": "C",
+            "text": "25.6%"
+          },
+          {
+            "label": "D",
+            "text": "26.0%"
+          },
+          {
+            "label": "E",
+            "text": "32.0%"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "School tickets = 36% of 1,250 = 450. Returned tickets = 10% of 450 = 45. Adult tickets originally = 22% of 1,250 = 275, so the new adult allocation is 320. Percentage = 320 / 1,250 × 100 = 25.6%. The answer is 25.6%.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "4600699f-4813-4c7e-9877-4107f159db8a",
+    "title": "Ceramic Tile Firing Trial",
+    "stimulus": {
+      "type": "scatter_plot",
+      "context": "A ceramics studio tested one tile sample at each kiln temperature. Flexural strength is measured in megapascals (MPa).",
+      "data": {
+        "title": "Kiln temperature and tile strength",
+        "xAxisLabel": "Firing temperature (°C)",
+        "yAxisLabel": "Strength (MPa)",
+        "series": [
+          {
+            "name": "Tile samples",
+            "points": [
+              {
+                "x": 780,
+                "y": 32,
+                "label": "A"
+              },
+              {
+                "x": 820,
+                "y": 38,
+                "label": "B"
+              },
+              {
+                "x": 860,
+                "y": 47,
+                "label": "C"
+              },
+              {
+                "x": 900,
+                "y": 54,
+                "label": "D"
+              },
+              {
+                "x": 940,
+                "y": 61,
+                "label": "E"
+              },
+              {
+                "x": 980,
+                "y": 59,
+                "label": "F"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "1b1f466b-fe9f-4ccf-9274-c1884a71500b",
+        "question_text": "Between which consecutive temperatures was the greatest increase in strength recorded?",
+        "options": [
+          {
+            "label": "A",
+            "text": "780–820°C"
+          },
+          {
+            "label": "B",
+            "text": "820–860°C"
+          },
+          {
+            "label": "C",
+            "text": "860–900°C"
+          },
+          {
+            "label": "D",
+            "text": "900–940°C"
+          },
+          {
+            "label": "E",
+            "text": "940–980°C"
+          }
+        ],
+        "correct_answer": "B",
+        "answer_reason": "Consecutive changes are +6, +9, +7, +7 and −2 MPa. The greatest increase is 9 MPa from 820°C to 860°C. The answer is 820–860°C.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "966bb7e5-9bcb-4111-b270-0f7d1208a961",
+        "question_text": "What was the percentage increase in strength from sample A to sample E, to the nearest 0.1%?",
+        "options": [
+          {
+            "label": "A",
+            "text": "81.3%"
+          },
+          {
+            "label": "B",
+            "text": "87.5%"
+          },
+          {
+            "label": "C",
+            "text": "90.6%"
+          },
+          {
+            "label": "D",
+            "text": "93.8%"
+          },
+          {
+            "label": "E",
+            "text": "96.9%"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Strength increased from 32 MPa to 61 MPa, a rise of 29 MPa. Percentage increase = 29 / 32 × 100 = 90.625%, which rounds to 90.6%. The answer is 90.6%.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "71fc89c2-7ab4-489e-acb1-0613d8cf3ece",
+        "question_text": "What is the median strength of the six samples?",
+        "options": [
+          {
+            "label": "A",
+            "text": "47.0 MPa"
+          },
+          {
+            "label": "B",
+            "text": "49.0 MPa"
+          },
+          {
+            "label": "C",
+            "text": "50.5 MPa"
+          },
+          {
+            "label": "D",
+            "text": "54.0 MPa"
+          },
+          {
+            "label": "E",
+            "text": "56.5 MPa"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Order the strengths: 32, 38, 47, 54, 59, 61. With six values, the median is the mean of the third and fourth: (47 + 54) / 2 = 50.5 MPa. The answer is 50.5 MPa.",
+        "order_index": 2,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "88f2fe67-cc93-4268-86fa-33b43cd0c03f",
+    "title": "Archaeological Survey Paths",
+    "stimulus": {
+      "type": "network_diagram",
+      "context": "Edge labels show walking distances between survey locations. Paths may be used in either direction.",
+      "data": {
+        "title": "Survey-site walking network",
+        "nodes": [
+          {
+            "id": "camp",
+            "label": "Camp",
+            "x": 0.12,
+            "y": 0.45
+          },
+          {
+            "id": "ridge",
+            "label": "Ridge",
+            "x": 0.34,
+            "y": 0.18
+          },
+          {
+            "id": "wadi",
+            "label": "Wadi",
+            "x": 0.35,
+            "y": 0.72
+          },
+          {
+            "id": "tell",
+            "label": "Tell",
+            "x": 0.58,
+            "y": 0.43
+          },
+          {
+            "id": "oasis",
+            "label": "Oasis",
+            "x": 0.62,
+            "y": 0.82
+          },
+          {
+            "id": "vault",
+            "label": "Vault",
+            "x": 0.86,
+            "y": 0.38
+          }
+        ],
+        "edges": [
+          {
+            "from": "camp",
+            "to": "ridge",
+            "label": "4.8 km"
+          },
+          {
+            "from": "ridge",
+            "to": "tell",
+            "label": "3.6 km"
+          },
+          {
+            "from": "camp",
+            "to": "wadi",
+            "label": "5.2 km"
+          },
+          {
+            "from": "wadi",
+            "to": "tell",
+            "label": "2.9 km"
+          },
+          {
+            "from": "tell",
+            "to": "vault",
+            "label": "4.1 km"
+          },
+          {
+            "from": "ridge",
+            "to": "vault",
+            "label": "6.5 km"
+          },
+          {
+            "from": "wadi",
+            "to": "oasis",
+            "label": "3.3 km"
+          },
+          {
+            "from": "oasis",
+            "to": "vault",
+            "label": "5.0 km"
+          }
+        ]
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "e97f3a47-2d95-41fb-b7cd-3c102bbd9a10",
+        "question_text": "What is the distance of a round trip from Camp to Wadi using the direct path?",
+        "options": [
+          {
+            "label": "A",
+            "text": "5.2 km"
+          },
+          {
+            "label": "B",
+            "text": "8.1 km"
+          },
+          {
+            "label": "C",
+            "text": "9.6 km"
+          },
+          {
+            "label": "D",
+            "text": "10.4 km"
+          },
+          {
+            "label": "E",
+            "text": "11.7 km"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "The direct Camp–Wadi path is 5.2 km each way. Round trip = 2 × 5.2 = 10.4 km. The answer is 10.4 km.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "2f30e598-145c-4250-83b6-9a7a19d44b30",
+        "question_text": "Rockfall adds a detour equal to 25% of the Ridge–Tell path's original distance. What is the revised distance for the route Camp–Ridge–Tell–Vault?",
+        "options": [
+          {
+            "label": "A",
+            "text": "12.5 km"
+          },
+          {
+            "label": "B",
+            "text": "12.9 km"
+          },
+          {
+            "label": "C",
+            "text": "13.0 km"
+          },
+          {
+            "label": "D",
+            "text": "13.4 km"
+          },
+          {
+            "label": "E",
+            "text": "14.3 km"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "The added detour is 25% of 3.6 km: 0.25 × 3.6 = 0.9 km, so Ridge–Tell becomes 4.5 km. Revised route distance = 4.8 + 4.5 + 4.1 = 13.4 km. No rounding is needed. The answer is 13.4 km.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "28df277b-aa1e-4fc8-b434-cb6f16b4da99",
+        "question_text": "Team A walks Camp–Ridge–Vault at 4 km/h. Team B walks Camp–Wadi–Oasis–Vault at 5 km/h. By how many minutes does Team B complete its route sooner than Team A?",
+        "options": [
+          {
+            "label": "A",
+            "text": "4.5 min"
+          },
+          {
+            "label": "B",
+            "text": "6.0 min"
+          },
+          {
+            "label": "C",
+            "text": "7.5 min"
+          },
+          {
+            "label": "D",
+            "text": "9.0 min"
+          },
+          {
+            "label": "E",
+            "text": "12.0 min"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Team A walks 4.8 + 6.5 = 11.3 km, taking 11.3 / 4 = 2.825 hours = 169.5 minutes. Team B walks 5.2 + 3.3 + 5.0 = 13.5 km, taking 13.5 / 5 = 2.7 hours = 162 minutes. Difference = 169.5 − 162 = 7.5 minutes, so Team B is 7.5 minutes sooner. The answer is 7.5 min.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "865d24bc-aa97-4156-adcc-426edfcda185",
+    "title": "Acoustic Wall Panels",
+    "stimulus": {
+      "type": "geometry_diagram",
+      "context": "An exhibition hall has a centrally notched acoustic wall. The outline is equivalent to a 12 m by 8 m rectangle with a 4 m by 3 m rectangular notch removed from the bottom centre.",
+      "data": {
+        "title": "Acoustic wall outline",
+        "viewBox": {
+          "width": 320,
+          "height": 240
+        },
+        "shapes": [
+          {
+            "type": "polygon",
+            "points": [
+              [
+                30,
+                30
+              ],
+              [
+                290,
+                30
+              ],
+              [
+                290,
+                200
+              ],
+              [
+                205,
+                200
+              ],
+              [
+                205,
+                136
+              ],
+              [
+                115,
+                136
+              ],
+              [
+                115,
+                200
+              ],
+              [
+                30,
+                200
+              ]
+            ],
+            "fill": "none",
+            "stroke": "#2d3748"
+          }
+        ],
+        "dimensions": [
+          {
+            "from": [
+              30,
+              18
+            ],
+            "to": [
+              290,
+              18
+            ],
+            "label": "12 m",
+            "side": "top"
+          },
+          {
+            "from": [
+              300,
+              30
+            ],
+            "to": [
+              300,
+              200
+            ],
+            "label": "8 m",
+            "side": "right"
+          },
+          {
+            "from": [
+              115,
+              126
+            ],
+            "to": [
+              205,
+              126
+            ],
+            "label": "4 m",
+            "side": "top"
+          },
+          {
+            "from": [
+              105,
+              136
+            ],
+            "to": [
+              105,
+              200
+            ],
+            "label": "3 m",
+            "side": "left"
+          }
+        ]
+      }
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "86eff007-5ddd-4290-9304-5e342fc87bc4",
+        "question_text": "What is the area of the acoustic wall?",
+        "options": [
+          {
+            "label": "A",
+            "text": "72 m²"
+          },
+          {
+            "label": "B",
+            "text": "80 m²"
+          },
+          {
+            "label": "C",
+            "text": "84 m²"
+          },
+          {
+            "label": "D",
+            "text": "88 m²"
+          },
+          {
+            "label": "E",
+            "text": "96 m²"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Outer rectangle area = 12 × 8 = 96 m². Notch area = 4 × 3 = 12 m². Wall area = 96 − 12 = 84 m². The answer is 84 m².",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "a68a48d7-a9aa-4d40-8cdb-39a4e277d503",
+        "question_text": "What is the perimeter of the wall outline?",
+        "options": [
+          {
+            "label": "A",
+            "text": "40 m"
+          },
+          {
+            "label": "B",
+            "text": "42 m"
+          },
+          {
+            "label": "C",
+            "text": "44 m"
+          },
+          {
+            "label": "D",
+            "text": "46 m"
+          },
+          {
+            "label": "E",
+            "text": "48 m"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Trace the outline: 12 + 8 + 4 + 3 + 4 + 3 + 4 + 8 = 46 m. The inward notch replaces a 4 m bottom segment with 3 + 4 + 3 m. The answer is 46 m.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "28006bac-05e2-48b1-b244-c500c5d89f42",
+        "question_text": "Panels measure 1.2 m by 0.6 m. Material must cover 90% of the wall area, with an extra 5% of that covered area allowed for waste. What is the minimum whole number of panels required?",
+        "options": [
+          {
+            "label": "A",
+            "text": "105"
+          },
+          {
+            "label": "B",
+            "text": "106"
+          },
+          {
+            "label": "C",
+            "text": "108"
+          },
+          {
+            "label": "D",
+            "text": "110"
+          },
+          {
+            "label": "E",
+            "text": "111"
+          }
+        ],
+        "correct_answer": "E",
+        "answer_reason": "Wall area = 84 m². Required material area = 84 × 0.90 × 1.05 = 79.38 m². Each panel covers 1.2 × 0.6 = 0.72 m². Panels = 79.38 / 0.72 = 110.25, so 111 whole panels are required. The answer is 111.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
+  },
+  {
+    "id": "4ba0804d-0e2a-424c-8a47-82bf2292de7d",
+    "title": "Aerial Mapping Quotes",
+    "stimulus": {
+      "type": "multi",
+      "items": [
+        {
+          "type": "text",
+          "text": "Three firms quote for mapping a site. Total before VAT equals setup fee + (hectares × rate per hectare) + analysis fee. VAT is 20%."
+        },
+        {
+          "type": "formula",
+          "text": "Total including VAT = total before VAT × 1.20"
+        },
+        {
+          "type": "table",
+          "data": {
+            "headers": [
+              "Package",
+              "Setup fee",
+              "Rate per hectare",
+              "Analysis fee"
+            ],
+            "rows": [
+              [
+                "Basic",
+                "£180",
+                "£6.40",
+                "£95"
+              ],
+              [
+                "SurveyPro",
+                "£120",
+                "£7.20",
+                "£60"
+              ],
+              [
+                "Rapid",
+                "£250",
+                "£5.80",
+                "£140"
+              ]
+            ]
+          },
+          "context": "The table lists the three package fees used in the quote formula; all charges shown are before VAT."
+        }
+      ]
+    },
+    "is_free": true,
+    "quantitative_reasoning_questions": [
+      {
+        "id": "1da1591f-011c-49fb-b466-03797d0b535c",
+        "question_text": "What is the Basic package cost for a 50-hectare site before VAT?",
+        "options": [
+          {
+            "label": "A",
+            "text": "£560"
+          },
+          {
+            "label": "B",
+            "text": "£575"
+          },
+          {
+            "label": "C",
+            "text": "£595"
+          },
+          {
+            "label": "D",
+            "text": "£615"
+          },
+          {
+            "label": "E",
+            "text": "£690"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Basic cost = £180 + (50 × £6.40) + £95 = £180 + £320 + £95 = £595. The answer is £595.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "56068679-a2c7-4f83-95ab-db1881c797c9",
+        "question_text": "What is the SurveyPro cost for an 80-hectare site including VAT?",
+        "options": [
+          {
+            "label": "A",
+            "text": "£756.00"
+          },
+          {
+            "label": "B",
+            "text": "£847.20"
+          },
+          {
+            "label": "C",
+            "text": "£882.00"
+          },
+          {
+            "label": "D",
+            "text": "£907.20"
+          },
+          {
+            "label": "E",
+            "text": "£921.60"
+          }
+        ],
+        "correct_answer": "D",
+        "answer_reason": "Before VAT = £120 + (80 × £7.20) + £60 = £756. Including VAT = £756 × 1.20 = £907.20. The answer is £907.20.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "ebc3a155-5704-459a-8ac7-09ced2e31ae9",
+        "question_text": "For what minimum whole-number site area is Rapid cheaper than Basic before VAT?",
+        "options": [
+          {
+            "label": "A",
+            "text": "190 ha"
+          },
+          {
+            "label": "B",
+            "text": "191 ha"
+          },
+          {
+            "label": "C",
+            "text": "192 ha"
+          },
+          {
+            "label": "D",
+            "text": "193 ha"
+          },
+          {
+            "label": "E",
+            "text": "195 ha"
+          }
+        ],
+        "correct_answer": "C",
+        "answer_reason": "Basic = £275 + £6.40h and Rapid = £390 + £5.80h. Rapid is cheaper when 390 + 5.80h < 275 + 6.40h, so 115 < 0.60h and h > 191.666.... The minimum whole area is 192 ha. The answer is 192 ha.",
+        "order_index": 2,
+        "difficulty": "hard"
+      }
+    ]
   }
 ]
