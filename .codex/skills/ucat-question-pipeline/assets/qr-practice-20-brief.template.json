@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "run_id": "qr-practice-20-YYYYMMDD-NN",
+  "section": "qr",
+  "mode": "practice",
+  "question_count": 20,
+  "unit_count": 6,
+  "unit_question_counts": [4, 4, 3, 3, 3, 3],
+  "difficulty_allocation": { "normal_questions": 15, "hard_questions": 5 },
+  "type_or_skill_allocation": {
+    "stimulus:table:sets": 1,
+    "stimulus:bar_chart:sets": 1,
+    "stimulus:line_graph:sets": 1,
+    "stimulus:pie_chart:sets": 1,
+    "stimulus:text:sets": 1,
+    "stimulus:multi:sets": 1
+  },
+  "is_free": true,
+  "editorial_requirements": ["Cover at least six distinct calculation skills.", "Every question needs an independent arithmetic verification ledger."],
+  "excluded_topics": [],
+  "corpus_run_id": "",
+  "corpus_generated_at": "",
+  "inventory_path": "content-authoring/cache/qr-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/qr-practice-20-v1.json",
+  "manifest_path": "content-authoring/reports/qr-practice-20-v1.manifest.json",
+  "validation_report_path": "content-authoring/reports/qr-practice-20-v1.validation.json"
+}

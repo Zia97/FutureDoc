@@ -1,0 +1,163 @@
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { db } from '../../lib/dbQueries';
+import { getCached, saveCache } from '../../services/contentCache';
+import { withRetry } from '../../lib/withRetry';
+import { isPreviewEnabled } from '../../dev/previewStore';
+import { flattenTimedVRPassages } from '../../lib/flattenQuestions';
+import { reportError } from '../../lib/reportError';
+
+const SECTION = 'timed_verbal_reasoning';
+
+function mapTestsFromNested(rows) {
+  return rows.map((test) => {
+    const passages = [...(test.timed_verbal_reasoning_passages ?? [])]
+      .sort((a, b) => a.order_index - b.order_index)
+      .map((p) => {
+        const questions = [...(p.timed_verbal_reasoning_questions ?? [])]
+          .sort((a, b) => a.order_index - b.order_index)
+          .map((q) => ({
+            questionId: q.id,
+            questionText: q.question_text,
+            options: q.options,
+            answer: q.correct_answer,
+            answeringReason: q.answer_reason,
+            difficulty: q.difficulty ?? 'normal',
+          }));
+        return { id: p.id, title: p.title, resource: p.body, questions };
+      });
+    return {
+      id: test.id,
+      title: test.title,
+      isFree: test.is_free ?? false,
+      passageCount: passages.length,
+      questionCount: passages.reduce((n, p) => n + p.questions.length, 0),
+      timeMinutes: test.time_minutes ?? 22,
+      passages,
+      flatQuestions: flattenTimedVRPassages(passages),
+    };
+  });
+}
+
+function mapTests(data, isPreview = false) {
+  return data.map((test) => {
+    const rawPassages = test.timed_verbal_reasoning_passages ?? test.passages ?? [];
+    const passages = rawPassages.map((p) => ({
+      id: p.id,
+      title: p.title,
+      resource: p.body ?? p.resource,
+      questions: [...(p.timed_verbal_reasoning_questions ?? p.verbal_reasoning_questions ?? p.questions ?? [])]
+        .sort((a, b) => a.order_index - b.order_index)
+        .map((q) => ({
+          questionId: q.id ?? q.questionId,
+          questionText: q.question_text ?? q.questionText,
+          options: q.options,
+          answer: q.correct_answer ?? q.answer,
+          answeringReason: q.answer_reason ?? q.answeringReason,
+          difficulty: q.difficulty ?? 'normal',
+        })),
+    }));
+    return {
+      id: test.id,
+      title: test.title,
+      isFree: isPreview ? true : (test.is_free ?? test.isFree ?? false),
+      isPreview,
+      passageCount: test.passage_count ?? passages.length,
+      questionCount: test.question_count ?? passages.reduce((n, p) => n + p.questions.length, 0),
+      timeMinutes: test.time_minutes ?? 22,
+      passages,
+      flatQuestions: flattenTimedVRPassages(passages),
+    };
+  });
+}
+
+function ensureFlatQuestions(t) {
+  return t.flatQuestions ? t : { ...t, flatQuestions: flattenTimedVRPassages(t.passages) };
+}
+
+export function useTimedVRTests() {
+  const [tests, setTests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [syncing, setSyncing] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true;
+    return () => { isMounted.current = false; };
+  }, []);
+
+  const load = useCallback(async () => {
+    if (__DEV__) {
+      const enabled = await isPreviewEnabled('vr');
+      if (enabled) {
+        const data = require('../../dev/preview-vr-timed.json');
+        if (data?.length > 0) {
+          setTests(mapTests(data, true));
+          setLoading(false);
+          return;
+        }
+      }
+    }
+
+    const cached = await getCached(SECTION);
+    const hasValidCache = cached?.data?.length > 0;
+
+    if (hasValidCache) {
+      setTests(cached.data.map(ensureFlatQuestions));
+      setLoading(false);
+    }
+
+    let versionRow;
+    try {
+      versionRow = await withRetry(() => db.getContentVersion(SECTION));
+    } catch (versionError) {
+      if (!hasValidCache) setError(versionError);
+      setLoading(false);
+      return;
+    }
+
+    if (hasValidCache && cached.version === versionRow.version) {
+      setError(null);
+      setLoading(false);
+      return;
+    }
+
+    if (!isMounted.current) return;
+    setSyncing(true);
+    setSyncProgress({ loaded: 0, total: null });
+
+    try {
+      let pagesLoaded = 0;
+      const rows = await db.fetchAllTimedVRTestsPaginated(() => {
+        pagesLoaded++;
+        if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+      });
+      const mapped = mapTestsFromNested(rows);
+      await saveCache(SECTION, versionRow.version, mapped);
+      if (isMounted.current) {
+        setTests(mapped);
+        setError(null);
+      }
+    } catch (fetchErr) {
+      reportError('useTimedVRTests', fetchErr, { level: 'warning', extra: { note: 'fetch failed' } });
+      if (!hasValidCache && isMounted.current) setError(fetchErr);
+    } finally {
+      if (isMounted.current) {
+        setSyncing(false);
+        setSyncProgress(null);
+        setLoading(false);
+      }
+    }
+  }, []);
+
+  const refetch = useCallback(async () => {
+    setError(null);
+    setLoading(true);
+    await load();
+  }, [load]);
+
+  useEffect(() => { load(); }, [load]);
+
+  return { tests, loading, error, syncing, syncProgress, refetch };
+}

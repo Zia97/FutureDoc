@@ -1,0 +1,2504 @@
+[
+  {
+    "id": "9a485920-7f6d-4434-84dd-e2c3768d27b0",
+    "title": "Ceramic Piece Classifications",
+    "type": "syllogism",
+    "difficulty": "normal",
+    "stem": "At a ceramics studio, all cobalt pieces are glazed. No glazed piece is porous. Some display pieces are cobalt. Every numbered piece is a display piece. Some porous pieces are numbered. For each statement, answer Yes if it follows and No if it does not.",
+    "order_index": 1,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Some display pieces are glazed.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some display pieces are cobalt, and every cobalt piece is glazed.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "No cobalt piece is porous.",
+        "correct_answer": "Yes",
+        "answer_reason": "All cobalt pieces are glazed, while no glazed piece is porous.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Some numbered pieces are porous.",
+        "correct_answer": "Yes",
+        "answer_reason": "The premises explicitly state that some porous pieces are numbered.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Every display piece is glazed.",
+        "correct_answer": "No",
+        "answer_reason": "Only some display pieces are known to be cobalt and therefore glazed.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Some numbered pieces are cobalt.",
+        "correct_answer": "No",
+        "answer_reason": "Numbered pieces are display pieces, but display status does not imply cobalt.",
+        "order_index": 5
+      }
+    ]
+  },
+  {
+    "id": "3cb31e21-99fc-495a-bbdb-1f91b0902ad6",
+    "title": "Conservation Flight Permissions",
+    "type": "syllogism",
+    "difficulty": "normal",
+    "stem": "For a conservation project, every thermal flight is a survey flight. All survey flights are authorised. No authorised flight passes over the reserve. Some night flights are thermal flights. Some training flights pass over the reserve. For each statement, answer Yes if it follows and No if it does not.",
+    "order_index": 2,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Some night flights are authorised.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some night flights are thermal, thermal flights are surveys, and all surveys are authorised.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "No thermal flight passes over the reserve.",
+        "correct_answer": "Yes",
+        "answer_reason": "Every thermal flight is authorised through the survey rule, and authorised flights never pass over the reserve.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Some training flights are not authorised.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some training flights pass over the reserve, whereas no authorised flight does.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Every night flight is a survey flight.",
+        "correct_answer": "No",
+        "answer_reason": "Only some night flights are stated to be thermal and hence surveys.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "No survey flight is a training flight.",
+        "correct_answer": "No",
+        "answer_reason": "A training flight outside the reserve could also be a survey; the premises do not exclude this.",
+        "order_index": 5
+      }
+    ]
+  },
+  {
+    "id": "bc483abe-96f8-41ae-b4f9-bb138cb3bfed",
+    "title": "Cold-Chain Crate Routes",
+    "type": "syllogism",
+    "difficulty": "normal",
+    "stem": "Every crate is routed north or south, but never both. Every fragile crate is routed north. Every refrigerated crate is routed north. No refrigerated crate is urgent. Some crates are refrigerated, and some south-routed crates are urgent. For each statement, answer Yes if it follows and No if it does not.",
+    "order_index": 3,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Every fragile crate is not routed south.",
+        "correct_answer": "Yes",
+        "answer_reason": "Fragile crates go north, and no crate can be both north- and south-routed.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Some north-routed crates are not urgent.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some crates are refrigerated; refrigerated crates go north and are not urgent.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "No south-routed crate is refrigerated.",
+        "correct_answer": "Yes",
+        "answer_reason": "All refrigerated crates go north, and the two routes are exclusive.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Some urgent crates are not routed north.",
+        "correct_answer": "Yes",
+        "answer_reason": "Some south-routed crates are urgent, and south-routed crates cannot also be north-routed.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Some north-routed crates are fragile.",
+        "correct_answer": "No",
+        "answer_reason": "Fragile crates would be north-routed, but the premises do not say that any fragile crates exist.",
+        "order_index": 5
+      }
+    ]
+  },
+  {
+    "id": "5384576a-eaaa-4199-b403-29f856f0a893",
+    "title": "Festival Mentor Roles",
+    "type": "syllogism",
+    "difficulty": "hard",
+    "stem": "At a festival, every mentor is a performer. No performer is a novice. Some coordinators are novices. Every coordinator is either a mentor or an auditor, but not both. Some auditors are performers. For each statement, answer Yes if it follows and No if it does not.",
+    "order_index": 4,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "No mentor is a novice.",
+        "correct_answer": "Yes",
+        "answer_reason": "Every mentor is a performer, and no performer is a novice.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Some coordinators are auditors.",
+        "correct_answer": "Yes",
+        "answer_reason": "The novice coordinators cannot be mentors, so under the exclusive rule they must be auditors.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Some auditors are novices.",
+        "correct_answer": "Yes",
+        "answer_reason": "The novice coordinators identified as auditors provide the required existence.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "No auditor is a mentor.",
+        "correct_answer": "No",
+        "answer_reason": "The auditor-versus-mentor exclusion applies to coordinators only, not to every auditor.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Some performers are not mentors.",
+        "correct_answer": "No",
+        "answer_reason": "The known auditor performers could also be mentors because they need not be coordinators.",
+        "order_index": 5
+      }
+    ]
+  },
+  {
+    "id": "4deea9db-d47e-49e4-85d3-20692069915a",
+    "title": "Courier Loading Sequence",
+    "type": "logic_puzzle",
+    "difficulty": "normal",
+    "stem": "Four crates F, G, H and J are loaded in slots 1 to 4, one per slot. F is loaded before G. H is loaded immediately before J. F is not in slot 1. Which statement must be true?",
+    "order_index": 5,
+    "is_free": true,
+    "correct_answer": "A",
+    "answer_reason": "The H-J consecutive block cannot occupy slots 2-3 or 3-4 because there would be no later place for G after a non-slot-1 F. Thus H-J occupy 1-2, leaving F-G in 3-4, so F must be in slot 3.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "F is in slot 3.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "H is in slot 2.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "J is in slot 4.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "G is in slot 2.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "327da49a-c1ec-4cbc-a80e-2dc8d032c2b5",
+    "title": "Exhibition Room Order",
+    "type": "logic_puzzle",
+    "difficulty": "normal",
+    "stem": "Artists P, Q, R and S each occupy one of four rooms in order from 1 to 4. P is in a room adjacent to Q. R is before P. S is not in room 4. Q is not in room 2. Which complete order could be correct?",
+    "order_index": 6,
+    "is_free": true,
+    "correct_answer": "A",
+    "answer_reason": "R, S, P, Q satisfies every rule: P and Q are adjacent, R is before P, S is not fourth, and Q is not second. Each other order breaks at least one stated constraint.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "R, S, P, Q",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "S, Q, R, P",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "P, R, S, Q",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "R, P, Q, S",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d8eb18f8-b743-4372-b477-2c6bdc58bb23",
+    "title": "Research Talk Programme",
+    "type": "logic_puzzle",
+    "difficulty": "hard",
+    "stem": "Six talks F, G, H, J, K and L are scheduled in slots 1 to 6. H is immediately after F. J is earlier than K. G is not adjacent to L. K is in slot 6. F is in neither slot 1 nor slot 5. Which order could be correct?",
+    "order_index": 7,
+    "is_free": true,
+    "correct_answer": "A",
+    "answer_reason": "Only G, J, F, H, L, K meets every condition. B places G next to L, C puts F in slot 1, and D places G next to L.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "G, J, F, H, L, K",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "J, F, H, G, L, K",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "F, H, J, L, G, K",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "G, L, J, F, H, K",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "69e9c207-6fbf-4fd2-bc8e-953bf2e925d0",
+    "title": "Three Delivery Assignments",
+    "type": "logic_puzzle",
+    "difficulty": "normal",
+    "stem": "Ali, Bea and Chen each make one delivery, using the red, blue or green route, at 09:00, 10:00 or 11:00. No route or time is repeated. Ali does not use red. The blue-route delivery is at 10:00. Bea delivers at 09:00. Chen uses green. Which statement must be true?",
+    "order_index": 8,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "Bea cannot use blue because blue is at 10:00, and Chen already uses green. Bea therefore uses red, leaving blue at 10:00 for Ali. Chen then takes the remaining time, 11:00.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Ali uses red at 09:00.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Bea uses blue at 09:00.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Chen uses green at 11:00.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "Chen uses green at 10:00.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "f60cd109-354f-4d41-957c-af8ba892328d",
+    "title": "Community Garden Attendance",
+    "type": "interpreting_info",
+    "difficulty": "normal",
+    "stem": "The table summarises bookings, attendance and late tool returns for three community-garden groups. Use only the table. For each statement, answer Yes if it is supported and No if it is not.",
+    "order_index": 9,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "The West group had an attendance rate of 90%.",
+        "correct_answer": "Yes",
+        "answer_reason": "West attendance was 54 out of 60 bookings, which is 90%.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Twelve people booked with the East group but did not attend.",
+        "correct_answer": "Yes",
+        "answer_reason": "There were 75 East bookings and 63 attendances, a difference of 12.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "The North attendance rate was higher than the East attendance rate.",
+        "correct_answer": "Yes",
+        "answer_reason": "North was 68/80 = 85%, while East was 63/75 = 84%.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Across the three groups, 185 people attended.",
+        "correct_answer": "Yes",
+        "answer_reason": "The total is 68 + 63 + 54 = 185.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "North recorded twice as many late tool returns as West.",
+        "correct_answer": "No",
+        "answer_reason": "Twice West's three late returns would be six, not North's five.",
+        "order_index": 5
+      }
+    ],
+    "table_data": {
+      "headers": [
+        "Group",
+        "Booked",
+        "Attended",
+        "Late tool returns"
+      ],
+      "rows": [
+        [
+          "North",
+          "80",
+          "68",
+          "5"
+        ],
+        [
+          "East",
+          "75",
+          "63",
+          "9"
+        ],
+        [
+          "West",
+          "60",
+          "54",
+          "3"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "c1ebad13-53b5-4b06-ab9b-635e6d4ce969",
+    "title": "Stage-Light Bench Tests",
+    "type": "interpreting_info",
+    "difficulty": "normal",
+    "stem": "Four stage-light models underwent bench testing. The table shows tests completed, tests passed and total energy used. Use only the table. For each statement, answer Yes if it is supported and No if it is not.",
+    "order_index": 10,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Alpha passed 85% of its tests.",
+        "correct_answer": "Yes",
+        "answer_reason": "Alpha passed 34 of 40 tests, and 34/40 = 85%.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Beta failed five tests.",
+        "correct_answer": "Yes",
+        "answer_reason": "Beta completed 50 tests and passed 45, leaving five failures.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Gamma used an average of 2.2 kWh per completed test.",
+        "correct_answer": "Yes",
+        "answer_reason": "Gamma used 66 kWh over 30 tests, so 66/30 = 2.2 kWh.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "Delta had a higher pass rate than Beta.",
+        "correct_answer": "No",
+        "answer_reason": "Delta passed 48/60 = 80%, below Beta's 45/50 = 90%.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "The four models passed 154 tests altogether.",
+        "correct_answer": "Yes",
+        "answer_reason": "The pass total is 34 + 45 + 27 + 48 = 154.",
+        "order_index": 5
+      }
+    ],
+    "table_data": {
+      "headers": [
+        "Model",
+        "Tests completed",
+        "Tests passed",
+        "Energy used (kWh)"
+      ],
+      "rows": [
+        [
+          "Alpha",
+          "40",
+          "34",
+          "76"
+        ],
+        [
+          "Beta",
+          "50",
+          "45",
+          "95"
+        ],
+        [
+          "Gamma",
+          "30",
+          "27",
+          "66"
+        ],
+        [
+          "Delta",
+          "60",
+          "48",
+          "120"
+        ]
+      ]
+    }
+  },
+  {
+    "id": "cf87523f-cfc0-483e-b25c-a3fadd2adeaa",
+    "title": "Estuary Sample Review",
+    "type": "interpreting_info",
+    "difficulty": "normal",
+    "stem": "A laboratory received 120 estuary samples: 45 from the upper reach, 38 from the middle reach and the remainder from the lower reach. Contamination was found in 18 upper, 12 middle and 10 lower samples. Fifteen contaminated samples were retested, and nine of those were confirmed contaminated. Use only this information. For each statement, answer Yes if it is supported and No if it is not.",
+    "order_index": 11,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Forty samples were initially found to be contaminated.",
+        "correct_answer": "Yes",
+        "answer_reason": "The initial contaminated total is 18 + 12 + 10 = 40.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "The lower reach supplied 37 samples.",
+        "correct_answer": "Yes",
+        "answer_reason": "The lower count is 120 - 45 - 38 = 37.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "The upper reach had the greatest contaminated proportion.",
+        "correct_answer": "Yes",
+        "answer_reason": "The proportions are 18/45 = 40%, 12/38 about 31.6%, and 10/37 about 27.0%.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "More than half of the contaminated samples were retested.",
+        "correct_answer": "No",
+        "answer_reason": "Only 15 of 40 contaminated samples were retested, which is 37.5%.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Six retested samples were not confirmed contaminated.",
+        "correct_answer": "Yes",
+        "answer_reason": "Fifteen were retested and nine confirmed, leaving six not confirmed.",
+        "order_index": 5
+      }
+    ]
+  },
+  {
+    "id": "ca5c9554-11f8-499d-b08c-560f986deda7",
+    "title": "Composite Panel Inspection",
+    "type": "interpreting_info",
+    "difficulty": "hard",
+    "stem": "A plant inspected 240 composite panels: 150 from line A and the remainder from line B. Twelve per cent of line A panels were defective, while 14 line B panels were defective. Of all defective panels, 20 were repaired; three repaired panels failed reinspection. Non-defective panels and repaired panels that passed were shipped. All others were scrapped. Use only this information. For each statement, answer Yes if it is supported and No if it is not.",
+    "order_index": 12,
+    "is_free": true,
+    "decision_making_question_options": [],
+    "decision_making_question_statements": [
+      {
+        "statement_text": "Thirty-two panels were initially defective.",
+        "correct_answer": "Yes",
+        "answer_reason": "Line A had 12% of 150 = 18 defects; adding 14 from line B gives 32.",
+        "order_index": 1
+      },
+      {
+        "statement_text": "Seventeen repaired panels were shipped.",
+        "correct_answer": "Yes",
+        "answer_reason": "Of 20 repaired panels, three failed reinspection, so 17 passed and were shipped.",
+        "order_index": 2
+      },
+      {
+        "statement_text": "Line A had a lower defect rate than line B.",
+        "correct_answer": "Yes",
+        "answer_reason": "Line A was 12%, while line B was 14/90, about 15.6%.",
+        "order_index": 3
+      },
+      {
+        "statement_text": "A total of 225 panels were shipped.",
+        "correct_answer": "Yes",
+        "answer_reason": "There were 240 - 32 = 208 non-defective panels and 17 repaired passes, totalling 225.",
+        "order_index": 4
+      },
+      {
+        "statement_text": "Exactly 10% of all inspected panels were scrapped.",
+        "correct_answer": "No",
+        "answer_reason": "Fifteen were scrapped, and 15/240 = 6.25%, not 10%.",
+        "order_index": 5
+      }
+    ]
+  },
+  {
+    "id": "eb38c6d4-6cd1-4ccb-8112-d1c305c2a514",
+    "title": "Advance Booking Cap for Rehearsal Rooms",
+    "type": "recognising_assumptions",
+    "difficulty": "normal",
+    "stem": "Should the civic arts centre limit each person to two advance rehearsal-room reservations at a time so that more users can obtain a slot?",
+    "order_index": 13,
+    "is_free": true,
+    "correct_answer": "B",
+    "answer_reason": "B directly connects the proposed cap with improved access and supplies relevant local evidence about concentrated reservations, no-shows and denied users. The other arguments rely on convenience, loyalty or preference without showing the proposal would or would not achieve its aim.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; two is an easy number for staff to remember.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; a six-month booking audit found that users holding three or more future reservations accounted for 31% of no-shows while 146 other users were denied a slot.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; frequent users have been attending the centre for many years.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; some users prefer to plan several months ahead.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "d7446382-a588-4328-aeb1-de60d64b3735",
+    "title": "Returnable Cups at a Stadium",
+    "type": "recognising_assumptions",
+    "difficulty": "normal",
+    "stem": "Should a stadium require returnable cups at all events in order to reduce the total waste caused by drink containers?",
+    "order_index": 14,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "C is the strongest argument because audited evidence from the same stadium directly measures the proposal against its stated aim and indicates that total waste increased. The other options are aesthetic, appeal to popularity, or cite preference rather than total waste.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; discarded cups look untidy after an event.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; several famous stadiums use returnable cups.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; the stadium's audited season trial found that a 42% cup-loss rate and replacement production created 18% more container waste than its current system.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; some spectators like taking branded cups home.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "8f4fecdf-4094-4658-8d42-9f4486f147ac",
+    "title": "Live Ferry Occupancy Updates",
+    "type": "recognising_assumptions",
+    "difficulty": "normal",
+    "stem": "Should the harbour publish live ferry occupancy estimates to reduce passenger waiting and missed sailings?",
+    "order_index": 15,
+    "is_free": true,
+    "correct_answer": "A",
+    "answer_reason": "A directly addresses both intended outcomes and provides comparative trial evidence. The other options concern appearance, individual preference or an irrelevant timetable design feature.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; during an eight-week controlled trial, terminals displaying the estimates recorded 24% less average waiting and 19% fewer missed sailings than matched terminals without them.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; digital display boards make a harbour appear modern.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; some passengers enjoy deciding at the last minute.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; the harbour timetable already uses blue lettering.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "c18aacbf-d7fb-4608-8b8e-55541ea335b8",
+    "title": "Automated Gallery Tours",
+    "type": "recognising_assumptions",
+    "difficulty": "hard",
+    "stem": "Should a gallery replace all staffed tours with automated audio tours to reduce operating costs without reducing visitor access?",
+    "order_index": 16,
+    "is_free": true,
+    "correct_answer": "D",
+    "answer_reason": "D is the strongest argument because it uses relevant comparative evidence to challenge the claim that access would be preserved. The other arguments do not measure operating costs and access together.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Yes; audio devices can use the gallery's new logo.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Yes; many visitors already own headphones.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "No; some guides would miss speaking to visitors.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "No; an independent access test found that 27% of participants needing hearing, cognitive or navigation adjustments could not complete the automated route, whereas staff adapted the tour for every participant.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "ff689f1d-812d-4d06-987b-157184c7b9a0",
+    "title": "Archive Record Relationships",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "An archive sorts files using the four categories in the key. Some files are in both Digitised and Loaned, and each group also has files outside the other. Some files are in both Digitised and Restricted, and each group also has files outside the other. Which diagram could represent all these relationships?",
+    "order_index": 17,
+    "is_free": true,
+    "correct_answer": "B",
+    "answer_reason": "Only diagram B satisfies every stated relationship: Some files are in both Digitised and Loaned, and each group also has files outside the other. Some files are in both Digitised and Restricted, and each group also has files outside the other.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Digitised",
+              "shape": "circle",
+              "geometry": {
+                "cx": 407.86,
+                "cy": 395.66,
+                "width": 255,
+                "height": 255,
+                "rotationDeg": 0
+              }
+            },
+            {
+              "id": "set2",
+              "label": "Restricted",
+              "shape": "diamond",
+              "geometry": {
+                "cx": 293.64,
+                "cy": 376.08,
+                "width": 306.52,
+                "height": 215.7,
+                "rotationDeg": 51.12
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Fragile",
+              "shape": "trapezoid",
+              "geometry": {
+                "cx": 557.43,
+                "cy": 441.84,
+                "width": 336.28,
+                "height": 276.83,
+                "rotationDeg": -153.57
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Loaned",
+              "shape": "heart",
+              "geometry": {
+                "cx": 764.86,
+                "cy": 269.36,
+                "width": 245.94,
+                "height": 253.1,
+                "rotationDeg": 72.21
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 3
+            },
+            {
+              "id": "set2_only:0",
+              "value": 6
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 9
+            },
+            {
+              "id": "set3_only:0",
+              "value": 4
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 7
+            },
+            {
+              "id": "set4_only:0",
+              "value": 2
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Digitised",
+              "shape": "circle",
+              "geometry": {
+                "cx": 389.23,
+                "cy": 378.42,
+                "width": 383.18,
+                "height": 383.18,
+                "rotationDeg": 0
+              }
+            },
+            {
+              "id": "set2",
+              "label": "Restricted",
+              "shape": "diamond",
+              "geometry": {
+                "cx": 262.85,
+                "cy": 555.81,
+                "width": 232.57,
+                "height": 185.77,
+                "rotationDeg": -71.87
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Fragile",
+              "shape": "trapezoid",
+              "geometry": {
+                "cx": 264.23,
+                "cy": 244.83,
+                "width": 270.97,
+                "height": 201.97,
+                "rotationDeg": 94.49
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Loaned",
+              "shape": "heart",
+              "geometry": {
+                "cx": 578.89,
+                "cy": 221.5,
+                "width": 267.77,
+                "height": 189.84,
+                "rotationDeg": -45.27
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 4
+            },
+            {
+              "id": "set2_only:0",
+              "value": 7
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 2
+            },
+            {
+              "id": "set3_only:0",
+              "value": 5
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 8
+            },
+            {
+              "id": "set4_only:0",
+              "value": 3
+            },
+            {
+              "id": "set1_set4_only:0",
+              "value": 6
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Digitised",
+              "shape": "circle",
+              "geometry": {
+                "cx": 392.29,
+                "cy": 411.74,
+                "width": 280.28,
+                "height": 280.28,
+                "rotationDeg": 0
+              }
+            },
+            {
+              "id": "set2",
+              "label": "Restricted",
+              "shape": "diamond",
+              "geometry": {
+                "cx": 461.71,
+                "cy": 278.94,
+                "width": 268.21,
+                "height": 183.44,
+                "rotationDeg": 23.36
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Fragile",
+              "shape": "trapezoid",
+              "geometry": {
+                "cx": 341.05,
+                "cy": 220.12,
+                "width": 254.56,
+                "height": 268.75,
+                "rotationDeg": -67.8
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Loaned",
+              "shape": "heart",
+              "geometry": {
+                "cx": 358.52,
+                "cy": 239.81,
+                "width": 133.41,
+                "height": 90.53,
+                "rotationDeg": 24.41
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 5
+            },
+            {
+              "id": "set2_only:0",
+              "value": 8
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 3
+            },
+            {
+              "id": "set3_only:0",
+              "value": 6
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 9
+            },
+            {
+              "id": "set2_set3_only:0",
+              "value": 4
+            },
+            {
+              "id": "set1_set2_set3_only:0",
+              "value": 7
+            },
+            {
+              "id": "set3_set4_only:0",
+              "value": 2
+            },
+            {
+              "id": "set2_set3_set4_only:0",
+              "value": 5
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Digitised",
+              "shape": "circle",
+              "geometry": {
+                "cx": 665.8,
+                "cy": 198.69,
+                "width": 300.96,
+                "height": 300.96,
+                "rotationDeg": 0
+              }
+            },
+            {
+              "id": "set2",
+              "label": "Restricted",
+              "shape": "diamond",
+              "geometry": {
+                "cx": 173.36,
+                "cy": 364.75,
+                "width": 290.01,
+                "height": 349.46,
+                "rotationDeg": 88.72
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Fragile",
+              "shape": "trapezoid",
+              "geometry": {
+                "cx": 501.5,
+                "cy": 634.07,
+                "width": 312.53,
+                "height": 215.05,
+                "rotationDeg": 158.06
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Loaned",
+              "shape": "heart",
+              "geometry": {
+                "cx": 605.99,
+                "cy": 371.61,
+                "width": 262.8,
+                "height": 200.39,
+                "rotationDeg": 80.98
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 6
+            },
+            {
+              "id": "set2_only:0",
+              "value": 9
+            },
+            {
+              "id": "set3_only:0",
+              "value": 4
+            },
+            {
+              "id": "set4_only:0",
+              "value": 7
+            },
+            {
+              "id": "set1_set4_only:0",
+              "value": 2
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "subtype": "select_diagram"
+  },
+  {
+    "id": "830571f1-c8fa-4940-bfd5-1d3e08d4bcfb",
+    "title": "Community Hub Roles",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "At a community hub, staff may hold several of the five roles shown. Some staff are in both Evening shift and Coordinator, and each group also has staff outside the other. Some staff are in both Evening shift and First-aid trained, and each group also has staff outside the other. Which diagram could represent all these relationships?",
+    "order_index": 18,
+    "is_free": true,
+    "correct_answer": "D",
+    "answer_reason": "Only diagram D satisfies every stated relationship: Some staff are in both Evening shift and Coordinator, and each group also has staff outside the other. Some staff are in both Evening shift and First-aid trained, and each group also has staff outside the other.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Evening shift",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 390.1,
+                "cy": 409.55,
+                "width": 255.29,
+                "height": 308.34,
+                "rotationDeg": 126
+              }
+            },
+            {
+              "id": "set2",
+              "label": "First-aid trained",
+              "shape": "triangle",
+              "geometry": {
+                "cx": 345.72,
+                "cy": 206.33,
+                "width": 333.31,
+                "height": 281.67,
+                "rotationDeg": 44.18
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Driver",
+              "shape": "rounded_rectangle",
+              "geometry": {
+                "cx": 264.49,
+                "cy": 17.34,
+                "width": 338.86,
+                "height": 262.48,
+                "rotationDeg": 62.23
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Coordinator",
+              "shape": "star",
+              "geometry": {
+                "cx": 208.48,
+                "cy": -184.51,
+                "width": 228.57,
+                "height": 246.19,
+                "rotationDeg": 8.93
+              }
+            },
+            {
+              "id": "set5",
+              "label": "Kitchen team",
+              "shape": "hexagon",
+              "geometry": {
+                "cx": 163.28,
+                "cy": -383,
+                "width": 227.29,
+                "height": 208.64,
+                "rotationDeg": -60.88
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 4
+            },
+            {
+              "id": "set2_only:0",
+              "value": 7
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 2
+            },
+            {
+              "id": "set3_only:0",
+              "value": 5
+            },
+            {
+              "id": "set2_set3_only:0",
+              "value": 8
+            },
+            {
+              "id": "set4_only:0",
+              "value": 3
+            },
+            {
+              "id": "set3_set4_only:0",
+              "value": 6
+            },
+            {
+              "id": "set5_only:0",
+              "value": 9
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Evening shift",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 546.23,
+                "cy": 771.5,
+                "width": 310.93,
+                "height": 329.57,
+                "rotationDeg": -180
+              }
+            },
+            {
+              "id": "set2",
+              "label": "First-aid trained",
+              "shape": "triangle",
+              "geometry": {
+                "cx": 397.04,
+                "cy": 115.14,
+                "width": 303.01,
+                "height": 279.12,
+                "rotationDeg": 98.54
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Driver",
+              "shape": "rounded_rectangle",
+              "geometry": {
+                "cx": 529.7,
+                "cy": 621.16,
+                "width": 271.67,
+                "height": 243.42,
+                "rotationDeg": -126.89
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Coordinator",
+              "shape": "star",
+              "geometry": {
+                "cx": 212.68,
+                "cy": 110.48,
+                "width": 259.32,
+                "height": 259.98,
+                "rotationDeg": -150.1
+              }
+            },
+            {
+              "id": "set5",
+              "label": "Kitchen team",
+              "shape": "hexagon",
+              "geometry": {
+                "cx": 430.16,
+                "cy": 678.55,
+                "width": 239.81,
+                "height": 275.09,
+                "rotationDeg": -154.7
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 5
+            },
+            {
+              "id": "set2_only:0",
+              "value": 8
+            },
+            {
+              "id": "set3_only:0",
+              "value": 3
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 6
+            },
+            {
+              "id": "set4_only:0",
+              "value": 9
+            },
+            {
+              "id": "set2_set4_only:0",
+              "value": 4
+            },
+            {
+              "id": "set5_only:0",
+              "value": 7
+            },
+            {
+              "id": "set1_set5_only:0",
+              "value": 2
+            },
+            {
+              "id": "set3_set5_only:0",
+              "value": 5
+            },
+            {
+              "id": "set1_set3_set5_only:0",
+              "value": 8
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Evening shift",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 436.54,
+                "cy": 378.88,
+                "width": 214.07,
+                "height": 225.36,
+                "rotationDeg": 174.33
+              }
+            },
+            {
+              "id": "set2",
+              "label": "First-aid trained",
+              "shape": "triangle",
+              "geometry": {
+                "cx": 412.33,
+                "cy": 591.5,
+                "width": 248.95,
+                "height": 294.73,
+                "rotationDeg": 90.61
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Driver",
+              "shape": "rounded_rectangle",
+              "geometry": {
+                "cx": 438.82,
+                "cy": 800.74,
+                "width": 231.8,
+                "height": 196.9,
+                "rotationDeg": 55.75
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Coordinator",
+              "shape": "star",
+              "geometry": {
+                "cx": 502.15,
+                "cy": 990.08,
+                "width": 370.51,
+                "height": 285.37,
+                "rotationDeg": -154.78
+              }
+            },
+            {
+              "id": "set5",
+              "label": "Kitchen team",
+              "shape": "hexagon",
+              "geometry": {
+                "cx": 653.54,
+                "cy": 1128.32,
+                "width": 230.89,
+                "height": 298.78,
+                "rotationDeg": -38.95
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 6
+            },
+            {
+              "id": "set2_only:0",
+              "value": 9
+            },
+            {
+              "id": "set3_only:0",
+              "value": 4
+            },
+            {
+              "id": "set4_only:0",
+              "value": 7
+            },
+            {
+              "id": "set3_set4_only:0",
+              "value": 2
+            },
+            {
+              "id": "set5_only:0",
+              "value": 5
+            },
+            {
+              "id": "set4_set5_only:0",
+              "value": 8
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "",
+        "option_data": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Evening shift",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 384.95,
+                "cy": 408.2,
+                "width": 433.04,
+                "height": 413.98,
+                "rotationDeg": 167.01
+              }
+            },
+            {
+              "id": "set2",
+              "label": "First-aid trained",
+              "shape": "triangle",
+              "geometry": {
+                "cx": 351.35,
+                "cy": 208.06,
+                "width": 296.5,
+                "height": 227.06,
+                "rotationDeg": 153.91
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Driver",
+              "shape": "rounded_rectangle",
+              "geometry": {
+                "cx": 155.99,
+                "cy": 413.92,
+                "width": 197.63,
+                "height": 244.12,
+                "rotationDeg": 142.49
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Coordinator",
+              "shape": "star",
+              "geometry": {
+                "cx": 333.79,
+                "cy": 615.13,
+                "width": 236.61,
+                "height": 242.77,
+                "rotationDeg": 108.77
+              }
+            },
+            {
+              "id": "set5",
+              "label": "Kitchen team",
+              "shape": "hexagon",
+              "geometry": {
+                "cx": 567.21,
+                "cy": 556.84,
+                "width": 235.58,
+                "height": 243.57,
+                "rotationDeg": 27.15
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 7
+            },
+            {
+              "id": "set2_only:0",
+              "value": 2
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 5
+            },
+            {
+              "id": "set3_only:0",
+              "value": 8
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 3
+            },
+            {
+              "id": "set4_only:0",
+              "value": 6
+            },
+            {
+              "id": "set1_set4_only:0",
+              "value": 9
+            },
+            {
+              "id": "set5_only:0",
+              "value": 4
+            },
+            {
+              "id": "set1_set5_only:0",
+              "value": 7
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 18,
+            "preferredFontSize": 22,
+            "padding": 3
+          }
+        },
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "subtype": "select_diagram"
+  },
+  {
+    "id": "f340da05-44d9-45d7-a68f-9a58ca742e89",
+    "title": "Wetland Survey Methods",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "A conservation programme has 37 survey teams in total. The diagram shows exclusive counts for teams using aerial or ground surveys. How many teams use neither method?",
+    "order_index": 19,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "The union contains 4 + 7 + 2 + 5 + 8 = 26 teams. Therefore 37 - 26 = 11 teams use neither method.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "7 teams",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "9 teams",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "11 teams",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "14 teams",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "stimulus_diagram": {
+      "schemaVersion": 2,
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Aerial survey",
+          "shape": "pentagon",
+          "geometry": {
+            "cx": 399.56,
+            "cy": 345.74,
+            "width": 654.85,
+            "height": 265.38,
+            "rotationDeg": 73.8
+          }
+        },
+        {
+          "id": "set2",
+          "label": "Ground survey",
+          "shape": "left_arrow",
+          "geometry": {
+            "cx": 405.62,
+            "cy": 491.43,
+            "width": 652.15,
+            "height": 264.34,
+            "rotationDeg": 175.9
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "set1_only:0",
+          "value": 4
+        },
+        {
+          "id": "set1_only:1",
+          "value": 7
+        },
+        {
+          "id": "set2_only:0",
+          "value": 2
+        },
+        {
+          "id": "set2_only:1",
+          "value": 5
+        },
+        {
+          "id": "set1_set2_only:0",
+          "value": 8
+        }
+      ],
+      "labelStyle": {
+        "minFontSize": 14,
+        "preferredFontSize": 18,
+        "padding": 3
+      }
+    },
+    "subtype": "interpret_diagram"
+  },
+  {
+    "id": "c64be728-1d79-4d5f-bbe2-6b3fddda2da6",
+    "title": "Food Hub Certifications",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram shows exclusive counts of suppliers with three certifications. Which certification applies to the greatest total number of suppliers?",
+    "order_index": 20,
+    "is_free": true,
+    "correct_answer": "A",
+    "answer_reason": "Organic: 22; Fairtrade: 14; Locally sourced: 9. The greatest total is 22.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "Organic",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "Fairtrade",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "Locally sourced",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "The three totals are equal",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "stimulus_diagram": {
+      "schemaVersion": 2,
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Organic",
+          "shape": "octagon",
+          "geometry": {
+            "cx": 407.92,
+            "cy": 400.19,
+            "width": 755.72,
+            "height": 879.55,
+            "rotationDeg": -88.13
+          }
+        },
+        {
+          "id": "set2",
+          "label": "Fairtrade",
+          "shape": "parallelogram",
+          "geometry": {
+            "cx": 390.69,
+            "cy": 325.89,
+            "width": 238.49,
+            "height": 194.35,
+            "rotationDeg": 172.79
+          }
+        },
+        {
+          "id": "set3",
+          "label": "Locally sourced",
+          "shape": "teardrop",
+          "geometry": {
+            "cx": 351.78,
+            "cy": 424.35,
+            "width": 298.51,
+            "height": 254.93,
+            "rotationDeg": 50.62
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "set1_only:0",
+          "value": 5
+        },
+        {
+          "id": "set1_set2_only:0",
+          "value": 8
+        },
+        {
+          "id": "set1_set3_only:0",
+          "value": 3
+        },
+        {
+          "id": "set1_set2_set3_only:0",
+          "value": 6
+        }
+      ],
+      "labelStyle": {
+        "minFontSize": 14,
+        "preferredFontSize": 18,
+        "padding": 3
+      }
+    },
+    "subtype": "interpret_diagram"
+  },
+  {
+    "id": "613beb96-5442-4418-b861-5e2338909f3d",
+    "title": "Training Module Combinations",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "The diagram shows exclusive trainee counts for four modules. How many trainees take Safety together with Equipment or Fieldwork (or both), regardless of whether they also take Data?",
+    "order_index": 21,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "The qualifying faces are inside Safety and also inside Equipment or Fieldwork. Their values are counted once each: 4 + 2 + 6 = 12.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "8 trainees",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "10 trainees",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "12 trainees",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "15 trainees",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "stimulus_diagram": {
+      "schemaVersion": 2,
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Safety",
+          "shape": "rectangle",
+          "geometry": {
+            "cx": 413.79,
+            "cy": 379.06,
+            "width": 303.68,
+            "height": 250.63,
+            "rotationDeg": -117.5
+          }
+        },
+        {
+          "id": "set2",
+          "label": "Equipment",
+          "shape": "heart",
+          "geometry": {
+            "cx": 539.75,
+            "cy": 519.94,
+            "width": 263.61,
+            "height": 231.27,
+            "rotationDeg": 21.16
+          }
+        },
+        {
+          "id": "set3",
+          "label": "Fieldwork",
+          "shape": "pentagon",
+          "geometry": {
+            "cx": 440.37,
+            "cy": 166.21,
+            "width": 291.35,
+            "height": 277.08,
+            "rotationDeg": -43.41
+          }
+        },
+        {
+          "id": "set4",
+          "label": "Data",
+          "shape": "right_arrow",
+          "geometry": {
+            "cx": 528.3,
+            "cy": 294.8,
+            "width": 186.76,
+            "height": 236.89,
+            "rotationDeg": 95.77
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "set1_only:0",
+          "value": 6
+        },
+        {
+          "id": "set2_only:0",
+          "value": 9
+        },
+        {
+          "id": "set1_set2_only:0",
+          "value": 4
+        },
+        {
+          "id": "set3_only:0",
+          "value": 7
+        },
+        {
+          "id": "set1_set3_only:0",
+          "value": 2
+        },
+        {
+          "id": "set4_only:0",
+          "value": 5
+        },
+        {
+          "id": "set1_set4_only:0",
+          "value": 8
+        },
+        {
+          "id": "set3_set4_only:0",
+          "value": 3
+        },
+        {
+          "id": "set1_set3_set4_only:0",
+          "value": 6
+        }
+      ],
+      "labelStyle": {
+        "minFontSize": 14,
+        "preferredFontSize": 18,
+        "padding": 3
+      }
+    },
+    "subtype": "interpret_diagram"
+  },
+  {
+    "id": "6ee93329-fe3f-4936-9c43-307155a23669",
+    "title": "Council Proposal Themes",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram shows exclusive counts of proposals covering five themes. How many proposals cover Housing but do not cover Transport?",
+    "order_index": 22,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "Include every face inside Housing that lies outside Transport. The qualifying values give 5 = 5.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "0 proposals",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "3 proposals",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "5 proposals",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "9 proposals",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "stimulus_diagram": {
+      "schemaVersion": 2,
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Climate",
+          "shape": "square",
+          "geometry": {
+            "cx": 373.63,
+            "cy": 610.66,
+            "width": 253.74,
+            "height": 253.74,
+            "rotationDeg": 96.67
+          }
+        },
+        {
+          "id": "set2",
+          "label": "Transport",
+          "shape": "ellipse",
+          "geometry": {
+            "cx": 191.31,
+            "cy": 205.11,
+            "width": 309.12,
+            "height": 222.64,
+            "rotationDeg": -63.74
+          }
+        },
+        {
+          "id": "set3",
+          "label": "Housing",
+          "shape": "diamond",
+          "geometry": {
+            "cx": 678.68,
+            "cy": 274.97,
+            "width": 220.58,
+            "height": 203.13,
+            "rotationDeg": -168.3
+          }
+        },
+        {
+          "id": "set4",
+          "label": "Health",
+          "shape": "star",
+          "geometry": {
+            "cx": 213.47,
+            "cy": 357.31,
+            "width": 288.74,
+            "height": 280.28,
+            "rotationDeg": 22.79
+          }
+        },
+        {
+          "id": "set5",
+          "label": "Education",
+          "shape": "trapezoid",
+          "geometry": {
+            "cx": 451.36,
+            "cy": 642.1,
+            "width": 276.66,
+            "height": 273.29,
+            "rotationDeg": 169.83
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "set1_only:0",
+          "value": 7
+        },
+        {
+          "id": "set2_only:0",
+          "value": 2
+        },
+        {
+          "id": "set3_only:0",
+          "value": 5
+        },
+        {
+          "id": "set4_only:0",
+          "value": 8
+        },
+        {
+          "id": "set2_set4_only:0",
+          "value": 3
+        },
+        {
+          "id": "set5_only:0",
+          "value": 6
+        },
+        {
+          "id": "set1_set5_only:0",
+          "value": 9
+        }
+      ],
+      "labelStyle": {
+        "minFontSize": 22,
+        "preferredFontSize": 26,
+        "padding": 3
+      }
+    },
+    "subtype": "interpret_diagram"
+  },
+  {
+    "id": "3e00d4d4-f29f-406f-8a9b-caf9b8575cae",
+    "title": "Workspace Permit Totals",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram shows exclusive counts for four workspace permissions. What is the difference between the total number of Cycle-access permits and the total number of Late-access permits?",
+    "order_index": 23,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "Cycle access totals 8 + 6 + 4 + 2 = 20; Late access totals 3 + 6 + 7 + 2 + 8 + 6 = 32. The difference is 12.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "10",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "11",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "12",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "15",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "stimulus_diagram": {
+      "schemaVersion": 2,
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Cycle access",
+          "shape": "circle",
+          "geometry": {
+            "cx": 461.75,
+            "cy": 391.16,
+            "width": 260.28,
+            "height": 260.28,
+            "rotationDeg": 0
+          }
+        },
+        {
+          "id": "set2",
+          "label": "Late access",
+          "shape": "square",
+          "geometry": {
+            "cx": 335.3,
+            "cy": 307.48,
+            "width": 272.19,
+            "height": 272.19,
+            "rotationDeg": 70.87
+          }
+        },
+        {
+          "id": "set3",
+          "label": "Weekend access",
+          "shape": "ellipse",
+          "geometry": {
+            "cx": 473.23,
+            "cy": 211.51,
+            "width": 287.2,
+            "height": 234.45,
+            "rotationDeg": -68.16
+          }
+        },
+        {
+          "id": "set4",
+          "label": "Equipment access",
+          "shape": "diamond",
+          "geometry": {
+            "cx": 353.38,
+            "cy": 131.9,
+            "width": 299.27,
+            "height": 310.77,
+            "rotationDeg": -98.27
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "set1_only:0",
+          "value": 8
+        },
+        {
+          "id": "set2_only:0",
+          "value": 3
+        },
+        {
+          "id": "set1_set2_only:0",
+          "value": 6
+        },
+        {
+          "id": "set3_only:0",
+          "value": 9
+        },
+        {
+          "id": "set1_set3_only:0",
+          "value": 4
+        },
+        {
+          "id": "set2_set3_only:0",
+          "value": 7
+        },
+        {
+          "id": "set1_set2_set3_only:0",
+          "value": 2
+        },
+        {
+          "id": "set4_only:0",
+          "value": 5
+        },
+        {
+          "id": "set2_set4_only:0",
+          "value": 8
+        },
+        {
+          "id": "set3_set4_only:0",
+          "value": 3
+        },
+        {
+          "id": "set2_set3_set4_only:0",
+          "value": 6
+        }
+      ],
+      "labelStyle": {
+        "minFontSize": 14,
+        "preferredFontSize": 18,
+        "padding": 3
+      }
+    },
+    "subtype": "interpret_diagram"
+  },
+  {
+    "id": "0842c146-0dc6-46a6-a4a7-5f2dd32b6038",
+    "title": "Parcel Handling Labels",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "The diagram shows exclusive parcel counts for three handling labels. Which statement is true?",
+    "order_index": 24,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "The complete Refrigerated set totals 9 + 7 + 5 + 3 = 24. Checking the corresponding totals shows that A, B and D are false.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "There are exactly 4 more Refrigerated parcels than Urgent parcels.",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "There are exactly 21 Tracked parcels.",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "There are exactly 24 Refrigerated parcels.",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "There are exactly 14 parcels with both Urgent and Tracked labels.",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": [],
+    "stimulus_diagram": {
+      "schemaVersion": 2,
+      "sets": [
+        {
+          "id": "set1",
+          "label": "Refrigerated",
+          "shape": "circle",
+          "geometry": {
+            "cx": 296.16,
+            "cy": 315.07,
+            "width": 314.02,
+            "height": 314.02,
+            "rotationDeg": 0
+          }
+        },
+        {
+          "id": "set2",
+          "label": "Urgent",
+          "shape": "hexagon",
+          "geometry": {
+            "cx": 399.58,
+            "cy": 517.5,
+            "width": 275.33,
+            "height": 391.61,
+            "rotationDeg": 38.17
+          }
+        },
+        {
+          "id": "set3",
+          "label": "Tracked",
+          "shape": "left_arrow",
+          "geometry": {
+            "cx": 479.98,
+            "cy": 352.69,
+            "width": 335,
+            "height": 292.65,
+            "rotationDeg": 109.9
+          }
+        }
+      ],
+      "regions": [
+        {
+          "id": "set1_only:0",
+          "value": 9
+        },
+        {
+          "id": "set2_only:0",
+          "value": 4
+        },
+        {
+          "id": "set1_set2_only:0",
+          "value": 7
+        },
+        {
+          "id": "set3_only:0",
+          "value": 2
+        },
+        {
+          "id": "set1_set3_only:0",
+          "value": 5
+        },
+        {
+          "id": "set2_set3_only:0",
+          "value": 8
+        },
+        {
+          "id": "set1_set2_set3_only:0",
+          "value": 3
+        }
+      ],
+      "labelStyle": {
+        "minFontSize": 20,
+        "preferredFontSize": 24,
+        "padding": 3
+      }
+    },
+    "subtype": "interpret_diagram"
+  },
+  {
+    "id": "0142bd31-4693-4403-a517-c3aed267e756",
+    "title": "Offline Charging Lockers",
+    "type": "probabilistic",
+    "difficulty": "normal",
+    "stem": "Twelve charging lockers are available, of which three are offline. Two different lockers are selected at random without replacement. What is the probability that exactly one selected locker is offline?",
+    "order_index": 25,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "There are C(12,2) = 66 unordered pairs. An exactly-one-offline pair can be formed in 3 x 9 = 27 ways, so the probability is 27/66 = 9/22.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "1/22",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "3/22",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "9/22",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "15/22",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "153c56ae-47a1-4c06-ac9f-14475072a649",
+    "title": "Independent Calibration Checks",
+    "type": "probabilistic",
+    "difficulty": "normal",
+    "stem": "Two independent calibration systems assess the same instrument. System A gives an accurate result with probability 0.90 and system B with probability 0.80. What is the probability that exactly one system gives an accurate result?",
+    "order_index": 26,
+    "is_free": true,
+    "correct_answer": "B",
+    "answer_reason": "Exactly one is accurate in two disjoint ways: A accurate and B inaccurate gives 0.90 x 0.20 = 0.18; A inaccurate and B accurate gives 0.10 x 0.80 = 0.08. The total is 0.26.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "0.18",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "0.26",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "0.72",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "0.98",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "dfd41b40-6483-4f0a-8459-777010ea598c",
+    "title": "Priority Parcel Route",
+    "type": "probabilistic",
+    "difficulty": "normal",
+    "stem": "A depot processed 40 parcels. Twenty-two travelled by rail. Fourteen parcels were priority parcels, and eight of those priority parcels travelled by rail. One priority parcel is chosen at random. What is the probability that it travelled by rail?",
+    "order_index": 27,
+    "is_free": true,
+    "correct_answer": "B",
+    "answer_reason": "The condition restricts the sample space to the 14 priority parcels. Eight of those used rail, so the probability is 8/14 = 4/7.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "1/5",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "4/7",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "7/11",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "8/11",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "2c2ae70a-20c9-4fd2-9555-0eab30574364",
+    "title": "Pop-up Equipment Return",
+    "type": "probabilistic",
+    "difficulty": "normal",
+    "stem": "A supplier earns a net £40 if rented equipment is returned on time, £10 if it is one day late, and loses £20 if it is more than one day late. The respective probabilities are 0.50, 0.30 and 0.20. What is the expected net amount per rental?",
+    "order_index": 28,
+    "is_free": true,
+    "correct_answer": "B",
+    "answer_reason": "The expected amount is (0.50 x £40) + (0.30 x £10) + (0.20 x -£20) = £20 + £3 - £4 = £19.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "£14",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "£19",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "£22",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "£25",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "1d74ee87-18c2-4484-a845-86e50f1cf853",
+    "title": "Corrupted Design File",
+    "type": "probabilistic",
+    "difficulty": "hard",
+    "stem": "Sixty per cent of a studio's design files use format X and 40% use format Y. Two per cent of X files and 5% of Y files are corrupted. A randomly selected file is known to be corrupted. What is the probability that it uses format Y?",
+    "order_index": 29,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "The joint probabilities of corruption are 0.60 x 0.02 = 0.012 for X and 0.40 x 0.05 = 0.020 for Y. Conditional on corruption, the Y share is 0.020/(0.012 + 0.020) = 0.020/0.032 = 5/8.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "2/5",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "1/2",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "5/8",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "3/4",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "69ab3f89-eabb-4b5b-b9a0-1989f6d19bfe",
+    "title": "Independent Server Interruptions",
+    "type": "probabilistic",
+    "difficulty": "normal",
+    "stem": "Three independent servers complete an overnight task without interruption with probabilities 0.95, 0.90 and 0.80. What is the probability that at least one server is interrupted?",
+    "order_index": 30,
+    "is_free": true,
+    "correct_answer": "C",
+    "answer_reason": "The probability that none is interrupted is 0.95 x 0.90 x 0.80 = 0.684. Therefore the probability of at least one interruption is 1 - 0.684 = 0.316.",
+    "decision_making_question_options": [
+      {
+        "label": "A",
+        "option_text": "0.116",
+        "option_data": null,
+        "order_index": 1
+      },
+      {
+        "label": "B",
+        "option_text": "0.266",
+        "option_data": null,
+        "order_index": 2
+      },
+      {
+        "label": "C",
+        "option_text": "0.316",
+        "option_data": null,
+        "order_index": 3
+      },
+      {
+        "label": "D",
+        "option_text": "0.684",
+        "option_data": null,
+        "order_index": 4
+      }
+    ],
+    "decision_making_question_statements": []
+  }
+]

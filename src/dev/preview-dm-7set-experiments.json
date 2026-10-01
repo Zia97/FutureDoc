@@ -1,0 +1,223 @@
+[
+  {
+    "id": "venn-7set-exp-001",
+    "title": "Hospital Specialty Reviews (7-set hub)",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "The diagram shows 200 patients at a teaching hospital. Each letter marks a different region.\n\nWhich letter represents a patient who is currently admitted and is being reviewed by the Cardiology team?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Currently admitted",        "shape": "circle"   },
+        { "id": "set2", "label": "Cardiology review",         "shape": "pentagon" },
+        { "id": "set3", "label": "Neurology review",          "shape": "hexagon"  },
+        { "id": "set4", "label": "Orthopaedics review",       "shape": "octagon"  },
+        { "id": "set5", "label": "Endocrinology review",      "shape": "star"     },
+        { "id": "set6", "label": "Respiratory review",        "shape": "diamond"  },
+        { "id": "set7", "label": "Infectious diseases review","shape": "triangle" }
+      ],
+      "regions": {
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set6_only": "F",
+        "set7_only": "G",
+        "set1_set2": "H",
+        "set1_set3": "I",
+        "set1_set4": "J",
+        "set1_set5": "K",
+        "set1_set6": "L",
+        "set1_set7": "M",
+        "outside":   "N"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "The question wants admitted AND Cardiology. Letter A sits inside admitted only — no Cardiology. Letter B sits inside Cardiology only — patient is an outpatient, not admitted. Letter I is admitted with Neurology — wrong specialty. Letter H is the lens where admitted overlaps Cardiology — that is the region we want. Answer: Letter H.",
+    "order_index": 1,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter A", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter B", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter H", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter I", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "venn-7set-exp-002",
+    "title": "Hospital Floor Clinics (7-set cycle)",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "The diagram shows 250 patients seen across the seven specialty clinics on one hospital floor. Each letter marks a different region.\n\nWhich letter represents a patient who is being seen at both the Neurology clinic and the Headache clinic?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "ENT",            "shape": "trapezoid"          },
+        { "id": "set2", "label": "Audiology",      "shape": "vertical_oval"      },
+        { "id": "set3", "label": "Speech therapy", "shape": "oval"               },
+        { "id": "set4", "label": "Neurology",      "shape": "parallelogram"      },
+        { "id": "set5", "label": "Headache",       "shape": "hexagon"            },
+        { "id": "set6", "label": "Ophthalmology",  "shape": "isosceles_triangle" },
+        { "id": "set7", "label": "Maxillofacial",  "shape": "pentagon"           }
+      ],
+      "regions": {
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set6_only": "F",
+        "set7_only": "G",
+        "set1_set2": "H",
+        "set2_set3": "I",
+        "set3_set4": "J",
+        "set4_set5": "K",
+        "set5_set6": "L",
+        "set6_set7": "M",
+        "set1_set7": "N",
+        "outside":   "O"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "B",
+    "answer_reason": "The question wants Neurology AND Headache. Letter D sits inside Neurology only — no Headache. Letter J is the Speech-Neurology lens — wrong adjacent pair. Letter L is the Headache-Ophthalmology lens — wrong adjacent pair. Letter K is the lens where Neurology overlaps Headache — that is the region we want. Answer: Letter K.",
+    "order_index": 2,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter J", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter K", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter L", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter D", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "venn-7set-exp-003",
+    "title": "Library Print Catalogue (7-set container, chain inner)",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram shows 800 books logged at a public library. Each letter marks a different region.\n\nWhich letter represents a print book that is in active circulation and is classified as both an early-reader and a middle-grade title?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Print books in active circulation", "shape": "rectangle"      },
+        { "id": "set2", "label": "Picture books",                     "shape": "square"         },
+        { "id": "set3", "label": "Early-reader",                      "shape": "diamond"        },
+        { "id": "set4", "label": "Middle-grade",                      "shape": "hexagon"        },
+        { "id": "set5", "label": "Reference (in-library use only)",   "shape": "octagon"        },
+        { "id": "set6", "label": "E-books",                           "shape": "star"           },
+        { "id": "set7", "label": "Offsite storage",                   "shape": "vertical_strip" }
+      ],
+      "regions": {
+        "set1_only":      "A",
+        "set1_set2":      "B",
+        "set1_set3":      "C",
+        "set1_set4":      "D",
+        "set1_set2_set3": "E",
+        "set1_set3_set4": "F",
+        "set5_only":      "G",
+        "set6_only":      "H",
+        "set7_only":      "I",
+        "outside":        "J"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "D",
+    "answer_reason": "The question wants a book in active circulation AND classified as both early-reader and middle-grade. Letter C is in circulation as early-reader only — no middle-grade. Letter D is in circulation as middle-grade only — no early-reader. Letter E is the picture/early-reader overlap — wrong pair. Letter F is the lens inside circulation where early-reader meets middle-grade — that is the region we want. Answer: Letter F.",
+    "order_index": 3,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter C", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter D", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter E", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter F", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "venn-7set-exp-004",
+    "title": "Lab Project Outputs (5-set hub + 2 separate)",
+    "type": "venn_diagram",
+    "difficulty": "normal",
+    "stem": "The diagram shows 180 research outputs logged at a translational medicine lab in the past year. Each letter marks a different region.\n\nWhich letter represents an output that contributed to the flagship cancer immunotherapy project and was produced by the Imaging team?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Flagship cancer immunotherapy", "shape": "octagon"             },
+        { "id": "set2", "label": "Bioinformatics team",           "shape": "triangle"            },
+        { "id": "set3", "label": "Cell culture team",             "shape": "isosceles_triangle"  },
+        { "id": "set4", "label": "Clinical trials team",          "shape": "hexagon"             },
+        { "id": "set5", "label": "Imaging team",                  "shape": "pentagon"            },
+        { "id": "set6", "label": "Archived diabetes project",     "shape": "right_arrow"         },
+        { "id": "set7", "label": "Incoming Alzheimer's project",  "shape": "left_arrow"          }
+      ],
+      "regions": {
+        "set1_only": "A",
+        "set2_only": "B",
+        "set3_only": "C",
+        "set4_only": "D",
+        "set5_only": "E",
+        "set6_only": "F",
+        "set7_only": "G",
+        "set1_set2": "H",
+        "set1_set3": "I",
+        "set1_set4": "J",
+        "set1_set5": "K",
+        "outside":   "L"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "The question wants flagship project AND Imaging team. Letter E is Imaging-team output that wasn't tied to the flagship — no flagship. Letter J is flagship plus Clinical trials — wrong team. Letter A is flagship-only with no team attribution — no Imaging. Letter K is the lens where flagship overlaps Imaging — that is the region we want. Answer: Letter K.",
+    "order_index": 4,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter E", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter J", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter K", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter A", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  },
+  {
+    "id": "venn-7set-exp-005",
+    "title": "Festival Stages and Vendors (7-set container, two-pair inner)",
+    "type": "venn_diagram",
+    "difficulty": "hard",
+    "stem": "The diagram shows 300 listings in the official festival programme. Each letter marks a different region.\n\nWhich letter represents an electronic-stage act on the main grounds that has its own affiliated food vendor?",
+    "stimulus_diagram": {
+      "diagramLayout": "auto",
+      "sets": [
+        { "id": "set1", "label": "Festival main grounds",       "shape": "parallelogram"   },
+        { "id": "set2", "label": "Acoustic-stage acts",         "shape": "oval"            },
+        { "id": "set3", "label": "Acoustic-stage food vendors", "shape": "vertical_oval"   },
+        { "id": "set4", "label": "Electronic-stage acts",       "shape": "trapezoid"       },
+        { "id": "set5", "label": "Electronic-stage food vendors","shape": "square"         },
+        { "id": "set6", "label": "Off-site after-party venues", "shape": "horizontal_strip"},
+        { "id": "set7", "label": "Off-site campsite stalls",    "shape": "right_arrow"     }
+      ],
+      "regions": {
+        "set1_only":      "A",
+        "set1_set2":      "B",
+        "set1_set3":      "C",
+        "set1_set4":      "D",
+        "set1_set5":      "E",
+        "set1_set2_set3": "F",
+        "set1_set4_set5": "G",
+        "set6_only":      "H",
+        "set7_only":      "I",
+        "outside":        "J"
+      }
+    },
+    "table_data": null,
+    "correct_answer": "C",
+    "answer_reason": "The question wants an electronic-stage act AND its affiliated food vendor, all on the main grounds. Letter D is an electronic act on the grounds but with no affiliated vendor. Letter E is an electronic vendor with no act tie-in. Letter F is the acoustic act + acoustic vendor pairing — wrong stage. Letter G is the lens where electronic acts and electronic vendors overlap inside the main grounds — that is the region we want. Answer: Letter G.",
+    "order_index": 5,
+    "decision_making_question_options": [
+      { "label": "A", "option_text": "Letter D", "option_data": null, "order_index": 1 },
+      { "label": "B", "option_text": "Letter F", "option_data": null, "order_index": 2 },
+      { "label": "C", "option_text": "Letter G", "option_data": null, "order_index": 3 },
+      { "label": "D", "option_text": "Letter E", "option_data": null, "order_index": 4 }
+    ],
+    "decision_making_question_statements": []
+  }
+]

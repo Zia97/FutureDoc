@@ -1,0 +1,502 @@
+[
+  {
+    "id": "5481075c-3b52-4edf-9b93-ff6c31daf0be",
+    "title": "Reading the Ocean with Stick Charts",
+    "body": "Marshallese navigators developed charts from lashed strips of palm or coconut material, sometimes adding shells to represent islands. Yet calling these objects maps can mislead. They did not simply shrink coastlines onto a fixed scale. Instead, their curves and crossings represented how long ocean swells were bent, reflected or interrupted by atolls. An island still below the horizon could alter the motion of a canoe, giving a skilled navigator evidence of nearby land.\n\nDifferent charts served different purposes. A mattang was a schematic teaching device: it showed general principles of swell interaction around an island rather than a particular voyage. A meddo represented part of the Marshall Islands and its characteristic swell patterns, while a rebbelib covered a larger group of atolls. Shells could mark islands, but not every chart used them, and the sticks did not share one universally readable code. Their interpretation was taught by experienced navigators.\n\nThe objects were normally studied on land rather than consulted like nautical charts at sea. During a voyage, the navigator relied on memory and on bodily sensation, sometimes crouching or lying in the canoe to feel changes in pitch and roll. This made the chart part of a wider apprenticeship rather than a substitute for practical skill.\n\nMuseum display can therefore create a paradox. Preserved behind glass, a chart looks like a self-contained store of geographical information. In use, however, it was one element in a system joining an instructor's explanation, a learner's memory and direct attention to the sea. Its open framework recorded relationships among swells and islands, but mastery resided partly in trained bodies and communities, not solely in the object.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "3e4c3304-0c69-43c7-adb3-b396641c5da2",
+        "question_text": "What was the principal function of a mattang?",
+        "options": [
+          "To teach general patterns of swell interaction around an island",
+          "To show every atoll in the Marshall Islands at a fixed scale",
+          "To record the daily position of a canoe during a voyage",
+          "To provide a code that any navigator could read without instruction"
+        ],
+        "correct_answer": "To teach general patterns of swell interaction around an island",
+        "answer_reason": "The passage explicitly calls the mattang a schematic teaching device for general swell interaction. It was not a fixed-scale map of every atoll, a voyage log, or a universally readable code, so the other three options conflict with the passage.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "faf6ee57-b8ac-490b-a2ad-89a01234d112",
+        "question_text": "Why could a navigator detect an island before seeing it?",
+        "options": [
+          "Shell markers floated from the island towards the canoe",
+          "The island altered swells and therefore changed the canoe's motion",
+          "The chart predicted the island's appearance from the stars alone",
+          "The navigator measured the island's coastline against a fixed scale"
+        ],
+        "correct_answer": "The island altered swells and therefore changed the canoe's motion",
+        "answer_reason": "The first paragraph states that atolls alter swells and that this can be felt through the canoe. Shells were attached to some charts, not released at sea; the passage does not attribute detection to stars; and the charts were not fixed-scale coastline maps.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "4c7e33e9-a75d-4970-b3f3-31ae28df59d2",
+        "question_text": "Which conclusion is best supported by the fact that charts were generally studied on land?",
+        "options": [
+          "Their makers considered ocean swells too changeable to be represented",
+          "They were ceremonial objects with no navigational relevance",
+          "Their value depended on learning that could later be applied without consulting the object",
+          "Navigators lacked a safe way to carry lightweight objects in canoes"
+        ],
+        "correct_answer": "Their value depended on learning that could later be applied without consulting the object",
+        "answer_reason": "The chart was studied during apprenticeship, then its principles were recalled while the navigator read the sea directly. Swells were represented, so they were not considered too changeable; the objects had navigational relevance, so they were not merely ceremonial; and no transport difficulty is stated.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "3348272b-1c70-4654-ad98-e36eb6fb6181",
+        "question_text": "What paradox does the author identify in museum display?",
+        "options": [
+          "A chart may look fragile although it was originally made from metal",
+          "A chart may appear abstract although every line reproduced a measured coastline",
+          "A chart may seem ancient although all surviving examples were made recently for tourists",
+          "A chart may look self-contained although its use relied on teaching, memory and bodily skill"
+        ],
+        "correct_answer": "A chart may look self-contained although its use relied on teaching, memory and bodily skill",
+        "answer_reason": "The final paragraph contrasts a self-contained museum object with a practice involving instruction, memory and bodily attention. The passage says the charts used plant strips, not metal; denies that the lines reproduce coastlines; and makes no claim that all surviving examples are modern tourist objects.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "89052d68-8561-471c-ab88-da03c30ea209",
+    "title": "When Iron Gall Ink Bites into Paper",
+    "body": "For centuries, iron gall ink was a standard writing medium in Europe. Recipes varied, but the usual ingredients were an extract of oak galls, iron sulphate, water and gum arabic. Galls contain tannins, which react with iron salts to form a dark colourant. Gum arabic helps the liquid flow from a pen and bind to the writing surface. Fresh writing could appear bluish black before ageing towards brown.\n\nThe same chemistry that made the ink useful can endanger a manuscript. Historical recipes sometimes contained more iron than the tannins could bind, and the mixtures could also be strongly acidic. Unbound iron ions promote oxidation of cellulose, while acids drive hydrolysis, a reaction that breaks cellulose chains. The result may begin as a brown halo around a line and progress to brittleness, cracks and complete loss where letters once lay. Higher moisture can help mobile iron ions and acids migrate into surrounding paper, widening the damage.\n\nConservators therefore do not treat every inked sheet by one recipe. They first assess the object, sometimes using an indicator paper to test for reactive iron. Aqueous treatment may remove or redistribute soluble material, so an ink's response to water and the paper's physical condition must be evaluated. Some treatments combine an iron-binding compound with deacidification, addressing both oxidation and acidity; fragile areas may also need local physical support.\n\nPrevention remains important even when chemical treatment is possible. Cool, dry, stable storage slows reactions and reduces migration. This does not reverse losses already present, and reinforcement alone does not neutralise the reactions. Conservation is consequently a managed choice among risks: intervention may stabilise an object, but careless treatment can move the very compounds responsible for its decay.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "629c51ee-482f-45e2-b55c-b61f72080f31",
+        "question_text": "What role does gum arabic play in the ink as described?",
+        "options": [
+          "It supplies the iron ions that oxidise cellulose",
+          "It removes excess acid during deacidification",
+          "It improves flow and helps bind the ink to the writing surface",
+          "It changes damaged brown ink back to bluish black"
+        ],
+        "correct_answer": "It improves flow and helps bind the ink to the writing surface",
+        "answer_reason": "The first paragraph gives flow and binding as gum arabic's functions. Iron sulphate, not gum, supplies iron; deacidification is a conservation treatment rather than an ingredient function; and no reversal of aged colour is described.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "efbde862-806c-47da-8245-7703abce14ce",
+        "question_text": "Why can excess moisture enlarge the area of ink corrosion?",
+        "options": [
+          "It allows reactive iron and acids to migrate into nearby paper",
+          "It converts gum arabic directly into sulphuric acid",
+          "It makes tannins reproduce throughout the paper fibres",
+          "It permanently strengthens cellulose around the written line"
+        ],
+        "correct_answer": "It allows reactive iron and acids to migrate into nearby paper",
+        "answer_reason": "The passage directly links moisture with migration of iron ions and acids. It does not say gum becomes acid or tannins reproduce, and strengthening cellulose is the opposite of the described deterioration.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "e2819377-d42f-4e75-b651-72c17c83488f",
+        "question_text": "Why might a conservator hesitate before placing an affected sheet in an aqueous treatment?",
+        "options": [
+          "Water always erases iron gall ink immediately and completely",
+          "Aqueous treatment can address acidity but never oxidation",
+          "Indicator papers work only after a manuscript has been washed",
+          "Water could redistribute soluble damaging compounds through the sheet"
+        ],
+        "correct_answer": "Water could redistribute soluble damaging compounds through the sheet",
+        "answer_reason": "The passage identifies redistribution of soluble material as a risk requiring prior testing. It does not say water always erases the ink; some combined treatments address both acidity and oxidation; and indicator testing is described as part of assessment before treatment.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "14d01a0f-dc44-4da3-8416-b39394c60047",
+        "question_text": "Which approach best matches the passage's account of conservation?",
+        "options": [
+          "Reinforce every damaged sheet because support stops the underlying chemistry",
+          "Assess each object and balance chemical, physical and preventive measures",
+          "Apply the same deacidification formula to every manuscript",
+          "Avoid stable dry storage once chemical treatment has been completed"
+        ],
+        "correct_answer": "Assess each object and balance chemical, physical and preventive measures",
+        "answer_reason": "The passage presents conservation as case-specific risk management using assessment, possible chemical treatment, support and storage. Reinforcement alone does not stop corrosion, one recipe is explicitly rejected, and preventive storage remains important after intervention.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "e3075813-ac78-489a-ad70-ad1857366808",
+    "title": "The Thirteen Towers of Chankillo",
+    "body": "In Peru's coastal Casma Valley, thirteen stone towers stand at intervals along a low ridge. They formed the most visible part of Chankillo, a ceremonial complex used during the late Early Horizon, roughly between 250 and 200 BCE. Other structures included a triple-walled hilltop building, plazas and compounds. The site's dry landscape preserved a relationship between architecture and horizon that eventually helped researchers explain the towers.\n\nFrom an observation point west of the ridge, the towers span the annual arc of sunrise. Near one solstice the Sun rises beyond one end of the row; over succeeding months its rising position shifts along the toothed horizon, appearing beside different towers and gaps, before reaching the other end near the opposite solstice. An eastern observation point allowed a corresponding reading of sunsets. The system could therefore indicate many dates through the year, rather than marking only a single annual event.\n\nThis interpretation depends on more than the alignment of one wall. Archaeological work identified restricted viewing positions, while archaeoastronomical analysis compared their sightlines with the Sun's changing horizon positions. The western point survives clearly as an opening associated with a building; the eastern point is less visible above ground, but its foundations have been identified. The combination of two viewpoints and a complete solar arc distinguishes Chankillo from monuments aligned only on one solstice.\n\nIts calendrical precision probably mattered to a society scheduling seasonal and ceremonial activities. Access to at least some observation space appears to have been controlled, which may have linked specialist knowledge with authority. Yet the surviving structures do not disclose exactly who read the calendar or how ordinary people experienced its announcements. Chankillo demonstrates the public scale of timekeeping more clearly than it reveals the institution that managed time.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "8e64794e-861e-4517-a8db-da4e967e63a2",
+        "question_text": "The towers could be used to identify dates between the two solstices, not merely the solstices themselves.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "True",
+        "answer_reason": "True. The passage says the Sun appeared beside different towers and gaps as its rising position moved, allowing the system to indicate many dates through the year. This is explicit confirmation, not an inference from outside knowledge.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "9ea052e8-37a4-4be5-a7b5-9bcb19ac2b29",
+        "question_text": "Both observation points are equally visible above ground today.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The western point survives clearly, whereas the eastern point is less visible above ground and is known from its foundations. The statement is specifically contradicted.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "a228d533-d875-4fa5-8d12-9d49a09f05fe",
+        "question_text": "The people who announced dates at Chankillo were hereditary priests.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "Can't tell",
+        "answer_reason": "Can't tell. The passage suggests controlled access and a possible connection between specialist knowledge and authority, but it states that the institution and the identities of the calendar readers are unknown. Nothing confirms or contradicts hereditary priesthood.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "b42d90d5-f9be-46d0-9cbe-9f6c2e89343b",
+        "question_text": "The western viewpoint was used for sunsets, while the eastern viewpoint was used for sunrises.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The passage assigns sunrise observations to the western point and corresponding sunset observations to the eastern point. The statement reverses the stated relationship.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "a9d469f6-033a-430e-a420-ad3753f65b7b",
+    "title": "Concrete Ears on the British Coast",
+    "body": "Before radar, British engineers tried to hear attacking aircraft while they were still beyond visual range. Their acoustic mirrors were concave concrete surfaces that reflected engine noise towards a focal point. A listener, and later sometimes a microphone, was positioned there. The mirror did not amplify sound electronically; its geometry concentrated sound arriving from the direction in which the structure faced.\n\nExperiments began during the First World War, when airships and aeroplanes introduced a new threat. Designs included upright dishes a few metres across, long curved walls and horizontal discs used in pairs. Installations appeared along parts of the south and east coasts. At Fan Bay near Dover, an early mirror detected aircraft moving down the Channel at a reported distance of about twelve to fifteen miles during a 1917 raid. Later work on the Kent coast included a 200-foot curved wall at Denge, intended to provide more warning and help estimate direction.\n\nThe system faced limits that engineering scale could not remove. Wind, waves, shipping and local activity produced competing noise. Atmospheric conditions changed how sound travelled. More importantly, aircraft became faster, so even a successful detection left less time to respond. Operators also had to distinguish a distant engine from background sound, making performance partly dependent on trained hearing.\n\nBy the mid-1930s, radar offered a different method: it transmitted radio waves and measured their return, rather than waiting for a target's engine noise to arrive. Radar's development made the proposed acoustic chain obsolete, although some mirrors were retained as backups or aids to searchlights. The surviving concrete forms are therefore not failed radar prototypes. They are evidence of a separate sensory technology whose usefulness narrowed as the targets it monitored changed.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "8786f7cc-0b3b-4c9c-b714-796df0d77baf",
+        "question_text": "How did an acoustic mirror make distant engine noise easier to detect?",
+        "options": [
+          "It converted sound directly into radio waves",
+          "It reflected sound towards a focal point",
+          "It electronically amplified every coastal noise",
+          "It forced aircraft to fly along a predictable route"
+        ],
+        "correct_answer": "It reflected sound towards a focal point",
+        "answer_reason": "The opening paragraph states that the concave surface concentrated reflected sound at a focal point. Radio-wave transmission belongs to radar; the mirror did not amplify electronically; and it had no effect on an aircraft's route.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "c0080d87-2be9-4cfc-ad7c-20e62e928395",
+        "question_text": "Which change most directly reduced the practical value of a given detection range?",
+        "options": [
+          "Concrete became unable to reflect sound",
+          "Aircraft crossed the remaining distance more quickly",
+          "Coastal waves stopped producing background noise",
+          "Operators ceased to use trained hearing"
+        ],
+        "correct_answer": "Aircraft crossed the remaining distance more quickly",
+        "answer_reason": "Faster aircraft shortened the response time after detection, directly reducing the value of the same range. The passage does not say concrete lost reflectivity or that background noise stopped, and trained hearing remained part of operation rather than being abandoned.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "2dd9c15a-77f7-4d63-b452-ac713d9519fe",
+        "question_text": "Which limitation would enlarging a mirror be least likely to solve?",
+        "options": [
+          "The decreasing response time caused by faster aircraft",
+          "The need to gather more sound from a target direction",
+          "The difficulty of detecting relatively faint engine noise",
+          "The wish to obtain warning from a greater distance"
+        ],
+        "correct_answer": "The decreasing response time caused by faster aircraft",
+        "answer_reason": "A larger collector might gather more sound and extend detection, addressing the other three aims. It cannot slow the aircraft after detection, so the shrinking interval for response remains. This combines the passage's discussion of scale with its separate speed constraint.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "53a0a9d8-89de-4bc4-b58a-9b86213ff6f9",
+        "question_text": "Why does the author say the mirrors were not failed radar prototypes?",
+        "options": [
+          "They were built only after radar had entered routine service",
+          "They transmitted stronger radio signals than early radar sets",
+          "They detected passively through sound and belonged to a distinct technical approach",
+          "They were intended exclusively to guide ships rather than detect aircraft"
+        ],
+        "correct_answer": "They detected passively through sound and belonged to a distinct technical approach",
+        "answer_reason": "The conclusion distinguishes passive acoustic detection from radar's transmitted radio waves. The mirrors predated radar, did not transmit radio signals, and were designed for aircraft warning rather than exclusively for shipping.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "f0cf8651-9bc0-42ed-896b-84b6eb350475",
+    "title": "How Wood Frogs Survive Freezing",
+    "body": "A wood frog overwintering beneath leaf litter may cool below the freezing point and allow ice to form through much of its body. Its heartbeat and breathing stop, and blood no longer circulates. This is freeze tolerance, not simply the avoidance of freezing. The distinction matters because ice is permitted in spaces around cells while intracellular ice, which can rupture membranes and disrupt cell structures, is restricted.\n\nThe onset of freezing triggers a rapid response. Glycogen stored in the liver is converted into glucose and released into the circulation before circulation ceases. Glucose enters tissues, where its high concentration helps retain water within cells and limits the shrinkage caused as extracellular water turns to ice. Wood frogs also accumulate urea before winter; experiments indicate that urea can protect tissues during freezing and thawing. These solutes are called cryoprotectants because they reduce injury, not because they keep the entire animal liquid.\n\nIce formation is itself regulated. It generally begins outside vital cells, and a controlled start gives glucose time to be distributed. Repeated mild freeze-thaw events before deep winter may increase the amount and distribution of protective solutes. Nevertheless, tolerance has limits: cooling rate, minimum temperature, duration and population all affect survival. A laboratory result for one population cannot automatically define the capacity of every wood frog.\n\nThawing reverses the visible shutdown. The heart resumes beating before normal movement returns, and the frog can become active again. Researchers understand several protective mechanisms, but the passage of a living animal from cardiac arrest back to coordinated activity is not explained by glucose alone. Freeze tolerance is therefore a coordinated physiological process, not the action of a single antifreeze substance.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "0cf2718a-73f9-4f02-898c-7e9146af9697",
+        "question_text": "A frozen wood frog continues to circulate blood slowly throughout winter.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The passage explicitly states that the heartbeat stops and blood no longer circulates. This directly contradicts continued slow circulation.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "16cb8091-9bde-4a3a-9809-f8ea7d93afbf",
+        "question_text": "Cryoprotectants prevent all ice from forming anywhere in a wood frog's body.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. Ice is allowed in spaces around cells, and the passage explicitly says cryoprotectants reduce injury rather than keep the entire animal liquid.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "70ba2ee6-4a94-41ec-ae07-2be4b633243f",
+        "question_text": "Repeated mild freeze-thaw events always increase the amount and distribution of protective solutes.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "Can't tell",
+        "answer_reason": "Can't tell. The passage says repeated mild freeze-thaw events may increase the amount and distribution of protective solutes. That does not establish that they always do so, and the passage supplies no counterexample that would directly contradict the universal claim.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "feaff4d1-8179-490e-bec6-eb15763e88db",
+        "question_text": "The heart begins beating again before the thawed frog regains normal movement.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "True",
+        "answer_reason": "True. The final paragraph states that the heart resumes beating before normal movement returns, so the order is explicitly entailed.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "9c9ef7f7-2fca-486f-b90c-00f78fb134ca",
+    "title": "Bacterial Compasses",
+    "body": "Magnetotactic bacteria are not one species but a varied group of aquatic microorganisms that respond to magnetic fields. Inside each cell are magnetosomes: membrane-bound compartments containing crystals of magnetite or greigite, both iron-bearing magnetic minerals. In many species the compartments form a chain. The combined magnetic moment turns the whole cell until its long axis lies approximately along a magnetic field line, rather like a compass needle.\n\nAlignment is not propulsion. The bacteria still swim using flagella, and chemical sensing still influences whether they continue or reverse. Magnetic alignment narrows a three-dimensional search through water or sediment into movement mainly along a field line. This can help cells locate preferred low-oxygen zones near an oxic-anoxic interface, the boundary between oxygenated and oxygen-poor conditions. Magnetotaxis and chemotaxis therefore work together rather than serving as rival navigation systems.\n\nThe direction that is useful can vary. Earth's field lines incline downwards in much of the Northern Hemisphere and upwards in much of the Southern Hemisphere. A bacterium seeking deeper, low-oxygen water may commonly swim northward in the north and southward in the south, but simple hemisphere rules are not universal: cells can reverse, environments differ, and populations near the magnetic equator may contain both polarities.\n\nMagnetosome construction is tightly controlled. Proteins regulate membrane formation, iron transport, crystal growth and chain organisation, producing crystals within a narrow size range that supports stable magnetism. The relevant genes often occur in clusters and may sometimes move between related lineages. This combination of mineral precision and biological control interests researchers studying both evolution and engineered magnetic particles. Yet proposed applications do not alter the central ecological point: the chain supplies an axis of alignment, while active movement and chemical choice remain the work of the living cell.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "d33ececf-0786-4f4d-b128-bf777682d06a",
+        "question_text": "What directly propels magnetotactic bacteria through their environment?",
+        "options": [
+          "The passive pull of the magnetosome chain",
+          "The oxic-anoxic interface",
+          "Greigite released outside the cell",
+          "Flagella"
+        ],
+        "correct_answer": "Flagella",
+        "answer_reason": "The passage distinguishes alignment from propulsion and states that the bacteria swim using flagella. Magnetosomes orient the cell, the interface is an environmental boundary, and greigite remains within magnetosomes rather than being released to propel the cell.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "db290e7c-526d-4627-8140-5c4d664fe539",
+        "question_text": "How can magnetic alignment make the search for a preferred zone more efficient?",
+        "options": [
+          "It identifies the oxygen concentration without any chemical sensing",
+          "It makes every cell swim north regardless of location",
+          "It reduces movement from a three-dimensional search to one mainly along a field line",
+          "It supplies energy by dissolving the mineral crystals"
+        ],
+        "correct_answer": "It reduces movement from a three-dimensional search to one mainly along a field line",
+        "answer_reason": "The second paragraph gives this dimensional reduction as the benefit. Chemical sensing still matters, northward swimming is not universal, and the crystals provide orientation rather than energy by dissolution.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "211bf6d8-c34f-4b8a-aa52-98fd7dd3053a",
+        "question_text": "A mutation leaves a bacterium's flagella and chemical sensing intact but scatters its magnetosomes instead of arranging them in a chain. Which outcome is most supported?",
+        "options": [
+          "It would align normally but lose all ability to propel itself",
+          "It would become unable to form any iron-bearing crystal",
+          "It could still swim and sense chemicals, but its magnetic alignment would likely be less effective",
+          "It would necessarily reverse its preferred oxygen level"
+        ],
+        "correct_answer": "It could still swim and sense chemicals, but its magnetic alignment would likely be less effective",
+        "answer_reason": "The passage separates flagellar propulsion and chemical sensing from the chain's combined magnetic alignment. Normal alignment is unlikely if the chain is disrupted; scattered crystals can still exist; and no necessary change in oxygen preference follows.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "4cb4979d-4555-4b94-8458-22a0631eae6b",
+        "question_text": "Which statement best describes magnetotaxis and chemotaxis in the passage?",
+        "options": [
+          "They cooperate, with one providing alignment and the other helping guide behavioural choice",
+          "They are alternative systems, and each species possesses only one",
+          "They are identical names for movement caused by flagella",
+          "They operate only in bacteria living near the magnetic equator"
+        ],
+        "correct_answer": "They cooperate, with one providing alignment and the other helping guide behavioural choice",
+        "answer_reason": "The passage explicitly says the two systems work together: magnetic fields orient while chemical sensing affects swimming decisions. It rejects rivalry, distinguishes both from propulsion, and describes broad aquatic occurrence rather than restriction to the equator.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "1bf80f0c-615d-4165-a80d-401e17931f39",
+    "title": "Printing in Prussian Blue",
+    "body": "The cyanotype is a photographic printing process recognised by its Prussian-blue image. John Herschel described the process in 1842. Unlike many early photographic methods based on silver compounds, it uses iron salts, commonly ferric ammonium citrate and potassium ferricyanide. The two solutions are stored separately and mixed before a support such as paper or cloth is coated under subdued light.\n\nOnce dry, the sensitised surface is placed in close contact with an object or a full-sized negative and exposed to ultraviolet light. Light drives the reduction of iron from the ferric state to the ferrous state; subsequent reactions form an insoluble blue compound. Washing removes soluble, unreacted chemicals from protected areas and allows the image to develop fully through oxidation. Exposed regions become blue, while areas shielded by an opaque object remain light. Because the process normally relies on contact, the object or negative determines image size directly rather than being enlarged through a lens.\n\nAnna Atkins exploited this feature in the 1840s when she arranged algae on sensitised sheets. The specimens blocked light and left pale silhouettes, producing photograms that recorded delicate outlines without a camera. Cyanotype was also adopted for copying technical drawings: a transparent traced plan could be reproduced as a durable blue image, giving rise to the familiar blueprint. Its materials were comparatively inexpensive and its water-based processing straightforward.\n\nSimplicity does not mean complete stability. Alkalis can fade or alter Prussian blue, prolonged washing can weaken an image, and display conditions affect paper as well as pigment. A freshly washed print may also deepen as oxidation continues. The process is thus forgiving enough for repeated practical use but still governed by light, chemistry, contact and care.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "3d3d2ac0-63cf-44c3-a3ec-406986baa639",
+        "question_text": "Which statement correctly describes preparation of the sensitiser?",
+        "options": [
+          "One solution is used only to wash the finished print",
+          "Mixing them permanently removes their sensitivity to ultraviolet light",
+          "They react only when heated inside a camera",
+          "They are stored separately as components of the light-sensitive working mixture"
+        ],
+        "correct_answer": "They are stored separately as components of the light-sensitive working mixture",
+        "answer_reason": "The passage states that the two solutions are stored separately and mixed before the support is coated, which the correct option directly restates. Neither solution is reserved only for washing; mixing does not remove ultraviolet sensitivity; and preparation requires neither heating nor a camera.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "b2d8fe16-7d1d-4d4e-9439-52629f8072f8",
+        "question_text": "What produces the pale shape in an Atkins-style algae photogram?",
+        "options": [
+          "The specimen shields part of the sensitised sheet from ultraviolet light",
+          "The specimen releases a bleaching chemical into every exposed area",
+          "A lens enlarges a small negative of the specimen",
+          "Silver compounds darken only the paper beneath the specimen"
+        ],
+        "correct_answer": "The specimen shields part of the sensitised sheet from ultraviolet light",
+        "answer_reason": "The algae acts as an opaque object, leaving protected areas light. No bleaching secretion is described; the print is made by direct contact rather than lens enlargement; and cyanotype uses iron salts rather than silver compounds.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "ed78c8b8-0284-4ed3-9804-2e19b4182111",
+        "question_text": "A transparent plan is placed against sensitised paper, but a small gap remains between the two surfaces. What problem is most consistent with the passage?",
+        "options": [
+          "The final copy will automatically be enlarged beyond the original plan",
+          "The exposed regions will remain white because ultraviolet light cannot cross air",
+          "The process will switch from iron chemistry to silver chemistry",
+          "Fine details may become less sharply defined because close contact determines the image"
+        ],
+        "correct_answer": "Fine details may become less sharply defined because close contact determines the image",
+        "answer_reason": "The process depends on close contact, so a gap can weaken edge definition. Contact printing does not enlarge; ultraviolet light can cross the gap; and physical separation cannot change iron salts into a silver process.",
+        "order_index": 2,
+        "difficulty": "hard"
+      },
+      {
+        "id": "0882b60a-8be3-4f98-9549-1d1625e36d5f",
+        "question_text": "Which statement best captures the author's view of cyanotype's simplicity?",
+        "options": [
+          "It ensures that every print remains unchanged under all display conditions",
+          "It makes the process practical, but does not remove chemical and conservation constraints",
+          "It means exposure time and contact have no effect on the image",
+          "It makes washing unnecessary once ultraviolet exposure is complete"
+        ],
+        "correct_answer": "It makes the process practical, but does not remove chemical and conservation constraints",
+        "answer_reason": "The final paragraph balances practical simplicity against sensitivity to alkalis, washing and display. The other options claim absolute stability or deny the importance of exposure, contact and washing, all of which the passage identifies as important.",
+        "order_index": 3,
+        "difficulty": "normal"
+      }
+    ]
+  },
+  {
+    "id": "8c61ed74-264f-43c5-8942-3931876ddffd",
+    "title": "Islands That Survived on Maps",
+    "body": "A phantom island is land shown on charts although later investigation finds no island at the stated position. Such features arose for different reasons. A sailor might mistake a mirage or floating pumice for new land, while mistaken coordinates could relocate a genuine sighting. A copied report could then acquire authority as later mapmakers repeated it, particularly when surveying a remote ocean was expensive and a failure to sight low land did not conclusively prove absence.\n\nSome phantoms grew from stories as much as observation. Hy-Brasil, usually drawn west of Ireland, appeared in varied forms on maps for centuries and attracted voyages, despite never being verified. Frisland entered influential sixteenth-century mapping through the published Zeno narrative and was copied widely in the North Atlantic. In such cases repetition did not amount to independent confirmation: several maps could descend from one claim.\n\nModern data systems did not automatically end the problem. Sandy Island in the Coral Sea appeared in global coastline and seafloor datasets and on widely used digital maps. Yet some official hydrographic charts had already omitted it. In 2012 researchers aboard the Southern Surveyor deliberately passed through its supposed position and found deep water rather than land. The mismatch showed how an inherited coastline outline could persist in compiled datasets even after specialist charting had rejected it.\n\nRemoving a phantom requires more than deleting a name. Navigational charts prioritise hazards and attach degrees of confidence to observations, while general maps and scientific databases may inherit shapes from different sources. An island can therefore disappear from one information system while surviving in another. Phantom islands expose a weakness shared by manuscript and digital cartography: copying preserves errors efficiently unless provenance and contrary evidence travel with the copied feature.",
+    "is_free": false,
+    "verbal_reasoning_questions": [
+      {
+        "id": "6d3449b4-bcdb-41a6-8dfc-818fefbdd23e",
+        "question_text": "Every phantom island originated as a deliberate deception by a mapmaker.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The passage lists mistaken clouds, pumice, misplaced real islands and stories as possible origins. These examples directly contradict the claim that every phantom was deliberate deception.",
+        "order_index": 0,
+        "difficulty": "normal"
+      },
+      {
+        "id": "3b3e3f36-6d6f-470e-bb19-06dfbd9fe60c",
+        "question_text": "Several maps showing Frisland could have descended from a single claim.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "True",
+        "answer_reason": "True. The passage explicitly says that several maps could descend from one claim and describes Frisland as widely copied from the Zeno narrative. The statement is directly entailed.",
+        "order_index": 1,
+        "difficulty": "normal"
+      },
+      {
+        "id": "9345713e-e0c6-440e-ac82-7ae29adbcc63",
+        "question_text": "Before the 2012 voyage, every official hydrographic service still accepted Sandy Island as real.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "False",
+        "answer_reason": "False. The passage explicitly says some official hydrographic charts had already omitted Sandy Island before the Southern Surveyor investigated its supposed position.",
+        "order_index": 2,
+        "difficulty": "normal"
+      },
+      {
+        "id": "6992b836-c150-4015-8d2a-d05565da42f4",
+        "question_text": "Sandy Island persisted in global datasets because their compilers deliberately ignored the 2012 voyage.",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "correct_answer": "Can't tell",
+        "answer_reason": "Can't tell. The passage says the outline persisted through inherited data and that the 2012 voyage found no island, but it does not describe a deliberate decision by compilers to ignore that voyage. Intent is neither confirmed nor contradicted.",
+        "order_index": 3,
+        "difficulty": "hard"
+      }
+    ]
+  }
+]

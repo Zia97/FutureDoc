@@ -1,0 +1,1705 @@
+[
+  {
+    "id": "timed-qr-test-005",
+    "title": "QR Timed Test 5",
+    "question_count": 36,
+    "time_minutes": 26,
+    "is_free": true,
+    "sets": [
+      {
+        "set_id": "3e43934f-148c-4fe6-b648-4cf94e5d075c",
+        "title": "Film Archive Restoration",
+        "stimulus": {
+          "type": "table",
+          "context": "A film archive inspected reels from five collections. Two technicians share the restoration work; each is scheduled for 6 hours per day and spends 80% of that time actively restoring reels.",
+          "data": {
+            "headers": [
+              "Collection",
+              "Reels received",
+              "Usable reels",
+              "Minutes per usable reel"
+            ],
+            "rows": [
+              [
+                "Documentary",
+                "240",
+                "204",
+                "16"
+              ],
+              [
+                "Drama",
+                "180",
+                "162",
+                "22"
+              ],
+              [
+                "Science",
+                "150",
+                "114",
+                "18"
+              ],
+              [
+                "Animation",
+                "120",
+                "108",
+                "25"
+              ],
+              [
+                "Newsreel",
+                "210",
+                "189",
+                "12"
+              ]
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "0cd6da0f-423c-488b-a882-5fcdc4c1033d",
+            "stem": "What percentage of the Documentary reels were usable?",
+            "options": [
+              {
+                "label": "A",
+                "text": "80%"
+              },
+              {
+                "label": "B",
+                "text": "82%"
+              },
+              {
+                "label": "C",
+                "text": "85%"
+              },
+              {
+                "label": "D",
+                "text": "88%"
+              },
+              {
+                "label": "E",
+                "text": "90%"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Usable percentage = 204 ÷ 240 × 100 = 85%. No rounding is required. The answer is 85%.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "263a9971-401b-4675-92f4-ad2e008c38db",
+            "stem": "How many hours of restoration work are required for all usable Drama reels?",
+            "options": [
+              {
+                "label": "A",
+                "text": "54.0 hours"
+              },
+              {
+                "label": "B",
+                "text": "56.7 hours"
+              },
+              {
+                "label": "C",
+                "text": "59.4 hours"
+              },
+              {
+                "label": "D",
+                "text": "60.0 hours"
+              },
+              {
+                "label": "E",
+                "text": "66.0 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The Drama collection has 162 usable reels. Work time = 162 × 22 = 3,564 minutes. Converting to hours gives 3,564 ÷ 60 = 59.4 hours. The answer is 59.4 hours.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "d7526cd4-0479-4885-86f5-2ce32c219278",
+            "stem": "What is the minimum number of whole working days the two technicians need to restore all usable Science reels?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 days"
+              },
+              {
+                "label": "B",
+                "text": "3 days"
+              },
+              {
+                "label": "C",
+                "text": "4 days"
+              },
+              {
+                "label": "D",
+                "text": "5 days"
+              },
+              {
+                "label": "E",
+                "text": "6 days"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Science restoration requires 114 × 18 = 2,052 minutes. The two technicians provide 2 × 6 × 60 × 0.80 = 576 active minutes per day. The work takes 2,052 ÷ 576 = 3.5625 days, so a fourth whole day is required. The answer is 4 days.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "0e8ceeef-93aa-4b26-9daf-f90249e2d064",
+        "title": "Coastal Water Sample Processing",
+        "stimulus": {
+          "type": "table",
+          "context": "A coastal laboratory processed water readings from four monitoring stations. Each positive reading requires a £6 confirmation test. The project also has a fixed setup cost of £450.",
+          "data": {
+            "headers": [
+              "Station",
+              "Readings scheduled",
+              "Valid readings",
+              "Positive readings",
+              "Cost per valid reading"
+            ],
+            "rows": [
+              [
+                "North",
+                "160",
+                "148",
+                "37",
+                "£2.40"
+              ],
+              [
+                "East",
+                "200",
+                "184",
+                "46",
+                "£2.10"
+              ],
+              [
+                "South",
+                "180",
+                "153",
+                "51",
+                "£2.60"
+              ],
+              [
+                "West",
+                "140",
+                "126",
+                "21",
+                "£2.30"
+              ]
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "5118442f-ab22-42aa-982e-eec1b1c8bd8c",
+            "stem": "What percentage of the scheduled readings at East station were valid?",
+            "options": [
+              {
+                "label": "A",
+                "text": "84%"
+              },
+              {
+                "label": "B",
+                "text": "88%"
+              },
+              {
+                "label": "C",
+                "text": "90%"
+              },
+              {
+                "label": "D",
+                "text": "92%"
+              },
+              {
+                "label": "E",
+                "text": "96%"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "Valid percentage = 184 ÷ 200 × 100 = 92%. The answer is 92%.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "1ed62118-86b2-4eb4-a14f-616614cdd1b9",
+            "stem": "Across all four stations, what percentage of valid readings were positive, to the nearest 0.1%?",
+            "options": [
+              {
+                "label": "A",
+                "text": "22.8%"
+              },
+              {
+                "label": "B",
+                "text": "24.1%"
+              },
+              {
+                "label": "C",
+                "text": "25.4%"
+              },
+              {
+                "label": "D",
+                "text": "26.7%"
+              },
+              {
+                "label": "E",
+                "text": "28.0%"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Total positives = 37 + 46 + 51 + 21 = 155. Total valid readings = 148 + 184 + 153 + 126 = 611. The percentage is 155 ÷ 611 × 100 = 25.368...%, which rounds to 25.4%. The answer is 25.4%.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "9627c16b-0f4f-4b84-8a9b-b52fd238b890",
+            "stem": "What was the total project cost, including processing, all confirmation tests and the fixed setup cost?",
+            "options": [
+              {
+                "label": "A",
+                "text": "£2,359.20"
+              },
+              {
+                "label": "B",
+                "text": "£2,739.20"
+              },
+              {
+                "label": "C",
+                "text": "£2,809.20"
+              },
+              {
+                "label": "D",
+                "text": "£2,905.20"
+              },
+              {
+                "label": "E",
+                "text": "£3,289.20"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Processing costs are 148 × £2.40 + 184 × £2.10 + 153 × £2.60 + 126 × £2.30 = £1,429.20. Confirmation tests cost 155 × £6 = £930. Adding the £450 setup cost gives £1,429.20 + £930 + £450 = £2,809.20. The answer is £2,809.20.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "53642c29-aacc-44c0-90ae-571ecbbdc107",
+        "title": "Archaeological Trench Finds",
+        "stimulus": {
+          "type": "bar_chart",
+          "context": "An archaeological survey classified finds from five trenches as organic material or ceramic material. The bars show the number of finds in each category.",
+          "data": {
+            "title": "Finds by Trench and Material",
+            "labels": [
+              "Trench A",
+              "Trench B",
+              "Trench C",
+              "Trench D",
+              "Trench E"
+            ],
+            "series": [
+              {
+                "name": "Organic",
+                "values": [
+                  48,
+                  60,
+                  36,
+                  72,
+                  40
+                ]
+              },
+              {
+                "name": "Ceramic",
+                "values": [
+                  32,
+                  45,
+                  54,
+                  24,
+                  50
+                ]
+              }
+            ],
+            "yAxisLabel": "Number of finds",
+            "unit": "finds"
+          }
+        },
+        "questions": [
+          {
+            "id": "69e312cd-df44-4ce7-8158-073659b3cd3b",
+            "stem": "How many finds were recorded in Trench C altogether?",
+            "options": [
+              {
+                "label": "A",
+                "text": "72"
+              },
+              {
+                "label": "B",
+                "text": "84"
+              },
+              {
+                "label": "C",
+                "text": "90"
+              },
+              {
+                "label": "D",
+                "text": "96"
+              },
+              {
+                "label": "E",
+                "text": "108"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Trench C contains 36 organic finds and 54 ceramic finds. Total = 36 + 54 = 90 finds. The answer is 90.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "2112a8ed-4a6a-4a39-ace4-0bd3adc3790c",
+            "stem": "What percentage of the finds in Trench B were ceramic, to the nearest 0.1%?",
+            "options": [
+              {
+                "label": "A",
+                "text": "37.5%"
+              },
+              {
+                "label": "B",
+                "text": "40.0%"
+              },
+              {
+                "label": "C",
+                "text": "42.9%"
+              },
+              {
+                "label": "D",
+                "text": "45.0%"
+              },
+              {
+                "label": "E",
+                "text": "57.1%"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Trench B has 60 + 45 = 105 finds. The ceramic share is 45 ÷ 105 × 100 = 42.857...%, which rounds to 42.9%. The answer is 42.9%.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "e8715e88-7145-4fe0-8afb-a66846b88127",
+            "stem": "Across all five trenches, 15% of organic finds and 20% of ceramic finds are expected to need conservation. What is the estimated total number needing conservation, to the nearest whole find?",
+            "options": [
+              {
+                "label": "A",
+                "text": "70"
+              },
+              {
+                "label": "B",
+                "text": "75"
+              },
+              {
+                "label": "C",
+                "text": "79"
+              },
+              {
+                "label": "D",
+                "text": "80"
+              },
+              {
+                "label": "E",
+                "text": "82"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "There are 48 + 60 + 36 + 72 + 40 = 256 organic finds and 32 + 45 + 54 + 24 + 50 = 205 ceramic finds. Expected conservation work = 0.15 × 256 + 0.20 × 205 = 38.4 + 41 = 79.4 finds. Rounding the final total to the nearest whole find gives 79. The answer is 79.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "189f0537-9ec8-4eea-a36d-53d57b28a8d5",
+        "title": "Laser Sensor Calibration",
+        "stimulus": {
+          "type": "line_graph",
+          "context": "Two laser sensors were tested over six calibration cycles. The graph shows each sensor's absolute measurement deviation in micrometres (µm).",
+          "data": {
+            "title": "Absolute Deviation by Calibration Cycle",
+            "labels": [
+              "Cycle 1",
+              "Cycle 2",
+              "Cycle 3",
+              "Cycle 4",
+              "Cycle 5",
+              "Cycle 6"
+            ],
+            "series": [
+              {
+                "name": "Sensor A",
+                "values": [
+                  2,
+                  3,
+                  5,
+                  4,
+                  6,
+                  8
+                ]
+              },
+              {
+                "name": "Sensor B",
+                "values": [
+                  7,
+                  6,
+                  6,
+                  5,
+                  4,
+                  3
+                ]
+              }
+            ],
+            "yAxisLabel": "Absolute deviation (µm)",
+            "unit": "µm"
+          }
+        },
+        "questions": [
+          {
+            "id": "62436299-2d20-49e1-91a6-9cae566c1098",
+            "stem": "What was the difference between the two sensor deviations in Cycle 1?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 µm"
+              },
+              {
+                "label": "B",
+                "text": "3 µm"
+              },
+              {
+                "label": "C",
+                "text": "4 µm"
+              },
+              {
+                "label": "D",
+                "text": "5 µm"
+              },
+              {
+                "label": "E",
+                "text": "7 µm"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "In Cycle 1, Sensor A deviated by 2 µm and Sensor B by 7 µm. The difference is 7 − 2 = 5 µm. The answer is 5 µm.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "e32c7164-6cb1-4040-9c34-10e146201973",
+            "stem": "What was Sensor A's mean deviation across the six cycles, to the nearest 0.1 µm?",
+            "options": [
+              {
+                "label": "A",
+                "text": "4.2 µm"
+              },
+              {
+                "label": "B",
+                "text": "4.5 µm"
+              },
+              {
+                "label": "C",
+                "text": "4.7 µm"
+              },
+              {
+                "label": "D",
+                "text": "5.0 µm"
+              },
+              {
+                "label": "E",
+                "text": "5.3 µm"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Sensor A's deviations sum to 2 + 3 + 5 + 4 + 6 + 8 = 28 µm. Mean = 28 ÷ 6 = 4.666... µm, which rounds to 4.7 µm. The answer is 4.7 µm.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "027a10d2-8511-4d7f-bdc0-9ff67fbbc391",
+            "stem": "A technician spends 12 minutes correcting each micrometre by which a reading exceeds 4 µm. How much correction time is needed for all readings from both sensors?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 hours 12 minutes"
+              },
+              {
+                "label": "B",
+                "text": "2 hours 36 minutes"
+              },
+              {
+                "label": "C",
+                "text": "3 hours"
+              },
+              {
+                "label": "D",
+                "text": "3 hours 24 minutes"
+              },
+              {
+                "label": "E",
+                "text": "4 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Sensor A exceeds 4 µm by 1 + 2 + 4 = 7 µm in total. Sensor B exceeds 4 µm by 3 + 2 + 2 + 1 = 8 µm. Total excess = 15 µm, so correction time = 15 × 12 = 180 minutes = 3 hours. The answer is 3 hours.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "723b2310-87fe-427a-9262-5902eeed8c02",
+        "title": "Recovered Pottery Glazes",
+        "stimulus": {
+          "type": "pie_chart",
+          "context": "A conservation store contains 2,400 pottery fragments. The pie chart shows the number in each glaze category.",
+          "data": {
+            "title": "Pottery Fragments by Glaze Category",
+            "segments": [
+              {
+                "label": "Blue glaze",
+              "value": 720
+              },
+              {
+                "label": "Green glaze",
+              "value": 528
+              },
+              {
+                "label": "Brown glaze",
+              "value": 432
+              },
+              {
+                "label": "White glaze",
+              "value": 360
+              },
+              {
+                "label": "Unglazed",
+              "value": 360
+              }
+            ],
+            "unit": "fragments",
+            "total": 2400
+          }
+        },
+        "questions": [
+          {
+            "id": "c46d548c-8868-4673-8cc3-2c7d669fc9a5",
+            "stem": "How many fragments have green glaze?",
+            "options": [
+              {
+                "label": "A",
+                "text": "432"
+              },
+              {
+                "label": "B",
+                "text": "480"
+              },
+              {
+                "label": "C",
+                "text": "528"
+              },
+              {
+                "label": "D",
+                "text": "600"
+              },
+              {
+                "label": "E",
+                "text": "720"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Green glaze accounts for 22% of 2,400. The number is 0.22 × 2,400 = 528 fragments. The answer is 528.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "8f5eadef-fc1e-4790-b2c2-cb577f11aec3",
+            "stem": "How many more fragments have blue glaze than white glaze?",
+            "options": [
+              {
+                "label": "A",
+                "text": "240"
+              },
+              {
+                "label": "B",
+                "text": "300"
+              },
+              {
+                "label": "C",
+                "text": "360"
+              },
+              {
+                "label": "D",
+                "text": "420"
+              },
+              {
+                "label": "E",
+                "text": "480"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The percentage-point difference is 30% − 15% = 15%. The number difference is 0.15 × 2,400 = 360 fragments. The answer is 360.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "cab4e67f-5a37-4a73-b8d6-8ef9b52a09e4",
+            "stem": "A further 120 unglazed fragments are added to the store. What percentage of the new total is unglazed, to the nearest 0.1%?",
+            "options": [
+              {
+                "label": "A",
+                "text": "17.1%"
+              },
+              {
+                "label": "B",
+                "text": "18.0%"
+              },
+              {
+                "label": "C",
+                "text": "19.0%"
+              },
+              {
+                "label": "D",
+                "text": "20.0%"
+              },
+              {
+                "label": "E",
+                "text": "21.4%"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Initially, 15% of 2,400 = 360 fragments are unglazed. After adding 120, there are 480 unglazed out of 2,520 total. The percentage is 480 ÷ 2,520 × 100 = 19.0476...%, which rounds to 19.0%. The answer is 19.0%.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "7424c66c-e1d1-4b05-b67f-f2722fce1409",
+        "title": "Telescope Exposure Trials",
+        "stimulus": {
+          "type": "scatter_plot",
+          "context": "An observatory tested eight image exposures. Each labelled point shows exposure time and the number of faint objects detected in that image.",
+          "data": {
+            "title": "Exposure Time and Faint Objects Detected",
+            "xAxisLabel": "Exposure time (minutes)",
+            "yAxisLabel": "Objects detected",
+            "series": [
+              {
+                "name": "Exposure trials",
+                "points": [
+                  {
+                    "x": 10,
+                    "y": 18,
+                    "label": "A"
+                  },
+                  {
+                    "x": 15,
+                    "y": 24,
+                    "label": "B"
+                  },
+                  {
+                    "x": 20,
+                    "y": 29,
+                    "label": "C"
+                  },
+                  {
+                    "x": 25,
+                    "y": 35,
+                    "label": "D"
+                  },
+                  {
+                    "x": 30,
+                    "y": 38,
+                    "label": "E"
+                  },
+                  {
+                    "x": 35,
+                    "y": 46,
+                    "label": "F"
+                  },
+                  {
+                    "x": 40,
+                    "y": 44,
+                    "label": "G"
+                  },
+                  {
+                    "x": 45,
+                    "y": 55,
+                    "label": "H"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "6dab5ff7-12fb-4f44-81bc-b06bc7a422ca",
+            "stem": "How many objects were detected in the 35-minute exposure?",
+            "options": [
+              {
+                "label": "A",
+                "text": "35"
+              },
+              {
+                "label": "B",
+                "text": "38"
+              },
+              {
+                "label": "C",
+                "text": "44"
+              },
+              {
+                "label": "D",
+                "text": "46"
+              },
+              {
+                "label": "E",
+                "text": "55"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "The point with an exposure time of 35 minutes is F, whose y-value is 46 objects. The answer is 46.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "48529b87-35de-45b0-b778-62bd80e4d2f2",
+            "stem": "Which labelled exposure detected the greatest number of objects per minute?",
+            "options": [
+              {
+                "label": "A",
+                "text": "A"
+              },
+              {
+                "label": "B",
+                "text": "B"
+              },
+              {
+                "label": "C",
+                "text": "D"
+              },
+              {
+                "label": "D",
+                "text": "F"
+              },
+              {
+                "label": "E",
+                "text": "H"
+              }
+            ],
+            "correct_answer": "A",
+            "answer_reason": "Objects per minute are A: 18 ÷ 10 = 1.8; B: 24 ÷ 15 = 1.6; D: 35 ÷ 25 = 1.4; F: 46 ÷ 35 = 1.31; H: 55 ÷ 45 = 1.22. The greatest rate is 1.8 objects per minute at A. The answer is A.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "92a5a40e-179d-426e-a85a-a1ec243c1b4c",
+            "stem": "Among exposures lasting at least 25 minutes, which also detected at least 1.3 objects per minute? What is the total number of objects detected by those qualifying exposures?",
+            "options": [
+              {
+                "label": "A",
+                "text": "73"
+              },
+              {
+                "label": "B",
+                "text": "79"
+              },
+              {
+                "label": "C",
+                "text": "81"
+              },
+              {
+                "label": "D",
+                "text": "90"
+              },
+              {
+                "label": "E",
+                "text": "136"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "For exposures of at least 25 minutes, the rates are D: 35 ÷ 25 = 1.40, E: 38 ÷ 30 = 1.27, F: 46 ÷ 35 = 1.31, G: 44 ÷ 40 = 1.10 and H: 55 ÷ 45 = 1.22 objects per minute. Only D and F meet at least 1.3, giving 35 + 46 = 81 objects. The answer is 81.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "71bff59d-3a6f-47cf-80b5-0cc6f26d1cae",
+        "title": "Marine Inspection Drone Routes",
+        "stimulus": {
+          "type": "network_diagram",
+          "context": "An inspection drone can travel along the links shown. Edge labels give one-way flight times in minutes, and links can be used in either direction.",
+          "data": {
+            "title": "Drone Flight Times Between Inspection Points",
+            "nodes": [
+              {
+                "id": "base",
+                "label": "Base",
+                "x": 0.1,
+                "y": 0.45
+              },
+              {
+                "id": "reef",
+                "label": "Reef",
+                "x": 0.32,
+                "y": 0.18
+              },
+              {
+                "id": "buoy",
+                "label": "Buoy",
+                "x": 0.34,
+                "y": 0.72
+              },
+              {
+                "id": "tower",
+                "label": "Tower",
+                "x": 0.58,
+                "y": 0.3
+              },
+              {
+                "id": "cove",
+                "label": "Cove",
+                "x": 0.62,
+                "y": 0.78
+              },
+              {
+                "id": "rig",
+                "label": "Rig",
+                "x": 0.88,
+                "y": 0.52
+              }
+            ],
+            "edges": [
+              {
+                "from": "base",
+                "to": "reef",
+                "label": "14 min"
+              },
+              {
+                "from": "base",
+                "to": "buoy",
+                "label": "20 min"
+              },
+              {
+                "from": "reef",
+                "to": "tower",
+                "label": "16 min"
+              },
+              {
+                "from": "buoy",
+                "to": "tower",
+                "label": "8 min"
+              },
+              {
+                "from": "buoy",
+                "to": "cove",
+                "label": "12 min"
+              },
+              {
+                "from": "tower",
+                "to": "rig",
+                "label": "18 min"
+              },
+              {
+                "from": "cove",
+                "to": "rig",
+                "label": "11 min"
+              },
+              {
+                "from": "reef",
+                "to": "cove",
+                "label": "25 min"
+              }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "a8cbb443-7e21-45d6-b058-7ae2ba1331fa",
+            "stem": "How long is the direct flight from Buoy to Tower?",
+            "options": [
+              {
+                "label": "A",
+                "text": "8 minutes"
+              },
+              {
+                "label": "B",
+                "text": "11 minutes"
+              },
+              {
+                "label": "C",
+                "text": "12 minutes"
+              },
+              {
+                "label": "D",
+                "text": "16 minutes"
+              },
+              {
+                "label": "E",
+                "text": "20 minutes"
+              }
+            ],
+            "correct_answer": "A",
+            "answer_reason": "The direct edge between Buoy and Tower is labelled 8 minutes. The answer is 8 minutes.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "2c2e03db-e253-4e17-8a36-8b8099a1c02c",
+            "stem": "What is the shortest flight time from Base to Tower?",
+            "options": [
+              {
+                "label": "A",
+                "text": "22 minutes"
+              },
+              {
+                "label": "B",
+                "text": "28 minutes"
+              },
+              {
+                "label": "C",
+                "text": "30 minutes"
+              },
+              {
+                "label": "D",
+                "text": "34 minutes"
+              },
+              {
+                "label": "E",
+                "text": "38 minutes"
+              }
+            ],
+            "correct_answer": "B",
+            "answer_reason": "Via Buoy, the time is 20 + 8 = 28 minutes. Via Reef, it is 14 + 16 = 30 minutes, and other routes are longer. The shortest flight time is 28 minutes.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "4887b62d-6932-40d5-a6d1-14e245662abf",
+            "stem": "The drone flies from Base to Rig by the quickest route, performs an inspection using 8 kWh, and returns to Base along the same route. Flying uses 0.6 kWh per minute. How much energy does the complete mission use?",
+            "options": [
+              {
+                "label": "A",
+                "text": "51.6 kWh"
+              },
+              {
+                "label": "B",
+                "text": "55.8 kWh"
+              },
+              {
+                "label": "C",
+                "text": "59.6 kWh"
+              },
+              {
+                "label": "D",
+                "text": "63.2 kWh"
+              },
+              {
+                "label": "E",
+                "text": "67.6 kWh"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The quickest Base-to-Rig route is Base–Buoy–Cove–Rig: 20 + 12 + 11 = 43 minutes. A return along the same route makes 86 flight minutes. Flight energy = 86 × 0.6 = 51.6 kWh; adding 8 kWh for inspection gives 59.6 kWh. The answer is 59.6 kWh.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "9a400fc4-1ab9-4083-a336-b0cbb2a48b20",
+        "title": "Trapezoidal Solar Test Panel",
+        "stimulus": {
+          "type": "geometry_diagram",
+          "context": "The panel is a trapezium. Its parallel sides are 8 m and 12 m, its perpendicular height is 5 m, and each sloping side is 5.4 m.",
+          "data": {
+            "title": "Solar Test Panel (not to scale)",
+            "viewBox": {
+              "width": 300,
+              "height": 210
+            },
+            "shapes": [
+              {
+                "type": "polygon",
+                "points": [
+                  [
+                    70,
+                    45
+                  ],
+                  [
+                    230,
+                    45
+                  ],
+                  [
+                    270,
+                    155
+                  ],
+                  [
+                    30,
+                    155
+                  ]
+                ],
+                "fill": "none",
+                "stroke": "#2d3748"
+              }
+            ],
+            "dimensions": [
+              {
+                "from": [
+                  70,
+                  28
+                ],
+                "to": [
+                  230,
+                  28
+                ],
+                "label": "8 m",
+                "side": "top"
+              },
+              {
+                "from": [
+                  30,
+                  178
+                ],
+                "to": [
+                  270,
+                  178
+                ],
+                "label": "12 m",
+                "side": "bottom"
+              },
+              {
+                "from": [
+                  150,
+                  45
+                ],
+                "to": [
+                  150,
+                  155
+                ],
+                "label": "5 m",
+                "side": "right"
+              },
+              {
+                "from": [
+                  30,
+                  155
+                ],
+                "to": [
+                  70,
+                  45
+                ],
+                "label": "5.4 m",
+                "side": "left"
+              },
+              {
+                "from": [
+                  230,
+                  45
+                ],
+                "to": [
+                  270,
+                  155
+                ],
+                "label": "5.4 m",
+                "side": "right"
+              }
+            ]
+          }
+        },
+        "questions": [
+          {
+            "id": "9c8ab0cf-c9b3-4706-ba7a-b5666c678806",
+            "stem": "What is the area of the panel?",
+            "options": [
+              {
+                "label": "A",
+                "text": "40 m²"
+              },
+              {
+                "label": "B",
+                "text": "45 m²"
+              },
+              {
+                "label": "C",
+                "text": "50 m²"
+              },
+              {
+                "label": "D",
+                "text": "60 m²"
+              },
+              {
+                "label": "E",
+                "text": "100 m²"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Area of a trapezium = ½ × (sum of parallel sides) × perpendicular height. Therefore, area = ½ × (8 + 12) × 5 = 50 m². The answer is 50 m².",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "3679d80c-68ce-49de-855e-807eb87d25cf",
+            "stem": "What is the perimeter of the panel?",
+            "options": [
+              {
+                "label": "A",
+                "text": "25.4 m"
+              },
+              {
+                "label": "B",
+                "text": "28.0 m"
+              },
+              {
+                "label": "C",
+                "text": "30.8 m"
+              },
+              {
+                "label": "D",
+                "text": "33.4 m"
+              },
+              {
+                "label": "E",
+                "text": "35.8 m"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Perimeter = 8 + 12 + 5.4 + 5.4 = 30.8 m. The answer is 30.8 m.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "ef456bbd-f649-4973-8582-d9b0701545e7",
+            "stem": "A scale model uses a length scale of 1:25. What is the area of the model panel in cm²?",
+            "options": [
+              {
+                "label": "A",
+                "text": "80 cm²"
+              },
+              {
+                "label": "B",
+                "text": "200 cm²"
+              },
+              {
+                "label": "C",
+                "text": "500 cm²"
+              },
+              {
+                "label": "D",
+                "text": "800 cm²"
+              },
+              {
+                "label": "E",
+                "text": "2,000 cm²"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "The real area is 50 m² = 500,000 cm². A 1:25 length scale gives an area scale of 1:25² = 1:625. Model area = 500,000 ÷ 625 = 800 cm². The answer is 800 cm².",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "013e9928-a525-422a-befa-a400615c4545",
+        "title": "Orchard Imaging Mission",
+        "stimulus": {
+          "type": "text",
+          "text": "A mapping drone must image a 54-hectare orchard. One battery covers 9 hectares during a 24-minute flight. Changing a battery takes 6 minutes between flights. Imaging produces 1.8 GB per hectare before compression; compression reduces the data to 40% of its original size. The upload connection transfers 12 GB per hour."
+        },
+        "questions": [
+          {
+            "id": "91e58952-653a-48d8-9e63-19c58953a54f",
+            "stem": "How many battery flights are required to image the whole orchard?",
+            "options": [
+              {
+                "label": "A",
+                "text": "4"
+              },
+              {
+                "label": "B",
+                "text": "5"
+              },
+              {
+                "label": "C",
+                "text": "6"
+              },
+              {
+                "label": "D",
+                "text": "7"
+              },
+              {
+                "label": "E",
+                "text": "8"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Flights required = 54 hectares ÷ 9 hectares per flight = 6 flights. The answer is 6.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "d36f4cbd-2c13-452f-a257-07d396f3b31d",
+            "stem": "How long will the six flights and the battery changes between them take in total?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 hours 24 minutes"
+              },
+              {
+                "label": "B",
+                "text": "2 hours 42 minutes"
+              },
+              {
+                "label": "C",
+                "text": "2 hours 54 minutes"
+              },
+              {
+                "label": "D",
+                "text": "3 hours"
+              },
+              {
+                "label": "E",
+                "text": "3 hours 6 minutes"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Six flights take 6 × 24 = 144 minutes. There are five changes between six flights, taking 5 × 6 = 30 minutes. Total = 174 minutes = 2 hours 54 minutes. The answer is 2 hours 54 minutes.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "44bc31be-a226-4121-aa51-9534c1113c6a",
+            "stem": "How long will the compressed data take to upload, to the nearest minute?",
+            "options": [
+              {
+                "label": "A",
+                "text": "2 hours 42 minutes"
+              },
+              {
+                "label": "B",
+                "text": "3 hours"
+              },
+              {
+                "label": "C",
+                "text": "3 hours 14 minutes"
+              },
+              {
+                "label": "D",
+                "text": "3 hours 24 minutes"
+              },
+              {
+                "label": "E",
+                "text": "8 hours 6 minutes"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Original data = 54 × 1.8 = 97.2 GB. Compressed data = 97.2 × 0.40 = 38.88 GB. Upload time = 38.88 ÷ 12 = 3.24 hours = 3 hours 14.4 minutes, which rounds to 3 hours 14 minutes. The answer is 3 hours 14 minutes.",
+            "order_index": 2,
+            "difficulty": "hard"
+          }
+        ]
+      },
+      {
+        "set_id": "ee53384c-cf78-4cff-94eb-25fe2996044c",
+        "title": "Pottery Glaze Batch",
+        "stimulus": {
+          "type": "text",
+          "text": "A pottery studio makes a dry glaze mixture using 5 parts silica, 3 parts clay and 2 parts pigment by mass. A batch contains 36 kg of dry mixture. During preparation, 8% of the mixture is wasted. Each finished piece uses 0.69 kg of the remaining mixture. Silica costs £1.20 per kg, clay £0.80 per kg and pigment £3.50 per kg."
+        },
+        "questions": [
+          {
+            "id": "02eca746-b90e-4995-9f39-682d4c8718bc",
+            "stem": "How much pigment is in the 36 kg dry batch?",
+            "options": [
+              {
+                "label": "A",
+                "text": "3.6 kg"
+              },
+              {
+                "label": "B",
+                "text": "5.4 kg"
+              },
+              {
+                "label": "C",
+                "text": "7.2 kg"
+              },
+              {
+                "label": "D",
+                "text": "9.0 kg"
+              },
+              {
+                "label": "E",
+                "text": "10.8 kg"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "There are 5 + 3 + 2 = 10 total parts, of which 2 are pigment. Pigment mass = 36 × 2 ÷ 10 = 7.2 kg. The answer is 7.2 kg.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "7b2de1ca-4e19-4c3c-9067-4c17ff6edbc3",
+            "stem": "What is the maximum number of finished pieces that can be glazed after the 8% preparation waste?",
+            "options": [
+              {
+                "label": "A",
+                "text": "44"
+              },
+              {
+                "label": "B",
+                "text": "46"
+              },
+              {
+                "label": "C",
+                "text": "48"
+              },
+              {
+                "label": "D",
+                "text": "50"
+              },
+              {
+                "label": "E",
+                "text": "52"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Remaining mixture = 36 × 0.92 = 33.12 kg. Number of pieces = 33.12 ÷ 0.69 = 48 exactly. The answer is 48 pieces.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "6dcaa8bd-9b63-42b2-a39f-038dd05c77fb",
+            "stem": "What is the ingredient cost of the full 36 kg dry batch?",
+            "options": [
+              {
+                "label": "A",
+                "text": "£47.52"
+              },
+              {
+                "label": "B",
+                "text": "£52.20"
+              },
+              {
+                "label": "C",
+                "text": "£55.44"
+              },
+              {
+                "label": "D",
+                "text": "£58.68"
+              },
+              {
+                "label": "E",
+                "text": "£63.00"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The batch contains 18 kg silica, 10.8 kg clay and 7.2 kg pigment. Cost = 18 × £1.20 + 10.8 × £0.80 + 7.2 × £3.50 = £21.60 + £8.64 + £25.20 = £55.44. The answer is £55.44.",
+            "order_index": 2,
+            "difficulty": "normal"
+          }
+        ]
+      },
+      {
+        "set_id": "30a0e16c-14af-4559-9738-b0185fee7eea",
+        "title": "Cold-Chain Crate Freight",
+        "stimulus": {
+          "type": "multi",
+          "items": [
+            {
+              "type": "text",
+              "text": "A carrier charges freight using the greater of each crate's actual mass and volumetric mass. The shipment also has one £42 handling fee."
+            },
+            {
+              "type": "formula",
+              "text": "Volumetric mass (kg) = length (cm) × width (cm) × height (cm) ÷ 5,000"
+            },
+            {
+              "type": "table",
+              "context": "Crate sizes, actual masses and quantities are shown below.",
+              "data": {
+                "headers": [
+                  "Crate type",
+                  "Dimensions (cm)",
+                  "Actual mass per crate",
+                  "Number of crates"
+                ],
+                "rows": [
+                  [
+                    "Culture kit",
+                    "40 × 30 × 25",
+                    "7.2 kg",
+                    "12"
+                  ],
+                  [
+                    "Reagent pack",
+                    "50 × 40 × 30",
+                    "9.5 kg",
+                    "8"
+                  ],
+                  [
+                    "Sensor case",
+                    "60 × 35 × 25",
+                    "11.0 kg",
+                    "10"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "d6acab21-fec3-44d5-9ddc-112d30949b75",
+            "stem": "What billable mass is used for one Reagent pack crate?",
+            "options": [
+              {
+                "label": "A",
+                "text": "9.5 kg"
+              },
+              {
+                "label": "B",
+                "text": "10.0 kg"
+              },
+              {
+                "label": "C",
+                "text": "11.0 kg"
+              },
+              {
+                "label": "D",
+                "text": "12.0 kg"
+              },
+              {
+                "label": "E",
+                "text": "15.0 kg"
+              }
+            ],
+            "correct_answer": "D",
+            "answer_reason": "The volumetric mass is 50 × 40 × 30 ÷ 5,000 = 12 kg. This is greater than the 9.5 kg actual mass, so the billable mass is 12.0 kg. The answer is 12.0 kg.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "54371b97-73d1-476f-8568-fdfdbe1fb064",
+            "stem": "What is the total billable mass of all 30 crates?",
+            "options": [
+              {
+                "label": "A",
+                "text": "273.4 kg"
+              },
+              {
+                "label": "B",
+                "text": "282.0 kg"
+              },
+              {
+                "label": "C",
+                "text": "292.4 kg"
+              },
+              {
+                "label": "D",
+                "text": "302.0 kg"
+              },
+              {
+                "label": "E",
+                "text": "316.4 kg"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Culture kits have volumetric mass 6 kg, so use actual mass: 12 × 7.2 = 86.4 kg. Reagent packs use volumetric mass: 8 × 12 = 96 kg. Sensor cases have volumetric mass 10.5 kg, so use actual mass: 10 × 11 = 110 kg. Total = 86.4 + 96 + 110 = 292.4 kg. The answer is 292.4 kg.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "a72bc8e6-5710-4a59-95bf-b438a9f7d6c9",
+            "stem": "Freight costs £1.85 per billable kilogram. What is the total charge including the handling fee?",
+            "options": [
+              {
+                "label": "A",
+                "text": "£540.94"
+              },
+              {
+                "label": "B",
+                "text": "£562.94"
+              },
+              {
+                "label": "C",
+                "text": "£582.94"
+              },
+              {
+                "label": "D",
+                "text": "£598.40"
+              },
+              {
+                "label": "E",
+                "text": "£625.94"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "The total billable mass is 292.4 kg. Freight costs 292.4 × £1.85 = £540.94. Adding the £42 handling fee gives £582.94. The answer is £582.94.",
+            "order_index": 2,
+            "difficulty": "normal"
+          }
+        ]
+      },
+      {
+        "set_id": "77aa1d04-6f9c-48be-99b8-a4578f48cda8",
+        "title": "Radio Telescope Project Schedule",
+        "stimulus": {
+          "type": "multi",
+          "items": [
+            {
+              "type": "text",
+              "text": "A radio telescope records data only during completed observing hours. An identical backup copy of all recorded data is required. Storage may be pooled across all purchased drives; original files and their backup copies do not need to occupy disjoint drives. Use 1 TB = 1,000 GB."
+            },
+            {
+              "type": "formula",
+              "text": "Completed hours = requested hours × completion percentage"
+            },
+            {
+              "type": "table",
+              "context": "The table summarises four fictional observing projects.",
+              "data": {
+                "headers": [
+                  "Project",
+                  "Requested hours",
+                  "Completion",
+                  "Data per completed hour"
+                ],
+                "rows": [
+                  [
+                    "Aurora",
+                    "48",
+                    "75%",
+                    "18 GB"
+                  ],
+                  [
+                    "Pulsar",
+                    "60",
+                    "80%",
+                    "15 GB"
+                  ],
+                  [
+                    "Quasar",
+                    "40",
+                    "90%",
+                    "24 GB"
+                  ],
+                  [
+                    "Galaxy",
+                    "72",
+                    "62.5%",
+                    "12 GB"
+                  ]
+                ]
+              }
+            }
+          ]
+        },
+        "questions": [
+          {
+            "id": "b68666e4-9ab4-48f2-9868-3558f5241c8c",
+            "stem": "How many observing hours were completed for the Quasar project?",
+            "options": [
+              {
+                "label": "A",
+                "text": "30 hours"
+              },
+              {
+                "label": "B",
+                "text": "32 hours"
+              },
+              {
+                "label": "C",
+                "text": "36 hours"
+              },
+              {
+                "label": "D",
+                "text": "38 hours"
+              },
+              {
+                "label": "E",
+                "text": "40 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Completed Quasar hours = 40 × 0.90 = 36 hours. The answer is 36 hours.",
+            "order_index": 0,
+            "difficulty": "normal"
+          },
+          {
+            "id": "ef51a260-d7c9-41cc-b91a-b409b5cba3d8",
+            "stem": "How many observing hours were completed across all four projects?",
+            "options": [
+              {
+                "label": "A",
+                "text": "153 hours"
+              },
+              {
+                "label": "B",
+                "text": "159 hours"
+              },
+              {
+                "label": "C",
+                "text": "165 hours"
+              },
+              {
+                "label": "D",
+                "text": "171 hours"
+              },
+              {
+                "label": "E",
+                "text": "180 hours"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Completed hours are Aurora 48 × 75% = 36, Pulsar 60 × 80% = 48, Quasar 40 × 90% = 36, and Galaxy 72 × 62.5% = 45. Total = 36 + 48 + 36 + 45 = 165 hours. The answer is 165 hours.",
+            "order_index": 1,
+            "difficulty": "normal"
+          },
+          {
+            "id": "4be57c0b-d6b4-4835-93a2-64aa7091ae55",
+            "stem": "Assuming files may be distributed across all purchased drives and only their combined storage capacity matters, how many 2 TB drives are needed to hold all recorded data and one additional copy?",
+            "options": [
+              {
+                "label": "A",
+                "text": "1 drive"
+              },
+              {
+                "label": "B",
+                "text": "2 drives"
+              },
+              {
+                "label": "C",
+                "text": "3 drives"
+              },
+              {
+                "label": "D",
+                "text": "4 drives"
+              },
+              {
+                "label": "E",
+                "text": "5 drives"
+              }
+            ],
+            "correct_answer": "C",
+            "answer_reason": "Recorded data are Aurora 36 × 18 = 648 GB, Pulsar 48 × 15 = 720 GB, Quasar 36 × 24 = 864 GB, and Galaxy 45 × 12 = 540 GB. Total = 2,772 GB. Including an identical backup requires 5,544 GB. Each drive holds 2,000 GB, so 5,544 ÷ 2,000 = 2.772 and 3 whole drives are required. The answer is 3 drives.",
+            "order_index": 2,
+            "difficulty": "normal"
+          }
+        ]
+      }
+    ]
+  }
+]

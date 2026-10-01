@@ -1,0 +1,663 @@
+﻿{
+    "corpus_source":  "supabase",
+    "brief_path":  "content-authoring/reports/qr-practice-20-v3.brief.json",
+    "schema_version":  1,
+    "corpus_run_id":  "qr-sync-20260929204555",
+    "manifest_path":  "content-authoring/reports/qr-practice-20-v3.manifest.json",
+    "batch_verdict":  "accept",
+    "corpus_scope":  {
+                         "units":  156,
+                         "questions":  544,
+                         "practice_units":  104,
+                         "timed_units":  52
+                     },
+    "section":  "qr",
+    "validator":  {
+                      "model":  "gpt-6-astra",
+                      "run_at":  "2026-09-29T21:04:45Z"
+                  },
+    "candidate_path":  "content-authoring/candidates/qr-practice-20-v3.json",
+    "summary":  {
+                    "assessment":  "All 20 independent answers match the key and manifest verification ledgers. Explanations and distractors are sound; each stimulus is internally consistent and every item is self-contained. The 20 labels are evenly balanced without a repeated ordered cycle. Semantic comparison to the current 156-unit practice/timed corpus found no substantive duplicates.",
+                    "revised_items":  0,
+                    "key_sequence":  "ACEBDBAECDEBDACCEADB",
+                    "rejected_items":  0,
+                    "stimulus_types":  [
+                                           "table",
+                                           "bar_chart",
+                                           "line_graph",
+                                           "pie_chart",
+                                           "text",
+                                           "multi"
+                                       ],
+                    "passed_items":  20,
+                    "difficulty_counts":  {
+                                              "normal":  15,
+                                              "hard":  5
+                                          },
+                    "deterministic_screen":  "pass: 20 questions, 0 errors, 0 warnings",
+                    "blocking_issues":  [
+
+                                        ],
+                    "key_label_counts":  {
+                                             "C":  4,
+                                             "E":  4,
+                                             "A":  4,
+                                             "D":  4,
+                                             "B":  4
+                                         },
+                    "unit_question_counts":  [
+                                                 4,
+                                                 4,
+                                                 3,
+                                                 3,
+                                                 3,
+                                                 3
+                                             ]
+                },
+    "deterministic_report_path":  "content-authoring/reports/qr-practice-20-v3.deterministic.json",
+    "blind_review_completed":  true,
+    "units":  [
+                  {
+                      "factual_or_professional_provenance":  "pass",
+                      "semantic_novelty":  "pass",
+                      "verdict":  "accept",
+                      "stimulus_consistency":  "Four rectangular rows, five columns, rejected counts below filled counts, and consistent per-bottle volume and run times.",
+                      "nearest_matches":  [
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "GP Training Region Allocations",
+                                                  "lexical_score":  0.2183,
+                                                  "existing_id":  "ae9a1ba7-2592-41fc-99ab-2d5c39a0320c",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Beekeeping Hive Honey Production",
+                                                  "lexical_score":  0.2142,
+                                                  "existing_id":  "9dfb4abf-2f13-4823-aefa-8b384955b335",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "timed",
+                                                  "title":  "Commuter Survey by Borough",
+                                                  "lexical_score":  0.2065,
+                                                  "existing_id":  "10f0f1c4-48e7-474c-8a13-e1462202f5cc",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "timed",
+                                                  "title":  "Recipe Scaling for a Dinner Party",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "a3b61ed4-90d5-461e-90ee-88878a5431ad",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "timed",
+                                                  "title":  "Swimming Pool Filling",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "a9c928b7-6add-491c-8382-f01ef6707b91",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              }
+                                          ],
+                      "items":  [
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "A",
+                                        "item_id":  "4305eca6-c29f-4b2b-bd47-dfff20bd4216",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "A",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "840 filled bottles - 42 rejected = 798 accepted bottles."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "C",
+                                        "item_id":  "4dba068c-fc76-4a39-987f-cfec79905174",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "C",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "72 rejected / 960 filled x 100 = 7.5%."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "E",
+                                        "item_id":  "b457b1a4-5d19-4ed9-9bf1-6ea5f20d459c",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "E",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "(750 - 30) accepted bottles x 500 mL = 360,000 mL = 360 L."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Multi-step calculation is consistent with hard allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "B",
+                                        "item_id":  "a0110c90-aa49-4f09-abf1-9dfb948a193c",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "B",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Run C: 750 - 30 = 720; run D: 900 - 45 = 855. Total 1,575 accepted bottles / (60 + 75) min = 11.666... = 11.67 bottles/min."
+                                    }
+                                ],
+                      "semantic_novelty_rationale":  "The table derives accepted output from filled minus rejected bottles, then combines time and volume. Corpus matches such as GP Training Region Allocations and Beekeeping Hive Honey Production have different data structures and calculation routes; Recipe Scaling and Swimming Pool Filling likewise do not reproduce this four-item sequence.",
+                      "title":  "Soap Bottling Quality Log",
+                      "unit_id":  "47146d21-b326-48ee-8105-a2aa76c87d05"
+                  },
+                  {
+                      "factual_or_professional_provenance":  "pass",
+                      "semantic_novelty":  "pass",
+                      "verdict":  "accept",
+                      "stimulus_consistency":  "Four day labels and two four-value series; all job counts nonnegative and prices apply to every completed job.",
+                      "nearest_matches":  [
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Weekly Hospital Admissions",
+                                                  "lexical_score":  0.2888,
+                                                  "existing_id":  "d66eeea2-cbdb-4d0d-a74b-76204f516792",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Daily Commute Times",
+                                                  "lexical_score":  0.2849,
+                                                  "existing_id":  "2be0bc2c-b82d-4f05-9480-789406e28a85",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "City Marathon Finishing Times",
+                                                  "lexical_score":  0.2631,
+                                                  "existing_id":  "25ff4f9d-a1c0-4704-8df4-97e6c282364c",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Greenfields Dental Clinic Workload",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "e4eebb57-b5da-4e22-b060-9488f1912044",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "DIY Paint Project: Wall Areas",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "f768ee02-ba53-4854-b189-f600afc85ce6",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              }
+                                          ],
+                      "items":  [
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "D",
+                                        "item_id":  "8e484ab2-5a8e-4ff0-a457-02b69a8adeba",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "D",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Wednesday total = 28 standard + 14 complex = 42 jobs."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "B",
+                                        "item_id":  "6fc38f84-f75a-4a2d-b370-4522ce3e73fe",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "B",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Thursday total = 36 + 12 = 48 jobs; 36/48 x 100 = 75%."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "A",
+                                        "item_id":  "803c4093-f9a6-4695-bdc9-dfcfc0f263cb",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "A",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Complex jobs total = 8 + 10 + 14 + 12 = 44; 44/4 = 11 jobs/day."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Multi-step calculation is consistent with hard allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "E",
+                                        "item_id":  "17bc795c-d314-4d4c-96b2-26fb08551075",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "E",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Tuesday receipts = 30 x GBP 18 + 10 x GBP 35 = GBP 890. Thursday = 36 x GBP 18 + 12 x GBP 35 = GBP 1,068. Total = GBP 1,958."
+                                    }
+                                ],
+                      "semantic_novelty_rationale":  "The grouped job chart combines standard and complex work, rates, a mean, and price-weighted receipts. Weekly Hospital Admissions uses a single series and distribution measures; Greenfields Dental Clinic Workload uses a treatment table. The workshop route and values are distinct.",
+                      "title":  "Bicycle Repair Workshop Jobs",
+                      "unit_id":  "71813af5-b73f-4e54-b2e1-cc5a6d7faf11"
+                  },
+                  {
+                      "factual_or_professional_provenance":  "pass",
+                      "semantic_novelty":  "pass",
+                      "verdict":  "accept",
+                      "stimulus_consistency":  "Five day labels and two five-value series; Friday transfer conserves water and yields 48 ML in each reservoir.",
+                      "nearest_matches":  [
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Daily Commute Times",
+                                                  "lexical_score":  0.2629,
+                                                  "existing_id":  "2be0bc2c-b82d-4f05-9480-789406e28a85",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Supermarket Checkout Queue Lengths",
+                                                  "lexical_score":  0.2392,
+                                                  "existing_id":  "bd339064-bdc5-4991-96de-d3b34e1f837e",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Monthly Rainfall in Two UK Cities",
+                                                  "lexical_score":  0.226,
+                                                  "existing_id":  "7358addf-6d47-4d64-86ae-11738efd7cc6",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Industrial Water Tank Flow",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "afc3ac62-e9ec-4997-ba27-6d819f65d3b9",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              }
+                                          ],
+                      "items":  [
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "C",
+                                        "item_id":  "105009e0-8674-4173-b4c7-46dcad68952c",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "C",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "East Reservoir: 54 ML on Friday - 42 ML on Monday = 12 ML increase."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "D",
+                                        "item_id":  "877332c6-c782-46ef-aaa9-76c6e75fa709",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "D",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Wednesday combined storage = 43 ML East + 39 ML West = 82 ML."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Multi-step calculation is consistent with hard allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "E",
+                                        "item_id":  "f8c5cfcd-0c09-45c3-a81b-1a3f7f6ff072",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "E",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Set 54 - x = 42 + x ML; 2x = 12, so transfer 6 ML."
+                                    }
+                                ],
+                      "semantic_novelty_rationale":  "The two-reservoir line chart uses absolute change, a same-day sum, and conservation-based equalisation. Daily Commute Times shares a two-series weekday display but asks different percentage and threshold questions; Industrial Water Tank Flow uses inlet/outlet rates.",
+                      "title":  "Twin Reservoir Morning Readings",
+                      "unit_id":  "749e81cd-845f-45bb-b50f-804bc9a4ddcd"
+                  },
+                  {
+                      "factual_or_professional_provenance":  "pass",
+                      "semantic_novelty":  "pass",
+                      "verdict":  "accept",
+                      "stimulus_consistency":  "Segments total 35 + 25 + 20 + 12 + 8 = 100%; uniform 25% loss and subsequent 300 kg addition are explicitly stated.",
+                      "nearest_matches":  [
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Monthly Household Budget Breakdown",
+                                                  "lexical_score":  0.2328,
+                                                  "existing_id":  "149bcc9c-1c8f-4e67-b7be-c34ff82c83e9",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "timed",
+                                                  "title":  "Restaurant Chain Annual Budget",
+                                                  "lexical_score":  0.2196,
+                                                  "existing_id":  "5d0fe949-dd48-4549-bb13-0126ac2b395a",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "timed",
+                                                  "title":  "School Subject Enrolment",
+                                                  "lexical_score":  0.2172,
+                                                  "existing_id":  "530a6fba-16a0-4e79-ba57-cb95f4229860",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Local Council Waste Disposal (2025)",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "a103302b-5a66-4348-9113-9ce40fffb009",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Public Library Loans by Category",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "ed2c3b2c-49f3-4da3-a7a4-83e87b05dec8",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              }
+                                          ],
+                      "items":  [
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "B",
+                                        "item_id":  "8b8b9389-0bc8-4d40-ad43-b7139ce6f8d1",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "B",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Leaves are 25% of 2,400 kg = 600 kg."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "D",
+                                        "item_id":  "1181c5e3-8af4-4edb-b002-0b553490885c",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "D",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Wood chips and cardboard are 20% + 12% = 32%; 0.32 x 2,400 kg = 768 kg."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Multi-step calculation is consistent with hard allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "A",
+                                        "item_id":  "34a5bc82-cd6c-4a86-8252-9c0852a480e0",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "A",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "After loss: total 2,400 x 0.75 = 1,800 kg, leaves 600 x 0.75 = 450 kg. Add 300 kg leaves: 750/2,100 x 100 = 35.714...%, rounded to 36%."
+                                    }
+                                ],
+                      "semantic_novelty_rationale":  "The pie chart uses a five-part compost recipe and a uniform mass loss followed by a new ingredient addition. Household Budget Breakdown and Local Council Waste Disposal use pie shares but differ in material, transformation, and question sequence.",
+                      "title":  "Community Compost Batch Ingredients",
+                      "unit_id":  "7bbf22b7-6003-4252-8dc6-bfa23db59abe"
+                  },
+                  {
+                      "factual_or_professional_provenance":  "pass",
+                      "semantic_novelty":  "pass",
+                      "verdict":  "accept",
+                      "stimulus_consistency":  "0.5625 / 0.75 = 75% efficiency; 3 kW is stated as total draw even with several bikes; tariff and charge endpoints are explicit.",
+                      "nearest_matches":  [
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Electric Vehicle Range and Charging",
+                                                  "lexical_score":  0.2368,
+                                                  "existing_id":  "15e823f4-fa20-405d-934f-4d1088306325",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Central Docking Station Hourly Trips",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "f66e43a7-85c3-40d1-993e-78f5234b1958",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              }
+                                          ],
+                      "items":  [
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "C",
+                                        "item_id":  "2c8c2fd3-2bfd-46a6-9683-31ab0c0b03b1",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "C",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Increase in charge = 80% - 20% = 60% of 0.75 kWh = 0.45 kWh stored."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "C",
+                                        "item_id":  "6637f3e7-b900-40a8-b473-48a97ed8ac27",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "C",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Ten bikes store 10 x 0.45 = 4.5 kWh. At 75% efficiency supply draws 4.5/0.75 = 6 kWh; 6 x GBP 0.24 = GBP 1.44."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Multi-step calculation is consistent with hard allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "E",
+                                        "item_id":  "b66cbc64-c846-4f4b-ad85-f145d2890889",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "E",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Eighteen bikes store 18 x 0.45 = 8.1 kWh; supply draws 8.1/0.75 = 10.8 kWh. At 3 kW, time = 10.8/3 = 3.6 hours."
+                                    }
+                                ],
+                      "semantic_novelty_rationale":  "The battery text combines state-of-charge change, 75% charging efficiency, tariff, and a shared 3 kW charger. Electric Vehicle Range and Charging overlaps the broad energy/time skill but does not include supply-side efficiency and cost; the item sequence is distinct.",
+                      "title":  "Cycle-Share Battery Charging",
+                      "unit_id":  "9cf5099f-1160-432b-9d85-6d966830f398"
+                  },
+                  {
+                      "factual_or_professional_provenance":  "pass",
+                      "semantic_novelty":  "pass",
+                      "verdict":  "accept",
+                      "stimulus_consistency":  "Rectangular three-column table and integer category hires (60, 18, 24); text supplies all category prices.",
+                      "nearest_matches":  [
+                                              {
+                                                  "mode":  "timed",
+                                                  "title":  "Patient Drug Dosage",
+                                                  "lexical_score":  0.2239,
+                                                  "existing_id":  "b57041d4-c1cc-4e71-9d04-bf37f72df59f",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Ambulance Response Times by Severity",
+                                                  "lexical_score":  0.218,
+                                                  "existing_id":  "293d285d-8561-4d8b-a796-d8e92776859e",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Art Gallery Ticket Sales",
+                                                  "lexical_score":  0.2069,
+                                                  "existing_id":  "c4c04a5b-8f54-4d4b-a6ad-dbe886cf06f3",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Public Library Loans by Category",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "ed2c3b2c-49f3-4da3-a7a4-83e87b05dec8",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              },
+                                              {
+                                                  "mode":  "practice",
+                                                  "title":  "Freelance Graphic Designer Hourly Rate Tiers",
+                                                  "lexical_score":  null,
+                                                  "existing_id":  "1af255f1-d926-4336-939b-3faad29a599f",
+                                                  "comparison":  "Reviewed stimulus and question routes against this corpus unit; no substantive duplicate found."
+                                              }
+                                          ],
+                      "items":  [
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "A",
+                                        "item_id":  "3eaec3a3-70b4-4b48-9aed-099a8df155d3",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "A",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Adult hires = 25% of 240 visitors = 60 guides."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "D",
+                                        "item_id":  "b0a818f0-43d9-4edb-92a8-210356889a5b",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "D",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Adult 240 x 25% = 60; child 180 x 10% = 18; senior 120 x 20% = 24. Total = 102 guides."
+                                    },
+                                    {
+                                        "issues":  [
+
+                                                   ],
+                                        "confidence":  "high",
+                                        "proposed_fix":  "",
+                                        "difficulty_assessment":  "Short calculation is consistent with normal allocation.",
+                                        "ambiguity":  false,
+                                        "independent_answer":  "B",
+                                        "item_id":  "8bdc5f84-cb2a-485d-820d-a49a4d151be8",
+                                        "explanation_assessment":  "Correct intermediate arithmetic, units, rounding where required, and final answer are stated.",
+                                        "provided_answer":  "B",
+                                        "verdict":  "accept",
+                                        "answer_agrees":  true,
+                                        "distractor_assessment":  "Five distinct, ascending numeric options; exactly one matches the calculated result.",
+                                        "working_or_rationale":  "Adult and senior receipts = (60 + 24) x GBP 4 = GBP 336; child receipts = 18 x GBP 2 = GBP 36. Total = GBP 372."
+                                    }
+                                ],
+                      "semantic_novelty_rationale":  "The museum combines visitor counts with category-specific hire rates before calculating guide totals and differentiated hire revenue. Art Gallery Ticket Sales starts from ticket sales, and Public Library Loans uses category shares; neither duplicates this two-stage route.",
+                      "title":  "Museum Audio-Guide Hire",
+                      "unit_id":  "96dbb0c1-4881-4c67-8131-a3a9c05cd290"
+                  }
+              ],
+    "blind_response_path":  "content-authoring/reports/qr-practice-20-v3.blind-response.json"
+}

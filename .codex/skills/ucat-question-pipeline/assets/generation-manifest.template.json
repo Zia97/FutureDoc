@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "run_id": "",
+  "brief_path": "",
+  "candidate_path": "",
+  "corpus_run_id": "",
+  "generator": {
+    "model": "",
+    "completed_at": ""
+  },
+  "passages": [
+    {
+      "passage_id": "",
+      "working_topic": "",
+      "format": "mc",
+      "intended_answer_distribution": [],
+      "novelty_rationale": "",
+      "semantic_fingerprint": {
+        "topic": "",
+        "entities": [],
+        "time_and_place": "",
+        "thesis_or_process": "",
+        "tested_evidence": [],
+        "inference_chains": [],
+        "traps": []
+      },
+      "nearest_existing": [
+        {
+          "id": "",
+          "title": "",
+          "material_difference": ""
+        }
+      ],
+      "sources": [
+        {
+          "title": "",
+          "url": "",
+          "accessed_at": "",
+          "facts_used": []
+        }
+      ],
+      "question_plan": [
+        {
+          "order_index": 0,
+          "purpose": "",
+          "evidence_location": "",
+          "trap_or_distinction": "",
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "passage_only_answers": false,
+        "single_defensible_answers": false,
+        "factual_claims_mapped": false,
+        "batch_internal_novelty": false,
+        "option_clueing_reviewed": false
+      }
+    }
+  ]
+}

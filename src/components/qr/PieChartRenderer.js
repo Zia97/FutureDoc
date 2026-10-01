@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
+import { useTheme } from '../../context/ThemeContext';
+import { useTextSize } from '../../context/TextSizeContext';
+import { formatWithUnit } from './formatUnit';
 
-const VW = 360;
-const VH = 220;
-const CX = 95;
-const CY = 100;
-const R = 82;
+const DEFAULT_VW = 420;
+const VH_BASE = 260;
+const PIE_PAD = 14;
+const LEGEND_W_BASE = 200;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4', '#76e4f7'];
 
@@ -22,11 +25,28 @@ function arcPath(cx, cy, r, startDeg, endDeg) {
 }
 
 export default function PieChartRenderer({ data }) {
+  const { theme: t } = useTheme();
+  const { svgMultiplier } = useTextSize();
+  const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
+  const fz = (n) => Math.round(n * svgMultiplier);
+  const LEGEND_W = Math.round(LEGEND_W_BASE * svgMultiplier);
+  const VH = Math.round(VH_BASE * (1 + (svgMultiplier - 1) * 0.5));
+  const VW = svgWidth;
+  // Reserve right side for legend, pie occupies left side
+  const pieAreaW = VW - LEGEND_W;
+  const R = Math.min((pieAreaW - PIE_PAD * 2) / 2, (VH - PIE_PAD * 2) / 2);
+  const CX = PIE_PAD + R;
+  const CY = VH / 2;
+  const legendX = pieAreaW + 8;
   const { segments, total, unit = '' } = data;
-  const computedTotal = total ?? segments.reduce((s, seg) => s + seg.value, 0);
+  const computedTotal = total ?? segments.reduce((s, seg) => s + (seg.value ?? 0), 0);
+
+  // Separate known and null segments
+  const knownSegments = segments.filter((seg) => seg.value != null);
+  const nullSegments = segments.filter((seg) => seg.value == null);
 
   let cumulative = 0;
-  const slices = segments.map((seg, i) => {
+  const slices = knownSegments.map((seg, i) => {
     const startDeg = (cumulative / computedTotal) * 360;
     cumulative += seg.value;
     const endDeg = (cumulative / computedTotal) * 360;
@@ -38,41 +58,62 @@ export default function PieChartRenderer({ data }) {
     };
   });
 
-  const ROW_H = 40;
-  const legendStartY = Math.max(14, (VH - slices.length * ROW_H) / 2);
+  // Null segments get a "missing" slice for the remainder
+  const nullSlices = nullSegments.map((seg, i) => ({
+    ...seg,
+    startDeg: (cumulative / computedTotal) * 360,
+    endDeg: 360,
+    color: '#2d3748',
+  }));
+
+  const allSlices = [...slices, ...nullSlices];
+
+  // Legend includes all segments (known + null)
+  const legendItems = segments.map((seg, i) => ({
+    ...seg,
+    color: seg.value != null
+      ? (seg.color ?? COLORS[knownSegments.indexOf(seg) % COLORS.length])
+      : '#2d3748',
+  }));
+
+  const ROW_H = Math.round(44 * svgMultiplier);
+  const legendStartY = Math.max(14, (VH - legendItems.length * ROW_H) / 2);
 
   return (
-    <View>
-      {data.title && <Text style={styles.title}>{data.title}</Text>}
+    <View onLayout={(e) => setSvgWidth(e.nativeEvent.layout.width)}>
+      {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
       <Svg
-        width="100%"
+        width={VW}
         height={VH}
         viewBox={`0 0 ${VW} ${VH}`}
         preserveAspectRatio="xMidYMid meet"
       >
         {/* Pie slices */}
-        {slices.map((slice, i) => (
+        {allSlices.map((slice, i) => (
           <Path
             key={i}
             d={arcPath(CX, CY, R, slice.startDeg, slice.endDeg)}
             fill={slice.color}
-            stroke="#1a1a2e"
+            stroke={t.bgCard}
             strokeWidth={1.5}
           />
         ))}
 
         {/* Legend */}
-        {slices.map((slice, i) => {
+        {legendItems.map((seg, i) => {
           const ly = legendStartY + i * ROW_H;
-          const pct = ((slice.value / computedTotal) * 100).toFixed(1);
+          const isNull = seg.value == null;
+          const pct = isNull ? '?' : ((seg.value / computedTotal) * 100).toFixed(1);
+          const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
+          const valText = isNull ? '?' : formatWithUnit(fmtVal, unit);
           return (
-            <G key={i} x={200} y={ly}>
-              <Rect x={0} y={0} width={13} height={13} fill={slice.color} rx={3} />
-              <SvgText x={19} y={11} fontSize={12} fill="#e2e8f0" fontWeight="600">
-                {slice.label}
+            <G key={i} x={legendX} y={ly}>
+              <Rect x={0} y={0} width={14} height={14} fill={seg.color} rx={3} />
+              <SvgText x={20} y={12} fontSize={fz(13)} fill={t.text} fontWeight="600">
+                {seg.label}
               </SvgText>
-              <SvgText x={19} y={27} fontSize={11} fill="#718096">
-                {unit}{slice.value.toLocaleString()} ({pct}%)
+              <SvgText x={20} y={29} fontSize={fz(12)} fill={t.text}>
+                {valText} ({pct}%)
               </SvgText>
             </G>
           );
@@ -84,7 +125,6 @@ export default function PieChartRenderer({ data }) {
 
 const styles = StyleSheet.create({
   title: {
-    color: '#90cdf4',
     fontSize: 13,
     fontWeight: '700',
     textAlign: 'center',

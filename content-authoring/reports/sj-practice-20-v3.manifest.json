@@ -1,0 +1,613 @@
+{
+  "schema_version": 1,
+  "run_id": "sj-practice-20-20260929-01",
+  "section": "sj",
+  "brief_path": "content-authoring/reports/sj-practice-20-v3.brief.json",
+  "candidate_path": "content-authoring/candidates/sj-practice-20-v3.json",
+  "corpus_run_id": "sj-sync-20260929204614",
+  "generator": {
+    "model": "gpt-6-astra",
+    "completed_at": "2026-09-29T21:11:13Z"
+  },
+  "units": [
+    {
+      "unit_id": "6570faba-36ae-415b-b6d2-121f8211b160",
+      "working_topic": "Obstructed step-free route on outpatient day unit",
+      "type_or_skill": "importance and appropriateness",
+      "novelty_rationale": "Replaces the booking-priority scenario entirely. The refreshed 198-unit corpus has no unit mentioning blocked or obstructed routes, exits, evacuation, wheelchairs or mobility aids. The closest general-safety unit concerns expired resuscitation trolley stock, not premises access.",
+      "semantic_fingerprint": {
+        "actor_role": "third-year medical student",
+        "setting": "outpatient day unit",
+        "professional_domain": "patient safety from inadequate premises",
+        "precipitating_conduct": "spare beds block signed step-free route",
+        "relationship_power_dynamic": "student, unit coordinator, nurse in charge",
+        "urgency_or_harm": "patients using walking aids present; collection only at closing",
+        "resolution_path": "raise immediately with nurse and arrange safe help",
+        "item_type": "importance and appropriateness",
+        "ethical_trap": "accept delayed collection or attempt unsafe solo move"
+      },
+      "nearest_existing": [
+        {
+          "id": "98db153b-8315-4570-85db-1aef55bf3a70",
+          "title": "Missing resuscitation trolley checks and expired ampoules",
+          "material_difference": "Existing unit involves emergency equipment stock and checking logs; this unit involves a blocked patient route and safe physical handling."
+        },
+        {
+          "id": "340b2ad7-1be7-40b0-909e-b481832b58ce",
+          "title": "Student sees another student take surgical supplies",
+          "material_difference": "Existing supplies-cupboard event tests theft; this unit tests current patient access and premises risk."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Good medical practice 2024, Domain 3",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-3-colleagues-culture-and-safety",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Paragraph 75 requires prompt action if patient safety may be seriously compromised; inadequate premises risks call for protecting patients and putting the matter right where possible."
+          ]
+        },
+        {
+          "title": "GMC Achieving good medical practice: guidance for medical students",
+          "url": "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Medical students apply safety duties while working within their competence and seeking support."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "ed564217-441f-42bf-9e1a-32c3ef743b89",
+          "purpose": "Assess current access risk",
+          "independent_derivation_or_rating_basis": "Very important: signed step-free route is blocked while patients needing it are present.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Direct current patient access risk, not an abstract storage concern."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "78a5f19e-abde-4287-ba5f-71f299e51c68",
+          "purpose": "Respect student's physical capability while acting",
+          "independent_derivation_or_rating_basis": "Very important: determines safe response without solo handling.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Central to how Amina can remedy hazard safely."
+          },
+          "difficulty": "hard"
+        },
+        {
+          "item_id": "e466526f-a6c2-4b6f-8b02-61a8cb39f835",
+          "purpose": "Escalate and arrange immediate safe action",
+          "independent_derivation_or_rating_basis": "Very appropriate: gets safe help now and steers patients away from the obstruction until the route is clear.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "Addresses present risk without unsafe solo move or delay."
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "b3efd936-dad2-47b8-bf25-ea2b02b74698",
+      "working_topic": "Low-vision patient's accessible discharge instructions",
+      "type_or_skill": "importance and appropriateness",
+      "novelty_rationale": "Centres the patient's wish to read discharge advice independently and a broken enlargement route. Nearby scenarios involve hearing support at dental reception or limited English during consultation.",
+      "semantic_fingerprint": {
+        "actor_role": "F1",
+        "setting": "ward discharge",
+        "professional_domain": "accessible information and privacy",
+        "precipitating_conduct": "standard leaflet unreadable for patient with low vision",
+        "relationship_power_dynamic": "doctor-patient-daughter",
+        "urgency_or_harm": "discharge later today; instruction comprehension",
+        "resolution_path": "oral explanation plus nurse-assisted readable copy and understanding check",
+        "item_type": "importance and appropriateness",
+        "ethical_trap": "assuming family may receive private information"
+      },
+      "nearest_existing": [
+        {
+          "id": "a823ced9-8dd3-4f4e-bede-e5379c3fb7b0",
+          "title": "Hearing impairment at dental outreach reception",
+          "material_difference": "Different care stage, impairment, format request and privacy preference; this unit concerns usable discharge instructions."
+        },
+        {
+          "id": "70974053-d3ee-4ca0-8f5a-298d3f3201f9",
+          "title": "Limited English during GP consultation",
+          "material_difference": "This unit concerns visual accessibility of written self-care advice rather than spoken-language interpretation."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Good medical practice 2024, Domain 2",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Give information in a way patients can understand; check understanding; take proportionate steps for communication needs and disabilities; respect privacy."
+          ]
+        },
+        {
+          "title": "GMC Confidentiality: managing and protecting personal information",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/confidentiality/managing-and-protecting-personal-information",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Patient information must be protected from improper disclosure."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "d42eda44-5e01-4d95-a338-eb68891e74f2",
+          "purpose": "Weight patient's stated format and privacy preference",
+          "independent_derivation_or_rating_basis": "Very important: unreadable advice fails its purpose.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Directly determines accessibility at discharge."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "02a8c878-2521-4031-a66e-77739053779c",
+          "purpose": "Provide accessible explanation and check understanding",
+          "independent_derivation_or_rating_basis": "Very appropriate: complete practical adaptation in available time.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "Addresses format and comprehension together."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "2546b8a4-6bff-436c-a04e-9001d3e35630",
+          "purpose": "Reject completed disclosure of the patient's diagnosis and treatment plan to her daughter without permission",
+          "independent_derivation_or_rating_basis": "Very inappropriate: the patient's identifiable discharge details have already been shared contrary to her stated privacy preference.",
+          "verification_ledger": {
+            "rating": "A very inappropriate thing to do",
+            "adjacent_distinction": "Completed disclosure of diagnosis and plan is more serious than merely proposing family help."
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "626cb4cd-1a0b-4cb4-9dbd-53f3683ae76e",
+      "working_topic": "Accidental personal-phone audio capture at handover",
+      "type_or_skill": "importance and appropriateness",
+      "novelty_rationale": "An inadvertent recording remains secured and unshared, so the dilemma is containment and transparent incident handling. Nearby scenarios involve omitted allergy handover or exposed paper information.",
+      "semantic_fingerprint": {
+        "actor_role": "F1",
+        "setting": "ward handover",
+        "professional_domain": "confidentiality and incident response",
+        "precipitating_conduct": "personal phone accidentally records identifiable discussion",
+        "relationship_power_dynamic": "doctor and information governance team",
+        "urgency_or_harm": "unshared recording still on locked phone; shift starting",
+        "resolution_path": "secure device and consult local reporting channel",
+        "item_type": "importance and appropriateness",
+        "ethical_trap": "quiet deletion to avoid embarrassment"
+      },
+      "nearest_existing": [
+        {
+          "id": "801453f3-f34e-4365-9629-a30f3ae6defd",
+          "title": "Drug allergy omitted at interhospital handover",
+          "material_difference": "Existing scenario concerns transfer of clinical information for care; this one concerns an unintended recording on a personal device."
+        },
+        {
+          "id": "34c93924-f6b1-4170-a8ea-13b2955ef2c1",
+          "title": "Printed handout at shared ward printer",
+          "material_difference": "This is accidental audio capture and reporting, not visible paper left in a shared area."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Confidentiality: managing and protecting personal information",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/confidentiality/managing-and-protecting-personal-information",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Unintentional disclosures can occur; personal information must be protected against improper access, disclosure or loss."
+          ]
+        },
+        {
+          "title": "GMC Good medical practice 2024, Domain 2",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Treat patient information as confidential and be open when things go wrong."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "e7ed5400-b05d-4ccd-88b1-44ebd87be24c",
+          "purpose": "Identify why identifiable content matters",
+          "independent_derivation_or_rating_basis": "Very important: nature and severity of information risk.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Defines the incident even if no sharing has occurred."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "6ee9d056-02f0-4590-8dfd-14026ee27d77",
+          "purpose": "Contain and report through appropriate process",
+          "independent_derivation_or_rating_basis": "Very appropriate: prompt secure handling and accountable advice.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "More complete than silent deletion."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "a2207a27-aa15-4252-8a3b-f4f27a73680c",
+          "purpose": "Reject concealment of a confidentiality incident",
+          "independent_derivation_or_rating_basis": "Very inappropriate: knowingly blocks organisational assessment.",
+          "verification_ledger": {
+            "rating": "A very inappropriate thing to do",
+            "adjacent_distinction": "Deliberate non-reporting worsens the accidental event."
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "1be908f0-fc43-4b8f-a67a-ba7280bcb64a",
+      "working_topic": "GP's paid work at recommended private physiotherapy centre",
+      "type_or_skill": "importance and appropriateness",
+      "novelty_rationale": "Tests disclosure of a direct financial interest during a live choice between suitable NHS and private care. The closest financial scenario is an offered pharmaceutical dinner, not a patient's referral decision.",
+      "semantic_fingerprint": {
+        "actor_role": "GP",
+        "setting": "primary care consultation",
+        "professional_domain": "financial interests and patient choice",
+        "precipitating_conduct": "doctor has paid work at a private option",
+        "relationship_power_dynamic": "trusted referrer and patient",
+        "urgency_or_harm": "non-urgent knee problem; potential unnecessary private spending",
+        "resolution_path": "disclose interest and explain both suitable routes",
+        "item_type": "importance and appropriateness",
+        "ethical_trap": "speed used to conceal interest and alternatives"
+      },
+      "nearest_existing": [
+        {
+          "id": "c5872aca-10ec-4db9-a690-399f84c9aa6e",
+          "title": "Pharmaceutical company offers educational dinner",
+          "material_difference": "Existing scenario is an inducement from a representative; this unit is a present referral choice involving the doctor's own paid clinical work."
+        },
+        {
+          "id": "a078638c-0eff-47c2-b010-a4da5d52b480",
+          "title": "Regular GP patient requests sick note",
+          "material_difference": "Both are GP encounters, but this unit assesses financial-interest disclosure and alternative care routes."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Good medical practice 2024, Domain 2",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Be open about interests that may affect or seem to affect recommendations, treatments or referrals; share information on options."
+          ]
+        },
+        {
+          "title": "GMC Good medical practice 2024, Domain 4",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-4-trust-and-professionalism",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Act honestly and maintain trust in professional decisions."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "c6830a34-70b1-4944-9b42-d4f645f6b0fa",
+          "purpose": "Weight financial interest",
+          "independent_derivation_or_rating_basis": "Very important: patient needs it to assess recommendation.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Directly affects this paid choice."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "cf41e81e-e926-4f70-9024-12206081f653",
+          "purpose": "Answer patient's necessity and recommendation questions, present alternatives and disclose",
+          "independent_derivation_or_rating_basis": "Very appropriate: explicitly says private care is unnecessary, recommends NHS for the non-urgent problem, explains the paid faster option, and discloses paid role.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "Answers both direct questions as well as disclosing conflict."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "8aff820d-cf99-4d6b-b3bf-1d1b792de402",
+          "purpose": "Reject undisclosed self-interested steering",
+          "independent_derivation_or_rating_basis": "Very inappropriate: hides relevant option and fee.",
+          "verification_ledger": {
+            "rating": "A very inappropriate thing to do",
+            "adjacent_distinction": "Active misrepresentation rather than incomplete explanation."
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "420e6fc9-78a2-4fba-8050-a23c4e92a1b3",
+      "working_topic": "Possible pressure to join optional questionnaire study",
+      "type_or_skill": "importance and appropriateness",
+      "novelty_rationale": "Focuses on a misleading implication that booked standard care may depend on research participation and the student clarifying in the patient's presence. Existing research units concern data integrity or publication.",
+      "semantic_fingerprint": {
+        "actor_role": "medical student observer",
+        "setting": "outpatient research invitation",
+        "professional_domain": "voluntary research consent",
+        "precipitating_conduct": "consultant implies booked scan may depend on questionnaire-study participation",
+        "relationship_power_dynamic": "consultant, hesitant patient, student",
+        "urgency_or_harm": "consent decision pending; scan already booked",
+        "resolution_path": "respectful real-time clarification and study-team explanation",
+        "item_type": "importance and appropriateness",
+        "ethical_trap": "treating low-burden study as harmless pressure"
+      },
+      "nearest_existing": [
+        {
+          "id": "1db44b4f-b583-4553-9e2b-61151bc1cdaf",
+          "title": "Senior academic alters research data before publication",
+          "material_difference": "Existing unit is research honesty after data collection; this one concerns voluntary patient consent before recruitment."
+        },
+        {
+          "id": "55e4ee5d-db1b-4474-963a-a255d3726629",
+          "title": "Student notices issue at pre-operative clinic",
+          "material_difference": "This unit is a questionnaire study and the separation of research from booked standard care."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Good practice in research",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-practice-in-research/good-practice-in-research",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "People must know they can decline or withdraw from research without affecting their relationship with their care team."
+          ]
+        },
+        {
+          "title": "GMC Achieving good medical practice: guidance for medical students",
+          "url": "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Students apply professional duties and raise concerns while acting within their role."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "9746b587-4071-4481-b131-ce5db2a72964",
+          "purpose": "Identify possible coercion",
+          "independent_derivation_or_rating_basis": "Very important: false connection to standard care affects voluntariness.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Core condition for meaningful consent."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "22f16cd8-89b4-440b-9406-12fa3f50643a",
+          "purpose": "Determine what information the patient needs before choosing research participation",
+          "independent_derivation_or_rating_basis": "Very important: explaining what the questionnaire involves is essential to an informed study decision, separate from correcting the scan misconception.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Necessary to decide whether to join; clarification about the booked scan alone is insufficient."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "e746cc01-377e-47bd-a63c-9b29c7d0d06c",
+          "purpose": "Student clarifies care is independent of research",
+          "independent_derivation_or_rating_basis": "Very appropriate: protects choice now while deferring study details to team.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "Immediate respectful clarification supports consent."
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "687960af-5f60-4c26-8400-81b3652662c6",
+      "working_topic": "Patient feedback omitted from ward quality summary",
+      "type_or_skill": "importance and appropriateness",
+      "novelty_rationale": "Uses patient comments collected after a new leaflet was launched to inform a ward quality decision; unlike committee-minute or research-data omission, the final summary would mislead a clinical improvement meeting.",
+      "semantic_fingerprint": {
+        "actor_role": "medical student",
+        "setting": "ward quality meeting preparation",
+        "professional_domain": "honesty and improvement",
+        "precipitating_conduct": "trainee asks to omit post-launch feedback about the new leaflet before review meeting",
+        "relationship_power_dynamic": "student and senior trainee",
+        "urgency_or_harm": "meeting will decide whether new leaflet needs changing; no immediate emergency",
+        "resolution_path": "brief accurate summary and chair-led discussion",
+        "item_type": "importance and appropriateness",
+        "ethical_trap": "assuming existing leaflet change makes criticism irrelevant"
+      },
+      "nearest_existing": [
+        {
+          "id": "e3ff7ed0-01cf-441b-8987-655d005f499a",
+          "title": "Student representative asked to alter committee minutes",
+          "material_difference": "Existing university committee item concerns formal minutes; this unit concerns patient feedback after a clinical leaflet change and a ward quality decision."
+        },
+        {
+          "id": "1db44b4f-b583-4553-9e2b-61151bc1cdaf",
+          "title": "Researcher alters data points before journal submission",
+          "material_difference": "This is local anonymous patient feedback and selective omission, not alteration of formal research data."
+        },
+        {
+          "id": "6c502ea4-bea8-467e-ae3a-9069dddd3206",
+          "title": "Intercalated student finalises supervisor's research analysis",
+          "material_difference": "This unit concerns a ward quality meeting and patient communication complaints, not research analysis."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Good medical practice 2024, Domain 1",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-1-knowledge--skills-and-development",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Take part in quality assurance and improvement to promote patient safety."
+          ]
+        },
+        {
+          "title": "GMC Achieving good medical practice: guidance for medical students",
+          "url": "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Students should communicate honestly and be accurate in the work they submit."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "d920a455-a97e-439b-9d61-c7c22497df64",
+          "purpose": "Weigh post-launch feedback for decision on leaflet",
+          "independent_derivation_or_rating_basis": "Very important: directly relevant to meeting's central decision.",
+          "verification_ledger": {
+            "rating": "Very important",
+            "adjacent_distinction": "Collected after launch and concerns the exact leaflet under review."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "79086841-5b77-4d09-a4e8-ef428202e9fe",
+          "purpose": "Report concise truthful feedback",
+          "independent_derivation_or_rating_basis": "Very appropriate: accuracy and meeting time both served.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "Active accurate inclusion rather than passive availability."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "d14847e7-971f-42dd-b984-9c2b69977635",
+          "purpose": "Reject knowingly misleading final patient-feedback presentation",
+          "independent_derivation_or_rating_basis": "Very inappropriate: final slide purports to represent feedback while hiding all relevant criticism from chair.",
+          "verification_ledger": {
+            "rating": "A very inappropriate thing to do",
+            "adjacent_distinction": "Final selective presentation, not a disclosed draft omission."
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "94dc8199-0235-4ea3-8a06-111f909ae156",
+      "working_topic": "Unanswered outpatient result callback",
+      "type_or_skill": "appropriateness",
+      "novelty_rationale": "Focuses on assigning responsibility for an unchecked result and a promised callback while the ordering clinician is occupied. Existing handover items concern transfer of known clinical facts, and complaint items concern responding to dissatisfaction.",
+      "semantic_fingerprint": {
+        "actor_role": "F1",
+        "setting": "outpatient clinic",
+        "professional_domain": "continuity and safe delegation",
+        "precipitating_conduct": "two patient calls after promised result callback",
+        "relationship_power_dynamic": "F1, duty clinician, clinic doctor and caller",
+        "urgency_or_harm": "clinical meaning unknown; reply expected today",
+        "resolution_path": "duty review and named callback owner",
+        "item_type": "appropriateness",
+        "ethical_trap": "leaving an unowned note as sufficient"
+      },
+      "nearest_existing": [
+        {
+          "id": "801453f3-f34e-4365-9629-a30f3ae6defd",
+          "title": "Drug allergy not communicated at transfer",
+          "material_difference": "Existing case has a known allergy omitted from interhospital handover; this has an unchecked result and an unfulfilled outpatient callback."
+        },
+        {
+          "id": "504f99e9-fd1d-4a90-b854-1d1301f5ccad",
+          "title": "Patient complains about another doctor",
+          "material_difference": "The caller seeks a result and clear follow-up, not a complaint investigation."
+        }
+      ],
+      "sources": [
+        {
+          "title": "GMC Good medical practice 2024, Domain 3",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-3-colleagues-culture-and-safety",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Work collaboratively and communicate clearly to support safe care and continuity."
+          ]
+        },
+        {
+          "title": "GMC Good medical practice 2024, Domain 2",
+          "url": "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+          "accessed_at": "2026-09-29",
+          "facts_used": [
+            "Give patients clear, accurate information and respond to concerns."
+          ]
+        }
+      ],
+      "item_plans": [
+        {
+          "item_id": "d2644558-93e4-4f71-a111-902d855b9f8f",
+          "purpose": "Arrange clinical review and owned callback",
+          "independent_derivation_or_rating_basis": "Very appropriate: covers clinical uncertainty and communication.",
+          "verification_ledger": {
+            "rating": "A very appropriate thing to do",
+            "adjacent_distinction": "More complete than message passing alone."
+          },
+          "difficulty": "normal"
+        },
+        {
+          "item_id": "4c5f6620-891f-4a04-8a9e-672aa1965a7b",
+          "purpose": "Expose risk of an unowned note",
+          "independent_derivation_or_rating_basis": "Inappropriate but not awful: message passed but no review or owner.",
+          "verification_ledger": {
+            "rating": "Inappropriate, but not awful",
+            "adjacent_distinction": "Less severe than ignoring calls entirely."
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    }
+  ],
+  "revision_of": "content-authoring/candidates/sj-practice-20-v2.json",
+  "revision_basis": "content-authoring/reports/sj-practice-20-v2.validation.json"
+}

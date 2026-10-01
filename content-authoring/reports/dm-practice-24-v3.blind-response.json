@@ -1,0 +1,443 @@
+{
+  "schema_version": 1,
+  "section": "dm",
+  "candidate": "content-authoring/candidates/dm-practice-24-v3.json",
+  "committed_before_answer_reveal": true,
+  "reviewer": "independent_blind_validator_v3",
+  "reviewed_at": "2026-09-29T21:54:25.003019Z",
+  "responses": [
+    {
+      "parent_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "item_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270:statement:0",
+      "prompt": "Some renewal permits are inspected.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Some amber permits are renewals; amber implies inspected.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "item_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270:statement:1",
+      "prompt": "No amber permit is approved automatically.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Every amber permit is inspected, and no inspected permit is automatically approved.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "item_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270:statement:2",
+      "prompt": "Every barcoded permit is amber.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Renewal implies barcode, but barcode does not imply amber.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "item_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270:statement:3",
+      "prompt": "Some barcoded permits are not approved automatically.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "The existing amber renewals have barcodes and cannot be automatically approved.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "item_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270:statement:4",
+      "prompt": "Some inspected permits are amber.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Some amber renewals exist and every amber permit is inspected.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "item_id": "cac6abc2-93cb-4129-a31d-290ec0279fee:statement:0",
+      "prompt": "Some kiln-fired tiles are not sold loose.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Some kiln-fired tiles are hand-painted; hand-painted tiles are never sold loose.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "item_id": "cac6abc2-93cb-4129-a31d-290ec0279fee:statement:1",
+      "prompt": "Every glazed tile is hand-painted.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Nothing requires a glazed tile to be hand-painted.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "item_id": "cac6abc2-93cb-4129-a31d-290ec0279fee:statement:2",
+      "prompt": "No hand-painted tile is sold loose.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "This is stated directly.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "item_id": "cac6abc2-93cb-4129-a31d-290ec0279fee:statement:3",
+      "prompt": "Some labelled tiles are glazed.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Loose implies labelled, but no relation forces a labelled glazed tile.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "item_id": "cac6abc2-93cb-4129-a31d-290ec0279fee:statement:4",
+      "prompt": "Some kiln-fired tiles are hand-painted.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "This is stated directly.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "item_id": "7b16280a-94d9-4e5d-9029-9bb35f023170:statement:0",
+      "prompt": "Some restricted files are indexed.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Some encrypted files are restricted; encrypted implies backed up, and backed up only if indexed.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "item_id": "7b16280a-94d9-4e5d-9029-9bb35f023170:statement:1",
+      "prompt": "Every encrypted file is indexed.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Encrypted implies backed up, and backed up implies indexed.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "item_id": "7b16280a-94d9-4e5d-9029-9bb35f023170:statement:2",
+      "prompt": "No encrypted file is shared publicly.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Only restricted files are barred from public sharing; encrypted files outside that subset may be shared.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "item_id": "7b16280a-94d9-4e5d-9029-9bb35f023170:statement:3",
+      "prompt": "Some backed-up files are restricted.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "The encrypted restricted files are backed up.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "item_id": "7b16280a-94d9-4e5d-9029-9bb35f023170:statement:4",
+      "prompt": "Every indexed file is backed up.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Backed up implies indexed; the converse is not given.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "b72ef91a-3680-4f37-aa0f-89998470d7b2",
+      "item_id": "b72ef91a-3680-4f37-aa0f-89998470d7b2",
+      "prompt": "Five display crates A, B, C, D and E are placed in a row from left to right. A is third. C is immediately to the right of A. B is somewhere to the left of D, and D is somewhere to the left of A. Which crate is first?",
+      "independent_answer": "B",
+      "independent_working_or_rationale": "A occupies 3 and C occupies 4; B must precede D and D precede A, forcing B at 1 and D at 2.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "2fea6610-f787-41a0-93be-28344a314aeb",
+      "item_id": "2fea6610-f787-41a0-93be-28344a314aeb",
+      "prompt": "Four makers, Imani, Joel, Kira and Luca, each use a different station: printing, cutting, painting or packing. Imani does not print or paint. Joel uses the station immediately before packing in the fixed order printing, cutting, painting, packing. Kira does not cut. Luca prints. Which station does Imani use?",
+      "independent_answer": "B",
+      "independent_working_or_rationale": "Luca prints and Joel paints, the station immediately before packing; Imani cannot print or paint, and Kira cannot cut, so Imani cuts and Kira packs.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "d822dd15-d4f7-4911-8187-2b9c6c356d91",
+      "item_id": "d822dd15-d4f7-4911-8187-2b9c6c356d91",
+      "prompt": "Five launches named Alder, Birch, Cedar, Dune and Elm leave at 09:00, 09:15, 09:30, 09:45 and 10:00, one per slot. Birch leaves immediately after Alder. Dune leaves after Birch but before Elm. Cedar leaves after Alder but not immediately after Birch. Elm leaves at 10:00. Which launch leaves at 09:30?",
+      "independent_answer": "D",
+      "independent_working_or_rationale": "Elm is 10:00. Alder and Birch must occupy 09:00 and 09:15; if Alder were 09:15 there is no legal later slot for Cedar. Cedar cannot immediately follow Birch, so Cedar is 09:45 and Dune is 09:30.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "item_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74:statement:0",
+      "prompt": "More lamps than radios were brought in across both Saturdays.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Lamps total 18+22=40; radios total 15+19=34.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "item_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74:statement:1",
+      "prompt": "The total number of successful repairs was higher on the second Saturday.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "First repaired total 12+9+15=36; second total 17+14+13=44.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "item_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74:statement:2",
+      "prompt": "Every category had more successful repairs on the second Saturday.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Toys fell from 15 repaired to 13.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "item_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74:statement:3",
+      "prompt": "The repair rate for radios was exactly 60% on the first Saturday.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "First-Saturday radio rate is 9/15=0.60.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "item_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74:statement:4",
+      "prompt": "More toys will be repaired on the third Saturday than on the second.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Nothing states what will happen on a third Saturday.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "item_id": "8383651a-ae22-4096-b8b3-d29328677eff:statement:0",
+      "prompt": "Fifty-four passengers boarded after noon.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "96-42=54 boarded after noon.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "item_id": "8383651a-ae22-4096-b8b3-d29328677eff:statement:1",
+      "prompt": "Twelve passengers with a bicycle boarded after noon.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Of 30 with a bicycle, 18 boarded before noon, leaving 12 after noon.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "item_id": "8383651a-ae22-4096-b8b3-d29328677eff:statement:2",
+      "prompt": "More than half of the before-noon passengers travelled with a bicycle.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "18 of 42 before-noon passengers had bicycles, below half.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "item_id": "8383651a-ae22-4096-b8b3-d29328677eff:statement:3",
+      "prompt": "More passengers without a bicycle boarded after noon than before noon.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Without bicycles: after noon 54-12=42; before noon 42-18=24.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "item_id": "8383651a-ae22-4096-b8b3-d29328677eff:statement:4",
+      "prompt": "At least one passenger who boarded later will bring a bicycle on Tuesday.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "Monday boarding says nothing about Tuesday bicycle use.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "item_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb:statement:0",
+      "prompt": "The South desk transferred the largest number of calls.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "South transferred 36, exceeding North 20 and East 15.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "item_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb:statement:1",
+      "prompt": "The North desk transferred one quarter of its answered calls.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "North transferred 20/80=1/4.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "item_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb:statement:2",
+      "prompt": "The combined transfer rate across all desks was less than one quarter.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "Total transferred 20+36+15=71 of 80+120+100=300; 71/300<1/4.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "item_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb:statement:3",
+      "prompt": "East had a lower transfer rate than South.",
+      "independent_answer": "Yes",
+      "independent_working_or_rationale": "East rate 15/100=0.15; South 36/120=0.30.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "item_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb:statement:4",
+      "prompt": "The South desk answered more calls without transfer than the other two desks combined.",
+      "independent_answer": "No",
+      "independent_working_or_rationale": "South non-transfers 120-36=84; North and East together (80-20)+(100-15)=145.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "b0f99a28-6127-40ab-b548-bce5ef933dc2",
+      "item_id": "b0f99a28-6127-40ab-b548-bce5ef933dc2",
+      "prompt": "A fictional repair workshop wants to introduce optional online appointment booking to reduce the average waiting time for visitors. Which is the strongest argument?",
+      "independent_answer": "C",
+      "independent_working_or_rationale": "The six-week comparison directly measured the stated target, mean waiting time, with staffing and hours held fixed.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "c2e726ed-8cb5-4d7e-88ba-9a6f1118b8ac",
+      "item_id": "c2e726ed-8cb5-4d7e-88ba-9a6f1118b8ac",
+      "prompt": "A fictional town considers adding a 07:00 river shuttle to reduce crowding on its existing 07:30 departure. Which is the strongest argument?",
+      "independent_answer": "C",
+      "independent_working_or_rationale": "The 07:00 trial left the 07:30 passenger count unchanged, directly undermining the crowding goal.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "fbaf9861-744c-45f3-9879-5fad8c0e62eb",
+      "item_id": "fbaf9861-744c-45f3-9879-5fad8c0e62eb",
+      "prompt": "A fictional archive keeps its only catalogue on paper in one building. Should it scan the catalogue and store duplicate digital copies in two other buildings to reduce the risk of losing all catalogue records if the archive building is damaged? Which is the strongest argument?",
+      "independent_answer": "A",
+      "independent_working_or_rationale": "Off-site duplicate records would survive damage confined to the archive building, directly reducing total-loss risk.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "80fd9429-e35b-42df-8c4a-2e29db932c4e",
+      "item_id": "80fd9429-e35b-42df-8c4a-2e29db932c4e",
+      "prompt": "A diagram shows 58 signs on a fictional coastal trail. Set A means “mentions birds” and set B means “mentions tides”. Numbers give the number of signs in each exclusive region.\n\nHow many signs mention birds but not tides?",
+      "independent_answer": "C",
+      "independent_working_or_rationale": "Birds but not tides is the set1-only region, 18; region sum 18+13+11+16=58.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "a10ba3a4-0fa6-488c-ade8-dbf012618322",
+      "item_id": "a10ba3a4-0fa6-488c-ade8-dbf012618322",
+      "prompt": "The diagram classifies 64 fictional studio members by enrolment in clay, print and textile workshops. Each number is the count in that exclusive region.\n\nHow many members take print, whether or not they take another workshop?",
+      "independent_answer": "C",
+      "independent_working_or_rationale": "Print includes print-only 9, clay/print 7, print/textile 5 and triple 4, totalling 25.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "61a5a8b4-20d2-4b57-b504-6c542a26a872",
+      "item_id": "61a5a8b4-20d2-4b57-b504-6c542a26a872",
+      "prompt": "The diagram shows 72 people at a fictional event, classified by whether they helped with setup, registration and clean-up. Region numbers are exclusive.\n\nHow many helped with exactly two of the three tasks?",
+      "independent_answer": "B",
+      "independent_working_or_rationale": "Exactly two tasks excludes the triple region: 6+8+5=19.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "7c2c3af5-ffdf-4c56-9eb1-d24c1490c99d",
+      "item_id": "7c2c3af5-ffdf-4c56-9eb1-d24c1490c99d",
+      "prompt": "The diagram classifies 80 volunteers at a fictional park by map reading, first aid and equipment maintenance. Each region count is exclusive, and every volunteer has an equal chance of being selected.\n\nAmong volunteers who have first-aid skills, what proportion also have map-reading skills?",
+      "independent_answer": "A",
+      "independent_working_or_rationale": "First-aid total is 12+8+6+5=31; first aid and map reading is 8+5=13, so 13/31.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "45d47239-046a-4ade-98a3-fa3de9802138",
+      "item_id": "45d47239-046a-4ade-98a3-fa3de9802138",
+      "prompt": "At a fictional observatory, two independent alert channels operate on a given night. Channel A sends an alert with probability 0.30; channel B sends an alert with probability 0.20. What is the probability that exactly one channel sends an alert?",
+      "independent_answer": "B",
+      "independent_working_or_rationale": "Exactly one alert is A only plus B only: 0.30(0.80)+0.70(0.20)=0.38.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "8efec042-4316-4d7d-a909-7de9beb2433b",
+      "item_id": "8efec042-4316-4d7d-a909-7de9beb2433b",
+      "prompt": "Three performers independently choose one of four rehearsal rooms. Each performer is equally likely to choose any room. What is the probability that at least two performers choose the same room?",
+      "independent_answer": "D",
+      "independent_working_or_rationale": "Complement of three different rooms: 1-(4*3*2)/4^3=1-24/64=5/8.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "f5541786-42ff-4db3-9e49-fdf982e875e3",
+      "item_id": "f5541786-42ff-4db3-9e49-fdf982e875e3",
+      "prompt": "A fictional ferry carried 120 passengers on its morning trip and 80 on its evening trip. On the morning trip, 30 passengers took a rain cover; on the evening trip, 40 did. One of the 200 passengers is chosen uniformly at random. Given that the selected passenger took a rain cover, what is the probability that they travelled in the evening?",
+      "independent_answer": "C",
+      "independent_working_or_rationale": "Among rain-cover takers there are 30 morning and 40 evening; conditional probability is 40/70=4/7.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "4c84d495-18b8-4ef5-a86f-1beb34142de1",
+      "item_id": "4c84d495-18b8-4ef5-a86f-1beb34142de1",
+      "prompt": "Six distinct display volumes are arranged in a random order on one shelf. Two named volumes, Atlas and Beacon, are among the six. What is the probability that Atlas and Beacon are next to each other?",
+      "independent_answer": "B",
+      "independent_working_or_rationale": "Treat Atlas and Beacon as one block: 2*5! favourable orders of 6!, giving 1/3.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "high"
+    },
+    {
+      "parent_id": "3aa6e000-327c-45d7-b2f5-26142b4b7177",
+      "item_id": "3aa6e000-327c-45d7-b2f5-26142b4b7177",
+      "prompt": "A station has 39 programmes. A programme may carry the Music, Talk, or Local tag. Of these, 12 have Music, 18 have Talk, and 11 have Local. Four have both Music and Talk; three have both Talk and Local; none have both Music and Local. Five programmes have none of the three tags. Which diagram represents these data? Each number is the count in that exclusive region.",
+      "independent_answer": "A",
+      "independent_working_or_rationale": "Music/Local overlap is zero, so triple is zero. Exclusive Music=12-4=8, Talk=18-4-3=11, Local=11-3=8, with intersections 4 and 3 and outside 5: option A sums to 39. B omits required overlaps; C gives Music total 34; D gives Local total 8 and omits Talk/Local overlap. The encoded shapes/region keys require a separate render-topology check after blind commitment.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "medium"
+    },
+    {
+      "parent_id": "5297e7b2-a46d-4750-9a7a-09db32602f59",
+      "item_id": "5297e7b2-a46d-4750-9a7a-09db32602f59",
+      "prompt": "Every digitised observatory image has been checked, and every published image has been checked. Some checked images are both digitised and published. The diagram uses a rectangle for Checked, a circle for Digitised, and a diamond for Published. Each letter identifies one exclusive region. An image in region Q is compared with an image in region R. Which statement must be true of both images?",
+      "independent_answer": "B",
+      "independent_working_or_rationale": "Q is Checked and Digitised only; R is Checked, Digitised and Published. Both images therefore are digitised. A fails for Q, C fails for both, and D fails because both are digitised. The actual rendered placement needs a separate topology check.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "medium"
+    },
+    {
+      "parent_id": "308bcd28-85d0-4149-a2fd-3f6dd456dfd3",
+      "item_id": "308bcd28-85d0-4149-a2fd-3f6dd456dfd3",
+      "prompt": "At a repair fair, each of 58 visitors completes one route card indicating whether they joined Repair, Reuse, Donate, or Recycle. The diagram shows four different shapes. Each number gives a count in an exclusive region. How many visitors joined at least one of Repair or Donate?",
+      "independent_answer": "D",
+      "independent_working_or_rationale": "Repair or Donate exclusive regions are Repair only 7, Donate only 8, Repair/Reuse 4, Reuse/Donate 5, Donate/Recycle 3, Repair/Recycle 6: total 33. All nine displayed counts sum to 58. Actual shape topology must be checked separately.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "medium"
+    },
+    {
+      "parent_id": "7e0c5ab8-a660-4780-a9f1-617433e4056a",
+      "item_id": "7e0c5ab8-a660-4780-a9f1-617433e4056a",
+      "prompt": "A packaging lab classifies samples by whether they need a retest and whether they have a seal, print, or weight fault. A sample can have at most one of the three named fault types. The diagram gives exclusive-region counts, except that the retest-only region is marked ?. The lab found that the number needing a retest is twice the number not needing one. How many samples are in the ? region?",
+      "independent_answer": "C",
+      "independent_working_or_rationale": "Outside Retest is Seal-only 5 + Print-only 7 + Weight-only 6 + outside-all 3 =21. Retest total is twice that, 42. Listed Retest/fault intersections total 4+6+8=18, leaving ?=24. Named faults are mutually exclusive by stem; actual shape topology needs a separate check.",
+      "ambiguity_or_multiple_valid_answers": false,
+      "confidence": "medium"
+    }
+  ],
+  "overall_notes": "All 48 response rows solved from the answer-free questions, options, tables and encoded Venn regions. For questions 21-24, region arithmetic and each textual option or diagram data were checked; renderer geometry, undeclared intersections and phone-width display remain for the revealed-stage audit."
+}

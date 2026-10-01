@@ -1,0 +1,712 @@
+{
+  "schema_version": 1,
+  "section": "sj",
+  "candidate_path": "content-authoring/candidates/sj-practice-20-v3.json",
+  "validator": {
+    "model": "GPT-6 (independent blind SJ reviewer, revealed review)",
+    "run_at": "2026-09-29T21:16:31Z"
+  },
+  "deterministic_report_path": "content-authoring/reports/sj-practice-20-v3.deterministic.json",
+  "blind_response_path": "content-authoring/reports/sj-practice-20-v3.blind-response.json",
+  "blind_review_completed": true,
+  "batch_verdict": "accept",
+  "units": [
+    {
+      "unit_id": "6570faba-36ae-415b-b6d2-121f8211b160",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "98db153b-8315-4570-85db-1aef55bf3a70",
+          "mode": "practice",
+          "title": "At the start of his Sunday night shift, Marcus, an F1 doctor, opens the resuscitation trol",
+          "existing_body": "At the start of his Sunday night shift, Marcus, an F1 doctor, opens the resuscitation trolley to find that the daily check sign-off log has been left empty for the past three days. He also notices several emergency drug ampoules with expiry dates from earlier in the month.\n\nHow important to take into account are the following considerations for Marcus when deciding what to do?",
+          "existing_item_prompts": [
+            "The risk that the trolley could be needed for a cardiac arrest call during his shift while drugs are out of date and the contents have not been checked.",
+            "That the previous F1 may have been very busy on Saturday night and run out of time to do the daily check.",
+            "Whether the gap reflects a wider rota or system issue with daily checks, rather than a one-off lapse."
+          ],
+          "semantic_assessment": "Existing unit involves emergency equipment stock and checking logs; this unit involves a blocked patient route and safe physical handling."
+        },
+        {
+          "existing_id": "340b2ad7-1be7-40b0-909e-b481832b58ce",
+          "mode": "practice",
+          "title": "While restocking the supplies cupboard at the end of a placement shift, Olamide, a fourth-",
+          "existing_body": "While restocking the supplies cupboard at the end of a placement shift, Olamide, a fourth-year medical student, sees a fellow student quietly putting boxes of surgical gloves and packs of dressings into their backpack. The other student catches Olamide watching and says with a laugh, 'They throw this stuff out anyway, and I always run out at home.'\n\nHow appropriate is each of the following responses by Olamide?",
+          "existing_item_prompts": [
+            "Olamide says nothing in the moment but reports the incident to the placement coordinator the next morning, without speaking to the student first.",
+            "Olamide tells the student privately that taking the supplies isn't acceptable and asks them to put everything back before leaving the cupboard.",
+            "Olamide says nothing and decides the items are inexpensive enough to overlook."
+          ],
+          "semantic_assessment": "Existing supplies-cupboard event tests theft; this unit tests current patient access and premises risk."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-3-colleagues-culture-and-safety",
+        "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice"
+      ],
+      "unit_assessment": "Current obstruction of the accessible route presents a premises risk. Amina can seek safe help promptly; GMC Domain 3 paragraph 75 and student guidance support all three ratings. Emergency trolley stock and supplies theft differ from a blocked step-free route and safe physical handling.",
+      "items": [
+        {
+          "item_id": "ed564217-441f-42bf-9e1a-32c3ef743b89",
+          "order_index": 0,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "This is the accessible exit route for patients currently in the unit, so leaving beds across it creates an immediate access and safety concern.",
+          "review_note": "The signed route is needed by patients present now; the top importance rating is supported.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "78a5f19e-abde-4287-ba5f-71f299e51c68",
+          "order_index": 1,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "She must avoid injuring herself or others by trying to move heavy beds alone; it determines that she should obtain safe help while still addressing the obstruction promptly.",
+          "review_note": "Physical handling beyond her safe ability dictates seeking help now; the top importance rating is supported.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "e466526f-a6c2-4b6f-8b02-61a8cb39f835",
+          "order_index": 2,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "She alerts someone able to arrange safe removal immediately and reduces the risk to patients while the obstruction remains.",
+          "review_note": "Prompt nurse involvement and interim patient direction address the present hazard within a student's role.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    },
+    {
+      "unit_id": "b3efd936-dad2-47b8-bf25-ea2b02b74698",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "a823ced9-8dd3-4f4e-bede-e5379c3fb7b0",
+          "mode": "timed",
+          "title": "A patient with a hearing impairment, Mr Jacobs, arrives for a dental appointment at an out",
+          "existing_body": "A patient with a hearing impairment, Mr Jacobs, arrives for a dental appointment at an outreach clinic where Sonia, a second-year dental student, is on placement. The clinic does not have a hearing loop system, and no interpreter has been arranged. Mr Jacobs appears frustrated and is struggling to follow the receptionist's instructions.\r\n\r\nHow important to take into account are the following considerations for Sonia when deciding how to respond?",
+          "existing_item_prompts": [
+            "Whether the clinic has access to alternative communication methods that could help Mr Jacobs understand the information he needs.",
+            "That Mr Jacobs has been a patient at the clinic before and managed without an interpreter on previous occasions.",
+            "Whether the lack of a hearing loop represents a broader accessibility issue that should be raised with the clinic management."
+          ],
+          "semantic_assessment": "Different care stage, impairment, format request and privacy preference; this unit concerns usable discharge instructions."
+        },
+        {
+          "existing_id": "70974053-d3ee-4ca0-8f5a-298d3f3201f9",
+          "mode": "timed",
+          "title": "During a GP consultation, the doctor discovers that the patient speaks very limited Englis",
+          "existing_body": "During a GP consultation, the doctor discovers that the patient speaks very limited English. The doctor turns to the medical student, Amira, who happens to speak the same language as the patient, and asks her to interpret the consultation including the diagnosis and treatment plan.\n\nHow appropriate is each of the following responses by Amira?",
+          "existing_item_prompts": [
+            "Amira agrees to interpret the full consultation, including the diagnosis and treatment options, to help the doctor and patient communicate.",
+            "Amira suggests to the doctor that a professional telephone interpreting service would be more appropriate for the clinical discussion, and offers to help with basic communication in the meantime.",
+            "Amira refuses to help at all, saying it is not part of her role as a medical student."
+          ],
+          "semantic_assessment": "This unit concerns visual accessibility of written self-care advice rather than spoken-language interpretation."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/confidentiality/managing-and-protecting-personal-information"
+      ],
+      "unit_assessment": "The patient's low vision and expressed privacy preference require proportionate accessible information. GMC Domain 2 paragraphs 28-33 and confidentiality duties support all three ratings. Hearing support at dental reception and interpreting in a GP visit differ from low-vision discharge advice, a readable format request, and privacy from family.",
+      "items": [
+        {
+          "item_id": "d42eda44-5e01-4d95-a338-eb68891e74f2",
+          "order_index": 0,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "The patient's expressed wish for independent access to private information is central to both accessible communication and respect for her autonomy.",
+          "review_note": "The patient's own format and privacy preference directly determines useful discharge advice.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "02a8c878-2521-4031-a66e-77739053779c",
+          "order_index": 1,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "He provides timely verbal explanation, arranges the readable format she requested, and checks understanding before discharge.",
+          "review_note": "The response supplies readable information and confirms understanding before departure.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "2546b8a4-6bff-436c-a04e-9001d3e35630",
+          "order_index": 2,
+          "independent_answer": "A very inappropriate thing to do",
+          "provided_answer": "A very inappropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "He discloses confidential diagnosis and treatment information to a relative without permission and ignores the patient's stated wish to read it herself.",
+          "review_note": "Sharing diagnosis and treatment details without permission is a completed privacy breach and frustrates independent access.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    },
+    {
+      "unit_id": "626cb4cd-1a0b-4cb4-9dbd-53f3683ae76e",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "801453f3-f34e-4365-9629-a30f3ae6defd",
+          "mode": "timed",
+          "title": "Following a busy weekend on call, Dr Asante, an F2 doctor, realises that important informa",
+          "existing_body": "Following a busy weekend on call, Dr Asante, an F2 doctor, realises that important information about a patient's drug allergy was not communicated during a handover to the receiving team at another hospital. The patient has already been transferred.\n\nHow appropriate is each of the following responses by Dr Asante?",
+          "existing_item_prompts": [
+            "Dr Asante contacts the receiving hospital immediately to communicate the allergy information and documents the error.",
+            "Dr Asante assumes the allergy will be in the patient's electronic notes and that the receiving team will find it themselves.",
+            "Dr Asante asks a colleague to call the other hospital on her behalf because she is busy with other patients."
+          ],
+          "semantic_assessment": "Existing scenario concerns transfer of clinical information for care; this one concerns an unintended recording on a personal device."
+        },
+        {
+          "existing_id": "34c93924-f6b1-4170-a8ea-13b2955ef2c1",
+          "mode": "timed",
+          "title": "While collecting a printed handout from the shared ward printer, a fourth-year medical stu",
+          "existing_body": "While collecting a printed handout from the shared ward printer, a fourth-year medical student, Tanya, finds several pages of a patient's clinic letter containing sensitive personal and medical information. The letter appears to have been left uncollected for some time.\n\nHow appropriate is each of the following responses by Tanya?",
+          "existing_item_prompts": [
+            "Tanya picks up the letter and hands it to the ward clerk or senior nurse, explaining where she found it.",
+            "Tanya reads the letter because it might be relevant to a patient she is following for her portfolio.",
+            "Tanya leaves the letter where it is, assuming whoever printed it will come back for it."
+          ],
+          "semantic_assessment": "This is accidental audio capture and reporting, not visible paper left in a shared area."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/confidentiality/managing-and-protecting-personal-information",
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication"
+      ],
+      "unit_assessment": "An unshared accidental recording still contains identifiable patient information. Securing it and seeking local information-governance advice is proportionate; deliberate concealment is not. Omitted allergy handover and an exposed printed letter differ from accidental audio capture on a locked personal phone and incident handling.",
+      "items": [
+        {
+          "item_id": "e7ed5400-b05d-4ccd-88b1-44ebd87be24c",
+          "order_index": 0,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "Identifiable clinical discussion on a personal device is confidential patient information requiring secure handling and appropriate incident advice, even though it was accidental and unshared.",
+          "review_note": "Identifiability changes an accidental phone capture into a patient-information incident requiring proper handling.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "6ee9d056-02f0-4590-8dfd-14026ee27d77",
+          "order_index": 1,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "He contains access to the recording, promptly informs the appropriate service, and follows the local process rather than deciding its disposal alone.",
+          "review_note": "Security plus prompt advice and local reporting provides accountable containment.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "a2207a27-aa15-4252-8a3b-f4f27a73680c",
+          "order_index": 2,
+          "independent_answer": "A very inappropriate thing to do",
+          "provided_answer": "A very inappropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "Deleting it secretly conceals a confidentiality incident and prevents the organisation from assessing the breach and any required response.",
+          "review_note": "Secret deletion blocks organisational assessment of a confidentiality incident.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    },
+    {
+      "unit_id": "1be908f0-fc43-4b8f-a67a-ba7280bcb64a",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "c5872aca-10ec-4db9-a690-399f84c9aa6e",
+          "mode": "practice",
+          "title": "After a busy diabetes clinic, foundation year two doctor Sarah Khan is approached by a pha",
+          "existing_body": "After a busy diabetes clinic, foundation year two doctor Sarah Khan is approached by a pharmaceutical sales representative who invites her and three colleagues to an all-expenses-paid 'educational dinner' at a high-end restaurant the following week. The representative mentions there will be a brief talk about a new diabetes medication, but the main purpose is networking. Sarah's department recently switched to prescribing this company's medications.\n\nHow appropriate is each of the following responses by Sarah?",
+          "existing_item_prompts": [
+            "Sarah accepts the dinner alone, reasoning that a free meal will not influence her future prescribing decisions.",
+            "Sarah accepts the invitation including the dinner and brings her partner along, treating the event as a social occasion.",
+            "Sarah declines the invitation, explains her concern about conflicts of interest, and suggests the company arrange an in-house educational session open to all staff instead."
+          ],
+          "semantic_assessment": "Existing scenario is an inducement from a representative; this unit is a present referral choice involving the doctor's own paid clinical work."
+        },
+        {
+          "existing_id": "a078638c-0eff-47c2-b010-a4da5d52b480",
+          "mode": "practice",
+          "title": "During a GP rotation, junior doctor Ahmed sees a regular patient who asks for a two-week s",
+          "existing_body": "During a GP rotation, junior doctor Ahmed sees a regular patient who asks for a two-week sickness certificate to cover an upcoming work deadline he says is 'killing him.' The patient describes feeling stressed but, on questioning, has no symptoms that meet the threshold for clinical sickness absence and is otherwise well. He mentions that his previous GP 'always sorted this out for him' without much fuss.\n\nHow appropriate are each of the following responses by Ahmed?",
+          "existing_item_prompts": [
+            "Ahmed declines to issue the note in this appointment and tells the patient he should book a longer appointment with his regular GP next week to discuss it further.",
+            "Ahmed issues the certificate as requested, reasoning that the patient seems genuinely under pressure and refusing might damage their therapeutic relationship.",
+            "Ahmed explains honestly that he cannot certify illness that is not present, acknowledges the patient's stress, and signposts him to occupational health, talking therapies, and self-help resources."
+          ],
+          "semantic_assessment": "Both are GP encounters, but this unit assesses financial-interest disclosure and alternative care routes."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-4-trust-and-professionalism"
+      ],
+      "unit_assessment": "GMC conflict guidance requires disclosure of a direct interest, explanation of reasonable alternatives and no self-interested steering. Both the NHS and private routes are clinically suitable here. A pharmaceutical hospitality offer and a GP sickness-note request differ from a direct paid interest in one of two suitable physiotherapy routes.",
+      "items": [
+        {
+          "item_id": "c6830a34-70b1-4944-9b42-d4f645f6b0fa",
+          "order_index": 0,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "Payment from the suggested service is a direct conflict that the patient needs disclosed so advice can remain transparent and centred on her needs.",
+          "review_note": "The clinician's direct financial interest is material to this particular recommendation.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "cf41e81e-e926-4f70-9024-12206081f653",
+          "order_index": 1,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "He explains that NHS care is clinically suitable, discloses his paid role, and leaves room for the patient's informed preference about speed and cost.",
+          "review_note": "Disclosure, the viable NHS route, and the patient's option to choose faster paid access answer both questions fairly.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "8aff820d-cf99-4d6b-b3bf-1d1b792de402",
+          "order_index": 2,
+          "independent_answer": "A very inappropriate thing to do",
+          "provided_answer": "A very inappropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "He hides both a reasonable NHS option and his financial interest while steering the patient toward a service that pays him.",
+          "review_note": "Concealing both the NHS route and paid role misleads the patient in a decision that may benefit the GP.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    },
+    {
+      "unit_id": "420e6fc9-78a2-4fba-8050-a23c4e92a1b3",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "1db44b4f-b583-4553-9e2b-61151bc1cdaf",
+          "mode": "timed",
+          "title": "While helping to compile data for a research project, a student, Layla, notices that the l",
+          "existing_body": "While helping to compile data for a research project, a student, Layla, notices that the lead researcher — a senior academic — appears to have altered several data points to make the results more statistically significant. The research is being submitted for publication in a medical journal.\n\nHow important to take into account are the following considerations for Layla when deciding how to respond?",
+          "existing_item_prompts": [
+            "That the senior academic could negatively affect Layla's grades or references if she raises the concern.",
+            "That falsified research data published in a medical journal could influence clinical decisions and ultimately harm patients.",
+            "Whether Layla may have misunderstood the data analysis methods and the changes might be legitimate."
+          ],
+          "semantic_assessment": "Existing unit is research honesty after data collection; this one concerns voluntary patient consent before recruitment."
+        },
+        {
+          "existing_id": "55e4ee5d-db1b-4474-963a-a255d3726629",
+          "mode": "timed",
+          "title": "While observing in a pre-operative clinic, a third-year medical student, Olumide, notices ",
+          "existing_body": "While observing in a pre-operative clinic, a third-year medical student, Olumide, notices that a surgeon is explaining a procedure to a patient very quickly and in complex medical terminology. The patient nods along but appears confused and does not ask any questions. The consent form is signed.\n\nHow appropriate is each of the following responses by Olumide?",
+          "existing_item_prompts": [
+            "Olumide approaches the patient after the surgeon leaves and asks whether they understood everything about the procedure.",
+            "Olumide says nothing because the surgeon is experienced and must know whether the patient has understood.",
+            "Olumide mentions his concern to the surgical registrar later that day, suggesting that the patient may not have fully understood the procedure."
+          ],
+          "semantic_assessment": "This unit is a questionnaire study and the separation of research from booked standard care."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-practice-in-research/good-practice-in-research",
+        "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice"
+      ],
+      "unit_assessment": "GMC research guidance protects informed and voluntary participation. The scan is already booked, so the student's respectful clarification is appropriate before any form is signed. Research data alteration and a pre-operative consent explanation differ from pressure to join an optional questionnaire study linked falsely to a booked scan.",
+      "items": [
+        {
+          "item_id": "9746b587-4071-4481-b131-ce5db2a72964",
+          "order_index": 0,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "A mistaken belief that declining research may delay an already booked scan undermines voluntary choice and should be corrected before consent.",
+          "review_note": "A false belief that research refusal affects the booked scan threatens voluntary consent.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "22f16cd8-89b4-440b-9406-12fa3f50643a",
+          "order_index": 1,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "Understanding what participation involves is necessary for a voluntary and informed decision about the study.",
+          "review_note": "Questionnaire participation must be understood as well as separated from the existing care plan.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "e746cc01-377e-47bd-a63c-9b29c7d0d06c",
+          "order_index": 2,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "She tactfully checks and corrects the apparent link to clinical care in the patient's presence and directs the consent explanation to the study team before signing.",
+          "review_note": "The student's tactful check in the patient's presence corrects possible pressure before consent; the study team handles details.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    },
+    {
+      "unit_id": "687960af-5f60-4c26-8400-81b3652662c6",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "e3ff7ed0-01cf-441b-8987-655d005f499a",
+          "mode": "timed",
+          "title": "Kwame is a student representative on a university committee. After a meeting, the committe",
+          "existing_body": "Kwame is a student representative on a university committee. After a meeting, the committee chair — a senior lecturer — asks Kwame to alter the minutes to remove a decision that was made about changing assessment deadlines, saying it will cause unnecessary complaints from students.\n\nHow important to take into account are the following considerations for Kwame when deciding how to respond?",
+          "existing_item_prompts": [
+            "That keeping an accurate record of committee decisions is a core responsibility of the minutes-taker.",
+            "That the chair is a senior lecturer who could influence Kwame's academic progression.",
+            "Whether removing the decision from the minutes would actually change any outcome, since the decision has already been communicated verbally."
+          ],
+          "semantic_assessment": "Existing university committee item concerns formal minutes; this unit concerns patient feedback after a clinical leaflet change and a ward quality decision."
+        },
+        {
+          "existing_id": "1db44b4f-b583-4553-9e2b-61151bc1cdaf",
+          "mode": "timed",
+          "title": "While helping to compile data for a research project, a student, Layla, notices that the l",
+          "existing_body": "While helping to compile data for a research project, a student, Layla, notices that the lead researcher — a senior academic — appears to have altered several data points to make the results more statistically significant. The research is being submitted for publication in a medical journal.\n\nHow important to take into account are the following considerations for Layla when deciding how to respond?",
+          "existing_item_prompts": [
+            "That the senior academic could negatively affect Layla's grades or references if she raises the concern.",
+            "That falsified research data published in a medical journal could influence clinical decisions and ultimately harm patients.",
+            "Whether Layla may have misunderstood the data analysis methods and the changes might be legitimate."
+          ],
+          "semantic_assessment": "This is local anonymous patient feedback and selective omission, not alteration of formal research data."
+        },
+        {
+          "existing_id": "6c502ea4-bea8-467e-ae3a-9069dddd3206",
+          "mode": "practice",
+          "title": "An intercalated medical student is finalising the analysis for her supervisor's research p",
+          "existing_body": "An intercalated medical student is finalising the analysis for her supervisor's research paper, which is being submitted to a high-impact journal next week. Her supervisor, who is also chair of her department, has asked her to remove three 'outlier' data points that he says are clearly errors. She has rerun the analysis without them and can see that the results now reach statistical significance, where they previously did not.\n\nHow important to take into account are each of the following considerations for the student when deciding how to respond?",
+          "existing_item_prompts": [
+            "That the supervisor is the chair of the department and may influence the student's future references and career.",
+            "The journal's stated guidelines on the handling and disclosure of outlier exclusion.",
+            "Whether the supervisor has provided a documented, methodologically valid reason for excluding each individual data point."
+          ],
+          "semantic_assessment": "This unit concerns a ward quality meeting and patient communication complaints, not research analysis."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-1-knowledge--skills-and-development",
+        "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice"
+      ],
+      "unit_assessment": "Post-introduction patient feedback is decision-relevant. A concise honest summary allows fair quality improvement; deliberate omission misleads the chair. Altered committee minutes and research data concern record integrity, but this unit tests omission of patient feedback in a live ward improvement decision.",
+      "items": [
+        {
+          "item_id": "d920a455-a97e-439b-9d61-c7c22497df64",
+          "order_index": 0,
+          "independent_answer": "Very important",
+          "provided_answer": "Very important",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "These reports concern the new leaflet under review and may indicate that patients are receiving unclear discharge instructions.",
+          "review_note": "Post-launch comments about the very leaflet being reviewed are central evidence for the meeting.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "79086841-5b77-4d09-a4e8-ef428202e9fe",
+          "order_index": 1,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "An accurate concise summary preserves decision-relevant feedback while allowing the chair to manage the meeting's limited time.",
+          "review_note": "The count and concise summary preserve relevant feedback while respecting meeting time.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "d14847e7-971f-42dd-b984-9c2b69977635",
+          "order_index": 2,
+          "independent_answer": "A very inappropriate thing to do",
+          "provided_answer": "A very inappropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "Presenting a selectively edited slide as representative knowingly misleads the meeting about a possible patient communication problem.",
+          "review_note": "Presenting selectively omitted feedback as representative is knowingly misleading.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    },
+    {
+      "unit_id": "94dc8199-0235-4ea3-8a06-111f909ae156",
+      "verdict": "pass",
+      "factual_or_professional_provenance": "pass",
+      "semantic_novelty": "pass",
+      "nearest_matches": [
+        {
+          "existing_id": "801453f3-f34e-4365-9629-a30f3ae6defd",
+          "mode": "timed",
+          "title": "Following a busy weekend on call, Dr Asante, an F2 doctor, realises that important informa",
+          "existing_body": "Following a busy weekend on call, Dr Asante, an F2 doctor, realises that important information about a patient's drug allergy was not communicated during a handover to the receiving team at another hospital. The patient has already been transferred.\n\nHow appropriate is each of the following responses by Dr Asante?",
+          "existing_item_prompts": [
+            "Dr Asante contacts the receiving hospital immediately to communicate the allergy information and documents the error.",
+            "Dr Asante assumes the allergy will be in the patient's electronic notes and that the receiving team will find it themselves.",
+            "Dr Asante asks a colleague to call the other hospital on her behalf because she is busy with other patients."
+          ],
+          "semantic_assessment": "Existing case has a known allergy omitted from interhospital handover; this has an unchecked result and an unfulfilled outpatient callback."
+        },
+        {
+          "existing_id": "504f99e9-fd1d-4a90-b854-1d1301f5ccad",
+          "mode": "timed",
+          "title": "Dr Eze, an F1 doctor, receives a verbal complaint from a patient who says another doctor, ",
+          "existing_body": "Dr Eze, an F1 doctor, receives a verbal complaint from a patient who says another doctor, Dr Marsh, was rude and dismissive during a consultation earlier that day. The patient says Dr Marsh did not listen to her concerns and spoke over her repeatedly. Dr Eze was not present during the consultation.\n\nHow important to take into account are the following considerations for Dr Eze when deciding how to respond?",
+          "existing_item_prompts": [
+            "That Dr Marsh may have a different recollection of the consultation and should have the opportunity to respond to the concern.",
+            "That patients have a right to be treated with respect and courtesy, and that poor communication can affect clinical outcomes and trust.",
+            "That Dr Eze does not want to get involved in a dispute between a patient and a colleague."
+          ],
+          "semantic_assessment": "The caller seeks a result and clear follow-up, not a complaint investigation."
+        }
+      ],
+      "source_urls": [
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-3-colleagues-culture-and-safety",
+        "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication"
+      ],
+      "unit_assessment": "The result's clinical significance is unknown and the patient expects an update today. Duty-clinician review plus an owned callback is sound; a note alone is inadequate but mitigates the severity of that lapse. Known allergy omission and a patient complaint differ from an unchecked outpatient result and an unassigned promised callback.",
+      "items": [
+        {
+          "item_id": "d2644558-93e4-4f71-a111-902d855b9f8f",
+          "order_index": 0,
+          "independent_answer": "A very appropriate thing to do",
+          "provided_answer": "A very appropriate thing to do",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "A clinician checks whether the unseen result needs action today, while the team assigns a definite callback to meet the patient's expectation.",
+          "review_note": "Duty review addresses unknown clinical significance, and a named callback plan supports continuity.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "high",
+          "ambiguity": false,
+          "ambiguity_resolution": "",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        },
+        {
+          "item_id": "4c5f6620-891f-4a04-8a9e-672aa1965a7b",
+          "order_index": 1,
+          "independent_answer": "Inappropriate, but not awful",
+          "provided_answer": "Inappropriate, but not awful",
+          "answer_agrees": true,
+          "ordinal_distance": 0,
+          "working_or_rationale": "The note may alert the clinic doctor soon, but without result review or an assigned caller it leaves a potentially time-sensitive result and the promised update unsecured.",
+          "review_note": "The note is a partial handoff, but a result of unknown urgency and an unowned callback still require a definite plan.",
+          "supplied_explanation_assessment": "adequate",
+          "confidence": "medium",
+          "ambiguity": true,
+          "ambiguity_resolution": "Resolved after reveal: a harsher adjacent rating would require a known urgent result, a prolonged delay, or no handoff. Here the clinician finishes consultations in about an hour and receives a note. The missing review and confirmed caller justify 'Inappropriate, but not awful'; the adjacent worse rating is less well supported.",
+          "verdict": "pass",
+          "issues": [],
+          "proposed_fix": ""
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "passed_items": 20,
+    "revised_items": 0,
+    "rejected_items": 0,
+    "blocking_issues": [],
+    "nonblocking_issues": [
+      "Blind item 20 flagged an adjacent harsher rating. On revealed review, the one-hour interval, the note to the clinic doctor, and absence of known clinical urgency support the supplied 'Inappropriate, but not awful' rating; no change is needed."
+    ],
+    "release_ready": true,
+    "required_next_step": "The candidate is accepted for the local practice preview installation workflow."
+  },
+  "brief_path": "content-authoring/reports/sj-practice-20-v3.brief.json",
+  "manifest_path": "content-authoring/reports/sj-practice-20-v3.manifest.json",
+  "corpus_run_id": "sj-sync-20260929204614",
+  "corpus_scope": {
+    "source": "supabase",
+    "practice_units": 105,
+    "timed_units": 93,
+    "total_units": 198,
+    "total_questions": 591,
+    "full_payloads_reviewed_for_nearest_matches": 18
+  },
+  "answer_comparison": {
+    "exact_matches": 20,
+    "adjacent_disagreements": 0,
+    "disagreements_over_one_step": 0,
+    "blind_ambiguity_flags": 1,
+    "resolved_ambiguity_flags": 1,
+    "unresolved_ambiguity_flags": 0
+  },
+  "deterministic_screen": {
+    "verdict": "pass",
+    "errors": 0,
+    "warnings": 0
+  },
+  "brief_alignment": {
+    "verdict": "pass",
+    "question_count": 20,
+    "unit_count": 7,
+    "unit_question_counts": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      2
+    ],
+    "difficulty_allocation": {
+      "normal_questions": 15,
+      "hard_questions": 5
+    },
+    "type_or_skill_allocation": {
+      "importance": 8,
+      "appropriateness": 12
+    },
+    "is_free": true,
+    "excluded_topics_avoided": true
+  },
+  "batch_internal_novelty": "All seven units have distinct precipitating events and response paths: obstructed accessible route; readable private discharge advice; accidental phone recording; paid private referral interest; optional research pressure; omitted patient feedback; and an unchecked result callback.",
+  "source_review": {
+    "primary_guidance": [
+      "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-1-knowledge--skills-and-development",
+      "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-2-patients-partnership-and-communication",
+      "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-medical-practice/domain-3-colleagues-culture-and-safety",
+      "https://www.gmc-uk.org/professional-standards/the-professional-standards/confidentiality/managing-and-protecting-personal-information",
+      "https://www.gmc-uk.org/professional-standards/the-professional-standards/identifying-and-managing-conflicts-of-interest/identifying-and-managing-conflicts-of-interest",
+      "https://www.gmc-uk.org/professional-standards/the-professional-standards/good-practice-in-research/good-practice-in-research",
+      "https://www.gmc-uk.org/education/standards-guidance-and-curricula/guidance/student-professionalism-and-ftp/achieving-good-medical-practice"
+    ],
+    "assessment": "Supplied rationales match the actor's authority, the stated urgency and alternatives, and current professional guidance. No specialist clinical knowledge or unsupported absolute rule is required."
+  }
+}

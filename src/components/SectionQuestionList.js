@@ -1,34 +1,59 @@
 import React from 'react';
 import {
-  View,
   Text,
   FlatList,
   TouchableOpacity,
   StyleSheet,
   StatusBar,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../context/ThemeContext';
+import { useSubscription } from '../context/SubscriptionContext';
 
-// getTitle: (item, index) => string
-// routeName: navigation route to push, receives { index }
-export default function SectionQuestionList({ items, getTitle, routeName, navigation }) {
+export default function SectionQuestionList({ items, getTitle, getStatus, getIndex, getIsFree, routeName, navigation, extraNavParams }) {
+  const { theme: t } = useTheme();
+  const { isPro } = useSubscription();
+  const insets = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
+    <SafeAreaView style={[styles.container, { backgroundColor: t.bgInput }]} edges={['left', 'right']}>
+      <StatusBar barStyle={t.statusBar} backgroundColor={t.bgInput} />
       <FlatList
         data={items}
-        keyExtractor={(_, index) => index.toString()}
-        contentContainerStyle={styles.listContent}
-        renderItem={({ item, index }) => (
-          <TouchableOpacity
-            style={styles.row}
-            onPress={() => navigation.navigate(routeName, { index })}
-            activeOpacity={0.75}
-          >
-            <Text style={styles.number}>{index + 1}.</Text>
-            <Text style={styles.title} numberOfLines={2}>{getTitle(item, index)}</Text>
-          </TouchableOpacity>
-        )}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={[styles.listContent, { paddingBottom: styles.listContent.paddingBottom + insets.bottom }]}
+        renderItem={({ item, index }) => {
+          const status = getStatus ? getStatus(item) : null;
+          const navIndex = getIndex ? getIndex(item, index) : index;
+          const isFree = getIsFree ? getIsFree(item) : true;
+          const isLocked = !isFree && !isPro;
+          return (
+            <TouchableOpacity
+              style={[styles.row, { borderBottomColor: t.border }, isLocked && { opacity: 0.5 }]}
+              onPress={() => {
+                if (isLocked) {
+                  navigation.navigate('Paywall');
+                  return;
+                }
+                navigation.navigate(routeName, { index: navIndex, ...(extraNavParams || {}) });
+              }}
+              activeOpacity={0.75}
+            >
+              <Text style={[styles.number, { color: isLocked ? '#6b7280' : t.accent }]}>
+                {isLocked ? '🔒' : `${index + 1}.`}
+              </Text>
+              <Text style={[styles.title, { color: t.text }]} numberOfLines={2}>{getTitle(item, index)}</Text>
+              {getStatus && !isLocked && (
+                <Text style={[styles.statusCircle, { color: t.accent }]}>
+                  {status === 'completed' ? '●' : status === 'in_progress' ? '◑' : '○'}
+                </Text>
+              )}
+              {isLocked && (
+                <Text style={[styles.premiumLabel, { color: t.accent }]}>Premium</Text>
+              )}
+            </TouchableOpacity>
+          );
+        }}
       />
     </SafeAreaView>
   );
@@ -37,7 +62,6 @@ export default function SectionQuestionList({ items, getTitle, routeName, naviga
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
   },
   listContent: {
     paddingHorizontal: 24,
@@ -49,19 +73,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 18,
     borderBottomWidth: 1,
-    borderBottomColor: '#16213e',
     gap: 12,
   },
   number: {
-    color: '#7c3aed',
     fontSize: 16,
     fontWeight: '700',
     width: 28,
   },
   title: {
-    color: '#ffffff',
     fontSize: 16,
     fontWeight: '500',
     flex: 1,
+  },
+  statusCircle: {
+    fontSize: 28,
+  },
+  premiumLabel: {
+    fontSize: 11,
+    fontWeight: '700',
   },
 });

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "run_id": "sj-practice-20-YYYYMMDD-NN",
+  "section": "sj",
+  "mode": "practice",
+  "question_count": 20,
+  "unit_count": 7,
+  "unit_question_counts": [3, 3, 3, 3, 3, 3, 2],
+  "difficulty_allocation": { "normal_questions": 15, "hard_questions": 5 },
+  "type_or_skill_allocation": { "importance": 8, "appropriateness": 12 },
+  "is_free": true,
+  "editorial_requirements": ["Use current GMC student guidance; use GDC guidance for any dental scenario.", "Do not generate Most/Least items or force rating variety within a scenario."],
+  "excluded_topics": [],
+  "corpus_run_id": "",
+  "corpus_generated_at": "",
+  "inventory_path": "content-authoring/cache/sj-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/sj-practice-20-v1.json",
+  "manifest_path": "content-authoring/reports/sj-practice-20-v1.manifest.json",
+  "validation_report_path": "content-authoring/reports/sj-practice-20-v1.validation.json"
+}

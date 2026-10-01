@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "run_id": "dm-practice-20-YYYYMMDD-NN",
+  "section": "dm",
+  "mode": "practice",
+  "question_count": 20,
+  "unit_count": 20,
+  "unit_question_counts": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+  "difficulty_allocation": { "normal_questions": 15, "hard_questions": 5 },
+  "type_or_skill_allocation": {
+    "syllogism": 3,
+    "logic_puzzle": 3,
+    "interpreting_info": 3,
+    "recognising_assumptions": 3,
+    "venn_diagram": 4,
+    "probabilistic": 4
+  },
+  "section_constraints": {
+    "interpreting_info": { "table_based_min": 1, "passage_only_min": 1 },
+    "venn_diagram": {
+      "mixed_shape_min": 3,
+      "select_diagram_min": 1,
+      "stimulus_diagram_min": 1,
+      "distinct_set_counts_min": 2,
+      "distinct_shape_types_min": 4,
+      "distinct_region_patterns_min": 3
+    }
+  },
+  "is_free": true,
+  "editorial_requirements": ["At least one passage-only and one table-based interpreting-information question.", "Venn items must vary topology and reasoning task, not just set names or numbers.", "Every Venn stimulus and diagram option must bake at phone width with every visible exclusive region accounted for."],
+  "excluded_topics": [],
+  "corpus_run_id": "",
+  "corpus_generated_at": "",
+  "inventory_path": "content-authoring/cache/dm-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/dm-practice-20-v1.json",
+  "manifest_path": "content-authoring/reports/dm-practice-20-v1.manifest.json",
+  "validation_report_path": "content-authoring/reports/dm-practice-20-v1.validation.json"
+}

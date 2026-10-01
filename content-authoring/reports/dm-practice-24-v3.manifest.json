@@ -1,0 +1,1645 @@
+{
+  "schema_version": 1,
+  "run_id": "dm-practice-24-20260929-03",
+  "section": "dm",
+  "brief_path": "content-authoring/reports/dm-practice-24-v3.brief.json",
+  "candidate_path": "content-authoring/candidates/dm-practice-24-v3.json",
+  "corpus_run_id": "dm-sync-20260929213356",
+  "generator": {
+    "model": "gpt-6-astra",
+    "completed_at": "2026-09-29T21:52:14.608Z"
+  },
+  "units": [
+    {
+      "unit_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+      "working_topic": "Permit inspection chain",
+      "type_or_skill": "syllogism",
+      "novelty_rationale": "Composes amber→inspected→not automatic with an explicitly existing amber-renewal subset; barcode conclusions depend on that witness.",
+      "semantic_fingerprint": {
+        "mechanism": "syllogism",
+        "specific_model": {
+          "premises": [
+            "amber -> inspected",
+            "inspected -> not automatic",
+            "some amber and renewal",
+            "renewal -> barcode"
+          ],
+          "answers": [
+            "Yes",
+            "Yes",
+            "No",
+            "Yes",
+            "Yes"
+          ]
+        },
+        "title": "Amber Permit Rules"
+      },
+      "nearest_existing": [
+        {
+          "id": "737a6b7f-1d76-4977-a0c4-06daded8e9df",
+          "title": "Parcel Inspection",
+          "material_difference": "Existing item starts with “A parcel can be delivered to a customer unless it has been flagged for inspection. All parcels flagged for inspection are held at the depot. Only senior officers may...” Its tested relation differs from this item: Composes amber→inspected→not automatic with an explicitly existing amber-renewal subset; barcode conclusions depend on that witness."
+        },
+        {
+          "id": "92037124-af4d-480f-9169-e98c9e798bfd",
+          "title": "Distinction Grade",
+          "material_difference": "Existing item starts with “If a student completes the research essay, they qualify for the distinction grade. Passing all four end-of-year exams is necessary for qualifying for the distinction...” Its tested relation differs from this item: Composes amber→inspected→not automatic with an explicitly existing amber-renewal subset; barcode conclusions depend on that witness."
+        },
+        {
+          "id": "cf9cf65f-64bd-473f-9f6e-0c6f00bb09b5",
+          "title": "Distinction Necessary",
+          "material_difference": "Existing item starts with “Achieving a distinction in the chemistry exam is necessary to qualify for the advanced cohort. A grade of 80% or above on the exam is sufficient to be awarded a...” Its tested relation differs from this item: Composes amber→inspected→not automatic with an explicitly existing amber-renewal subset; barcode conclusions depend on that witness."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "f1d045ff-a3b1-4bd7-9901-d6ed31b84270",
+          "purpose": "At a fictional permit office, every amber permit is inspected. No inspected permit is approved automatically. Some amber permits are renewals. Every renewal permit carries a barcode. Decide whether each statement follows from these rules.",
+          "independent_derivation_or_rating_basis": "Some renewals are amber, and every amber permit is inspected.; Every amber permit is inspected, and no inspected permit is approved automatically.; The rules say renewals carry barcodes, but do not restrict barcodes to amber permits.; The amber renewals exist; each has a barcode and, as an inspected amber permit, is not approved automatically.; The stated amber renewals exist, so at least those amber permits are inspected.",
+          "verification_ledger": {
+            "premises": [
+              "amber -> inspected",
+              "inspected -> not automatic",
+              "some amber and renewal",
+              "renewal -> barcode"
+            ],
+            "answers": [
+              "Yes",
+              "Yes",
+              "No",
+              "Yes",
+              "Yes"
+            ]
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+      "working_topic": "Ceramic tile rules",
+      "type_or_skill": "syllogism",
+      "novelty_rationale": "Uses an existential fired-and-painted subset to prove non-loose tiles, while the loose→labelled direction cannot be reversed.",
+      "semantic_fingerprint": {
+        "mechanism": "syllogism",
+        "specific_model": {
+          "premises": [
+            "glazed -> fired",
+            "some fired and painted",
+            "painted -> not loose",
+            "loose -> labelled"
+          ],
+          "answers": [
+            "Yes",
+            "No",
+            "Yes",
+            "No",
+            "Yes"
+          ]
+        },
+        "title": "Tile Workshop Rules"
+      },
+      "nearest_existing": [
+        {
+          "id": "c2c2992e-5852-4dec-bf11-02d56953123e",
+          "title": "Rice Preparation Rules",
+          "material_difference": "Existing item starts with “All rice is inedible unless it has been boiled. Salt is necessary to make rice edible.” Its tested relation differs from this item: Uses an existential fired-and-painted subset to prove non-loose tiles, while the loose→labelled direction cannot be reversed."
+        },
+        {
+          "id": "d812a53e-8faf-4824-8233-aa5f9d7c75df",
+          "title": "Medication Dispensing Rules",
+          "material_difference": "Existing item starts with “A pharmacy dispenses two types of medication: prescription and over-the-counter. Prescription medication cannot be dispensed without a valid prescription from a...” Its tested relation differs from this item: Uses an existential fired-and-painted subset to prove non-loose tiles, while the loose→labelled direction cannot be reversed."
+        },
+        {
+          "id": "9cadfb5d-2fd4-4ac7-aa4d-b6ef1499be2d",
+          "title": "Photography Club Rules",
+          "material_difference": "Existing item starts with “Members of the photography club must submit a portfolio before exhibiting their work unless they have won a regional award. All regional award winners have been...” Its tested relation differs from this item: Uses an existential fired-and-painted subset to prove non-loose tiles, while the loose→labelled direction cannot be reversed."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "cac6abc2-93cb-4129-a31d-290ec0279fee",
+          "purpose": "In a fictional tile workshop, every glazed tile is kiln-fired. Some kiln-fired tiles are hand-painted. No hand-painted tile is sold loose. Every tile sold loose has a label. Decide whether each statement follows.",
+          "independent_derivation_or_rating_basis": "The hand-painted kiln-fired tiles exist and no hand-painted tile is sold loose.; Glazed tiles are kiln-fired, but kiln firing does not imply hand painting.; This is an explicit rule.; Neither the existence of loose tiles nor a link from loose to glazed is given.; This is explicitly stated.",
+          "verification_ledger": {
+            "premises": [
+              "glazed -> fired",
+              "some fired and painted",
+              "painted -> not loose",
+              "loose -> labelled"
+            ],
+            "answers": [
+              "Yes",
+              "No",
+              "Yes",
+              "No",
+              "Yes"
+            ]
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+      "working_topic": "Encrypted archive files",
+      "type_or_skill": "syllogism",
+      "novelty_rationale": "Chains encrypted→backed up→indexed and combines it with an encrypted-restricted witness; tests the unsupported public-sharing converse.",
+      "semantic_fingerprint": {
+        "mechanism": "syllogism",
+        "specific_model": {
+          "premises": [
+            "encrypted -> backup -> indexed",
+            "some encrypted and restricted",
+            "restricted -> not public"
+          ],
+          "answers": [
+            "Yes",
+            "Yes",
+            "No",
+            "Yes",
+            "No"
+          ]
+        },
+        "title": "Restricted Archive Files"
+      },
+      "nearest_existing": [
+        {
+          "id": "eb6b4a14-ee9d-4030-a79a-7c13532e885d",
+          "title": "Archive Entry",
+          "material_difference": "Existing item starts with “A member may enter the archive room if and only if they have both a research pass and a security escort. All doctoral students have a research pass. A security escort...” Its tested relation differs from this item: Chains encrypted→backed up→indexed and combines it with an encrypted-restricted witness; tests the unsupported public-sharing converse."
+        },
+        {
+          "id": "58647de3-9fd7-40dc-9ea9-4447a3c4e8e4",
+          "title": "Research Wing Access",
+          "material_difference": "Existing item starts with “A security badge permits entry to the research wing unless it has been deactivated. Every deactivated badge is logged in the visitor system. Only staff members are...” Its tested relation differs from this item: Chains encrypted→backed up→indexed and combines it with an encrypted-restricted witness; tests the unsupported public-sharing converse."
+        },
+        {
+          "id": "966e1895-c1eb-4e8d-a294-99689e3e4728",
+          "title": "Gluten-Free Aisle",
+          "material_difference": "Existing item starts with “If a product is labelled 'gluten-free', it contains no wheat, barley, or rye. All products in aisle 4 are labelled 'gluten-free'. The oat biscuits in aisle 6 are not...” Its tested relation differs from this item: Chains encrypted→backed up→indexed and combines it with an encrypted-restricted witness; tests the unsupported public-sharing converse."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "7b16280a-94d9-4e5d-9029-9bb35f023170",
+          "purpose": "In a fictional archive, every encrypted file is backed up. A file can be backed up only if it is indexed. Some encrypted files are restricted. No restricted file is shared publicly. Decide whether each statement follows.",
+          "independent_derivation_or_rating_basis": "The encrypted restricted files exist. Encrypted files are backed up, and backed-up files must be indexed.; Encryption implies backup; backup requires indexing.; Only the restricted encrypted files are known to be unshared; other encrypted files could be shared.; The encrypted restricted files exist and are all backed up.; Backup requires indexing; the converse is not stated.",
+          "verification_ledger": {
+            "premises": [
+              "encrypted -> backup -> indexed",
+              "some encrypted and restricted",
+              "restricted -> not public"
+            ],
+            "answers": [
+              "Yes",
+              "Yes",
+              "No",
+              "Yes",
+              "No"
+            ]
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "b72ef91a-3680-4f37-aa0f-89998470d7b2",
+      "working_topic": "Display crate sequence",
+      "type_or_skill": "logic_puzzle",
+      "novelty_rationale": "Fixes the middle crate and immediate right neighbour, then orders the two left slots with a strict before relation.",
+      "semantic_fingerprint": {
+        "mechanism": "logic_puzzle",
+        "specific_model": {
+          "constraint_model": "A=3, C=4, B<D<A; thus B=1,D=2,E=5",
+          "selected_label": "B"
+        },
+        "title": "Display Crate Sequence"
+      },
+      "nearest_existing": [
+        {
+          "id": "f6762570-d857-4c57-8052-cf6782ea2718",
+          "title": "Sports Day Team Selection",
+          "material_difference": "Existing item starts with “A teacher is selecting a team of 3 students from the following candidates for a relay race. The table shows each student's attributes:” Its tested relation differs from this item: Fixes the middle crate and immediate right neighbour, then orders the two left slots with a strict before relation."
+        },
+        {
+          "id": "d2557ba7-b160-486a-a7bf-f9b23120206a",
+          "title": "Relay Race Order",
+          "material_difference": "Existing item starts with “Five runners — Anita, Blake, Cora, Diya, and Eli — finish a relay race in some order from first to fifth. Blake finishes immediately after Anita. Cora finishes before...” Its tested relation differs from this item: Fixes the middle crate and immediate right neighbour, then orders the two left slots with a strict before relation."
+        },
+        {
+          "id": "e34922d1-195f-48ce-8e6e-4d30b9559650",
+          "title": "Relay Team Lineup",
+          "material_difference": "Existing item starts with “A relay team of six runners (Priya, Quinn, Ravi, Sam, Tomas, Uma) is ordered from first to sixth leg. Sam runs immediately before Ravi. Uma runs at some point after...” Its tested relation differs from this item: Fixes the middle crate and immediate right neighbour, then orders the two left slots with a strict before relation."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "b72ef91a-3680-4f37-aa0f-89998470d7b2",
+          "purpose": "Five display crates A, B, C, D and E are placed in a row from left to right. A is third. C is immediately to the right of A. B is somewhere to the left of D, and D is somewhere to the left of A. Which crate is first?",
+          "independent_derivation_or_rating_basis": "A is third and C fourth. B and D must occupy the first two places in that order; E is fifth. B is first.",
+          "verification_ledger": {
+            "constraint_model": "A=3, C=4, B<D<A; thus B=1,D=2,E=5",
+            "selected_label": "B"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "2fea6610-f787-41a0-93be-28344a314aeb",
+      "working_topic": "Workshop station assignments",
+      "type_or_skill": "logic_puzzle",
+      "novelty_rationale": "Solves a one-to-one maker/station allocation using a station immediately before packing and exclusions, not a seating order.",
+      "semantic_fingerprint": {
+        "mechanism": "logic_puzzle",
+        "specific_model": {
+          "assignments": {
+            "Luca": "printing",
+            "Joel": "painting",
+            "Kira": "packing",
+            "Imani": "cutting"
+          },
+          "selected_label": "B"
+        },
+        "title": "Workshop Station Assignments"
+      },
+      "nearest_existing": [
+        {
+          "id": "aab00b4e-5dd2-4949-b629-0de078e0cfdf",
+          "title": "Project Assignments",
+          "material_difference": "Existing item starts with “Four colleagues — Priya, Quinn, Rami, Soh — are each assigned to exactly one of the four projects Alpha, Beta, Gamma, and Delta. No two colleagues share a project....” Its tested relation differs from this item: Solves a one-to-one maker/station allocation using a station immediately before packing and exclusions, not a seating order."
+        },
+        {
+          "id": "5434e16d-6822-4845-9c3e-4bb290f1e7fd",
+          "title": "Volunteer Rota Assignment",
+          "material_difference": "Existing item starts with “Four volunteers — Priya, Quinn, Raj, and Suki — must each be assigned to exactly one of four different tasks at a community centre: Reception, Kitchen, Stockroom, and...” Its tested relation differs from this item: Solves a one-to-one maker/station allocation using a station immediately before packing and exclusions, not a seating order."
+        },
+        {
+          "id": "c20960ac-e644-4a8a-8067-0af765ac9ce5",
+          "title": "Project Assignment",
+          "material_difference": "Existing item starts with “Four employees (Mia, Noor, Omar, Paul) are each assigned to exactly one of four projects (Red, Blue, Green, Yellow). Each project has exactly one employee. Mia will...” Its tested relation differs from this item: Solves a one-to-one maker/station allocation using a station immediately before packing and exclusions, not a seating order."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "2fea6610-f787-41a0-93be-28344a314aeb",
+          "purpose": "Four makers, Imani, Joel, Kira and Luca, each use a different station: printing, cutting, painting or packing. Imani does not print or paint. Joel uses the station immediately before packing in the fixed order printing, cutting, painting, packing. Kira does not cut. Luca prints. Which station does Imani use?",
+          "independent_derivation_or_rating_basis": "Joel paints because painting immediately precedes packing. Luca prints. The remaining stations are cutting and packing; Kira cannot cut, so Kira packs and Imani cuts.",
+          "verification_ledger": {
+            "assignments": {
+              "Luca": "printing",
+              "Joel": "painting",
+              "Kira": "packing",
+              "Imani": "cutting"
+            },
+            "selected_label": "B"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "d822dd15-d4f7-4911-8187-2b9c6c356d91",
+      "working_topic": "Harbour launch schedule",
+      "type_or_skill": "logic_puzzle",
+      "novelty_rationale": "Orders five launch slots with both adjacency and a non-adjacency condition; the last slot is fixed.",
+      "semantic_fingerprint": {
+        "mechanism": "logic_puzzle",
+        "specific_model": {
+          "constraint_model": "Elm=5; Alder/Birch consecutive; Alder < Dune < Elm; Cedar>Alder and Cedar not immediately after Birch. Unique schedule Alder,Birch,Dune,Cedar,Elm.",
+          "selected_label": "D"
+        },
+        "title": "Harbour Launch Slots"
+      },
+      "nearest_existing": [
+        {
+          "id": "c1ce28d3-fd7a-4263-86fc-5064b0bd4377",
+          "title": "Dinner Shift Schedule",
+          "material_difference": "Existing item starts with “A restaurant manager is scheduling five servers — Fen, Gita, Hari, Ira, Jon — across a five-hour dinner shift that starts at 6 pm. Each server covers exactly one...” Its tested relation differs from this item: Orders five launch slots with both adjacency and a non-adjacency condition; the last slot is fixed."
+        },
+        {
+          "id": "8d31fd13-cbf3-4e1e-9d60-cc0e51315e06",
+          "title": "Biscuit Production Schedule",
+          "material_difference": "Existing item starts with “A bakery produces five types of biscuit on Monday. The total production is 200 biscuits. Shortbread accounts for twice as many as ginger snaps. Digestives account for...” Its tested relation differs from this item: Orders five launch slots with both adjacency and a non-adjacency condition; the last slot is fixed."
+        },
+        {
+          "id": "16871bed-a194-4dc4-8869-fad08a39d3a1",
+          "title": "Bench Seating Order",
+          "material_difference": "Existing item starts with “Six people — Anil, Beth, Carlos, Diya, Eun, and Faris — sit on a bench in a row numbered 1 to 6 (left to right). Anil is in position 4. Beth sits somewhere to Anil's...” Its tested relation differs from this item: Orders five launch slots with both adjacency and a non-adjacency condition; the last slot is fixed."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "d822dd15-d4f7-4911-8187-2b9c6c356d91",
+          "purpose": "Five launches named Alder, Birch, Cedar, Dune and Elm leave at 09:00, 09:15, 09:30, 09:45 and 10:00, one per slot. Birch leaves immediately after Alder. Dune leaves after Birch but before Elm. Cedar leaves after Alder but not immediately after Birch. Elm leaves at 10:00. Which launch leaves at 09:30?",
+          "independent_derivation_or_rating_basis": "Elm is fifth. Dune must be before Elm and after consecutive Alder-Birch. If Alder-Birch occupied slots 1-2, Cedar must follow Alder but cannot be slot 3, so Cedar=4 and Dune=3. If they occupied slots 2-3, Cedar would need slot 4, leaving no slot for Dune before Elm. Therefore Dune is at 09:30.",
+          "verification_ledger": {
+            "constraint_model": "Elm=5; Alder/Birch consecutive; Alder < Dune < Elm; Cedar>Alder and Cedar not immediately after Birch. Unique schedule Alder,Birch,Dune,Cedar,Elm.",
+            "selected_label": "D"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+      "working_topic": "Repair desk outcomes",
+      "type_or_skill": "interpreting_info",
+      "novelty_rationale": "Derives category totals, success totals and a radio repair rate from a two-day item-by-outcome table.",
+      "semantic_fingerprint": {
+        "mechanism": "interpreting_info",
+        "specific_model": {
+          "first_repairs": 36,
+          "second_repairs": 44,
+          "lamps_total": 40,
+          "radios_total": 34,
+          "radio_first_rate": "9/15=60%",
+          "answers": [
+            "Yes",
+            "Yes",
+            "No",
+            "Yes",
+            "No"
+          ]
+        },
+        "title": "Repair Desk Outcomes"
+      },
+      "nearest_existing": [
+        {
+          "id": "4a4f9caa-3625-416d-a613-2f888cf21746",
+          "title": "Regional Sales Quarterly",
+          "material_difference": "Existing item starts with “The table shows quarterly sales (in thousands of pounds) for four regional branches of a retailer in 2024.” Its tested relation differs from this item: Derives category totals, success totals and a radio repair rate from a two-day item-by-outcome table."
+        },
+        {
+          "id": "c600ca9c-0dff-49c3-a7f2-f9a0533e9f2a",
+          "title": "Hospital Discharge Times",
+          "material_difference": "Existing item starts with “The table below shows average patient discharge times (in hours after admission) and readmission rates within 30 days for five hospital wards during 2025.” Its tested relation differs from this item: Derives category totals, success totals and a radio repair rate from a two-day item-by-outcome table."
+        },
+        {
+          "id": "6d5d9c7d-d51c-48e5-98c9-a64a94c47f6b",
+          "title": "Apprenticeship Completion Rates",
+          "material_difference": "Existing item starts with “A training provider published the following data on apprenticeship programmes:” Its tested relation differs from this item: Derives category totals, success totals and a radio repair rate from a two-day item-by-outcome table."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "8b01c2cb-8622-4e6a-9b00-42f3a71f7f74",
+          "purpose": "A fictional repair desk recorded items brought in and successfully repaired over two Saturdays. Each item belongs to exactly one category. Decide whether each statement follows from the table.",
+          "independent_derivation_or_rating_basis": "Lamps: 18+22=40; radios: 15+19=34.; First Saturday: 12+9+15=36. Second: 17+14+13=44.; The toy category fell from 15 to 13 successful repairs.; Nine of fifteen radios were repaired: 9/15=60%.; The table provides no third-Saturday result or valid prediction.",
+          "verification_ledger": {
+            "first_repairs": 36,
+            "second_repairs": 44,
+            "lamps_total": 40,
+            "radios_total": 34,
+            "radio_first_rate": "9/15=60%",
+            "answers": [
+              "Yes",
+              "Yes",
+              "No",
+              "Yes",
+              "No"
+            ]
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+      "working_topic": "Shuttle passenger counts",
+      "type_or_skill": "interpreting_info",
+      "novelty_rationale": "Uses a two-way bicycle-by-time partition and derives the missing afternoon/non-bicycle counts from prose alone.",
+      "semantic_fingerprint": {
+        "mechanism": "interpreting_info",
+        "specific_model": {
+          "total": 96,
+          "before": 42,
+          "after": 54,
+          "bike_before": 18,
+          "bike_after": 12,
+          "nonbike_before": 24,
+          "nonbike_after": 42,
+          "answers": [
+            "Yes",
+            "Yes",
+            "No",
+            "Yes",
+            "No"
+          ]
+        },
+        "title": "Shuttle Passenger Record"
+      },
+      "nearest_existing": [
+        {
+          "id": "910e6045-5e1b-4b9f-ac13-5a4565e3a374",
+          "title": "City Park Visitor Counts",
+          "material_difference": "Existing item starts with “The table shows the average daily visitor count at four city parks across the four seasons of last year.” Its tested relation differs from this item: Uses a two-way bicycle-by-time partition and derives the missing afternoon/non-bicycle counts from prose alone."
+        },
+        {
+          "id": "4710ce2d-d5ff-498a-97f0-eb13bdd4f858",
+          "title": "Airport Monthly Passengers",
+          "material_difference": "Existing item starts with “The table shows the number of passengers (in thousands) passing through four airport terminals over four months.” Its tested relation differs from this item: Uses a two-way bicycle-by-time partition and derives the missing afternoon/non-bicycle counts from prose alone."
+        },
+        {
+          "id": "721d240b-0406-49ab-9784-48c31f931c13",
+          "title": "School Attendance Patterns",
+          "material_difference": "Existing item starts with “A secondary school records the average attendance percentage for each year group across three terms. The school's target is 95% attendance for every year group in...” Its tested relation differs from this item: Uses a two-way bicycle-by-time partition and derives the missing afternoon/non-bicycle counts from prose alone."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "8383651a-ae22-4096-b8b3-d29328677eff",
+          "purpose": "A fictional shuttle carried 96 distinct passengers on Monday. Of these, 42 boarded before noon and the remainder boarded later. Thirty passengers travelled with a bicycle; 18 of those boarded before noon. Every passenger boarded exactly once. Decide whether each statement follows.",
+          "independent_derivation_or_rating_basis": "96-42=54.; Thirty travelled with a bicycle and 18 boarded before noon, leaving 12 after noon.; Only 18 of 42 did; half of 42 is 21.; After noon without bicycle: 54-12=42; before noon without bicycle: 42-18=24.; Monday data gives no Tuesday behaviour.",
+          "verification_ledger": {
+            "total": 96,
+            "before": 42,
+            "after": 54,
+            "bike_before": 18,
+            "bike_after": 12,
+            "nonbike_before": 24,
+            "nonbike_after": 42,
+            "answers": [
+              "Yes",
+              "Yes",
+              "No",
+              "Yes",
+              "No"
+            ]
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+      "working_topic": "Helpline transfers",
+      "type_or_skill": "interpreting_info",
+      "novelty_rationale": "Combines calls across three desks to test a pooled transfer rate and contrasts it with desk-specific rates and raw counts.",
+      "semantic_fingerprint": {
+        "mechanism": "interpreting_info",
+        "specific_model": {
+          "answered": [
+            80,
+            120,
+            100
+          ],
+          "transfers": [
+            20,
+            36,
+            15
+          ],
+          "combined_rate": "71/300=23.6667%",
+          "not_transferred": [
+            60,
+            84,
+            85
+          ],
+          "answers": [
+            "Yes",
+            "Yes",
+            "Yes",
+            "Yes",
+            "No"
+          ]
+        },
+        "title": "Helpline Transfer Audit"
+      },
+      "nearest_existing": [
+        {
+          "id": "2e891941-a821-4916-8a54-927cabfc5eb9",
+          "title": "Shelter Animals",
+          "material_difference": "Existing item starts with “A shelter houses 40 rescued animals: 24 dogs and the rest cats. Three quarters of the dogs have been microchipped. All cats have been microchipped, but none of the...” Its tested relation differs from this item: Combines calls across three desks to test a pooled transfer rate and contrasts it with desk-specific rates and raw counts."
+        },
+        {
+          "id": "13e911db-6288-4dc8-994a-dcba7333271b",
+          "title": "Hardware Store Fasteners",
+          "material_difference": "Existing item starts with “A hardware store has 60 fasteners on a single shelf. Two-thirds of the fasteners are screws and the rest are bolts. Of the screws, every one with a flat head is...” Its tested relation differs from this item: Combines calls across three desks to test a pooled transfer rate and contrasts it with desk-specific rates and raw counts."
+        },
+        {
+          "id": "800de224-adce-4c4c-845b-08b0a05d3de1",
+          "title": "Festival Ticket Extras",
+          "material_difference": "Existing item starts with “A festival has 180 ticket holders. A third of them hold a VIP pass and the rest hold standard passes. Every VIP pass includes drink tokens. Only some standard passes...” Its tested relation differs from this item: Combines calls across three desks to test a pooled transfer rate and contrasts it with desk-specific rates and raw counts."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "d9aae1fd-d6e2-4408-81ee-7a2c661c6acb",
+          "purpose": "A fictional helpline reports calls answered at three desks during one shift. Each call is answered by exactly one desk; transferred calls are included in that desk’s answered total and are transferred once. Decide whether each statement follows.",
+          "independent_derivation_or_rating_basis": "South transferred 36, compared with North 20 and East 15.; 20/80=1/4.; There were 20+36+15=71 transfers out of 80+120+100=300 calls; 71/300 is about 23.67%.; East: 15/100=15%; South: 36/120=30%.; South had 120-36=84; North and East together had (80-20)+(100-15)=145.",
+          "verification_ledger": {
+            "answered": [
+              80,
+              120,
+              100
+            ],
+            "transfers": [
+              20,
+              36,
+              15
+            ],
+            "combined_rate": "71/300=23.6667%",
+            "not_transferred": [
+              60,
+              84,
+              85
+            ],
+            "answers": [
+              "Yes",
+              "Yes",
+              "Yes",
+              "Yes",
+              "No"
+            ]
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "b0f99a28-6127-40ab-b548-bce5ef933dc2",
+      "working_topic": "Online repair bookings",
+      "type_or_skill": "recognising_assumptions",
+      "novelty_rationale": "Evaluates an optional booking proposal using a matched wait-time trial, with preference and administrative distractors.",
+      "semantic_fingerprint": {
+        "mechanism": "recognising_assumptions",
+        "specific_model": {
+          "criterion": "direct evidence on average wait under comparable conditions",
+          "selected_label": "C",
+          "scenario_facts": "all trial data are fictional and supplied in options"
+        },
+        "title": "Repair Booking Trial"
+      },
+      "nearest_existing": [
+        {
+          "id": "7ba80070-3d45-4458-b1c7-e844b2268e26",
+          "title": "Cashless Parking",
+          "material_difference": "Existing item starts with “Should town-centre car parks switch to cashless-only payment to cut the cost of collecting and banking coins?” Its tested relation differs from this item: Evaluates an optional booking proposal using a matched wait-time trial, with preference and administrative distractors."
+        },
+        {
+          "id": "91be2030-b663-4ee8-82fb-e143f44bed04",
+          "title": "Smartphones in Primary Schools",
+          "material_difference": "Existing item starts with “Should UK primary schools ban pupils from using personal smartphones during the school day to improve classroom concentration?” Its tested relation differs from this item: Evaluates an optional booking proposal using a matched wait-time trial, with preference and administrative distractors."
+        },
+        {
+          "id": "e8f93408-4b64-4b5a-83ae-bfde0d082900",
+          "title": "Longer Lunch Break",
+          "material_difference": "Existing item starts with “Should office employees be given a one-hour lunch break, up from thirty minutes, to increase afternoon productivity?” Its tested relation differs from this item: Evaluates an optional booking proposal using a matched wait-time trial, with preference and administrative distractors."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "b0f99a28-6127-40ab-b548-bce5ef933dc2",
+          "purpose": "A fictional repair workshop wants to introduce optional online appointment booking to reduce the average waiting time for visitors. Which is the strongest argument?",
+          "independent_derivation_or_rating_basis": "The six-week comparison directly measures the proposed outcome under comparable staffing and hours. The other arguments concern preference or minor administration rather than average waiting time.",
+          "verification_ledger": {
+            "criterion": "direct evidence on average wait under comparable conditions",
+            "selected_label": "C",
+            "scenario_facts": "all trial data are fictional and supplied in options"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "c2e726ed-8cb5-4d7e-88ba-9a6f1118b8ac",
+      "working_topic": "Early river shuttle",
+      "type_or_skill": "recognising_assumptions",
+      "novelty_rationale": "Uses a substitution effect: the added 07:00 shuttle attracted later passengers while the crowded 07:30 load stayed unchanged.",
+      "semantic_fingerprint": {
+        "mechanism": "recognising_assumptions",
+        "specific_model": {
+          "criterion": "effect on 07:30 passenger load, not new-trip demand",
+          "selected_label": "C",
+          "scenario_facts": "trial is fictional and self-contained"
+        },
+        "title": "Early River Shuttle"
+      },
+      "nearest_existing": [
+        {
+          "id": "c8d5d5ae-caec-4fcd-87cd-61e04c2c2a69",
+          "title": "Menu Calorie Labelling",
+          "material_difference": "Existing item starts with “Should restaurants be required to display calorie information on menus to help customers make healthier choices?” Its tested relation differs from this item: Uses a substitution effect: the added 07:00 shuttle attracted later passengers while the crowded 07:30 load stayed unchanged."
+        },
+        {
+          "id": "febf7e7d-7e43-4786-b59d-c699efa21dae",
+          "title": "Later School Start",
+          "material_difference": "Existing item starts with “Should secondary schools in the UK move the start of the school day from 08:45 to 10:00 to improve student academic performance?” Its tested relation differs from this item: Uses a substitution effect: the added 07:00 shuttle attracted later passengers while the crowded 07:30 load stayed unchanged."
+        },
+        {
+          "id": "13a6695c-a24f-4a52-a206-2a326e600c7f",
+          "title": "Meditation in Schools",
+          "material_difference": "Existing item starts with “Should schools introduce daily meditation sessions to improve student concentration?” Its tested relation differs from this item: Uses a substitution effect: the added 07:00 shuttle attracted later passengers while the crowded 07:30 load stayed unchanged."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "c2e726ed-8cb5-4d7e-88ba-9a6f1118b8ac",
+          "purpose": "A fictional town considers adding a 07:00 river shuttle to reduce crowding on its existing 07:30 departure. Which is the strongest argument?",
+          "independent_derivation_or_rating_basis": "The trial directly shows that the proposed trip did not reduce crowding on the 07:30 service. The other arguments do not measure that outcome.",
+          "verification_ledger": {
+            "criterion": "effect on 07:30 passenger load, not new-trip demand",
+            "selected_label": "C",
+            "scenario_facts": "trial is fictional and self-contained"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "fbaf9861-744c-45f3-9879-5fad8c0e62eb",
+      "working_topic": "Archive catalogue redundancy",
+      "type_or_skill": "recognising_assumptions",
+      "novelty_rationale": "Tests catalogue-loss resilience through off-site redundancy; the decisive argument follows from physical separation of copies, without trial statistics.",
+      "semantic_fingerprint": {
+        "mechanism": "recognising_assumptions",
+        "specific_model": {
+          "criterion": "prevent total loss of the only catalogue through off-site redundancy",
+          "argument_type": "deductive resilience mechanism, not an intervention trial",
+          "selected_label": "A"
+        },
+        "title": "Archive Catalogue Copies"
+      },
+      "nearest_existing": [
+        {
+          "id": "991c6f91-27a4-4919-800a-f5268275e6a5",
+          "title": "Opt-In Receipts",
+          "material_difference": "Existing item starts with “Should large UK retailers be required to stop issuing paper receipts by default (offering them only on request) to reduce paper waste?” Its tested relation differs from this item: Tests catalogue-loss resilience through off-site redundancy; the decisive argument follows from physical separation of copies, without trial statistics."
+        },
+        {
+          "id": "7ba80070-3d45-4458-b1c7-e844b2268e26",
+          "title": "Cashless Parking",
+          "material_difference": "Existing item starts with “Should town-centre car parks switch to cashless-only payment to cut the cost of collecting and banking coins?” Its tested relation differs from this item: Tests catalogue-loss resilience through off-site redundancy; the decisive argument follows from physical separation of copies, without trial statistics."
+        },
+        {
+          "id": "696e10e1-de73-4a2b-8f17-a1367a66fefe",
+          "title": "Solar Panels on New Homes",
+          "material_difference": "Existing item starts with “Should all new homes be required to have solar panels to reduce household energy costs?” Its tested relation differs from this item: Tests catalogue-loss resilience through off-site redundancy; the decisive argument follows from physical separation of copies, without trial statistics."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "fbaf9861-744c-45f3-9879-5fad8c0e62eb",
+          "purpose": "A fictional archive keeps its only catalogue on paper in one building. Should it scan the catalogue and store duplicate digital copies in two other buildings to reduce the risk of losing all catalogue records if the archive building is damaged? Which is the strongest argument?",
+          "independent_derivation_or_rating_basis": "Copies in other buildings would remain available if damage destroyed the only paper catalogue, directly reducing the stated risk of total record loss. Convenience, staff preference and a temporary need for electricity do not address permanent loss as directly.",
+          "verification_ledger": {
+            "criterion": "prevent total loss of the only catalogue through off-site redundancy",
+            "argument_type": "deductive resilience mechanism, not an intervention trial",
+            "selected_label": "A"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "80fd9429-e35b-42df-8c4a-2e29db932c4e",
+      "working_topic": "Coastal trail signs",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "Reads the bird-only region of a two-set sign diagram and excludes signs mentioning both topics.",
+      "semantic_fingerprint": {
+        "mechanism": "venn_diagram",
+        "specific_model": {
+          "regions": {
+            "birds_only": 18,
+            "tides_only": 13,
+            "both": 11,
+            "outside": 16
+          },
+          "total": 58,
+          "expression": "birds but not tides = set1_only = 18",
+          "selected_label": "C"
+        },
+        "title": "Coastal Trail Signs"
+      },
+      "nearest_existing": [
+        {
+          "id": "31c90982-8d16-411c-ad68-4b34e8cecafb",
+          "title": "Mountain Trail Stages",
+          "material_difference": "Existing item starts with “The diagram shows 150 hiking groups categorised by which stages of a mountain loop trail they are on. Each letter marks a different region.” Its tested relation differs from this item: Reads the bird-only region of a two-set sign diagram and excludes signs mentioning both topics."
+        },
+        {
+          "id": "2d7d258b-e3c6-48ba-89eb-32bac6971f8d",
+          "title": "Hospital Ward Rotations",
+          "material_difference": "Existing item starts with “The diagram shows 300 staff rotations at a hospital across six neighbouring wards. Each letter marks a different region.” Its tested relation differs from this item: Reads the bird-only region of a two-set sign diagram and excludes signs mentioning both topics."
+        },
+        {
+          "id": "2712bb75-396e-4c22-a94c-d86e193d7f6d",
+          "title": "Company Training Modules",
+          "material_difference": "Existing item starts with “The diagram categorises 100 training modules at a company by three attributes: technical, compliance and advanced. Each letter marks a different region.” Its tested relation differs from this item: Reads the bird-only region of a two-set sign diagram and excludes signs mentioning both topics."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "80fd9429-e35b-42df-8c4a-2e29db932c4e",
+          "purpose": "A diagram shows 58 signs on a fictional coastal trail. Set A means “mentions birds” and set B means “mentions tides”. Numbers give the number of signs in each exclusive region.\n\nHow many signs mention birds but not tides?",
+          "independent_derivation_or_rating_basis": "The birds-only region is 18. The overlap of 11 mentions both, so it is excluded.",
+          "verification_ledger": {
+            "regions": {
+              "birds_only": 18,
+              "tides_only": 13,
+              "both": 11,
+              "outside": 16
+            },
+            "total": 58,
+            "expression": "birds but not tides = set1_only = 18",
+            "selected_label": "C"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "a10ba3a4-0fa6-488c-ade8-dbf012618322",
+      "working_topic": "Studio workshop enrolment",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "Sums all four regions inside the print set of a three-workshop diagram, including the triple overlap.",
+      "semantic_fingerprint": {
+        "mechanism": "venn_diagram",
+        "specific_model": {
+          "regions": {
+            "set2_only": 9,
+            "set1_set2": 7,
+            "set2_set3": 5,
+            "set1_set2_set3": 4
+          },
+          "expression": "9+7+5+4=25 members",
+          "selected_label": "C"
+        },
+        "title": "Studio Workshop Enrolment"
+      },
+      "nearest_existing": [
+        {
+          "id": "a7b0fb4e-183a-4adb-98c6-c51bdcb048b9",
+          "title": "Library Workshop Attendance",
+          "material_difference": "Existing item starts with “The diagram shows 120 library members categorised by which of four workshops they attend — Fiction, Poetry, Drawing, and Bookbinding. Each letter marks a different...” Its tested relation differs from this item: Sums all four regions inside the print set of a three-workshop diagram, including the triple overlap."
+        },
+        {
+          "id": "e3f10518-29c6-42e8-b950-762426abe120",
+          "title": "Biology Module Enrolments",
+          "material_difference": "Existing item starts with “The diagram shows 180 students enrolled across five biology modules. Each letter marks a different region.” Its tested relation differs from this item: Sums all four regions inside the print set of a three-workshop diagram, including the triple overlap."
+        },
+        {
+          "id": "53c28368-9ef2-44a4-8325-cc1add54ad08",
+          "title": "Bookshop Orders",
+          "material_difference": "Existing item starts with “An online bookshop processes 122 orders one week across three categories: gift-wrapped, dispatched by first-class post, and placed by members.” Its tested relation differs from this item: Sums all four regions inside the print set of a three-workshop diagram, including the triple overlap."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "a10ba3a4-0fa6-488c-ade8-dbf012618322",
+          "purpose": "The diagram classifies 64 fictional studio members by enrolment in clay, print and textile workshops. Each number is the count in that exclusive region.\n\nHow many members take print, whether or not they take another workshop?",
+          "independent_derivation_or_rating_basis": "Print includes print only 9, clay-and-print only 7, print-and-textile only 5, and all three 4: 9+7+5+4=25.",
+          "verification_ledger": {
+            "regions": {
+              "set2_only": 9,
+              "set1_set2": 7,
+              "set2_set3": 5,
+              "set1_set2_set3": 4
+            },
+            "expression": "9+7+5+4=25 members",
+            "selected_label": "C"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "61a5a8b4-20d2-4b57-b504-6c542a26a872",
+      "working_topic": "Community event roles",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "Sums only the three pairwise-exclusive task regions, excluding the all-three event helpers.",
+      "semantic_fingerprint": {
+        "mechanism": "venn_diagram",
+        "specific_model": {
+          "regions": {
+            "set1_set2": 6,
+            "set1_set3": 8,
+            "set2_set3": 5
+          },
+          "expression": "6+8+5=19 people",
+          "selected_label": "B"
+        },
+        "title": "Community Event Roles"
+      },
+      "nearest_existing": [
+        {
+          "id": "1dda2ac3-bfa8-466e-9da3-b36b7214cec5",
+          "title": "Community Centre Evenings",
+          "material_difference": "Existing item starts with “A community centre surveys 90 members about three evening activities. 35 attend yoga, 40 attend book club, 25 attend swimming. 10 members attend both yoga and book...” Its tested relation differs from this item: Sums only the three pairwise-exclusive task regions, excluding the all-three event helpers."
+        },
+        {
+          "id": "de96eb9b-7e68-4672-a1e2-3bfd61180aab",
+          "title": "Community Programme Pairs",
+          "material_difference": "Existing item starts with “A community hub runs four programmes: yoga, choir, chess and pottery. 120 residents take part in total. Some residents attend both yoga and choir. Some residents...” Its tested relation differs from this item: Sums only the three pairwise-exclusive task regions, excluding the all-three event helpers."
+        },
+        {
+          "id": "22959108-0a64-459c-93e7-7e16aff09615",
+          "title": "Community Initiative Focus Areas",
+          "material_difference": "Existing item starts with “The diagram classifies community initiative projects by focus area: Environment, Healthcare, Education, Housing, Employment, and Transport. Each letter marks a...” Its tested relation differs from this item: Sums only the three pairwise-exclusive task regions, excluding the all-three event helpers."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "61a5a8b4-20d2-4b57-b504-6c542a26a872",
+          "purpose": "The diagram shows 72 people at a fictional event, classified by whether they helped with setup, registration and clean-up. Region numbers are exclusive.\n\nHow many helped with exactly two of the three tasks?",
+          "independent_derivation_or_rating_basis": "The exactly-two regions contain 6, 8 and 5 people. Their sum is 19; the all-three region is excluded.",
+          "verification_ledger": {
+            "regions": {
+              "set1_set2": 6,
+              "set1_set3": 8,
+              "set2_set3": 5
+            },
+            "expression": "6+8+5=19 people",
+            "selected_label": "B"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "7c2c3af5-ffdf-4c56-9eb1-d24c1490c99d",
+      "working_topic": "Park volunteer skills",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "Computes a conditional proportion within first-aid volunteers, using a two-region numerator and four-region denominator.",
+      "semantic_fingerprint": {
+        "mechanism": "venn_diagram",
+        "specific_model": {
+          "denominator": "12+8+6+5=31 first-aid volunteers",
+          "numerator": "8+5=13 with first aid and map reading",
+          "expression": "13/31",
+          "unrounded_result": "13/31",
+          "selected_label": "A"
+        },
+        "title": "Park Volunteer Skills"
+      },
+      "nearest_existing": [
+        {
+          "id": "e050cabc-0c28-4135-a843-701cf0a3c743",
+          "title": "Festival Volunteer Tasks",
+          "material_difference": "Existing item starts with “The diagram shows 300 festival volunteers categorised by the task areas they cover. Each letter marks a different region.” Its tested relation differs from this item: Computes a conditional proportion within first-aid volunteers, using a two-region numerator and four-region denominator."
+        },
+        {
+          "id": "c24de01b-3baf-4871-ae12-e36230bee6d2",
+          "title": "Trainee Nurse Skills",
+          "material_difference": "Existing item starts with “The diagram shows 150 trainee nurses categorised by their completion of a core clinical module and four supplementary skill modules (venepuncture, cannulation, wound...” Its tested relation differs from this item: Computes a conditional proportion within first-aid volunteers, using a two-region numerator and four-region denominator."
+        },
+        {
+          "id": "c3f5f14b-c720-4a46-8f69-42551f881875",
+          "title": "Bootcamp Student Skills",
+          "material_difference": "Existing item starts with “A coding bootcamp tracks 50 students by their skill areas. 15 are strong in Frontend, 14 in Backend, 13 in Database, and 14 in DevOps. 4 students are strong in both...” Its tested relation differs from this item: Computes a conditional proportion within first-aid volunteers, using a two-region numerator and four-region denominator."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "7c2c3af5-ffdf-4c56-9eb1-d24c1490c99d",
+          "purpose": "The diagram classifies 80 volunteers at a fictional park by map reading, first aid and equipment maintenance. Each region count is exclusive, and every volunteer has an equal chance of being selected.\n\nAmong volunteers who have first-aid skills, what proportion also have map-reading skills?",
+          "independent_derivation_or_rating_basis": "First-aid volunteers: 12+8+6+5=31. Those also with map reading: 8+5=13. The conditional proportion is 13/31.",
+          "verification_ledger": {
+            "denominator": "12+8+6+5=31 first-aid volunteers",
+            "numerator": "8+5=13 with first aid and map reading",
+            "expression": "13/31",
+            "unrounded_result": "13/31",
+            "selected_label": "A"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "45d47239-046a-4ade-98a3-fa3de9802138",
+      "working_topic": "Observatory alerts",
+      "type_or_skill": "probabilistic",
+      "novelty_rationale": "Computes exactly one of two independent alerts by adding two asymmetric exclusive branches.",
+      "semantic_fingerprint": {
+        "mechanism": "probabilistic",
+        "specific_model": {
+          "inputs": {
+            "A": 0.3,
+            "B": 0.2,
+            "independent": true
+          },
+          "expression": "0.3*0.8+0.7*0.2",
+          "unrounded_result": 0.38,
+          "rounding": "none",
+          "units": "probability",
+          "selected_label": "B"
+        },
+        "title": "Observatory Alert Channels"
+      },
+      "nearest_existing": [
+        {
+          "id": "91977d19-21f1-4cc8-9cef-4cbc37aaa127",
+          "title": "Charity Raffle Profit",
+          "material_difference": "Existing item starts with “A charity sells 200 raffle tickets at £5 each. There is one first prize of £300, two second prizes of £100 each, and five third prizes of £20 each.” Its tested relation differs from this item: Computes exactly one of two independent alerts by adding two asymmetric exclusive branches."
+        },
+        {
+          "id": "4f95045e-40db-4b34-904f-0b4ea7b12f43",
+          "title": "Rare Nut Allergy Test",
+          "material_difference": "Existing item starts with “A rare nut allergy affects 1 in 500 people. A new skin-prick test correctly identifies 99% of true cases as positive (when the allergy is present) and correctly...” Its tested relation differs from this item: Computes exactly one of two independent alerts by adding two asymmetric exclusive branches."
+        },
+        {
+          "id": "18f10ed6-11a8-4dd3-93af-c928b21a51a2",
+          "title": "Seed Germination Rate",
+          "material_difference": "Existing item starts with “A gardener plants 5 seeds, each with an independent 70% chance of germinating.” Its tested relation differs from this item: Computes exactly one of two independent alerts by adding two asymmetric exclusive branches."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "45d47239-046a-4ade-98a3-fa3de9802138",
+          "purpose": "At a fictional observatory, two independent alert channels operate on a given night. Channel A sends an alert with probability 0.30; channel B sends an alert with probability 0.20. What is the probability that exactly one channel sends an alert?",
+          "independent_derivation_or_rating_basis": "Exactly one means A alone or B alone: (0.30×0.80)+(0.70×0.20)=0.24+0.14=0.38.",
+          "verification_ledger": {
+            "inputs": {
+              "A": 0.3,
+              "B": 0.2,
+              "independent": true
+            },
+            "expression": "0.3*0.8+0.7*0.2",
+            "unrounded_result": 0.38,
+            "rounding": "none",
+            "units": "probability",
+            "selected_label": "B"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "8efec042-4316-4d7d-a909-7de9beb2433b",
+      "working_topic": "Rehearsal room collisions",
+      "type_or_skill": "probabilistic",
+      "novelty_rationale": "Computes a birthday-style collision among three independent room choices via the complement that all rooms chosen are distinct.",
+      "semantic_fingerprint": {
+        "mechanism": "probabilistic",
+        "specific_model": {
+          "inputs": {
+            "performers": 3,
+            "rooms": 4,
+            "independent_uniform_choices": true
+          },
+          "expression": "1-(4/4)*(3/4)*(2/4)",
+          "unrounded_result": "5/8",
+          "rounding": "exact fraction",
+          "units": "probability",
+          "selected_label": "D"
+        },
+        "title": "Rehearsal Room Collision"
+      },
+      "nearest_existing": [
+        {
+          "id": "ca009d11-0f00-411b-a051-328364d5cdc8",
+          "title": "Biased Coin Triple",
+          "material_difference": "Existing item starts with “A coin is biased so that it lands heads with probability 0.6 and tails with probability 0.4. It is flipped three times, and each flip is independent.” Its tested relation differs from this item: Computes a birthday-style collision among three independent room choices via the complement that all rooms chosen are distinct."
+        },
+        {
+          "id": "5e896827-f16a-48ba-a224-e85983afca67",
+          "title": "Three-Day Rain Forecast",
+          "material_difference": "Existing item starts with “A weather forecaster states that the probability of rain on each of three consecutive days is independently 0.4.” Its tested relation differs from this item: Computes a birthday-style collision among three independent room choices via the complement that all rooms chosen are distinct."
+        },
+        {
+          "id": "ce65c3ae-f7f0-4980-bb50-a74cb9baeb2f",
+          "title": "Raffle Ticket Drawing",
+          "material_difference": "Existing item starts with “A charity raffle has 200 tickets. 30 tickets win a small prize and 10 tickets win a large prize. The remaining 160 tickets win nothing. Two tickets are drawn at...” Its tested relation differs from this item: Computes a birthday-style collision among three independent room choices via the complement that all rooms chosen are distinct."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "8efec042-4316-4d7d-a909-7de9beb2433b",
+          "purpose": "Three performers independently choose one of four rehearsal rooms. Each performer is equally likely to choose any room. What is the probability that at least two performers choose the same room?",
+          "independent_derivation_or_rating_basis": "Use the complement. For all three performers to choose different rooms, the first can choose any room, the second must choose one of the other three, and the third one of the remaining two: (4/4)×(3/4)×(2/4)=3/8. Therefore the probability that at least two choose the same room is 1−3/8=5/8.",
+          "verification_ledger": {
+            "inputs": {
+              "performers": 3,
+              "rooms": 4,
+              "independent_uniform_choices": true
+            },
+            "expression": "1-(4/4)*(3/4)*(2/4)",
+            "unrounded_result": "5/8",
+            "rounding": "exact fraction",
+            "units": "probability",
+            "selected_label": "D"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "f5541786-42ff-4db3-9e49-fdf982e875e3",
+      "working_topic": "Ferry rain covers",
+      "type_or_skill": "probabilistic",
+      "novelty_rationale": "Conditions on having taken a rain cover, so the denominator is cover users rather than all ferry passengers.",
+      "semantic_fingerprint": {
+        "mechanism": "probabilistic",
+        "specific_model": {
+          "inputs": {
+            "morning_total": 120,
+            "morning_cover": 30,
+            "evening_total": 80,
+            "evening_cover": 40
+          },
+          "expression": "40/(30+40)",
+          "unrounded_result": "4/7",
+          "rounding": "exact fraction",
+          "units": "conditional probability",
+          "selected_label": "C"
+        },
+        "title": "Ferry Rain Covers"
+      },
+      "nearest_existing": [
+        {
+          "id": "5e896827-f16a-48ba-a224-e85983afca67",
+          "title": "Three-Day Rain Forecast",
+          "material_difference": "Existing item starts with “A weather forecaster states that the probability of rain on each of three consecutive days is independently 0.4.” Its tested relation differs from this item: Conditions on having taken a rain cover, so the denominator is cover users rather than all ferry passengers."
+        },
+        {
+          "id": "ec250d7c-e142-452d-998a-4716ab29b9ad",
+          "title": "Weather and Commute Delays",
+          "material_difference": "Existing item starts with “On any given day, there is a 30% chance of rain. When it rains, there is a 60% chance of a commute delay. When it does not rain, there is a 10% chance of a commute delay.” Its tested relation differs from this item: Conditions on having taken a rain cover, so the denominator is cover users rather than all ferry passengers."
+        },
+        {
+          "id": "015e0b07-a37f-43f3-8c80-ee5c8e0695a2",
+          "title": "Bakery Production Lines",
+          "material_difference": "Existing item starts with “A bakery uses two ovens. Oven A bakes 70% of all loaves with a 2% rate of being undercooked. Oven B bakes the remaining 30% with a 6% rate of being undercooked.” Its tested relation differs from this item: Conditions on having taken a rain cover, so the denominator is cover users rather than all ferry passengers."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "f5541786-42ff-4db3-9e49-fdf982e875e3",
+          "purpose": "A fictional ferry carried 120 passengers on its morning trip and 80 on its evening trip. On the morning trip, 30 passengers took a rain cover; on the evening trip, 40 did. One of the 200 passengers is chosen uniformly at random. Given that the selected passenger took a rain cover, what is the probability that they travelled in the evening?",
+          "independent_derivation_or_rating_basis": "Among rain-cover users there were 30+40=70 passengers, of whom 40 travelled in the evening. Conditional probability = 40/70=4/7.",
+          "verification_ledger": {
+            "inputs": {
+              "morning_total": 120,
+              "morning_cover": 30,
+              "evening_total": 80,
+              "evening_cover": 40
+            },
+            "expression": "40/(30+40)",
+            "unrounded_result": "4/7",
+            "rounding": "exact fraction",
+            "units": "conditional probability",
+            "selected_label": "C"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "4c84d495-18b8-4ef5-a86f-1beb34142de1",
+      "working_topic": "Display volume order",
+      "type_or_skill": "probabilistic",
+      "novelty_rationale": "Counts permutations with two named volumes adjacent by treating the pair as one block and allowing both internal orders.",
+      "semantic_fingerprint": {
+        "mechanism": "probabilistic",
+        "specific_model": {
+          "inputs": {
+            "distinct_volumes": 6,
+            "named_pair": 2
+          },
+          "expression": "2*5!/6!",
+          "unrounded_result": "1/3",
+          "rounding": "exact fraction",
+          "units": "probability",
+          "selected_label": "B"
+        },
+        "title": "Display Volume Order"
+      },
+      "nearest_existing": [
+        {
+          "id": "3609a7db-f54d-4525-bb51-eafe5091029f",
+          "title": "Dice Roll Game",
+          "material_difference": "Existing item starts with “A game costs £2 to play. A fair six-sided die is rolled. If the player rolls a 6, they win £10. If they roll any other number, they win nothing.” Its tested relation differs from this item: Counts permutations with two named volumes adjacent by treating the pair as one block and allowing both internal orders."
+        },
+        {
+          "id": "2cf31ed3-24a5-4f52-b15c-a423421b02cf",
+          "title": "Coloured Tokens",
+          "material_difference": "Existing item starts with “A bag contains 6 red tokens, 5 yellow tokens and 4 black tokens. Two tokens are drawn at random, one after the other, without replacement.” Its tested relation differs from this item: Counts permutations with two named volumes adjacent by treating the pair as one block and allowing both internal orders."
+        },
+        {
+          "id": "dae3aa0a-163d-43c7-b1c3-5aaf83f672fb",
+          "title": "Two Blue Marbles",
+          "material_difference": "Existing item starts with “A bag contains 5 red marbles and 3 blue marbles. Two marbles are drawn at random, one after the other, without replacement.” Its tested relation differs from this item: Counts permutations with two named volumes adjacent by treating the pair as one block and allowing both internal orders."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "4c84d495-18b8-4ef5-a86f-1beb34142de1",
+          "purpose": "Six distinct display volumes are arranged in a random order on one shelf. Two named volumes, Atlas and Beacon, are among the six. What is the probability that Atlas and Beacon are next to each other?",
+          "independent_derivation_or_rating_basis": "Treat Atlas and Beacon as one block. The block and four other volumes have 5! orders, and the two named volumes have 2 internal orders. Thus favourable orders = 2×5!, out of 6! total: 2/6=1/3.",
+          "verification_ledger": {
+            "inputs": {
+              "distinct_volumes": 6,
+              "named_pair": 2
+            },
+            "expression": "2*5!/6!",
+            "unrounded_result": "1/3",
+            "rounding": "exact fraction",
+            "units": "probability",
+            "selected_label": "B"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "3aa6e000-327c-45d7-b2f5-26142b4b7177",
+      "working_topic": "Community Radio Programme Tags",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "A three-tag, two-overlap path is reconstructed from marginals and pair counts; the live school-club item uses four sets split into two disconnected pairs. Wrong-option diagrams now explicitly number every nonempty exclusive region, including a zero-count geometric area in C.",
+      "semantic_fingerprint": {
+        "mechanism": "diagram selection from marginals",
+        "topology": "three_linear",
+        "shape_signature": [
+          "square",
+          "oval",
+          "diamond"
+        ],
+        "specific_model": {
+          "inputs": {
+            "total": 39,
+            "music": 12,
+            "talk": 18,
+            "local": 11,
+            "music_talk": 4,
+            "talk_local": 3,
+            "music_local": 0,
+            "outside": 5
+          },
+          "expression": "music_only=12-4; talk_only=18-4-3; local_only=11-3",
+          "unrounded_result": "8,11,8; diagram A",
+          "rounding": "none",
+          "units": "programmes",
+          "selected_label": "A",
+          "distractor_diagrams": {
+            "B": "All three sets are disjoint; no programme can be in both Music and Talk or both Talk and Local, contradicting the given overlaps.",
+            "C": "The Music ∩ Local only area is explicitly labelled 0; Music totals 20+8+6=34 rather than 12, so the diagram is wrong.",
+            "D": "Talk and Local do not overlap, contradicting the three programmes with both tags."
+          }
+        }
+      },
+      "nearest_existing": [
+        {
+          "id": "cef493a1-5b42-43b4-889f-c7de9d26248c",
+          "title": "After-School Club Wings",
+          "material_difference": "A three-tag, two-overlap path is reconstructed from marginals and pair counts; the live school-club item uses four sets split into two disconnected pairs."
+        },
+        {
+          "id": "7ad4867f-54cd-4d8b-9328-6752e6a38239",
+          "title": "Music Streaming Playlists",
+          "material_difference": "A three-tag, two-overlap path is reconstructed from marginals and pair counts; the live school-club item uses four sets split into two disconnected pairs."
+        },
+        {
+          "id": "de96eb9b-7e68-4672-a1e2-3bfd61180aab",
+          "title": "Community Programme Pairs",
+          "material_difference": "A three-tag, two-overlap path is reconstructed from marginals and pair counts; the live school-club item uses four sets split into two disconnected pairs."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "3aa6e000-327c-45d7-b2f5-26142b4b7177",
+          "purpose": "A station has 39 programmes. A programme may carry the Music, Talk, or Local tag. Of these, 12 have Music, 18 have Talk, and 11 have Local. Four have both Music and Talk; three have both Talk and Local; none have both Music and Local. Five programmes have none of the three tags. Which diagram represents these data? Each number is the count in that exclusive region.",
+          "independent_derivation_or_rating_basis": "Because Music and Local never overlap, no programme can have all three tags. Music-only is 12−4=8; Talk-only is 18−4−3=11; Local-only is 11−3=8. With five outside, diagram A matches every count and overlap.",
+          "verification_ledger": {
+            "inputs": {
+              "total": 39,
+              "music": 12,
+              "talk": 18,
+              "local": 11,
+              "music_talk": 4,
+              "talk_local": 3,
+              "music_local": 0,
+              "outside": 5
+            },
+            "expression": "music_only=12-4; talk_only=18-4-3; local_only=11-3",
+            "unrounded_result": "8,11,8; diagram A",
+            "rounding": "none",
+            "units": "programmes",
+            "selected_label": "A"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "5297e7b2-a46d-4750-9a7a-09db32602f59",
+      "working_topic": "Observatory Image Archive",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "Compares membership of two lettered regions inside a checked-image container and asks which property both images share; the nearest live module item asks for one region matching a three-set conjunction.",
+      "semantic_fingerprint": {
+        "mechanism": "common property of two named regions in a container with overlapping subgroups",
+        "topology": "container",
+        "shape_signature": [
+          "rectangle",
+          "circle",
+          "diamond"
+        ],
+        "specific_model": {
+          "inputs": {
+            "Q": "Checked ∩ Digitised ∩ not Published",
+            "R": "Checked ∩ Digitised ∩ Published",
+            "T": "Checked ∩ Published ∩ not Digitised"
+          },
+          "expression": "properties(Q) ∩ properties(R)",
+          "unrounded_result": "Checked and Digitised; only option B states a true common property",
+          "rounding": "none",
+          "units": "logical property",
+          "selected_label": "B"
+        }
+      },
+      "nearest_existing": [
+        {
+          "id": "2712bb75-396e-4c22-a94c-d86e193d7f6d",
+          "title": "Company Training Modules",
+          "material_difference": "The live question identifies one letter for Technical ∩ Compliance excluding Advanced. This item compares two named nested regions and asks for a property shared by both; the candidate cannot be answered by locating a single region."
+        },
+        {
+          "id": "05eae854-d2be-4c30-8010-2c4526f548a6",
+          "title": "Engineer Certification Hierarchy",
+          "material_difference": "The live hierarchy identifies the letter for senior but not principal. This item tests common membership across Q and R in a two-subgroup container, including their difference in publication status."
+        },
+        {
+          "id": "e9085941-f35a-498b-b952-46ea5a053272",
+          "title": "Hospital Floor Clinics",
+          "material_difference": "The live seven-clinic chain asks for one two-clinic intersection. This uses a checked-image container with two partly overlapping subgroups and compares two exclusive regions."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "5297e7b2-a46d-4750-9a7a-09db32602f59",
+          "purpose": "Every digitised observatory image has been checked, and every published image has been checked. Some checked images are both digitised and published. The diagram uses a rectangle for Checked, a circle for Digitised, and a diamond for Published. Each letter identifies one exclusive region. An image in region Q is compared with an image in region R. Which statement must be true of both images?",
+          "independent_derivation_or_rating_basis": "Q lies in Checked and Digitised but outside Published. R lies in all three. Both images have therefore been digitised. Only the R image is published, and both have been checked.",
+          "verification_ledger": {
+            "inputs": {
+              "Q": "Checked ∩ Digitised ∩ not Published",
+              "R": "Checked ∩ Digitised ∩ Published",
+              "T": "Checked ∩ Published ∩ not Digitised"
+            },
+            "expression": "properties(Q) ∩ properties(R)",
+            "unrounded_result": "Checked and Digitised; only option B states a true common property",
+            "rounding": "none",
+            "units": "logical property",
+            "selected_label": "B"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "308bcd28-85d0-4149-a2fd-3f6dd456dfd3",
+      "working_topic": "Repair Fair Route Cards",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "A four-set cycle tests the union of two opposite, disjoint sets by summing both sets’ adjacent-pair regions. The four-cycle now uses horizontal/vertical strips and ovals, which preserve the stated disjointness of opposite sets in the rendered geometry.",
+      "semantic_fingerprint": {
+        "mechanism": "union across opposite cycle sets",
+        "topology": "four_cycle",
+        "shape_signature": [
+          "horizontal_strip",
+          "vertical_strip",
+          "oval",
+          "vertical_oval"
+        ],
+        "specific_model": {
+          "inputs": {
+            "repair_regions": [
+              7,
+              4,
+              6
+            ],
+            "donate_regions": [
+              8,
+              5,
+              3
+            ],
+            "repair_donate_overlap": 0
+          },
+          "expression": "(7+4+6)+(8+5+3)",
+          "unrounded_result": 33,
+          "rounding": "none",
+          "units": "visitors",
+          "selected_label": "D"
+        }
+      },
+      "nearest_existing": [
+        {
+          "id": "65bf5171-033a-4589-81d3-ac5e2bb5c6e2",
+          "title": "Four Parties Considered",
+          "material_difference": "A four-set cycle tests the union of two opposite, disjoint sets by summing both sets’ adjacent-pair regions."
+        },
+        {
+          "id": "70ce422d-542b-4298-94c1-dd9d61b39fce",
+          "title": "Wellness Activities Cycle",
+          "material_difference": "A four-set cycle tests the union of two opposite, disjoint sets by summing both sets’ adjacent-pair regions."
+        },
+        {
+          "id": "22146428-aff8-44b1-bbba-becc549f3d89",
+          "title": "Community Festival Workshops",
+          "material_difference": "A four-set cycle tests the union of two opposite, disjoint sets by summing both sets’ adjacent-pair regions."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "308bcd28-85d0-4149-a2fd-3f6dd456dfd3",
+          "purpose": "At a repair fair, each of 58 visitors completes one route card indicating whether they joined Repair, Reuse, Donate, or Recycle. The diagram shows four different shapes. Each number gives a count in an exclusive region. How many visitors joined at least one of Repair or Donate?",
+          "independent_derivation_or_rating_basis": "Repair and Donate do not overlap, so add every region in either shape: Repair has 7+4+6=17; Donate has 8+5+3=16. The total is 33. The other 25 cards are in Reuse only, Recycle only, or outside.",
+          "verification_ledger": {
+            "inputs": {
+              "repair_regions": [
+                7,
+                4,
+                6
+              ],
+              "donate_regions": [
+                8,
+                5,
+                3
+              ],
+              "repair_donate_overlap": 0
+            },
+            "expression": "(7+4+6)+(8+5+3)",
+            "unrounded_result": 33,
+            "rounding": "none",
+            "units": "visitors",
+            "selected_label": "D"
+          },
+          "difficulty": "normal"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    },
+    {
+      "unit_id": "7e0c5ab8-a660-4780-a9f1-617433e4056a",
+      "working_topic": "Packaging Lab Fault Codes",
+      "type_or_skill": "venn_diagram",
+      "novelty_rationale": "A four-set hub with mutually exclusive fault spokes requires solving a 2:1 inside/outside constraint, then subtracting the hub overlaps. The hub now uses a circle, diamond, and two vertical ovals so the mutually exclusive fault spokes do not overlap in the rendered geometry.",
+      "semantic_fingerprint": {
+        "mechanism": "ratio constraint in four-set hub",
+        "topology": "n_hub",
+        "shape_signature": [
+          "circle",
+          "diamond",
+          "vertical_oval",
+          "vertical_oval"
+        ],
+        "specific_model": {
+          "inputs": {
+            "outside_retest": [
+              5,
+              7,
+              6,
+              3
+            ],
+            "inside_retest_faults": [
+              4,
+              6,
+              8
+            ],
+            "ratio_inside_to_outside": 2
+          },
+          "expression": "2*(5+7+6+3)-(4+6+8)",
+          "unrounded_result": 24,
+          "rounding": "none",
+          "units": "samples",
+          "selected_label": "C"
+        }
+      },
+      "nearest_existing": [
+        {
+          "id": "c1daf2ea-8e04-4739-902d-e1e1133d6e69",
+          "title": "Company Benefits Hub",
+          "material_difference": "A four-set hub with mutually exclusive fault spokes requires solving a 2:1 inside/outside constraint, then subtracting the hub overlaps."
+        },
+        {
+          "id": "28153f59-8b3a-40b1-8e7c-3f22f4604ecb",
+          "title": "Clinic Check Hub",
+          "material_difference": "A four-set hub with mutually exclusive fault spokes requires solving a 2:1 inside/outside constraint, then subtracting the hub overlaps."
+        },
+        {
+          "id": "277bb4f3-93e7-48bc-ad94-1fbfc9571bcb",
+          "title": "Parcel Handling Tags",
+          "material_difference": "A four-set hub with mutually exclusive fault spokes requires solving a 2:1 inside/outside constraint, then subtracting the hub overlaps."
+        }
+      ],
+      "sources": [],
+      "item_plans": [
+        {
+          "item_id": "7e0c5ab8-a660-4780-a9f1-617433e4056a",
+          "purpose": "A packaging lab classifies samples by whether they need a retest and whether they have a seal, print, or weight fault. A sample can have at most one of the three named fault types. The diagram gives exclusive-region counts, except that the retest-only region is marked ?. The lab found that the number needing a retest is twice the number not needing one. How many samples are in the ? region?",
+          "independent_derivation_or_rating_basis": "Outside Retest there are 5+7+6+3=21 samples. Twice as many need a retest, so Retest contains 42. The three Retest-and-fault regions contain 4+6+8=18, leaving 42−18=24 in the retest-only region.",
+          "verification_ledger": {
+            "inputs": {
+              "outside_retest": [
+                5,
+                7,
+                6,
+                3
+              ],
+              "inside_retest_faults": [
+                4,
+                6,
+                8
+              ],
+              "ratio_inside_to_outside": 2
+            },
+            "expression": "2*(5+7+6+3)-(4+6+8)",
+            "unrounded_result": 24,
+            "rounding": "none",
+            "units": "samples",
+            "selected_label": "C"
+          },
+          "difficulty": "hard"
+        }
+      ],
+      "self_checks": {
+        "single_defensible_answers": true,
+        "derivations_recorded": true,
+        "factual_claims_mapped": true,
+        "batch_internal_novelty": true,
+        "option_clueing_reviewed": true
+      }
+    }
+  ]
+}

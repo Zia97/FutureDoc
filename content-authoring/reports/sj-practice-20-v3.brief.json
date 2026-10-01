@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "run_id": "sj-practice-20-20260929-01",
+  "section": "sj",
+  "mode": "practice",
+  "question_count": 20,
+  "unit_count": 7,
+  "unit_question_counts": [3, 3, 3, 3, 3, 3, 2],
+  "difficulty_allocation": { "normal_questions": 15, "hard_questions": 5 },
+  "type_or_skill_allocation": { "importance": 8, "appropriateness": 12 },
+  "is_free": true,
+  "editorial_requirements": [
+    "Use current GMC medical student guidance and Good medical practice 2024. Use GDC guidance if any dental scenario is included.",
+    "Create seven distinct scenario fingerprints and avoid close semantic matches to live practice, timed, or other batch units.",
+    "Use accessible context with clear actor role, authority, urgency, patient or service impact, and reasonable alternatives.",
+    "Do not generate Most/Least items or force rating variety within a scenario. Distinguish adjacent rating choices in each rationale."
+  ],
+  "excluded_topics": [
+    "Jehovah's Witness blood refusal",
+    "generic patient gifts",
+    "routine prescribing error",
+    "fatigue after a night shift",
+    "social media patient photographs",
+    "copied coursework or falsified placement logbook",
+    "routine consent form witnessing"
+  ],
+  "corpus_run_id": "sj-sync-20260929220816",
+  "corpus_generated_at": "2026-09-29T20:46:14.253Z",
+  "inventory_path": "content-authoring/cache/sj-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/sj-practice-20-v3.json",
+  "manifest_path": "content-authoring/reports/sj-practice-20-v3.manifest.json",
+  "validation_report_path": "content-authoring/reports/sj-practice-20-v3.validation.json"
+}

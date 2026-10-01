@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "run_id": "vr-practice-YYYYMMDD-NN",
+  "section": "vr",
+  "mode": "practice",
+  "question_count": 20,
+  "passage_count": 5,
+  "format_allocation": {
+    "mc_passages": 3,
+    "tfc_passages": 2
+  },
+  "difficulty_allocation": {
+    "normal_questions": 15,
+    "hard_questions": 5
+  },
+  "is_free": false,
+  "editorial_requirements": [],
+  "excluded_topics": [],
+  "corpus_run_id": "",
+  "corpus_generated_at": "",
+  "inventory_path": "content-authoring/cache/vr-corpus-inventory.json",
+  "candidate_path": "content-authoring/candidates/vr-practice-20-v1.json",
+  "manifest_path": "content-authoring/reports/vr-practice-20-v1.manifest.json",
+  "validation_report_path": "content-authoring/reports/vr-practice-20-v1.validation.json"
+}

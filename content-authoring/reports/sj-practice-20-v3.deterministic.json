@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-09-29T21:11:34.975Z",
+  "section": "sj",
+  "mode": "practice",
+  "counts": {
+    "questions": 20,
+    "errors": 0,
+    "warnings": 0
+  },
+  "deterministic_verdict": "pass",
+  "issues": [],
+  "nearest_existing_content": [
+    {
+      "candidate_id": "6570faba-36ae-415b-b6d2-121f8211b160",
+      "candidate_title": "On an outpatient day unit, third-year medical student Amina sees two spare beds parked acr",
+      "matches": [
+        {
+          "existing_id": "1f1626b4-603e-4ce2-b9ef-060d8767875f",
+          "mode": "practice",
+          "title": "During a GP placement, a 32-year-old patient confides to Akin, a fourth-year medical stude",
+          "score": 0.1975
+        },
+        {
+          "existing_id": "cb24abc3-3954-47d5-864a-1787f9532405",
+          "mode": "timed",
+          "title": "While walking through the ward, a third-year medical student, Obi, notices that a computer",
+          "score": 0.1939
+        },
+        {
+          "existing_id": "1f41eca0-7d78-4b09-a38d-500d5b9db14e",
+          "mode": "practice",
+          "title": "On her third consecutive night shadowing on the medical admissions unit, Sam, a final-year",
+          "score": 0.1924
+        }
+      ]
+    },
+    {
+      "candidate_id": "b3efd936-dad2-47b8-bf25-ea2b02b74698",
+      "candidate_title": "Dr Mensah, an F1, is preparing discharge advice for a patient who has low vision. The pati",
+      "matches": [
+        {
+          "existing_id": "66878cf6-f497-4225-a7ee-17ae76846c8f",
+          "mode": "timed",
+          "title": "An adult patient's mother arrives at the ward and demands that Dr Yates, an F1 doctor, tel",
+          "score": 0.1996
+        },
+        {
+          "existing_id": "dd458f9a-e893-47af-bb3c-3cd1b0118497",
+          "mode": "practice",
+          "title": "On a Saturday ward round, a foundation year one doctor is preparing to break the news of a",
+          "score": 0.1839
+        },
+        {
+          "existing_id": "e7daf56e-a175-4e1f-8193-e583885ae394",
+          "mode": "practice",
+          "title": "A 67-year-old man with type 2 diabetes attends his GP review with Aisha, a fourth-year med",
+          "score": 0.1835
+        }
+      ]
+    },
+    {
+      "candidate_id": "626cb4cd-1a0b-4cb4-9dbd-53f3683ae76e",
+      "candidate_title": "During a ward handover, Dr Qureshi, an F1, notices that the voice recorder on his personal",
+      "matches": [
+        {
+          "existing_id": "6d68f1e1-e8e8-4b93-8217-218a1146dd46",
+          "mode": "practice",
+          "title": "While using the ward computer, foundation year one doctor Deepa notices a fellow F1 lookin",
+          "score": 0.1986
+        },
+        {
+          "existing_id": "801453f3-f34e-4365-9629-a30f3ae6defd",
+          "mode": "timed",
+          "title": "Following a busy weekend on call, Dr Asante, an F2 doctor, realises that important informa",
+          "score": 0.1965
+        },
+        {
+          "existing_id": "4a6a609e-2d3a-4a73-a602-ab7eeed449bc",
+          "mode": "practice",
+          "title": "Foundation year one doctor Zara notices that a fellow F1 has posted about a patient from t",
+          "score": 0.1939
+        }
+      ]
+    },
+    {
+      "candidate_id": "1be908f0-fc43-4b8f-a67a-ba7280bcb64a",
+      "candidate_title": "Dr Byrne, a GP, is discussing physiotherapy options with a patient with a persistent but n",
+      "matches": []
+    },
+    {
+      "candidate_id": "420e6fc9-78a2-4fba-8050-a23c4e92a1b3",
+      "candidate_title": "Fourth-year medical student Imogen observes a consultant inviting a patient to join a ques",
+      "matches": [
+        {
+          "existing_id": "728ba3e5-9af6-463c-b298-3c59990c2864",
+          "mode": "timed",
+          "title": "After completing a patient history on an orthopaedic ward, Ben, a third-year medical stude",
+          "score": 0.2147
+        },
+        {
+          "existing_id": "bf9fb7db-d74e-46b9-a783-2c2a50e4c708",
+          "mode": "practice",
+          "title": "On a gynaecology outpatient clinic, a patient quietly tells the consultant that she would ",
+          "score": 0.2121
+        },
+        {
+          "existing_id": "a4b093e3-6ca8-418c-a20b-1fb60bc8cdfe",
+          "mode": "timed",
+          "title": "After several weeks of home visits during a GP placement, a grateful elderly patient offer",
+          "score": 0.2095
+        }
+      ]
+    },
+    {
+      "candidate_id": "687960af-5f60-4c26-8400-81b3652662c6",
+      "candidate_title": "Medical student Nadia is preparing a summary of anonymous patient feedback for a ward qual",
+      "matches": [
+        {
+          "existing_id": "e3ff7ed0-01cf-441b-8987-655d005f499a",
+          "mode": "timed",
+          "title": "Kwame is a student representative on a university committee. After a meeting, the committe",
+          "score": 0.2023
+        },
+        {
+          "existing_id": "321ed553-1011-46a3-b2c8-3c2cb6b369e3",
+          "mode": "practice",
+          "title": "While shadowing on a busy surgical ward, Eli, a fourth-year medical student, witnesses a s",
+          "score": 0.1846
+        },
+        {
+          "existing_id": "4a6a609e-2d3a-4a73-a602-ab7eeed449bc",
+          "mode": "practice",
+          "title": "Foundation year one doctor Zara notices that a fellow F1 has posted about a patient from t",
+          "score": 0.1806
+        }
+      ]
+    },
+    {
+      "candidate_id": "94dc8199-0235-4ea3-8a06-111f909ae156",
+      "candidate_title": "Dr Evans, an F1 in an outpatient clinic, is told that a patient phoned twice about a test ",
+      "matches": []
+    }
+  ],
+  "note": "A pass confirms machine-checkable structure and lexical screening only; an independent blind review must establish correctness and semantic novelty.",
+  "input": "content-authoring\\candidates\\sj-practice-20-v3.json"
+}

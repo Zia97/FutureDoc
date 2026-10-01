@@ -1,264 +1,315 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
-  View,
-  Text,
   ScrollView,
-  TouchableOpacity,
   StyleSheet,
-  StatusBar,
-  LayoutAnimation,
-  Platform,
-  UIManager,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 
-import { useItemNavigation } from '../hooks/useItemNavigation';
-import { useAnswers } from '../hooks/useAnswers';
-import { useSwipeGesture } from '../hooks/useSwipeGesture';
+import { useFlatNavigation } from '../hooks/ui/useFlatNavigation';
+import { useAnswers } from '../hooks/ui/useAnswers';
+import { useSwipeGesture } from '../hooks/ui/useSwipeGesture';
+import { usePremiumGate } from '../hooks/ui/usePremiumGate';
+import { useActiveTimer } from '../hooks/ui/useActiveTimer';
+import { useBookmarks } from '../hooks/useBookmarks';
+import { useTheme } from '../context/ThemeContext';
+import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 import ScreenNavBar from './ScreenNavBar';
 import FeedbackBox from './FeedbackBox';
+import NotesModal from './NotesModal';
+import BottomToolbar from './BottomToolbar';
+import PremiumIcon from './premium/PremiumIcon';
+import { getSJMark, SJ_PARTIAL_MARK } from '../lib/sjScoring';
+import {
+  PremiumQuestionScaffold,
+  QuestionTopBar,
+  QuestionPanel,
+  SectionLabel,
+  QuestionText,
+  PrimaryQuestionButton,
+} from './premium/PremiumQuestionScreenUI';
 
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
-
-// Props:
-//   items          — array of passage/scenario objects
-//   initialIndex   — starting item index
-//   itemLabel      — "Passage" | "Scenario"
-//   getTitle       — (item, index) => string  — text shown in the nav bar
-//   getId          — (item) => string|number  — unique item identifier for answer tracking
-//   renderOptions  — ({ item, question, getOptionState, onAnswer }) => ReactNode
-//   alwaysShowReason — bool — show answeringReason even on correct answer (default false)
+const SECTION_TITLE = {
+  vr: 'Verbal Reasoning',
+  sj: 'Situational Judgement',
+};
 
 export default function PassageLayout({
-  items,
-  initialIndex,
+  flatQuestions,
+  initialIndex = 0,
   itemLabel,
   getTitle,
-  getId,
   renderOptions,
+  getQuestionOptions = null,
   alwaysShowReason = false,
+  onAnswerCommit = null,
+  initialAnswers = {},
+  initialTimesMs = {},
+  section = 'vr',
+  getItemIsFree = null,
+  demoMode = false,
+  onDemoExit = null,
+  demoTitle = null,
+  demoSubtitle = null,
+  demoExitLabel = null,
+  demoExitHint = null,
+  getStats = null,
 }) {
-  const {
-    itemIndex,
-    questionIndex,
-    item,
-    question,
-    isFirstItem,
-    isLastItem,
-    isFirstQuestion,
-    isLastQuestion,
-    goToItem,
-    goToNextQuestion,
-    goToPrevQuestion,
-  } = useItemNavigation(items, initialIndex);
+  const navigation = useNavigation();
+  const { isDark } = useTheme();
+  const { colors } = getPremiumTheme(isDark);
 
-  const { handleAnswer, getAnswer } = useAnswers();
-  const [panelExpanded, setPanelExpanded] = useState(true);
+  const { index, item, isFirst, isLast, goNext: rawGoNext, goPrev: rawGoPrev } =
+    useFlatNavigation(flatQuestions, initialIndex);
+  const { canAccess } = usePremiumGate(getItemIsFree);
 
-  const itemId = getId(item);
-  const selectedAnswer = getAnswer(itemId, question.questionId);
+  function goNext() {
+    const next = flatQuestions[index + 1];
+    if (next && !canAccess(next)) return;
+    rawGoNext();
+  }
+  function goPrev() {
+    const prev = flatQuestions[index - 1];
+    if (prev && !canAccess(prev)) return;
+    rawGoPrev();
+  }
+
+  const { handleAnswer, getAnswer } = useAnswers(initialAnswers);
+  const [pendingAnswer, setPendingAnswer] = useState(null);
+  const [notesVisible, setNotesVisible] = useState(false);
+  const [userTimesMs, setUserTimesMs] = useState({});
+  const { isBookmarked, toggle: toggleBookmark } = useBookmarks(section);
+
+  const qid = item.question.questionId ?? item.question.id ?? item.question.itemId;
+  const selectedAnswer = getAnswer(item.stemId, qid);
   const hasAnswered = !!selectedAnswer;
-  const isCorrect = selectedAnswer === question.answer;
+  const isCorrect = selectedAnswer === item.question.answer;
+  const sjLabelSet = section === 'sj' && getQuestionOptions
+    ? getQuestionOptions(item, item.question)
+    : null;
+  const isPartial = section === 'sj'
+    && getSJMark(selectedAnswer, item.question.answer, sjLabelSet) === SJ_PARTIAL_MARK;
+
+  const timer = useActiveTimer({ resetKey: `${item.stemId}:${qid}` });
+  useEffect(() => {
+    setPendingAnswer(null);
+  }, [qid, item.stemId]);
 
   const panHandlers = useSwipeGesture(
-    isFirstItem ? null : () => goToItem(itemIndex - 1),
-    isLastItem ? null : () => goToItem(itemIndex + 1),
+    isFirst ? null : goPrev,
+    isLast ? null : goNext,
   );
 
   function getOptionState(option) {
-    if (!hasAnswered) return 'idle';
-    if (option === question.answer) return 'correct';
-    if (option === selectedAnswer) return 'incorrect';
+    if (!hasAnswered) return option === pendingAnswer ? 'selected' : 'idle';
+    if (option === item.question.answer) return 'correct';
+    if (option === selectedAnswer) return isPartial ? 'partial' : 'incorrect';
     return 'idle';
   }
 
   function onAnswer(option) {
     if (hasAnswered) return;
-    handleAnswer(itemId, question.questionId, option);
+    setPendingAnswer(option);
   }
 
-  function togglePanel() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-    setPanelExpanded((v) => !v);
+  function handleCheckAnswer() {
+    if (!pendingAnswer || hasAnswered) return;
+    const timeSpentMs = Math.max(0, timer.getElapsedMs());
+    setUserTimesMs((prev) => ({ ...prev, [qid]: timeSpentMs }));
+    handleAnswer(item.stemId, qid, pendingAnswer);
+    onAnswerCommit?.(item, pendingAnswer, { timeSpentMs });
   }
+
+  const sectionColor = section === 'sj' ? colors.mint : colors.blue;
+  const screenTitle = SECTION_TITLE[section] ?? 'Practice';
 
   return (
-    <SafeAreaView style={styles.container} {...panHandlers}>
-      <StatusBar barStyle="light-content" backgroundColor="#1a1a2e" />
-
-      <ScreenNavBar
-        title={getTitle(item, itemIndex)}
-        meta={`Question ${itemIndex + 1} of ${items.length}`}
-        onPrev={() => goToItem(itemIndex - 1)}
-        onNext={() => goToItem(itemIndex + 1)}
-        isFirst={isFirstItem}
-        isLast={isLastItem}
-        color="#7c3aed"
+    <PremiumQuestionScaffold panHandlers={demoMode ? null : panHandlers}>
+      <QuestionTopBar
+        title={demoMode ? (demoTitle ?? 'AI Tutor Demo') : screenTitle}
+        subtitle={demoMode ? (demoSubtitle ?? 'Sample question') : 'Practice'}
+        accent={sectionColor}
+        onExit={demoMode ? (onDemoExit ?? (() => navigation.goBack())) : () => navigation.goBack()}
       />
 
-      {/* Resource text */}
-      <View style={styles.resourceContainer}>
-        <Text style={styles.resourceLabel}>{itemLabel.toUpperCase()}</Text>
-        <ScrollView key={itemIndex} showsVerticalScrollIndicator>
-          <Text style={styles.resourceText}>{item.resource}</Text>
-        </ScrollView>
-      </View>
+      {demoMode ? null : (
+        <ScreenNavBar
+          title={getTitle(item)}
+          meta={`Question ${index + 1} of ${flatQuestions.length}`}
+          onPrev={goPrev}
+          onNext={goNext}
+          isFirst={isFirst}
+          isLast={isLast}
+          color={sectionColor}
+          report={{ questionId: qid, section }}
+        />
+      )}
 
-      {/* Collapsible question panel */}
-      <View style={styles.questionPanel}>
-        <TouchableOpacity style={styles.panelHeader} onPress={togglePanel} activeOpacity={0.8}>
-          <Text style={styles.panelCounter}>
-            Question {questionIndex + 1} of {item.questions.length}
-          </Text>
-          <Text style={styles.panelChevron}>{panelExpanded ? '▾' : '▴'}</Text>
-        </TouchableOpacity>
+      <ScrollView
+        key={item.stemId + qid}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <QuestionPanel>
+          <SectionLabel accent={sectionColor}>{itemLabel}</SectionLabel>
+          <QuestionText muted>{item.resource}</QuestionText>
+        </QuestionPanel>
 
-        {panelExpanded && (
-          <ScrollView
-            style={styles.panelContent}
-            contentContainerStyle={styles.panelContentInner}
-            showsVerticalScrollIndicator={false}
-          >
-            <Text style={styles.questionText}>{question.questionText}</Text>
+        <QuestionPanel>
+          <SectionLabel accent={sectionColor}>Question</SectionLabel>
+          <QuestionText>{item.question.questionText}</QuestionText>
 
-            <View style={styles.optionsContainer}>
-              {renderOptions({ item, question, getOptionState, onAnswer })}
-            </View>
+          <View style={styles.optionsContainer}>
+            {renderOptions({ item, question: item.question, getOptionState, onAnswer })}
+          </View>
 
-            {hasAnswered && (
-              <FeedbackBox
-                isCorrect={isCorrect}
-                correctAnswer={question.answer}
-                reason={question.answeringReason}
-                showReason={!isCorrect || alwaysShowReason}
-              />
-            )}
+          {pendingAnswer && !hasAnswered ? (
+            <PrimaryQuestionButton accent={sectionColor} onPress={handleCheckAnswer}>
+              Check Answer
+            </PrimaryQuestionButton>
+          ) : null}
 
-            <View style={styles.questionNav}>
-              <TouchableOpacity
-                style={[styles.questionNavButton, isFirstQuestion && styles.questionNavButtonDisabled]}
-                onPress={goToPrevQuestion}
-                disabled={isFirstQuestion}
-              >
-                <Text style={styles.questionNavText}>← Previous</Text>
-              </TouchableOpacity>
+          {hasAnswered ? (
+            <FeedbackBox
+              isCorrect={isCorrect}
+              isPartial={isPartial}
+              usesPartialCredit={section === 'sj'}
+              correctAnswer={item.question.answer}
+              reason={item.question.answeringReason}
+              showReason={alwaysShowReason || true}
+              isDemo={demoMode}
+              highlightTeachMe={demoMode}
+              showStats={!demoMode && !!getStats}
+              userTimeMs={userTimesMs[qid] ?? initialTimesMs[qid] ?? null}
+              stats={getStats ? getStats(qid, null) : null}
+              questionContext={{
+                questionId: qid,
+                question: item.question.questionText,
+                questionType: section === 'sj'
+                  ? (item.question.type ?? item.type ?? 'situational_judgement')
+                  : 'true_false_cant_tell',
+                section,
+                passage: item.resource ?? undefined,
+                options: getQuestionOptions ? getQuestionOptions(item, item.question) : undefined,
+                correctAnswer: item.question.answer,
+                userAnswer: selectedAnswer,
+                explanation: item.question.answeringReason,
+                isTimed: false,
+              }}
+            />
+          ) : null}
+        </QuestionPanel>
+      </ScrollView>
 
-              <TouchableOpacity
-                style={[styles.questionNavButton, isLastQuestion && styles.questionNavButtonDisabled]}
-                onPress={goToNextQuestion}
-                disabled={isLastQuestion}
-              >
-                <Text style={styles.questionNavText}>Next →</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        )}
-      </View>
-    </SafeAreaView>
+      {demoMode ? (
+        <DemoBackBar
+          accent={sectionColor}
+          colors={colors}
+          isDark={isDark}
+          label={demoExitLabel}
+          hint={demoExitHint}
+          onPress={() => (onDemoExit ? onDemoExit() : navigation.goBack())}
+        />
+      ) : (
+        <BottomToolbar
+          onNotes={() => {
+            timer.pause();
+            setNotesVisible(true);
+          }}
+          onBookmark={() => toggleBookmark(qid)}
+          isBookmarked={isBookmarked(qid)}
+          onPrev={goPrev}
+          onNext={goNext}
+          isFirst={isFirst}
+          isLast={isLast}
+          sectionColor={sectionColor}
+        />
+      )}
+
+      <NotesModal
+        visible={notesVisible}
+        sectionKey={section}
+        onClose={() => {
+          setNotesVisible(false);
+          timer.resume();
+        }}
+      />
+    </PremiumQuestionScaffold>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#1a1a2e',
-  },
+function DemoBackBar({ accent, colors, isDark, onPress, label, hint }) {
+  const insets = useSafeAreaInsets();
+  const buttonLabel = label ?? 'Done — back to lesson';
+  return (
+    <View style={[demoBarStyles.wrap, { paddingBottom: Math.max(insets.bottom, 8) + 8 }]}>
+      <TouchableOpacity
+        activeOpacity={0.86}
+        onPress={onPress}
+        accessibilityRole="button"
+        accessibilityLabel={buttonLabel}
+        style={[
+          demoBarStyles.button,
+          {
+            backgroundColor: accent,
+            borderColor: accent,
+            shadowColor: accent,
+          },
+        ]}
+      >
+        <PremiumIcon name="check" size={18} color="#FFFFFF" strokeWidth={2.6} />
+        <Text style={demoBarStyles.buttonText}>{buttonLabel}</Text>
+      </TouchableOpacity>
+      {hint ? (
+        <Text style={[demoBarStyles.hint, { color: colors.textMuted }]}>{hint}</Text>
+      ) : null}
+    </View>
+  );
+}
 
-  // Resource text area
-  resourceContainer: {
-    flex: 1,
-    marginHorizontal: 20,
-    marginTop: 12,
-    backgroundColor: '#16213e',
-    borderRadius: 14,
-    padding: 16,
-    borderLeftWidth: 3,
-    borderLeftColor: '#7c3aed',
+const demoBarStyles = StyleSheet.create({
+  wrap: {
+    paddingHorizontal: 18,
+    paddingTop: 8,
   },
-  resourceLabel: {
-    color: '#7c3aed',
-    fontSize: 11,
+  button: {
+    minHeight: 52,
+    borderRadius: 16,
+    borderWidth: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 14,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: '900',
+  },
+  hint: {
+    fontSize: 12,
+    lineHeight: 16,
     fontWeight: '700',
-    letterSpacing: 1.2,
-    marginBottom: 10,
-  },
-  resourceText: {
-    color: '#cbd5e0',
-    fontSize: 14,
-    lineHeight: 22,
-  },
-
-  // Collapsible question panel
-  questionPanel: {
-    backgroundColor: '#16213e',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    borderTopWidth: 1.5,
-    borderColor: '#2d3748',
+    textAlign: 'center',
     marginTop: 8,
   },
-  panelHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 14,
-  },
-  panelCounter: {
-    color: '#a0aec0',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  panelChevron: {
-    color: '#7c3aed',
-    fontSize: 18,
-  },
-  panelContent: {
-    maxHeight: 380,
-  },
-  panelContentInner: {
-    paddingHorizontal: 20,
-    paddingBottom: 24,
-  },
+});
 
-  // Question
-  questionText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
-    lineHeight: 24,
-    marginBottom: 16,
+const styles = StyleSheet.create({
+  scrollContent: {
+    paddingHorizontal: 8,
+    paddingBottom: 26,
+    gap: 14,
   },
-
-  // Options
   optionsContainer: {
     gap: 10,
-  },
-
-  // Question prev/next
-  questionNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-    gap: 12,
-  },
-  questionNavButton: {
-    flex: 1,
-    backgroundColor: '#1a1a2e',
-    borderRadius: 12,
-    paddingVertical: 13,
-    alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: '#2d3748',
-  },
-  questionNavButtonDisabled: {
-    opacity: 0.3,
-  },
-  questionNavText: {
-    color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '600',
+    marginTop: 16,
   },
 });
