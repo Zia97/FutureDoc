@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
-import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { enqueue, flush, getPendingKeys, syncInBackground } from '../../services/timedExamSyncQueue';
 import { buildQRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
@@ -123,12 +123,15 @@ export function useTimedQRExamProgress() {
     if (!user) return;
 
     // Push any pending offline writes first so the hydrate sees them.
-    await flush(user);
-
     try {
+      await flush(user);
       const rows = await db.loadTimedQRAttempts();
-      const merged = { ...local };
+      const latestRaw = await AsyncStorage.getItem(COMPLETED_KEY);
+      const merged = latestRaw ? JSON.parse(latestRaw) : { ...local };
+      const pending = await getPendingKeys(user.id, SECTION);
       for (const row of rows) {
+        if (pending.has(String(keyFromNumericTestId(row.test_id)))) continue;
+        if (Date.parse(merged[keyFromNumericTestId(row.test_id)]?.submittedAt) > Date.parse(row.submitted_at)) continue;
         const answerMap = {};
         for (const a of row.answers) {
           if (!answerMap[a.set_id]) answerMap[a.set_id] = {};
@@ -203,6 +206,7 @@ export function useTimedQRExamProgress() {
       }
     } catch (err) {
       reportError('useTimedQRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
+      throw err;
     }
 
     // ── 2. Sync to cloud (best effort) ─────────────────────────────────────
@@ -235,20 +239,15 @@ export function useTimedQRExamProgress() {
       analyticsSummary,
     };
 
-    try {
-      await db.submitTimedQRExam(payload);
-      await removePending({ userId: user.id, section: SECTION, testKey: test.id });
-    } catch (err) {
-      reportError('useTimedQRExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'submit',
-        testKey: test.id,
-        testId: numericId,
-        payload,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'submit',
+      testKey: test.id,
+      testId: numericId,
+      payload,
+    });
+    syncInBackground(user);
   }
 
   async function deleteAttempt(testId) {
@@ -266,19 +265,14 @@ export function useTimedQRExamProgress() {
 
     if (isPreviewAttempt || !user) return;
     const numericId = numericTestIdFromKey(testId);
-    try {
-      await db.deleteTimedQRAttempt(numericId);
-      await removePending({ userId: user.id, section: SECTION, testKey: testId });
-    } catch (err) {
-      reportError('useTimedQRExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'delete',
-        testKey: testId,
-        testId: numericId,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'delete',
+      testKey: testId,
+      testId: numericId,
+    });
+    syncInBackground(user);
   }
 
   return { completedAttempts, submitExam, deleteAttempt, reload: loadAttempts };

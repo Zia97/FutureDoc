@@ -20,7 +20,6 @@ import {
   getResumeNavTarget,
   getSectionVisuals,
 } from '../../services/lastActivityService';
-import { refreshDailyReminder } from '../../services/notificationService';
 import { getExamDate, NOT_BOOKED } from '../../services/onboardingFlags';
 import { LEARN_FEATURE_ICON } from '../../constants/sectionVisuals';
 import {
@@ -284,7 +283,6 @@ export default function HomeScreen({ navigation }) {
         setStreak(s);
         setLastActivityState(a);
         setExamDateState(e);
-        refreshDailyReminder();
       })();
       return () => { cancelled = true; };
     }, []),

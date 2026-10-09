@@ -255,8 +255,8 @@ export default function ForumThreadScreen({ navigation, route }) {
   return (
     <PremiumScreen applyBottomInset>
       <AppHeader navigation={navigation} title="Discussion" />
-      <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined} keyboardVerticalOffset={8}>
-        <ScrollView contentContainerStyle={styles.list} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+      <KeyboardAvoidingView style={styles.flex} behavior="padding" keyboardVerticalOffset={Platform.OS === 'ios' ? 8 : 0}>
+        <ScrollView style={styles.flex} contentContainerStyle={styles.list} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
           <View style={[styles.conversation, { backgroundColor: isDark ? 'rgba(9, 23, 45, 0.94)' : '#fff', borderColor: colors.border }]}>
               <ForumPostCard post={post} embedded onLike={() => toggleLike('post', post)} />
               <View style={styles.postActions}>

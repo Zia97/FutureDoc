@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, AppState, View } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
+import * as Notifications from 'expo-notifications';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +10,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useContentVersionCheck } from '../services/contentUpdateService';
 import { checkForceUpdate } from '../services/appVersionGate';
 import { useTimedExamSyncOnForeground } from '../hooks/useTimedExamSyncOnForeground';
+import { refreshNotifications } from '../services/notificationService';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import SignUpScreen from '../screens/auth/SignUpScreen';
@@ -208,6 +210,35 @@ export default function AppNavigator() {
   const [examDateSet, setExamDateSet] = useState(null);
   const [welcomeSeen, setWelcomeSeenState] = useState(null);
   const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
+  const navigationRef = useRef(null);
+  const pendingReply = useRef(null);
+
+  useEffect(() => {
+    refreshNotifications(user?.id);
+  }, [user?.id]);
+
+  useEffect(() => {
+    const openReply = (response) => {
+      const data = response?.notification?.request?.content?.data;
+      if (data?.type !== 'forum_reply' || typeof data.postId !== 'string') return;
+      pendingReply.current = data.postId;
+      Notifications.clearLastNotificationResponseAsync().catch(() => {});
+      if (user && welcomeSeen && examDateSet && navigationRef.current?.isReady()) {
+        navigationRef.current.navigate('ForumThread', { postId: pendingReply.current });
+        pendingReply.current = null;
+      }
+    };
+    const subscription = Notifications.addNotificationResponseReceivedListener(openReply);
+    Notifications.getLastNotificationResponseAsync().then(openReply).catch(() => {});
+    return () => subscription.remove();
+  }, [user?.id, welcomeSeen, examDateSet]);
+
+  useEffect(() => {
+    if (user && pendingReply.current && navigationRef.current?.isReady() && welcomeSeen && examDateSet) {
+      navigationRef.current.navigate('ForumThread', { postId: pendingReply.current });
+      pendingReply.current = null;
+    }
+  }, [user?.id, welcomeSeen, examDateSet]);
 
   useEffect(() => {
     AsyncStorage.multiGet([TOS_FLAG_KEY, EXAM_DATE_KEY, WELCOME_SEEN_KEY])
@@ -239,11 +270,12 @@ export default function AppNavigator() {
     const sub = AppState.addEventListener('change', (next) => {
       if (appState.current.match(/inactive|background/) && next === 'active') {
         runCheck();
+        refreshNotifications(user?.id);
       }
       appState.current = next;
     });
     return () => { cancelled = true; sub.remove(); };
-  }, []);
+  }, [user?.id]);
 
   // If a returning verified user is already signed in but pre-dates the ToS flag,
   // they implicitly accepted at signup — silently mark and skip the modal.
@@ -303,7 +335,12 @@ export default function AppNavigator() {
   };
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef} onReady={() => {
+      if (user && pendingReply.current && welcomeSeen && examDateSet) {
+        navigationRef.current?.navigate('ForumThread', { postId: pendingReply.current });
+        pendingReply.current = null;
+      }
+    }}>
       {getStack()}
     </NavigationContainer>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
-import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { enqueue, flush, getPendingKeys, syncInBackground } from '../../services/timedExamSyncQueue';
 import { buildSJAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { getSJMark, SJ_FULL_MARK } from '../../lib/sjScoring';
 import { reportError } from '../../lib/reportError';
@@ -83,12 +83,15 @@ export function useTimedSJExamProgress() {
     if (!user) return;
 
     // Push any pending offline writes first so the hydrate sees them.
-    await flush(user);
-
     try {
+      await flush(user);
       const rows = await db.loadTimedSJAttempts();
-      const merged = { ...local };
+      const latestRaw = await AsyncStorage.getItem(COMPLETED_KEY);
+      const merged = latestRaw ? JSON.parse(latestRaw) : { ...local };
+      const pending = await getPendingKeys(user.id, SECTION);
       for (const row of rows) {
+        if (pending.has(String(keyFromNumericTestId(row.test_id)))) continue;
+        if (Date.parse(merged[keyFromNumericTestId(row.test_id)]?.submittedAt) > Date.parse(row.submitted_at)) continue;
         const answerMap = {};
         for (const a of row.answers) {
           if (!answerMap[a.scenario_id]) answerMap[a.scenario_id] = {};
@@ -163,6 +166,7 @@ export function useTimedSJExamProgress() {
       }
     } catch (err) {
       reportError('useTimedSJExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
+      throw err;
     }
 
     // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
@@ -191,20 +195,15 @@ export function useTimedSJExamProgress() {
       analyticsSummary,
     };
 
-    try {
-      await db.submitTimedSJExam(payload);
-      await removePending({ userId: user.id, section: SECTION, testKey: test.id });
-    } catch (err) {
-      reportError('useTimedSJExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'submit',
-        testKey: test.id,
-        testId: numericId,
-        payload,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'submit',
+      testKey: test.id,
+      testId: numericId,
+      payload,
+    });
+    syncInBackground(user);
   }
 
   // Removes a completed attempt from local storage and cloud.
@@ -223,19 +222,14 @@ export function useTimedSJExamProgress() {
 
     if (isPreviewAttempt || !user) return;
     const numericId = numericTestIdFromKey(testId);
-    try {
-      await db.deleteTimedSJAttempt(numericId);
-      await removePending({ userId: user.id, section: SECTION, testKey: testId });
-    } catch (err) {
-      reportError('useTimedSJExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'delete',
-        testKey: testId,
-        testId: numericId,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'delete',
+      testKey: testId,
+      testId: numericId,
+    });
+    syncInBackground(user);
   }
 
   return { completedAttempts, submitExam, deleteAttempt, reload: loadAttempts };

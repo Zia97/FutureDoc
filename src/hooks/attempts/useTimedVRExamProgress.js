@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
-import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { enqueue, flush, getPendingKeys, syncInBackground } from '../../services/timedExamSyncQueue';
 import { buildVRAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
@@ -72,12 +72,15 @@ export function useTimedVRExamProgress() {
     if (!user) return;
 
     // Push any pending offline writes first so the hydrate sees them.
-    await flush(user);
-
     try {
+      await flush(user);
       const rows = await db.loadTimedVRAttempts();
-      const merged = { ...local };
+      const latestRaw = await AsyncStorage.getItem(COMPLETED_KEY);
+      const merged = latestRaw ? JSON.parse(latestRaw) : { ...local };
+      const pending = await getPendingKeys(user.id, SECTION);
       for (const row of rows) {
+        if (pending.has(String(row.test_id))) continue;
+        if (Date.parse(merged[row.test_id]?.submittedAt) > Date.parse(row.submitted_at)) continue;
         const answerMap = {};
         for (const a of row.answers) {
           if (!answerMap[a.passage_id]) answerMap[a.passage_id] = {};
@@ -155,6 +158,7 @@ export function useTimedVRExamProgress() {
       }
     } catch (err) {
       reportError('useTimedVRExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
+      throw err;
     }
 
     // ── 2. Sync to cloud (best effort — local already saved) ────────────────
@@ -186,21 +190,15 @@ export function useTimedVRExamProgress() {
       analyticsSummary,
     };
 
-    try {
-      await db.submitTimedVRExam(payload);
-      // Direct write succeeded — drop any earlier queued copy of the same op.
-      await removePending({ userId: user.id, section: SECTION, testKey: test.id });
-    } catch (err) {
-      reportError('useTimedVRExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'submit',
-        testKey: test.id,
-        testId: test.id,
-        payload,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'submit',
+      testKey: test.id,
+      testId: test.id,
+      payload,
+    });
+    syncInBackground(user);
   }
 
   async function deleteAttempt(testId) {
@@ -218,19 +216,14 @@ export function useTimedVRExamProgress() {
     }
 
     if (isPreviewAttempt || !user) return;
-    try {
-      await db.deleteTimedVRAttempt(testId);
-      await removePending({ userId: user.id, section: SECTION, testKey: testId });
-    } catch (err) {
-      reportError('useTimedVRExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'delete',
-        testKey: testId,
-        testId,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'delete',
+      testKey: testId,
+      testId,
+    });
+    syncInBackground(user);
   }
 
   return { completedAttempts, submitExam, deleteAttempt, reload: loadAttempts };

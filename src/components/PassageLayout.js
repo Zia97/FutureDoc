@@ -144,11 +144,13 @@ export default function PassageLayout({
           isFirst={isFirst}
           isLast={isLast}
           color={sectionColor}
-          report={{ questionId: qid, section }}
+          report={{ questionId: qid, section, context: { selected_answer: selectedAnswer ?? pendingAnswer, submitted: hasAnswered, question_index: index, screen: 'practice-question' } }}
         />
       )}
 
       <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         key={item.stemId + qid}
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}

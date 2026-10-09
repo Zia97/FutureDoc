@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Sentry from '@sentry/react-native';
 import { supabase } from '../lib/supabase';
 import { clearLocalUserData, DISPLAY_NAME_CACHE_KEY } from '../services/localUserData';
+import { cancelDailyReminder, removeDevice } from '../services/notificationService';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -218,7 +219,10 @@ export function AuthProvider({ children }) {
     return result;
   };
 
-  const signOut = () => supabase.auth.signOut();
+  const signOut = async () => {
+    await Promise.all([cancelDailyReminder(), removeDevice(user?.id)]);
+    return supabase.auth.signOut();
+  };
 
   const resetPassword = (email) =>
     supabase.auth.resetPasswordForEmail(email, {
@@ -231,6 +235,7 @@ export function AuthProvider({ children }) {
     // discussion text so existing replies keep their context.
     const { data, error } = await supabase.functions.invoke('delete-account');
     if (error || !data?.ok) throw error ?? new Error(data?.error ?? 'Account deletion failed.');
+    await cancelDailyReminder();
     await clearLocalUserData();
     await supabase.auth.signOut();
   };

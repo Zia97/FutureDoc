@@ -33,8 +33,8 @@ function ChartWithToggle({ renderChart }) {
 
 function ChartWithExpand({ children }) {
   const [expanded, setExpanded] = useState(false);
-  const { width: screenWidth } = useWindowDimensions();
-  const chartWidth = screenWidth - 48;
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const chartWidth = screenWidth - 72;
   const { practiceTheme: t } = useTheme();
 
   return (
@@ -56,19 +56,25 @@ function ChartWithExpand({ children }) {
         animationType="fade"
         onRequestClose={() => setExpanded(false)}
       >
-        <TouchableOpacity
-          style={styles.modalOverlay}
-          onPress={() => setExpanded(false)}
-          activeOpacity={1}
-        >
-          <View style={[styles.modalCard, { backgroundColor: t.bgCard, borderColor: t.border }]}>
-            <ZoomableView maxZoom={4}>
-              <View style={{ width: chartWidth }}>
-                {children}
-              </View>
-            </ZoomableView>
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity
+            style={StyleSheet.absoluteFill}
+            onPress={() => setExpanded(false)}
+            accessibilityLabel="Close expanded chart"
+          />
+          <View style={[styles.modalCard, { maxHeight: screenHeight - 80, backgroundColor: t.bgCard, borderColor: t.border }]}>
+            <TouchableOpacity onPress={() => setExpanded(false)} style={styles.modalClose} accessibilityRole="button">
+              <Text style={{ color: t.accent, fontWeight: '600' }}>Close</Text>
+            </TouchableOpacity>
+            <ScrollView style={{ flexShrink: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 12 }}>
+              <ZoomableView maxZoom={4}>
+                <View style={{ width: chartWidth }}>
+                  {children}
+                </View>
+              </ZoomableView>
+            </ScrollView>
           </View>
-        </TouchableOpacity>
+        </View>
       </Modal>
     </>
   );
@@ -243,4 +249,5 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
   },
+  modalClose: { alignSelf: 'flex-end', paddingVertical: 8, paddingHorizontal: 4, marginBottom: 8 },
 });

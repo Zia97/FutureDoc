@@ -15,78 +15,68 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '29 September 2026';
+const LAST_UPDATED = '9 October 2026';
 
 const SECTIONS = [
   {
-    title: '1. Acceptance of Terms',
-    body:
-      'By creating an account or using UCAT Genius, you agree to these Terms of Service. If you do not agree, do not use the app.',
+    title: "Who provides UCAT Genius",
+    body: "UCAT Genius is provided by Qarex Labs Ltd (“we”, “us”), registered in England and Wales under company number 17503258. Our registered office is 71–75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom. These terms form an agreement between you and Qarex Labs Ltd when you use the UCAT Genius app or related services. If you are under 18, please review them with a parent or guardian.\n\nUCAT Genius is intended for users aged 16 or over. Please do not create an account if you are under 16.",
   },
   {
-    title: '2. Description of Service',
-    body:
-      'UCAT Genius is a mobile application designed to help students prepare for the University Clinical Aptitude Test (UCAT). The app provides practice questions, timed mock tests, and performance tracking across the four UCAT sections.',
+    title: "About the product",
+    body: "UCAT Genius offers independent UCAT practice questions, timed tests, lessons, answer explanations, progress tools and an AI Tutor. Some versions may also offer a Student Community. Features and access may differ between free and paid plans and may change as the app is updated.\n\nUCAT Genius is not official, endorsed by or affiliated with the UCAT Consortium, Pearson VUE, the NHS, any university or any admissions organisation. We do not have access to the official UCAT mark scheme. Refer to the official UCAT website for current exam rules and information.",
   },
   {
-    title: '3. Accounts',
-    body:
-      'You must provide a valid email address to create an account. We store your email only for account creation and account management. You are responsible for maintaining the security of your account credentials. You must be at least 16 years old to use this app.',
+    title: "Your account",
+    body: "Provide an email address you can access, keep your sign-in details secure and tell us promptly if you suspect unauthorised use. You are responsible for activity through your account unless it results from our failure to take reasonable care. Please keep your account information accurate and do not share paid access in a way that bypasses the limits of your purchase.",
   },
   {
-    title: '4. Data and Privacy',
-    body:
-      'We only store the data needed to provide and improve the app: your account details, test and practice performance, AI tutor conversations and optional answer feedback, technical AI usage information, and content you choose to submit to the student community. Community posts, replies, public display names, and approved screenshots are visible to other signed-in users. Submissions may be processed automatically and reviewed by an administrator to keep the service safe. See the Privacy Policy for more information.',
+    title: "Plans, purchases and subscriptions",
+    body: "The app may offer free access, recurring subscriptions and a one-off lifetime access product. The available features, price, currency, billing period and any renewal details are shown before you confirm a purchase. “Lifetime” means access for the life of the UCAT Genius service, subject to these terms and your statutory rights; it does not promise that the service will operate forever.\n\nIn-app purchases are billed by the Apple App Store or Google Play, as applicable. Their purchase and payment terms also apply. We use RevenueCat to recognise your entitlement in the app. Prices and taxes shown by the store may vary by location. We will not change the price of an existing store subscription except through the applicable store process and any notice or consent required by law.",
   },
   {
-    title: '5. Subscriptions & Payments',
-    body:
-      'Some features require a paid subscription. Subscriptions are managed through the Apple App Store or Google Play Store and are subject to their respective terms.\n\n• Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period\n• You can manage or cancel subscriptions in your device’s account settings\n• Refunds are handled by Apple or Google according to their policies',
+    title: "Free trials",
+    body: "If a free trial is offered, its length, eligibility and the price that follows will be displayed before you start it. A trial attached to an automatically renewing subscription will move to the paid subscription shown at sign-up unless you cancel before the trial ends. Availability of trials and eligibility for another trial are determined by the offer and the relevant app store.",
   },
   {
-    title: '6. Intellectual Property',
-    body:
-      'Questions, explanations, diagrams, and UI design supplied by UCAT Genius remain our intellectual property and may not be reproduced or distributed without permission. You retain ownership of original content you submit to the community. By posting it, you grant UCAT Genius a non-exclusive, worldwide, royalty-free licence to store, moderate, display, and technically reproduce it only as needed to operate and protect the community. You must have the right to share every screenshot or other item you upload.',
+    title: "Cancellation and refunds",
+    body: "You can turn off renewal of an Apple subscription in your Apple account settings, or of a Google Play subscription in Google Play. You can do this at any time before renewal; access normally continues until the end of the current paid period or trial, as described by the store. Deleting the app or your UCAT Genius account does not cancel an app-store subscription.\n\nFor a refund or billing issue, use the relevant store’s refund process or contact us at admin@qarexlabs.co.uk and we will help where we can. Nothing in these terms limits any cancellation, refund or other rights you have under applicable consumer law.",
   },
   {
-    title: '6A. Student Community',
-    body:
-      'Before posting, you must accept the Community Guidelines. You must not submit harassment, hate, threats, bullying, sexual or graphic content, personal information, spam, scams, impersonation, confidential live-exam material, or pirated paid resources. Do not use the community to identify, target, or humiliate another person.\n\nPosts, replies, public display names, and screenshots may be checked by automated safety systems and human administrators. We may hold, reject, remove, lock, or limit access to content, and may restrict an account from posting. Users can report content and separately block other users. Automated decisions may be referred for human review by contacting ucatgenius@gmail.com.',
+    title: "Acceptable use",
+    body: "Use UCAT Genius for your own lawful study. Do not try to compromise the app or other users’ accounts, scrape or redistribute substantial parts of its question bank, circumvent paid access, use automated tools to overload it, or submit unlawful, abusive or infringing content. Do not use the AI Tutor or any community feature to harass others, reveal another person’s private information or generate harmful content.\n\nIf a community feature is available, content you post may be visible to other users. You are responsible for what you post and must have the rights needed to share it. We may remove content or restrict access where reasonably necessary to protect users, comply with law or enforce these terms. Tell us at admin@qarexlabs.co.uk if you see content that raises a concern.",
   },
   {
-    title: '7. Disclaimer',
-    body:
-      'UCAT Genius is an independent study tool and is not affiliated with, endorsed by, or connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university. "UCAT" is a registered trademark of the UCAT Consortium; its use here is purely descriptive.\n\nThis app is intended solely as a supplementary preparation aid. It does not replace official UCAT resources. We strongly recommend that all users visit the official UCAT website (ucat.ac.uk) for the latest information on exam format, registration dates, and scoring.\n\nPractice questions are original content designed to reflect the style and difficulty of the UCAT. They are not past exam questions.\n\nScaled scores (300–900) and SJ bands shown in this app are estimates only. The real UCAT uses Item Response Theory scoring with proprietary, item-level parameters that no third-party app can replicate exactly. Our estimates are derived from the 2025 UCAT Consortium official statistics (means, standard deviations, and decile tables) using piecewise-linear interpolation (Verbal Reasoning) and z-score transformation (Decision Making, Quantitative Reasoning), with a typical ±40-point uncertainty per subtest. Treat any score shown in this app as a rough indicator of progress, not as a prediction of your actual UCAT result. See "About UCAT → Scoring" inside the app for the full methodology.',
+    title: "Intellectual property",
+    body: "The UCAT Genius app, its design, lessons, questions, explanations and other material are owned by us or our licensors. We give you a personal, non-exclusive, non-transferable right to use them for your own preparation while you have access to the service. You may not copy, publish, sell or commercially exploit them without permission, except where the law allows.\n\nYou keep ownership of content you submit. You give us a limited permission to host, display and process it as needed to provide the feature you use, such as showing a community post to other users. Our handling of personal information is explained in the Privacy Policy.",
   },
   {
-    title: '8. Limitation of Liability',
-    body:
-      'The app is provided "as is" without warranties of any kind. We do not guarantee that use of the app will result in any particular exam outcome. To the fullest extent permitted by law, we shall not be liable for any indirect, incidental, or consequential damages arising from your use of the app.',
+    title: "AI Tutor and educational limitations",
+    body: "AI-generated answers may be incomplete, inaccurate or unsuitable for a particular question. Check them against reliable sources and use your own judgement. The AI Tutor and our study materials are preparation aids, not official UCAT advice, admissions advice, medical advice or a substitute for the official exam materials.\n\nWe do not guarantee a particular UCAT score, exam result, university interview, admission offer or other outcome. Your results depend on many factors outside our control.",
   },
   {
-    title: '9. Account Deletion',
-    body:
-      'You may delete your account at any time from the Profile screen. Your email, performance data, AI tutor logs, private forum-account mapping, and uploaded screenshots will be removed. Text already contributed to public discussions may remain in anonymised form as “Deleted user” so replies keep their context, unless removal is required by law or you delete it before deleting your account. Security and moderation records may be retained where reasonably necessary to handle reports, prevent abuse, or meet legal obligations. Active subscriptions should be cancelled separately through your device’s account settings.',
+    title: "Availability and changes",
+    body: "We aim to keep the service available and working, but maintenance, errors, network issues and changes outside our control can interrupt access. We may update features and content to improve the app or keep it secure. If we make a material change that adversely affects paid access, we will give reasonable notice where practicable and provide any remedy required by law.",
   },
   {
-    title: '10. Termination',
-    body:
-      'We may make the community read-only for an account, suspend community posting, remove content, or suspend or terminate the full account if these terms are violated, the service is abused, or fraudulent activity occurs. Serious or repeated violations may lead to a permanent restriction.',
+    title: "Our responsibility to you",
+    body: "We are responsible for foreseeable loss or damage caused by our breach of these terms or our failure to use reasonable care and skill. Loss is foreseeable if it is obvious it might happen or if both you and we knew it might happen when you agreed to these terms. We are not responsible for losses that were not foreseeable or for business losses where you use UCAT Genius as a consumer.\n\nNothing in these terms excludes or limits liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any liability that cannot lawfully be excluded. Your statutory rights, including rights under the Consumer Rights Act 2015, remain unaffected.",
   },
   {
-    title: '11. Changes to Terms',
-    body:
-      'We may update these terms from time to time. We will notify you of significant changes via the app or email. Continued use after changes constitutes acceptance of the updated terms.',
+    title: "Ending access",
+    body: "You may stop using UCAT Genius and delete your account using the Delete Account option in the app’s Profile screen or by contacting us. We may suspend or end access if you seriously or repeatedly breach these terms, misuse the service, or if we are legally required to do so. Where reasonable, we will explain the reason and give you an opportunity to resolve a problem. Ending access does not remove any rights or remedies you have under consumer law. App-store subscriptions must be cancelled separately as described above.",
   },
   {
-    title: '12. Governing Law',
-    body:
-      'These terms are governed by and construed in accordance with the laws of England and Wales.',
+    title: "Changes to these terms",
+    body: "We may update these terms to reflect changes to the product, law or our business. We will update the date above and give reasonable notice of material changes. Changes will not remove rights you have already acquired for a purchase. If a change materially disadvantages you, contact us to discuss your options and any remedy available by law.",
   },
   {
-    title: '13. Contact Us',
-    body:
-      'If you have any questions about these terms, please contact us at:\n\nucatgenius@gmail.com',
+    title: "Governing law",
+    body: "These terms are governed by the law of England and Wales. If you live elsewhere in the UK, you may bring a claim in the courts of your part of the UK. If you live outside the UK, mandatory consumer protections in your country of residence may also apply.",
+  },
+  {
+    title: "Contact us",
+    body: "For support, billing questions or concerns about these terms, email admin@qarexlabs.co.uk.\n\nQarex Labs Ltd 71–75 Shelton Street Covent Garden London WC2H 9JQ United Kingdom",
   },
 ];
 
@@ -135,7 +125,7 @@ export default function TermsOfServiceScreen({ navigation }) {
             style={[styles.introCard, { borderColor: colors.border }]}
           >
             <Text style={[styles.introText, introScaled, { color: colors.textSecondary }]}>
-              Please read these terms carefully before using UCAT Genius.
+              These terms explain how you may use UCAT Genius and how purchases, subscriptions and account access work.
             </Text>
           </LinearGradient>
         </Animated.View>

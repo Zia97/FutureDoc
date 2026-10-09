@@ -13,6 +13,8 @@ import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
+import { useExamSubmission } from '../../hooks/ui/useExamSubmission';
+import TimedExamSavingScreen from '../../components/TimedExamSavingScreen';
 import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import NotesModal from '../../components/NotesModal';
@@ -46,13 +48,13 @@ export default function TimedVRTestScreen({ route, navigation }) {
   const [notesVisible, setNotesVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const { submit: saveCompletedExam, submissionState } = useExamSubmission(submitExam, () => setShowResults(true));
   const [flags, setFlags] = useState(new Set());
   const [seenQuestions, setSeenQuestions] = useState(new Set());
 
   useExitWarning(navigation, !showResults);
 
   const secondsLeftRef = useRef(null);
-  const endExamCalledRef = useRef(false);
 
   const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
     test.timeMinutes,
@@ -102,21 +104,15 @@ export default function TimedVRTestScreen({ route, navigation }) {
   );
 
   async function handleExamEnd(timerExpired = false) {
-    // Guard against a double submit: a manual "End Test" and the timer
-    // expiry can otherwise both fire and the second (empty-ish) one would
-    // overwrite the first. Also stop the timer so it can't re-fire.
-    if (endExamCalledRef.current) return;
-    endExamCalledRef.current = true;
     stopTimer();
     const timeMsByQid = getQuestionTimes();
-    await submitExam({
+    await saveCompletedExam({
       test,
       getAnswer,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
       flags,
       timeMsByQid,
     });
-    setShowResults(true);
   }
 
   function onAnswer(option) {
@@ -154,6 +150,10 @@ export default function TimedVRTestScreen({ route, navigation }) {
       questionId: q.questionId ?? q.id,
     })),
   }));
+
+  if (submissionState) {
+    return <TimedExamSavingScreen state={submissionState} onRetry={() => saveCompletedExam()} />;
+  }
 
   if (showResults) {
     return (
@@ -201,10 +201,12 @@ export default function TimedVRTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={sectionColor}
-        report={{ questionId: qid, section: 'vr', testId: test.id, isTimed: true }}
+        report={{ questionId: qid, section: 'vr', testId: test.id, isTimed: true, context: { selected_answer: selectedAnswer, question_index: index, seconds_left: secondsLeft, is_paused: isPaused, screen: 'timed-question' } }}
       />
 
       <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         ref={scrollRef}
         key={item.stemId}
         style={styles.scroll}

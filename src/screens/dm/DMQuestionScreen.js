@@ -244,7 +244,7 @@ function DMSingleQuestionBranch({ question, headerTitle, headerSubtitle, onAnswe
         isFirst
         isLast
         color={sectionColor}
-        report={{ questionId: question.id, section: 'dm' }}
+        report={{ questionId: question.id, section: 'dm', context: { selected_answer: answer, submitted, screen: 'worked-example' } }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
@@ -417,7 +417,7 @@ function DMQuestionScreenInner({ route, navigation }) {
         isFirst={isFirst}
         isLast={isLast}
         color={sectionColor}
-        report={{ questionId: question.id, section: 'dm' }}
+        report={{ questionId: question.id, section: 'dm', context: { selected_answer: currentAnswer, submitted: isSubmitted, question_index: currentIndex, screen: 'practice-question' } }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => { setCalcVisible(false); timer.resume(); }} />

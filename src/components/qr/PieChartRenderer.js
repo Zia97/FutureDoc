@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Svg, { G, Path, Rect, Text as SvgText } from 'react-native-svg';
+import Svg, { Path } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 import { useTextSize } from '../../context/TextSizeContext';
 import { formatWithUnit } from './formatUnit';
 
 const DEFAULT_VW = 420;
-const VH_BASE = 260;
 const PIE_PAD = 14;
-const LEGEND_W_BASE = 200;
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4', '#76e4f7'];
 
@@ -28,16 +26,13 @@ export default function PieChartRenderer({ data }) {
   const { theme: t } = useTheme();
   const { svgMultiplier } = useTextSize();
   const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
-  const fz = (n) => Math.round(n * svgMultiplier);
-  const LEGEND_W = Math.round(LEGEND_W_BASE * svgMultiplier);
-  const VH = Math.round(VH_BASE * (1 + (svgMultiplier - 1) * 0.5));
   const VW = svgWidth;
-  // Reserve right side for legend, pie occupies left side
-  const pieAreaW = VW - LEGEND_W;
-  const R = Math.min((pieAreaW - PIE_PAD * 2) / 2, (VH - PIE_PAD * 2) / 2);
-  const CX = PIE_PAD + R;
+  const stacked = VW < 520 * svgMultiplier;
+  const pieAreaW = stacked ? VW : VW * 0.48;
+  const R = Math.max(1, Math.min((pieAreaW - PIE_PAD * 2) / 2, 110));
+  const VH = R * 2 + PIE_PAD * 2;
+  const CX = pieAreaW / 2;
   const CY = VH / 2;
-  const legendX = pieAreaW + 8;
   const { segments, total, unit = '' } = data;
   const computedTotal = total ?? segments.reduce((s, seg) => s + (seg.value ?? 0), 0);
 
@@ -76,49 +71,46 @@ export default function PieChartRenderer({ data }) {
       : '#2d3748',
   }));
 
-  const ROW_H = Math.round(44 * svgMultiplier);
-  const legendStartY = Math.max(14, (VH - legendItems.length * ROW_H) / 2);
-
   return (
     <View onLayout={(e) => setSvgWidth(e.nativeEvent.layout.width)}>
       {data.title && <Text style={[styles.title, { color: t.accent }]}>{data.title}</Text>}
-      <Svg
-        width={VW}
-        height={VH}
-        viewBox={`0 0 ${VW} ${VH}`}
-        preserveAspectRatio="xMidYMid meet"
-      >
-        {/* Pie slices */}
-        {allSlices.map((slice, i) => (
-          <Path
-            key={i}
-            d={arcPath(CX, CY, R, slice.startDeg, slice.endDeg)}
-            fill={slice.color}
-            stroke={t.bgCard}
-            strokeWidth={1.5}
-          />
-        ))}
+      <View style={{ flexDirection: stacked ? 'column' : 'row', alignItems: 'center', gap: 12 }}>
+        <Svg
+          width={pieAreaW}
+          height={VH}
+          viewBox={`0 0 ${pieAreaW} ${VH}`}
+          preserveAspectRatio="xMidYMid meet"
+        >
+          {/* Pie slices */}
+          {allSlices.map((slice, i) => (
+            <Path
+              key={i}
+              d={arcPath(CX, CY, R, slice.startDeg, slice.endDeg)}
+              fill={slice.color}
+              stroke={t.bgCard}
+              strokeWidth={1.5}
+            />
+          ))}
 
-        {/* Legend */}
-        {legendItems.map((seg, i) => {
-          const ly = legendStartY + i * ROW_H;
-          const isNull = seg.value == null;
-          const pct = isNull ? '?' : ((seg.value / computedTotal) * 100).toFixed(1);
-          const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
-          const valText = isNull ? '?' : formatWithUnit(fmtVal, unit);
-          return (
-            <G key={i} x={legendX} y={ly}>
-              <Rect x={0} y={0} width={14} height={14} fill={seg.color} rx={3} />
-              <SvgText x={20} y={12} fontSize={fz(13)} fill={t.text} fontWeight="600">
-                {seg.label}
-              </SvgText>
-              <SvgText x={20} y={29} fontSize={fz(12)} fill={t.text}>
-                {valText} ({pct}%)
-              </SvgText>
-            </G>
-          );
-        })}
-      </Svg>
+        </Svg>
+        <View style={{ width: stacked ? '100%' : undefined, flex: stacked ? undefined : 1, gap: 10, paddingBottom: 8 }}>
+          {legendItems.map((seg, i) => {
+            const isNull = seg.value == null;
+            const pct = isNull ? '?' : ((seg.value / computedTotal) * 100).toFixed(1);
+            const fmtVal = seg.value != null ? seg.value.toLocaleString() : '';
+            const valText = isNull ? '?' : formatWithUnit(fmtVal, unit);
+            return (
+              <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8 }}>
+                <View style={{ width: 14, height: 14, marginTop: 3, borderRadius: 3, backgroundColor: seg.color }} />
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 13, lineHeight: 19, color: t.text, fontWeight: '600' }}>{seg.label}</Text>
+                  <Text style={{ fontSize: 12, lineHeight: 18, color: t.text }}>{valText} ({pct}%)</Text>
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      </View>
     </View>
   );
 }

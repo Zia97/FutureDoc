@@ -12,6 +12,8 @@ import { useAnswers } from '../../hooks/ui/useAnswers';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
+import { useExamSubmission } from '../../hooks/ui/useExamSubmission';
+import TimedExamSavingScreen from '../../components/TimedExamSavingScreen';
 import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useTimedSJExamProgress } from '../../hooks/attempts/useTimedSJExamProgress';
 import { LABEL_SETS } from '../../constants/sjLabelSets';
@@ -44,7 +46,6 @@ export default function TimedSJTestScreen({ route, navigation }) {
 
   const onExpireRef = useRef(null);
   const secondsLeftRef = useRef(test.timeMinutes * 60);
-  const endExamCalledRef = useRef(false);
 
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [notesVisible, setNotesVisible] = useState(false);
@@ -56,6 +57,7 @@ export default function TimedSJTestScreen({ route, navigation }) {
   useExitWarning(navigation, !examEnded);
 
   const { submitExam } = useTimedSJExamProgress();
+  const { submit: saveCompletedExam, submissionState } = useExamSubmission(submitExam, () => setExamEnded(true));
 
   const { secondsLeft, display: timerDisplay, isUrgent, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
     test.timeMinutes,
@@ -74,16 +76,12 @@ export default function TimedSJTestScreen({ route, navigation }) {
     !isPaused && !showReview && !examEnded,
   );
 
-  function endExam() {
-    if (endExamCalledRef.current) return;
-    endExamCalledRef.current = true;
+  function endExam(timerExpired = false) {
     stopTimer();
-    const timeMsByQid = getQuestionTimes();
-    setExamEnded(true);
-    submitExam({ test, getAnswer, secondsLeft: secondsLeftRef.current, flags, timeMsByQid });
+    void saveCompletedExam({ test, getAnswer, secondsLeft: timerExpired === true ? 0 : secondsLeftRef.current, flags, timeMsByQid: getQuestionTimes() });
   }
 
-  onExpireRef.current = endExam;
+  onExpireRef.current = () => endExam(true);
 
   const selectedAnswer = getAnswer(item.stemId, itemId);
   const isFlagged = flags.has(itemId);
@@ -121,6 +119,10 @@ export default function TimedSJTestScreen({ route, navigation }) {
     if (answered) return 'Answered';
     if (seenItems.has(fq.question.itemId)) return 'Incomplete';
     return 'Unseen';
+  }
+
+  if (submissionState) {
+    return <TimedExamSavingScreen state={submissionState} onRetry={() => saveCompletedExam()} />;
   }
 
   if (examEnded) {
@@ -169,10 +171,12 @@ export default function TimedSJTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={sectionColor}
-        report={{ questionId: itemId, section: 'sj', testId: test.id, isTimed: true }}
+        report={{ questionId: itemId, section: 'sj', testId: test.id, isTimed: true, context: { selected_answer: selectedAnswer, question_index: index, seconds_left: secondsLeft, is_paused: isPaused, screen: 'timed-question' } }}
       />
 
       <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         key={item.stemId + itemId}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}

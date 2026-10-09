@@ -22,6 +22,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
+import { getNotificationPreferences, setNotificationPreference } from '../../services/notificationService';
 import {
   AppHeader,
   GlassMenuCard,
@@ -59,6 +60,29 @@ export default function ProfileScreen() {
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const [nameSaving, setNameSaving] = useState(false);
+  const [notificationPrefs, setNotificationPrefs] = useState(null);
+  const [notificationLoadError, setNotificationLoadError] = useState(false);
+  const [notificationSaving, setNotificationSaving] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    if (user?.id) getNotificationPreferences(user.id)
+      .then(prefs => { if (active) { setNotificationPrefs(prefs); setNotificationLoadError(false); } })
+      .catch(() => { if (active) { setNotificationPrefs(null); setNotificationLoadError(true); } });
+    return () => { active = false; };
+  }, [user?.id]);
+
+  const toggleNotification = async (key, enabled) => {
+    setNotificationSaving(true);
+    try {
+      await setNotificationPreference(user.id, key, enabled);
+      setNotificationPrefs(previous => ({ ...previous, [key]: enabled }));
+    } catch (error) {
+      Alert.alert('Could not update notifications', error.message || 'Please try again.');
+    } finally {
+      setNotificationSaving(false);
+    }
+  };
 
   const heroAnim = useFadeSlide(0);
   const subAnim = useFadeSlide(90);
@@ -357,6 +381,33 @@ export default function ProfileScreen() {
             accent={contentAccent}
             onPress={checkingUpdates ? undefined : handleCheckForUpdates}
           />
+        </Animated.View>
+
+        <Animated.View style={[styles.section, contentAnim]}>
+          <Text style={[styles.sectionHeading, { color: colors.text }]}>Notifications</Text>
+          <Text style={[styles.helperText, { color: colors.textMuted }]}>Choose which reminders you receive. Your device must also allow notifications for UCAT Genius.</Text>
+          {[
+            ['streak_reminders', 'Study reminders', 'A daily nudge at 7 pm to keep practising.'],
+            ['forum_replies', 'Forum replies', 'When someone replies to your post or comment.'],
+          ].map(([key, title, description]) => (
+            <View key={key} style={[styles.devRow, { paddingVertical: 12 }]}>
+              <View style={styles.devLabel}>
+                <Text style={[styles.devTitle, { color: colors.text }]}>{title}</Text>
+                <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>{description}</Text>
+              </View>
+              <Switch
+                accessibilityLabel={title}
+                value={!!notificationPrefs?.[key]}
+                disabled={!notificationPrefs || notificationSaving}
+                onValueChange={value => toggleNotification(key, value)}
+                trackColor={{ false: colors.border, true: colors.blue }}
+                thumbColor="#ffffff"
+              />
+            </View>
+          ))}
+          {!notificationPrefs && <Text style={[styles.helperText, { color: colors.textMuted }]}>
+            {notificationLoadError ? 'Could not load notification settings. Reopen Profile to retry.' : 'Loading notification settings...'}
+          </Text>}
         </Animated.View>
 
         {/* Security */}

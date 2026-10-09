@@ -1,5 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { PanResponder } from 'react-native';
+import { QUESTION_SWIPE_DISTANCE, shouldClaimQuestionSwipe } from '../../utils/questionSwipe';
 
 // onPrev / onNext: callback or null when at boundary
 export function useSwipeGesture(onPrev, onNext) {
@@ -11,10 +12,11 @@ export function useSwipeGesture(onPrev, onNext) {
 
   return useRef(
     PanResponder.create({
-      onMoveShouldSetPanResponder: (_, { dx, dy }) =>
-        Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > 15,
+      // A small finger drift must not cancel a press without navigating.
+      onMoveShouldSetPanResponder: (_, gesture) => shouldClaimQuestionSwipe(gesture),
+      onPanResponderTerminationRequest: () => true,
       onPanResponderRelease: (_, { dx }) => {
-        if (Math.abs(dx) < 60) return;
+        if (Math.abs(dx) < QUESTION_SWIPE_DISTANCE) return;
         if (dx > 0) onPrevRef.current?.();
         else onNextRef.current?.();
       },

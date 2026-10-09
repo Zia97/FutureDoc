@@ -744,8 +744,22 @@ class DatabaseService {
   // same (user, test) before inserting. This matches the "reset to retake"
   // UX and avoids upsert/cascade complexity on the answers table.
 
+  async _deleteTimedExamAttempt(table, testId, accessToken) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const request = supabase.from(table).delete().eq('test_id', testId).abortSignal(controller.signal);
+      if (accessToken) request.setHeader('Authorization', `Bearer ${accessToken}`);
+      const { error } = await request;
+      if (error) throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
   async _submitTimedExamAttempt({
     rpcFn,
+    accessToken,
     testId,
     scorePercent,
     correctCount,
@@ -761,23 +775,32 @@ class DatabaseService {
     // rows if the connection dropped between steps (rendered as 0 / scaled
     // 300 on review). user_id is derived from auth.uid() inside the function,
     // so the client never sends it.
-    const { data, error } = await supabase.rpc(rpcFn, {
-      p_test_id: testId,
-      p_score_percent: scorePercent,
-      p_correct_count: correctCount,
-      p_time_taken_seconds: timeTakenSeconds,
-      p_flags: flags ?? [],
-      p_answers: answers ?? [],
-      p_analytics: analyticsSummary ?? null,
-    });
-    if (error) throw error;
-    return data; // new attempt uuid
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    try {
+      const request = supabase.rpc(rpcFn, {
+        p_test_id: testId,
+        p_score_percent: scorePercent,
+        p_correct_count: correctCount,
+        p_time_taken_seconds: timeTakenSeconds,
+        p_flags: flags ?? [],
+        p_answers: answers ?? [],
+        p_analytics: analyticsSummary ?? null,
+      }).abortSignal(controller.signal);
+      if (accessToken) request.setHeader('Authorization', `Bearer ${accessToken}`);
+      const { data, error } = await request;
+      if (error) throw error;
+      return data; // new attempt uuid
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
   // ── Verbal Reasoning ───────────────────────────────────────
-  async submitTimedVRExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedVRExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_vr_exam',
+      accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, passage_id, selected_answer, time_ms }]
       analyticsSummary,
@@ -804,12 +827,8 @@ class DatabaseService {
     }));
   }
 
-  async deleteTimedVRAttempt(testId) {
-    const { error } = await supabase
-      .from('timed_verbal_reasoning_exam_attempts')
-      .delete()
-      .eq('test_id', testId);
-    if (error) throw error;
+  async deleteTimedVRAttempt(testId, accessToken) {
+    return this._deleteTimedExamAttempt('timed_verbal_reasoning_exam_attempts', testId, accessToken);
   }
 
   /**
@@ -826,9 +845,10 @@ class DatabaseService {
   }
 
   // ── Decision Making ────────────────────────────────────────
-  async submitTimedDMExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedDMExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_dm_exam',
+      accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, selected_answer (JSONB), time_ms }]
       analyticsSummary,
@@ -855,12 +875,8 @@ class DatabaseService {
     }));
   }
 
-  async deleteTimedDMAttempt(testId) {
-    const { error } = await supabase
-      .from('timed_decision_making_exam_attempts')
-      .delete()
-      .eq('test_id', testId);
-    if (error) throw error;
+  async deleteTimedDMAttempt(testId, accessToken) {
+    return this._deleteTimedExamAttempt('timed_decision_making_exam_attempts', testId, accessToken);
   }
 
   /**
@@ -877,9 +893,10 @@ class DatabaseService {
   }
 
   // ── Quantitative Reasoning ─────────────────────────────────
-  async submitTimedQRExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedQRExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_qr_exam',
+      accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, set_id, selected_answer, time_ms }]
       analyticsSummary,
@@ -906,12 +923,8 @@ class DatabaseService {
     }));
   }
 
-  async deleteTimedQRAttempt(testId) {
-    const { error } = await supabase
-      .from('timed_quantitative_reasoning_exam_attempts')
-      .delete()
-      .eq('test_id', testId);
-    if (error) throw error;
+  async deleteTimedQRAttempt(testId, accessToken) {
+    return this._deleteTimedExamAttempt('timed_quantitative_reasoning_exam_attempts', testId, accessToken);
   }
 
   /**
@@ -928,9 +941,10 @@ class DatabaseService {
   }
 
   // ── Situational Judgement ──────────────────────────────────
-  async submitTimedSJExam({ testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedSJExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_sj_exam',
+      accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, scenario_id, selected_answer, time_ms }]
       analyticsSummary,
@@ -1081,12 +1095,8 @@ class DatabaseService {
     };
   }
 
-  async deleteTimedSJAttempt(testId) {
-    const { error } = await supabase
-      .from('timed_situational_judgement_exam_attempts')
-      .delete()
-      .eq('test_id', testId);
-    if (error) throw error;
+  async deleteTimedSJAttempt(testId, accessToken) {
+    return this._deleteTimedExamAttempt('timed_situational_judgement_exam_attempts', testId, accessToken);
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
