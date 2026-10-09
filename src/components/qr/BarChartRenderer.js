@@ -4,10 +4,11 @@ import Svg, { G, Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from '../../context/ThemeContext';
 import { useTextSize } from '../../context/TextSizeContext';
 import { formatWithUnit, formatNegativeWithUnit } from './formatUnit';
+import { wrapChartLabel } from '../../utils/chartLabels';
 
 const DEFAULT_VW = 420;
-const VH_BASE = 400;
-const M_BASE = { top: 28, right: 0, bottom: 90, left: 38 };
+const VH_BASE = 330;
+const M_BASE = { top: 28, right: 0, bottom: 20, left: 38 };
 
 const COLORS = ['#4a9eff', '#f6ad55', '#68d391', '#fc8181', '#b794f4'];
 
@@ -21,20 +22,6 @@ function niceStep(range, tickCount) {
   return nice * mag;
 }
 
-function wrapLabel(label) {
-  if (!label || !label.includes(' ')) return [label];
-  const mid = label.length / 2;
-  let bestSpace = -1, bestDist = Infinity;
-  for (let i = 0; i < label.length; i++) {
-    if (label[i] === ' ') {
-      const d = Math.abs(i - mid);
-      if (d < bestDist) { bestDist = d; bestSpace = i; }
-    }
-  }
-  if (bestSpace === -1) return [label];
-  return [label.slice(0, bestSpace), label.slice(bestSpace + 1)];
-}
-
 export default function BarChartRenderer({ data, showValues = false }) {
   const { theme: t } = useTheme();
   const { svgMultiplier } = useTextSize();
@@ -43,7 +30,7 @@ export default function BarChartRenderer({ data, showValues = false }) {
   const [svgWidth, setSvgWidth] = useState(DEFAULT_VW);
 
   const fz = (n) => Math.round(n * svgMultiplier);
-  // Grow margins so larger tick numbers and rotated x-labels still fit.
+  // Grow the left margin so larger tick numbers still fit.
   const M = {
     top: M_BASE.top,
     right: M_BASE.right,
@@ -229,10 +216,9 @@ export default function BarChartRenderer({ data, showValues = false }) {
               </SvgText>
             )}
 
-            {/* Bars & X labels */}
+            {/* Bars */}
             {labels.map((label, gi) => {
               const gx = gi * groupWidth + barPad;
-              const lx = gi * groupWidth + groupWidth / 2;
               return (
                 <G key={label}>
                   {series.map((s, si) => {
@@ -257,18 +243,6 @@ export default function BarChartRenderer({ data, showValues = false }) {
                       />
                     );
                   })}
-                  {wrapLabel(label).map((line, li) => (
-                    <SvgText
-                      key={li}
-                      x={lx}
-                      y={CH + 26 + li * 15}
-                      fontSize={fz(12)}
-                      fill={t.text}
-                      textAnchor="middle"
-                    >
-                      {line}
-                    </SvgText>
-                  ))}
                 </G>
               );
             })}
@@ -312,34 +286,27 @@ export default function BarChartRenderer({ data, showValues = false }) {
             )}
           </G>
 
-          {/* Legend — tap to toggle series */}
-          {numSeries > 1 && (() => {
-            const gap = 14;
-            const items = series.map((s) => ({
-              name: s.name,
-              width: 20 + s.name.length * 7,
-            }));
-            const totalW = items.reduce((sum, it) => sum + it.width, 0) + gap * (items.length - 1);
-            let cx = Math.max(8, (VW - totalW) / 2);
-            return items.map((item, si) => {
-              const x = cx;
-              cx += item.width + gap;
-              const hidden = hiddenSeries.has(si);
-              return (
-                <G key={series[si].name} transform={`translate(${x}, ${VH - 14})`} opacity={hidden ? 0.3 : 1}
-                   onPress={() => toggleSeries(si)}>
-                  <Rect x={-4} y={-16} width={item.width + 8} height={20} fill="transparent" />
-                  <Rect x={0} y={-11} width={13} height={13} fill={COLORS[si % COLORS.length]} rx={2} />
-                  <SvgText x={20} y={0} fontSize={fz(13)} fill={t.text}>
-                    {item.name}
-                  </SvgText>
-                </G>
-              );
-            });
-          })()}
         </Svg>
       </Pressable>
-
+      <View style={{ flexDirection: 'row', paddingLeft: M.left, paddingRight: M.right }}>
+        {labels.map((label, index) => (
+          <Text key={`${label}-${index}`} style={{ flex: 1, minWidth: 0, paddingHorizontal: 2, textAlign: 'center', fontSize: 12, lineHeight: 17, color: t.text }}>
+            {wrapChartLabel(label, groupWidth / (fz(12) * 0.65)).join('\n')}
+          </Text>
+        ))}
+      </View>
+      {numSeries > 1 && (
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', marginTop: 12, gap: 8 }}>
+          {series.map((s, si) => (
+            <Pressable key={s.name} onPress={() => toggleSeries(si)} accessibilityRole="checkbox"
+              accessibilityLabel={s.name} accessibilityState={{ checked: !hiddenSeries.has(si) }}
+              style={{ flexDirection: 'row', alignItems: 'center', maxWidth: '100%', padding: 6, gap: 6, opacity: hiddenSeries.has(si) ? 0.4 : 1 }}>
+              <View style={{ width: 13, height: 13, borderRadius: 2, backgroundColor: COLORS[si % COLORS.length] }} />
+              <Text style={{ flexShrink: 1, color: t.text, fontSize: 13 }}>{s.name}</Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
     </View>
   );
 }

@@ -78,7 +78,6 @@ async function runCommunityPolicyCheck(apiKey: string, text: string, imageUrls: 
             'Return JSON only: {"decision":"safe|review|reject","reason":"short reason","categories":["..."]}.',
             'Reject harassment, hate, sexual content, graphic violence, threats, bullying, scams, spam, doxxing,',
             'personal phone/email/address details, impersonation, or attempts to humiliate a real person.',
-            'Reject screenshots of confidential live exam content or obviously pirated paid preparation material.',
             'Use review for uncertain copyright, safeguarding, self-harm, medical emergency, or ambiguous personal data.',
             'Allow ordinary UCAT study questions, disagreements, supportive discussion, and benign app screenshots.',
           ].join(' '),
@@ -99,7 +98,7 @@ async function runCommunityPolicyCheck(apiKey: string, text: string, imageUrls: 
 async function notifyModerator(targetType: string, targetId: string, reason: string) {
   const apiKey = Deno.env.get('RESEND_API_KEY');
   if (!apiKey) return;
-  const to = Deno.env.get('SUPPORT_EMAIL_TO') ?? 'ucatgenius@gmail.com';
+  const to = Deno.env.get('SUPPORT_EMAIL_TO') ?? 'admin@qarexlabs.co.uk';
   const from = Deno.env.get('SUPPORT_EMAIL_FROM') ?? 'UCAT Genius Moderation <onboarding@resend.dev>';
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
@@ -250,6 +249,19 @@ Deno.serve(async (req) => {
         : (policy.reason || 'This submission needs a moderator review.')) : null;
 
     await updateOutcome(status, message);
+    if (status === 'published' && targetType === 'reply') {
+      try {
+        const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+        const pushResponse = await fetch(`${Deno.env.get('SUPABASE_URL')}/functions/v1/send-forum-reply-notification`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${serviceKey}`, apikey: serviceKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ replyId: targetId }),
+        });
+        if (!pushResponse.ok) console.error('Forum reply notification failed', pushResponse.status);
+      } catch (pushError) {
+        console.error('Forum reply notification failed', pushError);
+      }
+    }
     await supabase.from('forum_moderation_events').insert({
       target_type: targetType,
       target_id: targetId,

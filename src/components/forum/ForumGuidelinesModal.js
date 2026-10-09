@@ -45,7 +45,7 @@ export default function ForumGuidelinesModal({ visible, onAccept, onClose, savin
                 <Text style={[styles.rule, { color: colors.textSecondary }]}>{rule}</Text>
               </View>
             ))}
-            <Text style={[styles.contact, { color: colors.textMuted }]}>Safety contact: ucatgenius@gmail.com</Text>
+            <Text style={[styles.contact, { color: colors.textMuted }]}>Safety contact: admin@qarexlabs.co.uk</Text>
           </ScrollView>
 
           <TouchableOpacity style={styles.confirmRow} onPress={() => setConfirmed((value) => !value)} activeOpacity={0.8}>

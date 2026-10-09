@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '../../context/AuthContext';
 import { db } from '../../lib/dbQueries';
-import { enqueue, flush, removePending } from '../../services/timedExamSyncQueue';
+import { enqueue, flush, getPendingKeys, syncInBackground } from '../../services/timedExamSyncQueue';
 import { buildDMAnalyticsSummary } from '../../lib/buildAnalyticsSummary';
 import { reportError } from '../../lib/reportError';
 import { recordActivity } from '../../services/streakService';
@@ -81,12 +81,15 @@ export function useTimedDMExamProgress() {
     if (!user) return;
 
     // Push any pending offline writes first so the hydrate sees them.
-    await flush(user);
-
     try {
+      await flush(user);
       const rows = await db.loadTimedDMAttempts();
-      const merged = { ...local };
+      const latestRaw = await AsyncStorage.getItem(COMPLETED_KEY);
+      const merged = latestRaw ? JSON.parse(latestRaw) : { ...local };
+      const pending = await getPendingKeys(user.id, SECTION);
       for (const row of rows) {
+        if (pending.has(String(row.test_id))) continue;
+        if (Date.parse(merged[row.test_id]?.submittedAt) > Date.parse(row.submitted_at)) continue;
         // DM answerMap is flat: { [questionId]: selected_answer }
         const answerMap = {};
         for (const a of row.answers) {
@@ -145,6 +148,7 @@ export function useTimedDMExamProgress() {
       }
     } catch (err) {
       reportError('useTimedDMExamProgress', err, { level: 'warning', extra: { note: 'local save failed' } });
+      throw err;
     }
 
     // ── 2. Sync to cloud (best effort) ──────────────────────────────────────
@@ -173,20 +177,15 @@ export function useTimedDMExamProgress() {
       analyticsSummary,
     };
 
-    try {
-      await db.submitTimedDMExam(payload);
-      await removePending({ userId: user.id, section: SECTION, testKey: test.id });
-    } catch (err) {
-      reportError('useTimedDMExamProgress', err, { level: 'error', extra: { note: 'cloud save failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'submit',
-        testKey: test.id,
-        testId: test.id,
-        payload,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'submit',
+      testKey: test.id,
+      testId: test.id,
+      payload,
+    });
+    syncInBackground(user);
   }
 
   async function deleteAttempt(testId) {
@@ -203,19 +202,14 @@ export function useTimedDMExamProgress() {
     }
 
     if (isPreviewAttempt || !user) return;
-    try {
-      await db.deleteTimedDMAttempt(testId);
-      await removePending({ userId: user.id, section: SECTION, testKey: testId });
-    } catch (err) {
-      reportError('useTimedDMExamProgress', err, { level: 'error', extra: { note: 'cloud delete failed, queueing' } });
-      await enqueue({
-        userId: user.id,
-        section: SECTION,
-        op: 'delete',
-        testKey: testId,
-        testId,
-      });
-    }
+    await enqueue({
+      userId: user.id,
+      section: SECTION,
+      op: 'delete',
+      testKey: testId,
+      testId,
+    });
+    syncInBackground(user);
   }
 
   return { completedAttempts, submitExam, deleteAttempt, reload: loadAttempts };

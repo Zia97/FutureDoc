@@ -39,20 +39,20 @@ const KEY_POINTS = [
   {
     icon: 'book',
     accent: 'cyan',
-    title: 'Independent study tool',
-    body: 'Not affiliated with the UCAT Consortium or Pearson VUE. Practice questions are original content, not past exam questions.',
+    title: 'Provided by Qarex Labs Ltd',
+    body: 'UCAT Genius is an independent study tool, not affiliated with the UCAT Consortium or Pearson VUE.',
   },
   {
     icon: 'chart',
     accent: 'purple',
-    title: 'Estimated scores',
-    body: 'Scaled scores and SJ bands shown in the app are estimates only — rough indicators of progress, not predictions of your result.',
+    title: 'AI Tutor',
+    body: 'AI-generated answers may be inaccurate. Check them against reliable sources and use your own judgement.',
   },
   {
     icon: 'lock',
     accent: 'mint',
-    title: 'Minimal data',
-    body: 'We only store your account email, your test performance, and AI tutor questions needed to protect the service. We do not process, sell, or use your data for unrelated purposes.',
+    title: 'Your data',
+    body: 'We use account, study, AI Tutor and purchase information to provide the service. We do not sell personal information or use it for advertising profiles.',
   },
   {
     icon: 'shield-heart',

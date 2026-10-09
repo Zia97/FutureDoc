@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Modal,
   View,
@@ -10,6 +10,7 @@ import {
   Platform,
   ActivityIndicator,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../context/ThemeContext';
@@ -33,6 +34,7 @@ export default function ReportQuestionModal({
   section,
   testId = null,
   isTimed = false,
+  reportContext = {},
   partNumber = null,
   totalParts = null,
 }) {
@@ -44,17 +46,23 @@ export default function ReportQuestionModal({
   const [comment, setComment] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submittedOk, setSubmittedOk] = useState(false);
+  const closeTimer = useRef(null);
+  const requestGeneration = useRef(0);
+  const submittingRef = useRef(false);
   const isLessonReport = reportType === 'lesson';
   const reasons = isLessonReport ? LESSON_REPORT_REASONS : REPORT_REASONS;
 
   useEffect(() => {
-    if (!visible) {
-      setSelected([]);
-      setComment('');
-      setSubmitting(false);
-      setSubmittedOk(false);
-    }
-  }, [visible]);
+    setSelected([]);
+    setComment('');
+    setSubmitting(false);
+    submittingRef.current = false;
+    setSubmittedOk(false);
+    return () => {
+      requestGeneration.current++;
+      clearTimeout(closeTimer.current);
+    };
+  }, [visible, questionId, lessonId]);
 
   function toggleReason(id) {
     setSelected((prev) =>
@@ -63,38 +71,52 @@ export default function ReportQuestionModal({
   }
 
   async function handleSubmit() {
-    if (submitting) return;
+    if (submittingRef.current) return;
     if (!comment.trim()) {
       Alert.alert('Add comments', 'Please describe the issue so we know what to fix.');
       return;
     }
+    submittingRef.current = true;
+    const generation = requestGeneration.current;
     setSubmitting(true);
-    const res = isLessonReport
-      ? await submitLessonReport({
-          lessonId,
-          lessonTitle,
-          section,
-          reasons: selected,
-          comment,
-          partNumber,
-          totalParts,
-        })
-      : await submitQuestionReport({
-          questionId,
-          section,
-          testId,
-          isTimed,
-          reasons: selected,
-          comment,
-        });
-    setSubmitting(false);
+    try {
+      const res = isLessonReport
+        ? await submitLessonReport({
+            lessonId,
+            lessonTitle,
+            section,
+            reasons: selected,
+            comment,
+            partNumber,
+            totalParts,
+          })
+        : await submitQuestionReport({
+            questionId,
+            section,
+            testId,
+            isTimed,
+            reasons: selected,
+            comment,
+            context: reportContext,
+          });
+      if (generation !== requestGeneration.current) return;
 
-    if (!res.ok) {
-      Alert.alert('Could not send report', res.error ?? 'Please try again.');
-      return;
+      if (!res.ok) {
+        Alert.alert('Could not send report', res.error ?? 'Please try again.');
+        return;
+      }
+      setSubmittedOk(true);
+      closeTimer.current = setTimeout(onClose, 1100);
+    } catch {
+      if (generation === requestGeneration.current) {
+        Alert.alert('Could not send report', 'Please try again. Your comments are still here.');
+      }
+    } finally {
+      if (generation === requestGeneration.current) {
+        submittingRef.current = false;
+        setSubmitting(false);
+      }
     }
-    setSubmittedOk(true);
-    setTimeout(onClose, 1100);
   }
 
   const accent = colors.red;
@@ -105,7 +127,7 @@ export default function ReportQuestionModal({
     : "What's wrong with it? Pick all that apply.";
   const commentPlaceholder = isLessonReport
     ? 'Tell us what needs fixing and where in the lesson...'
-    : 'Tell us what needs fixing and where you noticed it...';
+    : 'What happened, and what did you expect? For an answer issue, include your reasoning or calculation.';
 
   return (
     <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
@@ -172,7 +194,7 @@ export default function ReportQuestionModal({
               </Text>
             </View>
           ) : (
-            <>
+            <ScrollView style={{ flexShrink: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 8 }}>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 {reasonPrompt}
               </Text>
@@ -256,7 +278,7 @@ export default function ReportQuestionModal({
                   )}
                 </LinearGradient>
               </TouchableOpacity>
-            </>
+            </ScrollView>
           )}
         </View>
       </KeyboardAvoidingView>
@@ -271,6 +293,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cardWrap: {
+    maxHeight: '92%',
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     borderTopWidth: 1,

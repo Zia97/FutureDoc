@@ -112,6 +112,7 @@ export default function ScreenNavBar({
           section={report.section}
           testId={report.testId ?? null}
           isTimed={!!report.isTimed}
+          reportContext={report.context}
         />
       ) : null}
     </View>

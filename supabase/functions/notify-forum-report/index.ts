@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
 
   const resendKey = Deno.env.get('RESEND_API_KEY');
   if (!resendKey) return new Response(JSON.stringify({ ok: true, emailed: false }), { status: 200, headers: responseHeaders });
-  const to = Deno.env.get('SUPPORT_EMAIL_TO') ?? 'ucatgenius@gmail.com';
+  const to = Deno.env.get('SUPPORT_EMAIL_TO') ?? 'admin@qarexlabs.co.uk';
   const from = Deno.env.get('SUPPORT_EMAIL_FROM') ?? 'UCAT Genius Moderation <onboarding@resend.dev>';
   const send = await fetch('https://api.resend.com/emails', {
     method: 'POST',

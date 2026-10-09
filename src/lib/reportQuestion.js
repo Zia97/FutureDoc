@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import { supabase } from './supabase';
 import { reportError } from './reportError';
+import { collectReportDiagnostics, REPORT_APP_VERSION } from './reportDiagnostics';
 
 export const REPORT_REASONS = [
   { id: 'wrong_answer',        label: 'Wrong answer' },
@@ -8,6 +9,8 @@ export const REPORT_REASONS = [
   { id: 'typo',                label: 'Typo / formatting' },
   { id: 'image_broken',        label: 'Image / diagram broken' },
   { id: 'explanation_unclear', label: 'Explanation unclear' },
+  { id: 'broken_interaction',  label: 'Buttons / exam not working' },
+  { id: 'difficulty',          label: 'Too easy / predictable' },
   { id: 'other',               label: 'Other' },
 ];
 
@@ -39,6 +42,7 @@ export async function submitQuestionReport({
   isTimed = false,
   reasons = [],
   comment = '',
+  context = {},
 }) {
   if (!questionId) return { ok: false, error: 'Missing questionId' };
   if (!section)    return { ok: false, error: 'Missing section' };
@@ -47,24 +51,38 @@ export async function submitQuestionReport({
     return { ok: false, error: 'Please add comments describing the issue.' };
   }
 
-  const { data: { user } } = await supabase.auth.getUser();
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    const diagnostics = await collectReportDiagnostics(section, isTimed, context);
+    const numericTestId = testId == null ? null : Number(String(testId).match(/(?:^|test-)(\d+)$/)?.[1]);
+    const payload = {
+      question_id: questionId,
+      section,
+      test_id: Number.isFinite(numericTestId) ? numericTestId : null,
+      is_timed: isTimed,
+      user_id: user?.id ?? null,
+      reasons,
+      comment: trimmedComment,
+      platform: Platform.OS,
+      app_version: REPORT_APP_VERSION,
+      diagnostics,
+    };
+    let { error } = await supabase.from('question_reports').insert(payload);
+    // Preserve reporting when the client update arrives before the schema migration.
+    if (error && ['PGRST204', '42703'].includes(error.code) && error.message?.includes('diagnostics')) {
+      const { diagnostics: omitted, ...legacyPayload } = payload;
+      ({ error } = await supabase.from('question_reports').insert(legacyPayload));
+    }
 
-  const { error } = await supabase.from('question_reports').insert({
-    question_id: questionId,
-    section,
-    test_id: testId,
-    is_timed: isTimed,
-    user_id: user?.id ?? null,
-    reasons,
-    comment: trimmedComment,
-    platform: Platform.OS,
-  });
-
-  if (error) {
+    if (error) {
+      reportError('submitQuestionReport', error, { extra: { questionId, section } });
+      return { ok: false, error: 'Could not submit your report. Please try again.' };
+    }
+    return { ok: true };
+  } catch (error) {
     reportError('submitQuestionReport', error, { extra: { questionId, section } });
     return { ok: false, error: 'Could not submit your report. Please try again.' };
   }
-  return { ok: true };
 }
 
 /**
@@ -109,6 +127,7 @@ export async function submitLessonReport({
     reasons,
     comment: finalComment,
     platform: Platform.OS,
+    app_version: REPORT_APP_VERSION,
   });
 
   if (error) {

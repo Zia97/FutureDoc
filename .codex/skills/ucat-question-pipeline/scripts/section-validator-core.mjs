@@ -2,6 +2,7 @@ import { isUuidV4, lexicalSimilarity, normaliseText, wordCount } from './vr-comm
 import { normalisePreview } from './section-common.mjs';
 import { computeLayout } from '../../../../src/utils/venn/layout.js';
 import { inspectExplicitDiagram, vennFingerprints } from '../../../../src/utils/venn/arrangement.js';
+import { editorialIssues, argumentPatternIssues } from './editorial-quality.mjs';
 
 export const DM_TYPES = [
   'syllogism', 'logic_puzzle', 'interpreting_info',
@@ -45,6 +46,7 @@ export function validateSectionCandidate({ section, input, modeHint, corpus = nu
   if (mode === 'practice' && looksTimed) add('error', 'schema.practice_root', `Practice ${section.toUpperCase()} must not use a timed-test wrapper.`);
 
   let questionCount = 0;
+  issues.push(...editorialIssues(input));
   if (section === 'dm') questionCount = validateDm(input, mode, add, registerId);
   else if (section === 'qr') questionCount = validateQr(input, mode, add, registerId);
   else if (section === 'sj') questionCount = validateSj(input, mode, add, registerId);
@@ -66,6 +68,7 @@ export function validateSectionCandidate({ section, input, modeHint, corpus = nu
 
 function validateDm(input, mode, add, registerId) {
   const questions = mode === 'timed' ? (input[0]?.questions || []) : input;
+  for (const issue of argumentPatternIssues(questions)) add(issue.severity, issue.code, issue.message);
   const timedTypes = mode === 'timed' ? [
     ...Array(5).fill('syllogism'),
     ...Array(6).fill('logic_puzzle'),

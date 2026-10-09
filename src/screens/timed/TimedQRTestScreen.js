@@ -12,6 +12,8 @@ import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
+import { useExamSubmission } from '../../hooks/ui/useExamSubmission';
+import TimedExamSavingScreen from '../../components/TimedExamSavingScreen';
 import { useTimedQRExamProgress } from '../../hooks/attempts/useTimedQRExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
@@ -51,10 +53,10 @@ export default function TimedQRTestScreen({ route, navigation }) {
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const { submit: saveCompletedExam, submissionState } = useExamSubmission(submitExam, () => setShowResults(true));
 
   useExitWarning(navigation, !showResults);
 
-  const endExamCalledRef = useRef(false);
   const secondsLeftRef = useRef(null);
 
   const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
@@ -106,18 +108,15 @@ export default function TimedQRTestScreen({ route, navigation }) {
   }
 
   async function endExam(timerExpired = false) {
-    if (endExamCalledRef.current) return;
-    endExamCalledRef.current = true;
     stopTimer();
     const timeMsByQid = getQuestionTimes();
-    await submitExam({
+    await saveCompletedExam({
       test,
       answers,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
       flags,
       timeMsByQid,
     });
-    setShowResults(true);
   }
 
   function getQuestionStatus(fq) {
@@ -137,6 +136,10 @@ export default function TimedQRTestScreen({ route, navigation }) {
 
   function getAnswerForResults(setId, questionId) {
     return answers[questionId] ?? null;
+  }
+
+  if (submissionState) {
+    return <TimedExamSavingScreen state={submissionState} onRetry={() => saveCompletedExam()} />;
   }
 
   if (showResults) {
@@ -185,12 +188,14 @@ export default function TimedQRTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={sectionColor}
-        report={{ questionId: qid, section: 'qr', testId: test.id, isTimed: true }}
+        report={{ questionId: qid, section: 'qr', testId: test.id, isTimed: true, context: { selected_answer: currentAnswer, question_index: index, seconds_left: secondsLeft, is_paused: isPaused, screen: 'timed-question' } }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
       <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         key={item.stemId + qid}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}

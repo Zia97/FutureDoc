@@ -12,7 +12,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 
-const SUPPORT_EMAIL = 'ucatgenius@gmail.com';
+const SUPPORT_EMAIL = 'admin@qarexlabs.co.uk';
 
 export default function SuspendedScreen({ reason, suspendedAt }) {
   const { theme: t } = useTheme();

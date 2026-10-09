@@ -15,53 +15,68 @@ import {
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
 
-const LAST_UPDATED = '29 September 2026';
+const LAST_UPDATED = '9 October 2026';
 
 const SECTIONS = [
   {
-    title: '1. Information We Collect',
-    body:
-      'We keep data collection limited to what is needed for the app to work:\n\n- Your email address and account identifier\n- Your display name and five-digit public community tag\n- Your test and practice performance, including answers, scores, timings, and analytics summaries\n- Questions and messages you send to the AI tutor, the tutor replies, optional helpful/not-helpful feedback, and technical usage information such as response time and token counts\n- Community posts, replies, screenshots, reports, blocked-user choices, and your acceptance of the Community Guidelines\n- Safety classifications, moderation actions, and limited technical information needed to prevent spam and abuse',
+    title: "Who we are",
+    body: "UCAT Genius is an independent UCAT preparation product operated by Qarex Labs Ltd, the data controller responsible for the personal information described in this policy. We are registered in England and Wales under company number 17503258. Our registered office is 71–75 Shelton Street, Covent Garden, London, WC2H 9JQ, United Kingdom. Contact us at admin@qarexlabs.co.uk.\n\nUCAT Genius is not affiliated with, endorsed by or connected to the UCAT Consortium, Pearson VUE, any university or admissions body. Our questions, explanations and progress tools are independent study aids; we do not have access to the official UCAT mark scheme.",
   },
   {
-    title: '2. How We Use Your Information',
-    body:
-      'We use this information for account access, learning and performance features, improving and monitoring AI tutor quality and cost, personalising explanations from previously observed learning difficulties, operating the student community, searching discussions, enforcing rate limits, detecting unsafe or abusive submissions, responding to reports, and securing the service. We do not sell, rent, trade, advertise with, or train our own models on your personal data.',
+    title: "Information we collect",
+    body: "- Account information: your email address and account identifiers, including a Supabase user ID and a RevenueCat app user ID. Supabase also records sign-in details such as IP address, event time and device user agent for account security.\n- Study activity: your practice and test answers, scores, timings and progress summaries, so you can review your work and see your progress.\n- AI Tutor content: questions and messages you send to the tutor. These are used to answer you and to detect misuse, investigate complaints and improve app quality.\n- Community content: if you use a Student Community feature, posts and replies you choose to publish. Other users of that feature can see the content you post, so please avoid sharing personal or sensitive information there.\n- Purchases: product, transaction and subscription status information received through RevenueCat and the Apple App Store or Google Play. We do not receive your payment card number.\n- Diagnostics: crash and error details sent to Sentry, which may include device model, operating system and app versions, an anonymised identifier and an error stack trace.\n- Website visits: ordinary technical request information, such as IP address and browser details, is processed to deliver and protect the UCAT Genius website. The site also loads a Cloudflare Web Analytics script, which can process page-view and performance information.\n- Messages to us: information you choose to include when you contact support or make a privacy request.\n\nWe do not ask you to provide your real name, postal address, phone number, location, contacts, photos, or camera or microphone input to use the app. Please do not put sensitive personal information in AI Tutor messages or community posts.",
   },
   {
-    title: '3. Data Storage & Security',
-    body:
-      'Your data is stored using Supabase with encryption in transit and at rest. Community screenshots are kept in private storage and delivered through time-limited links. Pending submissions are visible only to their author and administrators; other students receive only approved content. Access is limited through server-side authorisation and row-level security.',
+    title: "How we use information and our legal bases",
+    body: "- To provide the service (contract): create and manage your account, save practice results, display progress, answer AI Tutor requests, provide community features where available, and recognise paid access.\n- To keep the service safe and reliable (legitimate interests): investigate abuse or complaints, protect accounts, diagnose errors and improve stability. Our interest is operating a secure, useful study app; we consider the effect of this processing on users, including younger users.\n- To deliver the website (legitimate interests): process routine website requests and understand page performance so the site remains available and useful.\n- To comply with law (legal obligation): keep records or respond to lawful requests where required.\n- With consent, if we ask for it: for any optional processing that requires consent. We do not currently send marketing or newsletter emails. If we introduce them, we will ask you to opt in and provide a way to withdraw consent.\n\nWe do not sell personal information, use it for advertising profiles, run advertising in the app or use AI Tutor messages to train AI models. Essential account and service messages, such as password resets and security notices, are separate from marketing.",
   },
   {
-    title: '4. Third-Party Services',
-    body:
-      'We use trusted third-party services where needed for authentication, secure storage, subscription management, app updates, error monitoring, the AI tutor, and community safety moderation. AI tutor question context and chat messages are sent to OpenAI to generate the reply. Community text and screenshots may be sent to a safety provider solely to classify them for harmful or prohibited content. We do not permit these services to use your data for our marketing, advertising, or resale. Each provider has its own privacy terms.',
+    title: "AI Tutor",
+    body: "The AI Tutor sends the text of your questions and messages to OpenAI to generate a response. We do not attach your email address or account identifier to the messages sent to OpenAI. We store your messages for up to 14 days to monitor misuse, investigate complaints and improve quality, unless an active abuse or safety investigation requires longer retention. AI responses may be inaccurate; please check important information against official sources.",
   },
   {
-    title: '5. Your Rights',
-    body:
-      'You can:\n\n- Access your performance and public community content through the app\n- Delete your own forum posts and replies\n- Report content and block other community members\n- Delete your account from the Profile screen\n- Contact us to request access, correction, an export, human review of a moderation decision, or deletion where applicable\n\nIf you are in the UK or EU, you may also have rights to rectification, restriction, objection, and data portability.',
+    title: "Progress analytics and tracking",
+    body: "We calculate progress and performance summaries from your practice answers, scores and timings for you to view in the app. The mobile app does not use cookies, advertising trackers, behavioural analytics SDKs or cross-app tracking. Crash reporting through Sentry is used to fix errors, not to advertise to you.\n\nThe UCAT Genius website includes a Cloudflare Web Analytics script, which can collect page-view and performance metrics when configured. This is separate from your in-app study analytics and is not used for cross-site advertising.",
   },
   {
-    title: '6. Data Retention',
-    body:
-      'We retain account data while your account is active. When you delete it, identifying account data and screenshots are scheduled for removal within 30 days. Public discussion text may remain only in anonymised form to preserve conversation context. Reports, moderation decisions, and audit records may be retained for a reasonable period where necessary to protect users, resolve complaints, prevent repeat abuse, or comply with law.',
+    title: "Payments and subscriptions",
+    body: "Apple or Google handles payment processing for in-app purchases. RevenueCat helps us check purchase and subscription entitlements. We receive purchase metadata such as the product purchased, transaction ID and subscription status; we do not receive or store payment card details. You can manage or cancel an app-store subscription through the store where you bought it.",
   },
   {
-    title: '7. Children’s Privacy',
-    body:
-      'The app is intended for users aged 16 and over. We do not knowingly collect data from children under 16. If we become aware that we have collected data from a child under 16, we will delete it promptly.',
+    title: "Third-party service providers",
+    body: "We use these services to operate UCAT Genius. Their own privacy notices explain their handling of information:\n\n- Supabase — account authentication, database and storage for account and study data.\n- RevenueCat — purchase status and subscription entitlements.\n- Apple App Store and Google Play — in-app payment processing.\n- OpenAI — AI Tutor responses, using message content without an attached email or account identifier.\n- Sentry — crash and error reporting.\n- Expo / EAS — app builds and updates, which may involve limited update-check or diagnostic data.\n- Cloudflare — website delivery and a web analytics script on ucatgenius.com.\n\nWe use providers for these service purposes, not for resale of your data or unrelated advertising.",
   },
   {
-    title: '8. Changes to This Policy',
-    body:
-      'We may update this policy from time to time. We will notify you of significant changes via the app or email. Continued use of the app after changes constitutes acceptance.',
+    title: "International data transfers",
+    body: "Some providers, including OpenAI and Sentry, operate in the United States or other countries outside the UK. Where UK data protection law treats a transfer as restricted, we use an applicable adequacy decision or appropriate safeguards, such as the UK International Data Transfer Agreement or the UK Addendum to EU Standard Contractual Clauses, as relevant to the transfer. Contact us if you would like more information about the safeguards used for your data.",
   },
   {
-    title: '9. Contact Us',
-    body:
-      'If you have any questions about this privacy policy or your data, please contact us at:\n\nucatgenius@gmail.com',
+    title: "How long we keep data",
+    body: "- Account and study progress data are kept while your account is active.\n- AI Tutor messages are normally deleted after 14 days, subject to the investigation exception above.\n- Sentry crash and error logs are kept for up to 90 days.\n- After account deletion, personal data associated with your account is removed within 30 days, except information we must keep for a legal reason. Transaction records may be retained for up to six years for tax and accounting purposes.\n\nCommunity posts you publish may have been seen or copied by other users before deletion. If you need help removing a post, please contact us.",
+  },
+  {
+    title: "Security",
+    body: "We use encryption in transit and at rest and limit access to information needed to operate the app. No online system can be guaranteed completely secure. Please protect your account credentials and tell us promptly if you suspect unauthorised access.",
+  },
+  {
+    title: "Children",
+    body: "UCAT Genius is intended for people aged 16 or over. We do not knowingly collect personal data from children under 16. If you believe someone under 16 has provided personal information to us, email admin@qarexlabs.co.uk so we can investigate and delete it where appropriate.",
+  },
+  {
+    title: "Your data protection rights",
+    body: "Under the UK GDPR and Data Protection Act 2018, you may have rights to access your personal data, correct it, ask for its deletion, restrict its use, receive certain data in a portable form, and object to processing based on legitimate interests. Where we rely on consent, you may withdraw it. These rights depend on the circumstances and may be subject to legal exceptions.\n\nEmail admin@qarexlabs.co.uk to exercise a right. We may need to verify your identity. We normally respond within one month. You can also complain to the Information Commissioner’s Office (ICO) if you are unhappy with how we handle your data.",
+  },
+  {
+    title: "Account and data deletion",
+    body: "Use Delete Account on the Profile screen in the app, or email admin@qarexlabs.co.uk. Deleting your account does not automatically cancel a subscription billed by Apple or Google; manage that subscription in the relevant store. We remove associated personal data within 30 days, subject to the limited legal retention described above.",
+  },
+  {
+    title: "Changes to this policy",
+    body: "We may update this policy if our practices, services or legal obligations change. We will update the date above and, for significant changes, notify users in the app or by email before they take effect.",
+  },
+  {
+    title: "Contact us",
+    body: "Qarex Labs Ltd 71–75 Shelton Street Covent Garden London WC2H 9JQ United Kingdom\n\nEmail: admin@qarexlabs.co.uk",
   },
 ];
 
@@ -110,11 +125,7 @@ export default function PrivacyPolicyScreen({ navigation }) {
             style={[styles.introCard, { borderColor: colors.border }]}
           >
             <Text style={[styles.introText, introScaled, { color: colors.textSecondary }]}>
-              UCAT Genius (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) is committed to protecting your privacy.
-              This policy explains what data we collect, how we use it, and your rights.
-              {'\n\n'}UCAT Genius is an independent study tool and is not affiliated with, endorsed by, or
-              connected to the official UCAT app, the UCAT Consortium, Pearson VUE, or any university.
-              We recommend visiting the official UCAT website (ucat.ac.uk) for the latest exam information.
+              How we handle personal information when you use the UCAT Genius app, visit ucatgenius.com or contact us.
             </Text>
           </LinearGradient>
         </Animated.View>

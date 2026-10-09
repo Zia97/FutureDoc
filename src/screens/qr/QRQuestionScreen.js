@@ -160,7 +160,7 @@ function QRSingleSetBranch({ set, headerTitle, headerSubtitle, onAnswerCommit, i
         isFirst
         isLast
         color={sectionColor}
-        report={{ questionId: qid, section: 'qr' }}
+        report={{ questionId: qid, section: 'qr', context: { selected_answer: submittedAnswer ?? pendingAnswer, submitted: hasAnswered, screen: 'worked-example' } }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
@@ -339,7 +339,7 @@ function QRQuestionScreenInner({ route, navigation }) {
         isFirst={isFirst}
         isLast={isLast}
         color={sectionColor}
-        report={{ questionId: qid, section: 'qr' }}
+        report={{ questionId: qid, section: 'qr', context: { selected_answer: selectedAnswer ?? pendingAnswer, submitted: hasAnswered, question_index: index, screen: 'practice-question' } }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => { setCalcVisible(false); timer.resume(); }} />

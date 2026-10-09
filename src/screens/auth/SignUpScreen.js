@@ -18,10 +18,6 @@ import Svg, { Path } from 'react-native-svg';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import {
-  requestPermission,
-  scheduleDailyReminder,
-} from '../../services/notificationService';
-import {
   AppHeader,
   PremiumScreen,
   PremiumScrollView,
@@ -87,7 +83,7 @@ export default function SignUpScreen({ navigation }) {
     Alert.alert(
       'Check your email',
       'We sent you a confirmation link. Please verify your email before signing in.',
-      [{ text: 'OK', onPress: askForNotifications }],
+      [{ text: 'OK', onPress: () => navigation.navigate('Login') }],
     );
   };
 
@@ -114,30 +110,6 @@ export default function SignUpScreen({ navigation }) {
     } finally {
       setSocialLoading(null);
     }
-  };
-
-  const askForNotifications = () => {
-    Alert.alert(
-      'Stay on track',
-      'Get a daily reminder to keep your streak going and study consistently.',
-      [
-        {
-          text: 'Not now',
-          style: 'cancel',
-          onPress: () => navigation.navigate('Login'),
-        },
-        {
-          text: 'Enable reminders',
-          onPress: async () => {
-            const status = await requestPermission();
-            if (status === 'granted') {
-              await scheduleDailyReminder();
-            }
-            navigation.navigate('Login');
-          },
-        },
-      ],
-    );
   };
 
   const inputStyle = {

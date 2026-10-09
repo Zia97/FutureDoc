@@ -10,6 +10,8 @@ import { getPremiumTheme } from '../../theme/premiumTheme';
 import { useSwipeGesture } from '../../hooks/ui/useSwipeGesture';
 import { useTestTimer } from '../../hooks/ui/useTestTimer';
 import { useExitWarning } from '../../hooks/ui/useExitWarning';
+import { useExamSubmission } from '../../hooks/ui/useExamSubmission';
+import TimedExamSavingScreen from '../../components/TimedExamSavingScreen';
 import { useQuestionTimeTracker } from '../../hooks/ui/useQuestionTimeTracker';
 import { useTimedDMExamProgress } from '../../hooks/attempts/useTimedDMExamProgress';
 import ScreenNavBar from '../../components/ScreenNavBar';
@@ -49,10 +51,10 @@ export default function TimedDMTestScreen({ route, navigation }) {
   const [navigatorVisible, setNavigatorVisible] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const { submit: saveCompletedExam, submissionState } = useExamSubmission(submitExam, () => setShowResults(true));
 
   useExitWarning(navigation, !showResults);
 
-  const endExamCalledRef = useRef(false);
   const secondsLeftRef = useRef(null);
 
   const { display: timerDisplay, isUrgent, secondsLeft, isPaused, pause, resume, stop: stopTimer } = useTestTimer(
@@ -102,18 +104,15 @@ export default function TimedDMTestScreen({ route, navigation }) {
   [test]);
 
   async function endExam(timerExpired = false) {
-    if (endExamCalledRef.current) return;
-    endExamCalledRef.current = true;
     stopTimer();
     const timeMsByQid = getQuestionTimes();
-    await submitExam({
+    await saveCompletedExam({
       test,
       answers,
       secondsLeft: timerExpired ? 0 : (secondsLeftRef.current ?? 0),
       flags,
       timeMsByQid,
     });
-    setShowResults(true);
   }
 
   function handleAnswer(val) {
@@ -140,6 +139,10 @@ export default function TimedDMTestScreen({ route, navigation }) {
     if (isAnswered(fq.questionId)) return 'Answered';
     if (seenQuestions.has(fq.questionId)) return 'Incomplete';
     return 'Unseen';
+  }
+
+  if (submissionState) {
+    return <TimedExamSavingScreen state={submissionState} onRetry={() => saveCompletedExam()} />;
   }
 
   if (showResults) {
@@ -188,12 +191,14 @@ export default function TimedDMTestScreen({ route, navigation }) {
         isFirst={isFirst}
         isLast={false}
         color={sectionColor}
-        report={{ questionId: qid, section: 'dm', testId: test.id, isTimed: true }}
+        report={{ questionId: qid, section: 'dm', testId: test.id, isTimed: true, context: { selected_answer: currentAnswer, question_index: currentIndex, seconds_left: secondsLeft, is_paused: isPaused, screen: 'timed-question' } }}
       />
 
       <CalculatorModal visible={calcVisible} onClose={() => setCalcVisible(false)} />
 
       <ScrollView
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
         key={qid}
         style={styles.scroll}
         contentContainerStyle={styles.scrollContent}

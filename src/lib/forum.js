@@ -356,6 +356,13 @@ export async function moderateForumContentAsAdmin(targetType, targetId, action, 
     p_reason: reason,
   });
   if (error) throw error;
+  if (targetType === 'reply' && action === 'publish') {
+    supabase.functions.invoke('send-forum-reply-notification', { body: { replyId: targetId } })
+      .then(({ error: pushError }) => {
+        if (pushError) reportError('forum.replyNotification', pushError, { extra: { replyId: targetId } });
+      })
+      .catch(pushError => reportError('forum.replyNotification', pushError, { extra: { replyId: targetId } }));
+  }
   if (targetType === 'post' && action === 'delete') {
     emitSubmission({ type: 'post_deleted', postId: targetId });
     supabase.functions.invoke('cleanup-forum-media', { body: { postId: targetId } })
