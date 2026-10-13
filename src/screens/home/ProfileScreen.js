@@ -22,7 +22,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
-import { getNotificationPreferences, setNotificationPreference } from '../../services/notificationService';
+import { getNotificationPreferences, setNotificationsEnabled } from '../../services/notificationService';
 import {
   AppHeader,
   GlassMenuCard,
@@ -60,23 +60,23 @@ export default function ProfileScreen() {
   const [nameModalVisible, setNameModalVisible] = useState(false);
   const [nameDraft, setNameDraft] = useState('');
   const [nameSaving, setNameSaving] = useState(false);
-  const [notificationPrefs, setNotificationPrefs] = useState(null);
+  const [notificationsEnabled, setNotificationsEnabledState] = useState(null);
   const [notificationLoadError, setNotificationLoadError] = useState(false);
   const [notificationSaving, setNotificationSaving] = useState(false);
 
   useEffect(() => {
     let active = true;
     if (user?.id) getNotificationPreferences(user.id)
-      .then(prefs => { if (active) { setNotificationPrefs(prefs); setNotificationLoadError(false); } })
-      .catch(() => { if (active) { setNotificationPrefs(null); setNotificationLoadError(true); } });
+      .then(prefs => { if (active) { setNotificationsEnabledState(prefs.streak_reminders || prefs.forum_replies); setNotificationLoadError(false); } })
+      .catch(() => { if (active) { setNotificationsEnabledState(null); setNotificationLoadError(true); } });
     return () => { active = false; };
   }, [user?.id]);
 
-  const toggleNotification = async (key, enabled) => {
+  const toggleNotification = async (enabled) => {
     setNotificationSaving(true);
     try {
-      await setNotificationPreference(user.id, key, enabled);
-      setNotificationPrefs(previous => ({ ...previous, [key]: enabled }));
+      await setNotificationsEnabled(user.id, enabled);
+      setNotificationsEnabledState(enabled);
     } catch (error) {
       Alert.alert('Could not update notifications', error.message || 'Please try again.');
     } finally {
@@ -385,27 +385,22 @@ export default function ProfileScreen() {
 
         <Animated.View style={[styles.section, contentAnim]}>
           <Text style={[styles.sectionHeading, { color: colors.text }]}>Notifications</Text>
-          <Text style={[styles.helperText, { color: colors.textMuted }]}>Choose which reminders you receive. Your device must also allow notifications for UCAT Genius.</Text>
-          {[
-            ['streak_reminders', 'Study reminders', 'A daily nudge at 7 pm to keep practising.'],
-            ['forum_replies', 'Forum replies', 'When someone replies to your post or comment.'],
-          ].map(([key, title, description]) => (
-            <View key={key} style={[styles.devRow, { paddingVertical: 12 }]}>
-              <View style={styles.devLabel}>
-                <Text style={[styles.devTitle, { color: colors.text }]}>{title}</Text>
-                <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>{description}</Text>
-              </View>
-              <Switch
-                accessibilityLabel={title}
-                value={!!notificationPrefs?.[key]}
-                disabled={!notificationPrefs || notificationSaving}
-                onValueChange={value => toggleNotification(key, value)}
-                trackColor={{ false: colors.border, true: colors.blue }}
-                thumbColor="#ffffff"
-              />
+          <Text style={[styles.helperText, { color: colors.textMuted }]}>Get a reminder at 7 pm each day to keep practising. Your device must also allow UCAT Genius notifications.</Text>
+          <View style={[styles.devRow, { paddingVertical: 12 }]}>
+            <View style={styles.devLabel}>
+              <Text style={[styles.devTitle, { color: colors.text }]}>Allow notifications</Text>
+              <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>Turn notifications on or off.</Text>
             </View>
-          ))}
-          {!notificationPrefs && <Text style={[styles.helperText, { color: colors.textMuted }]}>
+            <Switch
+              accessibilityLabel="Allow notifications"
+              value={!!notificationsEnabled}
+              disabled={notificationsEnabled === null || notificationSaving}
+              onValueChange={toggleNotification}
+              trackColor={{ false: colors.border, true: colors.blue }}
+              thumbColor="#ffffff"
+            />
+          </View>
+          {notificationsEnabled === null && <Text style={[styles.helperText, { color: colors.textMuted }]}>
             {notificationLoadError ? 'Could not load notification settings. Reopen Profile to retry.' : 'Loading notification settings...'}
           </Text>}
         </Animated.View>
