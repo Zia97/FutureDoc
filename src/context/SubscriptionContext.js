@@ -24,6 +24,7 @@ export function SubscriptionProvider({ children }) {
   const [offerings, setOfferings] = useState(null);
   const [customerInfo, setCustomerInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [identifiedUserId, setIdentifiedUserId] = useState(null);
 
   // Derive premium status from customer info
   const checkEntitlement = useCallback(
@@ -119,8 +120,16 @@ export function SubscriptionProvider({ children }) {
 
   // Identify user and check subscription + admin status when auth state changes
   useEffect(() => {
+    let cancelled = false;
     async function identify() {
-      if (!user?.id) return;
+      if (!user?.id) {
+        setIsPro(false);
+        setAdminOverride(false);
+        setCustomerInfo(null);
+        setHasUsedTrial(false);
+        setIdentifiedUserId(null);
+        return;
+      }
 
       // 1. Check RevenueCat subscription
       let premium = false;
@@ -129,8 +138,10 @@ export function SubscriptionProvider({ children }) {
       } catch (err) {
         reportError('SubscriptionContext', err, { level: 'warning', extra: { note: 'logIn failed' } });
       }
+      if (cancelled) return;
       try {
         const info = await Purchases.getCustomerInfo();
+        if (cancelled) return;
         setCustomerInfo(info);
         premium = checkEntitlement(info);
       } catch (err) {
@@ -145,6 +156,7 @@ export function SubscriptionProvider({ children }) {
           .select('is_admin, trial_claimed_at')
           .eq('user_id', user.id)
           .single();
+        if (cancelled) return;
         isAdmin = !!data?.is_admin;
         setHasUsedTrial(data?.trial_claimed_at !== null && data?.trial_claimed_at !== undefined);
       } catch (err) {
@@ -152,10 +164,13 @@ export function SubscriptionProvider({ children }) {
       }
 
       // 3. User is pro if RevenueCat subscriber OR admin
+      if (cancelled) return;
       setAdminOverride(isAdmin);
       setIsPro(premium || isAdmin);
+      setIdentifiedUserId(user.id);
     }
     identify();
+    return () => { cancelled = true; };
   }, [user?.id]);
 
   async function checkSubscription() {
@@ -258,7 +273,7 @@ export function SubscriptionProvider({ children }) {
         hasUsedTrial,
         offerings,
         customerInfo,
-        loading,
+        loading: loading || (!!user?.id && identifiedUserId !== user.id),
         purchasePackage,
         restorePurchases,
         checkSubscription,

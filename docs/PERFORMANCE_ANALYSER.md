@@ -1,13 +1,17 @@
 # Performance analyser
 
-Implementation prepared on 13 October 2026. The database migrations and edge
-function have **not been applied to the live project**.
+Implementation prepared on 13 October 2026, with a subsequent caching and cohort
+revision. This revision's cohort migration and updated edge function have
+**not been deployed from this workspace**.
 
 ## Student experience
 
-The Analytics tab becomes Performance. Everyone sees animated marks rings, a
-question count and a four-section breakdown, with separate practice and timed
-views. The Pro card opens the existing purchase flow.
+The Analytics tab becomes Performance, headed "Your performance analytics".
+Everyone sees animated accuracy rings, a questions-answered count, a four-section
+breakdown and "You vs cohort", with separate practice and timed views. The Pro
+card opens the existing purchase flow. Promotional slogans and the "How your
+analysis works" panel have been removed for everyone; the scoring methodology
+below is developer documentation only.
 
 Pro adds 41 skill breakdowns, up to three evidence-backed priorities, six weeks
 of interactive progress bars, practice/timed comparisons and median answer time.
@@ -16,9 +20,61 @@ up to eight fresh practice questions or previously missed practice questions.
 The existing question screens provide their normal explanations, tools and
 telemetry. A completion screen returns to the skill analysis.
 
-Rings and numbers animate into place, bars grow, cards reveal in sequence and
-buttons respond to presses. Animations respect reduced-motion settings. Both
-light and dark themes use the existing premium theme system.
+Rings and numbers animate into place, bars grow and buttons respond to presses.
+Cards slide in once per mount and always remain opaque, including when an
+entrance is interrupted by navigation or a motion-preference change. Animations
+respect reduced-motion settings. Both light and dark themes use the existing
+premium theme system.
+
+An initial load shows pulsing chart placeholders and a small animated chart.
+Status text changes after four and nine seconds to acknowledge longer waits;
+it does not claim a measured percentage or guessed server progress. Loading
+animations and message timers stop when the screen loses focus or unmounts.
+
+## Device caching and refresh
+
+`src/lib/performance/cache.js` owns a shared in-memory snapshot, persisted in
+AsyncStorage separately for each account. A single `mode: 'all'` request gets
+both practice and timed reports, including all available skill details. Every
+Performance overview, skill and progress screen reads that same snapshot.
+
+The initial visit fetches if no valid snapshot exists. Later screen visits, mode
+changes, app foregrounds and app restarts do not refresh it, even when it is old.
+Pull-to-refresh can fetch once every five minutes; the last refresh time is
+persisted so restarting or navigating cannot bypass the device cooldown. A pull
+inside the window shows the normal short animation and keeps the report and its
+timestamp unchanged. Concurrent requests share one promise. Failed refreshes
+retain the saved report and cooldown; a failed cold load can be retried manually.
+
+A Pro upgrade fetches newly entitled details immediately. A downgrade strips
+paid data from the persisted report, and late paid responses cannot restore it.
+Subscription identification must finish for the signed-in account before a
+report is loaded. Sign-out/account deletion clear saved analytics and prevent
+late requests from repopulating the cache. Completed targeted drills are removed
+from cached fresh-question selections without recalculating accuracy.
+
+The five-minute limit is a device refresh policy, not an API abuse/security
+boundary. Server authorisation remains mandatory on each network request.
+
+## Cohort comparison
+
+`get_performance_cohort()` creates anonymous answer distributions, shared across
+users and cached in PostgreSQL for five minutes. A transaction advisory lock
+prevents simultaneous edge workers rebuilding the same cohort. No student IDs
+are stored in this cache, and only the service role can access it.
+
+The calculation uses each student's first recorded practice answer (reconstructs
+DM statement groups), and each student's saved submitted timed answers. Practice
+and timed data remain separate. Only questions attempted by the current student
+are compared. The engine grades both the student and cohort using the same
+reviewed answer metadata, including SJ/DM partial credit. Each question receives
+the same mark weight on both sides, regardless of how popular it is.
+
+A comparison needs at least three matched questions, each answered by at least
+five students. The cohort can include the current student. Small/absent cohorts
+show an empty state. Clients receive only section-level student/cohort
+percentages, their difference and matched-question counts, never answer
+distributions. A cohort RPC failure leaves personal analytics available.
 
 ## Reviewed tagging coverage
 
@@ -82,7 +138,9 @@ backlog. Existing mock results can consequently differ from the analyser.
 `supabase/functions/performance-analysis/index.ts` authenticates the bearer token
 and filters every student query by that authenticated user's ID. It ignores
 caller-supplied user IDs and Pro flags. Cursor pagination reads beyond 1,000 rows.
-The only shared cache is question metadata, lasting at most 60 seconds.
+Question metadata is cached for at most 60 seconds in each edge worker; cohort
+aggregates are cached separately as described above. Individual student reports
+are not shared between users.
 
 Pro is verified using the existing `REVENUECAT_SECRET_KEY` and entitlement
 `UCAT Genius AI Pro`. If that secret is absent, the server uses the protected
@@ -112,17 +170,23 @@ npx --yes deno check --no-lock supabase/functions/performance-analysis/index.ts
 npx expo export --platform ios --platform android --output-dir .expo/performance-build --no-bytecode
 ```
 
-The 22 automated tests cover scoring, first responses/retries, sparse/stale
+The 40 automated tests cover scoring, first responses/retries, sparse/stale
 evidence, matched-difficulty trends, exclusions, pagination, retained parent
 context, entitlement expiry, actual handler authentication, forged access/user
-IDs, per-user isolation and RevenueCat failure handling.
+IDs, per-user isolation and RevenueCat failure handling. They also cover device
+cache persistence, concurrent screen loads, cooldowns, failed refreshes, account
+isolation, upgrade/downgrade races, logout, completed drills, combined-mode API
+responses, matched cohort scoring, partial credit and small samples.
 
 Local additional checks passed: PostgreSQL-compatible PGlite applied both
 migrations (41 skills/2,541 tags), rejected authenticated direct reads and
-exercised question/DM child invalidation; mocked-native React rendering checked
+exercised question/DM child invalidation. The cohort revision's additional
+PGlite check exercised the actual new migration with practice retries, incomplete
+DM statement groups, timed DM JSON, future attempts, content exclusions, minimum
+sample sizes, cache hits/expiry and service-only access. Mocked-native React rendering checked
 the paywall, skill/lesson navigation, subscription revocation, targeted-session
 selection and completion; a 390px React Native Web harness displayed the actual
-overview, lock card, skill list and detail layouts with no page errors or
+overview, cohort comparison, lock card, skill list and detail layouts with no page errors or
 horizontal overflow. Those harnesses use synthetic student responses and live
 only under ignored `.expo/performance-tools`. They are not physical-device or
 live-purchase verification.
@@ -151,14 +215,17 @@ after review. Until then, keep these changes local.
    authorised, apply `20261013170000_performance_analyser.sql` followed by
    `20261013170100_seed_performance_tags.sql`. Do not include unrelated pending
    migrations without reviewing them.
-3. Confirm the server RevenueCat secret is configured, then deploy
+3. Apply `20261014120000_performance_cohort_cache.sql` before deploying the updated
+   edge function. The existing tagging migrations need not be reapplied if they
+   are already installed. Confirm the server RevenueCat secret is configured, then deploy
    `supabase functions deploy performance-analysis --use-api`. Existing Supabase
    URL/service-role secrets are used automatically; no secret goes in the app.
 4. Smoke-test free, active Pro, expired Pro and admin accounts; submit a practice
    response and a timed test, check the report, open a lesson and complete a
    focused session. Test reduced motion and large text on iOS and Android.
-5. Release the app only after the backend is ready. Before deployment the new
-   screen shows a retryable loading error because its endpoint does not exist.
+5. Release the app only after the backend is ready. The new client requests a
+   combined snapshot; an older endpoint does not support that request. The new
+   endpoint also accepts the original single-mode requests for older app builds.
 
 For later tagging revisions, update the JSON, validate against fresh content and
 generate a **new** migration with

@@ -13,7 +13,7 @@ const source = ts.transpileModule(fs.readFileSync('supabase/functions/performanc
 
 // Exercise the actual edge handler with an in-memory PostgREST adapter. These
 // tests make no network requests and never use real accounts or credentials.
-function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatStatus = 200 } = {}) {
+function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatStatus = 200, cohortError = null } = {}) {
   let handler;
   const queries = [], revenueCatRequests = [];
   const records = {
@@ -35,6 +35,7 @@ function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatS
     user_profiles: ['alice', 'bob'].map((user_id) => ({ user_id, is_admin: false, is_premium: premium, premium_expires_at: null })),
   };
   const client = {
+    rpc: async (name) => { assert.equal(name, 'get_performance_cohort'); return { data: { rows: [] }, error: cohortError }; },
     auth: { getUser: async (token) => ({ data: { user: ['alice', 'bob'].includes(token) ? { id: token } : null }, error: null }) },
     from(table) {
       const query = { table, filters: [], limit: Infinity, single: false }; queries.push(query);
@@ -128,4 +129,25 @@ test('RevenueCat verifies a new purchase and overrides stale profile access', as
   assert.equal((await unavailable.request({ body: { mode: 'practice', includeDetails: true } })).status, 503);
   // Basic analysis remains available without a RevenueCat round trip.
   assert.equal((await unavailable.request()).status, 200);
+});
+
+test('one snapshot includes both modes using a single authenticated data read', async () => {
+  const api = endpoint({ premium: true });
+  const snapshot = await (await api.request({ body: { mode: 'all', includeDetails: true } })).json();
+  assert.equal(snapshot.snapshotVersion, 1);
+  assert.equal(snapshot.reports.practice.overview.accuracy, 100);
+  assert.equal(snapshot.reports.timed.overview.accuracy, 100);
+  assert.equal(snapshot.reports.practice.access, 'pro');
+  assert.equal(snapshot.reports.timed.access, 'pro');
+  assert.equal(api.queries.filter((q) => q.table === 'practice_question_attempts').length, 1);
+  const free = await (await endpoint().request({ body: { mode: 'all', includeDetails: true } })).json();
+  assert.equal(free.reports.practice.details, null);
+  assert.equal(free.reports.timed.details, null);
+});
+
+test('a cohort outage leaves personal analytics available', async () => {
+  const api = endpoint({ cohortError: { message: 'offline' } });
+  const response = await api.request({ body: { mode: 'all' } });
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).reports.practice.overview.accuracy, 100);
 });

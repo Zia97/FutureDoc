@@ -385,7 +385,6 @@ export default function ProfileScreen() {
 
         <Animated.View style={[styles.section, contentAnim]}>
           <Text style={[styles.sectionHeading, { color: colors.text }]}>Notifications</Text>
-          <Text style={[styles.helperText, { color: colors.textMuted }]}>Get a reminder at 7 pm each day to keep practising. Your device must also allow UCAT Genius notifications.</Text>
           <View style={[styles.devRow, { paddingVertical: 12 }]}>
             <View style={styles.devLabel}>
               <Text style={[styles.devTitle, { color: colors.text }]}>Allow notifications</Text>

@@ -1,33 +1,45 @@
-import { useCallback, useRef, useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
-import { loadPerformanceReport } from '../services/performanceService';
-import { reportError } from '../lib/reportError';
+import { performanceCache } from '../services/performanceService';
 
 export function usePerformanceReport(mode) {
   const { user } = useAuth();
   const { isPro, loading: subscriptionLoading } = useSubscription();
-  const [state, setState] = useState({ key: null, report: null, error: null, loading: true });
-  const sequence = useRef(0);
-  const key = `${user?.id ?? ''}:${mode}:${isPro}`;
-  const refresh = useCallback(async () => {
-    const request = ++sequence.current;
-    if (subscriptionLoading) return;
-    setState((prev) => ({ key, report: prev.key === key ? prev.report : null, loading: true, error: null }));
-    try {
-      const report = await loadPerformanceReport({ mode, includeDetails: isPro });
-      if (request === sequence.current) setState({ key, report, loading: false, error: null });
-    } catch (error) {
-      reportError('performance-analysis', error, { level: 'warning' });
-      if (request === sequence.current) setState({ key, report: null, loading: false, error: error.message });
-    }
-  }, [key, mode, isPro, subscriptionLoading]);
-  useFocusEffect(useCallback(() => {
-    refresh();
-    return () => { sequence.current++; };
-  }, [refresh]));
-  // A logout or entitlement change hides stale detailed data synchronously.
-  const current = state.key === key ? state : { report: null, error: null, loading: true };
-  return { ...current, refresh, isPro, canAnalyse: isPro && current.report?.access === 'pro' };
+  const userId = user?.id;
+  const subscribe = useCallback((listener) => performanceCache.subscribe(userId, listener), [userId]);
+  const getState = useCallback(() => performanceCache.getState(userId), [userId]);
+  const state = useSyncExternalStore(subscribe, getState, getState);
+  const [refreshing, setRefreshing] = useState(false);
+  const refreshTask = useRef(null);
+  const generation = useRef(0);
+  useEffect(() => {
+    generation.current++;
+    setRefreshing(false);
+    refreshTask.current = null;
+    if (userId && !subscriptionLoading) performanceCache.ensure(userId, isPro);
+    return () => { generation.current++; };
+  }, [userId, isPro, subscriptionLoading]);
+
+  const refresh = useCallback(() => {
+    if (!userId || subscriptionLoading) return Promise.resolve();
+    if (refreshTask.current) return refreshTask.current;
+    const current = generation.current;
+    setRefreshing(true);
+    // Acknowledge a cache hit with the normal pull animation, without changing
+    // the report timestamp or claiming new data was downloaded.
+    const task = Promise.all([
+      performanceCache.refresh(userId, isPro),
+      new Promise((resolve) => setTimeout(resolve, 350)),
+    ]).finally(() => {
+      if (current === generation.current) { setRefreshing(false); refreshTask.current = null; }
+    });
+    refreshTask.current = task;
+    return task;
+  }, [userId, isPro, subscriptionLoading]);
+
+  const report = state.snapshot?.reports[mode] ?? null;
+  return { report, loading: !report && (subscriptionLoading || state.loading), error: state.error,
+    refreshing, refresh, isPro, canAnalyse: !subscriptionLoading && isPro && report?.access === 'pro',
+    completePractice: (section, questionIds) => performanceCache.completePractice(userId, section, questionIds) };
 }
