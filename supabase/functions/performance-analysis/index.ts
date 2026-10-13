@@ -13,8 +13,8 @@ const headers = {
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers });
 const sections = { vr: 'verbal_reasoning', dm: 'decision_making', qr: 'quantitative_reasoning', sj: 'situational_judgement' };
 
-// Only public question metadata is cached. Student responses and reports are
-// request-local and must never be reused between users.
+// This worker cache holds only question metadata. Anonymous cohort distributions
+// have a separate database cache; personal reports remain request-local.
 let catalogueCache: { at: number; value: any } | null = null;
 
 async function catalogue(client: any) {
@@ -91,14 +91,20 @@ Deno.serve(async (req) => {
     if (raw.length > 1024) return json({ error: 'request_too_large' }, 413);
     body = JSON.parse(raw);
   } catch { return json({ error: 'invalid_request' }, 400); }
-  if (!['practice', 'timed'].includes(body?.mode)) return json({ error: 'invalid_mode' }, 400);
+  if (!['practice', 'timed', 'all'].includes(body?.mode)) return json({ error: 'invalid_mode' }, 400);
   try {
     const now = Date.now();
-    const [content, attempts, pro] = await Promise.all([
+    const [content, attempts, pro, cohortResult] = await Promise.all([
       catalogue(client), readAttempts(client, user.id, new Date(now).toISOString()),
       body.includeDetails === true ? hasPro(client, user.id) : Promise.resolve(false),
+      client.rpc('get_performance_cohort'),
     ]);
-    return json(buildPerformanceReport({ catalogue: content, attempts, mode: body.mode, isPro: pro, now }));
+    // A temporarily unavailable cohort must not hide the student's own report.
+    const cohort = cohortResult.error ? null : cohortResult.data;
+    const build = (mode: string) => buildPerformanceReport({ catalogue: content, attempts, cohort, mode, isPro: pro, now });
+    if (body.mode === 'all') return json({ snapshotVersion: 1, reports: { practice: build('practice'), timed: build('timed') } });
+    // Older app builds can keep requesting a single mode during rollout.
+    return json(build(body.mode));
   } catch (err) {
     // No response payloads, credentials or student answers in logs/errors.
     console.error('performance-analysis failed', err instanceof Error ? err.message : 'database request failed');

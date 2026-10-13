@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { clearAllContentCaches } from './contentCache';
+import { clearPerformanceCache } from './performanceService';
 
 const USER_DATA_KEYS = [
   // Practice attempts
@@ -32,5 +33,6 @@ export async function clearLocalUserData() {
   await Promise.all([
     AsyncStorage.multiRemove(USER_DATA_KEYS),
     clearAllContentCaches(),
+    clearPerformanceCache(),
   ]);
 }

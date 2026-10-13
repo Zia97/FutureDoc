@@ -129,7 +129,37 @@ function weekHistory(rows, now) {
   });
 }
 
-export function buildPerformanceReport({ catalogue, attempts, mode = 'practice', isPro = false, now = Date.now() }) {
+function compareCohort(rows, byKey, cohort) {
+  const distributions = new Map((cohort?.rows ?? []).map((q) => [questionKey(q.section, q.mode, q.questionId), q]));
+  let earned = 0, cohortEarned = 0, possible = 0, matchedQuestions = 0;
+  for (const row of rows) {
+    if (row.excluded || !row.possible) continue;
+    const distribution = distributions.get(row.key);
+    if (!distribution) continue;
+    let total = 0, marks = 0;
+    for (const item of distribution.answers ?? []) {
+      if (!Number.isSafeInteger(item.count) || item.count < 1) continue;
+      const grade = gradeResponse(byKey.get(row.key), item.answer);
+      if (!grade.possible || grade.earned == null) continue;
+      total += item.count;
+      marks += grade.earned * item.count;
+    }
+    if (total < 5) continue;
+    earned += row.earned;
+    cohortEarned += marks / total;
+    possible += row.possible;
+    matchedQuestions++;
+  }
+  // Each matched question has the same weight for the student and the cohort.
+  // Popular/easier questions cannot swamp the comparison through attempt volume.
+  const available = matchedQuestions >= 3;
+  const yourAccuracy = available ? percent(earned, possible) : null;
+  const cohortAccuracy = available ? percent(cohortEarned, possible) : null;
+  return { yourAccuracy, cohortAccuracy, matchedQuestions,
+    delta: available ? yourAccuracy - cohortAccuracy : null };
+}
+
+export function buildPerformanceReport({ catalogue, attempts, cohort = null, mode = 'practice', isPro = false, now = Date.now() }) {
   if (!['practice', 'timed'].includes(mode)) throw new Error('Invalid performance mode');
   const byKey = new Map(catalogue.questions.map((q) => [questionKey(q.section, q.mode, q.id), q]));
   const safeRows = attempts.filter((r) => SECTIONS.includes(r.section) && ['practice', 'timed'].includes(r.mode) && dateMs(r.answeredAt) <= now);
@@ -138,7 +168,8 @@ export function buildPerformanceReport({ catalogue, attempts, mode = 'practice',
   const first = firstAll.filter((r) => r.mode === mode);
   const sections = SECTIONS.map((section) => {
     const rows = first.filter((r) => r.section === section);
-    return { section, ...summarise(rows), excludedQuestions: rows.filter((r) => r.excluded).length };
+    return { section, ...summarise(rows), excludedQuestions: rows.filter((r) => r.excluded).length,
+      cohort: compareCohort(rows, byKey, cohort) };
   });
   const overview = { ...summarise(first), sections, excludedQuestions: first.filter((r) => r.excluded).length };
   const report = { schemaVersion: 1, generatedAt: new Date(now).toISOString(), mode, access: isPro ? 'pro' : 'free', overview, details: null };

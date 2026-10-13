@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/react-native';
 import { supabase } from '../lib/supabase';
 import { clearLocalUserData, DISPLAY_NAME_CACHE_KEY } from '../services/localUserData';
 import { cancelDailyReminder, removeDevice } from '../services/notificationService';
+import { clearPerformanceCache } from '../services/performanceService';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -130,6 +131,7 @@ export function AuthProvider({ children }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') {
+        clearPerformanceCache().catch(() => {});
         setUser(null);
         setDisplayNameState(null);
         setSuspension({ loading: false, isSuspended: false, reason: null, suspendedAt: null });

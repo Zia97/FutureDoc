@@ -45,19 +45,23 @@ function useProgress(target, duration = 900, delay = 0) {
 export function Reveal({ children, delay = 0, style }) {
   const reduced = useReducedMotion();
   const focused = useIsFocused();
-  const value = useRef(new Animated.Value(1)).current;
+  const translateY = useRef(new Animated.Value(0)).current;
+  const entered = useRef(false);
   useEffect(() => {
-    if (reduced || !focused) { value.setValue(1); return; }
-    value.setValue(0);
-    const animation = Animated.timing(value, { toValue: 1, duration: 380, delay: Math.min(delay, 240),
-      easing: Easing.out(Easing.cubic), useNativeDriver: true });
+    if (reduced || !focused || entered.current) { translateY.setValue(0); return; }
+    entered.current = true;
+    // Keep content visible when the async motion preference resolves or an
+    // entrance is interrupted. Only the position animates, once per mount.
+    translateY.setValue(10);
+    const animation = Animated.timing(translateY, { toValue: 0, duration: 380, delay: Math.max(0, Math.min(delay, 240)),
+      easing: Easing.out(Easing.cubic), useNativeDriver: true, isInteraction: false });
     animation.start();
-    return () => animation.stop();
-  }, [reduced, focused, delay, value]);
-  return <Animated.View style={[{ opacity: value, transform: [{ translateY: value.interpolate({ inputRange: [0, 1], outputRange: [12, 0] }) }] }, style]}>{children}</Animated.View>;
+    return () => { animation.stop(); translateY.setValue(0); };
+  }, [reduced, focused, delay, translateY]);
+  return <Animated.View collapsable={false} style={[style, { opacity: 1, transform: [{ translateY }] }]}>{children}</Animated.View>;
 }
 
-export function StatRing({ value, size = 148, color, label = 'marks earned', compact = false }) {
+export function StatRing({ value, size = 148, color, label = 'Accuracy', compact = false }) {
   const { colors } = usePerformanceTheme();
   const target = Math.max(0, Math.min(100, value ?? 0));
   const progress = useProgress(target);
@@ -137,11 +141,11 @@ export function ProLockCard({ onUnlock, pending = false }) {
       </View>
     </View>
     <Text style={[styles.eyebrow, { color: colors.purple }]}>PERFORMANCE PRO</Text>
-    <Text style={[styles.title, { color: colors.text, marginTop: 9 }]}>{pending ? 'Your Pro analysis is almost ready' : 'Find your next breakthrough'}</Text>
+    <Text style={[styles.title, { color: colors.text, marginTop: 9 }]}>{pending ? 'Checking Pro access' : 'Full performance analysis'}</Text>
     <Text style={[styles.body, { color: colors.textSecondary, marginTop: 10, marginBottom: 18 }]}>{pending
       ? 'Your purchase is active in the app. Refresh to check that your full analysis has unlocked.'
-      : 'See your skill breakdown, discover where to focus and turn your mistakes into a personalised practice session.'}</Text>
-    {!pending && <View style={{ gap: 10, marginBottom: 22 }}>{['Every skill, clearly explained', 'Your three next priorities', 'Fresh practice and mistake review'].map((text) => <View key={text} style={styles.row}>
+      : 'Unlock detailed skill results, recommended practice and progress charts.'}</Text>
+    {!pending && <View style={{ gap: 10, marginBottom: 22 }}>{['Detailed skill breakdowns', 'Personalised practice recommendations', 'Fresh questions and mistake review'].map((text) => <View key={text} style={styles.row}>
       <Ionicons name="checkmark-circle" color={colors.purple} size={17} /><Text style={{ color: colors.textSecondary, fontSize: 13, flex: 1 }}>{text}</Text>
     </View>)}</View>}
     <PerformanceButton title={pending ? 'Refresh Pro access' : 'Unlock full analysis'} icon={pending ? 'refresh' : 'lock-open-outline'} onPress={onUnlock} />
@@ -153,7 +157,7 @@ export function SkillRow({ skill, onPress, delay = 0 }) {
   const { colors } = usePerformanceTheme();
   const color = colors[SECTION_COLOURS[skill.section]];
   return <Reveal delay={delay}><Pressable onPress={onPress} accessibilityRole="button"
-    accessibilityLabel={`${skill.label}, ${skill.accuracy == null ? 'no data' : `${skill.accuracy} percent marks earned`}, ${skill.status}. View details.`}
+    accessibilityLabel={`${skill.label}, ${skill.accuracy == null ? 'no data' : `${skill.accuracy} percent accuracy`}, ${skill.status}. View details.`}
     style={({ pressed }) => [styles.skillRow, { backgroundColor: pressed ? colors.surfaceSoft : colors.surface, borderColor: colors.border }]}>
     <View style={styles.between}><Text style={{ color: colors.text, fontSize: 15, fontWeight: '700', flex: 1 }}>{skill.label}</Text>
       <Text style={{ color, fontSize: 17, fontWeight: '800', marginLeft: 12 }}>{skill.accuracy == null ? '—' : `${skill.accuracy}%`}</Text><Ionicons name="chevron-forward" color={colors.textMuted} size={15} /></View>
@@ -179,10 +183,33 @@ export function HistoryChart({ weeks = [], color }) {
       </Pressable>)}
     </View>
     <Text style={[styles.caption, { color: colors.textSecondary, marginTop: 16 }]}>{point
-      ? `${point.questions} new questions · ${point.accuracy == null ? 'No marks recorded' : `${point.accuracy}% of available marks`}`
-      : 'Tap a week to explore. Each bar uses first responses to new questions.'}</Text>
-    <Text style={[styles.caption, { color: colors.textMuted, marginTop: 5 }]}>Question difficulty can vary between weeks.</Text>
+      ? `${point.questions} questions · ${point.accuracy == null ? 'No results' : `${point.accuracy}% accuracy`}`
+      : 'Tap a week to see your results.'}</Text>
   </View>;
+}
+
+export function CohortComparison({ sections = [] }) {
+  const { colors } = usePerformanceTheme();
+  const available = sections.some((item) => item.cohort?.cohortAccuracy != null);
+  return <Reveal><PerformanceCard>
+    <Text style={[styles.title, { color: colors.text }]}>You vs cohort</Text>
+    {!available ? <Text style={[styles.body, { color: colors.textSecondary, marginTop: 9 }]}>There isn’t enough comparison data yet.</Text>
+      : <View style={{ gap: 23, marginTop: 15 }}>{sections.map(({ section, cohort }) => {
+        const color = colors[SECTION_COLOURS[section]];
+        const ready = cohort?.cohortAccuracy != null;
+        const delta = cohort?.delta ?? 0;
+        return <View key={section} style={{ gap: 9 }}>
+          <View style={styles.between}><Text style={[styles.eyebrow, { color }]}>{section.toUpperCase()}</Text>
+            <Text style={[styles.caption, { color: !ready ? colors.textMuted : delta >= 0 ? colors.mint : colors.textSecondary }]}>{!ready ? 'Not enough data yet' : delta === 0 ? 'At the cohort average' : `${Math.abs(delta)} pts ${delta > 0 ? 'above' : 'below'} average`}</Text></View>
+          {ready && [{ label: 'You', value: cohort.yourAccuracy, barColor: color }, { label: 'Cohort', value: cohort.cohortAccuracy, barColor: colors.textMuted }].map(({ label, value, barColor }) =>
+            <View key={label} style={[styles.row, { gap: 12 }]} accessible accessibilityLabel={`${SECTION_NAMES[section]}, ${label}, ${value} percent accuracy`}>
+              <Text style={{ width: 47, fontSize: 12, color: colors.textSecondary }}>{label}</Text>
+              <View style={{ flex: 1 }}><SkillBar value={value} color={barColor} height={7} /></View>
+              <Text style={{ width: 38, textAlign: 'right', color: colors.text, fontWeight: '700', fontSize: 12 }}>{value}%</Text>
+            </View>)}
+        </View>;
+      })}</View>}
+  </PerformanceCard></Reveal>;
 }
 
 function HistoryColumn({ value, color, selected }) {
