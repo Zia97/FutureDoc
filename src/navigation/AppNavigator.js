@@ -29,6 +29,8 @@ import {
 } from '../services/onboardingFlags';
 
 import MainTabs from './MainTabs';
+import PerformanceSkillScreen from '../screens/performance/PerformanceSkillScreen';
+import PerformancePracticeScreen from '../screens/performance/PerformancePracticeScreen';
 import WhatsNewModal from '../components/WhatsNewModal';
 import TrialExpiredModal from '../components/TrialExpiredModal';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
@@ -104,6 +106,8 @@ function AppStack() {
       <TrialExpiredModal />
       <Stack.Navigator initialRouteName="MainTabs" screenOptions={screenOptions}>
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
+      <Stack.Screen name="PerformanceSkill" component={PerformanceSkillScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="PerformancePractice" component={PerformancePracticeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnSections" component={LearnSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnVerbalReasoning" component={VerbalReasoningLearnScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnVRLesson" component={VerbalReasoningLessonScreen} options={{ headerShown: false }} />

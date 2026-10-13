@@ -8,6 +8,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test:reports": "node --test scripts/question-report-fixes.test.mjs",
+    "test:performance": "node --test scripts/performance-analyser.test.mjs scripts/performance-endpoint.test.mjs",
+    "performance:validate-tags": "node scripts/validate-performance-tags.mjs",
     "questions:sync:vr": "node .codex/skills/ucat-question-pipeline/scripts/export-vr-corpus.mjs --source remote",
     "questions:sync:vr:preview": "node .codex/skills/ucat-question-pipeline/scripts/export-vr-corpus.mjs --source preview",
     "questions:inventory:vr": "node .codex/skills/ucat-question-pipeline/scripts/inventory-vr-corpus.mjs",

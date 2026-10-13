@@ -13,6 +13,8 @@ import { flattenSJScenarios } from '../../lib/flattenQuestions';
 import { SJ_TUTOR_DEMO_SCENARIO } from '../../data/demo/sjTutorDemoQuestion';
 import { SJ_WORKED_EXAMPLES } from '../../data/learn/sjWorkedExamples';
 import { SJ_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
+import { selectPracticeItems } from '../../lib/performance/practice';
+import { PracticeSessionUnavailable } from '../../components/performance/PracticeSessionFooter';
 
 const DEMO_FLAT_QUESTIONS = flattenSJScenarios([SJ_TUTOR_DEMO_SCENARIO]);
 
@@ -28,7 +30,7 @@ function renderSJOptions({ item, getOptionState, onAnswer }) {
   ));
 }
 
-export default function SJScenarioScreen({ route }) {
+export default function SJScenarioScreen({ route, performanceSession }) {
   const navigation = useNavigation();
   const mode = route?.params?.mode;
 
@@ -58,7 +60,7 @@ export default function SJScenarioScreen({ route }) {
     return <WorkedExampleBranch exampleId={route.params?.exampleId} />;
   }
 
-  return <SJScenarioScreenInner index={route.params.index} />;
+  return <SJScenarioScreenInner index={route.params.index} performanceSession={performanceSession} />;
 }
 
 function WorkedExampleBranch({ exampleId }) {
@@ -113,14 +115,16 @@ function WorkedExampleBranch({ exampleId }) {
   );
 }
 
-function SJScenarioScreenInner({ index }) {
-  const { flatQuestions, loading } = useSituationalJudgementScenarios();
+function SJScenarioScreenInner({ index, performanceSession }) {
+  const { flatQuestions: allQuestions, loading } = useSituationalJudgementScenarios();
+  const flatQuestions = useMemo(() => selectPracticeItems(allQuestions, performanceSession?.questionIds), [allQuestions, performanceSession?.questionIds]);
   const { submitAttempt, localAnswers, localTimesMs, cacheLoading } = useSituationalJudgementAttempts();
   const { getStats } = useQuestionStats('sj');
 
   if (loading || cacheLoading) {
     return <PremiumQuestionLoading label="Loading scenario..." />;
   }
+  if (!flatQuestions.length || (performanceSession && flatQuestions.length !== performanceSession.questionIds.length)) return <PracticeSessionUnavailable />;
 
   function handleAnswerCommit(item, selectedAnswer, meta = {}) {
     const correctAnswer = item.question.answer;
@@ -143,7 +147,8 @@ function SJScenarioScreenInner({ index }) {
       itemLabel="Scenario"
       getTitle={(item) => `Scenario ${item.stemIndex + 1}`}
       alwaysShowReason
-      initialAnswers={localAnswers}
+      initialAnswers={performanceSession ? {} : localAnswers}
+      performanceSession={performanceSession}
       initialTimesMs={localTimesMs}
       onAnswerCommit={handleAnswerCommit}
       section="sj"

@@ -27,7 +27,7 @@ const TABS = [
   { name: 'Home', component: HomeScreen, label: 'Home', icon: 'home', iconOutline: 'home-outline' },
   { name: 'PracticeSections', component: PracticeSectionsScreen, label: 'Practice', icon: 'book', iconOutline: 'book-outline' },
   { name: 'TimedTestList', component: TimedTabScreen, label: 'Timed', icon: 'timer', iconOutline: 'timer-outline' },
-  { name: 'PerformanceAnalytics', component: PerformanceAnalyticsScreen, label: 'Analytics', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
+  { name: 'PerformanceAnalytics', component: PerformanceAnalyticsScreen, label: 'Performance', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
   { name: 'Community', component: ForumScreen, label: 'Community', icon: 'people', iconOutline: 'people-outline' },
 ];
 
