@@ -56,6 +56,9 @@ export async function getNotificationPreferences(userId) {
 
 async function deviceToken() {
   if (Platform.OS === 'web') return null;
+  // Android remote push requires a Firebase config baked into the native build.
+  // Local scheduled reminders do not, so do not let missing FCM block them.
+  if (Platform.OS === 'android' && !Constants.expoConfig?.android?.googleServicesFile) return null;
   const projectId = Constants.easConfig?.projectId ?? Constants.expoConfig?.extra?.eas?.projectId;
   if (!projectId) throw new Error('Missing Expo project ID');
   return (await Notifications.getExpoPushTokenAsync({ projectId })).data;
@@ -75,9 +78,9 @@ export async function removeDevice(userId) {
   try {
     if (!userId) return;
     const cached = JSON.parse(await AsyncStorage.getItem(DEVICE_TOKEN_KEY) || 'null');
-    const token = cached?.userId === userId ? cached.token
-      : await getPermissionStatus() === 'granted' ? await deviceToken() : null;
-    if (token) await supabase.from('notification_devices').delete().eq('token', token).eq('user_id', userId);
+    if (cached?.userId === userId) {
+      await supabase.from('notification_devices').delete().eq('token', cached.token).eq('user_id', userId);
+    }
     if (cached?.userId === userId) await AsyncStorage.removeItem(DEVICE_TOKEN_KEY);
   } catch (error) {
     reportError('notificationService', error, { level: 'warning', extra: { note: 'removeDevice failed' } });
@@ -126,30 +129,38 @@ export async function refreshNotifications(userId) {
       await removeDevice(userId);
       return;
     }
-    if (preferences.streak_reminders) await scheduleDailyReminder();
+    if (preferences.streak_reminders || preferences.forum_replies) await scheduleDailyReminder();
     else await cancelDailyReminder();
-    if (preferences.forum_replies) await registerDevice(userId);
+    if (preferences.forum_replies) {
+      try { await registerDevice(userId); }
+      catch (error) {
+        reportError('notificationService', error, { level: 'warning', extra: { note: 'push registration failed' } });
+      }
+    }
     else await removeDevice(userId);
   } catch (error) {
     reportError('notificationService', error, { level: 'warning', extra: { note: 'refresh failed' } });
   }
 }
 
-export async function setNotificationPreference(userId, key, enabled) {
-  if (!['streak_reminders', 'forum_replies'].includes(key)) throw new Error('Unknown notification preference');
+export async function setNotificationsEnabled(userId, enabled) {
   if (enabled && await requestPermission() !== 'granted') throw new Error('Notifications are disabled in your device settings.');
-  if (key === 'forum_replies' && enabled) await registerDevice(userId);
-  if (key === 'streak_reminders' && enabled) await scheduleDailyReminder();
-  const current = await getNotificationPreferences(userId);
+  if (enabled) await scheduleDailyReminder();
   const { error } = await supabase.from('notification_preferences').upsert(
-    { user_id: userId, ...current, [key]: enabled, updated_at: new Date().toISOString() }, { onConflict: 'user_id' },
+    { user_id: userId, streak_reminders: enabled, forum_replies: enabled, updated_at: new Date().toISOString() },
+    { onConflict: 'user_id' },
   );
   if (error) {
-    if (key === 'streak_reminders' && enabled) await cancelDailyReminder();
-    if (key === 'forum_replies' && enabled) await removeDevice(userId);
+    if (enabled) await cancelDailyReminder();
     throw error;
   }
-  if (key === 'streak_reminders') {
-    if (!enabled) await cancelDailyReminder();
-  } else if (!enabled) await removeDevice(userId);
+  if (enabled) {
+    try { await registerDevice(userId); }
+    catch (pushError) {
+      reportError('notificationService', pushError, { level: 'warning', extra: { note: 'push registration failed' } });
+    }
+  } else {
+    await cancelDailyReminder();
+    await removeDevice(userId);
+  }
 }
