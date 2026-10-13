@@ -2,6 +2,8 @@
 
 The Profile switch schedules the 7 pm study reminder locally. Forum reply alerts also need a Firebase Android app, an FCM V1 sending credential in EAS, and a newly installed native build. The Firebase and EAS credentials are separate JSON files.
 
+Current Firebase project: `ucatgenius-70e35`. Its Android app is registered as `com.qhz123.ucatgeniusai`. The `GOOGLE_SERVICES_JSON` file variable is configured for the EAS `production`, `preview`, and `development` environments. EAS has an FCM V1 key for the dedicated `expo-push-sender` service account, which has the Firebase Cloud Messaging API Admin role. The FCM API is enabled. Use the steps below when replacing or rotating these credentials.
+
 ## 1. Register the Android app in Firebase
 
 1. Open [Firebase Console](https://console.firebase.google.com/) and create or select the project that will send this app's notifications.
