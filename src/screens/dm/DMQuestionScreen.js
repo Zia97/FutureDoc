@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
@@ -26,6 +26,8 @@ import {
 import { DM_TUTOR_DEMO_QUESTION } from '../../data/demo/dmTutorDemoQuestion';
 import { DM_WORKED_EXAMPLES } from '../../data/learn/dmWorkedExamples';
 import { DM_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
+import { selectPracticeItems } from '../../lib/performance/practice';
+import PracticeSessionFooter, { PracticeSessionUnavailable } from '../../components/performance/PracticeSessionFooter';
 
 const YES_NO_TYPES = ['syllogism', 'passage_syllogism', 'interpreting_info'];
 
@@ -134,7 +136,7 @@ function buildQuestionContext(question, currentAnswer, isYesNo) {
   };
 }
 
-export default function DMQuestionScreen({ route, navigation }) {
+export default function DMQuestionScreen({ route, navigation, performanceSession }) {
   const mode = route?.params?.mode;
 
   if (mode === 'tutorDemo') {
@@ -145,7 +147,7 @@ export default function DMQuestionScreen({ route, navigation }) {
     return <DMWorkedExampleBranch exampleId={route?.params?.exampleId} />;
   }
 
-  return <DMQuestionScreenInner route={route} navigation={navigation} />;
+  return <DMQuestionScreenInner route={route} navigation={navigation} performanceSession={performanceSession} />;
 }
 
 // ── Worked example branch ─────────────────────────────────────────────────────
@@ -292,7 +294,7 @@ function DMSingleQuestionBranch({ question, headerTitle, headerSubtitle, onAnswe
 
 // ── Regular practice flow ─────────────────────────────────────────────────────
 
-function DMQuestionScreenInner({ route, navigation }) {
+function DMQuestionScreenInner({ route, navigation, performanceSession }) {
   const { index: initialIndex = 0, filteredIndices = null } = route?.params ?? {};
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [answers, setAnswers] = useState({});
@@ -302,7 +304,8 @@ function DMQuestionScreenInner({ route, navigation }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
 
-  const { questions, loading } = useDecisionMakingQuestions();
+  const { questions: allQuestions, loading } = useDecisionMakingQuestions();
+  const questions = useMemo(() => selectPracticeItems(allQuestions, performanceSession?.questionIds), [allQuestions, performanceSession?.questionIds]);
   const { submitAttempt, localAnswers, localSubmitted, localTimesMs, cacheLoading } = useDecisionMakingAttempts();
   const { canAccess } = usePremiumGate((item) => item.isFree);
   const { getStats } = useQuestionStats('dm');
@@ -311,8 +314,8 @@ function DMQuestionScreenInner({ route, navigation }) {
 
   useEffect(() => {
     if (!cacheLoading) {
-      setAnswers(localAnswers);
-      setSubmitted(localSubmitted);
+      setAnswers(performanceSession ? {} : localAnswers);
+      setSubmitted(performanceSession ? {} : localSubmitted);
     }
   }, [cacheLoading]);
 
@@ -348,9 +351,10 @@ function DMQuestionScreenInner({ route, navigation }) {
 
   const timer = useActiveTimer({ resetKey: question?.id });
 
-  if (loading || cacheLoading || !question) {
+  if (loading || cacheLoading) {
     return <PremiumQuestionLoading label="Loading question..." />;
   }
+  if (!question || (performanceSession && questions.length !== performanceSession.questionIds.length)) return <PracticeSessionUnavailable />;
 
   const isYesNo = YES_NO_TYPES.includes(question.type);
   const currentAnswer = answers[question.id];
@@ -459,6 +463,7 @@ function DMQuestionScreenInner({ route, navigation }) {
         </QuestionPanel>
       </ScrollView>
 
+      <PracticeSessionFooter session={performanceSession} isLast={isLast} answered={questions.every((q) => !!submitted[q.id])} />
       <BottomToolbar
         onNotes={() => { timer.pause(); setNotesVisible(true); }}
         onCalculator={() => { timer.pause(); setCalcVisible(true); }}

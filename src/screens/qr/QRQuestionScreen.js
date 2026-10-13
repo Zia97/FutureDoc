@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   ScrollView,
@@ -38,8 +38,10 @@ import {
 import { QR_TUTOR_DEMO_SET } from '../../data/demo/qrTutorDemoQuestion';
 import { QR_WORKED_EXAMPLES } from '../../data/learn/qrWorkedExamples';
 import { QR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
+import { selectPracticeItems } from '../../lib/performance/practice';
+import PracticeSessionFooter, { PracticeSessionUnavailable } from '../../components/performance/PracticeSessionFooter';
 
-export default function QRQuestionScreen({ route, navigation }) {
+export default function QRQuestionScreen({ route, navigation, performanceSession }) {
   const mode = route?.params?.mode;
 
   if (mode === 'tutorDemo') {
@@ -57,7 +59,7 @@ export default function QRQuestionScreen({ route, navigation }) {
     return <QRWorkedExampleBranch exampleId={route?.params?.exampleId} />;
   }
 
-  return <QRQuestionScreenInner route={route} navigation={navigation} />;
+  return <QRQuestionScreenInner route={route} navigation={navigation} performanceSession={performanceSession} />;
 }
 
 // ── Worked example branch ─────────────────────────────────────────────────────
@@ -237,9 +239,10 @@ function QRSingleSetBranch({ set, headerTitle, headerSubtitle, onAnswerCommit, i
 
 // ── Regular practice flow ─────────────────────────────────────────────────────
 
-function QRQuestionScreenInner({ route, navigation }) {
+function QRQuestionScreenInner({ route, navigation, performanceSession }) {
   const { index: initialIndex = 0 } = route?.params ?? {};
-  const { flatQuestions, loading } = useQuantitativeReasoningSets();
+  const { flatQuestions: allQuestions, loading } = useQuantitativeReasoningSets();
+  const flatQuestions = useMemo(() => selectPracticeItems(allQuestions, performanceSession?.questionIds), [allQuestions, performanceSession?.questionIds]);
   const { submitAttempt, localAnswers, localTimesMs, cacheLoading } = useQuantitativeReasoningAttempts();
   const { getStats } = useQuestionStats('qr');
   const [userTimesMs, setUserTimesMs] = useState({});
@@ -269,7 +272,7 @@ function QRQuestionScreenInner({ route, navigation }) {
   const { isBookmarked, toggle: toggleBookmark } = useBookmarks('qr');
 
   useEffect(() => {
-    if (!cacheLoading) resetAnswers(localAnswers);
+    if (!cacheLoading) resetAnswers(performanceSession ? {} : localAnswers);
   }, [cacheLoading]);
 
   const qidForTimer = item?.question?.questionId ?? item?.question?.id ?? null;
@@ -283,9 +286,10 @@ function QRQuestionScreenInner({ route, navigation }) {
     isLast ? null : goNext,
   );
 
-  if (loading || cacheLoading || flatQuestions.length === 0) {
+  if (loading || cacheLoading) {
     return <PremiumQuestionLoading label="Loading question..." />;
   }
+  if (!flatQuestions.length || (performanceSession && flatQuestions.length !== performanceSession.questionIds.length)) return <PracticeSessionUnavailable />;
 
   const qid = item.question.questionId ?? item.question.id;
   const selectedAnswer = getAnswer(item.stemId, qid);
@@ -401,6 +405,8 @@ function QRQuestionScreenInner({ route, navigation }) {
         </QuestionPanel>
       </ScrollView>
 
+      <PracticeSessionFooter session={performanceSession} isLast={isLast}
+        answered={flatQuestions.every((q) => !!getAnswer(q.stemId, q.question.questionId ?? q.question.id))} />
       <BottomToolbar
         onNotes={() => { timer.pause(); setNotesVisible(true); }}
         onCalculator={() => { timer.pause(); setCalcVisible(true); }}

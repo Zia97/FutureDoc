@@ -22,6 +22,7 @@ import FeedbackBox from './FeedbackBox';
 import NotesModal from './NotesModal';
 import BottomToolbar from './BottomToolbar';
 import PremiumIcon from './premium/PremiumIcon';
+import PracticeSessionFooter from './performance/PracticeSessionFooter';
 import { getSJMark, SJ_PARTIAL_MARK } from '../lib/sjScoring';
 import {
   PremiumQuestionScaffold,
@@ -57,6 +58,7 @@ export default function PassageLayout({
   demoExitLabel = null,
   demoExitHint = null,
   getStats = null,
+  performanceSession = null,
 }) {
   const navigation = useNavigation();
   const { isDark } = useTheme();
@@ -205,6 +207,9 @@ export default function PassageLayout({
           ) : null}
         </QuestionPanel>
       </ScrollView>
+
+      <PracticeSessionFooter session={performanceSession} isLast={isLast}
+        answered={performanceSession ? flatQuestions.every((q) => !!getAnswer(q.stemId, q.question.questionId ?? q.question.id ?? q.question.itemId)) : hasAnswered} />
 
       {demoMode ? (
         <DemoBackBar

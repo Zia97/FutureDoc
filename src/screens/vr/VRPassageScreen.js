@@ -12,6 +12,8 @@ import { flattenVRPassages } from '../../lib/flattenQuestions';
 import { VR_TUTOR_DEMO_PASSAGE } from '../../data/demo/vrTutorDemoQuestion';
 import { VR_WORKED_EXAMPLES } from '../../data/learn/vrWorkedExamples';
 import { VR_LEARN_STORAGE_KEY } from '../../data/learn/learningStorageKeys';
+import { selectPracticeItems } from '../../lib/performance/practice';
+import { PracticeSessionUnavailable } from '../../components/performance/PracticeSessionFooter';
 
 const DEMO_FLAT_QUESTIONS = flattenVRPassages([VR_TUTOR_DEMO_PASSAGE]);
 
@@ -26,7 +28,7 @@ function renderVRAnswerOptions({ question, getOptionState, onAnswer }) {
   ));
 }
 
-export default function VRPassageScreen({ route }) {
+export default function VRPassageScreen({ route, performanceSession }) {
   const navigation = useNavigation();
   const mode = route.params?.mode;
 
@@ -55,7 +57,7 @@ export default function VRPassageScreen({ route }) {
     return <WorkedExampleBranch exampleId={route.params?.exampleId} />;
   }
 
-  return <VRPassageScreenInner index={route.params.index} />;
+  return <VRPassageScreenInner index={route.params.index} performanceSession={performanceSession} />;
 }
 
 function WorkedExampleBranch({ exampleId }) {
@@ -109,14 +111,16 @@ function WorkedExampleBranch({ exampleId }) {
   );
 }
 
-function VRPassageScreenInner({ index }) {
-  const { flatQuestions, loading } = useVerbalReasoningPassages();
+function VRPassageScreenInner({ index, performanceSession }) {
+  const { flatQuestions: allQuestions, loading } = useVerbalReasoningPassages();
+  const flatQuestions = useMemo(() => selectPracticeItems(allQuestions, performanceSession?.questionIds), [allQuestions, performanceSession?.questionIds]);
   const { submitAttempt, localAnswers, localTimesMs, cacheLoading } = useVerbalReasoningAttempts();
   const { getStats } = useQuestionStats('vr');
 
   if (loading || cacheLoading) {
     return <PremiumQuestionLoading label="Loading passage..." />;
   }
+  if (!flatQuestions.length || (performanceSession && flatQuestions.length !== performanceSession.questionIds.length)) return <PracticeSessionUnavailable />;
 
   function handleAnswerCommit(item, selectedAnswer, meta = {}) {
     const correctAnswer = item.question.answer;
@@ -138,7 +142,8 @@ function VRPassageScreenInner({ index }) {
       initialIndex={index}
       itemLabel="Passage"
       getTitle={(item) => item.stemTitle}
-      initialAnswers={localAnswers}
+      initialAnswers={performanceSession ? {} : localAnswers}
+      performanceSession={performanceSession}
       initialTimesMs={localTimesMs}
       onAnswerCommit={handleAnswerCommit}
       section="vr"
