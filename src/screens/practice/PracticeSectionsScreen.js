@@ -1,5 +1,5 @@
-import React from 'react';
-import { Animated, StatusBar, StyleSheet, Text } from 'react-native';
+import React, { useState } from 'react';
+import { Animated, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 import { useTheme } from '../../context/ThemeContext';
 import {
@@ -45,6 +45,7 @@ const SECTIONS = [
 export default function PracticeSectionsScreen({ navigation }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
+  const [mode, setMode] = useState('questions');
   const introAnim = useFadeSlide(0);
   const cardAnims = useStaggeredFade(SECTIONS.length, 100, 70);
   const footerAnim = useFadeSlide(430);
@@ -52,22 +53,33 @@ export default function PracticeSectionsScreen({ navigation }) {
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
-      <AppHeader navigation={navigation} title="Normal Practice" />
+      <AppHeader navigation={navigation} title="Practice" />
 
       <PremiumScrollView>
         <Animated.View style={[styles.intro, introAnim]}>
-          <Text style={[styles.heading, { color: colors.text }]}>Select Section</Text>
-          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Choose a UCAT section to practise</Text>
+          <Text style={[styles.heading, { color: colors.text }]}>Choose a section</Text>
         </Animated.View>
+
+        <View style={[styles.modeSwitch, { backgroundColor: colors.surfaceSoft, borderColor: colors.border }]}>
+          {[{ id: 'questions', label: 'Question practice' }, { id: 'timed', label: 'Timed tests' }].map((option) => {
+            const selected = mode === option.id;
+            return <TouchableOpacity key={option.id} accessibilityRole="button" accessibilityState={{ selected }} onPress={() => setMode(option.id)}
+              style={[styles.modeOption, selected && { backgroundColor: colors.blue }]}>
+              <Text style={{ color: selected ? '#fff' : colors.textSecondary, fontSize: 13, fontWeight: '700' }}>{option.label}</Text>
+            </TouchableOpacity>;
+          })}
+        </View>
 
         {SECTIONS.map((section, index) => (
           <Animated.View key={section.id} style={cardAnims[index]}>
             <SectionSelectionCard
               title={section.title}
-              description={section.description}
+              description={mode === 'timed' ? 'Timed tests under exam conditions' : section.description}
               icon={section.icon}
               accent={colors[section.accentKey] ?? section.accent}
-              onPress={() => navigation.navigate(section.route)}
+              onPress={() => mode === 'timed'
+                ? navigation.navigate('TimedTestList', { section: section.id, title: section.title })
+                : navigation.navigate(section.route)}
             />
           </Animated.View>
         ))}
@@ -97,6 +109,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     marginTop: 8,
   },
+  modeSwitch: { flexDirection: 'row', borderRadius: 15, borderWidth: 1, padding: 4, marginBottom: 8 },
+  modeOption: { flex: 1, minHeight: 42, alignItems: 'center', justifyContent: 'center', borderRadius: 11, paddingHorizontal: 8 },
   footer: {
     marginTop: 18,
   },

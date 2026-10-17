@@ -27,6 +27,7 @@ const FEATURES = [
   'All mock tests unlocked',
   'Full practice bank across VR, DM, QR, and SJ',
   'Unlimited AI Tutor explanations',
+  'Your personal AI coach, adaptive practice and saved coaching history',
   'Full performance analysis and personalised skill practice',
   'Strategy lessons, exam traps, and worked examples',
 ];

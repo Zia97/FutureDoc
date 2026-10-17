@@ -165,7 +165,7 @@ export default function PremiumInstructionScreen({
             <View style={styles.timeBlock}>
               <View style={styles.timeRow}>
                 <View style={styles.timeMeta}>
-                  <Text style={[styles.tableHeader, { color: colors.textMuted }]}>UCAT</Text>
+                  <Text style={[styles.tableHeader, { color: colors.textMuted }]}>{table.timeLabel ?? 'UCAT'}</Text>
                   <Text style={[styles.tableValue, { color: colors.text }]}>{table.timeUCAT}</Text>
                 </View>
                 <View style={[styles.timePill, { borderColor: hexToRgba(accent, 0.32), backgroundColor: hexToRgba(accent, 0.1) }]}>
@@ -177,11 +177,11 @@ export default function PremiumInstructionScreen({
 
               <View style={styles.timeRow}>
                 <View style={styles.timeMeta}>
-                  <Text style={[styles.tableHeader, { color: colors.textMuted }]}>UCAT +25%</Text>
+                  <Text style={[styles.tableHeader, { color: colors.textMuted }]}>{table.extendedTimeLabel ?? 'UCAT +25%'}</Text>
                   <Text style={[styles.tableValue, { color: colors.text }]}>{table.timeExtended}</Text>
                 </View>
                 <View style={[styles.timePill, { borderColor: hexToRgba(colors.amber, 0.36), backgroundColor: hexToRgba(colors.amber, 0.1) }]}>
-                  <Text style={[styles.timePillText, { color: colors.amber }]}>+25%</Text>
+                  <Text style={[styles.timePillText, { color: colors.amber }]}>{table.extendedBadge ?? '+25%'}</Text>
                 </View>
               </View>
             </View>

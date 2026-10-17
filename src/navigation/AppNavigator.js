@@ -29,6 +29,10 @@ import {
 } from '../services/onboardingFlags';
 
 import MainTabs from './MainTabs';
+import CoachHubScreen from '../screens/coaching/CoachHubScreen';
+import CoachSessionScreen from '../screens/coaching/CoachSessionScreen';
+import CoachChatScreen from '../screens/coaching/CoachChatScreen';
+import CoachSampleResultsScreen from '../screens/coaching/CoachSampleResultsScreen';
 import PerformanceSkillScreen from '../screens/performance/PerformanceSkillScreen';
 import PerformancePracticeScreen from '../screens/performance/PerformancePracticeScreen';
 import WhatsNewModal from '../components/WhatsNewModal';
@@ -107,6 +111,10 @@ function AppStack() {
       <Stack.Navigator initialRouteName="MainTabs" screenOptions={screenOptions}>
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
       <Stack.Screen name="PerformanceSkill" component={PerformanceSkillScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CoachHub" component={CoachHubScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CoachSession" component={CoachSessionScreen} options={{ title: 'Coaching', headerRight: () => null }} />
+      <Stack.Screen name="CoachChat" component={CoachChatScreen} options={{ title: 'Chat with your coach' }} />
+      <Stack.Screen name="CoachSampleResults" component={CoachSampleResultsScreen} options={{ title: 'Sample assessment', headerRight: () => null }} />
       <Stack.Screen name="PerformancePractice" component={PerformancePracticeScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnSections" component={LearnSectionsScreen} options={{ headerShown: false }} />
       <Stack.Screen name="LearnVerbalReasoning" component={VerbalReasoningLearnScreen} options={{ headerShown: false }} />

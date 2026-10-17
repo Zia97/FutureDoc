@@ -32,7 +32,7 @@ function ShapeMark({ shape, stroke }) {
 }
 
 export function getCanvasSize(_layoutName, vennConfig, widthPx) {
-  if (!vennConfig) return { width: 240, height: 200 };
+  if (!isRenderableVennConfig(vennConfig)) return { width: 240, height: 200 };
   try {
     const baked = widthPx
       ? getLayout(vennConfig, { targetWidthPx: widthPx })
@@ -41,6 +41,15 @@ export function getCanvasSize(_layoutName, vennConfig, widthPx) {
   } catch {
     return { width: widthPx || 240, height: 200 };
   }
+}
+
+// Older cached tests can contain a null JSONB diagram payload. Treat it as
+// unavailable content instead of passing it to the layout engine, where an
+// Object.keys/Object.entries call would crash the whole timed-test screen.
+function isRenderableVennConfig(vennConfig) {
+  return !!vennConfig && typeof vennConfig === 'object'
+    && Array.isArray(vennConfig.sets) && vennConfig.sets.length > 0
+    && vennConfig.regions && typeof vennConfig.regions === 'object';
 }
 
 // Props:
@@ -54,8 +63,10 @@ export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry
   // size to fit inside regions; too much growth would cause overlap.
   const vennLabelMultiplier = 1 + (svgMultiplier - 1) * 0.5;
   const isExplicit = vennConfig?.schemaVersion === 2;
+  const hasRenderableConfig = isRenderableVennConfig(vennConfig);
 
   const baked = useMemo(() => {
+    if (!hasRenderableConfig) return null;
     // Legacy bakes can be stale after content edits. V2 always derives from
     // its saved shape geometry, with a cache keyed by geometry AND values.
     if (bakedGeometry && !isExplicit) return bakedGeometry;
@@ -77,7 +88,7 @@ export default function VennDiagramRenderer({ vennConfig, widthPx, bakedGeometry
       }
       return null;
     }
-  }, [vennConfig, widthPx, bakedGeometry, isExplicit, vennLabelMultiplier]);
+  }, [vennConfig, widthPx, bakedGeometry, hasRenderableConfig, isExplicit, vennLabelMultiplier]);
 
   if (!baked) return <Text style={{ color: t.textSecondary }}>This diagram could not be displayed.</Text>;
   const { canvas, shapes, labels } = baked;

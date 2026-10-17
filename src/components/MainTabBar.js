@@ -9,20 +9,20 @@ import { getPremiumTheme, hexToRgba } from '../theme/premiumTheme';
 const TABS = [
   { name: 'Home', label: 'Home', icon: 'home', iconOutline: 'home-outline' },
   { name: 'PracticeSections', label: 'Practice', icon: 'book', iconOutline: 'book-outline' },
-  { name: 'TimedTestList', label: 'Timed', icon: 'timer', iconOutline: 'timer-outline' },
-  { name: 'PerformanceAnalytics', label: 'Analytics', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
+  { name: 'Coaching', label: 'Coaching', icon: 'school', iconOutline: 'school-outline' },
+  { name: 'PerformanceAnalytics', label: 'Performance', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
   { name: 'Community', label: 'Community', icon: 'people', iconOutline: 'people-outline' },
 ];
 
-const BAR_CONTENT_HEIGHT = 56;
-const TOP_PAD = 6;
+const BAR_CONTENT_HEIGHT = 60;
+const TOP_PAD = 5;
 const ANDROID_MIN_BOTTOM_PAD = 8;
 const IOS_MIN_BOTTOM_PAD = 6;
 
 // Renders a static visual copy of MainTabs' bar for screens that live outside the
 // tab navigator. Tapping a tab resets to MainTabs > <tab>. Keep style in sync
 // with src/navigation/MainTabs.js.
-export default function MainTabBar({ navigation, activeTab }) {
+export default function MainTabBar({ navigation, activeTab, onSelectTab }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const insets = useSafeAreaInsets();
@@ -35,7 +35,8 @@ export default function MainTabBar({ navigation, activeTab }) {
     const idx = mainTabsRoute.state.index ?? 0;
     return mainTabsRoute.state.routeNames?.[idx] ?? null;
   });
-  const current = activeTab ?? detectedTab;
+  const active = activeTab ?? detectedTab;
+  const current = active === 'TimedTestList' ? 'PracticeSections' : active;
 
   const bottomPad = Math.max(
     insets.bottom,
@@ -51,6 +52,7 @@ export default function MainTabBar({ navigation, activeTab }) {
           borderTopColor: hexToRgba(colors.blue, isDark ? 0.18 : 0.16),
           paddingTop: TOP_PAD,
           paddingBottom: bottomPad,
+          paddingHorizontal: 0,
           height: BAR_CONTENT_HEIGHT + bottomPad,
         },
       ]}
@@ -63,12 +65,13 @@ export default function MainTabBar({ navigation, activeTab }) {
             key={tab.name}
             style={styles.item}
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('MainTabs', { screen: tab.name })}
+            onPress={() => onSelectTab ? onSelectTab(tab.name) : navigation.navigate('MainTabs', { screen: tab.name })}
             accessibilityRole="button"
             accessibilityLabel={tab.label}
+            accessibilityState={{ selected: focused }}
           >
             <Ionicons name={focused ? tab.icon : tab.iconOutline} size={22} color={color} />
-            <Text style={[styles.label, { color }]} numberOfLines={1}>{tab.label}</Text>
+            <Text style={[styles.label, { color }]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.8}>{tab.label}</Text>
           </TouchableOpacity>
         );
       })}
@@ -84,13 +87,16 @@ const styles = StyleSheet.create({
   },
   item: {
     flex: 1,
+    minWidth: 0,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 2,
   },
   label: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '600',
     marginTop: 2,
+    includeFontPadding: false,
+    textAlign: 'center',
   },
 });

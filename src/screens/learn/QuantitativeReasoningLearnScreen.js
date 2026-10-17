@@ -2730,7 +2730,7 @@ const ModuleSection = React.memo(function ModuleSection({ module, completedIds, 
               : numberedLesson?.number === nextLessonNumber
                 ? 'next'
                 : 'notStarted';
-            const isLocked = !completed && (numberedLesson?.number ?? 0) > nextLessonNumber;
+            const isLocked = false;
 
             return (
               <LessonCard
@@ -2775,7 +2775,7 @@ function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
         </Text>
         <Text style={[styles.practiceText, { color: colors.textSecondary }]}>
           {allComplete
-            ? 'You have finished the QR learning pathway.'
+            ? 'You have completed all QR lessons.'
             : 'Open untimed QR practice when you want to turn a lesson into repetition.'}
         </Text>
         <View style={styles.practiceButtons}>
@@ -2860,15 +2860,12 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
   const openLesson = useCallback((lessonId) => {
     const lesson = ALL_LESSONS.find((l) => l.id === lessonId);
     if (!lesson) return;
-    const alreadyCompleted = completedIds.includes(lessonId);
-    const isLocked = !alreadyCompleted && lesson.number > nextLesson.number;
-    if (isLocked) return;
     if (!isPro && PREMIUM_LESSON_TYPES.has(lesson.type)) {
       navigation.navigate('Paywall');
       return;
     }
     navigation.navigate('LearnQRLesson', { lessonId });
-  }, [isPro, navigation, completedIds, nextLesson]);
+  }, [isPro, navigation]);
 
   const handleContinue = useCallback(() => {
     if (allComplete) {
@@ -2900,7 +2897,7 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
         <Animated.View style={contentAnim}>
           <View style={styles.pathIntro}>
             <View style={styles.pathIntroRow}>
-              <Text style={[styles.sectionHeading, { color: colors.text }]}>Your QR Path</Text>
+              <Text style={[styles.sectionHeading, { color: colors.text }]}>Quantitative Reasoning lessons</Text>
               <TouchableOpacity
                 activeOpacity={0.82}
                 onPress={handleResetProgress}
@@ -2918,7 +2915,7 @@ export default function QuantitativeReasoningLearnScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
-              Work through the path in order. Each lesson unlocks once you finish the one before it — completed lessons stay open for review.
+              Choose any lesson in whatever order works for you. Your completion is saved as you go.
             </Text>
           </View>
 

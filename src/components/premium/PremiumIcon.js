@@ -206,6 +206,19 @@ export default function PremiumIcon({
             <Path d="M20.5 13.6 19.2 16" />
           </G>
         );
+      case 'coach':
+        return (
+          <G {...strokeProps} fill="none">
+            <Rect x="11.2" y="3.8" width="9" height="7.4" rx="1.1" />
+            <Line x1="13.3" y1="6.4" x2="18.2" y2="6.4" />
+            <Line x1="13.3" y1="8.6" x2="16.6" y2="8.6" />
+            <Circle cx="6.7" cy="7.7" r="2.25" />
+            <Path d="M3.6 20.2c.3-3.9 1.6-6.1 3.6-6.1 1.8 0 3.1 1.6 3.5 4.3" />
+            <Path d="m8.6 11.1 3.5-2.4" />
+            <Circle cx="15.5" cy="16.3" r="1.65" />
+            <Path d="M12.8 20.2c.25-2.15 1.2-3.4 2.75-3.4s2.5 1.25 2.75 3.4" />
+          </G>
+        );
       case 'pencil':
         return (
           <G {...strokeProps} fill="none">

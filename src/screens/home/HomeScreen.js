@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -28,12 +27,14 @@ import {
   PremiumIcon,
   PremiumScreen,
   PremiumScrollView,
-  RichIconBox,
   hexToRgba,
   premiumColors,
   useFadeSlide,
 } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme } from '../../theme/premiumTheme';
+import { loadCoachHubCache, saveCoachHubCache, coachRequest } from '../../services/coachingService';
+import { buildDashboardStory, sectionSnapshot } from '../../lib/coaching/dashboard';
+import { StatRing, SECTION_COLOURS } from '../../components/performance/PerformanceUI';
 import AppLogo from '../../components/AppLogo';
 
 function getGreeting() {
@@ -64,134 +65,73 @@ function parseExamEndOfDay(iso) {
   return d.getTime();
 }
 
-function isExamToday(iso) {
-  if (!iso || iso === NOT_BOOKED) return false;
-  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso);
-  if (!m) return false;
-  const today = new Date();
-  return today.getFullYear() === Number(m[1])
-    && today.getMonth() + 1 === Number(m[2])
-    && today.getDate() === Number(m[3]);
-}
-
-const pad2 = (n) => String(Math.max(0, n | 0)).padStart(2, '0');
-
 function ExamCountdownClock({ examDate, isDark, colors, onPress }) {
   const isSet = !!examDate && examDate !== NOT_BOOKED;
-  const [now, setNow] = useState(() => Date.now());
-
+  const [now, setNow] = useState(Date.now());
   useEffect(() => {
     if (!isSet) return undefined;
-    const id = setInterval(() => setNow(Date.now()), 1000);
-    return () => clearInterval(id);
-  }, [isSet]);
+    const interval = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(interval);
+  }, [isSet, examDate]);
 
-  let days = 0;
-  let hours = 0;
-  let minutes = 0;
-  let seconds = 0;
-  let headline = 'TIME UNTIL YOUR UCAT EXAM';
-  let helper = 'Tap to set your exam date';
-  let active = false;
-
+  const remaining = isSet ? parseExamEndOfDay(examDate) - now : null;
+  const secondsLeft = remaining == null ? 0 : Math.max(0, Math.floor(remaining / 1000));
+  const days = Math.floor(secondsLeft / 86400);
+  const hours = Math.floor((secondsLeft % 86400) / 3600);
+  const minutes = Math.floor((secondsLeft % 3600) / 60);
+  const seconds = secondsLeft % 60;
+  const pad = (value) => String(value).padStart(2, '0');
+  let label = 'Set exam date';
   if (isSet) {
-    const target = parseExamEndOfDay(examDate);
-    const diff = target ? target - now : 0;
-
-    if (isExamToday(examDate)) {
-      headline = "EXAM DAY — YOU'VE GOT THIS";
-      helper = 'Tap to change date';
-    } else if (diff <= 0) {
-      headline = 'UCAT COMPLETE';
-      helper = 'Tap to change date';
-    } else {
-      const totalSeconds = Math.floor(diff / 1000);
-      days = Math.floor(totalSeconds / 86400);
-      hours = Math.floor((totalSeconds % 86400) / 3600);
-      minutes = Math.floor((totalSeconds % 3600) / 60);
-      seconds = totalSeconds % 60;
-      helper = 'Tap to change date';
-      active = true;
-    }
+    if (remaining <= 0) label = 'Exam date passed';
+    else label = `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)} till exam`;
   }
-
-  const digits = active
-    ? `${pad2(days)}:${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`
-    : '--:--:--:--';
-
-  return (
-    <TouchableOpacity
-      activeOpacity={0.85}
-      onPress={onPress}
-      accessibilityRole="button"
-      accessibilityLabel={isSet ? 'Change exam date' : 'Set exam date'}
-      style={[
-        styles.clockCard,
-        {
-          borderColor: hexToRgba(colors.cyan, isDark ? 0.34 : 0.32),
-          backgroundColor: isDark ? 'rgba(5, 12, 26, 0.55)' : 'rgba(255, 255, 255, 0.7)',
-        },
-      ]}
-    >
-      <Text style={[styles.clockHeadline, { color: colors.textSecondary }]} numberOfLines={1}>
-        {headline}
-      </Text>
-      <Text style={[styles.clockDigits, { color: colors.text }]} numberOfLines={1}>
-        {digits}
-      </Text>
-      <View style={styles.clockUnitsRow}>
-        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>days</Text>
-        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>hrs</Text>
-        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>min</Text>
-        <Text style={[styles.clockUnit, { color: colors.textMuted }]}>sec</Text>
-      </View>
-      <Text style={[styles.clockHelper, { color: colors.textMuted }]} numberOfLines={1}>
-        {helper}
-      </Text>
-    </TouchableOpacity>
-  );
+  return <TouchableOpacity activeOpacity={0.85} onPress={onPress} accessibilityRole="button"
+    accessibilityLabel={isSet ? 'Change exam date' : 'Set exam date'}
+    style={[styles.summaryPill, styles.examCountdownPill, { borderColor: hexToRgba(colors.blue, isDark ? 0.24 : 0.18), backgroundColor: isDark ? 'rgba(5, 12, 26, 0.45)' : 'rgba(255, 255, 255, 0.7)' }]}>
+    <PremiumIcon name="timer" size={15} color={colors.cyan} />
+    <Text style={[styles.summaryText, styles.countdownText, { color: colors.text }]} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.75}>{label}</Text>
+  </TouchableOpacity>;
 }
 
 function StudyStreakCard({ streak, isDark, colors }) {
   const current = streak.currentStreak ?? 0;
-  const longest = streak.longestStreak ?? 0;
-  const hasStreak = current > 0;
-  const dayLabel = current === 1 ? 'day' : 'days';
-  const status = hasStreak ? 'Active streak' : 'Start a streak today';
+  return <View style={[styles.summaryPill, { borderColor: hexToRgba(colors.amber, isDark ? 0.3 : 0.25), backgroundColor: isDark ? 'rgba(5, 12, 26, 0.45)' : 'rgba(255, 255, 255, 0.7)' }]}>
+    <PremiumIcon name="flame" size={15} color={colors.amber} />
+    <Text style={[styles.summaryText, { color: colors.text }]} numberOfLines={1}>{current ? current + (current === 1 ? ' day streak' : ' days streak') : 'Start a streak'}</Text>
+  </View>;
+}
 
+function CoachingProgressCard({ data, colors, isDark, onPress }) {
+  const story = data?.profile ? buildDashboardStory(data.profile, data.baseline, data.history || []) : null;
+  const snapshot = data?.profile ? sectionSnapshot(data.profile, data.baseline) : [];
+  const hasBaseline = Boolean(data?.baseline);
+  const border = isDark ? 'rgba(112, 94, 214, 0.3)' : 'rgba(112, 94, 214, 0.2)';
   return (
-    <View
-      style={[
-        styles.streakCard,
-        {
-          borderColor: hexToRgba(colors.amber, isDark ? 0.34 : 0.3),
-          backgroundColor: isDark ? 'rgba(5, 12, 26, 0.52)' : 'rgba(255, 255, 255, 0.72)',
-        },
-      ]}
-    >
-      <View style={[styles.streakIconWrap, { backgroundColor: hexToRgba(colors.amber, isDark ? 0.18 : 0.12), borderColor: hexToRgba(colors.amber, 0.34) }]}>
-        <PremiumIcon name="flame" size={22} color={colors.amber} />
-      </View>
-
-      <View style={styles.streakCopy}>
-        <Text style={[styles.streakEyebrow, { color: colors.textMuted }]} numberOfLines={1}>
-          {status}
-        </Text>
-        <View style={styles.streakValueRow}>
-          <Text style={[styles.streakValue, { color: colors.text }]}>{current}</Text>
-          <Text style={[styles.streakUnit, { color: colors.textSecondary }]}>{dayLabel}</Text>
+    <TouchableOpacity activeOpacity={0.88} onPress={onPress} accessibilityRole="button" style={[styles.coachCard, { borderColor: border, backgroundColor: isDark ? '#151B38' : '#F4F2FF' }]}>
+      <View style={styles.coachCardTop}>
+        <View style={[styles.coachIcon, { backgroundColor: isDark ? 'rgba(151, 130, 255, 0.16)' : 'rgba(111, 87, 230, 0.12)' }]}>
+          <PremiumIcon name="graduation-cap" size={20} color={colors.purple} />
         </View>
+        <View style={styles.coachHeading}>
+          <Text style={[styles.coachTitle, { color: colors.text }]}>{hasBaseline ? 'Your coaching progress' : 'Meet your coach'}</Text>
+          <Text style={[styles.coachDescription, { color: colors.textSecondary }]} numberOfLines={2}>
+            {hasBaseline ? (story?.focus?.title ? 'Next focus: ' + story.focus.title : 'Your performance plan is ready') : 'Take your mini mock to build your personal plan'}
+          </Text>
+        </View>
+        <PremiumIcon name="chevron-right" size={20} color={colors.purple} />
       </View>
-
-      <View style={[styles.streakBestBox, { borderLeftColor: isDark ? 'rgba(116, 154, 209, 0.2)' : 'rgba(69, 94, 140, 0.16)' }]}>
-        <Text style={[styles.streakBestLabel, { color: colors.textMuted }]} numberOfLines={1}>
-          Best
-        </Text>
-        <Text style={[styles.streakBestValue, { color: colors.teal }]} numberOfLines={1}>
-          {longest}
-        </Text>
-      </View>
-    </View>
+      {hasBaseline ? (
+        <View style={styles.coachMetrics}>
+          {snapshot.slice(0, 4).map((item) => (
+            <View key={item.id} style={[styles.coachMetric, { borderColor: hexToRgba(colors[SECTION_COLOURS[item.id]] ?? colors.blue, 0.22), backgroundColor: isDark ? 'rgba(8, 14, 31, 0.5)' : 'rgba(255,255,255,0.72)' }]}>
+              <StatRing value={item.accuracy} color={colors[SECTION_COLOURS[item.id]] ?? colors.blue} size={62} compact label={`${item.title} accuracy`} />
+              <Text style={[styles.coachMetricLabel, { color: colors.textSecondary }]} numberOfLines={1}>{item.short}</Text>
+            </View>
+          ))}
+        </View>
+      ) : null}
+    </TouchableOpacity>
   );
 }
 
@@ -210,7 +150,6 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
         />
         <View style={styles.logoCopy}>
           <Text style={[styles.logoTitle, { color: colors.text }]} numberOfLines={1}>UCAT Genius</Text>
-          <Text style={[styles.logoSubtitle, { color: colors.textMuted }]} numberOfLines={1}>PREP SMARTER</Text>
         </View>
       </View>
 
@@ -256,36 +195,42 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
 export default function HomeScreen({ navigation }) {
   const { user, displayName: profileDisplayName } = useAuth();
   const { isDark, toggleDark } = useTheme();
-  const { colors, gradients } = getPremiumTheme(isDark);
+  const { colors } = getPremiumTheme(isDark);
 
   const initial = getInitial(user, profileDisplayName);
   const displayName = getDisplayName(user, profileDisplayName);
 
   const headerAnim = useFadeSlide(0, 12);
-  const heroAnim = useFadeSlide(90, 18);
-  const action1Anim = useFadeSlide(190, 18);
-  const action2Anim = useFadeSlide(260, 18);
-  const action3Anim = useFadeSlide(330, 18);
-  const action4Anim = useFadeSlide(400, 18);
-  const action5Anim = useFadeSlide(470, 18);
-  const footerAnim = useFadeSlide(540, 18);
+  const heroAnim = useFadeSlide(80, 18);
+  const action1Anim = useFadeSlide(150, 18);
+  const footerAnim = useFadeSlide(240, 18);
 
   const [streak, setStreak] = useState({ currentStreak: 0, longestStreak: 0 });
   const [lastActivity, setLastActivityState] = useState(null);
   const [examDate, setExamDateState] = useState(null);
+  const [coachData, setCoachData] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
       let cancelled = false;
       (async () => {
-        const [s, a, e] = await Promise.all([getDisplayStreak(), getLastActivity(), getExamDate()]);
+        const [s, a, e, cached] = await Promise.all([getDisplayStreak(), getLastActivity(), getExamDate(), user?.id ? loadCoachHubCache(user.id) : null]);
         if (cancelled) return;
         setStreak(s);
         setLastActivityState(a);
         setExamDateState(e);
+        if (cached) setCoachData(cached);
+        if (user?.id) {
+          try {
+            const latest = await coachRequest(user.id, 'hub');
+            if (cancelled) return;
+            setCoachData(latest);
+            void saveCoachHubCache(user.id, latest).catch(() => {});
+          } catch (_) { /* Keep the locally cached coaching summary available offline. */ }
+        }
       })();
       return () => { cancelled = true; };
-    }, []),
+    }, [user?.id]),
   );
 
   const resumeTarget = getResumeNavTarget(lastActivity);
@@ -295,9 +240,10 @@ export default function HomeScreen({ navigation }) {
     if (resumeTarget) {
       navigation.navigate(resumeTarget.screen, resumeTarget.params);
     } else {
-      navigation.navigate('PracticeMode');
+      navigation.navigate('MainTabs', { screen: 'PracticeSections' });
     }
   };
+  const openCoaching = () => navigation.navigate('MainTabs', { screen: 'Coaching' });
   return (
     <PremiumScreen>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
@@ -313,98 +259,28 @@ export default function HomeScreen({ navigation }) {
 
       <PremiumScrollView contentContainerStyle={styles.scrollContent}>
         <Animated.View style={heroAnim}>
-          <LinearGradient
-            colors={gradients.hero}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.heroCard, { borderColor: colors.border, shadowColor: colors.blue }]}
-          >
-            <View style={[styles.heroCopy, { minHeight: resumeVisuals ? 150 : 112 }]}>
-              <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text>
-
-              <ExamCountdownClock
-                examDate={examDate}
-                isDark={isDark}
-                colors={colors}
-                onPress={() => navigation.navigate('ExamDate')}
-              />
-
-              <StudyStreakCard streak={streak} isDark={isDark} colors={colors} />
-
-              {resumeVisuals ? (
-                <TouchableOpacity
-                  activeOpacity={0.86}
-                  onPress={handleResume}
-                  style={[styles.continuePanel, { borderColor: isDark ? 'rgba(88, 126, 184, 0.18)' : 'rgba(69, 94, 140, 0.16)', backgroundColor: isDark ? 'rgba(5, 12, 25, 0.58)' : 'rgba(255, 255, 255, 0.72)' }]}
-                  accessibilityRole="button"
-                >
-                  <RichIconBox icon={resumeVisuals.icon} accent={resumeAccent} size={42} iconSize={22} />
-                  <Text style={[styles.continueTitle, { color: colors.text }]} numberOfLines={2}>
-                    Continue where you left off
-                  </Text>
-                  <PremiumIcon name="chevron-right" size={20} color={resumeAccent} strokeWidth={2.4} />
-                </TouchableOpacity>
-              ) : null}
-            </View>
-          </LinearGradient>
+          <View style={styles.summaryRow}>
+            <ExamCountdownClock examDate={examDate} isDark={isDark} colors={colors} onPress={() => navigation.navigate('ExamDate')} />
+            <StudyStreakCard streak={streak} isDark={isDark} colors={colors} />
+          </View>
+          {displayName ? <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text> : null}
+          <CoachingProgressCard data={coachData} colors={colors} isDark={isDark} onPress={openCoaching} />
+          {resumeVisuals ? (
+            <TouchableOpacity activeOpacity={0.85} onPress={handleResume} style={[styles.resumeLink, { borderColor: colors.border }]} accessibilityRole="button">
+              <PremiumIcon name={resumeVisuals.icon} size={18} color={resumeAccent} />
+              <Text style={[styles.resumeText, { color: colors.text }]} numberOfLines={1}>Continue where you left off</Text>
+              <PremiumIcon name="chevron-right" size={18} color={colors.textMuted} />
+            </TouchableOpacity>
+          ) : null}
         </Animated.View>
 
         <Animated.View style={action1Anim}>
-          <GlassMenuCard
-            title="Start Practising"
-            description="Adaptive practice across all UCAT subtests."
-            icon="target"
-            accent={colors.blue}
-            highlighted
-            onPress={() => navigation.navigate('PracticeMode')}
-            style={styles.actionCard}
-          />
-        </Animated.View>
-
-        <Animated.View style={action2Anim}>
-          <GlassMenuCard
-            title="Learn UCAT Techniques"
-            description="Theory, question types, worked examples, and strategy."
-            icon={LEARN_FEATURE_ICON}
-            accent={colors.cyan}
-            onPress={() => navigation.navigate('LearnSections')}
-            style={styles.actionCard}
-          />
-        </Animated.View>
-
-        <Animated.View style={action3Anim}>
-          <GlassMenuCard
-            title="Performance Analytics"
-            description="Track progress, strengths, and areas to improve."
-            icon="chart"
-            accent={colors.teal}
-            onPress={() => navigation.navigate('PerformanceAnalytics')}
-            style={styles.actionCard}
-          />
-        </Animated.View>
-
-        <Animated.View style={action4Anim}>
-          <GlassMenuCard
-            title="Student Community"
-            description="Ask questions, share techniques, and learn with other UCAT students."
-            icon="chat"
-            accent={colors.purple}
-            badge="New"
-            badgePosition="topRight"
-            onPress={() => navigation.navigate('MainTabs', { screen: 'Community' })}
-            style={styles.actionCard}
-          />
-        </Animated.View>
-
-        <Animated.View style={action5Anim}>
-          <GlassMenuCard
-            title="About the UCAT"
-            description="General knowledge about the UCAT"
-            icon="book"
-            accent={colors.amber}
-            onPress={() => navigation.navigate('AboutUCAT')}
-            style={styles.actionCard}
-          />
+          <GlassMenuCard title="Practice" description="Free or timed questions across the UCAT subtests." icon="target" accent={colors.blue} highlighted onPress={() => navigation.navigate('MainTabs', { screen: 'PracticeSections' })} style={styles.actionCard} />
+          <GlassMenuCard title="Coaching" description="Your personalised plan, practice and progress." icon="graduation-cap" accent={colors.purple} onPress={openCoaching} style={styles.actionCard} />
+          <GlassMenuCard title="Learn UCAT Techniques" description="Lessons and strategies for every subtest." icon={LEARN_FEATURE_ICON} accent={colors.cyan} onPress={() => navigation.navigate('LearnSections')} style={styles.actionCard} />
+          <GlassMenuCard title="Performance" description="Track your accuracy and progress." icon="chart" accent={colors.teal} onPress={() => navigation.navigate('MainTabs', { screen: 'PerformanceAnalytics' })} style={styles.actionCard} />
+          <GlassMenuCard title="Student Community" description="Ask questions and learn with other students." icon="chat" accent={colors.purple} onPress={() => navigation.navigate('MainTabs', { screen: 'Community' })} style={styles.actionCard} />
+          <GlassMenuCard title="About the UCAT" description="Learn how the test works." icon="book" accent={colors.amber} onPress={() => navigation.navigate('AboutUCAT')} style={styles.actionCard} />
         </Animated.View>
 
         <Animated.View style={footerAnim}>
@@ -481,6 +357,83 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingBottom: 34,
   },
+  summaryRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 9,
+    marginBottom: 14,
+  },
+  summaryPill: {
+    minHeight: 38,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 7,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderRadius: 14,
+    flex: 1,
+    minWidth: 0,
+  },
+  summaryText: {
+    fontSize: 12,
+    lineHeight: 16,
+    fontWeight: '800',
+    flexShrink: 1,
+  },
+  examCountdownPill: { flexGrow: 1.35 },
+  countdownText: {
+    fontSize: 10,
+    letterSpacing: -0.35,
+    fontVariant: ['tabular-nums'],
+  },
+  greeting: {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: '600',
+    marginBottom: 12,
+  },
+  coachCard: {
+    borderWidth: 1,
+    borderRadius: 22,
+    padding: 16,
+    marginBottom: 12,
+  },
+  coachCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 11,
+  },
+  coachIcon: {
+    width: 42,
+    height: 42,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  coachHeading: { flex: 1, minWidth: 0 },
+  coachTitle: { fontSize: 17, lineHeight: 21, fontWeight: '800' },
+  coachDescription: { fontSize: 13, lineHeight: 18, marginTop: 3 },
+  coachMetrics: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    rowGap: 9,
+    marginTop: 14,
+  },
+  coachMetric: { width: '48.5%', minHeight: 88, borderRadius: 16, borderWidth: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 9, gap: 3 },
+  coachMetricLabel: { fontSize: 11, lineHeight: 14, fontWeight: '700', marginTop: 2 },
+  resumeLink: {
+    minHeight: 44,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 12,
+    marginBottom: 18,
+  },
+  resumeText: { flex: 1, fontSize: 13, fontWeight: '700' },
   heroCard: {
     borderRadius: 28,
     borderWidth: 1,
@@ -496,15 +449,6 @@ const styles = StyleSheet.create({
   },
   heroCopy: {
     justifyContent: 'flex-start',
-  },
-  greeting: {
-    color: premiumColors.textSecondary,
-    fontSize: 19,
-    lineHeight: 26,
-    fontWeight: '500',
-    marginTop: 8,
-    marginBottom: 22,
-    maxWidth: 240,
   },
   heroTitle: {
     color: premiumColors.text,

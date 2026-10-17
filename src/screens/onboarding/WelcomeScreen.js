@@ -29,6 +29,13 @@ import AppLogo from '../../components/AppLogo';
 
 const FEATURES = [
   {
+    icon: 'coach',
+    accent: 'purple',
+    title: 'Personalised coaching',
+    body: 'Start with a mini mock, then follow a plan based on your strengths and areas to improve.',
+    highlight: true,
+  },
+  {
     icon: 'book',
     accent: 'cyan',
     title: 'Learn UCAT techniques',
@@ -37,8 +44,8 @@ const FEATURES = [
   {
     icon: 'target',
     accent: 'blue',
-    title: 'Adaptive practice',
-    body: 'Practise VR, DM, QR, and SJ at your own pace. Question banks tuned to the 2026 UCAT.',
+    title: 'Free Practice',
+    body: 'A large question bank across all UCAT subtests, in free or timed mode.',
   },
   {
     icon: 'timer',
@@ -51,13 +58,18 @@ const FEATURES = [
     accent: 'amber',
     title: 'AI tutor on demand',
     body: 'Stuck on a question? Get a friendly, focused explanation from your built-in tutor.',
-    highlight: true,
   },
   {
     icon: 'chart',
     accent: 'teal',
     title: 'Performance analytics',
     body: 'See your strengths, the topics to revisit, and progress trending over time.',
+  },
+  {
+    icon: 'chat',
+    accent: 'purple',
+    title: 'Student community forums',
+    body: 'Ask questions, share advice, and learn with other UCAT students.',
   },
 ];
 

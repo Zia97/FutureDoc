@@ -210,12 +210,12 @@ export function FlagButton({ active, onPress, accent }) {
   );
 }
 
-export function PremiumPauseModal({ visible, onResume }) {
+export function PremiumPauseModal({ visible, onResume, onExit }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
 
   return (
-    <Modal visible={visible} transparent animationType="fade" statusBarTranslucent>
+    <Modal visible={visible} transparent animationType="fade" statusBarTranslucent onRequestClose={onExit}>
       <View style={[styles.pauseOverlay, { backgroundColor: isDark ? '#02050C' : '#F8FBFF' }]}>
         <View style={[styles.pauseCardWrap, { shadowColor: colors.blue }]}>
           <LinearGradient
@@ -272,6 +272,9 @@ export function PremiumPauseModal({ visible, onResume }) {
                 <Text style={styles.resumeButtonText}>Resume Test</Text>
               </LinearGradient>
             </TouchableOpacity>
+            {onExit && <TouchableOpacity onPress={onExit} accessibilityRole="button" style={{ padding: 16, alignItems: 'center' }}>
+              <Text style={{ color: colors.textSecondary, fontWeight: '700' }}>Save & finish later</Text>
+            </TouchableOpacity>}
           </LinearGradient>
         </View>
       </View>

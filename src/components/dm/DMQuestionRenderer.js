@@ -98,6 +98,7 @@ export function DMOptionsContent({
   const { colors } = getPremiumTheme(isDark);
   const sectionColor = colors.teal;
   const { isYesNo, isMCQ, isSelectVenn, isInterpVenn, contentWidth } = useQuestionMeta(question, screenWidth);
+  const statementAnswers = answer && typeof answer === 'object' && !Array.isArray(answer) ? answer : {};
 
   function mcqOptionState(label) {
     if (timedMode) return label === answer ? 'selected' : 'idle';
@@ -172,7 +173,7 @@ export function DMOptionsContent({
         {optionsLabel}
         <YesNoStatements
           statements={question.statements}
-          answers={answer}
+          answers={statementAnswers}
           onAnswer={(index, val) => onAnswer({ ...(answer || {}), [index]: val })}
           submitted={submitted}
           timedMode={timedMode}
