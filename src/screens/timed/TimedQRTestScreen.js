@@ -1,6 +1,6 @@
+import TimedQuestionPanel from '../../components/timed/TimedQuestionPanel';
 import { useState, useEffect, useRef } from 'react';
 import {
-  View,
   ScrollView,
   StyleSheet,
 } from 'react-native';
@@ -19,19 +19,12 @@ import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
 import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
-import AnswerOptionButton from '../../components/AnswerOptionButton';
-import QRStimulusRenderer from '../../components/qr/QRStimulusRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedQRResultsScreen from '../../components/TimedQRResultsScreen';
 import {
   PremiumQuestionScaffold,
   QuestionTopBar,
-  QuestionPanel,
-  SectionLabel,
-  QuestionText,
-  QuestionDivider,
-  FlagButton,
   PremiumPauseModal,
 } from '../../components/premium/PremiumQuestionScreenUI';
 
@@ -201,31 +194,9 @@ export default function TimedQRTestScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <QuestionPanel>
-          <SectionLabel accent={sectionColor}>Stem</SectionLabel>
-          <QRStimulusRenderer stimulus={item.stimulus} />
-
-          <QuestionDivider />
-
-          <View style={styles.questionHeader}>
-            <View style={styles.questionCopy}>
-              <SectionLabel accent={sectionColor}>Question</SectionLabel>
-              <QuestionText>{item.question.stem}</QuestionText>
-            </View>
-            <FlagButton active={isFlagged} onPress={() => toggleFlag(qid)} accent={colors.amber} />
-          </View>
-
-          <View style={styles.options}>
-            {item.question.options.map((opt) => (
-              <AnswerOptionButton
-                key={opt.label}
-                label={`${opt.label}.  ${opt.text}`}
-                state={currentAnswer === opt.label ? 'selected' : 'idle'}
-                onPress={() => handleAnswer(opt.label)}
-              />
-            ))}
-          </View>
-        </QuestionPanel>
+        <TimedQuestionPanel section="qr" accent={sectionColor} stimulus={item.stimulus} text={item.question.stem}
+          choices={item.question.options.map((opt) => ({ value: opt.label, label: opt.label + '.  ' + opt.text }))}
+          answer={currentAnswer} flagged={isFlagged} onToggleFlag={() => toggleFlag(qid)} onAnswer={handleAnswer} />
       </ScrollView>
 
       <BottomToolbar
@@ -264,14 +235,4 @@ export default function TimedQRTestScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: { paddingHorizontal: 8, paddingBottom: 28 },
-  questionHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 12,
-  },
-  questionCopy: {
-    flex: 1,
-    minWidth: 0,
-  },
-  options: { gap: 10, marginTop: 16 },
 });

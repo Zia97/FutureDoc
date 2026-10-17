@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { supabase } from '../lib/supabase';
 import { getIsOnline } from '../context/NetworkContext';
+import { isPreviewEnabled } from '../dev/previewStore';
 
 const FUNCTION_URL = `${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/ai-tutor`;
 const APP_VERSION  = Constants.expoConfig?.version ?? '0.0.0';
@@ -49,6 +50,7 @@ export async function streamAITutor({
 
   let response;
   try {
+    const isPreview = __DEV__ && typeof section === 'string' && await isPreviewEnabled(section.toLowerCase()).catch(() => false);
     response = await fetch(FUNCTION_URL, {
       method: 'POST',
       headers: {
@@ -71,6 +73,7 @@ export async function streamAITutor({
         vennDiagrams,
         isTimed,
         isDemo,
+        isPreview: !!isPreview,
         messages,
       }),
     });

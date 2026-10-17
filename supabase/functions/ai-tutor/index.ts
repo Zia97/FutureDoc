@@ -2,8 +2,9 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { OpenAIProvider } from './providers/openai.ts';
 import type { ChatMessage, TutorResult } from './providers/types.ts';
 import { getTutorInstructions, buildQuestionContext } from './prompt-v2.ts';
+import { readTutorLearnerContext, readLearningHistory } from '../_shared/learner-memory.ts';
 
-const PROMPT_VERSION = 'tutor-v2-2026-09-29';
+const PROMPT_VERSION = 'tutor-v3-shared-learning-2026-10-17';
 
 // ── Limits ────────────────────────────────────────────────────────────────────
 const FREE_LIFETIME_LIMIT = 5;
@@ -244,6 +245,7 @@ Deno.serve(async (req) => {
     vennDiagrams,
     isTimed,
     isDemo,
+    isPreview,
     messages,
   }: {
     questionId?: string;
@@ -259,6 +261,7 @@ Deno.serve(async (req) => {
     vennDiagrams?: string;
     isTimed?: boolean;
     isDemo?: boolean;
+    isPreview?: boolean;
     messages: ChatMessage[];
   } = parsed;
 
@@ -269,6 +272,7 @@ Deno.serve(async (req) => {
     typeof correctAnswer !== 'string' ||
     typeof userAnswer !== 'string' ||
     typeof explanation !== 'string' ||
+    (questionId != null && (typeof questionId !== 'string' || questionId.length > 120)) ||
     (options != null && (!Array.isArray(options) || options.some((option) => typeof option !== 'string')))
   ) {
     return json({ error: 'invalid_request' }, 400);
@@ -348,19 +352,16 @@ Deno.serve(async (req) => {
     }
   }
 
-  // 5. Fetch learner context. Broad help-topic counts are retained for
-  // analytics; model-labelled misconceptions provide more useful tutoring.
-  const { data: context } = await supabase
-    .from('user_ai_context')
-    .select('struggles, misconceptions')
-    .eq('user_id', user.id)
-    .single();
-
-  const misconceptions = context?.misconceptions ?? {};
-  const learnerInsights = Object.entries(misconceptions as Record<string, number>)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 3)
-    .map(([topic, count]) => `${topic} (observed ${count}x)`);
+  // 5. Shared memory is read from this authenticated account only. Asking for
+  // help is recorded as support interest, never as performance evidence.
+  const useLearningMemory = !isDemo && isPreview !== true;
+  let learnerContext: string | undefined;
+  if (useLearningMemory) {
+    try {
+      learnerContext = JSON.stringify(await readTutorLearnerContext(supabase, user.id,
+        { section: section.toLowerCase(), questionId, isTimed: isTimed === true }));
+    } catch { /* A memory outage must not prevent a question explanation. */ }
+  }
 
   // 6. Build a stable curriculum prefix plus changing question context.
   // Keeping them separate enables prompt caching and avoids sending every
@@ -377,7 +378,7 @@ Deno.serve(async (req) => {
     options,
     stimulusData,
     vennDiagrams,
-    learnerInsights,
+    learnerInsights: [],
     isTimed,
   });
 
@@ -390,10 +391,13 @@ Deno.serve(async (req) => {
       .from('ai_tutor_logs')
       .insert({
         user_id: user.id,
-        message: lastUserMsg.content.slice(0, 1000),
-        section,
+        message: lastUserMsg.content.slice(0, MAX_MESSAGE_CHARS),
+        section: section.toLowerCase(),
         question_id: questionId ?? null,
         is_timed: isTimed ?? false,
+        is_demo: !!isDemo,
+        is_preview: isPreview === true,
+        prompt_version: PROMPT_VERSION,
       })
       .select('id')
       .single();
@@ -412,6 +416,8 @@ Deno.serve(async (req) => {
       questionContext,
       messages: safeMessages,
       section,
+      learnerContext,
+      ...(useLearningMemory ? { retrieveLearningHistory: (args: Record<string, unknown>) => readLearningHistory(supabase, user.id, args) } : {}),
     });
   } catch (err) {
     console.error('[ai-tutor] provider error:', err);
@@ -461,13 +467,15 @@ Deno.serve(async (req) => {
     }
   }
 
-  const { error: insightError } = await supabase.rpc('record_ai_tutor_insight', {
-    p_user_id: user.id,
-    p_question_type: questionType || 'unspecified',
-    p_misconception: result.diagnostics.misconception,
-  });
-  if (insightError) {
-    console.error('[ai-tutor] failed to update learner insight:', insightError.message);
+  if (useLearningMemory) {
+    const { error: insightError } = await supabase.rpc('record_ai_tutor_insight', {
+      p_user_id: user.id,
+      p_question_type: questionType || 'unspecified',
+      p_misconception: result.diagnostics.misconception,
+    });
+    if (insightError) {
+      console.error('[ai-tutor] failed to update learner insight:', insightError.message);
+    }
   }
 
   return json({ content: result.content, messageId: logId });

@@ -1,6 +1,6 @@
+import TimedQuestionPanel from '../../components/timed/TimedQuestionPanel';
 import { useState, useMemo, useEffect, useRef } from 'react';
 import {
-  View,
   ScrollView,
   StyleSheet,
 } from 'react-native';
@@ -18,17 +18,12 @@ import ScreenNavBar from '../../components/ScreenNavBar';
 import CalculatorModal from '../../components/CalculatorModal';
 import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
-import { DMStemContent, DMOptionsContent } from '../../components/dm/DMQuestionRenderer';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedDMResultsScreen from '../../components/TimedDMResultsScreen';
 import {
   PremiumQuestionScaffold,
   QuestionTopBar,
-  QuestionPanel,
-  SectionLabel,
-  QuestionDivider,
-  FlagButton,
   PremiumPauseModal,
 } from '../../components/premium/PremiumQuestionScreenUI';
 
@@ -204,25 +199,8 @@ export default function TimedDMTestScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <QuestionPanel>
-          <SectionLabel accent={sectionColor}>Stem</SectionLabel>
-          <DMStemContent question={question} showLabel={false} />
-
-          <QuestionDivider />
-
-          <View style={styles.optionsHeader}>
-            <SectionLabel accent={sectionColor}>Options</SectionLabel>
-            <FlagButton active={isFlagged} onPress={() => toggleFlag(qid)} accent={colors.amber} />
-          </View>
-          <DMOptionsContent
-            question={question}
-            answer={currentAnswer}
-            onAnswer={handleAnswer}
-            submitted={false}
-            timedMode
-            showLabel={false}
-          />
-        </QuestionPanel>
+        <TimedQuestionPanel section="dm" accent={sectionColor} dmQuestion={question} answer={currentAnswer}
+          flagged={isFlagged} onToggleFlag={() => toggleFlag(qid)} onAnswer={handleAnswer} />
       </ScrollView>
 
       <BottomToolbar
@@ -261,10 +239,4 @@ export default function TimedDMTestScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: { paddingHorizontal: 8, paddingBottom: 28 },
-  optionsHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
 });

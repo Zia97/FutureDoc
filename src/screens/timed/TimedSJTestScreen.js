@@ -1,6 +1,6 @@
+import TimedQuestionPanel from '../../components/timed/TimedQuestionPanel';
 import { useState, useEffect, useRef } from 'react';
 import {
-  View,
   ScrollView,
   StyleSheet,
 } from 'react-native';
@@ -20,18 +20,12 @@ import { LABEL_SETS } from '../../constants/sjLabelSets';
 import ScreenNavBar from '../../components/ScreenNavBar';
 import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
-import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedSJResultsScreen from '../../components/TimedSJResultsScreen';
 import {
   PremiumQuestionScaffold,
   QuestionTopBar,
-  QuestionPanel,
-  SectionLabel,
-  QuestionText,
-  QuestionDivider,
-  FlagButton,
   PremiumPauseModal,
 } from '../../components/premium/PremiumQuestionScreenUI';
 
@@ -182,30 +176,9 @@ export default function TimedSJTestScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <QuestionPanel>
-          <SectionLabel accent={sectionColor}>Scenario</SectionLabel>
-          <QuestionText muted>{item.stem}</QuestionText>
-
-          <QuestionDivider />
-
-          <View style={styles.questionHeader}>
-            <SectionLabel accent={sectionColor}>Question</SectionLabel>
-            <FlagButton active={isFlagged} onPress={() => toggleFlag(itemId)} accent={colors.amber} />
-          </View>
-
-          <QuestionText>{item.question.text}</QuestionText>
-
-          <View style={styles.optionsContainer}>
-            {labelSet.map((opt) => (
-              <AnswerOptionButton
-                key={opt}
-                label={opt}
-                state={selectedAnswer === opt ? 'selected' : 'idle'}
-                onPress={() => onAnswer(opt)}
-              />
-            ))}
-          </View>
-        </QuestionPanel>
+        <TimedQuestionPanel section="sj" accent={sectionColor} context={item.stem} text={item.question.text}
+          choices={labelSet.map((value) => ({ value, label: value }))} answer={selectedAnswer}
+          flagged={isFlagged} onToggleFlag={() => toggleFlag(itemId)} onAnswer={onAnswer} />
       </ScrollView>
 
       <BottomToolbar
@@ -243,11 +216,4 @@ export default function TimedSJTestScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: { paddingHorizontal: 8, paddingBottom: 28 },
-  questionHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  optionsContainer: { gap: 10, marginTop: 16 },
 });

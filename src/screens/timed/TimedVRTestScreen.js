@@ -1,6 +1,6 @@
+import TimedQuestionPanel from '../../components/timed/TimedQuestionPanel';
 import { useState, useEffect, useRef } from 'react';
 import {
-  View,
   ScrollView,
   StyleSheet,
 } from 'react-native';
@@ -19,18 +19,12 @@ import { useTimedVRExamProgress } from '../../hooks/attempts/useTimedVRExamProgr
 import ScreenNavBar from '../../components/ScreenNavBar';
 import NotesModal from '../../components/NotesModal';
 import BottomToolbar from '../../components/BottomToolbar';
-import AnswerOptionButton from '../../components/AnswerOptionButton';
 import TestNavigatorModal from '../../components/TestNavigatorModal';
 import TimedTestReviewScreen from '../../components/TimedTestReviewScreen';
 import TimedVRResultsScreen from '../../components/TimedVRResultsScreen';
 import {
   PremiumQuestionScaffold,
   QuestionTopBar,
-  QuestionPanel,
-  SectionLabel,
-  QuestionText,
-  QuestionDivider,
-  FlagButton,
   PremiumPauseModal,
 } from '../../components/premium/PremiumQuestionScreenUI';
 
@@ -86,7 +80,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
   }, [item.stemId, qid]);
 
   const selectedAnswer = getAnswer(item.stemId, qid);
-  const hasAnswered = !!selectedAnswer;
   const isFlagged = flags.has(qid);
 
   useEffect(() => {
@@ -126,12 +119,6 @@ export default function TimedVRTestScreen({ route, navigation }) {
       else next.add(questionId);
       return next;
     });
-  }
-
-  function getOptionState(option) {
-    if (!hasAnswered) return 'idle';
-    if (option === selectedAnswer) return 'selected';
-    return 'idle';
   }
 
   function getQuestionStatus(fq) {
@@ -213,29 +200,9 @@ export default function TimedVRTestScreen({ route, navigation }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <QuestionPanel>
-          <SectionLabel accent={sectionColor}>Passage</SectionLabel>
-          <QuestionText muted>{item.resource}</QuestionText>
-
-          <QuestionDivider />
-
-          <View style={styles.questionHeader}>
-            <SectionLabel accent={sectionColor}>Question</SectionLabel>
-            <FlagButton active={isFlagged} onPress={() => toggleFlag(qid)} accent={colors.amber} />
-          </View>
-
-          <QuestionText>{item.question.questionText}</QuestionText>
-          <View style={styles.optionsContainer}>
-            {item.question.options.map((opt) => (
-              <AnswerOptionButton
-                key={opt}
-                label={opt}
-                state={getOptionState(opt)}
-                onPress={() => onAnswer(opt)}
-              />
-            ))}
-          </View>
-        </QuestionPanel>
+        <TimedQuestionPanel section="vr" accent={sectionColor} context={item.resource} text={item.question.questionText}
+          choices={item.question.options.map((value) => ({ value, label: value }))} answer={selectedAnswer}
+          flagged={isFlagged} onToggleFlag={() => toggleFlag(qid)} onAnswer={onAnswer} />
       </ScrollView>
 
       <BottomToolbar
@@ -273,11 +240,4 @@ export default function TimedVRTestScreen({ route, navigation }) {
 const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: { paddingHorizontal: 8, paddingBottom: 28 },
-  questionHeader: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  optionsContainer: { gap: 10, marginTop: 16 },
 });

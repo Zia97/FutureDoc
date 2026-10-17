@@ -8,6 +8,9 @@ export interface TutorRequest {
   instructions: string;
   /** Question-specific data which changes from one question to the next. */
   questionContext: string;
+  /** Account-scoped saved performance and conversations, supplied as untrusted data. */
+  learnerContext?: string;
+  retrieveLearningHistory?: (args: Record<string, unknown>) => Promise<unknown>;
   messages: ChatMessage[];
   section: string;
 }

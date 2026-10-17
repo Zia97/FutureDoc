@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -26,49 +26,7 @@ import {
 import { getPremiumTheme } from '../../theme/premiumTheme';
 import { setExamDate, NOT_BOOKED } from '../../services/onboardingFlags';
 import AppLogo from '../../components/AppLogo';
-
-const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
-];
-
-// Format a JS Date as YYYY-MM-DD using local components — avoids the
-// timezone shift toISOString() introduces near midnight.
-function formatLocalISO(date) {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, '0');
-  const d = String(date.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
-
-function startOfDay(date) {
-  const d = new Date(date);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-function isSameDay(a, b) {
-  return a.getFullYear() === b.getFullYear()
-    && a.getMonth() === b.getMonth()
-    && a.getDate() === b.getDate();
-}
-
-// Mon-first 6×7 grid for the given month. Leading/trailing days are null
-// so the renderer can render blanks instead of bleeding into adjacent
-// months.
-function buildMonthGrid(year, month) {
-  const first = new Date(year, month, 1);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const jsDow = first.getDay(); // 0=Sun
-  const leading = (jsDow + 6) % 7; // shift to Mon=0
-
-  const cells = [];
-  for (let i = 0; i < leading; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
-  while (cells.length % 7 !== 0) cells.push(null);
-  return cells;
-}
+import ExamDateCalendar, { formatLocalISO } from '../../components/ExamDateCalendar';
 
 export default function ExamDateScreen({ onComplete }) {
   const { isDark } = useTheme();
@@ -81,9 +39,6 @@ export default function ExamDateScreen({ onComplete }) {
   const inApp = !onComplete;
   const canPop = inApp && navigation?.canGoBack?.();
 
-  const today = useMemo(() => startOfDay(new Date()), []);
-  const [viewYear, setViewYear] = useState(today.getFullYear());
-  const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [selected, setSelected] = useState(null); // Date or null
   const [notBooked, setNotBooked] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -92,35 +47,8 @@ export default function ExamDateScreen({ onComplete }) {
   const calendarAnim = useFadeSlide(120);
   const optAnim = useFadeSlide(220);
 
-  const grid = useMemo(() => buildMonthGrid(viewYear, viewMonth), [viewYear, viewMonth]);
-
-  // Allow navigating back to current month even if the user paged forward
-  // a few times, but never before today.
-  const canGoBack = viewYear > today.getFullYear()
-    || (viewYear === today.getFullYear() && viewMonth > today.getMonth());
-
-  const goPrev = () => {
-    if (!canGoBack) return;
-    if (viewMonth === 0) {
-      setViewMonth(11);
-      setViewYear((y) => y - 1);
-    } else {
-      setViewMonth((m) => m - 1);
-    }
-  };
-
-  const goNext = () => {
-    if (viewMonth === 11) {
-      setViewMonth(0);
-      setViewYear((y) => y + 1);
-    } else {
-      setViewMonth((m) => m + 1);
-    }
-  };
-
   const handleSelectDay = (date) => {
     if (!date) return;
-    if (date < today) return;
     setNotBooked(false);
     setSelected(date);
   };
@@ -152,7 +80,6 @@ export default function ExamDateScreen({ onComplete }) {
     }
   };
 
-  const monthLabel = `${MONTHS[viewMonth]} ${viewYear}`;
   const continueDisabled = saving || (!selected && !notBooked);
 
   return (
@@ -195,105 +122,7 @@ export default function ExamDateScreen({ onComplete }) {
         </Animated.View>
 
         <Animated.View style={calendarAnim}>
-          <LinearGradient
-            colors={gradients.glass}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={[styles.calendarCard, { borderColor: colors.border }]}
-          >
-            <View style={styles.calendarHeader}>
-              <TouchableOpacity
-                onPress={goPrev}
-                disabled={!canGoBack}
-                style={[
-                  styles.navButton,
-                  {
-                    borderColor: hexToRgba(colors.blue, 0.32),
-                    backgroundColor: isDark ? 'rgba(8, 18, 36, 0.78)' : 'rgba(255, 255, 255, 0.92)',
-                    opacity: canGoBack ? 1 : 0.35,
-                  },
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Previous month"
-              >
-                <PremiumIcon name="chevron-left" size={18} color={colors.text} strokeWidth={2.4} />
-              </TouchableOpacity>
-
-              <Text style={[styles.monthLabel, { color: colors.text }]}>{monthLabel}</Text>
-
-              <TouchableOpacity
-                onPress={goNext}
-                style={[
-                  styles.navButton,
-                  {
-                    borderColor: hexToRgba(colors.blue, 0.32),
-                    backgroundColor: isDark ? 'rgba(8, 18, 36, 0.78)' : 'rgba(255, 255, 255, 0.92)',
-                  },
-                ]}
-                accessibilityRole="button"
-                accessibilityLabel="Next month"
-              >
-                <PremiumIcon name="chevron-right" size={18} color={colors.text} strokeWidth={2.4} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.weekRow}>
-              {WEEKDAYS.map((d, i) => (
-                <View key={`${d}-${i}`} style={styles.weekCell}>
-                  <Text style={[styles.weekText, { color: colors.textMuted }]}>{d}</Text>
-                </View>
-              ))}
-            </View>
-
-            <View style={styles.daysGrid}>
-              {grid.map((date, idx) => {
-                if (!date) return <View key={`b-${idx}`} style={styles.dayCell} />;
-                const isPast = date < today;
-                const isToday = isSameDay(date, today);
-                const isSelected = !!selected && isSameDay(date, selected);
-
-                const baseStyle = [styles.dayCell];
-                let bg = 'transparent';
-                let borderColor = 'transparent';
-                let textColor = colors.text;
-
-                if (isSelected) {
-                  bg = colors.blue;
-                  textColor = '#fff';
-                } else if (isToday) {
-                  borderColor = hexToRgba(colors.cyan, 0.7);
-                  textColor = colors.cyan;
-                } else if (isPast) {
-                  textColor = hexToRgba(colors.textMuted, 0.45);
-                }
-
-                return (
-                  <TouchableOpacity
-                    key={`d-${idx}`}
-                    style={baseStyle}
-                    activeOpacity={isPast ? 1 : 0.7}
-                    onPress={() => handleSelectDay(date)}
-                    disabled={isPast}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Select ${formatLocalISO(date)}`}
-                  >
-                    <View
-                      style={[
-                        styles.dayInner,
-                        {
-                          backgroundColor: bg,
-                          borderColor,
-                          borderWidth: borderColor === 'transparent' ? 0 : 1.5,
-                        },
-                      ]}
-                    >
-                      <Text style={[styles.dayText, { color: textColor }]}>{date.getDate()}</Text>
-                    </View>
-                  </TouchableOpacity>
-                );
-              })}
-            </View>
-          </LinearGradient>
+          <ExamDateCalendar selected={selected} onSelectDay={handleSelectDay} />
         </Animated.View>
 
         <Animated.View style={[styles.notBookedRow, optAnim]}>
@@ -410,65 +239,6 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     marginTop: 8,
     maxWidth: 360,
-  },
-  calendarCard: {
-    borderRadius: 22,
-    borderWidth: 1,
-    paddingHorizontal: 14,
-    paddingTop: 14,
-    paddingBottom: 18,
-  },
-  calendarHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  navButton: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    borderWidth: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  monthLabel: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: premiumColors.text,
-  },
-  weekRow: {
-    flexDirection: 'row',
-    paddingVertical: 6,
-  },
-  weekCell: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  weekText: {
-    fontSize: 11,
-    fontWeight: '800',
-    letterSpacing: 1,
-    color: premiumColors.textMuted,
-  },
-  daysGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  dayCell: {
-    width: `${100 / 7}%`,
-    aspectRatio: 1,
-    padding: 3,
-  },
-  dayInner: {
-    flex: 1,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  dayText: {
-    fontSize: 14,
-    fontWeight: '700',
   },
   notBookedRow: {
     marginTop: 16,

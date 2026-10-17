@@ -28,6 +28,10 @@ export default function TimedTestReviewScreen({
   timerDisplay,
   isUrgent,
   title = 'Situational Judgement',
+  endButtonLabel = 'End Test',
+  endConfirmTitle = 'End Exam',
+  endConfirmButtonLabel = 'End Exam',
+  endConfirmMessage = 'Are you sure you want to end the exam? You will not be able to change your answers.',
 }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
@@ -262,11 +266,11 @@ export default function TimedTestReviewScreen({
           <TouchableOpacity
             onPress={() =>
               Alert.alert(
-                'End Exam',
-                'Are you sure you want to end the exam? You will not be able to change your answers.',
+                endConfirmTitle,
+                endConfirmMessage,
                 [
                   { text: 'Cancel', style: 'cancel' },
-                  { text: 'End Exam', style: 'destructive', onPress: onEndTest },
+                  { text: endConfirmButtonLabel, style: 'destructive', onPress: onEndTest },
                 ],
               )
             }
@@ -279,7 +283,7 @@ export default function TimedTestReviewScreen({
               end={{ x: 1, y: 1 }}
               style={styles.endButton}
             >
-              <Text style={styles.endButtonText}>End Test</Text>
+              <Text style={styles.endButtonText}>{endButtonLabel}</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>

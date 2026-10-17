@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { queueCoachExamDate } from './coachingService';
 
 // Gate flags for the post-ToS onboarding flow. Local-only and device-scoped.
 export const EXAM_DATE_KEY = 'exam_date_v1';
@@ -11,8 +12,10 @@ export const NOT_BOOKED = 'NOT_BOOKED';
 
 export const setWelcomeSeen = () => AsyncStorage.setItem(WELCOME_SEEN_KEY, 'true');
 
-export const setExamDate = (isoDateOrNotBooked) =>
-  AsyncStorage.setItem(EXAM_DATE_KEY, isoDateOrNotBooked);
+export const setExamDate = async (isoDateOrNotBooked, syncCoach = true) => {
+  await AsyncStorage.setItem(EXAM_DATE_KEY, isoDateOrNotBooked);
+  if (syncCoach) await queueCoachExamDate(isoDateOrNotBooked === NOT_BOOKED ? null : isoDateOrNotBooked);
+};
 
 // Returns null if never set, NOT_BOOKED if user opted out, or an ISO date
 // (YYYY-MM-DD) string the caller can parse with new Date(...).

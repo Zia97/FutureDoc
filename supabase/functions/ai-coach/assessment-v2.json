@@ -1,0 +1,3686 @@
+{
+  "version": 2,
+  "id": "coach-intro-v2",
+  "title": "Your starting assessment",
+  "assessmentOnly": true,
+  "validation": {
+    "status": "PASS",
+    "method": "independent-blind-and-revealed-review",
+    "sections": {
+      "vr": {
+        "candidateSha256": "a036ead7e7c8a4694991b1f7f4107b5ffdc0b4c2f001f793e1a7c0c168b60eb3",
+        "independentValidationSha256": "6a1606e4077408f653847d4a0912809bcb94181d46134f860590c0b13e1070f1",
+        "skillMappingSha256": "42cf92286f92f2fdbd27faa26685ed9b170d96f8043e2f3ada5ab813461cc1dc",
+        "corpusRunId": "coach-intro-v2-vr-20261017",
+        "reviewStatus": "PASS"
+      },
+      "dm": {
+        "candidateSha256": "a52bc5cb08dd35b2e5a6e594b4c7bd5ce76898c97ad033390f1c0275120784a5",
+        "independentValidationSha256": "f06c42ae9e2ab6d8bece0644a7757d3ae06be2f0c1fa944cd6320b6e0ee7a06b",
+        "skillMappingSha256": "5bb22b89e01a4c201d1cfc36a1855b69784529b8d14517d99c78221ed2eed3e6",
+        "corpusRunId": "coach-intro-v2-dm-20261017",
+        "reviewStatus": "PASS"
+      },
+      "qr": {
+        "candidateSha256": "3d3f7aa1400ff4e8655f06d2ef2d4831ab6b26ca7795536602645fdd46d817cb",
+        "independentValidationSha256": "31f1e7d778b7d1c7db0189e6e54116de8a685cfe9d192625716e6950adf74f74",
+        "skillMappingSha256": "f680f340b2171314d762c5cbbda4da39501f4dc565bd78ff564c9ef06ee3c586",
+        "corpusRunId": "coach-intro-v2-qr-20261017",
+        "reviewStatus": "PASS"
+      },
+      "sj": {
+        "candidateSha256": "0694f8e37ef57f6e61e72b8c032f3a5d6ebb56b09270b597decfcc3a1fe74a5c",
+        "independentValidationSha256": "8bb525d20f0ec6e483182230d24ec6ee4401153ef1979e9e5e6f6db1d9c5da82",
+        "skillMappingSha256": "b4a29e672e1b18b79601162acb7f0d5e8688e76517f66025caf7a9ad27298c6d",
+        "corpusRunId": "coach-intro-v2-sj-20261017",
+        "reviewStatus": "PASS"
+      }
+    }
+  },
+  "questions": [
+    {
+      "id": "abb06930-6cb9-4f84-ba8b-224db626e63e",
+      "section": "vr",
+      "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+      "title": "Keeping Seeds Alive in Storage",
+      "context": "A seed bank preserves living plant material, rather than simply keeping a collection of dried objects. In conventional storage, suitable seeds are dried, placed in airtight containers and kept at low temperatures. At Kew's Millennium Seed Bank, the storage temperature is minus twenty degrees Celsius. Dryness and cold extend the useful life of a collection, but storage is not a promise that every seed will remain alive indefinitely. Information attached to each collection records where it came from, allowing stored material to retain a connection with its source population.\n\nThe method depends on how seeds respond to treatment. Seeds described as orthodox tolerate drying and can usually be conserved by conventional banking. Recalcitrant seeds, by contrast, are damaged by the loss of moisture needed for this process. Other seeds may tolerate drying yet be unusually short-lived under standard freezer conditions. These differences mean that placing every species in the same vault would not provide the same protection for all of them.\n\nCollections also need attention after arrival. Small samples are periodically removed for germination tests, which check whether seeds can still develop into seedlings. A collection may be duplicated in its country of origin and at a separate bank, reducing dependence on a single location. Such duplication protects against loss at one site; it does not remove the need to check the living material itself.\n\nFor plants unsuited to conventional banking, researchers investigate other approaches, including storing seeds or seed tissues at extremely low temperatures using liquid nitrogen. These techniques broaden the available methods but do not make one method suitable for every plant. Seed banking therefore complements the protection of plants in their habitats, rather than making that work unnecessary.",
+      "text": "Suitable seeds are dried before they enter conventional low-temperature storage.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "True",
+          "label": "True"
+        },
+        {
+          "value": "False",
+          "label": "False"
+        },
+        {
+          "value": "Can't tell",
+          "label": "Can't tell"
+        }
+      ],
+      "tag": {
+        "id": "abb06930-6cb9-4f84-ba8b-224db626e63e",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+        "primarySkillId": "vr.explicit_information",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "tfc",
+        "rationale": "Tests retrieval of the preparation sequence.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "answer": "True",
+        "contentHash": "cfcc2059062d363e9603223792dda89172b570999ab946c0b28cf2177f9097ab",
+        "previouslySeen": false
+      },
+      "explanation": "The first paragraph describes suitable seeds being dried, placed in airtight containers and then kept at low temperatures. The sequence directly supports the statement.",
+      "statementReasons": []
+    },
+    {
+      "id": "d2cd3edb-9563-40c7-ac8a-c47df293e72a",
+      "section": "vr",
+      "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+      "title": "Keeping Seeds Alive in Storage",
+      "context": "A seed bank preserves living plant material, rather than simply keeping a collection of dried objects. In conventional storage, suitable seeds are dried, placed in airtight containers and kept at low temperatures. At Kew's Millennium Seed Bank, the storage temperature is minus twenty degrees Celsius. Dryness and cold extend the useful life of a collection, but storage is not a promise that every seed will remain alive indefinitely. Information attached to each collection records where it came from, allowing stored material to retain a connection with its source population.\n\nThe method depends on how seeds respond to treatment. Seeds described as orthodox tolerate drying and can usually be conserved by conventional banking. Recalcitrant seeds, by contrast, are damaged by the loss of moisture needed for this process. Other seeds may tolerate drying yet be unusually short-lived under standard freezer conditions. These differences mean that placing every species in the same vault would not provide the same protection for all of them.\n\nCollections also need attention after arrival. Small samples are periodically removed for germination tests, which check whether seeds can still develop into seedlings. A collection may be duplicated in its country of origin and at a separate bank, reducing dependence on a single location. Such duplication protects against loss at one site; it does not remove the need to check the living material itself.\n\nFor plants unsuited to conventional banking, researchers investigate other approaches, including storing seeds or seed tissues at extremely low temperatures using liquid nitrogen. These techniques broaden the available methods but do not make one method suitable for every plant. Seed banking therefore complements the protection of plants in their habitats, rather than making that work unnecessary.",
+      "text": "Recalcitrant seeds can tolerate the moisture loss required for conventional banking.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "True",
+          "label": "True"
+        },
+        {
+          "value": "False",
+          "label": "False"
+        },
+        {
+          "value": "Can't tell",
+          "label": "Can't tell"
+        }
+      ],
+      "tag": {
+        "id": "d2cd3edb-9563-40c7-ac8a-c47df293e72a",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+        "primarySkillId": "vr.recognising_contradictions",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "tfc",
+        "rationale": "Requires locating the explicit contradiction about drying tolerance.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "answer": "False",
+        "contentHash": "0b8207222cc5a7f14fd218f177027c1ea387aa4560183a2ea953b0c58f7eb173",
+        "previouslySeen": false
+      },
+      "explanation": "The second paragraph states that recalcitrant seeds are damaged by the loss of moisture needed for conventional banking. That is a direct contradiction, rather than merely missing support.",
+      "statementReasons": []
+    },
+    {
+      "id": "d648bf47-58bb-43b0-90e9-39f48eee667f",
+      "section": "vr",
+      "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+      "title": "Keeping Seeds Alive in Storage",
+      "context": "A seed bank preserves living plant material, rather than simply keeping a collection of dried objects. In conventional storage, suitable seeds are dried, placed in airtight containers and kept at low temperatures. At Kew's Millennium Seed Bank, the storage temperature is minus twenty degrees Celsius. Dryness and cold extend the useful life of a collection, but storage is not a promise that every seed will remain alive indefinitely. Information attached to each collection records where it came from, allowing stored material to retain a connection with its source population.\n\nThe method depends on how seeds respond to treatment. Seeds described as orthodox tolerate drying and can usually be conserved by conventional banking. Recalcitrant seeds, by contrast, are damaged by the loss of moisture needed for this process. Other seeds may tolerate drying yet be unusually short-lived under standard freezer conditions. These differences mean that placing every species in the same vault would not provide the same protection for all of them.\n\nCollections also need attention after arrival. Small samples are periodically removed for germination tests, which check whether seeds can still develop into seedlings. A collection may be duplicated in its country of origin and at a separate bank, reducing dependence on a single location. Such duplication protects against loss at one site; it does not remove the need to check the living material itself.\n\nFor plants unsuited to conventional banking, researchers investigate other approaches, including storing seeds or seed tissues at extremely low temperatures using liquid nitrogen. These techniques broaden the available methods but do not make one method suitable for every plant. Seed banking therefore complements the protection of plants in their habitats, rather than making that work unnecessary.",
+      "text": "Storing recalcitrant seeds costs more per collection than storing orthodox seeds.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "True",
+          "label": "True"
+        },
+        {
+          "value": "False",
+          "label": "False"
+        },
+        {
+          "value": "Can't tell",
+          "label": "Can't tell"
+        }
+      ],
+      "tag": {
+        "id": "d648bf47-58bb-43b0-90e9-39f48eee667f",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+        "primarySkillId": "vr.unsupported_claims",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "tfc",
+        "rationale": "Separates an unstated economic comparison from biological differences.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "answer": "Can't tell",
+        "contentHash": "6abcd67680efffd9c8a489e16411805189847423ea73f60dfed484d3f0fc2055",
+        "previouslySeen": false
+      },
+      "explanation": "The passage distinguishes the seeds by their response to drying and describes alternative methods, but gives no comparison of storage costs. Either cost relationship could fit the information supplied.",
+      "statementReasons": []
+    },
+    {
+      "id": "85f36446-ed62-4ade-8b39-1974b3a2d7bd",
+      "section": "vr",
+      "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+      "title": "Keeping Seeds Alive in Storage",
+      "context": "A seed bank preserves living plant material, rather than simply keeping a collection of dried objects. In conventional storage, suitable seeds are dried, placed in airtight containers and kept at low temperatures. At Kew's Millennium Seed Bank, the storage temperature is minus twenty degrees Celsius. Dryness and cold extend the useful life of a collection, but storage is not a promise that every seed will remain alive indefinitely. Information attached to each collection records where it came from, allowing stored material to retain a connection with its source population.\n\nThe method depends on how seeds respond to treatment. Seeds described as orthodox tolerate drying and can usually be conserved by conventional banking. Recalcitrant seeds, by contrast, are damaged by the loss of moisture needed for this process. Other seeds may tolerate drying yet be unusually short-lived under standard freezer conditions. These differences mean that placing every species in the same vault would not provide the same protection for all of them.\n\nCollections also need attention after arrival. Small samples are periodically removed for germination tests, which check whether seeds can still develop into seedlings. A collection may be duplicated in its country of origin and at a separate bank, reducing dependence on a single location. Such duplication protects against loss at one site; it does not remove the need to check the living material itself.\n\nFor plants unsuited to conventional banking, researchers investigate other approaches, including storing seeds or seed tissues at extremely low temperatures using liquid nitrogen. These techniques broaden the available methods but do not make one method suitable for every plant. Seed banking therefore complements the protection of plants in their habitats, rather than making that work unnecessary.",
+      "text": "A collection held at two sites may still need tests to check that its seeds remain viable.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "True",
+          "label": "True"
+        },
+        {
+          "value": "False",
+          "label": "False"
+        },
+        {
+          "value": "Can't tell",
+          "label": "Can't tell"
+        }
+      ],
+      "tag": {
+        "id": "85f36446-ed62-4ade-8b39-1974b3a2d7bd",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "d510fd66-d9ae-4edc-b40c-9999d17e6fe4",
+        "primarySkillId": "vr.qualifiers_and_scope",
+        "secondarySkillIds": [],
+        "difficulty": "hard",
+        "format": "tfc",
+        "rationale": "Preserves the limited benefit of duplication without turning it into a guarantee of viability.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "True",
+          "False",
+          "Can't tell"
+        ],
+        "answer": "True",
+        "contentHash": "6fdf89fb8f4d51ce97b1b91c5bd5a29f0bbd60415682179ab7f2ce264d2b65fd",
+        "previouslySeen": false
+      },
+      "explanation": "The third paragraph says duplication protects against loss at one site but does not remove the need to check the living material. Together with the explanation of germination tests, this supports the qualified claim that a duplicated collection may still require such tests.",
+      "statementReasons": []
+    },
+    {
+      "id": "663ded50-721d-4a9b-9496-d05f99d0edbc",
+      "section": "vr",
+      "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+      "title": "Linking the Rings in Old Timber",
+      "context": "Counting the rings in a piece of wood can suggest how long a tree grew, but assigning those rings to particular calendar years requires more information. Dendrochronology, the study of tree-ring dating, compares patterns across samples. Trees growing in similar conditions within a region often record related sequences of wider and narrower rings. A broad ring on its own is not a distinctive date; the order of several rings provides a more useful pattern to match.\n\nResearchers begin with material whose dates are known, such as the outer rings of a living tree. An older piece of wood may contain a sequence that overlaps the beginning of this record and also extends further into the past. Matching that overlap creates a bridge between the dated material and the older sample. Further overlapping specimens can extend the record beyond the lifespan of any living tree used in it. This process is called crossdating. Comparing samples also helps researchers detect rings that have been missed or bands that have been mistaken for separate annual rings.\n\nNot every piece of wood offers an equally useful pattern. Where growth conditions change little from year to year, the rings may be too uniform for a secure match. Regional variation matters too: a useful comparison depends on finding an appropriate sequence, not simply choosing the oldest available tree from anywhere. Moisture and temperature can affect growth, but other environmental stresses also leave traces, so ring width should not automatically be treated as a record of one factor alone.\n\nFor archaeologists, the date assigned to a timber's last surviving ring must be interpreted with care. A tree may have died before its wood was collected, and an old beam may have been reused. Dating a ring is consequently different from proving when a building was constructed.",
+      "text": "Why does the passage favour matching a sequence of rings over matching one broad ring?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Sequences remove the influence of environmental conditions",
+          "label": "Sequences remove the influence of environmental conditions"
+        },
+        {
+          "value": "Broad rings occur only in wood from living trees",
+          "label": "Broad rings occur only in wood from living trees"
+        },
+        {
+          "value": "The ordered pattern is more distinctive than one ring",
+          "label": "The ordered pattern is more distinctive than one ring"
+        },
+        {
+          "value": "A sequence always includes the year a tree was felled",
+          "label": "A sequence always includes the year a tree was felled"
+        }
+      ],
+      "tag": {
+        "id": "663ded50-721d-4a9b-9496-d05f99d0edbc",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+        "primarySkillId": "vr.explicit_information",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "mc",
+        "rationale": "Finds the stated reason for comparing ordered patterns.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Sequences remove the influence of environmental conditions",
+          "Broad rings occur only in wood from living trees",
+          "The ordered pattern is more distinctive than one ring",
+          "A sequence always includes the year a tree was felled"
+        ],
+        "answer": "The ordered pattern is more distinctive than one ring",
+        "contentHash": "5fe16275c30883eb806a5a3cd2d27eb387aae2d7f239941930ab757cdc1485cf",
+        "previouslySeen": false
+      },
+      "explanation": "The first paragraph contrasts a single broad ring with the more useful order of several rings. Environmental influences are the basis of matching, not removed; broad rings are not restricted to living trees; and a sequence need not retain the felling year.",
+      "statementReasons": []
+    },
+    {
+      "id": "4f9e8f85-4d8b-4925-a8d3-b81a5bec5e7f",
+      "section": "vr",
+      "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+      "title": "Linking the Rings in Old Timber",
+      "context": "Counting the rings in a piece of wood can suggest how long a tree grew, but assigning those rings to particular calendar years requires more information. Dendrochronology, the study of tree-ring dating, compares patterns across samples. Trees growing in similar conditions within a region often record related sequences of wider and narrower rings. A broad ring on its own is not a distinctive date; the order of several rings provides a more useful pattern to match.\n\nResearchers begin with material whose dates are known, such as the outer rings of a living tree. An older piece of wood may contain a sequence that overlaps the beginning of this record and also extends further into the past. Matching that overlap creates a bridge between the dated material and the older sample. Further overlapping specimens can extend the record beyond the lifespan of any living tree used in it. This process is called crossdating. Comparing samples also helps researchers detect rings that have been missed or bands that have been mistaken for separate annual rings.\n\nNot every piece of wood offers an equally useful pattern. Where growth conditions change little from year to year, the rings may be too uniform for a secure match. Regional variation matters too: a useful comparison depends on finding an appropriate sequence, not simply choosing the oldest available tree from anywhere. Moisture and temperature can affect growth, but other environmental stresses also leave traces, so ring width should not automatically be treated as a record of one factor alone.\n\nFor archaeologists, the date assigned to a timber's last surviving ring must be interpreted with care. A tree may have died before its wood was collected, and an old beam may have been reused. Dating a ring is consequently different from proving when a building was constructed.",
+      "text": "In the second paragraph, what does the word \"bridge\" describe?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "An overlapping sequence that connects dated and older wood",
+          "label": "An overlapping sequence that connects dated and older wood"
+        },
+        {
+          "value": "A wooden structure from which older samples are collected",
+          "label": "A wooden structure from which older samples are collected"
+        },
+        {
+          "value": "A correction that gives every ring the same width",
+          "label": "A correction that gives every ring the same width"
+        },
+        {
+          "value": "A living tree that contains all earlier regional growth",
+          "label": "A living tree that contains all earlier regional growth"
+        }
+      ],
+      "tag": {
+        "id": "4f9e8f85-4d8b-4925-a8d3-b81a5bec5e7f",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+        "primarySkillId": "vr.meaning_in_context",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "mc",
+        "rationale": "Interprets a figurative reference using the surrounding process.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "An overlapping sequence that connects dated and older wood",
+          "A wooden structure from which older samples are collected",
+          "A correction that gives every ring the same width",
+          "A living tree that contains all earlier regional growth"
+        ],
+        "answer": "An overlapping sequence that connects dated and older wood",
+        "contentHash": "d018acbe903a0c9c6357c4b6ee01b05677ced9ce3454b5037bb731f8ad16c34e",
+        "previouslySeen": false
+      },
+      "explanation": "The bridge is the matching overlap that links known dates to the older sample. It is not a physical structure, does not standardise ring widths, and does not require one tree to contain the entire record.",
+      "statementReasons": []
+    },
+    {
+      "id": "850c5b0e-c22b-430a-9243-85c175bdc08a",
+      "section": "vr",
+      "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+      "title": "Linking the Rings in Old Timber",
+      "context": "Counting the rings in a piece of wood can suggest how long a tree grew, but assigning those rings to particular calendar years requires more information. Dendrochronology, the study of tree-ring dating, compares patterns across samples. Trees growing in similar conditions within a region often record related sequences of wider and narrower rings. A broad ring on its own is not a distinctive date; the order of several rings provides a more useful pattern to match.\n\nResearchers begin with material whose dates are known, such as the outer rings of a living tree. An older piece of wood may contain a sequence that overlaps the beginning of this record and also extends further into the past. Matching that overlap creates a bridge between the dated material and the older sample. Further overlapping specimens can extend the record beyond the lifespan of any living tree used in it. This process is called crossdating. Comparing samples also helps researchers detect rings that have been missed or bands that have been mistaken for separate annual rings.\n\nNot every piece of wood offers an equally useful pattern. Where growth conditions change little from year to year, the rings may be too uniform for a secure match. Regional variation matters too: a useful comparison depends on finding an appropriate sequence, not simply choosing the oldest available tree from anywhere. Moisture and temperature can affect growth, but other environmental stresses also leave traces, so ring width should not automatically be treated as a record of one factor alone.\n\nFor archaeologists, the date assigned to a timber's last surviving ring must be interpreted with care. A tree may have died before its wood was collected, and an old beam may have been reused. Dating a ring is consequently different from proving when a building was constructed.",
+      "text": "Which finding would most clearly challenge a claim that a building was constructed in the year of a beam's last dated ring?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Other trees in the region show a matching growth sequence",
+          "label": "Other trees in the region show a matching growth sequence"
+        },
+        {
+          "value": "The beam contains several unusually narrow rings",
+          "label": "The beam contains several unusually narrow rings"
+        },
+        {
+          "value": "The beam was preserved well enough for the rings to be read",
+          "label": "The beam was preserved well enough for the rings to be read"
+        },
+        {
+          "value": "The beam had previously been used in an older structure",
+          "label": "The beam had previously been used in an older structure"
+        }
+      ],
+      "tag": {
+        "id": "850c5b0e-c22b-430a-9243-85c175bdc08a",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+        "primarySkillId": "vr.evaluating_evidence",
+        "secondarySkillIds": [],
+        "difficulty": "hard",
+        "format": "mc",
+        "rationale": "Applies the distinction between dated growth and later human use to new evidence.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Other trees in the region show a matching growth sequence",
+          "The beam contains several unusually narrow rings",
+          "The beam was preserved well enough for the rings to be read",
+          "The beam had previously been used in an older structure"
+        ],
+        "answer": "The beam had previously been used in an older structure",
+        "contentHash": "714c43732fa573c1d2fc635ce6b52d9e141dc505c466b04dab8ed4e3a2f5a55c",
+        "previouslySeen": false
+      },
+      "explanation": "The final paragraph identifies reuse as a reason a ring date may precede construction. A regional match strengthens the dating, narrow rings describe growth conditions, and preservation helps reading; none of those three findings establishes a gap between the ring and the building.",
+      "statementReasons": []
+    },
+    {
+      "id": "04c866cd-aba1-472b-b5a1-0679ee93eed8",
+      "section": "vr",
+      "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+      "title": "Linking the Rings in Old Timber",
+      "context": "Counting the rings in a piece of wood can suggest how long a tree grew, but assigning those rings to particular calendar years requires more information. Dendrochronology, the study of tree-ring dating, compares patterns across samples. Trees growing in similar conditions within a region often record related sequences of wider and narrower rings. A broad ring on its own is not a distinctive date; the order of several rings provides a more useful pattern to match.\n\nResearchers begin with material whose dates are known, such as the outer rings of a living tree. An older piece of wood may contain a sequence that overlaps the beginning of this record and also extends further into the past. Matching that overlap creates a bridge between the dated material and the older sample. Further overlapping specimens can extend the record beyond the lifespan of any living tree used in it. This process is called crossdating. Comparing samples also helps researchers detect rings that have been missed or bands that have been mistaken for separate annual rings.\n\nNot every piece of wood offers an equally useful pattern. Where growth conditions change little from year to year, the rings may be too uniform for a secure match. Regional variation matters too: a useful comparison depends on finding an appropriate sequence, not simply choosing the oldest available tree from anywhere. Moisture and temperature can affect growth, but other environmental stresses also leave traces, so ring width should not automatically be treated as a record of one factor alone.\n\nFor archaeologists, the date assigned to a timber's last surviving ring must be interpreted with care. A tree may have died before its wood was collected, and an old beam may have been reused. Dating a ring is consequently different from proving when a building was constructed.",
+      "text": "What follows from the description of crossdating?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Every old timber can be matched securely to any regional record",
+          "label": "Every old timber can be matched securely to any regional record"
+        },
+        {
+          "value": "A chronology can include years before the oldest sampled living tree began growing",
+          "label": "A chronology can include years before the oldest sampled living tree began growing"
+        },
+        {
+          "value": "Uniform rings provide the most precise matches between samples",
+          "label": "Uniform rings provide the most precise matches between samples"
+        },
+        {
+          "value": "Dating the final ring establishes the first use of the timber",
+          "label": "Dating the final ring establishes the first use of the timber"
+        }
+      ],
+      "tag": {
+        "id": "04c866cd-aba1-472b-b5a1-0679ee93eed8",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "e5ce9628-e0bf-4fc9-bc2f-d12c2d97ee88",
+        "primarySkillId": "vr.inference",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "mc",
+        "rationale": "Combines the overlap process with its ability to reach beyond living samples.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Every old timber can be matched securely to any regional record",
+          "A chronology can include years before the oldest sampled living tree began growing",
+          "Uniform rings provide the most precise matches between samples",
+          "Dating the final ring establishes the first use of the timber"
+        ],
+        "answer": "A chronology can include years before the oldest sampled living tree began growing",
+        "contentHash": "9755cb53813b6b97016cd665624f5e09061a5ee30d6fa7eee451dbb370b8d9ab",
+        "previouslySeen": false
+      },
+      "explanation": "Successive overlapping specimens can extend the record beyond the lifespan of the living trees in it. The passage rejects universal matchability and the usefulness of very uniform rings, and warns that a ring date does not prove when timber was first used.",
+      "statementReasons": []
+    },
+    {
+      "id": "adb77dd6-2c20-40a9-b5f6-5783ca8f7397",
+      "section": "vr",
+      "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+      "title": "Moving a Drawing Through Pinholes",
+      "context": "In an artist's workshop, a drawing can serve as a tool for moving a design, rather than as the finished object. A cartoon, in this setting, is a full-size preparatory drawing for another work, such as a painting or tapestry. The word does not refer to a humorous image. Its scale allows a composition planned on paper to be carried over to the surface where it will be executed.\n\nOne transfer method is pouncing. Small holes are pricked along the drawing's outlines, and the sheet is laid over the receiving surface. A fine powder, such as charcoal or chalk, passes through the holes. When the paper is lifted, dots mark the design below. Those marks guide the next stage of work; the powder has not transferred every colour or modelling effect from the drawing. The term pouncing may describe both the operation and the dotted outline it leaves behind.\n\nPerforation was not the only means of transferring a cartoon. A stylus could be run along its contours to leave indentations on the surface beneath. In another method, material on the back of the paper helped traced lines register on the new surface. Consequently, a sheet without pinholes might still have been used to move a design. The absence of evidence for one technique does not establish the absence of all transfer.\n\nThese distinctions change how a preparatory sheet can be read. Holes aligned with outlines are evidence relevant to its practical use, rather than necessarily damage unrelated to making the work. Yet a transfer mark is not a complete account of authorship, execution or completion. The physical trace records a step in a process. Interpreting that step requires attention to how the mark was made and to the limits of what it can demonstrate.",
+      "text": "What is the main purpose of the passage?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "To explain design-transfer methods and how their traces should be interpreted",
+          "label": "To explain design-transfer methods and how their traces should be interpreted"
+        },
+        {
+          "value": "To show that preparatory drawings were generally humorous works",
+          "label": "To show that preparatory drawings were generally humorous works"
+        },
+        {
+          "value": "To rank painting materials by how well they retain powdered pigment",
+          "label": "To rank painting materials by how well they retain powdered pigment"
+        },
+        {
+          "value": "To argue that transfer marks identify the maker of a finished painting",
+          "label": "To argue that transfer marks identify the maker of a finished painting"
+        }
+      ],
+      "tag": {
+        "id": "adb77dd6-2c20-40a9-b5f6-5783ca8f7397",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+        "primarySkillId": "vr.main_idea_and_purpose",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "mc",
+        "rationale": "Combines the technical account with the final interpretive argument.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "To explain design-transfer methods and how their traces should be interpreted",
+          "To show that preparatory drawings were generally humorous works",
+          "To rank painting materials by how well they retain powdered pigment",
+          "To argue that transfer marks identify the maker of a finished painting"
+        ],
+        "answer": "To explain design-transfer methods and how their traces should be interpreted",
+        "contentHash": "8ac8d346de1f1d80d89c563974d8561c35c2c1ff530331d1dd853f37cb26496a",
+        "previouslySeen": false
+      },
+      "explanation": "The passage explains pouncing and alternatives, then considers what physical traces do and do not show. It explicitly separates workshop cartoons from humour, makes no ranking of painting materials, and warns that a mark is not a complete account of authorship.",
+      "statementReasons": []
+    },
+    {
+      "id": "031d1a3e-fd6f-4882-a1fc-b2a850f7760f",
+      "section": "vr",
+      "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+      "title": "Moving a Drawing Through Pinholes",
+      "context": "In an artist's workshop, a drawing can serve as a tool for moving a design, rather than as the finished object. A cartoon, in this setting, is a full-size preparatory drawing for another work, such as a painting or tapestry. The word does not refer to a humorous image. Its scale allows a composition planned on paper to be carried over to the surface where it will be executed.\n\nOne transfer method is pouncing. Small holes are pricked along the drawing's outlines, and the sheet is laid over the receiving surface. A fine powder, such as charcoal or chalk, passes through the holes. When the paper is lifted, dots mark the design below. Those marks guide the next stage of work; the powder has not transferred every colour or modelling effect from the drawing. The term pouncing may describe both the operation and the dotted outline it leaves behind.\n\nPerforation was not the only means of transferring a cartoon. A stylus could be run along its contours to leave indentations on the surface beneath. In another method, material on the back of the paper helped traced lines register on the new surface. Consequently, a sheet without pinholes might still have been used to move a design. The absence of evidence for one technique does not establish the absence of all transfer.\n\nThese distinctions change how a preparatory sheet can be read. Holes aligned with outlines are evidence relevant to its practical use, rather than necessarily damage unrelated to making the work. Yet a transfer mark is not a complete account of authorship, execution or completion. The physical trace records a step in a process. Interpreting that step requires attention to how the mark was made and to the limits of what it can demonstrate.",
+      "text": "According to the passage, the word \"pouncing\" can refer to:",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Only the full-size drawing used before a painting",
+          "label": "Only the full-size drawing used before a painting"
+        },
+        {
+          "value": "Any indentation made with a stylus",
+          "label": "Any indentation made with a stylus"
+        },
+        {
+          "value": "The coloured modelling copied from a preparatory drawing",
+          "label": "The coloured modelling copied from a preparatory drawing"
+        },
+        {
+          "value": "Both the transfer operation and its resulting dotted outline",
+          "label": "Both the transfer operation and its resulting dotted outline"
+        }
+      ],
+      "tag": {
+        "id": "031d1a3e-fd6f-4882-a1fc-b2a850f7760f",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+        "primarySkillId": "vr.explicit_information",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "mc",
+        "rationale": "Retrieves a dual technical definition without confusing adjacent terms.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Only the full-size drawing used before a painting",
+          "Any indentation made with a stylus",
+          "The coloured modelling copied from a preparatory drawing",
+          "Both the transfer operation and its resulting dotted outline"
+        ],
+        "answer": "Both the transfer operation and its resulting dotted outline",
+        "contentHash": "21497a061f4951f10ae85e0763b29515d463dbbf50deeca3f8329d6319022d59",
+        "previouslySeen": false
+      },
+      "explanation": "The last sentence of paragraph two explicitly gives both meanings. A full-size drawing is called a cartoon; stylus indentation is an alternative method; and pouncing is not described as copying the drawing's colours and modelling.",
+      "statementReasons": []
+    },
+    {
+      "id": "e044eafe-de39-4083-841d-00968e84d30f",
+      "section": "vr",
+      "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+      "title": "Moving a Drawing Through Pinholes",
+      "context": "In an artist's workshop, a drawing can serve as a tool for moving a design, rather than as the finished object. A cartoon, in this setting, is a full-size preparatory drawing for another work, such as a painting or tapestry. The word does not refer to a humorous image. Its scale allows a composition planned on paper to be carried over to the surface where it will be executed.\n\nOne transfer method is pouncing. Small holes are pricked along the drawing's outlines, and the sheet is laid over the receiving surface. A fine powder, such as charcoal or chalk, passes through the holes. When the paper is lifted, dots mark the design below. Those marks guide the next stage of work; the powder has not transferred every colour or modelling effect from the drawing. The term pouncing may describe both the operation and the dotted outline it leaves behind.\n\nPerforation was not the only means of transferring a cartoon. A stylus could be run along its contours to leave indentations on the surface beneath. In another method, material on the back of the paper helped traced lines register on the new surface. Consequently, a sheet without pinholes might still have been used to move a design. The absence of evidence for one technique does not establish the absence of all transfer.\n\nThese distinctions change how a preparatory sheet can be read. Holes aligned with outlines are evidence relevant to its practical use, rather than necessarily damage unrelated to making the work. Yet a transfer mark is not a complete account of authorship, execution or completion. The physical trace records a step in a process. Interpreting that step requires attention to how the mark was made and to the limits of what it can demonstrate.",
+      "text": "Which view is most consistent with the author's account of pinholes along a drawing's outlines?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "They establish that the artist completed the intended painting",
+          "label": "They establish that the artist completed the intended painting"
+        },
+        {
+          "value": "They can be informative traces of a workshop process",
+          "label": "They can be informative traces of a workshop process"
+        },
+        {
+          "value": "They make other evidence about the drawing unnecessary",
+          "label": "They make other evidence about the drawing unnecessary"
+        },
+        {
+          "value": "They show the sheet was never intended to be used practically",
+          "label": "They show the sheet was never intended to be used practically"
+        }
+      ],
+      "tag": {
+        "id": "e044eafe-de39-4083-841d-00968e84d30f",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+        "primarySkillId": "vr.author_perspective",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "mc",
+        "rationale": "Identifies the author's cautious interpretation of physical evidence.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "They establish that the artist completed the intended painting",
+          "They can be informative traces of a workshop process",
+          "They make other evidence about the drawing unnecessary",
+          "They show the sheet was never intended to be used practically"
+        ],
+        "answer": "They can be informative traces of a workshop process",
+        "contentHash": "f3d49cc7aa39f2299c68d0982bb60a2d687c244b1a426dcda0b7fe3f27aba115",
+        "previouslySeen": false
+      },
+      "explanation": "The final paragraph treats aligned holes as evidence of possible practical use while limiting what they demonstrate. Completion and a complete account are not established, and the idea that the sheet had no practical purpose contradicts the explanation.",
+      "statementReasons": []
+    },
+    {
+      "id": "bbacd278-35bf-4286-a8db-14302a4bccfe",
+      "section": "vr",
+      "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+      "title": "Moving a Drawing Through Pinholes",
+      "context": "In an artist's workshop, a drawing can serve as a tool for moving a design, rather than as the finished object. A cartoon, in this setting, is a full-size preparatory drawing for another work, such as a painting or tapestry. The word does not refer to a humorous image. Its scale allows a composition planned on paper to be carried over to the surface where it will be executed.\n\nOne transfer method is pouncing. Small holes are pricked along the drawing's outlines, and the sheet is laid over the receiving surface. A fine powder, such as charcoal or chalk, passes through the holes. When the paper is lifted, dots mark the design below. Those marks guide the next stage of work; the powder has not transferred every colour or modelling effect from the drawing. The term pouncing may describe both the operation and the dotted outline it leaves behind.\n\nPerforation was not the only means of transferring a cartoon. A stylus could be run along its contours to leave indentations on the surface beneath. In another method, material on the back of the paper helped traced lines register on the new surface. Consequently, a sheet without pinholes might still have been used to move a design. The absence of evidence for one technique does not establish the absence of all transfer.\n\nThese distinctions change how a preparatory sheet can be read. Holes aligned with outlines are evidence relevant to its practical use, rather than necessarily damage unrelated to making the work. Yet a transfer mark is not a complete account of authorship, execution or completion. The physical trace records a step in a process. Interpreting that step requires attention to how the mark was made and to the limits of what it can demonstrate.",
+      "text": "A cartoon has no pinholes, but its outlines bear grooves consistent with stylus tracing. What does the passage best support?",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "The drawing must have been made after the intended painting",
+          "label": "The drawing must have been made after the intended painting"
+        },
+        {
+          "value": "The lack of holes rules out every form of design transfer",
+          "label": "The lack of holes rules out every form of design transfer"
+        },
+        {
+          "value": "The sheet may have been used for a transfer method other than pouncing",
+          "label": "The sheet may have been used for a transfer method other than pouncing"
+        },
+        {
+          "value": "The grooves prove that powder passed through the paper",
+          "label": "The grooves prove that powder passed through the paper"
+        }
+      ],
+      "tag": {
+        "id": "bbacd278-35bf-4286-a8db-14302a4bccfe",
+        "section": "vr",
+        "mode": "practice",
+        "parentId": "87111af0-45bd-4f36-b25d-02f9bfb6c7b8",
+        "primarySkillId": "vr.evaluating_evidence",
+        "secondarySkillIds": [],
+        "difficulty": "hard",
+        "format": "mc",
+        "rationale": "Uses evidence for an alternative mechanism without treating it as proof of all historical details.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "The drawing must have been made after the intended painting",
+          "The lack of holes rules out every form of design transfer",
+          "The sheet may have been used for a transfer method other than pouncing",
+          "The grooves prove that powder passed through the paper"
+        ],
+        "answer": "The sheet may have been used for a transfer method other than pouncing",
+        "contentHash": "6d879ac71deb04b2c222c07aed6f242fc4421076f7067e1d45a87f71b31e83a3",
+        "previouslySeen": false
+      },
+      "explanation": "Paragraph three describes transfer by stylus indentation as an alternative to perforation. The grooves are therefore consistent with another transfer method. They do not establish the order of completed works or the passage of powder, and missing holes rule out neither tracing nor every transfer method.",
+      "statementReasons": []
+    },
+    {
+      "id": "fad9a83c-3287-4418-b90e-c15469568775",
+      "section": "dm",
+      "parentId": "fad9a83c-3287-4418-b90e-c15469568775",
+      "title": "Isotope Sample Routes",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "fad9a83c-3287-4418-b90e-c15469568775",
+        "type": "syllogism",
+        "stem": "At a fictional field station, each sample comes from exactly one of Site H or Site J. Every sample sent for isotope analysis comes from Site H. Every contaminated sample from Site H is sent for isotope analysis. Some samples from Site H are not sent for isotope analysis. No sample sent for isotope analysis is returned to the field store. Some samples from Site J are returned to the field store.\n\nFor each conclusion, select Yes if it follows from the information and No if it does not.",
+        "options": [],
+        "statements": [
+          {
+            "text": "Some samples from Site H are not contaminated."
+          },
+          {
+            "text": "No sample from Site J is sent for isotope analysis."
+          },
+          {
+            "text": "Some samples from Site J are not contaminated."
+          },
+          {
+            "text": "Every contaminated sample is sent for isotope analysis."
+          },
+          {
+            "text": "Some samples from Site H are returned to the field store."
+          }
+        ]
+      },
+      "choices": [],
+      "tag": {
+        "id": "fad9a83c-3287-4418-b90e-c15469568775",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "fad9a83c-3287-4418-b90e-c15469568775",
+        "primarySkillId": "dm.syllogisms",
+        "secondarySkillIds": [
+          "dm.conditional_logic"
+        ],
+        "difficulty": "normal",
+        "format": "yes_no_statements",
+        "rationale": "Tests a universal rule limited to Site H, necessary conditions, and existential counterexamples.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [],
+        "statementAnswers": [
+          "Yes",
+          "Yes",
+          "No",
+          "No",
+          "No"
+        ],
+        "contentHash": "865398d79197920a599f3b7245064b5afb55934e8536cf427cf7795257d99ba1",
+        "previouslySeen": false
+      },
+      "explanation": null,
+      "statementReasons": [
+        "Some Site H samples are not analysed. If any of those samples were contaminated, the rule for contaminated Site H samples would require analysis. Those samples are therefore not contaminated.",
+        "Every analysed sample comes from Site H, and a sample cannot come from both sites. A Site J sample therefore cannot be analysed.",
+        "The contamination rule applies to Site H only. All Site J samples could be contaminated without contradicting any premise.",
+        "Only contaminated samples from Site H are required to be analysed. The information does not require analysis of contaminated samples from Site J.",
+        "We know some Site H samples are not analysed, but not being analysed does not guarantee return to the store. It is possible that no Site H sample is returned."
+      ]
+    },
+    {
+      "id": "b58056ac-5b09-4961-b549-b439ff50b053",
+      "section": "dm",
+      "parentId": "b58056ac-5b09-4961-b549-b439ff50b053",
+      "title": "Seed Library Dispatch Rules",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "b58056ac-5b09-4961-b549-b439ff50b053",
+        "type": "syllogism",
+        "stem": "A fictional seed library follows these rules. Every outgoing parcel is weighed unless it contains only paper labels. No parcel containing a glass vial contains only paper labels. Every parcel containing a glass vial is outgoing. Some parcels containing only paper labels are outgoing. Every weighed parcel receives a tracking code.\n\nFor each conclusion, select Yes if it follows from the information and No if it does not.",
+        "options": [],
+        "statements": [
+          {
+            "text": "Every parcel containing a glass vial receives a tracking code."
+          },
+          {
+            "text": "No parcel containing only paper labels is weighed."
+          },
+          {
+            "text": "Some outgoing parcels contain only paper labels."
+          },
+          {
+            "text": "Every parcel with a tracking code has been weighed."
+          },
+          {
+            "text": "Every outgoing parcel that is not weighed contains only paper labels."
+          }
+        ]
+      },
+      "choices": [],
+      "tag": {
+        "id": "b58056ac-5b09-4961-b549-b439ff50b053",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "b58056ac-5b09-4961-b549-b439ff50b053",
+        "primarySkillId": "dm.conditional_logic",
+        "secondarySkillIds": [
+          "dm.syllogisms"
+        ],
+        "difficulty": "normal",
+        "format": "yes_no_statements",
+        "rationale": "Combines an unless exception with a chain of implications and rejects the converse.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [],
+        "statementAnswers": [
+          "Yes",
+          "No",
+          "Yes",
+          "No",
+          "Yes"
+        ],
+        "contentHash": "131a0c540d0baf74d61cf957a82a7c46647352559ce7a8d561dd5a17f730c3f0",
+        "previouslySeen": false
+      },
+      "explanation": null,
+      "statementReasons": [
+        "A parcel containing a glass vial is outgoing and is not in the paper-label-only exception. It must be weighed, and every weighed parcel receives a tracking code.",
+        "The exception means these parcels are not required to be weighed. It does not prohibit weighing them.",
+        "The premises explicitly say that some parcels containing only paper labels are outgoing.",
+        "Weighed implies tracked, but the reverse direction is not given. An unweighed parcel could receive a tracking code for another reason.",
+        "An outgoing parcel outside the paper-label-only exception must be weighed. An outgoing parcel that is not weighed must therefore fall within that exception."
+      ]
+    },
+    {
+      "id": "eac3007d-4fde-4cef-878c-fde67a3b9d71",
+      "section": "dm",
+      "parentId": "eac3007d-4fde-4cef-878c-fde67a3b9d71",
+      "title": "Field Sensor Shelves",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "eac3007d-4fde-4cef-878c-fde67a3b9d71",
+        "type": "logic_puzzle",
+        "stem": "Five instruments are placed one per shelf on shelves numbered 1 to 5, with shelf 1 at the bottom. The instruments are an anemometer, a barometer, a compass, a dosimeter and an echo sounder.\n\nThe barometer is on shelf 3. The compass is on the shelf immediately above the anemometer. The dosimeter is not on a shelf next to the barometer. The echo sounder is on a higher shelf than the dosimeter.\n\nWhich instrument is on shelf 4?",
+        "options": [
+          {
+            "label": "A",
+            "text": "The anemometer",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "The compass",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "The dosimeter",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "The echo sounder",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  The anemometer"
+        },
+        {
+          "value": "B",
+          "label": "B.  The compass"
+        },
+        {
+          "value": "C",
+          "label": "C.  The dosimeter"
+        },
+        {
+          "value": "D",
+          "label": "D.  The echo sounder"
+        }
+      ],
+      "tag": {
+        "id": "eac3007d-4fde-4cef-878c-fde67a3b9d71",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "eac3007d-4fde-4cef-878c-fde67a3b9d71",
+        "primarySkillId": "dm.constraint_puzzles",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "multiple_choice",
+        "rationale": "Combines fixed position, adjacency, exclusion and relative position into one complete arrangement.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "A",
+        "contentHash": "08a83927c9fab43e61382ca180400c1173a335fdd124344f99520e1605129c76",
+        "previouslySeen": false
+      },
+      "explanation": "The dosimeter cannot be on shelf 2 or 4 because those shelves are next to the barometer, and it cannot be on shelf 5 because the echo sounder must be higher. It is therefore on shelf 1. The anemometer-compass pair cannot occupy shelves 1-2, 2-3 or 3-4 because shelf 1 or 3 is already occupied. It must occupy shelves 4-5, so the anemometer is on shelf 4. The remaining instrument, the echo sounder, is on shelf 2.",
+      "statementReasons": []
+    },
+    {
+      "id": "cc6f776d-0f7e-415f-889d-a1140702d7ad",
+      "section": "dm",
+      "parentId": "cc6f776d-0f7e-415f-889d-a1140702d7ad",
+      "title": "Three Display Cases",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "cc6f776d-0f7e-415f-889d-a1140702d7ad",
+        "type": "logic_puzzle",
+        "stem": "A fictional exhibition has three display cases: Amber, Blue and Copper. Each case holds exactly two of six artefacts, K, L, M, N, P and Q, and every artefact is displayed once.\n\nK is in the same case as neither L nor M. N is in Blue. L and P are in the same case. Q is not in Amber.\n\nWhich statement must be true?",
+        "options": [
+          {
+            "label": "A",
+            "text": "K is in Blue.",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "M is in Blue.",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "L is in Copper.",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "Q is in Copper.",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  K is in Blue."
+        },
+        {
+          "value": "B",
+          "label": "B.  M is in Blue."
+        },
+        {
+          "value": "C",
+          "label": "C.  L is in Copper."
+        },
+        {
+          "value": "D",
+          "label": "D.  Q is in Copper."
+        }
+      ],
+      "tag": {
+        "id": "cc6f776d-0f7e-415f-889d-a1140702d7ad",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "cc6f776d-0f7e-415f-889d-a1140702d7ad",
+        "primarySkillId": "dm.constraint_puzzles",
+        "secondarySkillIds": [],
+        "difficulty": "hard",
+        "format": "multiple_choice",
+        "rationale": "Uses paired allocation and case capacity to eliminate two apparently available cases.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "D",
+        "contentHash": "c6180b40c3b7ed65a2b972b1fd7e173d32f7a2337a2a3f8f9e804e5d77aa11fb",
+        "previouslySeen": false
+      },
+      "explanation": "L and P fill one entire case, so their case is not Blue because N is there. If L and P were in Copper, Q could not be in Amber or Copper and would have to join N in Blue. K and M would then have to share Amber, which is forbidden. Therefore L and P are in Amber. Q cannot be in Amber; if Q joined N in Blue, K and M would again have to share Copper. Hence Q must be in Copper. Either K or M may join N in Blue, so neither A nor B must be true.",
+      "statementReasons": []
+    },
+    {
+      "id": "c1750df0-8cf5-4062-ab93-552260f7285f",
+      "section": "dm",
+      "parentId": "c1750df0-8cf5-4062-ab93-552260f7285f",
+      "title": "Prop Crate Inspection",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "c1750df0-8cf5-4062-ab93-552260f7285f",
+        "type": "interpreting_info",
+        "stem": "A fictional prop workshop inspected the crates shown in the table during one week. Each crate was inspected once. Every inspected crate was either ready to use immediately or required repair; there were no other categories. All crates requiring repair were successfully repaired before the end of the week. The table does not show inspection hours.\n\nFor each statement, select Yes if it follows from the information and No if it does not.",
+        "tableData": {
+          "headers": [
+            "Depot",
+            "Crates inspected",
+            "Ready immediately",
+            "Required repair"
+          ],
+          "rows": [
+            [
+              "North",
+              "80",
+              "56",
+              "24"
+            ],
+            [
+              "South",
+              "120",
+              "90",
+              "30"
+            ],
+            [
+              "West",
+              "100",
+              "60",
+              "40"
+            ]
+          ]
+        },
+        "options": [],
+        "statements": [
+          {
+            "text": "South had the highest proportion of inspected crates ready to use immediately."
+          },
+          {
+            "text": "North repaired more crates than West."
+          },
+          {
+            "text": "More than 30% of all inspected crates required repair."
+          },
+          {
+            "text": "South inspected crates at the fastest rate per hour."
+          },
+          {
+            "text": "At least 200 of the inspected crates did not require repair."
+          }
+        ]
+      },
+      "choices": [],
+      "tag": {
+        "id": "c1750df0-8cf5-4062-ab93-552260f7285f",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "c1750df0-8cf5-4062-ab93-552260f7285f",
+        "primarySkillId": "dm.interpreting_information",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "yes_no_statements",
+        "rationale": "Distinguishes proportions, totals and an unsupported hourly-rate inference from a rectangular dataset.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [],
+        "statementAnswers": [
+          "Yes",
+          "No",
+          "Yes",
+          "No",
+          "Yes"
+        ],
+        "contentHash": "e10fa9a6400fc5d1af54d6fe8c626b9f9d522e06475b01b4db78850f1ab19590",
+        "previouslySeen": false
+      },
+      "explanation": null,
+      "statementReasons": [
+        "The proportions were North 56/80 = 70%, South 90/120 = 75%, and West 60/100 = 60%. South had the highest proportion.",
+        "North repaired 24 crates and West repaired 40, so North repaired fewer.",
+        "A total of 24 + 30 + 40 = 94 crates out of 80 + 120 + 100 = 300 required repair. Since 30% of 300 is 90, 94 is more than 30%.",
+        "South inspected the most crates, but the table gives no inspection hours. Counts alone cannot establish a rate per hour.",
+        "The crates ready immediately did not require repair. Their counts add to 56 + 90 + 60 = 206, which is at least 200."
+      ]
+    },
+    {
+      "id": "e92f149c-fa7a-4d02-8a60-799cb2c874a6",
+      "section": "dm",
+      "parentId": "e92f149c-fa7a-4d02-8a60-799cb2c874a6",
+      "title": "Two Scanning Trials",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "e92f149c-fa7a-4d02-8a60-799cb2c874a6",
+        "type": "interpreting_info",
+        "stem": "A fictional archive tested two scanners on different batches of pages. Scanner P scanned 240 pages during a four-hour trial; 232 scans were legible. Scanner Q scanned 300 pages during a five-hour trial; 285 scans were legible. Each page was scanned once. The trials used different operators, and the archive did not record whether the two page batches were equally difficult to scan.\n\nFor each statement, select Yes if it follows from the information and No if it does not.",
+        "options": [],
+        "statements": [
+          {
+            "text": "Scanner P produced more legible scans per hour, on average, than Scanner Q during these trials."
+          },
+          {
+            "text": "Scanner Q produced a greater total number of legible scans during its trial."
+          },
+          {
+            "text": "The two scanners scanned the same average number of pages per hour during their trials."
+          },
+          {
+            "text": "Scanner P must produce more legible scans per hour than Scanner Q on every future page batch."
+          },
+          {
+            "text": "Fewer than 4% of the pages scanned by Q were illegible."
+          }
+        ]
+      },
+      "choices": [],
+      "tag": {
+        "id": "e92f149c-fa7a-4d02-8a60-799cb2c874a6",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "e92f149c-fa7a-4d02-8a60-799cb2c874a6",
+        "primarySkillId": "dm.interpreting_information",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "yes_no_statements",
+        "rationale": "Separates legible-output rate, total throughput, failure percentage and unwarranted generalisation.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [],
+        "statementAnswers": [
+          "Yes",
+          "Yes",
+          "Yes",
+          "No",
+          "No"
+        ],
+        "contentHash": "7df9aa516ef5e7635d45f20f9ebf6660c2e9cca3b833a87fe9268606f468303b",
+        "previouslySeen": false
+      },
+      "explanation": null,
+      "statementReasons": [
+        "P produced 232/4 = 58 legible scans per hour and Q produced 285/5 = 57. P had the higher observed average.",
+        "Q produced 285 legible scans, compared with P's 232.",
+        "P scanned 240/4 = 60 pages per hour and Q scanned 300/5 = 60 pages per hour. This counts all scans, including illegible ones.",
+        "The trials involved different operators and page batches. Their observed averages do not guarantee performance on every future batch.",
+        "Q had 300 - 285 = 15 illegible scans. This is 15/300 = 5%, which is not fewer than 4%."
+      ]
+    },
+    {
+      "id": "a6777e27-974b-42ad-a253-59303ac12904",
+      "section": "dm",
+      "parentId": "a6777e27-974b-42ad-a253-59303ac12904",
+      "title": "Street Light Closure Target",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "a6777e27-974b-42ad-a253-59303ac12904",
+        "type": "recognising_assumptions",
+        "stem": "A fictional council wants street lights restored more quickly after faults are reported. Should it judge maintenance contractors solely by the percentage of fault reports marked \"closed\" within 24 hours?\n\nWhich is the strongest argument?",
+        "options": [
+          {
+            "label": "A",
+            "text": "Yes; publishing one simple percentage would make contractors easier to compare and let residents see how many reports are dealt with promptly.",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "No; reports may be closed after an initial visit while the light remains broken, so contractors could improve the percentage without restoring lights sooner.",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "Yes; most contractors already record opening and closing times, so calculating the percentage would require little additional administrative work each month.",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "No; contractors have used their present reporting forms for several years, and some staff would prefer to continue using the familiar format.",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  Yes; publishing one simple percentage would make contractors easier to compare and let residents see how many reports are dealt with promptly."
+        },
+        {
+          "value": "B",
+          "label": "B.  No; reports may be closed after an initial visit while the light remains broken, so contractors could improve the percentage without restoring lights sooner."
+        },
+        {
+          "value": "C",
+          "label": "C.  Yes; most contractors already record opening and closing times, so calculating the percentage would require little additional administrative work each month."
+        },
+        {
+          "value": "D",
+          "label": "D.  No; contractors have used their present reporting forms for several years, and some staff would prefer to continue using the familiar format."
+        }
+      ],
+      "tag": {
+        "id": "a6777e27-974b-42ad-a253-59303ac12904",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "a6777e27-974b-42ad-a253-59303ac12904",
+        "primarySkillId": "dm.evaluating_arguments",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "multiple_choice",
+        "rationale": "Finds a direct mismatch between an administrative proxy and the policy objective.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "contentHash": "d468392a94c6f59bfd4c9e3dc01140333f57128c5103262be22b79633fbafdb4",
+        "previouslySeen": false
+      },
+      "explanation": "The stated aim is quicker restoration of working lights. B identifies a direct gap between the chosen measure and that aim: administrative closure may occur without repair. A supports ease of comparison, C supports ease of calculation, and D concerns familiarity with forms. None of those establishes whether the measure captures restoration speed.",
+      "statementReasons": []
+    },
+    {
+      "id": "1fd4275b-4daf-44a5-8b4b-fa3032a97a31",
+      "section": "dm",
+      "parentId": "1fd4275b-4daf-44a5-8b4b-fa3032a97a31",
+      "title": "Tool Hire Due Date Tags",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "1fd4275b-4daf-44a5-8b4b-fa3032a97a31",
+        "type": "recognising_assumptions",
+        "stem": "A fictional tool-hire centre wants to reduce late returns. Should it add a clearly printed due-date tag to each hired tool, in addition to giving the customer the usual receipt?\n\nWhich is the strongest argument?",
+        "options": [
+          {
+            "label": "A",
+            "text": "No; some customers hire several different tools during the same month and may already use their own calendars to keep track of return dates.",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "Yes; the tags could use the centre's existing colours and logo, making the tools more easily recognisable when customers store them at home.",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "No; receipts already show the correct due date and are produced automatically, while a member of staff would need to attach each new tag.",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "Yes; in a randomised trial with identical loan terms, tagged tools were returned late half as often as untagged tools hired during the same period.",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  No; some customers hire several different tools during the same month and may already use their own calendars to keep track of return dates."
+        },
+        {
+          "value": "B",
+          "label": "B.  Yes; the tags could use the centre's existing colours and logo, making the tools more easily recognisable when customers store them at home."
+        },
+        {
+          "value": "C",
+          "label": "C.  No; receipts already show the correct due date and are produced automatically, while a member of staff would need to attach each new tag."
+        },
+        {
+          "value": "D",
+          "label": "D.  Yes; in a randomised trial with identical loan terms, tagged tools were returned late half as often as untagged tools hired during the same period."
+        }
+      ],
+      "tag": {
+        "id": "1fd4275b-4daf-44a5-8b4b-fa3032a97a31",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "1fd4275b-4daf-44a5-8b4b-fa3032a97a31",
+        "primarySkillId": "dm.evaluating_arguments",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "multiple_choice",
+        "rationale": "Prioritises direct comparative trial evidence over convenience, appearance and existing habits.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "D",
+        "contentHash": "a06ba1b19287dedd08af62d89bfb49ff95f264ce8444bd68b8529bc5bf081197",
+        "previouslySeen": false
+      },
+      "explanation": "D gives direct comparative evidence for the proposed action and the desired outcome. Random allocation, identical loan terms and the same trial period reduce obvious differences between the groups. A describes some customers' habits, B concerns recognition rather than punctuality, and C mentions existing information and extra work without showing whether late returns would fall. The trial is part of the fictional question, not an external research claim.",
+      "statementReasons": []
+    },
+    {
+      "id": "6ac320fe-120a-4e3b-91e6-db4f98704148",
+      "section": "dm",
+      "parentId": "6ac320fe-120a-4e3b-91e6-db4f98704148",
+      "title": "Portable Sensor Collection",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "6ac320fe-120a-4e3b-91e6-db4f98704148",
+        "type": "venn_diagram",
+        "stem": "The diagram classifies a fictional collection of devices by the sensors fitted to them. Each number is the count in that exclusive region, including zero counts.\n\nHow many devices have an acoustic sensor or a vibration sensor, including devices with both, but have neither a moisture sensor nor a light sensor?",
+        "stimulusDiagram": {
+          "schemaVersion": 2,
+          "sets": [
+            {
+              "id": "set1",
+              "label": "Acoustic sensor",
+              "shape": "circle",
+              "geometry": {
+                "cx": 397.85,
+                "cy": 402.77,
+                "width": 249.84,
+                "height": 249.84,
+                "rotationDeg": 0
+              }
+            },
+            {
+              "id": "set2",
+              "label": "Vibration sensor",
+              "shape": "ellipse",
+              "geometry": {
+                "cx": 587.34,
+                "cy": 448.15,
+                "width": 311.41,
+                "height": 325.29,
+                "rotationDeg": -105.59
+              }
+            },
+            {
+              "id": "set3",
+              "label": "Moisture sensor",
+              "shape": "teardrop",
+              "geometry": {
+                "cx": 291.65,
+                "cy": 269.35,
+                "width": 299.48,
+                "height": 284.44,
+                "rotationDeg": -18.66
+              }
+            },
+            {
+              "id": "set4",
+              "label": "Light sensor",
+              "shape": "octagon",
+              "geometry": {
+                "cx": 510.33,
+                "cy": 670.94,
+                "width": 263.81,
+                "height": 180.98,
+                "rotationDeg": -62.72
+              }
+            }
+          ],
+          "regions": [
+            {
+              "id": "set1_only:0",
+              "value": 8
+            },
+            {
+              "id": "set2_only:0",
+              "value": 3
+            },
+            {
+              "id": "set1_set2_only:0",
+              "value": 27
+            },
+            {
+              "id": "set3_only:0",
+              "value": 0
+            },
+            {
+              "id": "set1_set3_only:0",
+              "value": 5
+            },
+            {
+              "id": "set4_only:0",
+              "value": 18
+            },
+            {
+              "id": "set2_set4_only:0",
+              "value": 6
+            },
+            {
+              "id": "outside",
+              "value": 7
+            }
+          ],
+          "labelStyle": {
+            "minFontSize": 14,
+            "preferredFontSize": 18,
+            "padding": 3
+          }
+        },
+        "options": [
+          {
+            "label": "A",
+            "text": "11",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "38",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "43",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "49",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  11"
+        },
+        {
+          "value": "B",
+          "label": "B.  38"
+        },
+        {
+          "value": "C",
+          "label": "C.  43"
+        },
+        {
+          "value": "D",
+          "label": "D.  49"
+        }
+      ],
+      "tag": {
+        "id": "6ac320fe-120a-4e3b-91e6-db4f98704148",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "6ac320fe-120a-4e3b-91e6-db4f98704148",
+        "primarySkillId": "dm.venn_sets",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "diagram_interpretation",
+        "rationale": "Translates inclusive OR and two exclusions into exact exclusive-region membership.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "contentHash": "366a44243a9690039949adb83a36b08a77af12fb27b7aa89378a8d752f4c5a18",
+        "previouslySeen": false
+      },
+      "explanation": "Include the acoustic-only region (8), vibration-only region (3), and the acoustic-and-vibration region (27). Exclude the acoustic-and-moisture region (5) and vibration-and-light region (6). The required total is 8 + 3 + 27 = 38. Devices in neither required group, including those outside every shape, do not contribute.",
+      "statementReasons": []
+    },
+    {
+      "id": "82c60dd5-e53e-4b0f-b494-2e59f5180cbb",
+      "section": "dm",
+      "parentId": "82c60dd5-e53e-4b0f-b494-2e59f5180cbb",
+      "title": "Equipment Loan Classes",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "82c60dd5-e53e-4b0f-b494-2e59f5180cbb",
+        "type": "venn_diagram",
+        "stem": "At a fictional equipment library, every short-loan item is checked out, and every extended-loan item is checked out. No item is on both a short loan and an extended loan. There are items in each loan class, and some checked-out items are in neither class.\n\nWhich diagram could represent all of these relationships? Each number shows how many items lie in that exclusive region.",
+        "options": [
+          {
+            "label": "A",
+            "text": "",
+            "vennConfig": {
+              "schemaVersion": 2,
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Checked out",
+                  "shape": "diamond",
+                  "geometry": {
+                    "cx": 420.57,
+                    "cy": 407.22,
+                    "width": 936.75,
+                    "height": 721.44,
+                    "rotationDeg": 153.25
+                  }
+                },
+                {
+                  "id": "set2",
+                  "label": "Short loan",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 447.1,
+                    "cy": 324.22,
+                    "width": 179.85,
+                    "height": 204.29,
+                    "rotationDeg": 165.49
+                  }
+                },
+                {
+                  "id": "set3",
+                  "label": "Extended loan",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 470,
+                    "cy": 340,
+                    "width": 213.59,
+                    "height": 157.27,
+                    "rotationDeg": 6.95
+                  }
+                }
+              ],
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set1_set3_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set1_set2_set3_only:0",
+                  "value": 1
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              }
+            }
+          },
+          {
+            "label": "B",
+            "text": "",
+            "vennConfig": {
+              "schemaVersion": 2,
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Checked out",
+                  "shape": "diamond",
+                  "geometry": {
+                    "cx": 420.57,
+                    "cy": 407.22,
+                    "width": 936.75,
+                    "height": 721.44,
+                    "rotationDeg": 153.25
+                  }
+                },
+                {
+                  "id": "set2",
+                  "label": "Short loan",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 447.1,
+                    "cy": 324.22,
+                    "width": 179.85,
+                    "height": 204.29,
+                    "rotationDeg": 165.49
+                  }
+                },
+                {
+                  "id": "set3",
+                  "label": "Extended loan",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 1030,
+                    "cy": 500,
+                    "width": 213.59,
+                    "height": 157.27,
+                    "rotationDeg": 6.95
+                  }
+                }
+              ],
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set3_only:0",
+                  "value": 1
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              }
+            }
+          },
+          {
+            "label": "C",
+            "text": "",
+            "vennConfig": {
+              "schemaVersion": 2,
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Checked out",
+                  "shape": "diamond",
+                  "geometry": {
+                    "cx": 420.57,
+                    "cy": 407.22,
+                    "width": 936.75,
+                    "height": 721.44,
+                    "rotationDeg": 153.25
+                  }
+                },
+                {
+                  "id": "set2",
+                  "label": "Short loan",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 447.1,
+                    "cy": 324.22,
+                    "width": 179.85,
+                    "height": 204.29,
+                    "rotationDeg": 165.49
+                  }
+                },
+                {
+                  "id": "set3",
+                  "label": "Extended loan",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 467.42,
+                    "cy": 468.24,
+                    "width": 213.59,
+                    "height": 157.27,
+                    "rotationDeg": 6.95
+                  }
+                }
+              ],
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set1_set2_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set1_set3_only:0",
+                  "value": 1
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              }
+            }
+          },
+          {
+            "label": "D",
+            "text": "",
+            "vennConfig": {
+              "schemaVersion": 2,
+              "sets": [
+                {
+                  "id": "set1",
+                  "label": "Checked out",
+                  "shape": "diamond",
+                  "geometry": {
+                    "cx": -100,
+                    "cy": 407.22,
+                    "width": 600,
+                    "height": 600,
+                    "rotationDeg": 15
+                  }
+                },
+                {
+                  "id": "set2",
+                  "label": "Short loan",
+                  "shape": "left_arrow",
+                  "geometry": {
+                    "cx": 447.1,
+                    "cy": 324.22,
+                    "width": 179.85,
+                    "height": 204.29,
+                    "rotationDeg": 165.49
+                  }
+                },
+                {
+                  "id": "set3",
+                  "label": "Extended loan",
+                  "shape": "triangle",
+                  "geometry": {
+                    "cx": 467.42,
+                    "cy": 468.24,
+                    "width": 213.59,
+                    "height": 157.27,
+                    "rotationDeg": 6.95
+                  }
+                }
+              ],
+              "regions": [
+                {
+                  "id": "set1_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set2_only:0",
+                  "value": 1
+                },
+                {
+                  "id": "set3_only:0",
+                  "value": 1
+                }
+              ],
+              "labelStyle": {
+                "minFontSize": 14,
+                "preferredFontSize": 18,
+                "padding": 3
+              }
+            }
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  "
+        },
+        {
+          "value": "B",
+          "label": "B.  "
+        },
+        {
+          "value": "C",
+          "label": "C.  "
+        },
+        {
+          "value": "D",
+          "label": "D.  "
+        }
+      ],
+      "tag": {
+        "id": "82c60dd5-e53e-4b0f-b494-2e59f5180cbb",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "82c60dd5-e53e-4b0f-b494-2e59f5180cbb",
+        "primarySkillId": "dm.venn_sets",
+        "secondarySkillIds": [
+          "dm.syllogisms"
+        ],
+        "difficulty": "normal",
+        "format": "diagram_selection",
+        "rationale": "Selects the only diagram satisfying two containments, disjoint subclasses and an existential remainder.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C",
+        "contentHash": "5128952969fd1a7d00e64b9d175a905d5132cd2ab4f4b1fd018c48b2f0aa11d4",
+        "previouslySeen": false
+      },
+      "explanation": "C places the entire short-loan shape and the entire extended-loan shape inside the checked-out shape, keeps the two loan classes separate, and leaves a populated checked-out region outside both classes. A has an occupied overlap between the two loan classes, violating their mutual exclusion. B has extended-loan items outside the checked-out shape. D has both loan classes outside the checked-out shape.",
+      "statementReasons": []
+    },
+    {
+      "id": "bd58bf89-bc45-4dcd-ba9f-ccd20fa6a5cb",
+      "section": "dm",
+      "parentId": "bd58bf89-bc45-4dcd-ba9f-ccd20fa6a5cb",
+      "title": "Covered Bridge Route Choice",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "bd58bf89-bc45-4dcd-ba9f-ccd20fa6a5cb",
+        "type": "probabilistic",
+        "stem": "A fictional trail game chooses one of three routes, P, Q or R, with equal probability. It then chooses one bridge on that route uniformly at random. Route P has two covered bridges and one open bridge. Route Q has one covered bridge and three open bridges. Route R has two open bridges and no covered bridges. Each bridge belongs to only one route.\n\nYou are told that the chosen bridge is covered. What is the probability that Route P was chosen?",
+        "options": [
+          {
+            "label": "A",
+            "text": "1/2",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "2/3",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "8/11",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "3/4",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  1/2"
+        },
+        {
+          "value": "B",
+          "label": "B.  2/3"
+        },
+        {
+          "value": "C",
+          "label": "C.  8/11"
+        },
+        {
+          "value": "D",
+          "label": "D.  3/4"
+        }
+      ],
+      "tag": {
+        "id": "bd58bf89-bc45-4dcd-ba9f-ccd20fa6a5cb",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "bd58bf89-bc45-4dcd-ba9f-ccd20fa6a5cb",
+        "primarySkillId": "dm.conditional_probability",
+        "secondarySkillIds": [
+          "dm.probability_rules"
+        ],
+        "difficulty": "hard",
+        "format": "multiple_choice",
+        "rationale": "Updates source probabilities after an observed result in a two-stage unequal group-size selection.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "C",
+        "contentHash": "a083708cffed5cc04d4ff10cfee4a2f7e5b955b30555bad3b231788e3fe94367",
+        "previouslySeen": false
+      },
+      "explanation": "The probability of choosing P and then a covered bridge is (1/3)(2/3) = 2/9 = 8/36. For Q it is (1/3)(1/4) = 1/12 = 3/36; R contributes zero. Given a covered bridge, the relevant total is 8/36 + 3/36 = 11/36. Therefore the probability of P is (8/36)/(11/36) = 8/11. Choosing a route first means individual bridges across different routes are not equally likely.",
+      "statementReasons": []
+    },
+    {
+      "id": "4bba2c66-fed5-45b6-afc0-89e5b1c34c3d",
+      "section": "dm",
+      "parentId": "4bba2c66-fed5-45b6-afc0-89e5b1c34c3d",
+      "title": "Sorter Stop Rule",
+      "context": null,
+      "text": "",
+      "stimulus": null,
+      "dm": {
+        "id": "4bba2c66-fed5-45b6-afc0-89e5b1c34c3d",
+        "type": "probabilistic",
+        "stem": "A fictional sorter generates independent colour signals. Each signal is red with probability 2/5 and blue with probability 3/5. It stops as soon as two consecutive signals have the same colour, or immediately after its third signal, whichever happens first.\n\nWhat is the probability that the sorter produces exactly three signals and its final signal is blue?",
+        "options": [
+          {
+            "label": "A",
+            "text": "18/125",
+            "vennConfig": null
+          },
+          {
+            "label": "B",
+            "text": "36/125",
+            "vennConfig": null
+          },
+          {
+            "label": "C",
+            "text": "54/125",
+            "vennConfig": null
+          },
+          {
+            "label": "D",
+            "text": "75/125",
+            "vennConfig": null
+          }
+        ],
+        "statements": []
+      },
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  18/125"
+        },
+        {
+          "value": "B",
+          "label": "B.  36/125"
+        },
+        {
+          "value": "C",
+          "label": "C.  54/125"
+        },
+        {
+          "value": "D",
+          "label": "D.  75/125"
+        }
+      ],
+      "tag": {
+        "id": "4bba2c66-fed5-45b6-afc0-89e5b1c34c3d",
+        "section": "dm",
+        "mode": "practice",
+        "parentId": "4bba2c66-fed5-45b6-afc0-89e5b1c34c3d",
+        "primarySkillId": "dm.probability_rules",
+        "secondarySkillIds": [
+          "dm.conditional_probability"
+        ],
+        "difficulty": "hard",
+        "format": "multiple_choice",
+        "rationale": "Enumerates disjoint paths while respecting an early stopping rule.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "answer": "B",
+        "contentHash": "b3b7e80e65047dcd3e0edacaef4dab9bf85010ddb4ef1a04ccadd7fdef5c5909",
+        "previouslySeen": false
+      },
+      "explanation": "To reach a third signal, the first two must differ. With a blue final signal, the only sequences are red-blue-blue and blue-red-blue. Each has probability (2/5)(3/5)(3/5) = 18/125. Adding the two disjoint sequences gives 36/125. Sequences beginning red-red or blue-blue stop after two signals and cannot be counted.",
+      "statementReasons": []
+    },
+    {
+      "id": "ba7a7456-91a1-4ffd-804b-4726d13ad78c",
+      "section": "qr",
+      "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+      "title": "Captioning Team Output",
+      "context": null,
+      "text": "How many minutes of audio did Alder caption across all five days?",
+      "stimulus": {
+        "type": "bar_chart",
+        "context": "A fictional captioning service has two teams, Alder and Birch. The chart shows minutes of recorded audio for which each team completed captions on five days. Every recording is assigned to exactly one team, so the two teams' outputs can be added without counting a recording twice.",
+        "data": {
+          "title": "Completed captions by team",
+          "labels": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "series": [
+            {
+              "name": "Alder",
+              "values": [
+                84,
+                108,
+                96,
+                132,
+                120
+              ]
+            },
+            {
+              "name": "Birch",
+              "values": [
+                60,
+                72,
+                84,
+                96,
+                108
+              ]
+            }
+          ],
+          "yAxisLabel": "Minutes of audio",
+          "unit": "minutes"
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  480 minutes"
+        },
+        {
+          "value": "B",
+          "label": "B.  504 minutes"
+        },
+        {
+          "value": "C",
+          "label": "C.  528 minutes"
+        },
+        {
+          "value": "D",
+          "label": "D.  540 minutes"
+        },
+        {
+          "value": "E",
+          "label": "E.  564 minutes"
+        }
+      ],
+      "tag": {
+        "id": "ba7a7456-91a1-4ffd-804b-4726d13ad78c",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+        "primarySkillId": "qr.data_interpretation",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "bar_chart",
+        "rationale": "Select one chart series and add its five values.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "D",
+        "contentHash": "a0ef3da623b7e117ec21c9cd6fce492b674dd7575f6eaa2d8505fb89967039e9",
+        "previouslySeen": false
+      },
+      "explanation": "Read the Alder bars: 84 + 108 + 96 + 132 + 120 = 540 minutes. No rounding is needed. The answer is 540 minutes.",
+      "statementReasons": []
+    },
+    {
+      "id": "d72c6624-35be-41eb-9c99-5a3a213c6e1f",
+      "section": "qr",
+      "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+      "title": "Captioning Team Output",
+      "context": null,
+      "text": "By what percentage did the teams' combined daily output increase from Monday to Thursday? Give your answer to 1 decimal place.",
+      "stimulus": {
+        "type": "bar_chart",
+        "context": "A fictional captioning service has two teams, Alder and Birch. The chart shows minutes of recorded audio for which each team completed captions on five days. Every recording is assigned to exactly one team, so the two teams' outputs can be added without counting a recording twice.",
+        "data": {
+          "title": "Completed captions by team",
+          "labels": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "series": [
+            {
+              "name": "Alder",
+              "values": [
+                84,
+                108,
+                96,
+                132,
+                120
+              ]
+            },
+            {
+              "name": "Birch",
+              "values": [
+                60,
+                72,
+                84,
+                96,
+                108
+              ]
+            }
+          ],
+          "yAxisLabel": "Minutes of audio",
+          "unit": "minutes"
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  36.8%"
+        },
+        {
+          "value": "B",
+          "label": "B.  44.4%"
+        },
+        {
+          "value": "C",
+          "label": "C.  50.0%"
+        },
+        {
+          "value": "D",
+          "label": "D.  55.0%"
+        },
+        {
+          "value": "E",
+          "label": "E.  58.3%"
+        }
+      ],
+      "tag": {
+        "id": "d72c6624-35be-41eb-9c99-5a3a213c6e1f",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+        "primarySkillId": "qr.percentage_change",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "bar_chart",
+        "rationale": "Form both daily totals and divide the increase by the original Monday total.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "E",
+        "contentHash": "eb613c5ba87d7e10a34e69793429513418b68c1d1616f16e8f1d8397908ba810",
+        "previouslySeen": false
+      },
+      "explanation": "Monday's combined output was 84 + 60 = 144 minutes. Thursday's was 132 + 96 = 228 minutes. The increase was 84 minutes, so the percentage increase was 84 / 144 × 100 = 58.333...%. Rounded to 1 decimal place, the answer is 58.3%.",
+      "statementReasons": []
+    },
+    {
+      "id": "a1363fe2-59d2-49a7-b8d7-cd3d172cc3d2",
+      "section": "qr",
+      "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+      "title": "Captioning Team Output",
+      "context": null,
+      "text": "What was the ratio of Alder's output to Birch's output on Tuesday, in its simplest form?",
+      "stimulus": {
+        "type": "bar_chart",
+        "context": "A fictional captioning service has two teams, Alder and Birch. The chart shows minutes of recorded audio for which each team completed captions on five days. Every recording is assigned to exactly one team, so the two teams' outputs can be added without counting a recording twice.",
+        "data": {
+          "title": "Completed captions by team",
+          "labels": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "series": [
+            {
+              "name": "Alder",
+              "values": [
+                84,
+                108,
+                96,
+                132,
+                120
+              ]
+            },
+            {
+              "name": "Birch",
+              "values": [
+                60,
+                72,
+                84,
+                96,
+                108
+              ]
+            }
+          ],
+          "yAxisLabel": "Minutes of audio",
+          "unit": "minutes"
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  1 : 1"
+        },
+        {
+          "value": "B",
+          "label": "B.  3 : 2"
+        },
+        {
+          "value": "C",
+          "label": "C.  2 : 1"
+        },
+        {
+          "value": "D",
+          "label": "D.  5 : 2"
+        },
+        {
+          "value": "E",
+          "label": "E.  3 : 1"
+        }
+      ],
+      "tag": {
+        "id": "a1363fe2-59d2-49a7-b8d7-cd3d172cc3d2",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+        "primarySkillId": "qr.ratio_proportion",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "bar_chart",
+        "rationale": "Reduce two chart values to their simplest integer ratio.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "B",
+        "contentHash": "211dc922ec9d7102b88b185ff4244102d57a43599d410ac61104a27c45617ac0",
+        "previouslySeen": false
+      },
+      "explanation": "Tuesday's outputs were Alder 108 minutes and Birch 72 minutes. Dividing both parts of 108 : 72 by 36 gives 3 : 2. The answer is 3 : 2.",
+      "statementReasons": []
+    },
+    {
+      "id": "b0de04ce-18ca-4951-8664-156169d1dc2b",
+      "section": "qr",
+      "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+      "title": "Captioning Team Output",
+      "context": null,
+      "text": "What was the mean combined daily output of the two teams across the five days?",
+      "stimulus": {
+        "type": "bar_chart",
+        "context": "A fictional captioning service has two teams, Alder and Birch. The chart shows minutes of recorded audio for which each team completed captions on five days. Every recording is assigned to exactly one team, so the two teams' outputs can be added without counting a recording twice.",
+        "data": {
+          "title": "Completed captions by team",
+          "labels": [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
+          ],
+          "series": [
+            {
+              "name": "Alder",
+              "values": [
+                84,
+                108,
+                96,
+                132,
+                120
+              ]
+            },
+            {
+              "name": "Birch",
+              "values": [
+                60,
+                72,
+                84,
+                96,
+                108
+              ]
+            }
+          ],
+          "yAxisLabel": "Minutes of audio",
+          "unit": "minutes"
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  180 minutes"
+        },
+        {
+          "value": "B",
+          "label": "B.  186 minutes"
+        },
+        {
+          "value": "C",
+          "label": "C.  192 minutes"
+        },
+        {
+          "value": "D",
+          "label": "D.  198 minutes"
+        },
+        {
+          "value": "E",
+          "label": "E.  204 minutes"
+        }
+      ],
+      "tag": {
+        "id": "b0de04ce-18ca-4951-8664-156169d1dc2b",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b1315b97-7e8a-4207-a460-77fc979ef917",
+        "primarySkillId": "qr.averages_range",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "bar_chart",
+        "rationale": "Combine both series and divide by days rather than by the number of bars.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "C",
+        "contentHash": "d32c97fe402dcc2ded8a0497b021e7520c4088bd2b1e8bc6fd67fe4e4e5710be",
+        "previouslySeen": false
+      },
+      "explanation": "Alder captioned 540 minutes in total and Birch captioned 60 + 72 + 84 + 96 + 108 = 420 minutes. Combined output was 960 minutes over 5 days. Mean combined daily output = 960 / 5 = 192 minutes. The answer is 192 minutes.",
+      "statementReasons": []
+    },
+    {
+      "id": "9e509047-3009-45c2-9161-1d9744677782",
+      "section": "qr",
+      "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+      "title": "Instrument Reed Blank Order",
+      "context": null,
+      "text": "What is the area of one flat face of a Long blank?",
+      "stimulus": {
+        "type": "table",
+        "context": "A fictional music workshop orders flat rectangular cane blanks for making instrument reeds. The dimensions are for one blank. The workshop needs the exact numbers shown but may buy extra because blanks are sold only in whole packs. A 12% discount applies to the total price of any order containing at least four packs of the same size. Prices include all charges.",
+        "data": {
+          "headers": [
+            "Size",
+            "Length (cm)",
+            "Width (cm)",
+            "Blanks needed",
+            "Blanks per pack",
+            "Price per pack"
+          ],
+          "rows": [
+            [
+              "Short",
+              "7.5",
+              "1.2",
+              "240",
+              "60",
+              "GBP 12.00"
+            ],
+            [
+              "Medium",
+              "9.0",
+              "1.6",
+              "180",
+              "50",
+              "GBP 16.00"
+            ],
+            [
+              "Long",
+              "12.0",
+              "1.8",
+              "150",
+              "40",
+              "GBP 18.50"
+            ]
+          ]
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  21.6 cm²"
+        },
+        {
+          "value": "B",
+          "label": "B.  24.0 cm²"
+        },
+        {
+          "value": "C",
+          "label": "C.  27.6 cm²"
+        },
+        {
+          "value": "D",
+          "label": "D.  33.6 cm²"
+        },
+        {
+          "value": "E",
+          "label": "E.  43.2 cm²"
+        }
+      ],
+      "tag": {
+        "id": "9e509047-3009-45c2-9161-1d9744677782",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+        "primarySkillId": "qr.geometry",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "table",
+        "rationale": "Calculate the area of a rectangle from its length and width.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "A",
+        "contentHash": "8d526e8cacfb0a090249d2485017cc25c618a1ce85adb9334cb7f172df1df24d",
+        "previouslySeen": false
+      },
+      "explanation": "A Long blank is a rectangle measuring 12.0 cm by 1.8 cm. Area of one face = length × width = 12.0 × 1.8 = 21.6 cm². The answer is 21.6 cm².",
+      "statementReasons": []
+    },
+    {
+      "id": "4b252938-786a-4d5d-8081-d2b5322c89e8",
+      "section": "qr",
+      "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+      "title": "Instrument Reed Blank Order",
+      "context": null,
+      "text": "If the 180 Medium blanks needed are placed end to end with no gaps or overlaps, what total length do they form in metres?",
+      "stimulus": {
+        "type": "table",
+        "context": "A fictional music workshop orders flat rectangular cane blanks for making instrument reeds. The dimensions are for one blank. The workshop needs the exact numbers shown but may buy extra because blanks are sold only in whole packs. A 12% discount applies to the total price of any order containing at least four packs of the same size. Prices include all charges.",
+        "data": {
+          "headers": [
+            "Size",
+            "Length (cm)",
+            "Width (cm)",
+            "Blanks needed",
+            "Blanks per pack",
+            "Price per pack"
+          ],
+          "rows": [
+            [
+              "Short",
+              "7.5",
+              "1.2",
+              "240",
+              "60",
+              "GBP 12.00"
+            ],
+            [
+              "Medium",
+              "9.0",
+              "1.6",
+              "180",
+              "50",
+              "GBP 16.00"
+            ],
+            [
+              "Long",
+              "12.0",
+              "1.8",
+              "150",
+              "40",
+              "GBP 18.50"
+            ]
+          ]
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  1.62 m"
+        },
+        {
+          "value": "B",
+          "label": "B.  9.00 m"
+        },
+        {
+          "value": "C",
+          "label": "C.  12.00 m"
+        },
+        {
+          "value": "D",
+          "label": "D.  13.50 m"
+        },
+        {
+          "value": "E",
+          "label": "E.  16.20 m"
+        }
+      ],
+      "tag": {
+        "id": "4b252938-786a-4d5d-8081-d2b5322c89e8",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+        "primarySkillId": "qr.unit_conversion",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "table",
+        "rationale": "Calculate a combined centimetre length and convert centimetres to metres.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "E",
+        "contentHash": "2ddc7d582be5e00fc3e719737afccb8a0f0f484156094e44e87a0e78e6463e9f",
+        "previouslySeen": false
+      },
+      "explanation": "The combined length is 180 × 9.0 = 1,620 cm. There are 100 cm in 1 m, so 1,620 / 100 = 16.20 m. The answer is 16.20 m.",
+      "statementReasons": []
+    },
+    {
+      "id": "06ed0d18-e26f-4446-9926-f5321b752502",
+      "section": "qr",
+      "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+      "title": "Instrument Reed Blank Order",
+      "context": null,
+      "text": "What percentage of all the blanks needed are Short blanks? Give your answer to 1 decimal place.",
+      "stimulus": {
+        "type": "table",
+        "context": "A fictional music workshop orders flat rectangular cane blanks for making instrument reeds. The dimensions are for one blank. The workshop needs the exact numbers shown but may buy extra because blanks are sold only in whole packs. A 12% discount applies to the total price of any order containing at least four packs of the same size. Prices include all charges.",
+        "data": {
+          "headers": [
+            "Size",
+            "Length (cm)",
+            "Width (cm)",
+            "Blanks needed",
+            "Blanks per pack",
+            "Price per pack"
+          ],
+          "rows": [
+            [
+              "Short",
+              "7.5",
+              "1.2",
+              "240",
+              "60",
+              "GBP 12.00"
+            ],
+            [
+              "Medium",
+              "9.0",
+              "1.6",
+              "180",
+              "50",
+              "GBP 16.00"
+            ],
+            [
+              "Long",
+              "12.0",
+              "1.8",
+              "150",
+              "40",
+              "GBP 18.50"
+            ]
+          ]
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  26.3%"
+        },
+        {
+          "value": "B",
+          "label": "B.  42.1%"
+        },
+        {
+          "value": "C",
+          "label": "C.  50.0%"
+        },
+        {
+          "value": "D",
+          "label": "D.  57.9%"
+        },
+        {
+          "value": "E",
+          "label": "E.  75.0%"
+        }
+      ],
+      "tag": {
+        "id": "06ed0d18-e26f-4446-9926-f5321b752502",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+        "primarySkillId": "qr.fractions_percentages",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "table",
+        "rationale": "Use the count of Short blanks as the numerator and all required blanks as the denominator.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "B",
+        "contentHash": "b01ae5823400beee32da0766775011b6095f31e3ae8ca52c5ae9a8b803c11ba0",
+        "previouslySeen": false
+      },
+      "explanation": "The workshop needs 240 + 180 + 150 = 570 blanks in total. The Short share is 240 / 570 × 100 = 42.105...%. Rounded to 1 decimal place, the answer is 42.1%. Extra blanks bought in whole packs are irrelevant because the question asks about blanks needed.",
+      "statementReasons": []
+    },
+    {
+      "id": "84a7d7d6-74bc-485f-8532-b96bd9a831c6",
+      "section": "qr",
+      "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+      "title": "Instrument Reed Blank Order",
+      "context": null,
+      "text": "What is the minimum total price the workshop must pay to buy enough Long blanks, including the stated discount?",
+      "stimulus": {
+        "type": "table",
+        "context": "A fictional music workshop orders flat rectangular cane blanks for making instrument reeds. The dimensions are for one blank. The workshop needs the exact numbers shown but may buy extra because blanks are sold only in whole packs. A 12% discount applies to the total price of any order containing at least four packs of the same size. Prices include all charges.",
+        "data": {
+          "headers": [
+            "Size",
+            "Length (cm)",
+            "Width (cm)",
+            "Blanks needed",
+            "Blanks per pack",
+            "Price per pack"
+          ],
+          "rows": [
+            [
+              "Short",
+              "7.5",
+              "1.2",
+              "240",
+              "60",
+              "GBP 12.00"
+            ],
+            [
+              "Medium",
+              "9.0",
+              "1.6",
+              "180",
+              "50",
+              "GBP 16.00"
+            ],
+            [
+              "Long",
+              "12.0",
+              "1.8",
+              "150",
+              "40",
+              "GBP 18.50"
+            ]
+          ]
+        }
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  GBP 48.84"
+        },
+        {
+          "value": "B",
+          "label": "B.  GBP 55.50"
+        },
+        {
+          "value": "C",
+          "label": "C.  GBP 65.12"
+        },
+        {
+          "value": "D",
+          "label": "D.  GBP 74.00"
+        },
+        {
+          "value": "E",
+          "label": "E.  GBP 81.40"
+        }
+      ],
+      "tag": {
+        "id": "84a7d7d6-74bc-485f-8532-b96bd9a831c6",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "16a56818-53c7-4c66-be5e-e45266a1e1ee",
+        "primarySkillId": "qr.costs_budgets",
+        "secondarySkillIds": [
+          "qr.percentage_change"
+        ],
+        "difficulty": "hard",
+        "format": "table",
+        "rationale": "Round required packs up to a whole number, then apply the qualifying discount to the complete cost.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "C",
+        "contentHash": "c29b35acea082a4b8dd6ae0afe0dc5f3e77b6d02f3ab964b138ac5345cfd5374",
+        "previouslySeen": false
+      },
+      "explanation": "150 / 40 = 3.75, so the workshop must buy 4 whole packs. The full price is 4 × GBP 18.50 = GBP 74.00. Four packs qualify for 12% off, giving GBP 74.00 × 0.88 = GBP 65.12. The answer is GBP 65.12.",
+      "statementReasons": []
+    },
+    {
+      "id": "a136ece4-b1a7-48b7-b49b-68f44681d6fc",
+      "section": "qr",
+      "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+      "title": "Kinetic Display Carriage",
+      "context": null,
+      "text": "How many seconds is the carriage actually moving during one demonstration, excluding pauses?",
+      "stimulus": {
+        "type": "multi",
+        "items": [
+          {
+            "type": "text",
+            "text": "A fictional kinetic display has a carriage moving along a straight 9 m rail. One demonstration consists of four complete return journeys: the carriage travels from one end to the other and back four times. Its moving speed is constant at 0.75 m/s. It pauses for 6 seconds at every end it reaches before changing direction. There is no pause before the first movement or after the final arrival. Assume starts, stops and changes of direction take no additional time. A demonstration begins at 15:40:00."
+          },
+          {
+            "type": "formula",
+            "text": "The controller's test index is I = 18 + 0.4m, where m is cumulative moving time in seconds. Pauses do not contribute to m."
+          }
+        ]
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  72 seconds"
+        },
+        {
+          "value": "B",
+          "label": "B.  84 seconds"
+        },
+        {
+          "value": "C",
+          "label": "C.  90 seconds"
+        },
+        {
+          "value": "D",
+          "label": "D.  96 seconds"
+        },
+        {
+          "value": "E",
+          "label": "E.  108 seconds"
+        }
+      ],
+      "tag": {
+        "id": "a136ece4-b1a7-48b7-b49b-68f44681d6fc",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+        "primarySkillId": "qr.speed_rates",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "multi",
+        "rationale": "Find total distance for four return journeys and divide by the constant speed.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "D",
+        "contentHash": "b693019a7d56faa74fd176974083d11d86295f87201e0946afd55d2c411b1ad2",
+        "previouslySeen": false
+      },
+      "explanation": "Each return journey covers 2 × 9 = 18 m, so four cover 72 m. Moving time = distance / speed = 72 / 0.75 = 96 seconds. Pauses are excluded. The answer is 96 seconds.",
+      "statementReasons": []
+    },
+    {
+      "id": "9573608e-9b28-4f71-b748-4ae233cd11b9",
+      "section": "qr",
+      "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+      "title": "Kinetic Display Carriage",
+      "context": null,
+      "text": "At what time does the demonstration finish, including all the required pauses?",
+      "stimulus": {
+        "type": "multi",
+        "items": [
+          {
+            "type": "text",
+            "text": "A fictional kinetic display has a carriage moving along a straight 9 m rail. One demonstration consists of four complete return journeys: the carriage travels from one end to the other and back four times. Its moving speed is constant at 0.75 m/s. It pauses for 6 seconds at every end it reaches before changing direction. There is no pause before the first movement or after the final arrival. Assume starts, stops and changes of direction take no additional time. A demonstration begins at 15:40:00."
+          },
+          {
+            "type": "formula",
+            "text": "The controller's test index is I = 18 + 0.4m, where m is cumulative moving time in seconds. Pauses do not contribute to m."
+          }
+        ]
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  15:42:18"
+        },
+        {
+          "value": "B",
+          "label": "B.  15:42:24"
+        },
+        {
+          "value": "C",
+          "label": "C.  15:42:30"
+        },
+        {
+          "value": "D",
+          "label": "D.  15:42:36"
+        },
+        {
+          "value": "E",
+          "label": "E.  15:42:42"
+        }
+      ],
+      "tag": {
+        "id": "9573608e-9b28-4f71-b748-4ae233cd11b9",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+        "primarySkillId": "qr.routes_time",
+        "secondarySkillIds": [
+          "qr.speed_rates"
+        ],
+        "difficulty": "hard",
+        "format": "multi",
+        "rationale": "Count only pauses between eight movements and add elapsed time to the start time.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "A",
+        "contentHash": "2451c97edda2d27b477f41e5a3f160066844515956af9a38567e4c5bc1c16b4e",
+        "previouslySeen": false
+      },
+      "explanation": "Four return journeys give 8 one-way movements, covering 8 × 9 = 72 m. Moving time is 72 / 0.75 = 96 seconds. There are 7 pauses between the 8 movements, since none occurs before the start or after the finish. Pause time is 7 × 6 = 42 seconds. Total time is 138 seconds, or 2 minutes 18 seconds. Starting at 15:40:00 gives a finish time of 15:42:18. The answer is 15:42:18.",
+      "statementReasons": []
+    },
+    {
+      "id": "c3b4079a-14c4-4b70-82de-1e1ebb3aef93",
+      "section": "qr",
+      "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+      "title": "Kinetic Display Carriage",
+      "context": null,
+      "text": "When the controller's test index is 54, what is the cumulative moving time?",
+      "stimulus": {
+        "type": "multi",
+        "items": [
+          {
+            "type": "text",
+            "text": "A fictional kinetic display has a carriage moving along a straight 9 m rail. One demonstration consists of four complete return journeys: the carriage travels from one end to the other and back four times. Its moving speed is constant at 0.75 m/s. It pauses for 6 seconds at every end it reaches before changing direction. There is no pause before the first movement or after the final arrival. Assume starts, stops and changes of direction take no additional time. A demonstration begins at 15:40:00."
+          },
+          {
+            "type": "formula",
+            "text": "The controller's test index is I = 18 + 0.4m, where m is cumulative moving time in seconds. Pauses do not contribute to m."
+          }
+        ]
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  36 seconds"
+        },
+        {
+          "value": "B",
+          "label": "B.  54 seconds"
+        },
+        {
+          "value": "C",
+          "label": "C.  72 seconds"
+        },
+        {
+          "value": "D",
+          "label": "D.  84 seconds"
+        },
+        {
+          "value": "E",
+          "label": "E.  90 seconds"
+        }
+      ],
+      "tag": {
+        "id": "c3b4079a-14c4-4b70-82de-1e1ebb3aef93",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+        "primarySkillId": "qr.formula_algebra",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "multi",
+        "rationale": "Rearrange the supplied linear formula to recover cumulative moving time.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "E",
+        "contentHash": "62578eec02348964a762a7643775b5d3fa1f2615f17ae237647e3cd89200b939",
+        "previouslySeen": false
+      },
+      "explanation": "Substitute I = 54 into 54 = 18 + 0.4m. Subtracting 18 gives 36 = 0.4m, so m = 36 / 0.4 = 90 seconds. The answer is 90 seconds.",
+      "statementReasons": []
+    },
+    {
+      "id": "d4d88d40-6948-4429-bc6d-af302cd3715b",
+      "section": "qr",
+      "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+      "title": "Kinetic Display Carriage",
+      "context": null,
+      "text": "For a new demonstration, the moving speed is increased by 20% and each pause is shortened to 4 seconds. The rail length and four return journeys are unchanged. By what percentage is the total demonstration time reduced compared with the original? Give your answer to 1 decimal place.",
+      "stimulus": {
+        "type": "multi",
+        "items": [
+          {
+            "type": "text",
+            "text": "A fictional kinetic display has a carriage moving along a straight 9 m rail. One demonstration consists of four complete return journeys: the carriage travels from one end to the other and back four times. Its moving speed is constant at 0.75 m/s. It pauses for 6 seconds at every end it reaches before changing direction. There is no pause before the first movement or after the final arrival. Assume starts, stops and changes of direction take no additional time. A demonstration begins at 15:40:00."
+          },
+          {
+            "type": "formula",
+            "text": "The controller's test index is I = 18 + 0.4m, where m is cumulative moving time in seconds. Pauses do not contribute to m."
+          }
+        ]
+      },
+      "dm": null,
+      "choices": [
+        {
+          "value": "A",
+          "label": "A.  13.0%"
+        },
+        {
+          "value": "B",
+          "label": "B.  20.0%"
+        },
+        {
+          "value": "C",
+          "label": "C.  21.7%"
+        },
+        {
+          "value": "D",
+          "label": "D.  25.0%"
+        },
+        {
+          "value": "E",
+          "label": "E.  27.8%"
+        }
+      ],
+      "tag": {
+        "id": "d4d88d40-6948-4429-bc6d-af302cd3715b",
+        "section": "qr",
+        "mode": "practice",
+        "parentId": "b0f4e182-31d7-4641-9137-40dce99a2086",
+        "primarySkillId": "qr.percentage_change",
+        "secondarySkillIds": [
+          "qr.speed_rates",
+          "qr.routes_time"
+        ],
+        "difficulty": "hard",
+        "format": "multi",
+        "rationale": "Recalculate a duration after a speed increase and pause reduction, then divide the time saving by the original duration.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E"
+        ],
+        "answer": "C",
+        "contentHash": "39ff654e50598dc9f61086de3d96a7c6df62ec1d1eebf8d1cc4d604cf9be1760",
+        "previouslySeen": false
+      },
+      "explanation": "The original moving time is 72 / 0.75 = 96 seconds; 7 pauses add 42 seconds, giving 138 seconds. The new speed is 0.75 × 1.20 = 0.90 m/s, so moving time becomes 72 / 0.90 = 80 seconds. The 7 new pauses add 28 seconds, giving 108 seconds. The reduction is 30 / 138 × 100 = 21.739...%, or 21.7% to 1 decimal place. The answer is 21.7%.",
+      "statementReasons": []
+    },
+    {
+      "id": "711077b1-f61a-4a5c-9938-8bd133c4944f",
+      "section": "sj",
+      "parentId": "65f6bb41-ec5d-4aa8-ab76-d9288c611cf7",
+      "title": "",
+      "context": "During a supervised clinical-skills class, first-year medical students practise a simple arm examination on one another; participation as the person being examined is voluntary, and a model is available as an alternative. Before the next examination begins, Sam says he no longer wants to be examined. Another student tells Sam that he is wasting the group's time. Priya is a fellow student in the group, and the tutor is at the next table.\n\nHow appropriate are the following responses by Priya?",
+      "text": "Priya says that Sam can decline, suggests using the model, and asks the tutor to help the group continue without pressuring him.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "A very appropriate thing to do",
+          "label": "A very appropriate thing to do"
+        },
+        {
+          "value": "Appropriate, but not ideal",
+          "label": "Appropriate, but not ideal"
+        },
+        {
+          "value": "Inappropriate, but not awful",
+          "label": "Inappropriate, but not awful"
+        },
+        {
+          "value": "A very inappropriate thing to do",
+          "label": "A very inappropriate thing to do"
+        }
+      ],
+      "tag": {
+        "id": "711077b1-f61a-4a5c-9938-8bd133c4944f",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "65f6bb41-ec5d-4aa8-ab76-d9288c611cf7",
+        "primarySkillId": "sj.autonomy",
+        "secondarySkillIds": [
+          "sj.communication"
+        ],
+        "difficulty": "normal",
+        "format": "appropriateness",
+        "rationale": "Tests respect for withdrawal of consent despite peer pressure.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A very appropriate thing to do",
+          "Appropriate, but not ideal",
+          "Inappropriate, but not awful",
+          "A very inappropriate thing to do"
+        ],
+        "answer": "A very appropriate thing to do",
+        "contentHash": "29c837c37f539d90f00cc3787a7bf61ed940ca8baf3adb28b8b02041455b0280",
+        "previouslySeen": false
+      },
+      "explanation": "This respects a clear withdrawal of consent and gives the group an available way to continue learning. Involving the nearby tutor is proportionate because the tutor can support the voluntary arrangement and address pressure within the class.",
+      "statementReasons": []
+    },
+    {
+      "id": "846bd047-68f8-4dfc-9349-297192e86a3d",
+      "section": "sj",
+      "parentId": "65f6bb41-ec5d-4aa8-ab76-d9288c611cf7",
+      "title": "",
+      "context": "During a supervised clinical-skills class, first-year medical students practise a simple arm examination on one another; participation as the person being examined is voluntary, and a model is available as an alternative. Before the next examination begins, Sam says he no longer wants to be examined. Another student tells Sam that he is wasting the group's time. Priya is a fellow student in the group, and the tutor is at the next table.\n\nHow appropriate are the following responses by Priya?",
+      "text": "Priya helps the group switch to the model and does not ask Sam to change his decision, but later tells him privately that declining was inconsiderate towards his classmates.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "A very appropriate thing to do",
+          "label": "A very appropriate thing to do"
+        },
+        {
+          "value": "Appropriate, but not ideal",
+          "label": "Appropriate, but not ideal"
+        },
+        {
+          "value": "Inappropriate, but not awful",
+          "label": "Inappropriate, but not awful"
+        },
+        {
+          "value": "A very inappropriate thing to do",
+          "label": "A very inappropriate thing to do"
+        }
+      ],
+      "tag": {
+        "id": "846bd047-68f8-4dfc-9349-297192e86a3d",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "65f6bb41-ec5d-4aa8-ab76-d9288c611cf7",
+        "primarySkillId": "sj.fairness",
+        "secondarySkillIds": [
+          "sj.autonomy"
+        ],
+        "difficulty": "normal",
+        "format": "appropriateness",
+        "rationale": "Distinguishes a mildly blaming private comment, after the choice is respected, from coercion or a proportionate supportive response.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A very appropriate thing to do",
+          "Appropriate, but not ideal",
+          "Inappropriate, but not awful",
+          "A very inappropriate thing to do"
+        ],
+        "answer": "Inappropriate, but not awful",
+        "contentHash": "4d34fd6b8bef2b265e7c1ca6f02c68c4a057ce4f3a13a6c77e0162db974bc791",
+        "previouslySeen": false
+      },
+      "explanation": "Sam was entitled to decline this voluntary activity. Blaming him is unfair and may make him reluctant to assert a boundary next time. Priya has nevertheless respected the refusal and helped the class continue; this is an insensitive, unwarranted criticism rather than forcing an examination, issuing a threat or publicly humiliating him.",
+      "statementReasons": []
+    },
+    {
+      "id": "eaf9d154-72f1-42cf-9323-9ac486c4193e",
+      "section": "sj",
+      "parentId": "65f6bb41-ec5d-4aa8-ab76-d9288c611cf7",
+      "title": "",
+      "context": "During a supervised clinical-skills class, first-year medical students practise a simple arm examination on one another; participation as the person being examined is voluntary, and a model is available as an alternative. Before the next examination begins, Sam says he no longer wants to be examined. Another student tells Sam that he is wasting the group's time. Priya is a fellow student in the group, and the tutor is at the next table.\n\nHow appropriate are the following responses by Priya?",
+      "text": "Priya asks Sam privately whether he would like support, while also reminding the group that they can use the model and should respect his decision.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "A very appropriate thing to do",
+          "label": "A very appropriate thing to do"
+        },
+        {
+          "value": "Appropriate, but not ideal",
+          "label": "Appropriate, but not ideal"
+        },
+        {
+          "value": "Inappropriate, but not awful",
+          "label": "Inappropriate, but not awful"
+        },
+        {
+          "value": "A very inappropriate thing to do",
+          "label": "A very inappropriate thing to do"
+        }
+      ],
+      "tag": {
+        "id": "eaf9d154-72f1-42cf-9323-9ac486c4193e",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "65f6bb41-ec5d-4aa8-ab76-d9288c611cf7",
+        "primarySkillId": "sj.communication",
+        "secondarySkillIds": [
+          "sj.autonomy"
+        ],
+        "difficulty": "hard",
+        "format": "appropriateness",
+        "rationale": "Tests supportive communication without assuming a private discussion replaces addressing ongoing pressure.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A very appropriate thing to do",
+          "Appropriate, but not ideal",
+          "Inappropriate, but not awful",
+          "A very inappropriate thing to do"
+        ],
+        "answer": "A very appropriate thing to do",
+        "contentHash": "2f1b08c2075507c076346d1f26b8e0f1317165e35fbbdc589da062fa14efb64a",
+        "previouslySeen": false
+      },
+      "explanation": "Priya offers support without assuming why Sam declined or requiring him to disclose anything. She also addresses the group's pressure and the immediate learning task. A formal complaint is not automatically required when a proportionate response can resolve the situation.",
+      "statementReasons": []
+    },
+    {
+      "id": "72228e40-c853-4692-ac52-6d4dfaadf73e",
+      "section": "sj",
+      "parentId": "18be0b7b-01d5-42d3-91cb-0f01ff79260b",
+      "title": "",
+      "context": "Noor, a second-year medical student, sits on a three-person panel allocating university travel grants for an educational conference, using published criteria that must be applied equally. One application is from Noor's close friend. The panel chair can appoint another reviewer for that application, and no rankings have yet been agreed. Noor's friend wants her to explain why other applicants, whose forms contain personal financial information, should receive less support.\n\nHow important are the following considerations when Noor decides how to proceed?",
+      "text": "That Noor has a close friendship with one applicant, even if she believes she can score the application impartially.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Very important",
+          "label": "Very important"
+        },
+        {
+          "value": "Important",
+          "label": "Important"
+        },
+        {
+          "value": "Of minor importance",
+          "label": "Of minor importance"
+        },
+        {
+          "value": "Not important at all",
+          "label": "Not important at all"
+        }
+      ],
+      "tag": {
+        "id": "72228e40-c853-4692-ac52-6d4dfaadf73e",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "18be0b7b-01d5-42d3-91cb-0f01ff79260b",
+        "primarySkillId": "sj.boundaries",
+        "secondarySkillIds": [
+          "sj.fairness"
+        ],
+        "difficulty": "hard",
+        "format": "importance",
+        "rationale": "Tests recognition and disclosure of a non-financial conflict before a decision.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Very important",
+          "Important",
+          "Of minor importance",
+          "Not important at all"
+        ],
+        "answer": "Very important",
+        "contentHash": "555e50de6e98f3698c09a8f51690e58adc7273eb4d282a11f066804eff5258d1",
+        "previouslySeen": false
+      },
+      "explanation": "The relationship creates a real or perceived conflict in a decision affecting other students. Noor should make it known before scoring so that the chair can manage it, including using the available replacement. Confidence in her own impartiality does not remove the conflict.",
+      "statementReasons": []
+    },
+    {
+      "id": "1092f039-c3bc-4405-8ea7-80c59fc21bde",
+      "section": "sj",
+      "parentId": "18be0b7b-01d5-42d3-91cb-0f01ff79260b",
+      "title": "",
+      "context": "Noor, a second-year medical student, sits on a three-person panel allocating university travel grants for an educational conference, using published criteria that must be applied equally. One application is from Noor's close friend. The panel chair can appoint another reviewer for that application, and no rankings have yet been agreed. Noor's friend wants her to explain why other applicants, whose forms contain personal financial information, should receive less support.\n\nHow important are the following considerations when Noor decides how to proceed?",
+      "text": "That applicants' personal financial details were supplied for the panel's decision, rather than for discussion with Noor's friend.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Very important",
+          "label": "Very important"
+        },
+        {
+          "value": "Important",
+          "label": "Important"
+        },
+        {
+          "value": "Of minor importance",
+          "label": "Of minor importance"
+        },
+        {
+          "value": "Not important at all",
+          "label": "Not important at all"
+        }
+      ],
+      "tag": {
+        "id": "1092f039-c3bc-4405-8ea7-80c59fc21bde",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "18be0b7b-01d5-42d3-91cb-0f01ff79260b",
+        "primarySkillId": "sj.confidentiality",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "importance",
+        "rationale": "Tests purpose-limited use of sensitive information rather than secrecy about fair criteria.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Very important",
+          "Important",
+          "Of minor importance",
+          "Not important at all"
+        ],
+        "answer": "Very important",
+        "contentHash": "c37971083685707657cf0762eb970b6b581646ef14d6acd08e362cb157246c27",
+        "previouslySeen": false
+      },
+      "explanation": "The friend is not entitled to other applicants' private details. Their restricted purpose remains relevant even if sharing them would make it easier to explain the outcome. Noor can explain the published process without disclosing the applications.",
+      "statementReasons": []
+    },
+    {
+      "id": "930ab4ce-3938-4bbd-83a7-3ca42502e43a",
+      "section": "sj",
+      "parentId": "18be0b7b-01d5-42d3-91cb-0f01ff79260b",
+      "title": "",
+      "context": "Noor, a second-year medical student, sits on a three-person panel allocating university travel grants for an educational conference, using published criteria that must be applied equally. One application is from Noor's close friend. The panel chair can appoint another reviewer for that application, and no rankings have yet been agreed. Noor's friend wants her to explain why other applicants, whose forms contain personal financial information, should receive less support.\n\nHow important are the following considerations when Noor decides how to proceed?",
+      "text": "Whether Noor and her friend usually prefer the same restaurant when they meet socially.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Very important",
+          "label": "Very important"
+        },
+        {
+          "value": "Important",
+          "label": "Important"
+        },
+        {
+          "value": "Of minor importance",
+          "label": "Of minor importance"
+        },
+        {
+          "value": "Not important at all",
+          "label": "Not important at all"
+        }
+      ],
+      "tag": {
+        "id": "930ab4ce-3938-4bbd-83a7-3ca42502e43a",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "18be0b7b-01d5-42d3-91cb-0f01ff79260b",
+        "primarySkillId": "sj.fairness",
+        "secondarySkillIds": [
+          "sj.boundaries"
+        ],
+        "difficulty": "normal",
+        "format": "importance",
+        "rationale": "Distinguishes a relevant personal relationship from an irrelevant incidental preference.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Very important",
+          "Important",
+          "Of minor importance",
+          "Not important at all"
+        ],
+        "answer": "Not important at all",
+        "contentHash": "ccfce58440c61bcf0913f434d141c9c4a0726b426293d3577d51c3a8b81e9e93",
+        "previouslySeen": false
+      },
+      "explanation": "A shared restaurant preference has no bearing on the grant criteria, the conflict-management process or confidentiality. The close friendship is relevant; this unrelated detail about their social preferences adds no useful basis for allocating support.",
+      "statementReasons": []
+    },
+    {
+      "id": "f65dba01-e3da-4eb9-ad40-b7de965cca29",
+      "section": "sj",
+      "parentId": "d490cd51-3a79-4512-a805-3fedc3c39282",
+      "title": "",
+      "context": "Dr Ellis, an F1 doctor, is helping arrange a patient's discharge under an agreed plan requiring someone at home to help with essential tasks that evening. Just before departure, the patient says that the relative who agreed to help has become unavailable, and asks for the plan to be reviewed because they are worried about coping alone. Transport is due shortly but can be delayed, and the nurse coordinating discharge and the supervising doctor are both available.\n\nHow appropriate are the following responses by Dr Ellis?",
+      "text": "Dr Ellis tells the discharge nurse about the change, asks for departure to be paused, and seeks a review of the support plan with the patient and supervising doctor.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "A very appropriate thing to do",
+          "label": "A very appropriate thing to do"
+        },
+        {
+          "value": "Appropriate, but not ideal",
+          "label": "Appropriate, but not ideal"
+        },
+        {
+          "value": "Inappropriate, but not awful",
+          "label": "Inappropriate, but not awful"
+        },
+        {
+          "value": "A very inappropriate thing to do",
+          "label": "A very inappropriate thing to do"
+        }
+      ],
+      "tag": {
+        "id": "f65dba01-e3da-4eb9-ad40-b7de965cca29",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "d490cd51-3a79-4512-a805-3fedc3c39282",
+        "primarySkillId": "sj.patient_safety",
+        "secondarySkillIds": [
+          "sj.teamwork"
+        ],
+        "difficulty": "normal",
+        "format": "appropriateness",
+        "rationale": "Tests acting on a newly identified support gap before departure.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A very appropriate thing to do",
+          "Appropriate, but not ideal",
+          "Inappropriate, but not awful",
+          "A very inappropriate thing to do"
+        ],
+        "answer": "A very appropriate thing to do",
+        "contentHash": "2110012f97eecb32fd09c26bb52f9789789bb372439eb3723b7e99366ec64bbc",
+        "previouslySeen": false
+      },
+      "explanation": "An assumption essential to the agreed plan has changed. Pausing the preventable departure and coordinating a review addresses the patient's concern before the gap in support causes harm. It uses the available team rather than making an unsupported discharge decision alone.",
+      "statementReasons": []
+    },
+    {
+      "id": "559da23a-c443-4603-b5c3-52ba459e7534",
+      "section": "sj",
+      "parentId": "d490cd51-3a79-4512-a805-3fedc3c39282",
+      "title": "",
+      "context": "Dr Ellis, an F1 doctor, is helping arrange a patient's discharge under an agreed plan requiring someone at home to help with essential tasks that evening. Just before departure, the patient says that the relative who agreed to help has become unavailable, and asks for the plan to be reviewed because they are worried about coping alone. Transport is due shortly but can be delayed, and the nurse coordinating discharge and the supervising doctor are both available.\n\nHow appropriate are the following responses by Dr Ellis?",
+      "text": "Dr Ellis tells the patient to use the original transport because a discharge summary has already been printed, without informing the team that the support is unavailable.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "A very appropriate thing to do",
+          "label": "A very appropriate thing to do"
+        },
+        {
+          "value": "Appropriate, but not ideal",
+          "label": "Appropriate, but not ideal"
+        },
+        {
+          "value": "Inappropriate, but not awful",
+          "label": "Inappropriate, but not awful"
+        },
+        {
+          "value": "A very inappropriate thing to do",
+          "label": "A very inappropriate thing to do"
+        }
+      ],
+      "tag": {
+        "id": "559da23a-c443-4603-b5c3-52ba459e7534",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "d490cd51-3a79-4512-a805-3fedc3c39282",
+        "primarySkillId": "sj.raising_concerns",
+        "secondarySkillIds": [
+          "sj.patient_safety"
+        ],
+        "difficulty": "normal",
+        "format": "appropriateness",
+        "rationale": "Tests prompt communication of material new safety information rather than deference to completed administration.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A very appropriate thing to do",
+          "Appropriate, but not ideal",
+          "Inappropriate, but not awful",
+          "A very inappropriate thing to do"
+        ],
+        "answer": "A very inappropriate thing to do",
+        "contentHash": "d2145c0d2b7149ac61ea52422e3ebc978cbc8e3c26058a9ba360ead787207437",
+        "previouslySeen": false
+      },
+      "explanation": "Printed paperwork does not make the altered plan safe. This response ignores both the lost essential support and the patient's request for review, while preventing colleagues from responding to the change. The departure can be delayed, so there is no stated reason to accept that avoidable risk.",
+      "statementReasons": []
+    },
+    {
+      "id": "5552f4c7-4e36-4032-a257-060500bb3cd9",
+      "section": "sj",
+      "parentId": "d490cd51-3a79-4512-a805-3fedc3c39282",
+      "title": "",
+      "context": "Dr Ellis, an F1 doctor, is helping arrange a patient's discharge under an agreed plan requiring someone at home to help with essential tasks that evening. Just before departure, the patient says that the relative who agreed to help has become unavailable, and asks for the plan to be reviewed because they are worried about coping alone. Transport is due shortly but can be delayed, and the nurse coordinating discharge and the supervising doctor are both available.\n\nHow appropriate are the following responses by Dr Ellis?",
+      "text": "Dr Ellis pauses departure, informs the discharge nurse and requests a prompt review from the supervising doctor. He tells the patient that the plan is being checked, but gives no further explanation of the review or who will speak to them, although he knows those details.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "A very appropriate thing to do",
+          "label": "A very appropriate thing to do"
+        },
+        {
+          "value": "Appropriate, but not ideal",
+          "label": "Appropriate, but not ideal"
+        },
+        {
+          "value": "Inappropriate, but not awful",
+          "label": "Inappropriate, but not awful"
+        },
+        {
+          "value": "A very inappropriate thing to do",
+          "label": "A very inappropriate thing to do"
+        }
+      ],
+      "tag": {
+        "id": "5552f4c7-4e36-4032-a257-060500bb3cd9",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "d490cd51-3a79-4512-a805-3fedc3c39282",
+        "primarySkillId": "sj.communication",
+        "secondarySkillIds": [
+          "sj.patient_safety",
+          "sj.teamwork"
+        ],
+        "difficulty": "hard",
+        "format": "appropriateness",
+        "rationale": "Distinguishes appropriate safety coordination with an incomplete patient update from a fully informative response or an unsafe discharge.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "A very appropriate thing to do",
+          "Appropriate, but not ideal",
+          "Inappropriate, but not awful",
+          "A very inappropriate thing to do"
+        ],
+        "answer": "Appropriate, but not ideal",
+        "contentHash": "8d76a84cfdb915979f8ff976736ef61afc3d2e5145f62d8076ebac88f6ef7ada",
+        "previouslySeen": false
+      },
+      "explanation": "The immediate actions protect the patient and arrange the needed review, and the update is truthful. The response is incomplete because a worried patient is given only a vague account despite more information being available. Explaining the next steps and who will speak to the patient would make this a more patient-centred response; no unsafe departure or false reassurance is proposed.",
+      "statementReasons": []
+    },
+    {
+      "id": "4900c7bf-735e-46e9-9832-b21dd30f196e",
+      "section": "sj",
+      "parentId": "bbf16379-ab18-413f-8cc5-8e6d68605bc8",
+      "title": "",
+      "context": "After a simulated handover using a fictional patient, third-year medical student Asha receives feedback that her summary was accurate but did not clearly identify outstanding tasks or who should do them. No real patient was involved, and the exercise is for learning rather than a pass-or-fail decision. A tutor offers further supervised practice next week, at a time that can be fitted around Asha's other compulsory teaching. The teaching team has capacity to provide the session, although arranging it will require a small amount of routine room-booking work.\n\nHow important are the following considerations when Asha plans her next steps?",
+      "text": "That leaving outstanding tasks and responsibility unclear could affect continuity of care when Asha later takes part in real handovers.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Very important",
+          "label": "Very important"
+        },
+        {
+          "value": "Important",
+          "label": "Important"
+        },
+        {
+          "value": "Of minor importance",
+          "label": "Of minor importance"
+        },
+        {
+          "value": "Not important at all",
+          "label": "Not important at all"
+        }
+      ],
+      "tag": {
+        "id": "4900c7bf-735e-46e9-9832-b21dd30f196e",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "bbf16379-ab18-413f-8cc5-8e6d68605bc8",
+        "primarySkillId": "sj.patient_safety",
+        "secondarySkillIds": [
+          "sj.teamwork"
+        ],
+        "difficulty": "normal",
+        "format": "importance",
+        "rationale": "Tests the relevance of learning from simulation to later safe practice.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Very important",
+          "Important",
+          "Of minor importance",
+          "Not important at all"
+        ],
+        "answer": "Very important",
+        "contentHash": "57a8b27cd46ac1d1f88fdbcb830f7c31ee3ed41718b1b0fb18c97fd7aae9c06c",
+        "previouslySeen": false
+      },
+      "explanation": "The feedback identifies a practical communication habit that can matter when responsibility passes between people. The lack of a real patient in this exercise removes immediate harm, but not the value of learning a safer approach before clinical use.",
+      "statementReasons": []
+    },
+    {
+      "id": "e596d76f-1ee9-4fb4-962a-ba10468a80d7",
+      "section": "sj",
+      "parentId": "bbf16379-ab18-413f-8cc5-8e6d68605bc8",
+      "title": "",
+      "context": "After a simulated handover using a fictional patient, third-year medical student Asha receives feedback that her summary was accurate but did not clearly identify outstanding tasks or who should do them. No real patient was involved, and the exercise is for learning rather than a pass-or-fail decision. A tutor offers further supervised practice next week, at a time that can be fitted around Asha's other compulsory teaching. The teaching team has capacity to provide the session, although arranging it will require a small amount of routine room-booking work.\n\nHow important are the following considerations when Asha plans her next steps?",
+      "text": "That the practice session is arranged so Asha can attend without missing her other compulsory teaching.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Very important",
+          "label": "Very important"
+        },
+        {
+          "value": "Important",
+          "label": "Important"
+        },
+        {
+          "value": "Of minor importance",
+          "label": "Of minor importance"
+        },
+        {
+          "value": "Not important at all",
+          "label": "Not important at all"
+        }
+      ],
+      "tag": {
+        "id": "e596d76f-1ee9-4fb4-962a-ba10468a80d7",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "bbf16379-ab18-413f-8cc5-8e6d68605bc8",
+        "primarySkillId": "sj.teamwork",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "importance",
+        "rationale": "Tests reliable coordination of two legitimate learning commitments rather than treating one optional session as the sole route to competence.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Very important",
+          "Important",
+          "Of minor importance",
+          "Not important at all"
+        ],
+        "answer": "Important",
+        "contentHash": "c45f8b72af47cecd6347fe0791aa834299a600075ef4bea6bf029c17ee92eeab",
+        "previouslySeen": false
+      },
+      "explanation": "Asha should follow through on the learning opportunity while meeting her other teaching commitments. Because the timing is flexible, coordinating attendance is a relevant and practical responsibility. This scheduling consideration does not carry the future patient-safety significance of recognising and addressing the handover gap itself.",
+      "statementReasons": []
+    },
+    {
+      "id": "faebb0ea-f3bb-4e2a-be08-95101fac22eb",
+      "section": "sj",
+      "parentId": "bbf16379-ab18-413f-8cc5-8e6d68605bc8",
+      "title": "",
+      "context": "After a simulated handover using a fictional patient, third-year medical student Asha receives feedback that her summary was accurate but did not clearly identify outstanding tasks or who should do them. No real patient was involved, and the exercise is for learning rather than a pass-or-fail decision. A tutor offers further supervised practice next week, at a time that can be fitted around Asha's other compulsory teaching. The teaching team has capacity to provide the session, although arranging it will require a small amount of routine room-booking work.\n\nHow important are the following considerations when Asha plans her next steps?",
+      "text": "That arranging the additional practice will involve a small amount of routine room-booking work for the teaching team.",
+      "stimulus": null,
+      "dm": null,
+      "choices": [
+        {
+          "value": "Very important",
+          "label": "Very important"
+        },
+        {
+          "value": "Important",
+          "label": "Important"
+        },
+        {
+          "value": "Of minor importance",
+          "label": "Of minor importance"
+        },
+        {
+          "value": "Not important at all",
+          "label": "Not important at all"
+        }
+      ],
+      "tag": {
+        "id": "faebb0ea-f3bb-4e2a-be08-95101fac22eb",
+        "section": "sj",
+        "mode": "practice",
+        "parentId": "bbf16379-ab18-413f-8cc5-8e6d68605bc8",
+        "primarySkillId": "sj.teamwork",
+        "secondarySkillIds": [],
+        "difficulty": "normal",
+        "format": "importance",
+        "rationale": "Tests proportionate consideration of a real but small logistical burden, without treating it as irrelevant or allowing it to override the learning need.",
+        "confidence": "high",
+        "excludedReason": null,
+        "assessmentOnly": true,
+        "source": "coach-intro-v2",
+        "options": [
+          "Very important",
+          "Important",
+          "Of minor importance",
+          "Not important at all"
+        ],
+        "answer": "Of minor importance",
+        "contentHash": "9fbbbc25efc3166e8c4cec870ade8a581b9c818e80a05aa04af28bd23f6a038c",
+        "previouslySeen": false
+      },
+      "explanation": "The teaching team's time and arrangements deserve consideration, so this is not wholly irrelevant. However, the team has capacity and has offered the session; a small routine administrative burden should have little weight beside addressing a skill gap that could affect future handovers. It does not justify abandoning the learning opportunity.",
+      "statementReasons": []
+    }
+  ]
+}

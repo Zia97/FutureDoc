@@ -3,6 +3,10 @@ import { AppState } from 'react-native';
 import NetInfo from '@react-native-community/netinfo';
 import { useAuth } from '../context/AuthContext';
 import { flush } from '../services/timedExamSyncQueue';
+import { flushPracticeAttempts } from '../services/practiceAttemptQueue';
+import { flushCoachPreferences, flushCoachCheckpoints } from '../services/coachingService';
+
+const flushAll = (user) => Promise.allSettled([flush(user), flushPracticeAttempts(user?.id), flushCoachPreferences(user?.id), flushCoachCheckpoints(user?.id)]);
 
 // ============================================================
 // Drains the timed-exam offline write queue whenever the app
@@ -29,11 +33,11 @@ export function useTimedExamSyncOnForeground() {
 
     // Flush immediately on mount as well — covers cold-start
     // when the app was killed while items were still queued.
-    flush(user).catch(() => {});
+    flushAll(user).catch(() => {});
 
     const appStateSub = AppState.addEventListener('change', (state) => {
       if (state === 'active' && userRef.current) {
-        flush(userRef.current).catch(() => {});
+        flushAll(userRef.current).catch(() => {});
       }
     });
 
@@ -42,7 +46,7 @@ export function useTimedExamSyncOnForeground() {
     const netSub = NetInfo.addEventListener((s) => {
       const isOnline = s.isInternetReachable !== false && s.isConnected !== false;
       if (isOnline && !wasOnlineRef.current && userRef.current) {
-        flush(userRef.current).catch(() => {});
+        flushAll(userRef.current).catch(() => {});
       }
       wasOnlineRef.current = isOnline;
     });

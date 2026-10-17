@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 import Constants from 'expo-constants';
 import { supabase } from './supabase';
 import { reportError } from './reportError';
+import { queuePracticeAttempt } from '../services/practiceAttemptQueue';
 
 const APP_VERSION = Constants.expoConfig?.version ?? null;
 
@@ -35,10 +36,12 @@ export async function recordPracticeAttempt({
   if (!section || !questionId) return;
   if (timeSpentMs == null || Number.isNaN(timeSpentMs) || timeSpentMs < 0) return;
 
-  const userId = await getUserId();
+  let userId;
+  try { const { data: { session } } = await supabase.auth.getSession(); userId = session?.user?.id; }
+  catch { return; }
   if (!userId) return;
 
-  const { error } = await supabase.from('practice_question_attempts').insert({
+  try { await queuePracticeAttempt({
     user_id: userId,
     section,
     question_id: questionId,
@@ -48,9 +51,7 @@ export async function recordPracticeAttempt({
     time_spent_ms: Math.round(timeSpentMs),
     platform: Platform.OS,
     app_version: APP_VERSION,
-  });
-
-  if (error) {
+  }); } catch (error) {
     reportError('recordPracticeAttempt', error, { extra: { section, questionId } });
   }
 }

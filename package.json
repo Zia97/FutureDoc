@@ -8,6 +8,9 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test:reports": "node --test scripts/question-report-fixes.test.mjs",
+    "test:coaching": "node --test scripts/coaching*.test.mjs",
+    "coaching:build-forms": "node scripts/build-coach-forms.mjs",
+    "coaching:build-assessment": "node scripts/build-coach-assessment.mjs",
     "test:performance": "node --test scripts/performance-analyser.test.mjs scripts/performance-endpoint.test.mjs scripts/performance-cache.test.mjs scripts/performance-cohort.test.mjs",
     "performance:validate-tags": "node scripts/validate-performance-tags.mjs",
     "questions:sync:vr": "node .codex/skills/ucat-question-pipeline/scripts/export-vr-corpus.mjs --source remote",
@@ -77,6 +80,7 @@
   },
   "private": true,
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.9",
     "@types/react": "~19.1.10",
     "@types/react-native": "^0.72.8",
     "typescript": "~5.9.2"

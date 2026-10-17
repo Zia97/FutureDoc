@@ -52,7 +52,7 @@ export default function ProfileScreen() {
 
   const [deleting, setDeleting] = useState(false);
   const [checkingUpdates, setCheckingUpdates] = useState(false);
-  const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false });
+  const [previewToggles, setPreviewToggles] = useState({ vr: false, qr: false, sj: false, dm: false, coach_sample: false });
   const [pwModalVisible, setPwModalVisible] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -139,7 +139,7 @@ export default function ProfileScreen() {
     if (!__DEV__) return;
     async function loadToggles() {
       const entries = await Promise.all(
-        PRACTICE_SECTIONS.map(async (s) => [s.id, await isPreviewEnabled(s.id)])
+        [...PRACTICE_SECTIONS.map((s) => s.id), 'coach_sample'].map(async (id) => [id, await isPreviewEnabled(id)])
       );
       setPreviewToggles(Object.fromEntries(entries));
     }
@@ -423,7 +423,7 @@ export default function ProfileScreen() {
           <Animated.View style={[styles.section, contentAnim]}>
             <Text style={[styles.sectionHeading, { color: colors.text }]}>Developer</Text>
             <Text style={[styles.helperText, { color: colors.textMuted }]}>
-              Each toggle loads both practice and timed JSON for that section instead of the database. Reload after installing content in src/dev/.
+              Practice toggles load local section JSON. The coaching toggle enables a generated sample assessment report for previewing the results screen.
             </Text>
             <View
               style={[
@@ -435,6 +435,20 @@ export default function ProfileScreen() {
                 },
               ]}
             >
+              <View style={styles.devRow}>
+                <RichIconBox icon="chat" accent={colors.amber} size={40} iconSize={20} />
+                <View style={styles.devLabel}>
+                  <Text style={[styles.devTitle, { color: colors.text }]}>Coaching sample results</Text>
+                  <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>Show a generated report in Coaching</Text>
+                </View>
+                <Switch
+                  value={previewToggles.coach_sample ?? false}
+                  onValueChange={(val) => handlePreviewToggle('coach_sample', val)}
+                  trackColor={{ false: colors.border, true: colors.amber }}
+                  thumbColor="#ffffff"
+                />
+              </View>
+              <View style={[styles.devDivider, { backgroundColor: colors.border }]} />
               {PRACTICE_SECTIONS.map((section, index) => (
                 <React.Fragment key={section.id}>
                   {index > 0 && (

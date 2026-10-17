@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
+export const isTestTimerUrgent = (secondsLeft) => secondsLeft <= 300;
+
 export function useTestTimer(totalMinutes, onExpire) {
   const [secondsLeft, setSecondsLeft] = useState(totalMinutes * 60);
   const [isPaused, setIsPaused] = useState(false);
@@ -42,7 +44,7 @@ export function useTestTimer(totalMinutes, onExpire) {
   const mins = Math.floor(secondsLeft / 60);
   const secs = secondsLeft % 60;
   const display = `${mins}:${secs.toString().padStart(2, '0')}`;
-  const isUrgent = secondsLeft <= 300; // last 5 minutes
+  const isUrgent = isTestTimerUrgent(secondsLeft); // last 5 minutes
 
   function pause() { setIsPaused(true); }
   function resume() { setIsPaused(false); }
