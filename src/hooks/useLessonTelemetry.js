@@ -1,100 +1,71 @@
-import { useCallback, useEffect, useRef } from 'react';
+﻿import { useCallback, useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import { recordLessonStart, recordLessonHeartbeat, recordLessonComplete } from '../lib/userTelemetry';
+import { reportError } from '../lib/reportError';
+import { useAuth } from '../context/AuthContext';
 
-import {
-  recordLessonStart,
-  recordLessonHeartbeat,
-  recordLessonComplete,
-} from '../lib/userTelemetry';
-
-const HEARTBEAT_MS = 15_000;
-
-/**
- * Track time-on-lesson for telemetry.
- *
- * Active wall-clock seconds (foreground only) are accumulated locally and
- * flushed on a 15s cadence, on unmount, and on explicit completion.
- *
- * @param {{ section: 'vr'|'dm'|'qr'|'sj', lessonId: string|null }} args
- * @returns {{ markComplete: () => void }}
- */
+const CHECKPOINT_MS = 5_000;
+const UPLOAD_MS = 60_000;
 export function useLessonTelemetry({ section, lessonId }) {
-  const enabled = !!section && !!lessonId;
-
-  // Wall-clock anchor for the currently-active foreground window (null when bg).
-  const activeSinceRef = useRef(null);
-  // Pending seconds since the last successful flush.
-  const pendingSecondsRef = useRef(0);
-  // Once true, heartbeats stop and further markComplete calls are ignored.
-  const completedRef = useRef(false);
-
-  const collectSeconds = useCallback(() => {
-    if (activeSinceRef.current == null) return 0;
-    const now = Date.now();
-    const elapsed = Math.max(0, Math.floor((now - activeSinceRef.current) / 1000));
-    activeSinceRef.current = now;
-    pendingSecondsRef.current += elapsed;
-    return pendingSecondsRef.current;
-  }, []);
-
-  const flushHeartbeat = useCallback(async () => {
-    if (!enabled || completedRef.current) return;
-    collectSeconds();
-    const delta = pendingSecondsRef.current;
-    if (delta <= 0) return;
-    pendingSecondsRef.current = 0;
-    await recordLessonHeartbeat({ section, lessonId, deltaSeconds: delta });
-  }, [enabled, section, lessonId, collectSeconds]);
-
+  const focused = useIsFocused();
+  const { user } = useAuth();
+  const userId = user?.id;
+  const completeRef = useRef(null);
+  const finished = useRef(false);
+  useEffect(() => { finished.current = false; }, [section, lessonId]);
   useEffect(() => {
-    if (!enabled) return undefined;
-
-    completedRef.current = false;
-    pendingSecondsRef.current = 0;
-    activeSinceRef.current =
-      AppState.currentState === 'active' ? Date.now() : null;
-
-    recordLessonStart({ section, lessonId });
-
+    if (!section || !lessonId || !userId || !focused || finished.current) return;
+    let anchor = AppState.currentState === 'active' ? Date.now() : null;
+    let pending = 0;
+    let lastUpload = Date.now();
+    let writes = Promise.resolve();
+    let done = false;
+    const collect = () => {
+      if (anchor == null) return;
+      const seconds = Math.max(0, Math.floor((Date.now() - anchor) / 1000));
+      pending += seconds;
+      anchor += seconds * 1000;
+    };
+    const save = (upload, complete = false) => {
+      collect();
+      // Serialize persistence, retaining seconds if a local write fails.
+      writes = writes.then(async () => {
+        const delta = pending;
+        pending = 0;
+        try {
+          await (complete ? recordLessonComplete : recordLessonHeartbeat)({ userId, section, lessonId, deltaSeconds: delta, upload });
+        } catch (error) {
+          pending += delta;
+          reportError('lessonCheckpoint.persist', error);
+        }
+      });
+      if (upload) lastUpload = Date.now();
+      return writes;
+    };
+    writes = recordLessonStart({ userId, section, lessonId }).catch((error) => reportError('lessonCheckpoint.start', error));
     const interval = setInterval(() => {
-      flushHeartbeat();
-    }, HEARTBEAT_MS);
-
-    const sub = AppState.addEventListener('change', (next) => {
-      if (next === 'active') {
-        if (activeSinceRef.current == null) activeSinceRef.current = Date.now();
-      } else {
-        // Going to background: roll partial seconds into pending and pause the clock.
-        collectSeconds();
-        activeSinceRef.current = null;
-      }
+      if (!done && anchor != null) save(Date.now() - lastUpload >= UPLOAD_MS);
+    }, CHECKPOINT_MS);
+    const sub = AppState.addEventListener('change', (state) => {
+      if (done) return;
+      if (state === 'active') { if (anchor == null) anchor = Date.now(); }
+      else { save(true); anchor = null; }
     });
-
+    completeRef.current = () => {
+      if (done) return;
+      done = true;
+      finished.current = true;
+      save(true, true);
+      anchor = null;
+    };
     return () => {
       clearInterval(interval);
       sub.remove();
-      // Final flush on unmount unless markComplete already handled it.
-      if (!completedRef.current) {
-        collectSeconds();
-        const delta = pendingSecondsRef.current;
-        pendingSecondsRef.current = 0;
-        activeSinceRef.current = null;
-        if (delta > 0) {
-          recordLessonHeartbeat({ section, lessonId, deltaSeconds: delta });
-        }
-      }
+      if (!done) save(true);
+      anchor = null;
+      completeRef.current = null;
     };
-  }, [enabled, section, lessonId, flushHeartbeat, collectSeconds]);
-
-  const markComplete = useCallback(() => {
-    if (!enabled || completedRef.current) return;
-    completedRef.current = true;
-    collectSeconds();
-    const delta = pendingSecondsRef.current;
-    pendingSecondsRef.current = 0;
-    activeSinceRef.current = null;
-    recordLessonComplete({ section, lessonId, deltaSeconds: delta });
-  }, [enabled, section, lessonId, collectSeconds]);
-
-  return { markComplete };
+  }, [section, lessonId, userId, focused]);
+  return { markComplete: useCallback(() => completeRef.current?.(), []) };
 }

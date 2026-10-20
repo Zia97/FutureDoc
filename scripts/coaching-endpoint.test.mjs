@@ -129,6 +129,35 @@ test('save conflicts and invalid answers never reach the mutation RPC', async ()
   assert.equal((await f.request({ action: 'save', id, version: 0, progress: { ...engine.initialProgress(), answers: { q1: 'INVENTED' } } })).status, 400);
   assert.equal(f.rpcs.length, 0);
 });
+
+test('the first-plan introduction uses only the authenticated student’s completed mini mock', async () => {
+  const unfinished = fixture();
+  assert.equal((await unfinished.request({ action: 'initial_plan', id })).status, 409);
+  const f = fixture({ completed: true });
+  f.s.progress.answers.q1 = 'A';
+  f.s.completed_at = '2026-10-20T12:00:00Z';
+  f.s.report = engine.buildSessionReport(f.s);
+  f.records.coach_evidence.push({ user_id: alice, payload: { questionId: 'unrelated-practice' } });
+  assert.equal((await f.request({ action: 'initial_plan', id }, 'bob')).status, 404);
+  assert.equal((await f.request({ action: 'initial_plan', id: bob })).status, 400);
+  const result = await (await f.request({ action: 'initial_plan', id })).json();
+  assert.equal(result.seen, false);
+  assert.equal(result.profile.freshQuestions, 1);
+  assert.equal(result.profile.skills[0].accuracy, 100);
+  assert.equal(result.report.sections[0].accuracy, 100);
+  assert.ok(!JSON.stringify(result).includes('SECRET ANSWER REASON'));
+});
+
+test('acknowledging the introduction is account scoped, idempotent and skips subsequent walkthroughs', async () => {
+  const f = fixture({ completed: true });
+  assert.equal((await f.request({ action: 'acknowledge_plan', id: bob })).status, 400);
+  assert.equal(f.records.coach_profiles[0].plan_intro_session_id, undefined);
+  assert.equal((await f.request({ action: 'acknowledge_plan', id }, 'bob')).status, 404);
+  for (let i = 0; i < 2; i++) assert.equal((await f.request({ action: 'acknowledge_plan', id })).status, 200);
+  assert.equal(f.records.coach_profiles[0].plan_intro_session_id, id);
+  assert.equal(f.records.coach_profiles[1].plan_intro_session_id, undefined);
+  assert.deepEqual(await (await f.request({ action: 'initial_plan', id })).json(), { seen: true });
+});
 test('chat quotas are reserved before any model call; settings validate before update', async () => {
   const f = fixture({ completed: true });
   assert.equal((await f.request({ action: 'chat', requestId: id, text: 'How am I doing?' })).status, 429);

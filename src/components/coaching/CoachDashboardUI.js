@@ -70,12 +70,12 @@ function SnapshotRing({ value, color }) {
   </View>;
 }
 
-export function ProgressOverview({ story, sections, onProgress, onAccuracyInfo }) {
+export function ProgressOverview({ story, sections, onProgress, onAccuracyInfo, onSection }) {
   const { colors, gradients } = useCoachTheme();
   return <LinearGradient colors={gradients.hero} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[ds.card, { borderColor: colors.border }]}>
     <View style={ds.between}>
-      <CoachText style={[ds.heroTitle, { flex: 1 }]}>Your accuracy</CoachText>
-      <Pressable onPress={onAccuracyInfo} accessibilityRole="button" accessibilityLabel="About your accuracy" hitSlop={6}
+      <CoachText style={[ds.heroTitle, { flex: 1 }]}>Running accuracy</CoachText>
+      <Pressable onPress={onAccuracyInfo} accessibilityRole="button" accessibilityLabel="About your running accuracy" hitSlop={6}
         style={{ minWidth: 40, minHeight: 40, alignItems: 'center', justifyContent: 'center' }}>
         <Ionicons name="information-circle-outline" size={22} color={colors.textSecondary} />
       </Pressable>
@@ -94,11 +94,12 @@ export function ProgressOverview({ story, sections, onProgress, onAccuracyInfo }
       </View>
     </View>}
     <View style={ds.snapshotRow}>
-      {sections.map((section) => <View key={section.id} style={[ds.snapshotTile, { backgroundColor: hexToRgba(colors[section.color], 0.06) }]}
-        accessible accessibilityLabel={`${section.title}, ${section.accuracy == null ? 'no results yet' : `${section.accuracy} percent of marks`}`}>
+      {sections.map((section) => <Pressable key={section.id} style={[ds.snapshotTile, { backgroundColor: hexToRgba(colors[section.color], 0.06) }]}
+        onPress={() => onSection?.(section.id)} accessibilityRole="button"
+        accessibilityLabel={`${section.title}, ${section.accuracy == null ? 'no results yet' : `${section.accuracy} percent of marks`}. View section and skills.`}>
         <SnapshotRing value={section.accuracy} color={colors[section.color]} />
         <Text style={[ds.sectionName, { color: colors.text }]}>{section.short}</Text>
-      </View>)}
+      </Pressable>)}
     </View>
   </LinearGradient>;
 }

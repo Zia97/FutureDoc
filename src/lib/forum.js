@@ -95,8 +95,10 @@ export async function listForumPosts({ query = '', before = null, limit = 20 } =
   return addSignedImageUrls(Array.isArray(data) ? data : []);
 }
 
-export async function getForumThread(postId) {
-  const { data, error } = await supabase.rpc('forum_get_thread', { p_post_id: postId });
+export async function getForumThread(postId, cursor = null) {
+  const { data, error } = await supabase.rpc('forum_get_thread_page', {
+    p_post_id: postId, p_after_at: cursor?.createdAt ?? null, p_after_id: cursor?.id ?? null,
+  });
   if (error) throw error;
   if (!data?.post) return null;
   const [post] = await addSignedImageUrls([data.post]);
@@ -333,10 +335,10 @@ export async function deleteOwnForumContent(targetType, targetId) {
   }
 }
 
-export async function getForumAdminQueue() {
-  const { data, error } = await supabase.rpc('forum_admin_get_queue');
+export async function getForumAdminQueue(offset = 0) {
+  const { data, error } = await supabase.rpc('forum_admin_get_queue_page', { p_offset: offset });
   if (error) throw error;
-  return data;
+  return data ? { ...data, nextOffset: data.pending.length === 50 || data.reports.length === 50 ? offset + 50 : null } : null;
 }
 
 export async function searchForumMembers(query = '') {

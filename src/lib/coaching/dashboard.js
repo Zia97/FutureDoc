@@ -9,21 +9,21 @@ export const COACH_SECTIONS = [
 export const sectionName = (id) => COACH_SECTIONS.find((section) => section.id === id)?.title ?? 'UCAT';
 
 export function recommendationReason(skill) {
-  if (!skill?.questions || skill.accuracy == null) return 'A few focused questions will help us understand how you approach this skill.';
-  if (skill.stale) return 'Time for a refresher. Let’s check what has stuck and what needs another look.';
-  const evidence = `${skill.accuracy}% of marks across ${skill.questions} first attempts.`;
-  if (skill.confidence !== 'established') return `${evidence} An early signal to explore with more practice.`;
-  if (skill.accuracy < 65) return `${evidence} A priority for recovering missed marks.`;
-  return `${evidence} Let’s make this skill more consistent.`;
+  if (!skill?.questions || skill.accuracy == null) return 'Try a short set so we can choose what to work on next.';
+  if (skill.stale) return 'Time for a refresher. Revisit the technique, then try a short set.';
+  if (skill.accuracy < 65) return 'There are marks to pick up here. Start with the technique, then put it into practice.';
+  return 'Build on what you can already do and practise getting these questions right more consistently.';
 }
 
 export function sectionSnapshot(profile, baseline, mode = 'all') {
   return COACH_SECTIONS.map((meta) => {
     let stats;
     if (mode === 'all') {
-      stats = profile?.runningSections?.find((item) => item.section === meta.id)
-        ?? profile?.sections?.find((item) => item.section === meta.id)
-        ?? baseline?.report?.sections?.find((item) => item.section === meta.id);
+      const current = profile?.runningSections?.find((item) => item.section === meta.id)
+        ?? profile?.sections?.find((item) => item.section === meta.id);
+      // An empty running window must not hide the saved mini mock result.
+      stats = Number.isFinite(current?.accuracy) ? current
+        : baseline?.report?.sections?.find((item) => item.section === meta.id);
     } else {
       const rows = (profile?.skills ?? []).filter((skill) => skill.section === meta.id).map((skill) => skill[mode]);
       const earned = rows.reduce((sum, item) => sum + (item?.earned ?? 0), 0);
@@ -57,7 +57,7 @@ export function buildDashboardStory(profile, baseline, history = []) {
   const strength = profile?.strengths?.find((skill) => !skill.stale);
   let coachNote;
   if (strength) {
-    coachNote = `${strength.label} is ${strength.confidence === 'established' ? 'a strength to build on' : 'an encouraging early signal'} in ${sectionName(strength.section)}.`;
+    coachNote = `You’ve done well with ${strength.label.toLowerCase()} in ${sectionName(strength.section)} so far.`;
   } else if (improvement) {
     coachNote = `You’re making headway in ${improvement.skill.label.toLowerCase()}. Let’s keep building on that with fresh questions.`;
   } else {

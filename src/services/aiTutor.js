@@ -12,6 +12,8 @@ function firstPresentId(...values) {
 }
 
 export async function streamAITutor({
+  requestId,
+  requestCreatedAt,
   questionId,
   id,
   itemId,
@@ -60,6 +62,8 @@ export async function streamAITutor({
         'X-App-Version': APP_VERSION,
       },
       body: JSON.stringify({
+        requestId,
+        requestCreatedAt,
         questionId: resolvedQuestionId,
         question,
         questionType,

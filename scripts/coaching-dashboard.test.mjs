@@ -12,7 +12,7 @@ test('dashboard distinguishes a baseline from ongoing practice without inventing
   assert.equal(initial.stage, 'starting');
   assert.equal(initial.improvement, null);
   assert.equal(initial.focus.sectionTitle, 'Decision Making');
-  assert.match(initial.focus.reason, /50%.*12 first attempts/);
+  assert.match(initial.focus.reason, /marks to pick up/);
   assert.equal(buildDashboardStory(profile(), baseline, [{ kind: 'practice' }]).stage, 'building');
   assert.equal(buildDashboardStory(profile({ freshQuestions: 13 }), baseline).stage, 'building');
   assert.equal(buildDashboardStory(null, null).improvement, null);
@@ -61,6 +61,23 @@ test('a zero section score is preserved and the mini mock is only a fallback', (
   assert.equal(sectionSnapshot(null, baseline).find((s) => s.id === 'dm').accuracy, 50);
 });
 
+test('empty running sections fall back to mini mock results while populated sections keep updating', () => {
+  const saved = { report: { sections: [
+    { section: 'vr', accuracy: 75, questions: 12 },
+    { section: 'dm', accuracy: 50, questions: 12 },
+    { section: 'qr', accuracy: 0, questions: 12 },
+    { section: 'sj', accuracy: 63, questions: 12 },
+  ] } };
+  const runningSections = saved.report.sections.map(({ section }) => ({ section, accuracy: null, questions: 0 }));
+  const rows = sectionSnapshot({ runningSections }, saved);
+  assert.deepEqual(rows.map(({ accuracy, questions }) => ({ accuracy, questions })),
+    saved.report.sections.map(({ accuracy, questions }) => ({ accuracy, questions })));
+  runningSections[1] = { section: 'dm', accuracy: 0, questions: 20 };
+  assert.equal(sectionSnapshot({ runningSections }, saved)[1].accuracy, 0);
+  assert.equal(sectionSnapshot({ runningSections }, saved)[1].questions, 20);
+  assert.ok(sectionSnapshot({ runningSections: [] }, null).every((row) => row.accuracy === null));
+});
+
 test('resuming counts complete DM statement answers and describes the saved focus', () => {
   const active = { kind: 'practice', title: 'Decision Making · Conditional logic' };
   const session = { questions: [
@@ -77,8 +94,9 @@ test('resuming counts complete DM statement answers and describes the saved focu
   assert.equal(resumeSummary(session, { ...active, kind: 'assessment' }).sectionTitle, 'All four UCAT sections');
 });
 
-test('limited evidence is described as an early signal and questions about tutor help are ignored', () => {
-  assert.match(recommendationReason({ ...logic, questions: 3, confidence: 'early signal' }), /early signal/);
+test('recommendations give a practical next step without calculation details and tutor help is ignored', () => {
+  assert.match(recommendationReason({ ...logic, questions: 3, confidence: 'early signal' }), /technique.*practice/);
+  assert.doesNotMatch(recommendationReason(logic), /first attempts|confidence|early signal/);
   assert.doesNotMatch(recommendationReason({ ...logic, questions: 0, accuracy: null }), /weak|struggl/);
   const withHelp = buildDashboardStory(profile({ tutorHelp: { vr: 5 } }), baseline);
   assert.deepEqual(withHelp, buildDashboardStory(profile(), baseline));

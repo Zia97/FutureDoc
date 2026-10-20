@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '../lib/supabase';
+import { performanceCache } from './performanceService';
 
 const PREFIX = 'coach_checkpoint_v1:';
 const HUB_PREFIX = 'coach_hub_v1:';
@@ -37,6 +38,7 @@ export async function coachRequest(userId, action, payload = {}) {
     const failure = new Error(messages[code] ?? 'Your coach could not connect. Your saved progress is safe; check your connection and retry.');
     failure.code = code; throw failure;
   }
+  if (action === 'reset_progress' || (action === 'save' && data?.session?.status === 'completed')) performanceCache.invalidate(userId);
   return data;
 }
 export function saveCoachCheckpoint(userId, session, dirty = true) {

@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { rateAITutorResponse, streamAITutor } from '../../services/aiTutor';
+import { newCoachRequestId } from '../../services/coachingService';
 
 export const TUTOR_ERROR = {
   DAILY_LIMIT: 'daily_limit_reached',
@@ -58,12 +59,17 @@ export function useAITutor(questionContext, options = {}) {
 
   // Tracks conversation history sent to the Edge Function (role/content only)
   const historyRef = useRef([]);
+  const retryRef = useRef(null);
 
   const sendMessage = useCallback((userText) => {
     if (isStreaming) return;
 
     const userMessage = { role: 'user', content: userText };
     historyRef.current = [...historyRef.current, userMessage];
+    const signature = JSON.stringify(historyRef.current);
+    if (retryRef.current?.signature !== signature) retryRef.current = {
+      signature, requestId: newCoachRequestId(), requestCreatedAt: new Date().toISOString(),
+    };
 
     setMessages((prev) => [...prev, { role: 'user', content: userText }]);
     setStreamingContent('');
@@ -74,6 +80,8 @@ export function useAITutor(questionContext, options = {}) {
 
     streamAITutor({
       ...normalizedQuestionContext,
+      requestId: retryRef.current.requestId,
+      requestCreatedAt: retryRef.current.requestCreatedAt,
       messages: historyRef.current,
       isDemo,
       onChunk: (chunk) => {
@@ -81,6 +89,7 @@ export function useAITutor(questionContext, options = {}) {
         setStreamingContent(accumulated);
       },
       onDone: ({ messageId } = {}) => {
+        retryRef.current = null;
         const assistantMessage = {
           role: 'assistant',
           content: accumulated,
@@ -134,6 +143,7 @@ export function useAITutor(questionContext, options = {}) {
     setIsStreaming(false);
     setError(null);
     historyRef.current = [];
+    retryRef.current = null;
   }, [questionSessionKey]);
 
   const reset = useCallback(() => {
@@ -142,6 +152,7 @@ export function useAITutor(questionContext, options = {}) {
     setIsStreaming(false);
     setError(null);
     historyRef.current = [];
+    retryRef.current = null;
   }, []);
 
   return {

@@ -6,7 +6,7 @@ async function loadPerformanceSnapshot({ userId, includeDetails }) {
   const { data: { session } } = await supabase.auth.getSession();
   if (!session || session.user.id !== userId) throw new Error('Please sign in to see your performance.');
   const { data, error } = await supabase.functions.invoke('performance-analysis', {
-    body: { mode: 'all', includeDetails: includeDetails === true },
+    body: { mode: 'all', snapshotVersion: 2, includeDetails: includeDetails === true },
     headers: { Authorization: `Bearer ${session.access_token}` },
   });
   if (error || data?.error || !isPerformanceSnapshot(data)) {

@@ -1,0 +1,127 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {PGlite} from '@electric-sql/pglite';
+const root=process.env.FUTUREDOC_PATH || (fs.existsSync('src/lib/dbQueries.js')?process.cwd():path.resolve('../FutureDoc'));
+const migration=fs.readFileSync(new URL('../supabase/migrations/20261020120000_admin_report_triage.sql',import.meta.url),'utf8');
+const original=name=>fs.readFileSync(path.join(root,'supabase/migrations',name),'utf8');
+const admin='00000000-0000-4000-8000-000000000001',student='00000000-0000-4000-8000-000000000002';
+const qid='00000000-0000-4000-8000-000000000003';
+test('private SQL inbox, historical evidence, atomic triage, AI evidence preservation and new arrivals',async()=>{
+  const db=new PGlite();
+  try {
+    await db.exec(`create role anon;create role authenticated;create role service_role bypassrls;
+      create schema auth;create table auth.users(id uuid primary key,email text,last_sign_in_at timestamptz,created_at timestamptz);
+      create function auth.uid() returns uuid language sql as $$select null::uuid$$;
+      create table public.user_profiles(user_id uuid primary key,is_admin boolean default false);
+      create table public.user_ai_context(user_id uuid primary key,struggles jsonb,updated_at timestamptz);
+      grant usage on schema public to anon,authenticated,service_role;
+      grant usage on schema auth to anon,authenticated,service_role;`);
+    for(const name of ['20260408000002_create_question_reports.sql','20260501000001_create_lesson_reports.sql',
+      '20260504000005_create_support_messages.sql','20260504000007_support_messages_grants_only.sql',
+      '20260410000002_create_ai_tutor_logs.sql','20260418000001_fix_ai_tutor_logs_columns.sql','20260929000002_ai_tutor_observability.sql',
+      '20261001000001_question_report_diagnostics.sql'])await db.exec(original(name));
+    const forum=original('20260928000001_create_forum.sql');
+    for(const type of ['forum_report_target','forum_report_status'])await db.exec(forum.match(new RegExp(`create type public\\.${type} as enum \\([\\s\\S]*?\\);`))[0]);
+    await db.exec(forum.match(/create table public\.forum_reports \([\s\S]*?\n\);/)[0]);
+    await db.exec(`alter table forum_reports enable row level security;grant all on all tables in schema public to service_role;
+      grant usage on all sequences in schema public to service_role;
+      insert into auth.users(id) values('${admin}'),('${student}');
+      insert into user_profiles values('${admin}',true),('${student}',false);`);
+    await db.exec(migration);
+    const originalPolicies=(await db.query("select count(*)::int n from pg_policies where tablename='question_reports'")).rows[0].n;
+    assert.equal(originalPolicies,1,'existing student report policy remains intact');
+    const insertQuestion=async(mode=false,section='qr',state='new',created='2026-04-10T08:00:00Z')=>(await db.query(
+      "insert into question_reports(question_id,section,is_timed,comment,status,created_at) values($1,$2,$3,$4,$5,$6) returning id",
+      [qid,section,mode,'The chart units are unclear',state,created])).rows[0].id;
+    const r1=await insertQuestion(),r2=await insertQuestion();
+    await insertQuestion(true);await insertQuestion(false,'vr');
+    await insertQuestion(false,'dm','fixed');
+    await db.query("insert into lesson_reports(lesson_id,section,comment) values('old-lesson','vr','Historical lesson issue')");
+    await db.query("insert into support_messages(subject,message) values('Delivery','I need help')");
+    await db.query("insert into forum_reports(target_type,target_id,reason,details) values('post',$1,'spam','Spam report')",[qid]);
+    const a1=(await db.query(`insert into ai_tutor_logs(user_id,message,section,question_id,is_timed,record_status,record_concern,feedback,success,prompt_version,error_code)
+      values($1,'Why?', 'quantitative_reasoning',$2,false,'possible_error','Check units','not_helpful',false,'v2','provider_error') returning id`,[student,qid])).rows[0].id;
+    await db.query("insert into ai_tutor_logs(user_id,message,section,success,created_at) values($1,'Legacy row','vr',false,'2026-04-12')",[student]);
+    await db.query("insert into ai_tutor_logs(user_id,message,section,success,prompt_version,created_at) values($1,'In flight','vr',false,'v2',now())",[student]);
+    await db.query("insert into ai_tutor_logs(user_id,message,section,success,prompt_version,created_at) values($1,'Abandoned','vr',false,'v2',now()-interval '1 hour')",[student]);
+    await db.exec('set role service_role');
+    const rpc=async(name,args)=>(await db.query(`select public.${name}(${args.map((_,i)=>'$'+(i+1)).join(',')}) as result`,args)).rows[0].result;
+    const list=filter=>rpc('admin_reports_list',[admin,filter]);
+    const detail=issue=>rpc('admin_reports_detail',[admin,issue,1]);
+    const primary=`question:qr:practice:${qid}`;
+    const all=await list({status:'all',pageSize:100});
+    assert.equal(all.total,8);
+    assert.equal(all.items.find(i=>i.issue_key===primary).report_count,3,'two reports plus ONE AI row despite three flags');
+    assert.ok(all.items.some(i=>i.issue_key===`question:qr:timed:${qid}`),'timed is independent');
+    assert.ok(all.items.some(i=>i.issue_key===`question:vr:practice:${qid}`),'section is independent');
+    assert.equal((await list({signal:'possible_error'})).total,1);
+    assert.equal((await list({source:'ai'})).total,2,'legacy default false and in-flight requests are excluded');
+    assert.equal((await list({status:'resolved'})).total,1,'historical fixed reports remain accessible');
+    assert.equal((await list({search:'old-lesson'})).total,1);
+    const first=await list({page:1,pageSize:3}),second=await list({page:2,pageSize:3});
+    assert.equal(first.items.length,3);assert.equal(second.items.length,3);
+    assert.ok(!first.items.some(a=>second.items.some(b=>a.issue_key===b.issue_key)));
+    let d=await detail(primary);
+    const originalAI=JSON.stringify(d.evidence.find(e=>e.source==='ai').raw);
+    const items=d.evidence.map(({source,source_id,revision})=>({source,source_id,revision}));
+    const review=(action,selected=items,note='Reviewed the chart',conclusion='confirmed_error')=>rpc('admin_reports_review',[admin,primary,selected,action,note,conclusion]);
+    await assert.rejects(review('resolve',items,''),/invalid_review/);
+    await assert.rejects(review('start',[...items,items[0]]),/duplicate_evidence/);
+    await review('start');
+    await assert.rejects(review('resolve'),/stale_evidence/,'stale client cannot overwrite another review');
+    d=await detail(primary);
+    const fresh=d.evidence.map(({source,source_id,revision})=>({source,source_id,revision}));
+    // A bad item must roll the entire operation back, including its audit.
+    const bad=fresh.map((e,i)=>i===fresh.length-1?{...e,revision:'stale'}:e);
+    await assert.rejects(review('resolve',bad),/stale_evidence/);
+    assert.ok((await detail(primary)).evidence.every(e=>e.state==='reviewing'));
+    assert.equal((await detail(primary)).audit.length,3);
+    await review('resolve',fresh);
+    d=await detail(primary);
+    assert.ok(d.evidence.every(e=>e.state==='resolved'&&e.conclusion==='confirmed_error'));
+    assert.equal(JSON.stringify(d.evidence.find(e=>e.source==='ai').raw),originalAI,'AI evidence is unchanged');
+    assert.equal((await db.query('select status from question_reports where id=$1',[r1])).rows[0].status,'fixed');
+    assert.equal(d.audit.length,6);
+    assert.equal((await rpc('admin_reports_activity',[admin,primary,1])).total,6);
+    assert.equal((await rpc('admin_reports_activity',[admin,primary,2])).items.length,0);
+    assert.ok(d.audit.every(a=>a.actor===admin&&a.created_at&&a.action));
+    await db.exec('reset role');
+    await insertQuestion(false,'qr','new','2026-10-20T12:00:00Z');
+    await db.exec('set role service_role');
+    const reopened=(await list({status:'open'})).items.find(i=>i.issue_key===primary);
+    assert.equal(reopened.state,'new');assert.equal(reopened.report_count,4);assert.equal(reopened.open_count,1);
+    await db.exec('reset role');
+    await db.query("update ai_tutor_logs set feedback_at=now() where id=$1",[a1]);
+    await db.exec('set role service_role');
+    d=await detail(primary);
+    assert.equal(d.evidence.find(e=>e.source==='ai').state,'new','new feedback on a closed AI log reopens it');
+    assert.equal(d.evidence.find(e=>e.source==='ai').conclusion,'unconfirmed');
+    const onlyNew=d.evidence.filter(e=>e.state==='new').map(({source,source_id,revision})=>({source,source_id,revision}));
+    await review('dismiss',onlyNew,'No content change required','no_error');
+    d=await detail(primary);
+    const dismissed=d.evidence.filter(e=>e.state==='dismissed').map(({source,source_id,revision})=>({source,source_id,revision}));
+    await review('reopen',dismissed,'Revisit this issue','unconfirmed');
+    d=await detail(primary);
+    const noteItem=d.evidence.filter(e=>e.state==='new').slice(0,1).map(({source,source_id,revision})=>({source,source_id,revision}));
+    await review('note',noteItem,'Additional observation','unconfirmed');
+    assert.equal((await detail(primary)).evidence.find(e=>e.source_id===noteItem[0].source_id).state,'new','notes do not change status');
+    await assert.rejects(rpc('admin_reports_list',[student,{}]),/forbidden/);
+    await assert.rejects(rpc('admin_reports_review',[student,primary,[], 'note','x','unconfirmed']),/forbidden/);
+    await db.exec('reset role');
+    await db.query("update user_profiles set is_admin=false where user_id=$1",[admin]);
+    await db.exec('set role service_role');
+    await assert.rejects(list({}),/forbidden/,'revoked admin loses access');
+    for(const role of ['anon','authenticated']) {
+      await db.exec(`reset role;set role ${role}`);
+      await assert.rejects(rpc('admin_reports_list',[admin,{}]),/permission denied/);
+      await assert.rejects(rpc('admin_reports_detail',[admin,primary,1]),/permission denied/);
+      await assert.rejects(rpc('admin_reports_activity',[admin,primary,1]),/permission denied/);
+      await assert.rejects(rpc('admin_reports_review',[admin,primary,items,'start','','unconfirmed']),/permission denied/);
+      await assert.rejects(db.query('select * from admin.report_evidence'),/permission denied/);
+      await assert.rejects(db.query('select * from admin.report_reviews'),/permission denied/);
+      await assert.rejects(db.query('select * from admin.report_audit'),/permission denied/);
+    }
+  }finally{await db.close();}
+});

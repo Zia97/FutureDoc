@@ -22,7 +22,7 @@ const TABS = [
   { name: 'Home', component: HomeScreen, label: 'Home', icon: 'home', iconOutline: 'home-outline' },
   { name: 'PracticeSections', component: PracticeSectionsScreen, label: 'Practice', icon: 'book', iconOutline: 'book-outline' },
   { name: 'Coaching', component: CoachHubScreen, label: 'Coaching', icon: 'school', iconOutline: 'school-outline' },
-  { name: 'PerformanceAnalytics', component: PerformanceAnalyticsScreen, label: 'Performance', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
+  { name: 'PerformanceAnalytics', component: PerformanceAnalyticsScreen, hidden: true },
   { name: 'Community', component: ForumScreen, label: 'Community', icon: 'people', iconOutline: 'people-outline' },
   { name: 'TimedTestList', component: TimedTabScreen, hidden: true },
 ];

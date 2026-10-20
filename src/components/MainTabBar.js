@@ -10,7 +10,6 @@ const TABS = [
   { name: 'Home', label: 'Home', icon: 'home', iconOutline: 'home-outline' },
   { name: 'PracticeSections', label: 'Practice', icon: 'book', iconOutline: 'book-outline' },
   { name: 'Coaching', label: 'Coaching', icon: 'school', iconOutline: 'school-outline' },
-  { name: 'PerformanceAnalytics', label: 'Performance', icon: 'stats-chart', iconOutline: 'stats-chart-outline' },
   { name: 'Community', label: 'Community', icon: 'people', iconOutline: 'people-outline' },
 ];
 
@@ -36,7 +35,7 @@ export default function MainTabBar({ navigation, activeTab, onSelectTab }) {
     return mainTabsRoute.state.routeNames?.[idx] ?? null;
   });
   const active = activeTab ?? detectedTab;
-  const current = active === 'TimedTestList' ? 'PracticeSections' : active;
+  const current = active === 'TimedTestList' ? 'PracticeSections' : active === 'PerformanceAnalytics' ? 'Coaching' : active;
 
   const bottomPad = Math.max(
     insets.bottom,

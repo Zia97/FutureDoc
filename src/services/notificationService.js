@@ -67,11 +67,13 @@ async function deviceToken() {
 async function registerDevice(userId) {
   const token = await deviceToken();
   if (!token) return;
+  const cached = JSON.parse(await AsyncStorage.getItem(DEVICE_TOKEN_KEY) || 'null');
+  if (cached?.userId === userId && cached.token === token && Date.now() - cached.registeredAt < 24 * 60 * 60 * 1000) return;
   const { error } = await supabase.from('notification_devices').upsert(
     { token, user_id: userId, updated_at: new Date().toISOString() }, { onConflict: 'token' },
   );
   if (error) throw error;
-  await AsyncStorage.setItem(DEVICE_TOKEN_KEY, JSON.stringify({ userId, token }));
+  await AsyncStorage.setItem(DEVICE_TOKEN_KEY, JSON.stringify({ userId, token, registeredAt: Date.now() }));
 }
 
 export async function removeDevice(userId) {

@@ -22,6 +22,7 @@ export default function ForumAdminScreen({ navigation }) {
   const [members, setMembers] = useState([]);
   const [memberQuery, setMemberQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [tab, setTab] = useState('pending');
   const [action, setAction] = useState(null);
   const [reason, setReason] = useState('');
@@ -72,6 +73,19 @@ export default function ForumAdminScreen({ navigation }) {
   };
 
   const data = tab === 'pending' ? queue.pending ?? [] : tab === 'reports' ? queue.reports ?? [] : members;
+  const loadMore = async () => {
+    if (loadingMore || queue.nextOffset == null) return;
+    setLoadingMore(true);
+    try {
+      const page = await getForumAdminQueue(queue.nextOffset);
+      if (page) setQueue((current) => ({
+        nextOffset: page.nextOffset,
+        pending: [...new Map([...current.pending, ...page.pending].map((item) => [`${item.type}:${item.id}`, item])).values()],
+        reports: [...new Map([...current.reports, ...page.reports].map((item) => [item.id, item])).values()],
+      }));
+    } catch (error) { Alert.alert('Could not load queue', error.message); }
+    finally { setLoadingMore(false); }
+  };
 
   const openBanChoice = (item) => Alert.alert('Restrict forum posting', 'Choose how long this member cannot post.', [
     { text: 'Cancel', style: 'cancel' },
@@ -154,6 +168,11 @@ export default function ForumAdminScreen({ navigation }) {
           keyExtractor={(item) => item.id ?? item.memberId}
           renderItem={tab === 'pending' ? renderPending : tab === 'reports' ? renderReport : renderMember}
           contentContainerStyle={styles.list}
+          ListFooterComponent={tab !== 'users' && queue.nextOffset != null ? (
+            <TouchableOpacity onPress={loadMore} disabled={loadingMore} style={styles.actionOutline}>
+              <Text style={[styles.outlineText, { color: colors.text }]}>{loadingMore ? 'Loading…' : 'Load more'}</Text>
+            </TouchableOpacity>
+          ) : null}
           ListEmptyComponent={<View style={styles.empty}><Ionicons name="checkmark-circle-outline" size={44} color={colors.teal} /><Text style={[styles.emptyText, { color: colors.textSecondary }]}>Queue clear</Text></View>}
         />
       )}

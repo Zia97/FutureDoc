@@ -21,6 +21,8 @@ async function proAccess(client: any, userId: string) {
   return revenueCatHasPro((await response.json()).subscriber);
 }
 async function ensureProfile(client: any, userId: string) {
+  const existing = unwrap(await client.from('coach_profiles').select('*').eq('user_id', userId).maybeSingle());
+  if (existing) return existing;
   unwrap(await client.from('coach_profiles').upsert({ user_id: userId }, { onConflict: 'user_id', ignoreDuplicates: true }));
   return unwrap(await client.from('coach_profiles').select('*').eq('user_id', userId).single());
 }
@@ -71,6 +73,22 @@ export async function handleCoach(req: Request, client: any) {
       return json({ report: buildSampleReport(questions), sample: true });
     }
     const settings = await ensureProfile(client, user.id);
+    if (body.action === 'initial_plan' || body.action === 'acknowledge_plan') {
+      if (!settings.baseline_session_id) throw new Error('assessment_required');
+      if (body.id !== settings.baseline_session_id) throw new Error('invalid_request');
+      const baseline = await getSession(client, user.id, settings.baseline_session_id);
+      if (baseline.status !== 'completed') throw new Error('assessment_required');
+      if (body.action === 'acknowledge_plan') {
+        unwrap(await client.from('coach_profiles').update({ plan_intro_session_id: baseline.id })
+          .eq('user_id', user.id).eq('baseline_session_id', baseline.id));
+        return json({ ok: true });
+      }
+      if (settings.plan_intro_session_id === baseline.id) return json({ seen: true });
+      const catalogue = await readCatalogue(client);
+      const profile = buildCoachProfile({ catalogue, rawEvidence: sessionEvidence(baseline),
+        examDate: settings.exam_date, baselineCompletedAt: baseline.completed_at });
+      return json({ seen: false, profile, report: baseline.report });
+    }
     if (body.action === 'settings') {
       const examDate = body.examDate === undefined ? settings.exam_date : body.examDate;
       const timeMultiplier = body.timeMultiplier === undefined ? Number(settings.time_multiplier) : body.timeMultiplier;
@@ -79,13 +97,25 @@ export async function handleCoach(req: Request, client: any) {
       return json({ ok: true });
     }
     if (!['hub', 'start', 'chat'].includes(body.action)) throw new Error('invalid_request');
+    let pro = false, reservation: any;
+    if (body.action === 'chat') {
+    if (!settings.baseline_session_id) throw new Error('assessment_required');
+    if (typeof body.text !== 'string' || !body.text.trim() || body.text.length > 2000 || !uuid(body.requestId)) throw new Error('invalid_message');
+    pro = await proAccess(client, user.id);
+    reservation = unwrap(await client.rpc('coach_reserve_message', { p_user: user.id, p_request: body.requestId, p_text: body.text.trim(), p_pro: pro }));
+    if (!reservation.reserved) {
+      if (reservation.message.status === 'completed') return json({ message: reservation.message });
+      // If a worker was terminated, return a durable fallback for that same request.
+      if (Date.parse(reservation.message.created_at) > Date.now() - 120000) throw new Error('message_in_progress');
+    }
+    }
     const [catalogue, rawEvidence] = await Promise.all([readCatalogue(client), readEvidence(client, user.id)]);
     const baseline = settings.baseline_session_id ? await getSession(client, user.id, settings.baseline_session_id) : null;
     const profile = buildCoachProfile({ catalogue, rawEvidence, examDate: settings.exam_date,
       baselineCompletedAt: baseline?.completed_at ?? null });
     if (baseline) {
-      for (const label of profile.milestones) unwrap(await client.from('coach_milestones').upsert({ user_id: user.id,
-        key: label.toLowerCase().replace(/[^a-z0-9]+/g, '_'), label }, { onConflict: 'user_id,key', ignoreDuplicates: true }));
+      if (profile.milestones.length) unwrap(await client.from('coach_milestones').upsert(profile.milestones.map((label: string) => ({ user_id: user.id,
+        key: label.toLowerCase().replace(/[^a-z0-9]+/g, '_'), label })), { onConflict: 'user_id,key', ignoreDuplicates: true }));
       const earned = unwrap(await client.from('coach_milestones').select('key,label,earned_at').eq('user_id', user.id).order('earned_at'));
       profile.milestones = [...new Set([...profile.milestones, ...earned.map((m: any) => m.label)])];
     }
@@ -134,15 +164,6 @@ export async function handleCoach(req: Request, client: any) {
         kind: body.kind, title, form_version: formVersion, time_multiplier: settings.time_multiplier, questions, budgets, progress: initialProgress(),
       } }));
       return json({ session: publicSession(session) });
-    }
-    if (!baseline) throw new Error('assessment_required');
-    if (typeof body.text !== 'string' || !body.text.trim() || body.text.length > 2000 || !uuid(body.requestId)) throw new Error('invalid_message');
-    const pro = await proAccess(client, user.id);
-    const reservation = unwrap(await client.rpc('coach_reserve_message', { p_user: user.id, p_request: body.requestId, p_text: body.text.trim(), p_pro: pro }));
-    if (!reservation.reserved) {
-      if (reservation.message.status === 'completed') return json({ message: reservation.message });
-      // If a worker was terminated, return a durable fallback for that same request.
-      if (Date.parse(reservation.message.created_at) > Date.now() - 120000) throw new Error('message_in_progress');
     }
     const recent = Array.isArray(body.history) ? body.history.slice(-12).flatMap((turn: any) => {
       if (!turn || typeof turn.user_text !== 'string') return [];

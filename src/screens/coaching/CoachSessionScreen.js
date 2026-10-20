@@ -191,7 +191,7 @@ export default function CoachSessionScreen({ route, navigation }) {
       if (next) { put(next).catch(() => {}); if (next.progress.phase !== 'running') syncRef.current?.(); }
     }} />;
   if (session.kind === 'assessment' && complete) return <CoachAssessmentResults session={session}
-    initialReview={route.params?.review === true} onPlan={() => navigation.navigate('CoachHub')} />;
+    initialReview={route.params?.review === true} onPlan={() => navigation.navigate('CoachPlanIntro', { id: session.id })} />;
   return <CoachPage scrollRef={scroll}>
     <Copy title>{session.title}</Copy>
     {!complete && <Copy muted style={cs.caption}>{saveLabel}</Copy>}

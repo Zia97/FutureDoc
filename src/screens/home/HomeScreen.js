@@ -278,7 +278,7 @@ export default function HomeScreen({ navigation }) {
           <GlassMenuCard title="Practice" description="Free or timed questions across the UCAT subtests." icon="target" accent={colors.blue} highlighted onPress={() => navigation.navigate('MainTabs', { screen: 'PracticeSections' })} style={styles.actionCard} />
           <GlassMenuCard title="Coaching" description="Your personalised plan, practice and progress." icon="graduation-cap" accent={colors.purple} onPress={openCoaching} style={styles.actionCard} />
           <GlassMenuCard title="Learn UCAT Techniques" description="Lessons and strategies for every subtest." icon={LEARN_FEATURE_ICON} accent={colors.cyan} onPress={() => navigation.navigate('LearnSections')} style={styles.actionCard} />
-          <GlassMenuCard title="Performance" description="Track your accuracy and progress." icon="chart" accent={colors.teal} onPress={() => navigation.navigate('MainTabs', { screen: 'PerformanceAnalytics' })} style={styles.actionCard} />
+          <GlassMenuCard title="Your progress" description="Section results, skills and cohort comparison." icon="chart" accent={colors.teal} onPress={() => navigation.navigate('MainTabs', { screen: 'Coaching', params: { area: 'progress' } })} style={styles.actionCard} />
           <GlassMenuCard title="Student Community" description="Ask questions and learn with other students." icon="chat" accent={colors.purple} onPress={() => navigation.navigate('MainTabs', { screen: 'Community' })} style={styles.actionCard} />
           <GlassMenuCard title="About the UCAT" description="Learn how the test works." icon="book" accent={colors.amber} onPress={() => navigation.navigate('AboutUCAT')} style={styles.actionCard} />
         </Animated.View>

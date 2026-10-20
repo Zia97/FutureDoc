@@ -1,6 +1,7 @@
 // Shared by the authenticated edge function and the local analysis tests.
 // No UI, network calls, predictions or model-generated statistics live here.
 import { getSJMark } from '../sjScoring.js';
+import { compareCohort } from './cohort.js';
 
 export const SECTIONS = ['vr', 'dm', 'qr', 'sj'];
 export const MIN_SKILL_QUESTIONS = 10;
@@ -59,7 +60,7 @@ function collapseAttempts(rows, byKey, latest = false) {
     groups.get(key).push(row);
   }
   return [...groups.entries()].map(([key, parts]) => {
-    const q = byKey.get(key);
+    const q = parts[0].tag ?? byKey.get(key);
     const row = parts[0];
     let answer = row.selectedAnswer;
     let timeMs = validTime(row.timeMs);
@@ -73,7 +74,8 @@ function collapseAttempts(rows, byKey, latest = false) {
     }
     const grade = incomplete ? { earned: null, possible: 0 } : gradeResponse(q, answer, row.isCorrect);
     return {
-      key, section: row.section, mode: row.mode, questionId: row.questionId,
+      key, section: row.section, mode: row.mode, questionId: row.questionId, tag: q,
+      cohortMode: row.cohortMode ?? row.mode, kind: row.kind, interrupted: row.interrupted === true,
       parentId: q?.parentId ?? row.questionId, skillId: q?.primarySkillId ?? null,
       difficulty: q?.difficulty ?? 'unknown', confidence: q?.confidence ?? 'low',
       answeredAt: parts.map((p) => p.answeredAt).sort((a, b) => dateMs(b) - dateMs(a))[0],
@@ -129,56 +131,34 @@ function weekHistory(rows, now) {
   });
 }
 
-function compareCohort(rows, byKey, cohort) {
-  const distributions = new Map((cohort?.rows ?? []).map((q) => [questionKey(q.section, q.mode, q.questionId), q]));
-  let earned = 0, cohortEarned = 0, possible = 0, matchedQuestions = 0;
-  for (const row of rows) {
-    if (row.excluded || !row.possible) continue;
-    const distribution = distributions.get(row.key);
-    if (!distribution) continue;
-    let total = 0, marks = 0;
-    for (const item of distribution.answers ?? []) {
-      if (!Number.isSafeInteger(item.count) || item.count < 1) continue;
-      const grade = gradeResponse(byKey.get(row.key), item.answer);
-      if (!grade.possible || grade.earned == null) continue;
-      total += item.count;
-      marks += grade.earned * item.count;
-    }
-    if (total < 5) continue;
-    earned += row.earned;
-    cohortEarned += marks / total;
-    possible += row.possible;
-    matchedQuestions++;
-  }
-  // Each matched question has the same weight for the student and the cohort.
-  // Popular/easier questions cannot swamp the comparison through attempt volume.
-  const available = matchedQuestions >= 3;
-  const yourAccuracy = available ? percent(earned, possible) : null;
-  const cohortAccuracy = available ? percent(cohortEarned, possible) : null;
-  return { yourAccuracy, cohortAccuracy, matchedQuestions,
-    delta: available ? yourAccuracy - cohortAccuracy : null };
-}
-
 export function buildPerformanceReport({ catalogue, attempts, cohort = null, mode = 'practice', isPro = false, now = Date.now() }) {
-  if (!['practice', 'timed'].includes(mode)) throw new Error('Invalid performance mode');
+  if (!['practice', 'timed', 'coaching', 'combined'].includes(mode)) throw new Error('Invalid performance mode');
   const byKey = new Map(catalogue.questions.map((q) => [questionKey(q.section, q.mode, q.id), q]));
-  const safeRows = attempts.filter((r) => SECTIONS.includes(r.section) && ['practice', 'timed'].includes(r.mode) && dateMs(r.answeredAt) <= now);
+  const safeRows = attempts.filter((r) => SECTIONS.includes(r.section) && ['practice', 'timed', 'coaching'].includes(r.mode) && dateMs(r.answeredAt) <= now);
   const firstAll = collapseAttempts(safeRows, byKey);
   const latestAll = collapseAttempts(safeRows, byKey, true);
-  const first = firstAll.filter((r) => r.mode === mode);
+  const combined = new Map();
+  for (const row of [...firstAll].sort((a, b) => dateMs(a.answeredAt) - dateMs(b.answeredAt) || a.key.localeCompare(b.key))) {
+    const id = `${row.section}:${row.questionId}`;
+    if (!combined.has(id)) combined.set(id, row);
+  }
+  const first = mode === 'combined' ? [...combined.values()] : firstAll.filter((r) => r.mode === mode);
   const sections = SECTIONS.map((section) => {
     const rows = first.filter((r) => r.section === section);
     return { section, ...summarise(rows), excludedQuestions: rows.filter((r) => r.excluded).length,
-      cohort: compareCohort(rows, byKey, cohort) };
+      cohort: compareCohort(rows, byKey, cohort, gradeResponse, { section, mode }),
+      conditions: mode === 'coaching' ? ['assessment', 'practice', 'timed_check', 'review'].map((kind) => ({ kind, ...summarise(rows.filter((r) => r.kind === kind)) })) : undefined };
   });
   const overview = { ...summarise(first), sections, excludedQuestions: first.filter((r) => r.excluded).length };
-  const report = { schemaVersion: 1, generatedAt: new Date(now).toISOString(), mode, access: isPro ? 'pro' : 'free', overview, details: null };
+  const report = { schemaVersion: 1, generatedAt: new Date(now).toISOString(), mode, access: isPro ? 'pro' : 'free', overview, details: null,
+    skillCatalogue: catalogue.skills.map(({ id, section, label }) => ({ id, section, label })) };
   // This early return is also the server boundary: free responses contain no
   // skill metrics, question IDs, recommendations or practice selections.
   if (!isPro) return report;
 
   const skillRows = first.filter((r) => r.tagged && !r.excluded);
-  const practiceLatest = new Map(latestAll.filter((r) => r.mode === 'practice').map((r) => [r.questionId, r]));
+  const practiceLatest = new Map(latestAll.filter((r) => r.mode === 'practice' || r.mode === 'coaching')
+    .sort((a, b) => dateMs(a.answeredAt) - dateMs(b.answeredAt)).map((r) => [r.questionId, r]));
   const skills = catalogue.skills.map((skill) => {
     const rows = skillRows.filter((r) => r.skillId === skill.id);
     const stats = summarise(rows);
@@ -186,19 +166,23 @@ export function buildPerformanceReport({ catalogue, attempts, cohort = null, mod
     const allModes = firstAll.filter((r) => r.tagged && !r.excluded && r.skillId === skill.id);
     const practice = summarise(allModes.filter((r) => r.mode === 'practice'));
     const timed = summarise(allModes.filter((r) => r.mode === 'timed'));
+    const coaching = summarise(allModes.filter((r) => r.mode === 'coaching'));
     const eligible = catalogue.questions.filter((q) => q.section === skill.section && q.mode === 'practice' && q.primarySkillId === skill.id && q.confidence !== 'low' && !q.excludedReason);
-    const unseen = eligible.filter((q) => !practiceLatest.has(q.id));
+    const seen = new Set(latestAll.filter((r) => r.section === skill.section).map((r) => r.questionId));
+    const unseen = eligible.filter((q) => !seen.has(q.id));
     const review = eligible.filter((q) => {
       const last = practiceLatest.get(q.id);
       return last && last.possible > 0 && last.earned < last.possible;
     }).sort((a, b) => dateMs(practiceLatest.get(a.id).answeredAt) - dateMs(practiceLatest.get(b.id).answeredAt));
     const lastAt = rows.reduce((max, r) => Math.max(max, dateMs(r.answeredAt)), 0);
     const stale = lastAt > 0 && now - lastAt > 28 * DAY;
-    const trend = supported && !stale ? comparableTrend(rows, now) : null;
+    // Mixed coaching conditions and All remain visible as history, without
+    // presenting a change of practice conditions as a measured improvement.
+    const trend = supported && !stale && (mode === 'practice' || mode === 'timed') ? comparableTrend(rows, now) : null;
     const status = !stats.questions ? 'Unexplored' : !supported ? 'Early signal' : stale ? 'Check again' : stats.accuracy >= 80 ? 'Strong' : stats.accuracy >= 60 ? 'Developing' : 'Needs practice';
     return {
       ...skill, ...stats, supported, stale, status, trend,
-      practice, timed, history: weekHistory(rows, now),
+      practice, timed, coaching, history: weekHistory(rows, now),
       newQuestionIds: unseen.map((q) => q.id), reviewQuestionIds: review.map((q) => q.id),
       // Evidence strength and recent performance, not an invented score uplift.
       priority: supported && !stale && stats.accuracy < 80 && eligible.length ? (100 - stats.accuracy) * Math.min(1, stats.questions / 25) : 0,

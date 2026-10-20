@@ -190,6 +190,7 @@ test('tutor handler supplies authenticated memory and flags demo/preview logs wi
       } },
     } });
     const response = await handler(new Request('https://example.test/ai-tutor', { method: 'POST', headers: { Authorization: 'Bearer alice' }, body: JSON.stringify({
+      requestId: crypto.randomUUID(), requestCreatedAt: new Date().toISOString(),
       questionId: crypto.randomUUID(), section: 'dm', questionType: 'recognising_assumptions', question: 'Which assumption is needed?', correctAnswer: 'A', userAnswer: 'A', explanation: 'Apply the negation test.',
       isDemo: mode === 'demo', isPreview: mode === 'preview', user_id: 'bob', learnerContext: 'FORGED', messages: [{ role: 'user', content: 'Please explain.' }],
     }) }));
@@ -202,6 +203,11 @@ test('tutor handler supplies authenticated memory and flags demo/preview logs wi
     }
     assert.equal(captures.inserts[0].is_demo, mode === 'demo');
     assert.equal(captures.inserts[0].is_preview, mode === 'preview');
-    assert.equal(captures.rpcs.filter((r) => r.name === 'increment_ai_usage').length, mode === 'demo' ? 0 : 1);
+    const claims = captures.rpcs.filter((r) => r.name === 'reserve_tutor_request');
+    assert.equal(claims.length, 1);
+    assert.equal(claims[0].args.p_demo, mode === 'demo');
+    assert.equal(claims[0].args.p_user, 'alice');
+    assert.equal(captures.rpcs.filter((r) => r.name === 'finish_tutor_request').length, 1);
+    assert.equal(captures.rpcs.filter((r) => r.name === 'record_ai_tutor_insight').length, 0);
   }
 });

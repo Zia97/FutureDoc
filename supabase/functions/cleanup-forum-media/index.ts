@@ -28,7 +28,8 @@ Deno.serve(async (req) => {
   if (!['deleted', 'rejected'].includes(post.status)) {
     return new Response(JSON.stringify({ error: 'content_not_removed' }), { status: 409, headers: responseHeaders });
   }
-  const { data: attachments } = await admin.from('forum_attachments').select('storage_path').eq('post_id', body.postId);
+  const { data: attachments, error: attachmentError } = await admin.from('forum_attachments').select('storage_path').eq('post_id', body.postId);
+  if (attachmentError) return new Response(JSON.stringify({ error: 'attachment_lookup_failed' }), { status: 503, headers: responseHeaders });
   const paths = (attachments ?? []).map((item) => item.storage_path);
   if (paths.length) {
     const { error } = await admin.storage.from('forum-media').remove(paths);

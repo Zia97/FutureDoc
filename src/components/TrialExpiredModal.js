@@ -18,11 +18,13 @@ const TRIAL_WAS_ACTIVE_KEY = 'trial_was_active_v1';
 // Set once the expiry modal has been shown, so it never reappears.
 const TRIAL_EXPIRED_SEEN_KEY = 'trial_expired_seen_v1';
 
-export default function TrialExpiredModal() {
+export default function TrialExpiredModal({ enabled = true, onBlockingChange }) {
   const { theme: t } = useTheme();
   const navigation = useNavigation();
   const { isPro, isOnTrial, hasUsedTrial } = useSubscription();
   const [visible, setVisible] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => { onBlockingChange?.(!ready || visible); }, [ready, visible, onBlockingChange]);
 
   // While the trial is active, remember it. This is the breadcrumb that lets us
   // later tell "trial ended" apart from "subscription state still loading".
@@ -52,7 +54,7 @@ export default function TrialExpiredModal() {
       }
     }
 
-    maybeShow();
+    maybeShow().catch(() => {}).finally(() => { if (!cancelled) setReady(true); });
     return () => { cancelled = true; };
   }, [isPro, isOnTrial, hasUsedTrial]);
 
@@ -68,7 +70,7 @@ export default function TrialExpiredModal() {
 
   return (
     <Modal
-      visible={visible}
+      visible={visible && enabled}
       transparent
       animationType="fade"
       statusBarTranslucent

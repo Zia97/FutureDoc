@@ -1,4 +1,6 @@
 import { supabase } from './supabase';
+import { createBoundedAsyncCache } from './boundedAsyncCache';
+const contentVersions = createBoundedAsyncCache({ ttlMs: 60_000, maxEntries: 1 });
 
 class DatabaseService {
 
@@ -12,21 +14,18 @@ class DatabaseService {
    * @param {string} section - e.g. 'verbal_reasoning', 'decision_making'
    */
   async getContentVersion(section) {
-    const { data, error } = await supabase
-      .from('content_versions')
-      .select('version')
-      .eq('section', section)
-      .single();
-    if (error) throw error;
-    return data;
+    const rows = await this.getAllContentVersions();
+    const row = rows.find((entry) => entry.section === section);
+    if (!row) throw new Error('Content version unavailable');
+    return { version: row.version };
   }
 
   async getAllContentVersions() {
-    const { data, error } = await supabase
-      .from('content_versions')
-      .select('section, version');
-    if (error) throw error;
-    return data; // [{ section, version }, ...]
+    return contentVersions.get('all', async () => {
+      const { data, error } = await supabase.from('content_versions').select('section, version');
+      if (error) throw error;
+      return data ?? [];
+    });
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -760,6 +759,7 @@ class DatabaseService {
   async _submitTimedExamAttempt({
     rpcFn,
     accessToken,
+    submissionId,
     testId,
     scorePercent,
     correctCount,
@@ -778,7 +778,8 @@ class DatabaseService {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const request = supabase.rpc(rpcFn, {
+      const request = supabase.rpc(submissionId ? 'submit_timed_exam_v2' : rpcFn, {
+        ...(submissionId ? { p_submission_id: submissionId, p_section: rpcFn.split('_')[2] } : {}),
         p_test_id: testId,
         p_score_percent: scorePercent,
         p_correct_count: correctCount,
@@ -797,9 +798,10 @@ class DatabaseService {
   }
 
   // ── Verbal Reasoning ───────────────────────────────────────
-  async submitTimedVRExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedVRExam({ accessToken, submissionId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_vr_exam',
+      submissionId,
       accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, passage_id, selected_answer, time_ms }]
@@ -845,9 +847,10 @@ class DatabaseService {
   }
 
   // ── Decision Making ────────────────────────────────────────
-  async submitTimedDMExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedDMExam({ accessToken, submissionId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_dm_exam',
+      submissionId,
       accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, selected_answer (JSONB), time_ms }]
@@ -893,9 +896,10 @@ class DatabaseService {
   }
 
   // ── Quantitative Reasoning ─────────────────────────────────
-  async submitTimedQRExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedQRExam({ accessToken, submissionId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_qr_exam',
+      submissionId,
       accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, set_id, selected_answer, time_ms }]
@@ -941,9 +945,10 @@ class DatabaseService {
   }
 
   // ── Situational Judgement ──────────────────────────────────
-  async submitTimedSJExam({ accessToken, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
+  async submitTimedSJExam({ accessToken, submissionId, testId, scorePercent, correctCount, timeTakenSeconds, flags, answers, analyticsSummary }) {
     return this._submitTimedExamAttempt({
       rpcFn: 'submit_timed_sj_exam',
+      submissionId,
       accessToken,
       testId, scorePercent, correctCount, timeTakenSeconds, flags,
       answers, // [{ question_id, scenario_id, selected_answer, time_ms }]

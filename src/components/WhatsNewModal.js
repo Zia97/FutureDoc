@@ -12,10 +12,12 @@ import { db } from '../lib/dbQueries';
 
 const WHATS_NEW_SEEN_VERSION_KEY = 'whats_new_seen_version';
 
-export default function WhatsNewModal() {
+export default function WhatsNewModal({ enabled = true, onBlockingChange }) {
   const { theme: t } = useTheme();
   const [content, setContent] = useState(null);
   const [visible, setVisible] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => { onBlockingChange?.(!ready || visible); }, [ready, visible, onBlockingChange]);
 
   useEffect(() => {
     let cancelled = false;
@@ -33,6 +35,8 @@ export default function WhatsNewModal() {
         }
       } catch {
         // Fail silent — no modal if content can't be fetched.
+      } finally {
+        if (!cancelled) setReady(true);
       }
     })();
     return () => {
@@ -53,7 +57,7 @@ export default function WhatsNewModal() {
 
   return (
     <Modal
-      visible={visible}
+      visible={visible && enabled}
       transparent
       animationType="fade"
       statusBarTranslucent

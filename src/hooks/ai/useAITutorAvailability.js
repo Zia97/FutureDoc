@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase';
 
 const CACHE_KEY = '@futuredoc/ai_tutor_availability';
 const CACHE_TTL_MS = 90_000;
+let pending = null;
 
 const KEYS = ['ai_tutor_enabled', 'ai_tutor_demo_enabled'];
 
@@ -65,11 +66,17 @@ export function useAITutorAvailability() {
   const mountedRef = useRef(true);
 
   async function refresh() {
-    const fresh = await fetchSwitches();
+    if (!pending) pending = (async () => {
+      const cached = await readCache();
+      if (cached?.values) return cached.values;
+      const fresh = await fetchSwitches();
+      await writeCache(fresh);
+      return fresh;
+    })().finally(() => { pending = null; });
+    const fresh = await pending;
     if (!mountedRef.current) return;
     setValues(fresh);
     setLoading(false);
-    writeCache(fresh);
   }
 
   useEffect(() => {

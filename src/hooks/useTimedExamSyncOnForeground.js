@@ -4,9 +4,10 @@ import NetInfo from '@react-native-community/netinfo';
 import { useAuth } from '../context/AuthContext';
 import { flush } from '../services/timedExamSyncQueue';
 import { flushPracticeAttempts } from '../services/practiceAttemptQueue';
+import { flushLessonCheckpoints } from '../services/lessonCheckpointQueue';
 import { flushCoachPreferences, flushCoachCheckpoints } from '../services/coachingService';
 
-const flushAll = (user) => Promise.allSettled([flush(user), flushPracticeAttempts(user?.id), flushCoachPreferences(user?.id), flushCoachCheckpoints(user?.id)]);
+const flushAll = (user) => Promise.allSettled([flush(user), flushPracticeAttempts(user?.id), flushLessonCheckpoints(user?.id), flushCoachPreferences(user?.id), flushCoachCheckpoints(user?.id)]);
 
 // ============================================================
 // Drains the timed-exam offline write queue whenever the app

@@ -22,8 +22,9 @@ Deno.serve(async (request) => {
   try { replyId = (await request.json()).replyId; } catch { return respond({ error: 'invalid_json' }, 400); }
   if (!/^[0-9a-f-]{36}$/i.test(replyId ?? '')) return respond({ error: 'invalid_reply_id' }, 400);
   const { data: reply, error: replyError } = await client.from('forum_replies')
-    .select('id,post_id,parent_reply_id,author_user_id,status').eq('id', replyId).maybeSingle();
+    .select('id,post_id,parent_reply_id,author_user_id,status,created_at').eq('id', replyId).maybeSingle();
   if (replyError || !reply || reply.status !== 'published') return respond({ skipped: 'not_published' });
+  if (Date.parse(reply.created_at) < Date.now() - 48 * 60 * 60 * 1000) return respond({ skipped: 'expired' });
   if (!serviceCall) {
     const { data: profile } = await client.from('user_profiles').select('is_admin').eq('user_id', user!.id).maybeSingle();
     if (user!.id !== reply.author_user_id && !profile?.is_admin) return respond({ error: 'forbidden' }, 403);
@@ -60,12 +61,12 @@ Deno.serve(async (request) => {
     if (!response.ok) throw new Error(`expo_${response.status}`);
     const result = await response.json();
     const tickets = Array.isArray(result.data) ? result.data : [result.data];
-    if (!tickets.some(ticket => ticket?.status === 'ok')) throw new Error('expo_no_successful_ticket');
     await Promise.all(tickets.map(async (ticket, index) => {
-      if (ticket?.details?.error === 'DeviceNotRegistered') {
+      if (ticket?.details?.error === 'DeviceNotRegistered' && devices[index]) {
         await client.from('notification_devices').delete().eq('token', devices[index].token);
       }
     }));
+    if (!tickets.some(ticket => ticket?.status === 'ok')) throw new Error('expo_no_successful_ticket');
     return respond({ sent: true });
   } catch (error) {
     await client.from('forum_reply_notifications').delete().eq('reply_id', replyId).eq('recipient_id', recipient);

@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import { supabase } from '../../lib/supabase';
+import { createBoundedAsyncCache } from '../../lib/boundedAsyncCache';
+const cache = createBoundedAsyncCache({ ttlMs: 300_000, maxEntries: 4 });
 
 // Sentinel value matching the migration: -1 means "no statement" (option-based).
 const NO_STATEMENT = -1;
@@ -27,12 +29,21 @@ export function useQuestionStats(section) {
 
   const load = useCallback(async () => {
     if (!section) return;
-    const { data, error } = await supabase
-      .from('question_stats')
-      .select('question_id, statement_index, total_first_attempts, total_correct_first_attempts, sum_time_ms')
-      .eq('section', section);
-
-    if (error || !isMounted.current) return;
+    let data;
+    try {
+      data = await cache.get(section, async () => {
+        const rows = [];
+        for (let offset = 0; ; offset += 500) {
+          const result = await supabase.from('question_stats')
+            .select('question_id, statement_index, total_first_attempts, total_correct_first_attempts, sum_time_ms')
+            .eq('section', section).order('question_id').order('statement_index').range(offset, offset + 499);
+          if (result.error) throw result.error;
+          rows.push(...(result.data ?? []));
+          if (result.data.length < 500) return rows;
+        }
+      });
+    } catch { return; }
+    if (!isMounted.current) return;
 
     const map = new Map();
     for (const row of data ?? []) {

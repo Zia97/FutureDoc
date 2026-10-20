@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
+import { buildCoachProfile } from '../src/lib/coaching/engine.js';
 
 test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async () => {
   const db = new PGlite();
@@ -22,6 +23,7 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     await db.query('insert into timed_verbal_reasoning_question_answers values($1,$2,$3,$4,$5,$6)', [crypto.randomUUID(), alice, exam, question, 'False', 6000]);
     await db.exec(fs.readFileSync('supabase/migrations/20261017000001_ai_coaching.sql', 'utf8'));
     await db.exec(fs.readFileSync('supabase/migrations/20261017000003_coach_reset_progress.sql', 'utf8'));
+    await db.exec(fs.readFileSync('supabase/migrations/20261020000002_coach_plan_introduction.sql', 'utf8'));
     assert.equal((await db.query('select count(*)::int n from coach_evidence')).rows[0].n, 2, 'existing evidence is backfilled');
     await db.query('insert into practice_question_attempts(id,user_id,section,question_id,selected_answer,time_spent_ms) values($1,$2,$3,$4,$5,$6)', [crypto.randomUUID(), alice, 'vr', question, 'False', 10000]);
     await db.query('insert into timed_verbal_reasoning_question_answers values($1,$2,$3,$4,$5,$6)', [crypto.randomUUID(), alice, exam, question, 'True', 7000]);
@@ -39,15 +41,35 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     const start = async (user, data = session, pro = false) => (await db.query('select coach_start_session($1,$2,$3) s', [user, data, pro])).rows[0].s;
     await assert.rejects(start(bob, { ...session, kind: 'practice' }, true), /assessment_required/);
     const [one, two] = await Promise.all([start(alice), start(alice)]); assert.equal(one.id, two.id, 'concurrent starts reuse active assessment');
-    const save = async (user, s, version, complete = false) => (await db.query('select coach_save_session($1,$2,$3,$4,$5,$6) s', [user, s.id, version, { phase: complete ? 'finished' : 'paused' }, complete ? { sections: [] } : null, complete ? [{ questionId: question, section: 'vr', mode: 'coach' }] : []])).rows[0].s;
+    const tag = { id: question, section: 'vr', mode: 'practice', parentId: question, primarySkillId: 'vr.test', answer: 'True' };
+    const save = async (user, s, version, complete = false) => (await db.query('select coach_save_session($1,$2,$3,$4,$5,$6) s', [user, s.id, version, { phase: complete ? 'finished' : 'paused' }, complete ? { sections: [] } : null, complete ? [{ questionId: question, section: 'vr', mode: 'coach', kind: s.kind,
+      sessionId: s.id, tag, selectedAnswer: 'True', answeredAt: '2026-01-01T00:00:00Z' }] : []])).rows[0].s;
     await assert.rejects(save(bob, one, 0), /session_not_found/);
     const paused = await save(alice, one, 0); assert.equal(paused.version, 1);
     await assert.rejects(save(alice, one, 0), /version_conflict/);
     const completed = await save(alice, one, 1, true); assert.equal(completed.status, 'completed');
+    const baselineEvidence = async () => (await db.query('select payload from coach_evidence where user_id=$1 and source_key=$2', [alice, `coach:${one.id}:${question}`])).rows[0].payload;
+    const running = (evidence) => buildCoachProfile({ catalogue: { skills: [], questions: [tag] },
+      rawEvidence: [evidence], baselineCompletedAt: completed.completed_at }).runningSections[0];
+    assert.equal(running(await baselineEvidence()).accuracy, null, 'reproduces edge timestamp excluding the completed mini mock');
+    const repair = fs.readFileSync('supabase/migrations/20261020000001_coach_completion_evidence_time.sql', 'utf8');
+    await db.exec(repair);
+    const repaired = await baselineEvidence();
+    assert.equal(Date.parse(repaired.answeredAt), Date.parse(completed.completed_at));
+    assert.equal(running(repaired).accuracy, 100, 'existing mini mock contributes to running accuracy after repair');
+    assert.equal(running(repaired).questions, 1);
+    assert.deepEqual((await db.query("select payload from coach_evidence where payload->>'mode'='practice' limit 1")).rows[0].payload, source,
+      'repair leaves separate practice evidence unchanged');
+    await db.exec(repair);
+    assert.deepEqual(await baselineEvidence(), repaired, 'repair is idempotent');
     assert.equal((await save(alice, one, 1, true)).id, one.id, 'completion is idempotent');
     assert.equal((await start(alice)).id, one.id, 'baseline cannot be replaced');
+    await db.query('update coach_profiles set plan_intro_session_id=$1 where user_id=$2', [one.id, alice]);
+    assert.equal((await db.query('select plan_intro_session_id from coach_profiles where user_id=$1', [alice])).rows[0].plan_intro_session_id, one.id);
     const trial = await start(alice, { ...session, kind: 'practice' });
-    await save(alice, trial, 0, true);
+    const trialCompleted = await save(alice, trial, 0, true);
+    const trialEvidence = (await db.query('select payload from coach_evidence where user_id=$1 and source_key=$2', [alice, `coach:${trial.id}:${question}`])).rows[0].payload;
+    assert.equal(Date.parse(trialEvidence.answeredAt), Date.parse(trialCompleted.completed_at), 'future completions use the database timestamp');
     await assert.rejects(start(alice, { ...session, kind: 'practice' }), /pro_required/);
     const paid = await start(alice, { ...session, kind: 'review' }, true); assert.equal(paid.kind, 'review');
     const reserve = async (id = crypto.randomUUID(), pro = false) => (await db.query('select coach_reserve_message($1,$2,$3,$4) r', [alice, id, 'How am I doing?', pro])).rows[0].r;
@@ -68,6 +90,7 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     }
     const resetProfile = (await db.query('select * from coach_profiles where user_id=$1', [alice])).rows[0];
     assert.equal(resetProfile.baseline_session_id, null);
+    assert.equal(resetProfile.plan_intro_session_id, null, 'a new mini mock gets a new introduction after reset');
     assert.ok(resetProfile.preview_session_id && resetProfile.preview_session_id !== trial.id, 'free coached set remains used without retaining its old session ID');
     assert.equal(resetProfile.free_chat_used, 5, 'free chat remains used');
     assert.equal(resetProfile.chat_day_used, 6, 'daily chat limit remains used');

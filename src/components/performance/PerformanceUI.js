@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AccessibilityInfo, Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
+import { AccessibilityInfo, Alert, Animated, Easing, Pressable, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import Svg, { Circle } from 'react-native-svg';
@@ -188,27 +188,47 @@ export function HistoryChart({ weeks = [], color }) {
   </View>;
 }
 
-export function CohortComparison({ sections = [] }) {
+export function CohortComparison({ sections = [], onRetry }) {
   const { colors } = usePerformanceTheme();
-  const available = sections.some((item) => item.cohort?.cohortAccuracy != null);
+  const unavailable = sections.length > 0 && sections.every((item) => !item.cohort || item.cohort.status === 'unavailable');
+  const conditionNames = { practice: 'Practice', timed: 'Timed', assessment: 'Mini mock', coach_practice: 'Untimed coaching', coach_timed: 'Timed coaching' };
   return <Reveal><PerformanceCard>
-    <Text style={[styles.title, { color: colors.text }]}>You vs cohort</Text>
-    {!available ? <Text style={[styles.body, { color: colors.textSecondary, marginTop: 9 }]}>There isn’t enough comparison data yet.</Text>
-      : <View style={{ gap: 23, marginTop: 15 }}>{sections.map(({ section, cohort }) => {
-        const color = colors[SECTION_COLOURS[section]];
-        const ready = cohort?.cohortAccuracy != null;
-        const delta = cohort?.delta ?? 0;
-        return <View key={section} style={{ gap: 9 }}>
-          <View style={styles.between}><Text style={[styles.eyebrow, { color }]}>{section.toUpperCase()}</Text>
-            <Text style={[styles.caption, { color: !ready ? colors.textMuted : delta >= 0 ? colors.mint : colors.textSecondary }]}>{!ready ? 'Not enough data yet' : delta === 0 ? 'At the cohort average' : `${Math.abs(delta)} pts ${delta > 0 ? 'above' : 'below'} average`}</Text></View>
-          {ready && [{ label: 'You', value: cohort.yourAccuracy, barColor: color }, { label: 'Cohort', value: cohort.cohortAccuracy, barColor: colors.textMuted }].map(({ label, value, barColor }) =>
-            <View key={label} style={[styles.row, { gap: 12 }]} accessible accessibilityLabel={`${SECTION_NAMES[section]}, ${label}, ${value} percent accuracy`}>
-              <Text style={{ width: 47, fontSize: 12, color: colors.textSecondary }}>{label}</Text>
-              <View style={{ flex: 1 }}><SkillBar value={value} color={barColor} height={7} /></View>
-              <Text style={{ width: 38, textAlign: 'right', color: colors.text, fontWeight: '700', fontSize: 12 }}>{value}%</Text>
-            </View>)}
-        </View>;
-      })}</View>}
+    <View style={styles.between}>
+      <Text style={[styles.title, { color: colors.text }]}>You vs cohort</Text>
+      <Pressable accessibilityRole="button" accessibilityLabel="About cohort comparison" hitSlop={6}
+        style={{ width: 40, height: 40, alignItems: 'center', justifyContent: 'center' }}
+        onPress={() => Alert.alert('You vs cohort', 'Practice, timed tests and coaching conditions are compared separately. Where enough questions overlap, we compare results on those questions. Otherwise, we show the broader section average. Question mixes can differ, so this is a guide rather than a UCAT percentile.')}>
+        <Ionicons name="information-circle-outline" size={22} color={colors.textSecondary} />
+      </Pressable>
+    </View>
+    {unavailable ? <View style={{ gap: 12, marginTop: 10 }}>
+      <Text style={[styles.body, { color: colors.textSecondary }]}>The cohort comparison could not load. Your results are still available.</Text>
+      {onRetry && <PerformanceButton title="Retry comparison" icon="refresh" secondary onPress={onRetry} />}
+    </View> : <View style={{ gap: 23, marginTop: 10 }}>{sections.map(({ section, cohort }) => {
+      const color = colors[SECTION_COLOURS[section]];
+      const ready = cohort?.cohortAccuracy != null;
+      const unavailable = cohort?.status === 'unavailable' || !cohort;
+      const delta = cohort?.delta;
+      const message = unavailable ? 'Comparison could not load.' : !ready ? 'More student results are needed in this section.'
+        : delta == null ? 'Answer more questions to compare your result.' : delta === 0 ? 'At the cohort average'
+          : Math.abs(delta) + ' pts ' + (delta > 0 ? 'above' : 'below') + ' average';
+      return <View key={section} style={{ gap: 9 }}>
+        <View style={styles.between}><Text style={[styles.eyebrow, { color }]}>{section.toUpperCase()}</Text>
+          <Text style={[styles.caption, { color: colors.textSecondary, flexShrink: 1, textAlign: 'right' }]}>{message}</Text></View>
+        {ready && <>
+          <Text style={[styles.caption, { color: colors.textMuted }]}>{cohort.basis === 'section'
+            ? cohort.condition ? `${conditionNames[cohort.condition]} section average` : 'Section average' : 'On shared questions'}</Text>
+          {[{ label: 'You', value: cohort.yourAccuracy, barColor: color }, { label: 'Cohort', value: cohort.cohortAccuracy, barColor: colors.textMuted }]
+            .filter((item) => item.value != null).map(({ label, value, barColor }) =>
+              <View key={label} style={[styles.row, { gap: 12 }]} accessible accessibilityLabel={SECTION_NAMES[section] + ', ' + label + ', ' + value + ' percent accuracy'}>
+                <Text style={{ width: 47, fontSize: 12, color: colors.textSecondary }}>{label}</Text>
+                <View style={{ flex: 1 }}><SkillBar value={value} color={barColor} height={7} /></View>
+                <Text style={{ width: 38, textAlign: 'right', color: colors.text, fontWeight: '700', fontSize: 12 }}>{value}%</Text>
+              </View>)}
+        </>}
+        {unavailable && onRetry && <PerformanceButton title="Retry comparison" icon="refresh" secondary onPress={onRetry} />}
+      </View>;
+    })}</View>}
   </PerformanceCard></Reveal>;
 }
 

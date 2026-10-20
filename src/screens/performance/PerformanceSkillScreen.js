@@ -7,7 +7,7 @@ import PerformanceLoading from '../../components/performance/PerformanceLoading'
 import { HistoryChart, PerformanceButton, PerformanceCard, ProLockCard, Reveal, StatRing, SECTION_COLOURS, SECTION_NAMES, performanceStyles as s, usePerformanceTheme } from '../../components/performance/PerformanceUI';
 
 export default function PerformanceSkillScreen({ route, navigation }) {
-  const mode = route.params?.mode === 'timed' ? 'timed' : 'practice';
+  const mode = ['practice', 'timed', 'coaching', 'combined'].includes(route.params?.mode) ? route.params.mode : 'practice';
   const { report, loading, error, refreshing, refresh, isPro, canAnalyse } = usePerformanceReport(mode);
   const { colors } = usePerformanceTheme();
   const skill = canAnalyse ? report.details.skills.find((item) => item.id === route.params?.skillId) : null;
@@ -21,9 +21,9 @@ export default function PerformanceSkillScreen({ route, navigation }) {
       {loading ? <PerformanceLoading /> : error ? <PerformanceCard>
         <Text style={[s.body, { color: colors.textSecondary, marginBottom: 14 }]}>{error}</Text><PerformanceButton title="Try again" onPress={refresh} />
       </PerformanceCard> : !canAnalyse ? <ProLockCard pending={isPro} onUnlock={isPro ? refresh : () => navigation.navigate('Paywall')} /> : !skill ? <PerformanceCard>
-        <Text style={[s.title, { color: colors.text }]}>This skill is not available yet</Text><Text style={[s.body, { color: colors.textSecondary }]}>Return to Performance to explore your current skills.</Text>
+        <Text style={[s.title, { color: colors.text }]}>This skill is not available yet</Text><Text style={[s.body, { color: colors.textSecondary }]}>Return to Your progress to explore your current skills.</Text>
       </PerformanceCard> : <>
-        <View><Text style={[s.eyebrow, { color }]}>{SECTION_NAMES[skill.section].toUpperCase()} · {mode === 'timed' ? 'TIMED' : 'PRACTICE'}</Text>
+        <View><Text style={[s.eyebrow, { color }]}>{SECTION_NAMES[skill.section].toUpperCase()} · {mode === 'timed' ? 'TIMED' : mode === 'coaching' ? 'COACHING' : mode === 'combined' ? 'ALL PRACTICE' : 'PRACTICE'}</Text>
           <Text style={[s.heading, { color: colors.text, marginTop: 10 }]}>{skill.label}</Text><Text style={[s.body, { color: colors.textSecondary, marginTop: 9 }]}>{skill.description}</Text></View>
         <Reveal><PerformanceCard accent={color}>
           <View style={[s.row, { justifyContent: 'space-around', flexWrap: 'wrap' }]}><StatRing value={skill.accuracy} color={color} />
@@ -43,8 +43,8 @@ export default function PerformanceSkillScreen({ route, navigation }) {
           <PerformanceButton title={skill.newQuestionIds.length ? `Start fresh practice · ${Math.min(8, skill.newQuestionIds.length)} questions` : 'No new questions in this skill yet'} disabled={!skill.newQuestionIds.length} onPress={() => practice('fresh')} />
           <View style={{ height: 8 }} /><PerformanceButton secondary icon="refresh" title={skill.reviewQuestionIds.length ? `Review mistakes · ${Math.min(8, skill.reviewQuestionIds.length)} questions` : 'No mistakes waiting for review'} disabled={!skill.reviewQuestionIds.length} onPress={() => practice('review')} />
         </PerformanceCard></Reveal>
-        <PerformanceCard><Text style={[s.title, { color: colors.text }]}>Practice and timed performance</Text>
-          <View style={[s.row, { marginTop: 16, gap: 12 }]}>{[{ label: 'Practice', value: skill.practice }, { label: 'Timed tests', value: skill.timed }].map(({ label, value }) => <View key={label} style={{ flex: 1, gap: 5 }}>
+        <PerformanceCard><Text style={[s.title, { color: colors.text }]}>Performance by practice type</Text>
+          <View style={[s.row, { marginTop: 16, gap: 12, flexWrap: 'wrap' }]}>{[{ label: 'Practice', value: skill.practice }, { label: 'Timed tests', value: skill.timed }, { label: 'Coaching', value: skill.coaching }].map(({ label, value }) => <View key={label} style={{ flex: 1, minWidth: 85, gap: 5 }}>
             <Text style={[s.caption, { color: colors.textMuted }]}>{label}</Text><Text style={{ fontSize: 26, fontWeight: '800', color: colors.text }}>{value.accuracy == null ? '—' : `${value.accuracy}%`}</Text><Text style={[s.caption, { color: colors.textSecondary }]}>{value.questions} questions</Text>
           </View>)}</View>
         </PerformanceCard>

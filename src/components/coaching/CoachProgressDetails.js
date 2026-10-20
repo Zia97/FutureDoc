@@ -8,15 +8,22 @@ import { sectionName, sectionSnapshot } from '../../lib/coaching/dashboard';
 import { Button, useCoachTheme } from './CoachUI';
 import { CoachText, SkillEvidence, TextLink, ds } from './CoachDashboardUI';
 
-export default function CoachProgressDetails({ data, story, tab, onTabChange, onSession, onLesson, onPractice, busy }) {
+export default function CoachProgressDetails({ data, story, tab, onTabChange, onSession, onLesson, onPractice, onAccuracyInfo, onSection, onSkill, busy }) {
   const { colors } = useCoachTheme();
   const profile = data.profile;
   return <>
     <Segments values={[{ id: 'overview', label: 'Progress' }, { id: 'plan', label: 'Your plan' }, { id: 'history', label: 'History' }]} value={tab} onChange={onTabChange} />
     {tab === 'overview' && <>
       <View style={{ gap: 12 }}>
-        <CoachText style={ds.cardTitle}>Your section performance</CoachText>
-        {sectionSnapshot(profile, data.baseline).map((section) => <View key={section.id} style={[ds.evidenceRow, { borderColor: colors.border, backgroundColor: colors.surface }]}>
+        <View style={ds.row}>
+          <CoachText style={[ds.cardTitle, { flex: 1 }]}>Running accuracy</CoachText>
+          <Pressable onPress={onAccuracyInfo} accessibilityRole="button" accessibilityLabel="About your running accuracy" hitSlop={6}
+            style={{ minWidth: 40, minHeight: 40, alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="information-circle-outline" size={22} color={colors.textSecondary} />
+          </Pressable>
+        </View>
+        {sectionSnapshot(profile, data.baseline).map((section) => <Pressable key={section.id} accessibilityRole="button" accessibilityLabel={`${section.title}, view skills`}
+          onPress={() => onSection(section.id)} style={[ds.evidenceRow, { borderColor: colors.border, backgroundColor: colors.surface }]}>
           <View style={ds.row}>
             <PremiumIcon name={section.icon} color={colors[section.color]} size={22} />
             <CoachText style={{ flex: 1, fontWeight: '700' }}>{section.title}</CoachText>
@@ -25,8 +32,8 @@ export default function CoachProgressDetails({ data, story, tab, onTabChange, on
           <View style={[ds.barTrack, { marginTop: 13, backgroundColor: hexToRgba(colors[section.color], 0.12) }]}>
             <View style={[ds.barFill, { width: `${section.accuracy ?? 0}%`, backgroundColor: colors[section.color] }]} />
           </View>
-          <CoachText muted style={[ds.caption, { marginTop: 8 }]}>{section.questions ? `${section.questions} of 20 questions` : 'No results yet'}</CoachText>
-        </View>)}
+          {section.accuracy == null && <CoachText muted style={[ds.caption, { marginTop: 8 }]}>No results yet</CoachText>}
+        </Pressable>)}
       </View>
       <View style={{ gap: 12 }}>
         <CoachText style={ds.cardTitle}>Where you’re improving</CoachText>
@@ -43,7 +50,10 @@ export default function CoachProgressDetails({ data, story, tab, onTabChange, on
       </View>
       {[{ title: 'Your strengths', items: profile.strengths, color: colors.mint }, { title: 'Areas to improve', items: profile.weaknesses, color: colors.red }].map((group) => <View key={group.title} style={{ gap: 10 }}>
         <CoachText style={[ds.cardTitle, { color: group.color }]}>{group.title}</CoachText>
-        {(group.items ?? []).slice(0, 6).map((skill) => <SkillEvidence key={skill.id} skill={skill} color={group.color} onLesson={skill.lessonRoute ? () => onLesson(skill) : null} />)}
+        {(group.items ?? []).slice(0, 6).map((skill) => <View key={skill.id}>
+          <SkillEvidence skill={skill} color={group.color} onLesson={skill.lessonRoute ? () => onLesson(skill) : null} />
+          <TextLink title="View skill analysis" onPress={() => onSkill(skill.id)} />
+        </View>)}
         {!group.items?.length && <CoachText muted>We’ll keep learning about you as you answer more questions.</CoachText>}
       </View>)}
       <View style={[ds.card, { borderColor: colors.border, backgroundColor: colors.surface, gap: 12 }]}>

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, ScrollView, StatusBar, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
@@ -11,12 +11,13 @@ import { getExamDate, NOT_BOOKED, setExamDate } from '../../services/onboardingF
 import { validExamDate } from '../../lib/coaching/engine';
 import { buildDashboardStory, resumeSummary, sectionSnapshot, sectionName } from '../../lib/coaching/dashboard';
 import ExamDateCalendar, { formatLocalISO, parseLocalISO } from '../../components/ExamDateCalendar';
-import { PremiumIcon } from '../../components/premium/PremiumPracticeUI';
 import { Button, useCoachTheme } from '../../components/coaching/CoachUI';
 import { Segments } from '../../components/performance/PerformanceUI';
 import { hexToRgba } from '../../theme/premiumTheme';
 import { CoachText, DashboardHeader, ProgressOverview, NextPracticeCard, CoachInsightCard, CoachChatDock, CoachSheet, SectionChoices, TextLink, ds } from '../../components/coaching/CoachDashboardUI';
 import CoachProgressDetails from '../../components/coaching/CoachProgressDetails';
+import CoachWelcome from '../../components/coaching/CoachWelcome';
+import CoachProgressOverview from '../../components/coaching/CoachProgressOverview';
 
 const PRACTICE_MODES = [
   { id: 'practice', title: 'Untimed practice', icon: 'sparkles-outline' },
@@ -27,6 +28,14 @@ const PRACTICE_MODES = [
 export default function CoachHubScreen({ navigation, route }) {
   const { user } = useAuth();
   const { colors, isDark } = useCoachTheme();
+  const insets = useSafeAreaInsets();
+  const [area, setArea] = useState(route?.params?.area === 'progress' ? 'progress' : 'coach');
+  useEffect(() => {
+    if (route?.params?.area) {
+      setArea(route.params.area === 'progress' ? 'progress' : 'coach');
+      navigation.setParams({ area: undefined });
+    }
+  }, [route?.params?.area, navigation]);
   const [data, setData] = useState(null), [error, setError] = useState(null), [busy, setBusy] = useState(false);
   const [samplePreviewEnabled, setSamplePreviewEnabled] = useState(false);
   const [sheet, setSheet] = useState(null), [progressTab, setProgressTab] = useState('overview');
@@ -88,7 +97,13 @@ export default function CoachHubScreen({ navigation, route }) {
     if (!data) return;
     setDate(savedDate); setMultiplier(Number(data.settings.time_multiplier)); setSheet('settings');
   }
-  function openProgress(tab = 'overview') { setProgressTab(tab); setSheet('progress'); }
+  function openProgress(tab = 'overview') {
+    if (tab === 'overview') { closeSheet(); setArea('progress'); }
+    else { setProgressTab(tab); setSheet('progress'); }
+  }
+  function showAccuracyInfo() {
+    Alert.alert('Running accuracy', 'Your running accuracy starts with your mini mock and updates as you practise, using your latest 20 first attempts in each section. Repeated questions count once. Your full history stays saved, and your coaching plan uses your wider performance.');
+  }
   function go(screen, params) { closeSheet(); navigation.navigate(screen, params); }
   function lesson(item) { if (item?.lessonRoute) go(item.lessonRoute, { lessonId: item.lessonId }); }
   async function start(kind, focus = {}) {
@@ -153,7 +168,11 @@ export default function CoachHubScreen({ navigation, route }) {
   return <SafeAreaView edges={['top', 'left', 'right']} style={[ds.page, { backgroundColor: colors.bgTop }]}>
     <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} backgroundColor={colors.bgTop} />
     <DashboardHeader onBack={() => route?.name === 'Coaching' ? navigation.navigate('Home') : navigation.goBack()} onSettings={openSettings} examLabel={examLabel} />
-    <ScrollView style={ds.coachScroll} showsVerticalScrollIndicator={false} contentContainerStyle={ds.content}>
+    <View style={{ paddingHorizontal: 20, paddingBottom: 12, width: '100%', maxWidth: 800, alignSelf: 'center' }}>
+      <Segments values={[{ id: 'coach', label: 'Your coach' }, { id: 'progress', label: 'Your progress' }]} value={area} onChange={setArea} />
+    </View>
+    {area === 'progress' ? <CoachProgressOverview navigation={navigation}
+      onHistory={profile ? () => openProgress('history') : null} /> : <ScrollView style={ds.coachScroll} showsVerticalScrollIndicator={false} contentContainerStyle={ds.content}>
       {error && <View style={[ds.option, { backgroundColor: colors.surfaceSoft, borderColor: colors.border }]}>
         <View style={{ flex: 1 }}><CoachText style={{ fontSize: 12, fontWeight: '700' }}>{data ? 'Showing your saved progress' : 'Your coach could not connect'}</CoachText>
           <CoachText muted style={ds.caption}>{data ? 'Your plan is still here. Reconnect to update it.' : error}</CoachText></View>
@@ -161,29 +180,15 @@ export default function CoachHubScreen({ navigation, route }) {
       </View>}
       {!data ? (!error && <ActivityIndicator color={colors.blue} size="large" accessibilityLabel="Loading your coach" style={{ marginTop: 40 }} />)
         : !profile ? <>
-          <View style={[ds.card, { backgroundColor: colors.surface, borderColor: colors.border, gap: 15, padding: 24 }]}>
-            <View style={[ds.coachAvatar, { width: 58, height: 58, borderRadius: 20, backgroundColor: hexToRgba(colors.purple, 0.12) }]}><PremiumIcon name="coach" size={34} color={colors.purple} /></View>
-            <CoachText style={[ds.heroTitle, { fontSize: 28, lineHeight: 35 }]}>Meet your UCAT coach.</CoachText>
-            <CoachText muted>Discover your strengths, work on the areas that need support, and see your progress as you prepare.</CoachText>
-            <View style={[ds.row, { alignItems: 'flex-start', gap: 8, marginVertical: 6 }]}>
-              {['Find your level', 'Build your plan', 'Grow your skills'].map((label, index) => <View key={label} style={{ flex: 1, gap: 7 }}>
-                <View style={[ds.coachAvatar, { width: 28, height: 28, borderRadius: 10, backgroundColor: colors.surfaceSoft }]}><CoachText style={{ color: colors.purple, fontSize: 12, fontWeight: '800' }}>{index + 1}</CoachText></View>
-                <CoachText style={{ fontSize: 11, lineHeight: 16, fontWeight: '600' }}>{label}</CoachText>
-              </View>)}
-            </View>
-            {!data.active && <>
-              <CoachText style={ds.cardTitle}>Start with your mini mock</CoachText>
-              <CoachText muted>A timed introduction across all four sections. Your answers will shape your first coaching plan.</CoachText>
-              <CoachText muted style={ds.caption}>Around 35 minutes · pause and finish later</CoachText>
-              <Button title={busy ? 'Preparing your mini mock…' : 'Start my mini mock'} disabled={busy} onPress={() => start('assessment')} />
-            </>}
-          </View>
-          {data.active && <NextPracticeCard resume={resume} busy={busy} onContinue={() => practise()} />}
+          <CoachWelcome>
+            {data.active ? <NextPracticeCard resume={resume} busy={busy} onContinue={() => practise()} /> : null}
+          </CoachWelcome>
           <TextLink title="How coaching works" icon="help-circle-outline" onPress={() => setSheet('how')} style={{ alignSelf: 'flex-start' }} />
           {__DEV__ && samplePreviewEnabled && !data.active && <Button title="Developer: preview sample results" secondary disabled={busy} onPress={previewSample} />}
         </> : <>
           <ProgressOverview story={story} sections={sections} onProgress={() => openProgress()}
-            onAccuracyInfo={() => Alert.alert('Your accuracy', 'It starts with your mini mock results. As you answer new questions, it uses your latest 20 first attempts in each section. Repeated questions count once.')} />
+            onSection={(section) => go('CoachSectionProgress', { section, mode: 'combined' })}
+            onAccuracyInfo={showAccuracyInfo} />
           <NextPracticeCard focus={story.focus} resume={resume} busy={busy} locked={locked} preview={data.previewAvailable && data.pro === false}
             onContinue={() => practise('practice', story.focus ? { skillId: story.focus.skillId } : {})}
             onLesson={story.focus?.lessonRoute ? () => lesson(story.focus) : null} onChange={() => setSheet('practice')} onPlan={() => openProgress('plan')} />
@@ -191,7 +196,13 @@ export default function CoachHubScreen({ navigation, route }) {
           {data.pro === null && <CoachText muted style={ds.caption}>Reconnect to confirm Pro access. Your saved results remain available.</CoachText>}
         </>}
       {profile && <CoachChatDock onPress={() => go('CoachChat')} remaining={data.chatRemaining} />}
-    </ScrollView>
+    </ScrollView>}
+    {area === 'coach' && data && !profile && !data.active && <View style={{ paddingHorizontal: 20, paddingTop: 12,
+      paddingBottom: route?.name === 'Coaching' ? 12 : Math.max(insets.bottom, 12), borderTopWidth: 1, borderTopColor: colors.border }}>
+      <View style={{ width: '100%', maxWidth: 800, alignSelf: 'center' }}>
+        <Button title={busy ? 'Preparing your mini mock…' : 'Start my mini mock'} disabled={busy} onPress={() => start('assessment')} />
+      </View>
+    </View>}
 
     <CoachSheet visible={!!sheet} title={sheet === 'settings' ? 'Coach settings' : sheet === 'practice' ? 'Choose your practice' : sheet === 'how' ? 'How coaching works' : 'Your progress'} onClose={closeSheet}>
       {sheet === 'how' && <View style={{ gap: 16 }}>
@@ -258,6 +269,9 @@ export default function CoachHubScreen({ navigation, route }) {
           disabled={busy} onPress={() => practise(mode, skill ? { skillId: skill } : { section })} />
       </>}
       {sheet === 'progress' && profile && <CoachProgressDetails data={data} story={story} tab={progressTab} onTabChange={setProgressTab}
+        onAccuracyInfo={showAccuracyInfo}
+        onSection={(section) => go('CoachSectionProgress', { section, mode: 'combined' })}
+        onSkill={(skillId) => go('PerformanceSkill', { skillId, mode: 'combined' })}
         busy={busy} onSession={(id) => go('CoachSession', { id })} onLesson={lesson}
         onPractice={(item) => practise('practice', { skillId: item.skillId })} />}
     </CoachSheet>

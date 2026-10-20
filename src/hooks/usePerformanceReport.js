@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from '
 import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { performanceCache } from '../services/performanceService';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 export function usePerformanceReport(mode) {
   const { user } = useAuth();
@@ -13,6 +14,13 @@ export function usePerformanceReport(mode) {
   const [refreshing, setRefreshing] = useState(false);
   const refreshTask = useRef(null);
   const generation = useRef(0);
+  const focused = useIsFocused();
+  useEffect(() => {
+    if (focused && state.needsRefresh && userId && !subscriptionLoading) void performanceCache.ensure(userId, isPro);
+  }, [focused, state.needsRefresh, userId, isPro, subscriptionLoading]);
+  useFocusEffect(useCallback(() => {
+    if (userId && !subscriptionLoading) void performanceCache.ensure(userId, isPro);
+  }, [userId, isPro, subscriptionLoading]));
   useEffect(() => {
     generation.current++;
     setRefreshing(false);

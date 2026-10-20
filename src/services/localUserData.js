@@ -3,6 +3,7 @@ import { clearAllContentCaches } from './contentCache';
 import { clearPerformanceCache } from './performanceService';
 import { clearCoachData } from './coachingService';
 import { clearPracticeQueue } from './practiceAttemptQueue';
+import { clearLessonCheckpoints } from './lessonCheckpointQueue';
 
 const USER_DATA_KEYS = [
   // Practice attempts
@@ -38,5 +39,6 @@ export async function clearLocalUserData() {
     clearPerformanceCache(),
     clearCoachData(),
     clearPracticeQueue(),
+    clearLessonCheckpoints(),
   ]);
 }

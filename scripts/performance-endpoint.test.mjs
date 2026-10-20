@@ -6,6 +6,7 @@ import ts from 'typescript';
 import * as engine from '../src/lib/performance/engine.js';
 import * as access from '../src/lib/performance/access.js';
 import * as pagination from '../src/lib/performance/pagination.js';
+import * as boundedCache from '../src/lib/boundedAsyncCache.js';
 
 const source = ts.transpileModule(fs.readFileSync('supabase/functions/performance-analysis/index.ts', 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
@@ -13,7 +14,7 @@ const source = ts.transpileModule(fs.readFileSync('supabase/functions/performanc
 
 // Exercise the actual edge handler with an in-memory PostgREST adapter. These
 // tests make no network requests and never use real accounts or credentials.
-function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatStatus = 200, cohortError = null } = {}) {
+function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatStatus = 200, cohortError = null, cohortThrows = false } = {}) {
   let handler;
   const queries = [], revenueCatRequests = [];
   const records = {
@@ -33,9 +34,14 @@ function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatS
       { id: 'ta2', user_id: 'bob', exam_attempt_id: 'e2', question_id: 'q1', selected_answer: 'B' },
     ],
     user_profiles: ['alice', 'bob'].map((user_id) => ({ user_id, is_admin: false, is_premium: premium, premium_expires_at: null })),
+    coach_evidence: ['alice', 'bob'].map((user_id) => ({ id: `coach-${user_id}`, user_id, payload: {
+      id: `coach-${user_id}`, mode: 'coach', kind: 'assessment', section: 'qr', questionId: 'private-mini-mock',
+      answeredAt: '2026-01-02T12:00:00Z', selectedAnswer: user_id === 'alice' ? 'B' : 'A',
+      tag: { id: 'private-mini-mock', section: 'qr', primarySkillId: 'qr.ratios', answer: 'A', confidence: 'high' },
+    } })),
   };
   const client = {
-    rpc: async (name) => { assert.equal(name, 'get_performance_cohort'); return { data: { rows: [] }, error: cohortError }; },
+    rpc: async (name) => { if (name === 'coach_evidence_revision') return { data: 'fixture-revision', error: null }; assert.equal(name, 'get_performance_cohort'); if (cohortThrows) throw new Error('offline'); return { data: { rows: [] }, error: cohortError }; },
     auth: { getUser: async (token) => ({ data: { user: ['alice', 'bob'].includes(token) ? { id: token } : null }, error: null }) },
     from(table) {
       const query = { table, filters: [], limit: Infinity, single: false }; queries.push(query);
@@ -65,6 +71,7 @@ function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatS
       if (specifier.endsWith('engine.js')) return engine;
       if (specifier.endsWith('access.js')) return access;
       if (specifier.endsWith('pagination.js')) return pagination;
+      if (specifier.endsWith('boundedAsyncCache.js')) return boundedCache;
       throw new Error(`Unexpected import: ${specifier}`);
     },
     Deno: { env: { get: (name) => name === 'REVENUECAT_SECRET_KEY' ? secret : 'test-only' }, serve: (fn) => { handler = fn; } },
@@ -131,10 +138,11 @@ test('RevenueCat verifies a new purchase and overrides stale profile access', as
   assert.equal((await unavailable.request()).status, 200);
 });
 
-test('one snapshot includes both modes using a single authenticated data read', async () => {
+test('one snapshot includes practice, timed and coaching using a single authenticated data read', async () => {
   const api = endpoint({ premium: true });
-  const snapshot = await (await api.request({ body: { mode: 'all', includeDetails: true } })).json();
-  assert.equal(snapshot.snapshotVersion, 1);
+  const snapshot = await (await api.request({ body: { mode: 'all', snapshotVersion: 2, includeDetails: true } })).json();
+  assert.equal(snapshot.snapshotVersion, 2);
+  assert.equal(snapshot.reports.coaching.mode, 'coaching');
   assert.equal(snapshot.reports.practice.overview.accuracy, 100);
   assert.equal(snapshot.reports.timed.overview.accuracy, 100);
   assert.equal(snapshot.reports.practice.access, 'pro');
@@ -143,11 +151,36 @@ test('one snapshot includes both modes using a single authenticated data read', 
   const free = await (await endpoint().request({ body: { mode: 'all', includeDetails: true } })).json();
   assert.equal(free.reports.practice.details, null);
   assert.equal(free.reports.timed.details, null);
+  assert.equal(free.reports.coaching.details, null);
+  assert.equal(free.snapshotVersion, 1, 'older apps can still read the existing snapshot contract');
 });
 
 test('a cohort outage leaves personal analytics available', async () => {
   const api = endpoint({ cohortError: { message: 'offline' } });
   const response = await api.request({ body: { mode: 'all' } });
   assert.equal(response.status, 200);
-  assert.equal((await response.json()).reports.practice.overview.accuracy, 100);
+  const report = (await response.json()).reports.practice;
+  assert.equal(report.overview.accuracy, 100);
+  assert.equal(report.overview.sections[0].cohort.status, 'unavailable');
+});
+
+test('coaching and combined reports use account-scoped snapshots and preserve ordinary practice', async () => {
+  const api = endpoint({ premium: true });
+  const alice = await (await api.request({ body: { mode: 'all', snapshotVersion: 2, includeDetails: true } })).json();
+  const bob = await (await api.request({ token: 'bob', body: { mode: 'coaching', includeDetails: true } })).json();
+  assert.equal(alice.reports.coaching.overview.accuracy, 0);
+  assert.equal(bob.overview.accuracy, 100);
+  assert.equal(alice.reports.combined.overview.questions, 2, 'repeated ordinary question across practice and timed counts once in All');
+  assert.equal(alice.reports.combined.overview.accuracy, 50);
+  assert.equal(alice.reports.coaching.details.skills[0].coaching.questions, 1);
+  assert.ok(!JSON.stringify(alice).includes('private-mini-mock'), 'private assessment IDs are not practice selections or public metadata');
+});
+
+test('a thrown cohort request is reported as unavailable instead of breaking the student report', async () => {
+  const api = endpoint({ cohortThrows: true });
+  const response = await api.request();
+  assert.equal(response.status, 200);
+  const result = await response.json();
+  assert.equal(result.overview.accuracy, 100);
+  assert.equal(result.overview.sections[2].cohort.status, 'unavailable');
 });

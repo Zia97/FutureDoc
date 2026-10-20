@@ -6,7 +6,7 @@ import ts from 'typescript';
 const transpile = (file) => ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
 function setup() {
   const values = new Map(), writes = [], inserts = [], requests = [];
-  const storage = { getItem: async (k) => values.get(k) ?? null, setItem: async (k, v) => { values.set(k, v); }, getAllKeys: async () => [...values.keys()], removeItem: async (k) => values.delete(k), multiRemove: async (keys) => keys.forEach((k) => values.delete(k)) };
+  const storage = { getItem: async (k) => values.get(k) ?? null, multiGet: async (keys) => keys.map((k) => [k,values.get(k) ?? null]), setItem: async (k, v) => { values.set(k, v); }, getAllKeys: async () => [...values.keys()], removeItem: async (k) => values.delete(k), multiRemove: async (keys) => keys.forEach((k) => values.delete(k)) };
   const state = { user: 'alice', offline: false, remote: null };
   const supabase = { auth: { getSession: async () => ({ data: { session: state.user ? { user: { id: state.user }, access_token: state.user } : null } }) },
     functions: { invoke: async (_fn, { body }) => {
@@ -17,9 +17,17 @@ function setup() {
       if (body.action === 'save') { writes.push(body); state.remote = { ...state.remote, ...body, version: body.version + 1, status: body.progress.phase === 'finished' ? 'completed' : 'active' }; }
       return { data: { session: structuredClone(state.remote) } };
     } },
-    from: () => ({ insert: async (row) => { if (state.offline) return { error: { code: 'offline' } }; if (inserts.some((r) => r.id === row.id)) return { error: { code: '23505' } }; inserts.push(row); return {}; } }) };
+    rpc: (name, { p_attempts: rows }) => ({
+      setHeader(_key, value) { assert.equal(value, `Bearer ${state.user}`); return this; },
+      then(resolve, reject) {
+        assert.equal(name, 'upload_practice_attempts'); assert.ok(rows.length <= 50);
+        const result = state.offline ? { error: { code: 'offline' } } : {};
+        if (!state.offline) rows.forEach((row) => { if (!inserts.some((r) => r.id === row.id)) inserts.push(row); });
+        return Promise.resolve(result).then(resolve,reject);
+      },
+    }) };
   const service = {}, queue = {};
-  const context = (exports) => ({ exports, console, require: (path) => path.includes('async-storage') ? { default: storage } : path.endsWith('supabase') ? { supabase } : path.endsWith('coachingService') ? service : null });
+  const context = (exports) => ({ exports, console, require: (path) => path.includes('async-storage') ? { default: storage } : path.endsWith('supabase') ? { supabase } : path.endsWith('coachingService') ? service : path.endsWith('performanceService') ? { performanceCache: { invalidate() {} } } : null });
   vm.runInNewContext(transpile('src/services/coachingService.js'), context(service));
   vm.runInNewContext(transpile('src/services/practiceAttemptQueue.js'), context(queue));
   return { state, values, writes, inserts, requests, service, queue };
@@ -53,6 +61,20 @@ test('practice attempts retain stable IDs offline, stay account scoped and clear
   f.state.offline = false; f.state.user = 'bob'; await f.queue.flushPracticeAttempts('alice'); assert.equal(f.inserts.length, 0);
   f.state.user = 'alice'; await f.queue.flushPracticeAttempts('alice'); assert.equal(f.inserts.length, 1); assert.equal(f.values.size, 0);
   await f.queue.flushPracticeAttempts('alice'); assert.equal(f.inserts.length, 1);
+});
+test('practice backlog drains in bounded batches and retries without dropping another account', async () => {
+  const f = setup();
+  for (let i = 0; i < 125; i++) f.values.set(`practice_upload_v1:alice:${i}`,
+    JSON.stringify({ id: `attempt-${i}`, user_id: 'alice', question_id: 'q1' }));
+  f.values.set('practice_upload_v1:bob:one', JSON.stringify({ id: 'bob-one', user_id: 'bob' }));
+  f.state.offline = true;
+  await assert.rejects(f.queue.flushPracticeAttempts('alice'));
+  assert.equal(f.values.size, 126);
+  f.state.offline = false;
+  await f.queue.flushPracticeAttempts('alice');
+  assert.equal(f.inserts.length, 125);
+  assert.equal(f.values.size, 1);
+  assert.ok(f.values.has('practice_upload_v1:bob:one'));
 });
 test('coaching reset removes only the signed-in student\'s local coaching data after server success', async () => {
   const f = setup();

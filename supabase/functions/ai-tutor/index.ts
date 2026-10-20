@@ -331,26 +331,23 @@ Deno.serve(async (req) => {
   // Unlimited access for RevenueCat subscribers OR admins
   const isPremium = !!(profile?.is_premium || profile?.is_admin);
 
-  // 4. Enforce usage limits via the atomic increment_ai_usage RPC.
-  // Returns -1 when the cap is hit, the new lifetime_count otherwise.
-  // This closes the SELECT-then-UPSERT race on the free-tier limit.
-  if (!isDemo) {
-    const { data: incremented, error: incErr } = await supabase.rpc(
-      'increment_ai_usage',
-      {
-        p_user_id:   user.id,
-        p_limit:     FREE_LIFETIME_LIMIT,
-        p_unlimited: isPremium,
-      },
-    );
-    if (incErr) {
-      console.error('[ai-tutor] increment_ai_usage failed:', incErr.message);
-      return json({ error: 'usage_check_failed' }, 500);
-    }
-    if (incremented === -1) {
-      return json({ error: 'lifetime_limit_reached', limit: FREE_LIFETIME_LIMIT }, 429);
-    }
+  // Claim before history reads or provider work, including on older app builds.
+  const requestId = parsed.requestId ?? crypto.randomUUID();
+  const requestCreatedAt = parsed.requestCreatedAt ?? new Date().toISOString();
+  if (typeof requestId !== 'string' || !/^[0-9a-f-]{36}$/i.test(requestId)
+    || typeof requestCreatedAt !== 'string' || !Number.isFinite(Date.parse(requestCreatedAt))) {
+    return json({ error: 'invalid_request' }, 400);
   }
+  const { data: claim, error: claimError } = await supabase.rpc('reserve_tutor_request', {
+    p_user: user.id, p_request: requestId, p_created_at: requestCreatedAt,
+    p_demo: !!isDemo, p_unlimited: isPremium,
+  });
+  if (claimError) {
+    const code = claimError.message;
+    const known = ['daily_limit_reached','lifetime_limit_reached','message_in_progress','request_expired'];
+    return json({ error: known.includes(code) ? code : 'usage_check_failed' }, known.includes(code) ? 429 : 503);
+  }
+  if (claim?.response) return json(claim.response);
 
   // 5. Shared memory is read from this authenticated account only. Asking for
   // help is recorded as support interest, never as performance evidence.
@@ -427,6 +424,7 @@ Deno.serve(async (req) => {
         .update({ error_code: 'provider_error', success: false })
         .eq('id', logId);
     }
+    await supabase.rpc('finish_tutor_request', { p_user: user.id, p_request: requestId, p_response: null });
     return json({ error: 'provider_error' }, 500);
   }
 
@@ -467,16 +465,12 @@ Deno.serve(async (req) => {
     }
   }
 
-  if (useLearningMemory) {
-    const { error: insightError } = await supabase.rpc('record_ai_tutor_insight', {
-      p_user_id: user.id,
-      p_question_type: questionType || 'unspecified',
-      p_misconception: result.diagnostics.misconception,
-    });
-    if (insightError) {
-      console.error('[ai-tutor] failed to update learner insight:', insightError.message);
-    }
-  }
+  // Logs are durable support history; unused JSON-key counters duplicated writes.
+  const responseBody = { content: result.content, messageId: logId };
+  const { error: receiptError } = await supabase.rpc('finish_tutor_request', {
+    p_user: user.id, p_request: requestId, p_response: responseBody,
+  });
+  if (receiptError) console.error('[ai-tutor] response receipt failed:', receiptError.message);
+  return json(responseBody);
 
-  return json({ content: result.content, messageId: logId });
 });

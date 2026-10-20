@@ -33,10 +33,14 @@ import CoachHubScreen from '../screens/coaching/CoachHubScreen';
 import CoachSessionScreen from '../screens/coaching/CoachSessionScreen';
 import CoachChatScreen from '../screens/coaching/CoachChatScreen';
 import CoachSampleResultsScreen from '../screens/coaching/CoachSampleResultsScreen';
+import CoachPlanIntroScreen from '../screens/coaching/CoachPlanIntroScreen';
+import CoachSectionProgressScreen from '../screens/coaching/CoachSectionProgressScreen';
 import PerformanceSkillScreen from '../screens/performance/PerformanceSkillScreen';
 import PerformancePracticeScreen from '../screens/performance/PerformancePracticeScreen';
 import WhatsNewModal from '../components/WhatsNewModal';
 import TrialExpiredModal from '../components/TrialExpiredModal';
+import AnnouncementHost from '../components/AnnouncementHost';
+import { announcementSafeRoute } from '../services/announcementQueue';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
 import PaywallScreen from '../screens/home/PaywallScreen';
 import ProfileScreen from '../screens/home/ProfileScreen';
@@ -90,8 +94,11 @@ function hasValidDisplayName(value) {
   return name.length >= 2 && name.length <= 40 && !/[\u0000-\u001F\u007F]/.test(name);
 }
 
-function AppStack() {
+function AppStack({ routeName }) {
   const { theme: t } = useTheme();
+  const [whatsNewBlocking, setWhatsNewBlocking] = useState(true);
+  const [trialBlocking, setTrialBlocking] = useState(true);
+  const safeForModal = announcementSafeRoute(routeName);
   useContentVersionCheck();
   useTimedExamSyncOnForeground();
 
@@ -106,12 +113,15 @@ function AppStack() {
 
   return (
     <>
-      <WhatsNewModal />
-      <TrialExpiredModal />
+      <WhatsNewModal enabled={safeForModal} onBlockingChange={setWhatsNewBlocking}/>
+      <TrialExpiredModal enabled={safeForModal && !whatsNewBlocking} onBlockingChange={setTrialBlocking}/>
+      <AnnouncementHost routeName={routeName} blocked={whatsNewBlocking || trialBlocking}/>
       <Stack.Navigator initialRouteName="MainTabs" screenOptions={screenOptions}>
       <Stack.Screen name="MainTabs" component={MainTabs} options={{ headerShown: false }} />
       <Stack.Screen name="PerformanceSkill" component={PerformanceSkillScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CoachHub" component={CoachHubScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CoachPlanIntro" component={CoachPlanIntroScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="CoachSectionProgress" component={CoachSectionProgressScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CoachSession" component={CoachSessionScreen} options={{ title: 'Coaching', headerRight: () => null }} />
       <Stack.Screen name="CoachChat" component={CoachChatScreen} options={{ title: 'Chat with your coach' }} />
       <Stack.Screen name="CoachSampleResults" component={CoachSampleResultsScreen} options={{ title: 'Sample assessment', headerRight: () => null }} />
@@ -223,6 +233,7 @@ export default function AppNavigator() {
   const [welcomeSeen, setWelcomeSeenState] = useState(null);
   const [versionGate, setVersionGate] = useState(null); // null = unknown, { updateRequired, storeUrl } once resolved
   const navigationRef = useRef(null);
+  const [routeName, setRouteName] = useState(null);
   const pendingReply = useRef(null);
 
   useEffect(() => {
@@ -343,11 +354,12 @@ export default function AppNavigator() {
     if (!welcomeSeen) {
       return <WelcomeStack onComplete={() => setWelcomeSeenState(true)} />;
     }
-    return <AppStack />;
+    return <AppStack routeName={routeName}/>;
   };
 
   return (
-    <NavigationContainer ref={navigationRef} onReady={() => {
+    <NavigationContainer ref={navigationRef} onStateChange={() => setRouteName(navigationRef.current?.getCurrentRoute()?.name)} onReady={() => {
+      setRouteName(navigationRef.current?.getCurrentRoute()?.name);
       if (user && pendingReply.current && welcomeSeen && examDateSet) {
         navigationRef.current?.navigate('ForumThread', { postId: pendingReply.current });
         pendingReply.current = null;

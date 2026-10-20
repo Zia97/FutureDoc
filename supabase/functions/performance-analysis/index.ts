@@ -2,6 +2,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { buildPerformanceReport } from '../../../src/lib/performance/engine.js';
 import { profileHasPro, revenueCatHasPro } from '../../../src/lib/performance/access.js';
 import { readAllPages as pages } from '../../../src/lib/performance/pagination.js';
+import { createBoundedAsyncCache } from '../../../src/lib/boundedAsyncCache.js';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -13,11 +14,14 @@ const headers = {
 const json = (body: unknown, status = 200) => new Response(JSON.stringify(body), { status, headers });
 const sections = { vr: 'verbal_reasoning', dm: 'decision_making', qr: 'quantitative_reasoning', sj: 'situational_judgement' };
 
-// This worker cache holds only question metadata. Anonymous cohort distributions
-// have a separate database cache; personal reports remain request-local.
+// Metadata is shared. Attempt inputs are cached by authenticated user and archive
+// revision; report permissions are evaluated for each request.
 let catalogueCache: { at: number; value: any } | null = null;
+const catalogueLoads = createBoundedAsyncCache({ maxEntries: 1, maxBytes: 12_000_000 });
+const attemptLoads = createBoundedAsyncCache({ maxEntries: 8, maxBytes: 8_000_000 });
 
-async function catalogue(client: any) {
+const catalogue = (client: any) => catalogueLoads.get('catalogue', () => loadCatalogue(client));
+async function loadCatalogue(client: any) {
   if (catalogueCache && Date.now() - catalogueCache.at < 60000) return catalogueCache.value;
   const [skills, questions] = await Promise.all([
     pages(() => client.from('performance_skills').select('id, section, metadata')),
@@ -50,6 +54,11 @@ async function hasPro(client: any, userId: string) {
 }
 
 async function readAttempts(client: any, userId: string, cutoff: string) {
+  const { data: revision, error } = await client.rpc('coach_evidence_revision', { p_user: userId });
+  if (error) throw error;
+  return attemptLoads.get(`${userId}:${revision}`, () => loadAttempts(client, userId, cutoff));
+}
+async function loadAttempts(client: any, userId: string, cutoff: string) {
   const practicePromise = pages(() => client.from('practice_question_attempts')
     .select('id,section,question_id,statement_index,selected_answer,is_correct,time_spent_ms,answered_at')
     .eq('user_id', userId).lte('answered_at', cutoff));
@@ -67,11 +76,16 @@ async function readAttempts(client: any, userId: string, cutoff: string) {
     }));
   });
   const [practice, ...timed] = await Promise.all([practicePromise, ...timedPromises]);
+  const archived = await pages(() => client.from('coach_evidence').select('id,payload').eq('user_id', userId));
+  const coaching = archived.map((row: any) => row.payload).filter((row: any) => row && Date.parse(row.answeredAt) <= Date.parse(cutoff))
+    .map((row: any) => row.mode !== 'coach' ? row : { ...row, mode: 'coaching',
+      cohortMode: row.kind === 'assessment' ? 'assessment' : row.kind === 'timed_check' ? 'coach_timed' : row.kind === 'review' ? 'coach_review' : 'coach_practice' });
   return [
     ...practice.map((a) => ({ id: a.id, section: a.section, mode: 'practice', questionId: a.question_id,
       statementIndex: a.statement_index, selectedAnswer: a.selected_answer, isCorrect: a.is_correct,
       timeMs: a.time_spent_ms, answeredAt: a.answered_at })),
     ...timed.flat(),
+    ...coaching,
   ];
 }
 
@@ -91,18 +105,19 @@ Deno.serve(async (req) => {
     if (raw.length > 1024) return json({ error: 'request_too_large' }, 413);
     body = JSON.parse(raw);
   } catch { return json({ error: 'invalid_request' }, 400); }
-  if (!['practice', 'timed', 'all'].includes(body?.mode)) return json({ error: 'invalid_mode' }, 400);
+  if (!['practice', 'timed', 'coaching', 'combined', 'all'].includes(body?.mode)) return json({ error: 'invalid_mode' }, 400);
   try {
     const now = Date.now();
     const [content, attempts, pro, cohortResult] = await Promise.all([
       catalogue(client), readAttempts(client, user.id, new Date(now).toISOString()),
       body.includeDetails === true ? hasPro(client, user.id) : Promise.resolve(false),
-      client.rpc('get_performance_cohort'),
+      client.rpc('get_performance_cohort').catch(() => ({ error: true })),
     ]);
     // A temporarily unavailable cohort must not hide the student's own report.
-    const cohort = cohortResult.error ? null : cohortResult.data;
+    const cohort = cohortResult.error || !Array.isArray(cohortResult.data?.rows) ? { status: 'unavailable' } : cohortResult.data;
     const build = (mode: string) => buildPerformanceReport({ catalogue: content, attempts, cohort, mode, isPro: pro, now });
-    if (body.mode === 'all') return json({ snapshotVersion: 1, reports: { practice: build('practice'), timed: build('timed') } });
+    if (body.mode === 'all') return json({ snapshotVersion: body.snapshotVersion === 2 ? 2 : 1,
+      reports: { practice: build('practice'), timed: build('timed'), coaching: build('coaching'), combined: build('combined') } });
     // Older app builds can keep requesting a single mode during rollout.
     return json(build(body.mode));
   } catch (err) {

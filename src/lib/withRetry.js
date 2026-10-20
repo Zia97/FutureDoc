@@ -13,7 +13,7 @@ export class OfflineError extends Error {
 }
 
 function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms * (0.75 + Math.random() * 0.5)));
 }
 
 /**
@@ -44,6 +44,10 @@ export async function withRetry(fn, { maxAttempts = MAX_ATTEMPTS, shouldRetry } 
       return result;
     } catch (err) {
       lastError = err;
+      const status = Number(err?.status ?? err?.statusCode);
+      const code = String(err?.code ?? '');
+      if (err?.name === 'AbortError' || (status >= 400 && status < 500 && ![408, 429].includes(status))
+        || /^(22|23|28|42)/.test(code) || !getIsOnline()) throw err;
       if (attempt < maxAttempts) {
         await delay(BASE_DELAY_MS * Math.pow(2, attempt - 1));
       }

@@ -14,13 +14,37 @@ const attempt = (questionId, extra = {}) => ({ id: `attempt-${questionId}`, ques
   selectedAnswer: 'A', answeredAt: new Date(NOW - day).toISOString(), timeMs: 12000, ...extra });
 const report = (questions, attempts, extra = {}) => buildPerformanceReport({ catalogue: { skills: [skill], questions }, attempts, isPro: true, now: NOW, ...extra });
 
-test('free report contains only basic breakdown, never skill IDs or practice selections', () => {
+test('free reports include skill names but no paid skill metrics or practice selections', () => {
   const result = report([question('q1')], [attempt('q1')], { isPro: false });
   assert.equal(result.overview.accuracy, 100);
   assert.equal(result.details, null);
   assert.equal(result.access, 'free');
-  assert.ok(!JSON.stringify(result).includes('qr.ratio'));
+  assert.deepEqual(result.skillCatalogue, [{ id: 'qr.ratio', section: 'qr', label: 'Ratios' }]);
   assert.ok(!JSON.stringify(result).includes('q1'));
+});
+
+test('coaching snapshots contribute to skill results without leaking keys or reoffering seen practice', () => {
+  const q = question('q1');
+  const rows = [attempt(q.id, { mode: 'coaching', kind: 'assessment', cohortMode: 'assessment', tag: q, selectedAnswer: 'B' })];
+  const result = report([q], rows, { mode: 'coaching' });
+  assert.equal(result.overview.questions, 1);
+  assert.equal(result.overview.accuracy, 0);
+  assert.equal(result.details.skills[0].coaching.questions, 1);
+  assert.deepEqual(result.details.skills[0].newQuestionIds, []);
+  assert.deepEqual(result.details.skills[0].reviewQuestionIds, ['q1']);
+  assert.equal(result.overview.sections.find((section) => section.section === 'qr').conditions[0].questions, 1);
+  assert.ok(!JSON.stringify(result).includes('"answer":'));
+});
+
+test('moving from an assessment to untimed coaching cannot create a false improvement claim', () => {
+  const qs = Array.from({ length: 24 }, (_, index) => question(`coach-${index}`));
+  const attempts = qs.map((tag, index) => attempt(tag.id, { mode: 'coaching', tag,
+    kind: index < 12 ? 'assessment' : 'practice', cohortMode: index < 12 ? 'assessment' : 'coach_practice',
+    selectedAnswer: index < 12 ? 'B' : 'A', answeredAt: new Date(NOW - (index < 12 ? 20 : 2) * day).toISOString() }));
+  const result = report(qs, attempts, { mode: 'coaching' });
+  assert.equal(result.details.skills[0].accuracy, 50);
+  assert.equal(result.details.skills[0].trend, null);
+  assert.equal(result.details.skills[0].coaching.questions, 24);
 });
 
 test('a correct retry does not inflate first-response score and clears mistake queue', () => {

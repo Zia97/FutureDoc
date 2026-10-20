@@ -3,6 +3,8 @@ import { db } from '../lib/dbQueries';
 import { supabase } from '../lib/supabase';
 import { reportError, reportMessage } from '../lib/reportError';
 import { createTimedExamQueue } from './timedExamQueueCore';
+import { performanceCache } from './performanceService';
+import { newCoachRequestId } from './coachingService';
 
 const QUEUE_KEY = 'timed_exam_sync_queue';
 const SUBMIT_FN = { vr: 'submitTimedVRExam', dm: 'submitTimedDMExam', qr: 'submitTimedQRExam', sj: 'submitTimedSJExam' };
@@ -14,6 +16,10 @@ const queue = createTimedExamQueue({
     const raw = await AsyncStorage.getItem(QUEUE_KEY);
     const entries = raw ? JSON.parse(raw) : [];
     if (!Array.isArray(entries)) throw new Error('Invalid saved exam queue');
+    if (entries.some((entry) => !entry.queueId)) {
+      entries.forEach((entry) => { if (!entry.queueId) entry.queueId = newCoachRequestId(); });
+      await AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(entries));
+    }
     return entries;
   },
   write: (entries) => AsyncStorage.setItem(QUEUE_KEY, JSON.stringify(entries)),
@@ -29,9 +35,12 @@ const queue = createTimedExamQueue({
     if (error) throw error;
     if (!session || session.user.id !== entry.userId) throw new Error('Exam upload account changed');
     // Bind the request to this account even if sign-out/sign-in occurs during upload.
-    return entry.op === 'submit'
-      ? db[SUBMIT_FN[entry.section]]({ ...entry.payload, accessToken: session.access_token })
-      : db[DELETE_FN[entry.section]](entry.testId, session.access_token);
+    const result = await (entry.op === 'submit'
+      ? db[SUBMIT_FN[entry.section]]({ ...entry.payload, submissionId: entry.queueId ?? entry.createdAt,
+        accessToken: session.access_token })
+      : db[DELETE_FN[entry.section]](entry.testId, session.access_token));
+    performanceCache.invalidate(entry.userId);
+    return result;
   },
   onError: (error) => reportError('timedExamSyncQueue', error, { extra: { note: 'Upload retained for retry' } }),
   onDrop: (entry) => reportMessage('timedExamSyncQueue', 'Invalid legacy operation', { level: 'warning', extra: { section: entry.section, op: entry.op } }),

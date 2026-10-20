@@ -11,7 +11,7 @@ export function createTimedExamQueue({ read, write, execute, isValid = () => tru
     return operation;
   }
   async function enqueue(entry) {
-    const saved = { ...entry, queueId: `${Date.now()}-${++sequence}`, createdAt: new Date().toISOString() };
+    const saved = { ...entry, queueId: `${Date.now()}-${++sequence}-${Math.random().toString(36).slice(2)}`, createdAt: new Date().toISOString() };
     await mutate((entries) => write([...entries.filter((e) => key(e) !== key(saved)), saved]));
   }
   async function removePending(entry) {

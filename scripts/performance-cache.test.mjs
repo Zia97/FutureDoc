@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createPerformanceCache, PERFORMANCE_CACHE_PREFIX, PERFORMANCE_REFRESH_INTERVAL } from '../src/lib/performance/cache.js';
 
-const snapshot = (pro = false, accuracy = 72) => ({ snapshotVersion: 1, reports: Object.fromEntries(['practice', 'timed'].map((mode) => [mode,
+const snapshot = (pro = false, accuracy = 72) => ({ snapshotVersion: 2, reports: Object.fromEntries(['practice', 'timed', 'coaching', 'combined'].map((mode) => [mode,
   { schemaVersion: 1, mode, access: pro ? 'pro' : 'free', overview: { accuracy }, details: pro ? { skills: [] } : null }])) });
 const deferred = () => { let resolve; const promise = new Promise((r) => { resolve = r; }); return { promise, resolve }; };
 function harness() {
@@ -143,7 +143,7 @@ test('subscribers on different screens see refreshed data without their own fetc
   assert.ok(second > first); assert.equal(h.calls(), 2);
 });
 
-test('completed drills leave the fresh selections without fetching or changing cached accuracy', async () => {
+test('completed drills update selections immediately and reload results on the next visit', async () => {
   const h = harness(), cache = h.factory();
   const value = snapshot(true);
   for (const report of Object.values(value.reports)) report.details.skills = [{ section: 'qr', newQuestionIds: ['q1', 'q2', 'q3'] }];
@@ -153,7 +153,43 @@ test('completed drills leave the fresh selections without fetching or changing c
   assert.deepEqual(cache.getState('alice').snapshot.reports.practice.details.skills[0].newQuestionIds, ['q3']);
   assert.deepEqual(cache.getState('alice').snapshot.reports.timed.details.skills[0].newQuestionIds, ['q3']);
   assert.equal(cache.getState('alice').snapshot.reports.practice.overview.accuracy, 72);
+  assert.equal(h.calls(), 1);
+  h.transport(() => {
+    const updated = snapshot(true, 80);
+    for (const report of Object.values(updated.reports)) report.details.skills = [{ section: 'qr', newQuestionIds: ['q3'] }];
+    return updated;
+  });
   const restarted = h.factory(); await restarted.ensure('alice', true);
   assert.deepEqual(restarted.getState('alice').snapshot.reports.practice.details.skills[0].newQuestionIds, ['q3']);
-  assert.equal(h.calls(), 1);
+  assert.equal(h.calls(), 2);
+  assert.equal(restarted.getState('alice').snapshot.reports.coaching.overview.accuracy, 80);
+});
+
+test('a cohort outage can be retried immediately without discarding personal results', async () => {
+  const h = harness(), cache = h.factory();
+  const failed = snapshot();
+  for (const report of Object.values(failed.reports)) report.overview.sections = [{ cohort: { status: 'unavailable' } }];
+  h.transport(() => failed);
+  await cache.ensure('alice', false);
+  h.transport(() => snapshot(false, 81));
+  await cache.refresh('alice', false);
+  assert.equal(h.calls(), 2);
+  assert.equal(cache.getState('alice').snapshot.reports.practice.overview.accuracy, 81);
+});
+
+test('an answer uploaded during refresh cannot leave a stale report marked as current', async () => {
+  const h = harness(), cache = h.factory(), pending = deferred();
+  await cache.ensure('alice', false);
+  cache.invalidate('alice');
+  assert.equal(cache.getState('alice').needsRefresh, true);
+  h.transport(() => h.calls() === 2 ? pending.promise : snapshot(false, 84));
+  const first = cache.ensure('alice', false);
+  await new Promise(setImmediate);
+  cache.invalidate('alice');
+  const second = cache.ensure('alice', false);
+  pending.resolve(snapshot(false, 72));
+  await Promise.all([first, second]);
+  assert.equal(h.calls(), 3);
+  assert.equal(cache.getState('alice').snapshot.reports.combined.overview.accuracy, 84);
+  assert.equal(cache.getState('alice').needsRefresh, false);
 });

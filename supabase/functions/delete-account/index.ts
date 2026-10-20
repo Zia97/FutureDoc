@@ -19,19 +19,14 @@ Deno.serve(async (req) => {
 
   // Remove binary screenshots before the auth row is deleted. Database
   // triggers then anonymise public discussion text and cascade private data.
-  const { data: posts } = await admin.from('forum_posts').select('id').eq('author_user_id', user.id);
-  const postIds = (posts ?? []).map((post) => post.id);
-  if (postIds.length) {
-    const { data: attachments, error: attachmentError } = await admin
-      .from('forum_attachments').select('storage_path').in('post_id', postIds);
-    if (attachmentError) {
-      return new Response(JSON.stringify({ error: 'forum_cleanup_failed' }), { status: 500, headers: headers() });
-    }
-    const paths = (attachments ?? []).map((row) => row.storage_path);
-    if (paths.length) {
-      const { error: storageError } = await admin.storage.from('forum-media').remove(paths);
-      if (storageError) return new Response(JSON.stringify({ error: 'forum_media_cleanup_failed' }), { status: 500, headers: headers() });
-    }
+  // Page by the user's storage prefix, including unregistered uploads.
+  const deadline = Date.now() + 40_000;
+  for (;;) {
+    const { data: objects, error: listError } = await admin.rpc('forum_user_media_paths', { p_user: user.id });
+    if (listError || Date.now() > deadline) return new Response(JSON.stringify({ error: 'forum_cleanup_failed' }), { status: 503, headers: headers() });
+    if (!objects?.length) break;
+    const { error: storageError } = await admin.storage.from('forum-media').remove(objects.map((row: any) => row.path));
+    if (storageError) return new Response(JSON.stringify({ error: 'forum_media_cleanup_failed' }), { status: 503, headers: headers() });
   }
 
   const { error: deleteError } = await admin.auth.admin.deleteUser(user.id);

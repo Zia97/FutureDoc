@@ -91,6 +91,7 @@ export default function ForumThreadScreen({ navigation, route }) {
   const [thread, setThread] = useState(null);
   const [forumState, setForumState] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [replyBody, setReplyBody] = useState('');
   const [replyTarget, setReplyTarget] = useState(null);
   const [replying, setReplying] = useState(false);
@@ -109,6 +110,16 @@ export default function ForumThreadScreen({ navigation, route }) {
   }, [postId]);
 
   useFocusEffect(useCallback(() => { load(); }, [load]));
+  const loadMore = async () => {
+    if (loadingMore || !thread?.nextCursor) return;
+    setLoadingMore(true);
+    try {
+      const page = await getForumThread(postId, thread.nextCursor);
+      setThread((current) => current && page ? { ...current, nextCursor: page.nextCursor,
+        replies: [...new Map([...current.replies, ...page.replies].map((reply) => [reply.id, reply])).values()] } : current);
+    } catch (error) { Alert.alert('Could not load replies', forumErrorMessage(error)); }
+    finally { setLoadingMore(false); }
+  };
 
   useEffect(() => subscribeToForumSubmissions((event) => {
     if (event.type === 'reply_pending' && event.reply.postId === postId) {
@@ -311,6 +322,11 @@ export default function ForumThreadScreen({ navigation, route }) {
                   onDelete={() => deleteContent('reply', item.id)}
                 />
               )) : <Text style={[styles.noReplies, { color: colors.textMuted }]}>No replies yet. Add something helpful.</Text>}
+              {thread.nextCursor ? (
+                <TouchableOpacity onPress={loadMore} disabled={loadingMore} style={styles.previewButton}>
+                  <Text style={[styles.previewText, { color: colors.cyan }]}>{loadingMore ? 'Loading…' : 'Load more replies'}</Text>
+                </TouchableOpacity>
+              ) : null}
           </View>
         </ScrollView>
 
