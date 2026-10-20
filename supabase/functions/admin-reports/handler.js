@@ -36,6 +36,19 @@ export function createHandler({client, origins, catalogue, sentryUrl=''}) {
       let body; try { body=JSON.parse(bodyText); } catch { return json({error:'Invalid JSON.'},400); }
       if (!body || typeof body!=='object') return json({error:'Invalid request.'},400);
       if (body.action==='session') return json({user:{id:user.id,email:user.email}});
+      if (body.action==='delete_preview') {
+        const selected=Array.isArray(body.issues)&&body.issues.length>0&&body.issues.length<=1000&&body.issues.every(i=>typeof i==='string'&&i.length<=500);
+        const filtered=body.allMatching===true&&body.filter&&typeof body.filter==='object'&&!Array.isArray(body.filter);
+        if ((!selected&&!filtered)||(selected&&filtered))return json({error:'Select reports or all matching issues.'},400);
+        return json(unwrap(await client.rpc('admin_reports_delete_preview',{
+          p_actor:user.id,p_issues:selected?body.issues:null,p_filter:filtered?body.filter:null,
+        })));
+      }
+      if (body.action==='delete') {
+        if(typeof body.id!=='string'||!/^[0-9a-f-]{36}$/i.test(body.id)||body.confirm!==true)
+          return json({error:'Confirm the deletion preview.'},400);
+        return json(unwrap(await client.rpc('admin_reports_delete',{p_actor:user.id,p_id:body.id})));
+      }
       if (body.action?.startsWith('announcement_')) {
         if (body.action==='announcement_preview' || body.action==='announcement_history') {
           if (typeof body.issue!=='string' || !/^question:(vr|dm|qr|sj):(practice|timed):[0-9a-f-]{36}$/i.test(body.issue))

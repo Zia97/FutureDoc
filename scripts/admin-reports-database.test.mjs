@@ -30,6 +30,7 @@ test('private SQL inbox, historical evidence, atomic triage, AI evidence preserv
       insert into auth.users(id) values('${admin}'),('${student}');
       insert into user_profiles values('${admin}',true),('${student}',false);`);
     await db.exec(migration);
+    await db.exec(original('20261020180000_admin_report_deletion.sql'));
     const originalPolicies=(await db.query("select count(*)::int n from pg_policies where tablename='question_reports'")).rows[0].n;
     assert.equal(originalPolicies,1,'existing student report policy remains intact');
     const insertQuestion=async(mode=false,section='qr',state='new',created='2026-04-10T08:00:00Z')=>(await db.query(
@@ -109,6 +110,43 @@ test('private SQL inbox, historical evidence, atomic triage, AI evidence preserv
     assert.equal((await detail(primary)).evidence.find(e=>e.source_id===noteItem[0].source_id).state,'new','notes do not change status');
     await assert.rejects(rpc('admin_reports_list',[student,{}]),/forbidden/);
     await assert.rejects(rpc('admin_reports_review',[student,primary,[], 'note','x','unconfirmed']),/forbidden/);
+    await assert.rejects(rpc('admin_reports_delete_preview',[student,[primary],null]),/forbidden/);
+    const preview=await rpc('admin_reports_delete_preview',[admin,[primary],null]);
+    assert.equal(preview.records,4);
+    assert.deepEqual(preview.sources,{question:3,ai:1});
+    await assert.rejects(rpc('admin_reports_delete',[student,preview.id]),/forbidden/);
+    // New arrivals survive a preview; retries delete nothing further.
+    await db.exec('reset role');
+    const later=await insertQuestion();
+    await db.exec('set role service_role');
+    assert.equal((await rpc('admin_reports_delete',[admin,preview.id])).deleted,4);
+    assert.equal((await rpc('admin_reports_delete',[admin,preview.id])).deleted,4);
+    assert.equal((await detail(primary)).total,1);
+    assert.equal((await detail(primary)).evidence[0].source_id,later);
+    assert.equal((await db.query('select count(*)::int n from ai_tutor_logs where id=$1',[a1])).rows[0].n,0);
+    assert.ok((await detail(primary)).audit.some(a=>a.action==='delete'&&a.actor===admin));
+    const stale=await rpc('admin_reports_delete_preview',[admin,[primary,`question:qr:timed:${qid}`],null]);
+    await db.exec('reset role');
+    await db.query("update question_reports set comment='Changed after preview' where id=$1",[later]);
+    await db.exec('set role service_role');
+    await assert.rejects(rpc('admin_reports_delete',[admin,stale.id]),/stale_evidence/);
+    assert.equal((await detail(`question:qr:timed:${qid}`)).total,1,'atomic rollback preserves the other group');
+    const filtered=await rpc('admin_reports_delete_preview',[admin,null,{source:'support'}]);
+    assert.deepEqual(filtered.sources,{support:1});
+    assert.equal((await rpc('admin_reports_delete',[admin,filtered.id])).deleted,1);
+    const everything=await rpc('admin_reports_delete_preview',[admin,null,{status:'all',pageSize:1,page:99}]);
+    assert.ok(everything.records>1,'all matching ignores current page');
+    await db.exec('reset role');
+    await db.query("update admin.report_deletions set expires_at=now()-interval '1 second' where id=$1",[everything.id]);
+    await db.exec('set role service_role');
+    await assert.rejects(rpc('admin_reports_delete',[admin,everything.id]),/expired_preview/);
+    const freshDelete=await rpc('admin_reports_delete_preview',[admin,null,{status:'all'}]);
+    assert.equal(freshDelete.sources.forum,1);
+    assert.equal(freshDelete.sources.lesson,1);
+    assert.equal((await rpc('admin_reports_delete',[admin,freshDelete.id])).deleted,freshDelete.records);
+    assert.equal((await list({status:'all'})).total,0);
+    assert.equal((await db.query('select count(*)::int n from admin.report_reviews')).rows[0].n,0);
+    assert.ok((await db.query('select count(*)::int n from admin.report_audit')).rows[0].n>0,'audit survives hard deletion');
     await db.exec('reset role');
     await db.query("update user_profiles set is_admin=false where user_id=$1",[admin]);
     await db.exec('set role service_role');
@@ -116,6 +154,9 @@ test('private SQL inbox, historical evidence, atomic triage, AI evidence preserv
     for(const role of ['anon','authenticated']) {
       await db.exec(`reset role;set role ${role}`);
       await assert.rejects(rpc('admin_reports_list',[admin,{}]),/permission denied/);
+      await assert.rejects(rpc('admin_reports_delete_preview',[admin,[primary],null]),/permission denied/);
+      await assert.rejects(rpc('admin_reports_delete',[admin,preview.id]),/permission denied/);
+      await assert.rejects(db.query('select * from admin.report_deletions'),/permission denied/);
       await assert.rejects(rpc('admin_reports_detail',[admin,primary,1]),/permission denied/);
       await assert.rejects(rpc('admin_reports_activity',[admin,primary,1]),/permission denied/);
       await assert.rejects(rpc('admin_reports_review',[admin,primary,items,'start','','unconfirmed']),/permission denied/);

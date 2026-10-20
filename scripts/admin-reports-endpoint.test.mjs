@@ -12,7 +12,7 @@ function setup({admin=true,auth=true,profileError=false,missingProfile=false}={}
   return {calls,state,handler:createHandler({client,origins:[origin],catalogue:{}})};
 }
 test('every privileged action rejects missing, expired, forged and non-admin sessions',async()=>{
-  for(const action of ['session','list','detail','review','media','activity','announcement_preview','announcement_send','announcement_cancel','announcement_history']) {
+  for(const action of ['session','list','detail','review','media','activity','announcement_preview','announcement_send','announcement_cancel','announcement_history','delete_preview','delete']) {
     for(const token of [null,'expired','forged']) {
       const {calls,handler}=setup();
       assert.equal((await handler(request(action,token))).status,401,action);
@@ -23,6 +23,15 @@ test('every privileged action rejects missing, expired, forged and non-admin ses
     assert.deepEqual(calls.filter(c=>c[0]==='table').map(c=>c[1]),['user_profiles']);
     assert.equal(calls.filter(c=>c[0]==='rpc').length,0);
   }
+});
+test('deletion requires explicit confirmation and uses the verified actor',async()=>{
+  const {handler,calls}=setup();
+  assert.equal((await handler(request('delete','valid',{id:'00000000-0000-4000-8000-000000000001'}))).status,400);
+  assert.equal((await handler(request('delete_preview','valid',{issues:[]}))).status,400);
+  assert.equal((await handler(request('delete_preview','valid',{issues:['question:qr:practice:x'],allMatching:true,filter:{}}))).status,400);
+  assert.equal((await handler(request('delete_preview','valid',{issues:['question:qr:practice:x'],actor:'attacker'}))).status,200);
+  assert.equal((await handler(request('delete','valid',{id:'00000000-0000-4000-8000-000000000001',confirm:true,actor:'attacker'}))).status,200);
+  assert.ok(calls.filter(c=>c[0]==='rpc').every(c=>c[2].p_actor==='verified-admin'));
 });
 test('only database boolean true grants access; missing profiles and revoked flags fail closed',async()=>{
   for(const admin of [false,null,'true',1]){
