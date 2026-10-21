@@ -16,6 +16,7 @@ export default function TimedDMTestReviewScreen({ route, navigation }) {
       answers={answers}
       flags={flags}
       test={test}
+      marketingScorePercent={route.params?.marketingScorePercent}
       onDone={() => navigation.goBack()}
     />
   );

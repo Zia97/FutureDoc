@@ -1,5 +1,5 @@
 import Alert from '../../services/appAlert';
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -15,12 +15,14 @@ import {
   Animated,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
+import { useMarketingDemo, setMarketingDemoEnabled } from '../../dev/useMarketingDemo';
+import { useMarketingAccess } from '../../context/MarketingAccessContext';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
 import { getNotificationPreferences, setNotificationsEnabled } from '../../services/notificationService';
 import { useSupportNotifications } from '../../context/SupportNotificationsContext';
@@ -45,6 +47,9 @@ const PRACTICE_SECTIONS = [
 ];
 
 export default function ProfileScreen() {
+  const marketingDemo = useMarketingDemo();
+  const { canUseMarketingDemo, refreshMarketingAccess } = useMarketingAccess();
+  useFocusEffect(useCallback(() => { void refreshMarketingAccess(); }, [refreshMarketingAccess]));
   const navigation = useNavigation();
   const { user, signOut, deleteAccount, displayName, updatePassword, saveDisplayName } = useAuth();
   const { isDark } = useTheme();
@@ -421,12 +426,12 @@ export default function ProfileScreen() {
         )}
 
         {/* Developer */}
-        {__DEV__ && (
+        {canUseMarketingDemo && (
           <Animated.View style={[styles.section, contentAnim]}>
-            <Text style={[styles.sectionHeading, { color: colors.text }]}>Developer</Text>
-            <Text style={[styles.helperText, { color: colors.textMuted }]}>
+            <Text style={[styles.sectionHeading, { color: colors.text }]}>{__DEV__ ? 'Developer' : 'Marketing tools'}</Text>
+            {__DEV__ && <Text style={[styles.helperText, { color: colors.textMuted }]}>
               Practice toggles load local section JSON. The coaching toggle enables a generated sample assessment report for previewing the results screen.
-            </Text>
+            </Text>}
             <View
               style={[
                 styles.devCard,
@@ -437,6 +442,18 @@ export default function ProfileScreen() {
                 },
               ]}
             >
+              <View style={styles.devRow}>
+                <RichIconBox icon="chart" accent={colors.amber} size={40} iconSize={20} />
+                <View style={styles.devLabel}>
+                  <Text style={[styles.devTitle, { color: colors.text }]}>Marketing demo</Text>
+                  <Text style={[styles.devSubtitle, { color: colors.textMuted }]}>Sample statistics and community content. Real data stays unchanged.</Text>
+                </View>
+                <Switch accessibilityLabel="Marketing demo" value={marketingDemo}
+                  onValueChange={(value) => { void setMarketingDemoEnabled(value).catch(() => Alert.alert('Demo preference', 'The toggle changed, but could not be saved for your next launch.')); }}
+                  trackColor={{ false: colors.border, true: colors.amber }} thumbColor="#ffffff" />
+              </View>
+              {__DEV__ && <>
+              <View style={[styles.devDivider, { backgroundColor: colors.border }]} />
               <View style={styles.devRow}>
                 <RichIconBox icon="chat" accent={colors.amber} size={40} iconSize={20} />
                 <View style={styles.devLabel}>
@@ -473,11 +490,16 @@ export default function ProfileScreen() {
                   </View>
                 </React.Fragment>
               ))}
+              </>}
             </View>
           </Animated.View>
         )}
 
         {/* Support */}
+        {supportCounts?.is_admin && <Animated.View style={[styles.section, supportAnim]}>
+          <GlassMenuCard title="Marketing testers" icon="chart" accent={colors.purple}
+            onPress={() => navigation.navigate('MarketingTesters')} />
+        </Animated.View>}
         <Animated.View style={[styles.section, supportAnim]}>
           <Text style={[styles.sectionHeading, { color: colors.text }]}>Support</Text>
           <GlassMenuCard

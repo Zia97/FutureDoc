@@ -8,6 +8,7 @@ import * as resultsView from '../src/lib/coaching/resultsView.js';
 import * as scoring from '../src/lib/ucatScoring.js';
 import * as sjScoring from '../src/lib/sjScoring.js';
 import { LABEL_SETS } from '../src/constants/sjLabelSets.js';
+import * as marketingData from '../src/dev/marketingDemoData.js';
 
 const names = { vr: 'VR', dm: 'DM', qr: 'QR', sj: 'SJ' };
 function sessionFor(section) {
@@ -34,7 +35,7 @@ function sessionFor(section) {
 
 // Render the real coaching adapter and real completed timed-test screens.
 // Replace only native views and leaf feedback/rendering components.
-function fixture(session, { initialReview = false, isDark = false, multiplier = 1 } = {}) {
+function fixture(session, { initialReview = false, isDark = false, multiplier = 1, marketingDemo = false } = {}) {
   const instances = new Map(), modules = new Map(); let current, lastTimed;
   const calls = { done: 0, continued: 0, plan: 0 };
   const react = {
@@ -58,6 +59,8 @@ function fixture(session, { initialReview = false, isDark = false, multiplier = 
     assert.equal(errors.length, 0);
     vm.runInNewContext(source.outputText, { exports, React: react, require(path) {
       if (path === 'react') return { ...react, default: react };
+      if (path.endsWith('/dev/useMarketingDemo')) return { useMarketingDemo: () => marketingDemo };
+      if (path.endsWith('/dev/marketingDemoData')) return marketingData;
       if (path === 'react-native') return native;
       if (path === 'react-native-safe-area-context') return { SafeAreaView: 'SafeAreaView' };
       if (path.endsWith('ThemeContext')) return { useTheme: () => ({ isDark }) };
@@ -98,6 +101,16 @@ function nodes(tree) {
 }
 const all = (tree, type) => nodes(tree).filter((node) => node.type === type);
 const find = (tree, type) => all(tree, type)[0];
+
+for (const section of ['vr', 'dm', 'qr', 'sj']) test(`${section}: marketing results reuse review UI without changing frozen real answers`, () => {
+  const session = sessionFor(section), before = structuredClone(session);
+  const f = fixture(session, { initialReview: true, marketingDemo: true });
+  const tree = f.timed({ marketingScorePercent: 67 });
+  const overview = find(tree, 'ScoreOverviewCard');
+  assert.equal(overview.props.pct, 67);
+  assert.ok(all(tree, 'QuestionBreakdownRow').every((row) => row.props.result !== 'unanswered'));
+  assert.deepEqual(session, before);
+});
 
 for (const section of ['vr', 'dm', 'qr', 'sj']) test(`${section}: completed coaching reuses the timed results screen, breakdown and question review`, () => {
   const session = sessionFor(section), f = fixture(session, { initialReview: true, isDark: true, multiplier: 1.5 });

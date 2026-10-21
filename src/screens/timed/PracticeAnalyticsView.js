@@ -12,6 +12,8 @@ import Svg, { Path, Circle, Line, G, Text as SvgText } from 'react-native-svg';
 
 import { db } from '../../lib/dbQueries';
 import { reportError } from '../../lib/reportError';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
+import { marketingPracticeData } from '../../dev/marketingDemoData';
 import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import {
   AnalyticsCard,
@@ -568,6 +570,7 @@ function TrendCompare({ trend, t }) {
 
 // ─── Screen ─────────────────────────────────────────────────────────────────
 export default function PracticeAnalyticsView({ sectionKey, preloadedData }) {
+  const marketingDemo = useMarketingDemo();
   const t = usePremiumAnalyticsTheme(sectionKey);
   const hasPreloaded = preloadedData !== undefined;
   const screenBg = hasPreloaded ? 'transparent' : t.bgInput;
@@ -579,7 +582,7 @@ export default function PracticeAnalyticsView({ sectionKey, preloadedData }) {
   const sectionId = SECTION_KEY_MAP[sectionKey];
 
   const load = useCallback(async () => {
-    if (hasPreloaded) return;
+    if (marketingDemo || hasPreloaded) return;
     try {
       setLoading(true);
       const res = await db.loadPracticeAnalytics(sectionId);
@@ -591,7 +594,7 @@ export default function PracticeAnalyticsView({ sectionKey, preloadedData }) {
     } finally {
       setLoading(false);
     }
-  }, [hasPreloaded, sectionId]);
+  }, [marketingDemo, hasPreloaded, sectionId]);
 
   useFocusEffect(useCallback(() => { if (!hasPreloaded) load(); }, [load, hasPreloaded]));
 
@@ -603,18 +606,19 @@ export default function PracticeAnalyticsView({ sectionKey, preloadedData }) {
   }, [hasPreloaded, preloadedData]);
 
   const [chartWidth, setChartWidth] = useState(280);
+  const displayData = useMemo(() => marketingDemo ? marketingPracticeData(sectionKey.toLowerCase()) : data, [marketingDemo, sectionKey, data]);
   const stats = useMemo(
     () => aggregate({
-      rawAttempts: data?.rawAttempts ?? [],
-      latestAttempts: data?.latestAttempts ?? [],
-      cohortByKey: data?.cohortByKey ?? new Map(),
-      totalQuestions: data?.totalQuestions ?? 0,
+      rawAttempts: displayData?.rawAttempts ?? [],
+      latestAttempts: displayData?.latestAttempts ?? [],
+      cohortByKey: displayData?.cohortByKey ?? new Map(),
+      totalQuestions: displayData?.totalQuestions ?? 0,
       sectionKey,
     }),
-    [data, sectionKey],
+    [displayData, sectionKey],
   );
 
-  if (loading) {
+  if (loading && !marketingDemo) {
     return (
       <AnalyticsEmptyState
         t={t}
@@ -626,7 +630,7 @@ export default function PracticeAnalyticsView({ sectionKey, preloadedData }) {
     );
   }
 
-  if (error) {
+  if (error && !marketingDemo) {
     return (
       <AnalyticsEmptyState
         t={t}

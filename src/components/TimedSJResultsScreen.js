@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useMarketingDemo } from '../dev/useMarketingDemo';
+import { marketingResultAnswers } from '../dev/marketingDemoData';
 import {
   View,
   Text,
@@ -57,7 +59,10 @@ function deriveScenarioTitle(stem, fallback) {
   return slice;
 }
 
-export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, isTimed = true }) {
+export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, isTimed = true, marketingScorePercent = 80 }) {
+  const marketingDemo = useMarketingDemo();
+  const sampleAnswers = useMemo(() => marketingDemo ? marketingResultAnswers(scenarios.flatMap((s) => s.items), marketingScorePercent) : null, [marketingDemo, scenarios, marketingScorePercent]);
+  if (marketingDemo) { getAnswer = (_parent, id) => sampleAnswers[id]; scoreSummary = undefined; }
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();

@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useMarketingDemo } from '../dev/useMarketingDemo';
+import { marketingResultAnswers } from '../dev/marketingDemoData';
 import {
   View,
   Text,
@@ -51,7 +53,12 @@ function getQuestionResult(q, answers) {
   return selected === q.answer ? 'correct' : 'incorrect';
 }
 
-export default function TimedDMResultsScreen({ questions, answers, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary }) {
+export default function TimedDMResultsScreen({ questions, answers, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, marketingScorePercent = 80 }) {
+  const marketingDemo = useMarketingDemo();
+  const sampleAnswers = useMemo(() => marketingDemo ? marketingResultAnswers(questions, marketingScorePercent) : null, [marketingDemo, questions, marketingScorePercent]);
+  const displayQuestions = useMemo(() => marketingDemo ? questions.map((q) => ({ ...q, grade: undefined })) : questions, [marketingDemo, questions]);
+  questions = displayQuestions;
+  if (marketingDemo) { answers = sampleAnswers; scoreSummary = undefined; }
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const accent = colors.teal;

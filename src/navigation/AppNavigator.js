@@ -44,6 +44,7 @@ import { announcementSafeRoute } from '../services/announcementQueue';
 import AboutUCATScreen from '../screens/home/AboutUCATScreen';
 import PaywallScreen from '../screens/home/PaywallScreen';
 import ProfileScreen from '../screens/home/ProfileScreen';
+import MarketingTestersScreen from '../screens/home/MarketingTestersScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
 import TermsOfServiceScreen from '../screens/home/TermsOfServiceScreen';
 import SupportScreen from '../screens/home/SupportScreen';
@@ -168,6 +169,7 @@ function AppStack({ routeName }) {
       <Stack.Screen name="AboutUCAT" component={AboutUCATScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Paywall" component={PaywallScreen} options={{ headerShown: false, presentation: 'modal' }} />
       <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="MarketingTesters" component={MarketingTestersScreen} options={{ headerShown: false }} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />

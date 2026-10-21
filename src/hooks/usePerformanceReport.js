@@ -3,8 +3,10 @@ import { useAuth } from '../context/AuthContext';
 import { useSubscription } from '../context/SubscriptionContext';
 import { performanceCache } from '../services/performanceService';
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useMarketingDemo, getMarketingDemo } from '../dev/useMarketingDemo';
 
 export function usePerformanceReport(mode) {
+  const marketingDemo = useMarketingDemo();
   const { user } = useAuth();
   const { isPro, loading: subscriptionLoading } = useSubscription();
   const userId = user?.id;
@@ -16,21 +18,21 @@ export function usePerformanceReport(mode) {
   const generation = useRef(0);
   const focused = useIsFocused();
   useEffect(() => {
-    if (focused && state.needsRefresh && userId && !subscriptionLoading) void performanceCache.ensure(userId, isPro);
-  }, [focused, state.needsRefresh, userId, isPro, subscriptionLoading]);
+    if (!marketingDemo && focused && state.needsRefresh && userId && !subscriptionLoading) void performanceCache.ensure(userId, isPro);
+  }, [marketingDemo, focused, state.needsRefresh, userId, isPro, subscriptionLoading]);
   useFocusEffect(useCallback(() => {
-    if (userId && !subscriptionLoading) void performanceCache.ensure(userId, isPro);
-  }, [userId, isPro, subscriptionLoading]));
+    if (!marketingDemo && userId && !subscriptionLoading) void performanceCache.ensure(userId, isPro);
+  }, [marketingDemo, userId, isPro, subscriptionLoading]));
   useEffect(() => {
     generation.current++;
     setRefreshing(false);
     refreshTask.current = null;
-    if (userId && !subscriptionLoading) performanceCache.ensure(userId, isPro);
+    if (!marketingDemo && userId && !subscriptionLoading) performanceCache.ensure(userId, isPro);
     return () => { generation.current++; };
-  }, [userId, isPro, subscriptionLoading]);
+  }, [marketingDemo, userId, isPro, subscriptionLoading]);
 
   const refresh = useCallback(() => {
-    if (!userId || subscriptionLoading) return Promise.resolve();
+    if (marketingDemo || !userId || subscriptionLoading) return Promise.resolve();
     if (refreshTask.current) return refreshTask.current;
     const current = generation.current;
     setRefreshing(true);
@@ -44,9 +46,11 @@ export function usePerformanceReport(mode) {
     });
     refreshTask.current = task;
     return task;
-  }, [userId, isPro, subscriptionLoading]);
+  }, [marketingDemo, userId, isPro, subscriptionLoading]);
 
   const report = state.snapshot?.reports[mode] ?? null;
+  if (marketingDemo) return { report: getMarketingDemo().reports[mode], loading: false, error: null, refreshing: false,
+    refresh, isPro: true, canAnalyse: true, completePractice: () => {} };
   return { report, loading: !report && (subscriptionLoading || state.loading), error: state.error,
     refreshing, refresh, isPro, canAnalyse: !subscriptionLoading && isPro && report?.access === 'pro',
     completePractice: (section, questionIds) => performanceCache.completePractice(userId, section, questionIds) };

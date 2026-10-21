@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { useTheme } from '../../context/ThemeContext';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
 import MainTabBar from '../../components/MainTabBar';
 import {
   AppHeader,
@@ -2291,10 +2292,12 @@ function PracticeHandOff({ allComplete, colors, isDark, onPractice, onTimed }) {
 }
 
 export default function DecisionMakingLearnScreen({ navigation }) {
+  const marketingDemo = useMarketingDemo();
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
   const { isPro } = useSubscription();
-  const [completedIds, setCompletedIds] = useState([]);
+  const [realCompletedIds, setCompletedIds] = useState([]);
+  const completedIds = useMemo(() => marketingDemo ? ALL_LESSONS.slice(0, Math.round(TOTAL_LESSONS * 0.62)).map((lesson) => lesson.id) : realCompletedIds, [marketingDemo, realCompletedIds]);
   const [expandedModules, setExpandedModules] = useState(() => MODULES.reduce((acc, m) => ({ ...acc, [m.id]: true }), {}));
   const introAnim = useFadeSlide(0, 14);
   const contentAnim = useFadeSlide(120, 16);
@@ -2304,6 +2307,7 @@ export default function DecisionMakingLearnScreen({ navigation }) {
   }, []);
 
   const handleResetProgress = useCallback(() => {
+    if (marketingDemo) return;
     Alert.alert(
       'Reset DM progress?',
       'This will clear all your completed lessons in Decision Making. This cannot be undone.',
@@ -2319,7 +2323,7 @@ export default function DecisionMakingLearnScreen({ navigation }) {
         },
       ],
     );
-  }, []);
+  }, [marketingDemo]);
 
   useFocusEffect(useCallback(() => {
     let mounted = true;

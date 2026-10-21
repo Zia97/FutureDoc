@@ -4,6 +4,8 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import ts from 'typescript';
 import * as coachAccess from '../src/lib/coaching/access.js';
+import { buildMarketingDemo } from '../src/dev/marketingDemoData.js';
+import marketingSkills from '../src/dev/marketingDemoSkills.js';
 
 const tick = () => new Promise((resolve) => setImmediate(resolve));
 const deferred = () => {
@@ -16,7 +18,7 @@ const completed = { ...welcome, profile: { skills: [], plan: [] }, baseline: { i
 
 // Exercise the screen callbacks and retained hook state without a native renderer.
 function screenFixture(name, service, content = {}) {
-  const slots = [], effects = [], exports = {}, navigationCalls = [];
+  const slots = [], effects = [], exports = {}, navigationCalls = [], alerts = [];
   let index = 0, focus;
   const react = {
     createElement: (type, props, ...children) => ({ type, props: { ...props, children } }),
@@ -39,6 +41,7 @@ function screenFixture(name, service, content = {}) {
   }).outputText;
   vm.runInNewContext(source, { exports, console, __DEV__: false, require(path) {
     if (path === 'react') return { ...react, default: react };
+    if (path.endsWith('/services/appAlert')) return { default: { alert: (...args) => alerts.push(args) } };
     if (path === 'react-native') return new Proxy({ StyleSheet: { create: (styles) => styles } }, {
       get: (target, key) => target[key] ?? key,
     });
@@ -46,6 +49,7 @@ function screenFixture(name, service, content = {}) {
     if (path === 'react-native-safe-area-context') return { SafeAreaView: 'SafeAreaView', useSafeAreaInsets: () => ({ bottom: 0 }) };
     if (path.endsWith('SubscriptionContext')) return { useSubscription: () => content.subscription ?? { isPro: true, adminOverride: true } };
     if (path.endsWith('/coaching/access')) return coachAccess;
+    if (path.endsWith('/dev/useMarketingDemo')) return { useMarketingDemo: () => content.marketingDemo === true, getMarketingDemo: () => buildMarketingDemo(marketingSkills) };
     if (path.endsWith('AuthContext')) return { useAuth: () => ({ user: { id: 'alice' } }) };
     if (path.endsWith('coachingService')) return { ...service,
       loadCoachInitialPlan: service.loadCoachInitialPlan ?? ((user, id) => service.coachRequest(user, 'initial_plan', { id })),
@@ -69,6 +73,7 @@ function screenFixture(name, service, content = {}) {
     });
   } });
   return {
+    alerts,
     effects,
     navigationCalls,
     focus: () => focus(),
@@ -85,6 +90,43 @@ function nodes(tree) {
   if (Array.isArray(tree)) return tree.flatMap(nodes);
   return [tree, ...nodes(tree.props?.children)];
 }
+
+test('marketing coaching renders a complete dashboard without touching real caches or starting sessions', async () => {
+  const calls = [];
+  const f = screenFixture('CoachHubScreen', {
+    coachRequest: async () => { calls.push('request'); },
+    loadCoachHubCache: async () => { calls.push('read'); },
+    saveCoachHubCache: async () => { calls.push('write'); },
+    startCoachSession: async () => { calls.push('start'); },
+  }, { marketingDemo: true, ensureCoachQuestionBanks: async () => { calls.push('download'); } });
+  let tree = f.render();
+  f.effects.forEach((effect) => effect());
+  await f.focus();
+  tree = f.render();
+  const insight = nodes(tree).find((node) => node.type === 'CoachInsightCard');
+  assert.ok(insight.props.strengths.length > 0 && insight.props.weaknesses.length > 0);
+  assert.ok(nodes(tree).find((node) => node.type === 'CoachProgressChart').props.history.length > 1);
+  await nodes(tree).find((node) => node.type === 'NextPracticeCard').props.onContinue();
+  assert.equal(f.alerts[0][0], 'Marketing demo');
+  assert.deepEqual(calls, []);
+});
+
+test('switching marketing off reloads the real dashboard without ever saving the sample', async () => {
+  const content = { marketingDemo: true };
+  const saved = [];
+  const f = screenFixture('CoachHubScreen', {
+    loadCoachHubCache: async () => completed,
+    coachRequest: async () => completed,
+    saveCoachHubCache: async (_user, data) => { saved.push(data); return data; },
+    flushCoachPreferences: async () => {}, flushCoachCheckpoints: async () => {},
+  }, content);
+  f.render(); await f.focus();
+  content.marketingDemo = false;
+  f.render(); f.focus(); await tick();
+  const chart = nodes(f.render()).find((node) => node.type === 'CoachProgressChart');
+  assert.equal(chart.props.history, undefined);
+  assert.deepEqual(saved, [completed]);
+});
 
 test('Start my coaching saves the plan on device and returns before the cloud dashboard responds', async () => {
   const hub = deferred();

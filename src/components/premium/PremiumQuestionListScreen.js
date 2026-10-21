@@ -24,6 +24,8 @@ import SyncBanner from '../SyncBanner';
 import PremiumIcon from './PremiumIcon';
 import MainTabBar from '../MainTabBar';
 import { AppHeader, PremiumScreen } from './PremiumPracticeUI';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
+import { marketingListStatus } from '../../dev/marketingDemoData';
 
 const STATUS_META = {
   not_started: {
@@ -412,6 +414,8 @@ export default function PremiumQuestionListScreen({
   resetItemLabel = 'this question',
   bookmarksConfig = null,
 }) {
+  const marketingDemo = useMarketingDemo();
+  if (marketingDemo) { onReset = undefined; onResetItem = undefined; }
   const insets = useSafeAreaInsets();
   const { isPro } = useSubscription();
   const { isDark } = useTheme();
@@ -445,11 +449,11 @@ export default function PremiumQuestionListScreen({
         originalIndex,
         title: String(titleText),
         searchText: `${titleText} ${extraSearchText}`.toLowerCase(),
-        status: normalizeStatus(getStatus?.(item, originalIndex)),
+        status: marketingDemo ? marketingListStatus(originalIndex) : normalizeStatus(getStatus?.(item, originalIndex)),
         isFree: getIsFree ? !!getIsFree(item, originalIndex) : true,
       };
     })
-  ), [getIsFree, getSearchText, getStatus, getTitle, items]);
+  ), [marketingDemo, getIsFree, getSearchText, getStatus, getTitle, items]);
 
   const stats = useMemo(() => indexedItems.reduce((acc, entry) => {
     if (entry.status === 'completed') acc.completed += 1;

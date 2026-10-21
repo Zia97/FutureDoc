@@ -31,6 +31,7 @@ export default function TimedQRTestReviewScreen({ route, navigation }) {
       getAnswer={getAnswer}
       flags={flags}
       test={test}
+      marketingScorePercent={route.params?.marketingScorePercent}
       onDone={() => navigation.goBack()}
     />
   );

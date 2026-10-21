@@ -8,16 +8,20 @@ import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
 import { coachRequest, newCoachRequestId } from '../../services/coachingService';
 import { Copy, Button } from '../../components/coaching/CoachUI';
 import PremiumIcon from '../../components/premium/PremiumIcon';
+import { useMarketingDemo, getMarketingDemo } from '../../dev/useMarketingDemo';
 
 const suggestions = ['What should I work on next?', 'What are my strengths so far?', 'How should I prepare around my exam date?'];
 
 export default function CoachChatScreen({ navigation }) {
+  const marketingDemo = useMarketingDemo();
   const { user } = useAuth(), { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
   const [keyboardOffset, setKeyboardOffset] = useState(0);
   const [messages, setMessages] = useState([]), [text, setText] = useState(''), [busy, setBusy] = useState(false), [error, setError] = useState(null);
+  const [demoMessages, setDemoMessages] = useState([]);
+  const visibleMessages = marketingDemo ? demoMessages : messages;
   const pending = useRef(null), scroll = useRef(null), content = useRef(null);
   useEffect(() => {
     const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => setKeyboardVisible(true));
@@ -28,6 +32,17 @@ export default function CoachChatScreen({ navigation }) {
   async function send(value = text) {
     const messageText = value.trim();
     if (!messageText || busy) return;
+    if (marketingDemo) {
+      const profile = getMarketingDemo().coach.profile;
+      const focus = profile.weaknesses[0], strength = profile.strengths[0];
+      const reply = /strength/i.test(messageText)
+        ? `${strength.label} is a strength at ${strength.accuracy}% across ${strength.questions} questions. Keep it fresh with a short timed set each week.`
+        : /exam|date/i.test(messageText)
+          ? `With ${profile.daysToExam} days to go, alternate targeted practice with timed checks. Spend your next session on ${focus.label.toLowerCase()}, then review the explanations.`
+          : `Start with ${focus.label.toLowerCase()}. Your accuracy is ${focus.accuracy}%, and it has improved by ${focus.trend.delta} percentage points. Review the technique, try a short set, then check the questions you missed.`;
+      setDemoMessages((current) => [...current, { id: `marketing-chat-${current.length}`, user_text: messageText, assistant_text: reply }]);
+      setText(''); return;
+    }
     setBusy(true); setError(null);
     if (!pending.current || pending.current.text !== messageText) pending.current = { requestId: newCoachRequestId(), text: messageText };
     const request = pending.current;
@@ -58,12 +73,12 @@ export default function CoachChatScreen({ navigation }) {
       <ScrollView ref={scroll} style={{ flex: 1, minHeight: 0 }} keyboardShouldPersistTaps="handled" keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
         onLayout={() => scroll.current?.scrollToEnd?.({ animated: false })}
         onContentSizeChange={() => scroll.current?.scrollToEnd?.({ animated: true })} contentContainerStyle={{ padding: 20, gap: 18, width: '100%', maxWidth: 800, alignSelf: 'center', paddingBottom: 24 }}>
-      {!messages.length && <>
+      {!visibleMessages.length && <>
         <Copy title>Chat with your coach</Copy>
         <Copy muted>Ask about your next session, a question you found difficult or how your practice is going.</Copy>
         {suggestions.map((suggestion) => <Button key={suggestion} title={suggestion} secondary onPress={() => send(suggestion)} />)}
       </>}
-      {messages.map((m) => <View key={m.id} style={{ gap: 4 }}>
+      {visibleMessages.map((m) => <View key={m.id} style={{ gap: 4 }}>
         <LinearGradient colors={[colors.blue, hexToRgba(colors.blue, 0.78)]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[styles.bubble, styles.userBubble]}>
           <Text style={styles.userText}>{m.user_text}</Text>
         </LinearGradient>
@@ -71,7 +86,7 @@ export default function CoachChatScreen({ navigation }) {
           <Text selectable style={[styles.coachText, { color: colors.text }]}>{m.assistant_text}</Text>
         </View> : busy ? <View style={[styles.thinking, { backgroundColor: isDark ? 'rgba(13, 26, 49, 0.96)' : 'rgba(255, 255, 255, 0.98)', borderColor: hexToRgba(colors.blue, isDark ? 0.28 : 0.18) }]}><ActivityIndicator size="small" color={colors.cyan} /><Text style={{ color: colors.textSecondary, fontSize: 12 }}>Your coach is thinking</Text></View> : null}
       </View>)}
-      {error && <Copy>{error}</Copy>}
+      {error && !marketingDemo && <Copy>{error}</Copy>}
       </ScrollView>
       <View style={{ flexShrink: 0, borderTopWidth: 1, paddingBottom: keyboardVisible ? 0 : insets.bottom, borderColor: hexToRgba(colors.blue, isDark ? 0.18 : 0.16), backgroundColor: isDark ? 'rgba(4, 12, 25, 0.72)' : 'rgba(255, 255, 255, 0.86)' }}>
       <View style={styles.composer}>

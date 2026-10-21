@@ -25,6 +25,7 @@ const USER_DATA_KEYS = [
   // Profile cache (cleared on account deletion so a different user
   // signing in on the same device doesn't see the old name flash).
   'display_name_cache',
+  'marketing_access_cache',
 ];
 
 export const DISPLAY_NAME_CACHE_KEY = 'display_name_cache';

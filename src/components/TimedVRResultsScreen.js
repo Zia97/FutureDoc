@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { useMarketingDemo } from '../dev/useMarketingDemo';
+import { marketingResultAnswers } from '../dev/marketingDemoData';
 import {
   View,
   Text,
@@ -31,7 +33,10 @@ import {
   resultsStyles,
 } from './premium/PremiumResultsUI';
 
-export default function TimedVRResultsScreen({ passages, getAnswer, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, isTimed = true }) {
+export default function TimedVRResultsScreen({ passages, getAnswer, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, isTimed = true, marketingScorePercent = 80 }) {
+  const marketingDemo = useMarketingDemo();
+  const sampleAnswers = useMemo(() => marketingDemo ? marketingResultAnswers(passages.flatMap((p) => p.questions), marketingScorePercent) : null, [marketingDemo, passages, marketingScorePercent]);
+  if (marketingDemo) { getAnswer = (_parent, id) => sampleAnswers[id]; scoreSummary = undefined; }
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();

@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import { useTheme } from '../../context/ThemeContext';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
 import {
   PremiumIcon,
   PremiumScreen,
@@ -579,6 +580,7 @@ function AllLessonsCompleteModal({ visible, colors, isDark, accent, onPractice, 
 }
 
 export default function DecisionMakingLessonScreen({ navigation, route }) {
+  const marketingDemo = useMarketingDemo();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { demoEnabled: tutorDemoEnabled } = useAITutorAvailability();
@@ -728,11 +730,11 @@ export default function DecisionMakingLessonScreen({ navigation, route }) {
     setCompletedIds((current) => {
       if (current.includes(lesson.id)) return current;
       const next = [...current, lesson.id];
-      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      if (!marketingDemo) AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
       markLessonTelemetryComplete();
       return next;
     });
-  }, [lesson.id, markLessonTelemetryComplete]);
+  }, [marketingDemo, lesson.id, markLessonTelemetryComplete]);
 
   useEffect(() => {
     if (!completed && allQuestionsAnswered) {

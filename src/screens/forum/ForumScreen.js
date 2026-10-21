@@ -28,14 +28,18 @@ import {
 } from '../../lib/forum';
 import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
 import { reportError } from '../../lib/reportError';
+import { useMarketingCommunity } from '../../dev/useMarketingCommunity';
 
 export default function ForumScreen({ navigation }) {
+  const { marketingDemo, community, snapshot } = useMarketingCommunity();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const [forumState, setForumState] = useState(null);
-  const [posts, setPosts] = useState([]);
+  const [realForumState, setForumState] = useState(null);
+  const [realPosts, setPosts] = useState([]);
   const [query, setQuery] = useState('');
   const [appliedQuery, setAppliedQuery] = useState('');
+  const forumState = marketingDemo ? snapshot.state : realForumState;
+  const posts = marketingDemo ? community.listPosts(appliedQuery) : realPosts;
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -43,14 +47,18 @@ export default function ForumScreen({ navigation }) {
   const [guidelinesVisible, setGuidelinesVisible] = useState(false);
   const [guidelinesSaving, setGuidelinesSaving] = useState(false);
   const retrying = useRef(new Set());
+  const loadVersion = useRef(0);
 
   const load = useCallback(async ({ refresh = false, search = appliedQuery } = {}) => {
+    const version = ++loadVersion.current;
+    if (marketingDemo) { setLoading(false); setRefreshing(false); return; }
     if (refresh) setRefreshing(true); else setLoading(true);
     try {
       const [state, rows] = await Promise.all([
         getForumState(),
         listForumPosts({ query: search }),
       ]);
+      if (version !== loadVersion.current) return;
       setForumState(state);
       setPosts(rows);
       setHasMore(rows.length >= 20);
@@ -60,15 +68,15 @@ export default function ForumScreen({ navigation }) {
         retryPendingModeration('post', post.id).finally(() => retrying.current.delete(post.id));
       });
     } catch (error) {
+      if (version !== loadVersion.current) return;
       reportError('ForumScreen.load', error, { extra: { query: search } });
       Alert.alert('Could not load community', forumErrorMessage(error));
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      if (version === loadVersion.current) { setLoading(false); setRefreshing(false); }
     }
-  }, [appliedQuery]);
+  }, [marketingDemo, appliedQuery]);
 
-  useFocusEffect(useCallback(() => { load({ refresh: true }); }, [load]));
+  useFocusEffect(useCallback(() => { load({ refresh: true }); return () => { loadVersion.current++; }; }, [load]));
 
   useEffect(() => {
     const timer = setTimeout(() => setAppliedQuery(query.trim()), 350);
@@ -77,7 +85,9 @@ export default function ForumScreen({ navigation }) {
 
   useEffect(() => { if (!loading) load({ search: appliedQuery }); }, [appliedQuery]);
 
-  useEffect(() => subscribeToForumSubmissions((event) => {
+  useEffect(() => {
+    if (marketingDemo) return;
+    return subscribeToForumSubmissions((event) => {
     if (event.type === 'post_pending') {
       setPosts((current) => [event.post, ...current.filter((post) => post.id !== event.post.id)]);
     } else if (event.type === 'post_updated') {
@@ -97,9 +107,11 @@ export default function ForumScreen({ navigation }) {
           : post));
       }
     }
-  }), []);
+    });
+  }, [marketingDemo]);
 
   const loadMore = async () => {
+    if (marketingDemo) return;
     if (loadingMore || !hasMore || !posts.length) return;
     setLoadingMore(true);
     try {
@@ -122,6 +134,7 @@ export default function ForumScreen({ navigation }) {
   };
 
   const acceptGuidelines = async () => {
+    if (marketingDemo) { setGuidelinesVisible(false); navigation.navigate('CreateForumPost'); return; }
     setGuidelinesSaving(true);
     try {
       await acceptForumGuidelines(forumState?.guidelinesVersion);
@@ -134,6 +147,7 @@ export default function ForumScreen({ navigation }) {
   };
 
   const togglePostLike = async (post) => {
+    if (marketingDemo) { community.toggleLike('post', post.id); return; }
     if (post.status !== 'published') return;
     const previous = { likedByMe: !!post.likedByMe, likeCount: post.likeCount ?? 0 };
     const optimistic = { likedByMe: !previous.likedByMe, likeCount: Math.max(0, previous.likeCount + (previous.likedByMe ? -1 : 1)) };
@@ -164,13 +178,13 @@ export default function ForumScreen({ navigation }) {
             <Text style={[styles.adminButtonText, { color: colors.purple }]}>Admin</Text>
           </TouchableOpacity>
         ) : null}
-        <TouchableOpacity
+        {!marketingDemo && <TouchableOpacity
           style={[styles.adminButton, { borderColor: colors.border, backgroundColor: hexToRgba(colors.blue, 0.08) }]}
           onPress={() => navigation.navigate('ForumBlockedUsers')}
         >
           <Ionicons name="ban-outline" size={20} color={colors.textMuted} />
           <Text style={[styles.adminButtonText, { color: colors.textMuted }]}>Blocked</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
 
       {!forumState?.hasAcceptedGuidelines ? (
@@ -196,7 +210,7 @@ export default function ForumScreen({ navigation }) {
     </View>
   );
 
-  if (loading && !posts.length) {
+  if (!marketingDemo && loading && !posts.length) {
     return (
       <PremiumScreen>
         <AppHeader navigation={navigation} title="Community" />
@@ -238,7 +252,7 @@ export default function ForumScreen({ navigation }) {
         ListFooterComponent={loadingMore ? <ActivityIndicator style={styles.more} color={colors.cyan} /> : <View style={styles.bottomSpace} />}
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => load({ refresh: true })} tintColor={colors.cyan} />}
+        refreshControl={<RefreshControl refreshing={!marketingDemo && refreshing} onRefresh={() => load({ refresh: true })} tintColor={colors.cyan} />}
         onEndReached={loadMore}
         onEndReachedThreshold={0.35}
       />

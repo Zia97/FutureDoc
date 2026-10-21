@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
 import { getPremiumTheme } from '../theme/premiumTheme';
+import { useMarketingDemo } from '../dev/useMarketingDemo';
 
 function formatSeconds(ms) {
   if (ms == null || Number.isNaN(ms) || ms < 0) return '—';
@@ -21,6 +22,8 @@ function formatSeconds(ms) {
  * @param {{ avgTimeMs: number, correctPct: number, totalFirstAttempts: number } | null} props.stats
  */
 export default function QuestionStatsBullets({ userTimeMs, stats }) {
+  const marketingDemo = useMarketingDemo();
+  if (marketingDemo) { userTimeMs = 28000; stats = { avgTimeMs: 34000, correctPct: 68 }; }
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();

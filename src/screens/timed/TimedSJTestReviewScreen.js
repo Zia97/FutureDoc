@@ -24,6 +24,7 @@ export default function TimedSJTestReviewScreen({ route, navigation }) {
       getAnswer={getAnswer}
       flags={flags}
       test={test}
+      marketingScorePercent={route.params?.marketingScorePercent}
       onDone={() => navigation.goBack()}
     />
   );

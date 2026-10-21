@@ -24,12 +24,14 @@ import CoachProgressDetails from '../../components/coaching/CoachProgressDetails
 import CoachWelcome from '../../components/coaching/CoachWelcome';
 import CoachProgressOverview from '../../components/coaching/CoachProgressOverview';
 import CoachProgressChart from '../../components/coaching/CoachProgressChart';
+import { useMarketingDemo, getMarketingDemo } from '../../dev/useMarketingDemo';
 
 export default function CoachHubScreen({ navigation, route }) {
+  const marketingDemo = useMarketingDemo();
   const { user } = useAuth();
   const { isOnline } = useNetwork();
   const subscription = useSubscription();
-  const hasPro = hasCoachProAccess(subscription);
+  const hasPro = marketingDemo || hasCoachProAccess(subscription);
   const { colors, isDark } = useCoachTheme();
   const insets = useSafeAreaInsets();
   const [area, setArea] = useState(route?.params?.area === 'progress' ? 'progress' : 'coach');
@@ -39,12 +41,14 @@ export default function CoachHubScreen({ navigation, route }) {
       navigation.setParams({ area: undefined });
     }
   }, [route?.params?.area, navigation]);
-  const [data, setData] = useState(null), [error, setError] = useState(null), [busy, setBusy] = useState(false);
+  const [realData, setData] = useState(null), [error, setError] = useState(null), [busy, setBusy] = useState(false);
+  const data = marketingDemo ? getMarketingDemo().coach : realData;
   const [samplePreviewEnabled, setSamplePreviewEnabled] = useState(false);
   const [questionSetup, setQuestionSetup] = useState(null), [setupError, setSetupError] = useState(null);
   const [setupRetry, setSetupRetry] = useState(0);
   const [questionsReady, setQuestionsReady] = useState(false);
   useEffect(() => {
+    if (marketingDemo) return;
     let active = true;
     setSetupError(null);
     void ensureCoachQuestionBanks((progress) => {
@@ -55,7 +59,7 @@ export default function CoachHubScreen({ navigation, route }) {
       if (active) setSetupError('Connect to the internet and check that your device has space, then retry.');
     });
     return () => { active = false; };
-  }, [isOnline, setupRetry]);
+  }, [marketingDemo, isOnline, setupRetry]);
   const [sheet, setSheet] = useState(null), [progressTab, setProgressTab] = useState('overview');
   const [examDate, setDate] = useState(''), [multiplier, setMultiplier] = useState(1), [datePickerOpen, setDatePickerOpen] = useState(false);
   const [savedDate, setSavedDate] = useState('');
@@ -64,6 +68,10 @@ export default function CoachHubScreen({ navigation, route }) {
   sheetRef.current = sheet;
 
   const load = useCallback(async () => {
+    if (marketingDemo) {
+      setDate(getMarketingDemo().examDate); setSavedDate(getMarketingDemo().examDate); setMultiplier(1); setError(null);
+      return;
+    }
     if (!user?.id) return;
     const version = ++loadVersion.current;
     try {
@@ -90,7 +98,7 @@ export default function CoachHubScreen({ navigation, route }) {
         setMultiplier(Number(merged.settings.time_multiplier));
       }
     } catch (e) { if (version === loadVersion.current) setError(e.message); }
-  }, [user?.id, isOnline]);
+  }, [marketingDemo, user?.id, isOnline]);
   useFocusEffect(useCallback(() => { load(); return () => { loadVersion.current++; }; }, [load]));
   useEffect(() => {
     let cancelled = false;
@@ -123,9 +131,17 @@ export default function CoachHubScreen({ navigation, route }) {
   function showAccuracyInfo() {
     Alert.alert('Running accuracy', 'Your running accuracy starts with your mini mock and updates as you practise, using your latest 20 first attempts in each section. Repeated questions count once. Your full history stays saved, and your coaching plan uses your wider performance.');
   }
-  function go(screen, params) { closeSheet(); navigation.navigate(screen, params); }
+  function go(screen, params) {
+    closeSheet();
+    if (marketingDemo && screen === 'CoachSession') {
+      const report = params.id === data.baseline.id ? data.baseline.report : data.history.find((s) => s.id === params.id)?.report;
+      navigation.navigate('CoachSampleResults', { report, marketingDemo: true }); return;
+    }
+    navigation.navigate(screen, params);
+  }
   function lesson(item) { if (item?.lessonRoute) go(item.lessonRoute, { lessonId: item.lessonId }); }
   async function start(kind, focus = {}) {
+    if (marketingDemo) return Alert.alert('Marketing demo', 'Turn off Marketing demo in Profile to start a real session.');
     if (kind !== 'assessment' && subscription?.loading) return;
     if (kind !== 'assessment' && locked) return go('Paywall');
     if (kind !== 'assessment' && !questionsReady) return;
@@ -151,6 +167,7 @@ export default function CoachHubScreen({ navigation, route }) {
     finally { setBusy(false); }
   }
   async function saveSettings() {
+    if (marketingDemo) { closeSheet(); return; }
     const date = examDate.trim() || null;
     if (!validExamDate(date)) return Alert.alert('Check the date', 'Choose an exam date or select Not booked yet.');
     setBusy(true);
@@ -165,6 +182,7 @@ export default function CoachHubScreen({ navigation, route }) {
     finally { setBusy(false); }
   }
   function confirmReset() {
+    if (marketingDemo) return Alert.alert('Marketing demo', 'Sample progress cannot be reset. Turn off Marketing demo to manage your real progress.');
     Alert.alert('Delete coaching progress?',
       'Your initial assessment, coaching sessions, answers, reports, plan, milestones and coach chat will be permanently deleted. You will need to resit the initial assessment. Your separate practice, timed-test and AI tutor records will stay in the app. Used free coaching credits will not be restored.',
       [{ text: 'Keep my progress', style: 'cancel' }, {
@@ -191,7 +209,7 @@ export default function CoachHubScreen({ navigation, route }) {
     </View>
     {area === 'progress' ? <CoachProgressOverview navigation={navigation}
       onHistory={profile ? () => openProgress('history') : null} /> : <ScrollView style={ds.coachScroll} showsVerticalScrollIndicator={false} contentContainerStyle={ds.content}>
-      {questionSetup && <CoachQuestionSetup progress={questionSetup} error={setupError} onRetry={() => setSetupRetry((value) => value + 1)} />}
+      {questionSetup && !marketingDemo && <CoachQuestionSetup progress={questionSetup} error={setupError} onRetry={() => setSetupRetry((value) => value + 1)} />}
       {error && !data && <View style={[ds.option, { backgroundColor: colors.surfaceSoft, borderColor: colors.border }]}>
         <View style={{ flex: 1 }}><CoachText style={{ fontSize: 12, fontWeight: '700' }}>{data ? 'Showing your saved progress' : 'Your coach could not connect'}</CoachText>
           <CoachText muted style={ds.caption}>{data ? 'Your plan is still here. Reconnect to update it.' : error}</CoachText></View>
@@ -209,7 +227,7 @@ export default function CoachHubScreen({ navigation, route }) {
           <ProgressOverview story={story} sections={sections} onProgress={() => openProgress()}
             onSection={(section) => go('CoachSectionProgress', { section, mode: 'combined' })}
             onAccuracyInfo={showAccuracyInfo} />
-          <NextPracticeCard focus={story.focus} resume={resume} busy={busy || (!data.active && (subscription?.loading || (!locked && !questionsReady)))} locked={locked} preview={data.previewAvailable && !hasPro}
+          <NextPracticeCard focus={story.focus} resume={resume} busy={busy || (!marketingDemo && !data.active && (subscription?.loading || (!locked && !questionsReady)))} locked={locked} preview={data.previewAvailable && !hasPro}
             onContinue={() => practise('practice', story.focus ? { skillId: story.focus.skillId } : {})}
             onLesson={story.focus?.lessonRoute ? () => lesson(story.focus) : null} onPlan={() => openProgress('plan')} />
           <CoachInsightCard story={story} strengths={profile.strengths} weaknesses={profile.weaknesses} onDetails={() => openProgress()} onHow={() => setSheet('how')} />

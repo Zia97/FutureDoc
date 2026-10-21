@@ -24,6 +24,7 @@
 //   REVENUECAT_WEBHOOK_AUTH                  — shared secret, required
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { premiumProfile, revenueCatSubscriber } from '../_shared/revenuecat-pro.js';
 
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -135,6 +136,14 @@ Deno.serve(async (req) => {
         : null,
     rc_app_user_id: event?.app_user_id ?? userId,
   };
+
+  // Promotional access can overlap paid subscriptions. An expired promotion
+  // must not revoke a still-active paid entitlement (or an older event restore it).
+  const revenueCatSecret = Deno.env.get('REVENUECAT_SECRET_KEY');
+  if (revenueCatSecret) {
+    try { Object.assign(update, premiumProfile(await revenueCatSubscriber(userId, revenueCatSecret))); }
+    catch { return json({ error: 'entitlement_check_unavailable' }, 503); }
+  }
 
   const { data, error } = await supabase
     .from('user_profiles')

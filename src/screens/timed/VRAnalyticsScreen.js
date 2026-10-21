@@ -11,6 +11,8 @@ import Svg, { Path, Circle, Line, G, Text as SvgText } from 'react-native-svg';
 import { useFocusEffect } from '@react-navigation/native';
 
 import { reportError } from '../../lib/reportError';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
+import { marketingTimedRows } from '../../dev/marketingDemoData';
 import { db } from '../../lib/dbQueries';
 import { UCAT_SECTIONS } from '../../constants/sectionVisuals';
 import {
@@ -303,6 +305,7 @@ function StatBar({ label, value, sub, color, barBg, textColor, mutedColor }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function VRAnalyticsScreen({ route, preloadedRows }) {
+  const marketingDemo = useMarketingDemo();
   const tests = route.params?.tests ?? [];
   const hasPreloaded = preloadedRows !== undefined;
   const t = usePremiumAnalyticsTheme('VR');
@@ -314,7 +317,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
   const [chartWidth, setChartWidth] = useState(280);
 
   const load = useCallback(async () => {
-    if (hasPreloaded) return;
+    if (marketingDemo || hasPreloaded) return;
     try {
       setLoading(true);
       const data = await db.loadVRAnalytics();
@@ -326,7 +329,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
     } finally {
       setLoading(false);
     }
-  }, [hasPreloaded]);
+  }, [marketingDemo, hasPreloaded]);
 
   useFocusEffect(
     useCallback(() => {
@@ -342,9 +345,9 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
     }
   }, [hasPreloaded, preloadedRows]);
 
-  const stats = useMemo(() => aggregate(rows ?? [], tests), [rows, tests]);
+  const stats = useMemo(() => aggregate(marketingDemo ? marketingTimedRows('vr', tests) : rows ?? [], tests), [marketingDemo, rows, tests]);
 
-  if (loading) {
+  if (loading && !marketingDemo) {
     return (
       <AnalyticsEmptyState
         t={t}
@@ -356,7 +359,7 @@ export default function VRAnalyticsScreen({ route, preloadedRows }) {
     );
   }
 
-  if (error) {
+  if (error && !marketingDemo) {
     return (
       <AnalyticsEmptyState
         t={t}

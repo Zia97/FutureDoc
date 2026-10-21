@@ -36,6 +36,8 @@ import OfflineRetry from '../../components/OfflineRetry';
 import PremiumIcon from '../../components/premium/PremiumIcon';
 import { AppHeader, PremiumScreen } from '../../components/premium/PremiumPracticeUI';
 import { getPremiumTheme, hexToRgba, premiumColors } from '../../theme/premiumTheme';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
+import { marketingTimedRows } from '../../dev/marketingDemoData';
 
 const INSTRUCTION_ROUTE = {
   VR: 'VRInstruction',
@@ -131,13 +133,17 @@ function StatCard({ label, count, color, isDark, colors }) {
 }
 
 function TimedListBody({ navigation, section, title, tests, loading, error, progress, syncing, syncProgress, refetch }) {
+  const marketingDemo = useMarketingDemo();
   const { theme: t, isDark } = useTheme();
   const { isPro } = useSubscription();
   const { colors } = getPremiumTheme(isDark);
   const insets = useSafeAreaInsets();
   const sectionAccent = colors[SECTION_META[section]?.accentKey ?? 'blue'] ?? colors.blue;
 
-  const { completedAttempts, reload, deleteAttempt } = progress;
+  const { completedAttempts: realAttempts, reload, deleteAttempt } = progress;
+  const completedAttempts = useMemo(() => marketingDemo
+    ? Object.fromEntries(marketingTimedRows(section.toLowerCase(), tests).map((row) => [row.test_id, { scorePercent: row.score_percent }]))
+    : realAttempts, [marketingDemo, section, tests, realAttempts]);
   const [activeFilter, setActiveFilter] = useState('all');
   const [filterOpen, setFilterOpen] = useState(false);
 
@@ -176,6 +182,7 @@ function TimedListBody({ navigation, section, title, tests, loading, error, prog
   const activeFilterLabel = filterOptions.find((option) => option.value === activeFilter)?.label ?? filterOptions[0].label;
 
   const handleResetAttempt = (testId, testTitle) => {
+    if (marketingDemo) return;
     Alert.alert(
       'Reset Test',
       `This will delete your result for "${testTitle}" and remove it from your performance analytics. You'll be able to retake the test. This cannot be undone.`,
@@ -244,7 +251,7 @@ function TimedListBody({ navigation, section, title, tests, loading, error, prog
             return;
           }
           if (isCompleted) {
-            navigation.navigate(REVIEW_ROUTE[section] ?? 'TimedVRTestReview', { test: item });
+            navigation.navigate(REVIEW_ROUTE[section] ?? 'TimedVRTestReview', { test: item, marketingScorePercent: marketingDemo ? attempt.scorePercent : undefined });
           } else {
             navigation.navigate(INSTRUCTION_ROUTE[section] ?? 'VRInstruction', { test: item, section, title });
           }
@@ -292,7 +299,7 @@ function TimedListBody({ navigation, section, title, tests, loading, error, prog
             ) : (
               <PremiumIcon name="chevron-right" size={26} color={sectionAccent} strokeWidth={2.4} />
             )}
-            {!isLocked && isCompleted ? (
+            {!marketingDemo && !isLocked && isCompleted ? (
               <TouchableOpacity
                 onPress={(event) => {
                   event.stopPropagation?.();

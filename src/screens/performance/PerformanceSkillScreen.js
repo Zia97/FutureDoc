@@ -4,15 +4,21 @@ import { Ionicons } from '@expo/vector-icons';
 import { AppHeader, PremiumScreen } from '../../components/premium/PremiumPracticeUI';
 import { usePerformanceReport } from '../../hooks/usePerformanceReport';
 import PerformanceLoading from '../../components/performance/PerformanceLoading';
+import Alert from '../../services/appAlert';
+import { useMarketingDemo } from '../../dev/useMarketingDemo';
 import { HistoryChart, PerformanceButton, PerformanceCard, ProLockCard, Reveal, StatRing, SECTION_COLOURS, SECTION_NAMES, performanceStyles as s, usePerformanceTheme } from '../../components/performance/PerformanceUI';
 
 export default function PerformanceSkillScreen({ route, navigation }) {
+  const marketingDemo = useMarketingDemo();
   const mode = ['practice', 'timed', 'coaching', 'combined'].includes(route.params?.mode) ? route.params.mode : 'practice';
   const { report, loading, error, refreshing, refresh, isPro, canAnalyse } = usePerformanceReport(mode);
   const { colors } = usePerformanceTheme();
   const skill = canAnalyse ? report.details.skills.find((item) => item.id === route.params?.skillId) : null;
   const color = colors[SECTION_COLOURS[skill?.section] ?? 'blue'];
+  const freshCount = marketingDemo ? 8 : skill?.newQuestionIds.length ?? 0;
+  const reviewCount = marketingDemo ? 6 : skill?.reviewQuestionIds.length ?? 0;
   const practice = (kind) => {
+    if (marketingDemo) return Alert.alert('Marketing demo', 'Turn off Marketing demo in Profile to start real practice.');
     if (!canAnalyse || !skill) { navigation.navigate('Paywall'); return; }
     navigation.navigate('PerformancePractice', { skillId: skill.id, kind });
   };
@@ -40,8 +46,8 @@ export default function PerformanceSkillScreen({ route, navigation }) {
         </PerformanceCard></Reveal>
         <Reveal delay={100}><PerformanceCard accent={color}>
           <Text style={[s.title, { color: colors.text }]}>Targeted practice</Text><Text style={[s.body, { color: colors.textSecondary, marginVertical: 10 }]}>Practise this skill with up to eight questions.</Text>
-          <PerformanceButton title={skill.newQuestionIds.length ? `Start fresh practice · ${Math.min(8, skill.newQuestionIds.length)} questions` : 'No new questions in this skill yet'} disabled={!skill.newQuestionIds.length} onPress={() => practice('fresh')} />
-          <View style={{ height: 8 }} /><PerformanceButton secondary icon="refresh" title={skill.reviewQuestionIds.length ? `Review mistakes · ${Math.min(8, skill.reviewQuestionIds.length)} questions` : 'No mistakes waiting for review'} disabled={!skill.reviewQuestionIds.length} onPress={() => practice('review')} />
+          <PerformanceButton title={freshCount ? `Start fresh practice · ${Math.min(8, freshCount)} questions` : 'No new questions in this skill yet'} disabled={!freshCount} onPress={() => practice('fresh')} />
+          <View style={{ height: 8 }} /><PerformanceButton secondary icon="refresh" title={reviewCount ? `Review mistakes · ${Math.min(8, reviewCount)} questions` : 'No mistakes waiting for review'} disabled={!reviewCount} onPress={() => practice('review')} />
         </PerformanceCard></Reveal>
         <PerformanceCard><Text style={[s.title, { color: colors.text }]}>Performance by practice type</Text>
           <View style={[s.row, { marginTop: 16, gap: 12, flexWrap: 'wrap' }]}>{[{ label: 'Practice', value: skill.practice }, { label: 'Timed tests', value: skill.timed }, { label: 'Coaching', value: skill.coaching }].map(({ label, value }) => <View key={label} style={{ flex: 1, minWidth: 85, gap: 5 }}>

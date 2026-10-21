@@ -3,6 +3,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { recordAppLaunch } from './src/services/reviewPromptService';
 import { AuthProvider } from './src/context/AuthContext';
+import { MarketingAccessProvider } from './src/context/MarketingAccessContext';
 import { ThemeProvider } from './src/context/ThemeContext';
 import { TextSizeProvider } from './src/context/TextSizeContext';
 import { SubscriptionProvider } from './src/context/SubscriptionContext';
@@ -44,11 +45,13 @@ export default Sentry.wrap(function App() {
               <AppAlertHost />
               <TextSizeProvider>
                 <AuthProvider>
+                  <MarketingAccessProvider>
                   <SubscriptionProvider>
                     <SupportNotificationsProvider>
                       <AppNavigator />
                     </SupportNotificationsProvider>
                   </SubscriptionProvider>
+                  </MarketingAccessProvider>
                 </AuthProvider>
               </TextSizeProvider>
             </ThemeProvider>

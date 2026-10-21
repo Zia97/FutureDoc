@@ -4,10 +4,12 @@ import { useIsFocused } from '@react-navigation/native';
 import { recordLessonStart, recordLessonHeartbeat, recordLessonComplete } from '../lib/userTelemetry';
 import { reportError } from '../lib/reportError';
 import { useAuth } from '../context/AuthContext';
+import { useMarketingDemo } from '../dev/useMarketingDemo';
 
 const CHECKPOINT_MS = 5_000;
 const UPLOAD_MS = 60_000;
 export function useLessonTelemetry({ section, lessonId }) {
+  const marketingDemo = useMarketingDemo();
   const focused = useIsFocused();
   const { user } = useAuth();
   const userId = user?.id;
@@ -15,7 +17,7 @@ export function useLessonTelemetry({ section, lessonId }) {
   const finished = useRef(false);
   useEffect(() => { finished.current = false; }, [section, lessonId]);
   useEffect(() => {
-    if (!section || !lessonId || !userId || !focused || finished.current) return;
+    if (marketingDemo || !section || !lessonId || !userId || !focused || finished.current) return;
     let anchor = AppState.currentState === 'active' ? Date.now() : null;
     let pending = 0;
     let lastUpload = Date.now();
@@ -66,6 +68,6 @@ export function useLessonTelemetry({ section, lessonId }) {
       anchor = null;
       completeRef.current = null;
     };
-  }, [section, lessonId, userId, focused]);
+  }, [marketingDemo, section, lessonId, userId, focused]);
   return { markComplete: useCallback(() => completeRef.current?.(), []) };
 }

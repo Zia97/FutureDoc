@@ -19,8 +19,10 @@ import { AppHeader, PremiumScreen } from '../../components/premium/PremiumPracti
 import { createForumPost, forumErrorMessage, pickForumImages } from '../../lib/forum';
 import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
 import { returnToCommunity } from '../../navigation/forumNavigation';
+import { useMarketingCommunity } from '../../dev/useMarketingCommunity';
 
 export default function CreateForumPostScreen({ navigation }) {
+  const { marketingDemo, community } = useMarketingCommunity();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const [title, setTitle] = useState('');
@@ -40,6 +42,10 @@ export default function CreateForumPostScreen({ navigation }) {
     const cleanBody = body.trim();
     if (cleanTitle.length < 5) return Alert.alert('Add a title', 'The title must be at least 5 characters.');
     if (cleanBody.length < 10) return Alert.alert('Add more detail', 'The post must be at least 10 characters.');
+    if (marketingDemo) {
+      community.createPost({ title: cleanTitle, body: cleanBody, images });
+      returnToCommunity(navigation); return;
+    }
     setSubmitting(true);
     let navigated = false;
     try {

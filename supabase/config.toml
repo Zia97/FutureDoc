@@ -368,6 +368,10 @@ deno_version = 2
 [functions.database-maintenance]
 verify_jwt = false
 
+# The handler verifies the JWT and the caller's current admin flag itself.
+[functions.marketing-testers]
+verify_jwt = false
+
 # [edge_runtime.secrets]
 # secret_key = "env(SECRET_VALUE)"
 

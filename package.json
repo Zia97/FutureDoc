@@ -11,6 +11,7 @@
     "test:support": "node --test scripts/support-conversations.test.mjs scripts/support-notifications.test.mjs",
     "test:database": "node scripts/database-growth-regression.mjs && node --test scripts/database-client-regression.test.mjs",
     "test:coaching": "node --test scripts/coaching*.test.mjs",
+    "test:marketing": "node --test scripts/marketing*.test.mjs scripts/revenuecat-marketing-webhook.test.mjs",
     "coaching:build-forms": "node scripts/build-coach-forms.mjs",
     "coaching:build-assessment": "node scripts/build-coach-assessment.mjs",
     "test:performance": "node --test scripts/performance-analyser.test.mjs scripts/performance-endpoint.test.mjs scripts/performance-cache.test.mjs scripts/performance-cohort.test.mjs scripts/performance-cohort-database.test.mjs",

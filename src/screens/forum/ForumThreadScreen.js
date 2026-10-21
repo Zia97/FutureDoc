@@ -1,5 +1,5 @@
 import Alert from '../../services/appAlert';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   ScrollView,
@@ -36,6 +36,8 @@ import {
   toggleForumLike,
 } from '../../lib/forum';
 import { getPremiumTheme, hexToRgba } from '../../theme/premiumTheme';
+import { useMarketingCommunity } from '../../dev/useMarketingCommunity';
+import { isMarketingCommunityId } from '../../dev/marketingCommunityData';
 
 function ReplyCard({ reply, own, depth, onReply, onLike, onReport, onReportUser, onBlock, onDelete }) {
   const { isDark } = useTheme();
@@ -85,11 +87,15 @@ function ReplyCard({ reply, own, depth, onReply, onLike, onReport, onReportUser,
 }
 
 export default function ForumThreadScreen({ navigation, route }) {
+  const { marketingDemo, community, snapshot } = useMarketingCommunity();
   const postId = route.params?.postId;
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const [thread, setThread] = useState(null);
-  const [forumState, setForumState] = useState(null);
+  const [realThread, setThread] = useState(null);
+  const [realForumState, setForumState] = useState(null);
+  const thread = marketingDemo ? community.getThread(postId) : realThread?.post?.id === postId ? realThread : null;
+  const forumState = marketingDemo ? snapshot.state : realForumState;
+  const loadVersion = useRef(0);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [replyBody, setReplyBody] = useState('');
@@ -100,17 +106,21 @@ export default function ForumThreadScreen({ navigation, route }) {
   const [imagePreview, setImagePreview] = useState(null);
 
   const load = useCallback(async () => {
+    const version = ++loadVersion.current;
+    if (marketingDemo || isMarketingCommunityId(postId)) { setLoading(false); return; }
     try {
       const [state, value] = await Promise.all([getForumState(), getForumThread(postId)]);
+      if (version !== loadVersion.current) return;
       setForumState(state);
       setThread(value);
       value?.replies?.filter((reply) => ['pending', 'moderating'].includes(reply.status)).forEach((reply) => retryPendingModeration('reply', reply.id));
-    } catch (error) { Alert.alert('Could not load discussion', forumErrorMessage(error)); }
-    finally { setLoading(false); }
-  }, [postId]);
+    } catch (error) { if (version === loadVersion.current) Alert.alert('Could not load discussion', forumErrorMessage(error)); }
+    finally { if (version === loadVersion.current) setLoading(false); }
+  }, [marketingDemo, postId]);
 
-  useFocusEffect(useCallback(() => { load(); }, [load]));
+  useFocusEffect(useCallback(() => { load(); return () => { loadVersion.current++; }; }, [load]));
   const loadMore = async () => {
+    if (marketingDemo || isMarketingCommunityId(postId)) return;
     if (loadingMore || !thread?.nextCursor) return;
     setLoadingMore(true);
     try {
@@ -121,7 +131,9 @@ export default function ForumThreadScreen({ navigation, route }) {
     finally { setLoadingMore(false); }
   };
 
-  useEffect(() => subscribeToForumSubmissions((event) => {
+  useEffect(() => {
+    if (marketingDemo || isMarketingCommunityId(postId)) return;
+    return subscribeToForumSubmissions((event) => {
     if (event.type === 'reply_pending' && event.reply.postId === postId) {
       setThread((current) => current ? { ...current, replies: [...current.replies, event.reply] } : current);
     } else if (event.type === 'reply_updated') {
@@ -146,11 +158,17 @@ export default function ForumThreadScreen({ navigation, route }) {
             : reply),
       } : current);
     }
-  }), [navigation, postId]);
+    });
+  }, [marketingDemo, navigation, postId]);
 
   const sendReply = async () => {
     const text = replyBody.trim();
     if (!text) return;
+    if (marketingDemo) {
+      community.createReply(postId, text, replyTarget?.id ?? null);
+      setReplyBody(''); setReplyTarget(null); return;
+    }
+    if (isMarketingCommunityId(postId)) return;
     setReplying(true);
     setReplyBody('');
     try {
@@ -163,6 +181,8 @@ export default function ForumThreadScreen({ navigation, route }) {
   };
 
   const toggleLike = async (targetType, target) => {
+    if (marketingDemo) { community.toggleLike(targetType, target.id); return; }
+    if (isMarketingCommunityId(target.id)) return;
     const key = targetType === 'post' ? 'post' : 'replies';
     const previous = { likedByMe: !!target.likedByMe, likeCount: target.likeCount ?? 0 };
     const optimistic = { likedByMe: !previous.likedByMe, likeCount: Math.max(0, previous.likeCount + (previous.likedByMe ? -1 : 1)) };
@@ -190,6 +210,10 @@ export default function ForumThreadScreen({ navigation, route }) {
 
   const submitReport = async (reason, details) => {
     if (!reportTarget) return;
+    if (marketingDemo || isMarketingCommunityId(reportTarget.targetId)) {
+      setReportTarget(null);
+      Alert.alert('Marketing demo', 'Reports are not sent in marketing mode.'); return;
+    }
     setReportSaving(true);
     try {
       await reportForumContent({ ...reportTarget, reason, details });
@@ -199,7 +223,8 @@ export default function ForumThreadScreen({ navigation, route }) {
     finally { setReportSaving(false); }
   };
 
-  const blockMember = (member) => Alert.alert(
+  const blockMember = (member) => marketingDemo || isMarketingCommunityId(member.id)
+    ? Alert.alert('Marketing demo', 'Sample members cannot be blocked.') : Alert.alert(
     `Block ${member.displayName}?`,
     'Their posts and replies will be hidden from you. Reporting is a separate action.',
     [
@@ -211,7 +236,14 @@ export default function ForumThreadScreen({ navigation, route }) {
     ],
   );
 
-  const deleteContent = (type, id) => Alert.alert('Delete content?', 'This cannot be undone.', [
+  const deleteContent = (type, id) => {
+    if (marketingDemo) {
+      community.deleteContent(type, id);
+      if (type === 'post') returnToCommunity(navigation);
+      return;
+    }
+    if (isMarketingCommunityId(id)) return;
+    Alert.alert('Delete content?', 'This cannot be undone.', [
     { text: 'Cancel', style: 'cancel' },
     { text: 'Delete', style: 'destructive', onPress: async () => {
       try {
@@ -220,9 +252,10 @@ export default function ForumThreadScreen({ navigation, route }) {
         else setThread((current) => ({ ...current, replies: current.replies.filter((reply) => reply.id !== id) }));
       } catch (error) { Alert.alert('Could not delete', forumErrorMessage(error)); }
     } },
-  ]);
+    ]);
+  };
 
-  const adminDelete = () => Alert.alert('Remove this post?', 'It will disappear for all students and the action will be audited.', [
+  const adminDelete = () => marketingDemo || isMarketingCommunityId(postId) ? undefined : Alert.alert('Remove this post?', 'It will disappear for all students and the action will be audited.', [
     { text: 'Cancel', style: 'cancel' },
     { text: 'Remove', style: 'destructive', onPress: async () => {
       try { await moderateForumContentAsAdmin('post', post.id, 'delete', 'Removed in thread by administrator'); returnToCommunity(navigation); }
@@ -231,11 +264,12 @@ export default function ForumThreadScreen({ navigation, route }) {
   ]);
 
   const adminToggleLock = async () => {
+    if (marketingDemo || isMarketingCommunityId(postId)) return;
     try { await moderateForumContentAsAdmin('post', post.id, post.isLocked ? 'unlock' : 'lock', 'Thread moderation'); await load(); }
     catch (error) { Alert.alert('Could not update thread', error.message); }
   };
 
-  const adminBan = () => Alert.alert('Ban this member from posting?', 'Their learning access will not be affected.', [
+  const adminBan = () => marketingDemo || isMarketingCommunityId(postId) ? undefined : Alert.alert('Ban this member from posting?', 'Their learning access will not be affected.', [
     { text: 'Cancel', style: 'cancel' },
     { text: 'Ban', style: 'destructive', onPress: async () => {
       try { await setForumBan(post.author.id, { permanent: true, reason: 'Community guideline violation' }); Alert.alert('Posting restricted'); }
@@ -243,7 +277,7 @@ export default function ForumThreadScreen({ navigation, route }) {
     } },
   ]);
 
-  if (loading) return <PremiumScreen><AppHeader navigation={navigation} title="Discussion" /><View style={styles.center}><ActivityIndicator size="large" color={colors.cyan} /></View></PremiumScreen>;
+  if (loading && !marketingDemo) return <PremiumScreen><AppHeader navigation={navigation} title="Discussion" /><View style={styles.center}><ActivityIndicator size="large" color={colors.cyan} /></View></PremiumScreen>;
   if (!thread?.post) return <PremiumScreen><AppHeader navigation={navigation} title="Discussion" /><View style={styles.center}><Text style={{ color: colors.text }}>This discussion is unavailable.</Text></View></PremiumScreen>;
 
   const post = thread.post;

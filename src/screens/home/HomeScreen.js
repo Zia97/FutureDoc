@@ -36,6 +36,7 @@ import { loadCoachHubCache, saveCoachHubCache, coachRequest } from '../../servic
 import { buildDashboardStory, sectionSnapshot } from '../../lib/coaching/dashboard';
 import { StatRing, SECTION_COLOURS } from '../../components/performance/PerformanceUI';
 import AppLogo from '../../components/AppLogo';
+import { useMarketingDemo, getMarketingDemo } from '../../dev/useMarketingDemo';
 import { useSupportNotifications } from '../../context/SupportNotificationsContext';
 import SupportUnreadBadge from '../../components/support/SupportUnreadBadge';
 
@@ -209,6 +210,8 @@ export default function HomeScreen({ navigation }) {
   const action1Anim = useFadeSlide(150, 18);
   const footerAnim = useFadeSlide(240, 18);
 
+  const marketingDemo = useMarketingDemo();
+  const demo = marketingDemo ? getMarketingDemo() : null;
   const [streak, setStreak] = useState({ currentStreak: 0, longestStreak: 0 });
   const [lastActivity, setLastActivityState] = useState(null);
   const [examDate, setExamDateState] = useState(null);
@@ -216,6 +219,7 @@ export default function HomeScreen({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
+      if (marketingDemo) return;
       let cancelled = false;
       (async () => {
         const [s, a, e, cached] = await Promise.all([getDisplayStreak(), getLastActivity(), getExamDate(), user?.id ? loadCoachHubCache(user.id) : null]);
@@ -234,7 +238,7 @@ export default function HomeScreen({ navigation }) {
         }
       })();
       return () => { cancelled = true; };
-    }, [user?.id]),
+    }, [user?.id, marketingDemo]),
   );
 
   const resumeTarget = getResumeNavTarget(lastActivity);
@@ -264,11 +268,11 @@ export default function HomeScreen({ navigation }) {
       <PremiumScrollView contentContainerStyle={styles.scrollContent}>
         <Animated.View style={heroAnim}>
           <View style={styles.summaryRow}>
-            <ExamCountdownClock examDate={examDate} isDark={isDark} colors={colors} onPress={() => navigation.navigate('ExamDate')} />
-            <StudyStreakCard streak={streak} isDark={isDark} colors={colors} />
+            <ExamCountdownClock examDate={demo?.examDate ?? examDate} isDark={isDark} colors={colors} onPress={() => { if (!marketingDemo) navigation.navigate('ExamDate'); }} />
+            <StudyStreakCard streak={demo?.streak ?? streak} isDark={isDark} colors={colors} />
           </View>
           {displayName ? <Text style={[styles.greeting, { color: colors.textSecondary }]}>{getGreeting()}, {displayName}</Text> : null}
-          <CoachingProgressCard data={coachData} colors={colors} isDark={isDark} onPress={openCoaching} />
+          <CoachingProgressCard data={demo?.coach ?? coachData} colors={colors} isDark={isDark} onPress={openCoaching} />
           {resumeVisuals ? (
             <TouchableOpacity activeOpacity={0.85} onPress={handleResume} style={[styles.resumeLink, { borderColor: colors.border }]} accessibilityRole="button">
               <PremiumIcon name={resumeVisuals.icon} size={18} color={resumeAccent} />

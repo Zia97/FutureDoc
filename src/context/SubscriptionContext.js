@@ -1,10 +1,12 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState, useCallback } from 'react';
 import { AppState, Platform } from 'react-native';
 import Purchases from 'react-native-purchases';
 import RevenueCatUI from 'react-native-purchases-ui';
 import { useAuth } from './AuthContext';
 import { supabase } from '../lib/supabase';
 import { reportError } from '../lib/reportError';
+import { useMarketingAccess } from './MarketingAccessContext';
+import { hasMarketingAccess } from '../lib/marketingAccess';
 
 const REVENUECAT_API_KEY = Platform.select({
   ios: process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY,
@@ -17,6 +19,7 @@ const ENTITLEMENT_ID = 'UCAT Genius AI Pro';
 const SubscriptionContext = createContext(null);
 
 export function SubscriptionProvider({ children }) {
+  const { testerExpiresAt } = useMarketingAccess();
   const { user } = useAuth();
   const [isPro, setIsPro] = useState(false);
   const [adminOverride, setAdminOverride] = useState(false);
@@ -25,6 +28,7 @@ export function SubscriptionProvider({ children }) {
   const [customerInfo, setCustomerInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [identifiedUserId, setIdentifiedUserId] = useState(null);
+  const previousTester = useRef(null);
 
   // Derive premium status from customer info
   const checkEntitlement = useCallback(
@@ -40,10 +44,22 @@ export function SubscriptionProvider({ children }) {
   // periodType === 'PROMOTIONAL'. Trial users have full premium access but
   // are NOT paying — so the UI must still offer them the paywall to upgrade.
   const activeEntitlement = customerInfo?.entitlements?.active?.[ENTITLEMENT_ID];
-  const isOnTrial = isPro && !adminOverride && activeEntitlement?.periodType === 'PROMOTIONAL';
+  const isOnTrial = isPro && !adminOverride && !hasMarketingAccess(testerExpiresAt) && activeEntitlement?.periodType === 'PROMOTIONAL';
 
-  // NOTE: is_premium in Supabase is written ONLY by the `revenuecat-webhook`
-  // edge function (service role). The client never writes it — the
+  useEffect(() => {
+    const previous = previousTester.current;
+    previousTester.current = { userId: user?.id, expiresAt: testerExpiresAt };
+    if (!user?.id || !REVENUECAT_API_KEY || (!testerExpiresAt && !(previous?.userId === user.id && previous.expiresAt))) return;
+    let active = true;
+    void Purchases.invalidateCustomerInfoCache().then(() => Purchases.getCustomerInfo()).then((info) => {
+      if (!active) return;
+      setCustomerInfo(info); setIsPro(checkEntitlement(info) || adminOverride);
+    }).catch(() => {});
+    return () => { active = false; };
+  }, [user?.id, testerExpiresAt, adminOverride, checkEntitlement]);
+
+  // NOTE: is_premium in Supabase is written by server-side RevenueCat sync
+  // (webhooks and tester grants). The client never writes it — the
   // user_profiles_protect_privileged_columns trigger blocks non-service-role
   // writes anyway. RevenueCat is the single source of truth: the app gates
   // features on `isPro` (derived from customerInfo), and the DB flag is just
@@ -103,7 +119,7 @@ export function SubscriptionProvider({ children }) {
     const appStateRef = { current: AppState.currentState };
     const subscription = AppState.addEventListener('change', async (nextState) => {
       if (appStateRef.current.match(/inactive|background/) && nextState === 'active') {
-        if (isOnTrial) {
+        if (isOnTrial || testerExpiresAt) {
           try {
             await Purchases.invalidateCustomerInfoCache();
           } catch (err) {
@@ -116,7 +132,7 @@ export function SubscriptionProvider({ children }) {
     });
 
     return () => subscription.remove();
-  }, [user?.id, adminOverride, isOnTrial]);
+  }, [user?.id, adminOverride, isOnTrial, testerExpiresAt]);
 
   // Identify user and check subscription + admin status when auth state changes
   useEffect(() => {
