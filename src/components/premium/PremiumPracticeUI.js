@@ -14,6 +14,8 @@ import Svg, { Circle, G, Line, Path, Polygon, Polyline } from 'react-native-svg'
 
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useSupportNotifications } from '../../context/SupportNotificationsContext';
+import SupportUnreadBadge from '../support/SupportUnreadBadge';
 import { getPremiumTheme, hexToRgba, premiumColors } from '../../theme/premiumTheme';
 import PremiumIcon from './PremiumIcon';
 
@@ -156,9 +158,10 @@ export function PremiumScrollView({ children, contentContainerStyle, ...props })
   );
 }
 
-export function AppHeader({ navigation, title, showBack = true }) {
+export function AppHeader({ navigation, title, showBack = true, unreadCount = 0 }) {
   const insets = useSafeAreaInsets();
   const { user, displayName } = useAuth();
+  const { profileUnread } = useSupportNotifications();
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const initialSource = displayName || user?.user_metadata?.full_name || user?.email;
@@ -192,7 +195,10 @@ export function AppHeader({ navigation, title, showBack = true }) {
         <PremiumIcon name="arrow-left" size={22} color={colors.text} />
       </TouchableOpacity>
 
-      <Text style={[styles.appHeaderTitle, { color: colors.text }]} numberOfLines={1}>{title}</Text>
+      <View style={styles.headerTitleGroup}>
+        <Text style={[styles.appHeaderTitle, { color: colors.text }]} numberOfLines={1}>{title}</Text>
+        <SupportUnreadBadge count={unreadCount} />
+      </View>
 
       {user ? (
         <TouchableOpacity
@@ -207,9 +213,10 @@ export function AppHeader({ navigation, title, showBack = true }) {
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Open profile"
+          accessibilityLabel={profileUnread ? `Open profile, ${profileUnread} unread support tickets` : 'Open profile'}
         >
           <Text style={[styles.headerAvatarText, { color: isDark ? '#C5E4FF' : colors.blue }]}>{initial}</Text>
+          <SupportUnreadBadge count={profileUnread} dot floating />
         </TouchableOpacity>
       ) : (
         <View style={[styles.headerAvatar, styles.invisible]} />
@@ -251,6 +258,7 @@ export function GlassMenuCard({
   accent = premiumColors.blue,
   onPress,
   badge,
+  unreadCount = 0,
   badgePosition = 'inline',
   highlighted = false,
   style,
@@ -265,7 +273,9 @@ export function GlassMenuCard({
   const containerProps = onPress
     ? { activeOpacity: 0.86, onPress, accessibilityRole: 'button' }
     : {};
-  const badgeView = badge ? (
+  const badgeView = unreadCount > 0 ? (
+    <SupportUnreadBadge count={unreadCount} style={badgePosition === 'topRight' ? styles.badgeTopRight : undefined} />
+  ) : badge ? (
     <View style={[styles.badge, badgePosition === 'topRight' && styles.badgeTopRight, { borderColor: hexToRgba(accent, 0.36), backgroundColor: hexToRgba(accent, 0.1) }]}>
       <Text style={[styles.badgeText, { color: accent }]}>{badge}</Text>
     </View>
@@ -316,7 +326,7 @@ export function GlassMenuCard({
             <Text style={[styles.cardTitle, { color: colors.text }]} numberOfLines={2}>{title}</Text>
             {badgePosition !== 'topRight' ? badgeView : null}
           </View>
-          <Text style={[styles.cardDescription, { color: colors.textSecondary }]}>{description}</Text>
+          {!!description && <Text style={[styles.cardDescription, { color: colors.textSecondary }]}>{description}</Text>}
         </View>
 
         {showChevron ? (
@@ -374,8 +384,15 @@ const styles = StyleSheet.create({
   invisible: {
     opacity: 0,
   },
-  appHeaderTitle: {
+  headerTitleGroup: {
     flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  appHeaderTitle: {
+    flexShrink: 1,
     color: premiumColors.text,
     fontSize: 18,
     fontWeight: '800',

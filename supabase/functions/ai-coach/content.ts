@@ -17,6 +17,11 @@ export function selectAssessment(catalogue: any, evidence: any[]) {
 }
 
 const sorted = (rows: any[]) => [...rows].sort((a, b) => a.order_index - b.order_index);
+async function bankVersions(client: any) {
+  const { data, error } = await client.from('content_versions').select('section,version');
+  if (error) throw error;
+  return Object.fromEntries(data.map((row: any) => [row.section, row.version]));
+}
 export async function loadQuestions(client: any, tags: any[]) {
   if (tags.some((tag) => tag.assessmentOnly)) {
     if (new Set(tags.map((tag) => tag.id)).size !== tags.length) throw new Error('content_changed');
@@ -29,6 +34,7 @@ export async function loadQuestions(client: any, tags: any[]) {
       return question;
     });
   }
+  const before = await bankVersions(client);
   const output: any[] = [];
   for (const section of ['vr', 'dm', 'qr', 'sj']) {
     const chosen = tags.filter((t) => t.section === section);
@@ -63,5 +69,10 @@ export async function loadQuestions(client: any, tags: any[]) {
     }
   }
   if (output.length !== tags.length) throw new Error('content_unavailable');
+  const after = await bankVersions(client);
+  for (const question of output) {
+    const bank = bases[question.section];
+    if (before[bank] != null && before[bank] === after[bank]) question.bankVersion = after[bank];
+  }
   return output;
 }

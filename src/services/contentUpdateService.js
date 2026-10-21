@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 import { db } from '../lib/dbQueries';
-import { getCached, clearCache } from './contentCache';
+import { getCached } from './contentCache';
+import { syncPracticeContent } from './practiceContentService';
+import { useNetwork } from '../context/NetworkContext';
 
 const ALL_SECTIONS = [
   'verbal_reasoning',
@@ -19,68 +21,30 @@ const MIN_CHECK_INTERVAL_MS = 5 * 60 * 1000;
 
 let lastCheckedAt = 0;
 
-/**
- * Checks each section's cached version against the DB.
- * Clears the local content cache for any section that has a newer version.
- * The next time a section hook mounts it will find no cache and fetch fresh content.
- */
-async function checkAndInvalidateStaleContent() {
-  const now = Date.now();
-  if (now - lastCheckedAt < MIN_CHECK_INTERVAL_MS) return;
-  lastCheckedAt = now;
-
-  let dbVersions;
-  try {
-    dbVersions = await db.getAllContentVersions();
-  } catch {
-    return; // Non-fatal — try again next interval.
-  }
-
-  const dbVersionMap = Object.fromEntries(dbVersions.map((r) => [r.section, r.version]));
-
-  for (const section of ALL_SECTIONS) {
-    try {
-      const cached = await getCached(section);
-      if (!cached) continue;
-      if (dbVersionMap[section] !== cached.version) {
-        await clearCache(section);
-      }
-    } catch {
-      // ignore
-    }
-  }
-}
-
-/**
- * Checks all sections immediately, bypassing the cooldown.
- * Returns the number of sections whose caches were cleared.
- */
-export async function forceContentVersionCheck() {
-  let dbVersions;
-  try {
-    dbVersions = await db.getAllContentVersions();
-  } catch {
-    return 0;
-  }
-
-  const dbVersionMap = Object.fromEntries(dbVersions.map((r) => [r.section, r.version]));
+// Keep complete device banks while replacements download. Timed-test hooks
+// already refresh their own versioned banks when opened.
+async function refreshChangedContent() {
+  const rows = await db.getAllContentVersions({ force: true });
+  const versions = Object.fromEntries(rows.map((row) => [row.section, row.version]));
   let staleCount = 0;
-
-  for (const section of ALL_SECTIONS) {
-    try {
-      const cached = await getCached(section);
-      if (!cached) continue;
-      if (dbVersionMap[section] !== cached.version) {
-        await clearCache(section);
-        staleCount++;
-      }
-    } catch {
-      // ignore
-    }
-  }
-
+  await Promise.all(ALL_SECTIONS.map(async (section) => {
+    const cached = await getCached(section);
+    if (!cached || versions[section] == null || versions[section] === cached.version) return;
+    staleCount++;
+    if (!section.startsWith('timed_')) void syncPracticeContent(section).catch(() => {});
+  }));
   lastCheckedAt = Date.now();
   return staleCount;
+}
+
+async function checkAndRefreshStaleContent() {
+  if (Date.now() - lastCheckedAt < MIN_CHECK_INTERVAL_MS) return;
+  lastCheckedAt = Date.now();
+  try { await refreshChangedContent(); } catch { /* Keep downloaded content offline. */ }
+}
+
+export function forceContentVersionCheck() {
+  return refreshChangedContent();
 }
 
 /**
@@ -89,17 +53,18 @@ export async function forceContentVersionCheck() {
  */
 export function useContentVersionCheck() {
   const appState = useRef(AppState.currentState);
+  const { isOnline } = useNetwork();
 
   useEffect(() => {
-    checkAndInvalidateStaleContent();
+    if (isOnline) { lastCheckedAt = 0; checkAndRefreshStaleContent(); }
 
     const sub = AppState.addEventListener('change', (nextState) => {
       if (appState.current.match(/inactive|background/) && nextState === 'active') {
-        checkAndInvalidateStaleContent();
+        if (isOnline) checkAndRefreshStaleContent();
       }
       appState.current = nextState;
     });
 
     return () => sub.remove();
-  }, []);
+  }, [isOnline]);
 }

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useHeaderHeight } from '@react-navigation/elements';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -15,10 +14,11 @@ const suggestions = ['What should I work on next?', 'What are my strengths so fa
 export default function CoachChatScreen({ navigation }) {
   const { user } = useAuth(), { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
-  const headerHeight = useHeaderHeight(), insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
   const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
   const [messages, setMessages] = useState([]), [text, setText] = useState(''), [busy, setBusy] = useState(false), [error, setError] = useState(null);
-  const pending = useRef(null), scroll = useRef(null);
+  const pending = useRef(null), scroll = useRef(null), content = useRef(null);
   useEffect(() => {
     const show = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow', () => setKeyboardVisible(true));
     const hide = Keyboard.addListener(Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide', () => setKeyboardVisible(false));
@@ -49,8 +49,12 @@ export default function CoachChatScreen({ navigation }) {
     } finally { setBusy(false); }
   }
 
-  return <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.bgTop }} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={headerHeight}>
-    <View style={{ flex: 1, minHeight: 0 }}>
+  // Measure the actual content top: Android's native header can report physical pixels instead of layout units.
+  // Disable Android avoidance on hide so its final keyboard coordinates cannot leave residual padding.
+  return <KeyboardAvoidingView style={{ flex: 1, backgroundColor: colors.bgTop }}
+    behavior="padding" keyboardVerticalOffset={keyboardOffset} enabled={Platform.OS === 'ios' || keyboardVisible}>
+    <View ref={content} collapsable={false} style={{ flex: 1, minHeight: 0 }}
+      onLayout={() => content.current?.measure((_x, _y, _width, _height, _pageX, pageY) => setKeyboardOffset(pageY))}>
       <ScrollView ref={scroll} style={{ flex: 1, minHeight: 0 }} keyboardShouldPersistTaps="handled" keyboardDismissMode={Platform.OS === 'ios' ? 'interactive' : 'on-drag'}
         onLayout={() => scroll.current?.scrollToEnd?.({ animated: false })}
         onContentSizeChange={() => scroll.current?.scrollToEnd?.({ animated: true })} contentContainerStyle={{ padding: 20, gap: 18, width: '100%', maxWidth: 800, alignSelf: 'center', paddingBottom: 24 }}>

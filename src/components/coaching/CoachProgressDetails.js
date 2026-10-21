@@ -12,7 +12,7 @@ export default function CoachProgressDetails({ data, story, tab, onTabChange, on
   const { colors } = useCoachTheme();
   const profile = data.profile;
   return <>
-    <Segments values={[{ id: 'overview', label: 'Progress' }, { id: 'plan', label: 'Your plan' }, { id: 'history', label: 'History' }]} value={tab} onChange={onTabChange} />
+    <Segments values={[{ id: 'overview', label: 'Progress' }, { id: 'plan', label: data.pro ? 'Your plan' : 'Initial plan' }, { id: 'history', label: 'History' }]} value={tab} onChange={onTabChange} />
     {tab === 'overview' && <>
       <View style={{ gap: 12 }}>
         <View style={ds.row}>
@@ -65,6 +65,7 @@ export default function CoachProgressDetails({ data, story, tab, onTabChange, on
       </View>
     </>}
     {tab === 'plan' && <>
+      {!data.pro && <CoachText muted>Pro updates your plan as you practise.</CoachText>}
       {story.plan.map((item, index) => <View key={item.skillId} style={[ds.card, { borderColor: index === 0 ? hexToRgba(colors.purple, 0.4) : colors.border, backgroundColor: colors.surface, gap: 12 }]}>
         <View style={ds.row}><View style={[ds.coachAvatar, { backgroundColor: colors.surfaceSoft }]}><CoachText style={{ fontWeight: '800', color: colors.purple }}>{index + 1}</CoachText></View>
           <View style={{ flex: 1, gap: 3 }}><CoachText muted style={ds.caption}>{item.sectionTitle}</CoachText><CoachText style={ds.cardTitle}>{item.title}</CoachText></View></View>

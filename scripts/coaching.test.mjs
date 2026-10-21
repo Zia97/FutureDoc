@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { buildCoachProfile, buildSessionReport, initialProgress, normaliseEvidence, practiceEstimate, publicSession, selectGroups, sessionEvidence, validateProgress, validExamDate, SECTION_SECONDS } from '../src/lib/coaching/engine.js';
+import { buildCoachProfile, buildSessionReport, initialProgress, localSessionResult, normaliseEvidence, practiceEstimate, publicSession, selectGroups, sessionEvidence, validateProgress, validExamDate, SECTION_SECONDS } from '../src/lib/coaching/engine.js';
 import { tickProgress, pauseProgress, advanceSection } from '../src/lib/coaching/sessionState.js';
 
 const sections = ['vr', 'dm', 'qr', 'sj'];
@@ -62,9 +62,10 @@ test('offline progression can save several completed sections atomically', () =>
   for (let i = 0; i < 4; i++) p = advanceSection(s, p);
   assert.equal(validateProgress(s, p).phase, 'finished');
 });
-test('answer keys and explanations are withheld until completion; DM scoring and SJ partial credit survive', () => {
-  const s = fixture(); const hidden = JSON.stringify(publicSession(s));
-  assert.ok(!hidden.includes('PRIVATE KEY')); assert.ok(!hidden.includes('statementAnswers')); assert.ok(!hidden.includes('contentHash'));
+test('question UI withholds answers until completion while device scoring preserves DM and SJ partial credit', () => {
+  const s = fixture(); const downloadable = publicSession(s), hidden = JSON.stringify(downloadable.questions);
+  assert.ok(!hidden.includes('PRIVATE KEY')); assert.ok(!hidden.includes('statementAnswers')); assert.ok(!JSON.stringify(downloadable).includes('contentHash'));
+  assert.equal(downloadable.offlineScoring[s.questions[0].id].explanation, 'PRIVATE KEY');
   const dm = s.questions.find((q) => q.tag.statementAnswers?.length === 5);
   assert.ok(dm);
   s.progress.answers[dm.id] = Object.fromEntries(dm.tag.statementAnswers.map((a, i) => [i, i ? a : a === 'Yes' ? 'No' : 'Yes']));
@@ -83,6 +84,24 @@ test('estimates are bounded, monotonic and identical for paid/free and paused co
   const s = fixture(), baseline = buildSessionReport(s); s.progress.interrupted = true;
   assert.deepEqual(buildSessionReport(s).estimate, baseline.estimate);
   assert.equal(practiceEstimate([{ section: 'vr', questions: 12, earned: 6, possible: 12 }]), null);
+});
+
+test('device completion produces exactly the server report, grades and explanations without a request', () => {
+  const raw = fixture();
+  raw.progress = { ...initialProgress(), phase: 'finished', sectionIndex: 3, index: raw.questions.findIndex((q) => q.section === 'sj'), closedSections: sections };
+  for (const [index, q] of raw.questions.entries()) {
+    raw.progress.answers[q.id] = index % 3 ? q.tag.statementAnswers
+      ? Object.fromEntries(q.tag.statementAnswers.map((answer, i) => [i, i === 0 ? answer === 'Yes' ? 'No' : 'Yes' : answer]))
+      : q.tag.answer : null;
+  }
+  const download = publicSession(raw);
+  const result = localSessionResult(download, Date.parse('2026-10-20T12:00:00Z'));
+  raw.status = 'completed'; raw.completed_at = result.completedAt; raw.report = buildSessionReport(raw);
+  const server = publicSession(raw);
+  assert.deepEqual(result.report, server.report);
+  assert.deepEqual(result.questions, server.questions);
+  assert.equal(result.status, 'active', 'Completion remains queued until the cloud acknowledges it');
+  assert.equal(localSessionResult({ ...download, progress: initialProgress() }).report, undefined, 'No results before finishing');
 });
 test('first encounters determine evidence; repeat drills do not inflate strengths or exam estimates', () => {
   const q = catalogue.questions.find((q) => q.section === 'vr' && !q.excludedReason && q.mode === 'practice');

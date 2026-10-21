@@ -269,6 +269,7 @@ export function SubscriptionProvider({ children }) {
     <SubscriptionContext.Provider
       value={{
         isPro,
+        adminOverride,
         isOnTrial,
         hasUsedTrial,
         offerings,

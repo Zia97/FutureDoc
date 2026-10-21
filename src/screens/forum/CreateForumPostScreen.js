@@ -1,7 +1,7 @@
+import Alert from '../../services/appAlert';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,

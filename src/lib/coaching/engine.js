@@ -1,5 +1,6 @@
 import { gradeResponse, summarise, comparableTrend } from '../performance/engine.js';
 import { getVRScaledScore, getDMScaledScore, getQRScaledScore } from '../ucatScoring.js';
+import { buildOverallHistory } from './progressHistory.js';
 
 export const COACH_VERSION = 'coach-v1';
 export const SECTIONS = ['vr', 'dm', 'qr', 'sj'];
@@ -139,6 +140,7 @@ export function buildCoachProfile({ catalogue, rawEvidence, examDate = null, bas
     reason: s.questions ? `${s.accuracy}% of marks across ${s.questions} fresh ${s.questions === 1 ? 'question' : 'questions'}${s.stale ? '; due for another check' : ''}${s.confidence === 'early signal' ? '. An early signal to explore' : ''}.` : 'We need more evidence in this skill.',
     tip: s.tip, lessonRoute: s.lessonRoute, lessonId: s.lessonId, order: i + 1 }));
   return { version: COACH_VERSION, generatedAt: new Date(now).toISOString(), skills, strengths, weaknesses, plan, runningSections,
+    overallHistory: buildOverallHistory(fresh, now),
     daysToExam, totalAttempts: rawEvidence.length, freshQuestions: fresh.length,
     summary: fresh.length ? `You have built a starting picture from ${fresh.length} fresh questions. ${recommended ? `Let’s work on ${recommended.label.toLowerCase()} next, one set at a time.` : 'Keep building your evidence, one set at a time.'}` : 'Your assessment will give us a starting point. You do not need to be perfect to begin.',
     dailyAdvice: daysToExam != null && daysToExam < 0 ? 'Your saved exam date has passed. Update it when you are ready to plan your next steps.' : daysToExam != null && daysToExam <= 2 ? 'Keep today light: review a familiar technique, take a break and prioritise rest.' : 'Start with one recommended set. Review the explanation, then continue or stop whenever you are ready.',
@@ -244,15 +246,33 @@ export function validateProgress(session, input) {
   return result;
 }
 
-// Allowlist the public shape: never send grading metadata or explanations before completion.
+// Scoring downloads with the questions so completion never needs a cloud save.
+// The question UI only receives answers and explanations after finishing.
 export function publicSession(session) {
   const complete = session.status === 'completed';
   return { id: session.id, kind: session.kind, status: session.status, title: session.title, version: session.version,
     formVersion: session.form_version, progress: session.progress, budgets: session.budgets,
     timeMultiplier: session.time_multiplier, report: session.report, completedAt: session.completed_at,
+    ...(!complete ? { offlineScoring: Object.fromEntries(session.questions.map((q) => [q.id, {
+      tag: Object.fromEntries(['section', 'answer', 'statementAnswers', 'labelSet', 'format', 'options', 'parentId', 'previouslySeen', 'excludedReason']
+        .filter((key) => q.tag[key] !== undefined).map((key) => [key, q.tag[key]])),
+      explanation: q.explanation, statementReasons: q.statementReasons,
+    }])) } : {}),
     questions: session.questions.map((q) => ({ id: q.id, section: q.section, parentId: q.parentId,
       title: q.title, context: q.context, text: q.text, stimulus: q.stimulus, choices: q.choices,
       dm: q.dm ? { ...q.dm, statements: q.dm.statements.map((s) => ({ text: s.text })) } : null,
       ...(complete ? { answer: q.tag.statementAnswers ?? q.tag.answer, explanation: q.explanation,
         statementReasons: q.statementReasons, grade: gradeResponse(q.tag, session.progress.answers[q.id]) } : {}) })) };
+}
+
+export function localSessionResult(session, now = Date.now()) {
+  if (session.status === 'completed' || session.progress.phase !== 'finished'
+    || !session.questions.every((q) => session.offlineScoring?.[q.id]?.tag)) return session;
+  const questions = session.questions.map((q) => ({ ...q, ...session.offlineScoring[q.id] }));
+  const completedAt = session.completedAt ?? new Date(now).toISOString();
+  return { ...session, completedAt,
+    report: buildSessionReport({ ...session, questions, completed_at: completedAt, time_multiplier: session.timeMultiplier }),
+    questions: questions.map(({ tag, ...q }) => ({ ...q, answer: tag.statementAnswers ?? tag.answer,
+      grade: gradeResponse(tag, session.progress.answers[q.id]) })),
+  };
 }

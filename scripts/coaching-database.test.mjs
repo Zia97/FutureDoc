@@ -24,6 +24,8 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     await db.exec(fs.readFileSync('supabase/migrations/20261017000001_ai_coaching.sql', 'utf8'));
     await db.exec(fs.readFileSync('supabase/migrations/20261017000003_coach_reset_progress.sql', 'utf8'));
     await db.exec(fs.readFileSync('supabase/migrations/20261020000002_coach_plan_introduction.sql', 'utf8'));
+    await db.exec(fs.readFileSync('supabase/migrations/20261020210000_coach_prepared_next_sets.sql', 'utf8'));
+    await db.exec(fs.readFileSync('supabase/migrations/20261021000001_coach_device_sessions.sql', 'utf8'));
     assert.equal((await db.query('select count(*)::int n from coach_evidence')).rows[0].n, 2, 'existing evidence is backfilled');
     await db.query('insert into practice_question_attempts(id,user_id,section,question_id,selected_answer,time_spent_ms) values($1,$2,$3,$4,$5,$6)', [crypto.randomUUID(), alice, 'vr', question, 'False', 10000]);
     await db.query('insert into timed_verbal_reasoning_question_answers values($1,$2,$3,$4,$5,$6)', [crypto.randomUUID(), alice, exam, question, 'True', 7000]);
@@ -72,6 +74,31 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     assert.equal(Date.parse(trialEvidence.answeredAt), Date.parse(trialCompleted.completed_at), 'future completions use the database timestamp');
     await assert.rejects(start(alice, { ...session, kind: 'practice' }), /pro_required/);
     const paid = await start(alice, { ...session, kind: 'review' }, true); assert.equal(paid.kind, 'review');
+    const nextData = { ...session, kind: 'practice', questions: [{ id: question, tag }], progress: { phase: 'instructions' } };
+    const prepare = async (user, previous, pro = true) => (await db.query('select coach_prepare_next_set($1,$2,$3,$4) s', [user, previous, nextData, pro])).rows[0].s;
+    await db.exec(fs.readFileSync('supabase/migrations/20261020220000_coach_activation_pro_gate.sql', 'utf8'));
+    const activate = async (user, id, pro = true) => (await db.query('select coach_activate_next_set($1,$2,$3) s', [user, id, pro])).rows[0].s;
+    const evidenceBeforePreparing = (await db.query('select count(*)::int n from coach_evidence where user_id=$1', [alice])).rows[0].n;
+    await assert.rejects(prepare(alice, paid.id, false), /pro_required/);
+    const [ready, sameReady] = await Promise.all([prepare(alice, paid.id), prepare(alice, paid.id)]);
+    assert.equal(ready.id, sameReady.id, 'parallel prefetch requests reserve one set');
+    assert.equal((await db.query("select id from coach_sessions where user_id=$1 and status='active'", [alice])).rows[0].id, paid.id, 'prefetch leaves the current set active');
+    assert.equal((await db.query('select count(*)::int n from coach_evidence where user_id=$1', [alice])).rows[0].n, evidenceBeforePreparing, 'prefetch does not score unanswered questions');
+    await assert.rejects(activate(alice, ready.id), /previous_incomplete/);
+    await assert.rejects(activate(bob, ready.id), /session_not_found/);
+    const anotherReady = await prepare(alice, ready.id);
+    await save(alice, paid, 0, true);
+    await assert.rejects(activate(alice, ready.id, false), /pro_required/, 'an unused reservation needs current Pro');
+    await assert.rejects(activate(alice, ready.id, null), /pro_required/, 'unknown access fails closed');
+    await assert.rejects(db.query('select coach_activate_next_set($1,$2)', [alice, ready.id]), /does not exist/, 'old ungated signature is removed');
+    assert.equal((await db.query('select claimed_at from coach_next_sets where id=$1', [ready.id])).rows[0].claimed_at, null);
+    const nextActive = await activate(alice, ready.id);
+    assert.equal(nextActive.id, ready.id, 'activation preserves the ID used by the device');
+    assert.equal((await activate(alice, ready.id, false)).id, ready.id, 'already-activated sessions remain available after Pro ends');
+    assert.equal((await db.query('select session from coach_next_sets where id=$1', [ready.id])).rows[0].session, null, 'claimed question snapshots are not duplicated');
+    await assert.rejects(activate(alice, anotherReady.id), /previous_incomplete/);
+    await save(alice, nextActive, 0, true);
+    assert.equal((await activate(alice, anotherReady.id)).id, anotherReady.id);
     const reserve = async (id = crypto.randomUUID(), pro = false) => (await db.query('select coach_reserve_message($1,$2,$3,$4) r', [alice, id, 'How am I doing?', pro])).rows[0].r;
     const request = crypto.randomUUID(); const first = await reserve(request);
     assert.equal(first.reserved, true); assert.equal((await reserve(request)).reserved, false);
@@ -82,10 +109,22 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     }
     await assert.rejects(reserve(), /pro_required/); assert.equal((await reserve(crypto.randomUUID(), true)).reserved, true);
     const bobAssessment = await start(bob);
+    const importSession = async (user, data, pro = false) => (await db.query('select coach_import_session($1,$2,$3) s', [user, data, pro])).rows[0].s;
+    const offlineId = crypto.randomUUID();
+    await assert.rejects(importSession(bob, { ...session, id: offlineId }), /session_in_progress/);
+    await save(bob, bobAssessment, 0, true);
+    await assert.rejects(importSession(bob, { ...session, id: offlineId }), /assessment_already_completed/);
+    const offlinePractice = { ...session, id: offlineId, kind: 'practice' };
+    const imported = await importSession(bob, offlinePractice);
+    assert.equal(imported.id, offlineId, 'offline UUID is preserved');
+    assert.equal((await importSession(bob, offlinePractice)).id, offlineId, 'registration retries are idempotent');
+    await save(bob, imported, 0, true);
+    assert.equal((await importSession(bob, offlinePractice)).status, 'completed', 'a lost response cannot recreate a completed session');
+    await assert.rejects(importSession(bob, { ...offlinePractice, id: crypto.randomUUID() }), /pro_required/);
     await db.query('insert into coach_plans(user_id,evidence_count,plan_key,profile) values($1,7,$2,$3)', [alice, 'before-reset', { plan: [] }]);
     await db.query('insert into coach_milestones(user_id,key,label) values($1,$2,$3)', [alice, 'first_step', 'First step']);
     await db.query('select coach_reset_progress($1)', [alice]);
-    for (const table of ['coach_sessions','coach_evidence','coach_plans','coach_messages','coach_milestones']) {
+    for (const table of ['coach_sessions','coach_next_sets','coach_evidence','coach_plans','coach_messages','coach_milestones']) {
       assert.equal((await db.query(`select count(*)::int n from ${table} where user_id=$1`, [alice])).rows[0].n, 0, `${table} reset`);
     }
     const resetProfile = (await db.query('select * from coach_profiles where user_id=$1', [alice])).rows[0];
@@ -95,7 +134,7 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     assert.equal(resetProfile.free_chat_used, 5, 'free chat remains used');
     assert.equal(resetProfile.chat_day_used, 6, 'daily chat limit remains used');
     assert.equal((await db.query('select count(*)::int n from practice_question_attempts where user_id=$1', [alice])).rows[0].n, 2, 'separate practice history stays');
-    assert.equal((await db.query('select id from coach_sessions where user_id=$1', [bob])).rows[0].id, bobAssessment.id, 'another student is unaffected');
+    assert.equal((await db.query('select id from coach_sessions where user_id=$1 and id=$2', [bob, bobAssessment.id])).rows[0].id, bobAssessment.id, 'another student is unaffected');
     await assert.rejects(save(alice, paid, 0), /session_not_found/, 'old session cannot be restored');
     const retake = await start(alice);
     assert.notEqual(retake.id, one.id, 'initial assessment can be retaken');
@@ -105,9 +144,12 @@ test('Postgres: lifecycle, quotas, archival, RLS and account deletion', async ()
     await db.query('update coach_profiles set chat_day_used=100 where user_id=$1', [alice]);
     await assert.rejects(reserve(crypto.randomUUID(), true), /daily_limit/, 'reset does not bypass the daily chat cap');
     await db.exec('set role authenticated');
-    for (const table of ['coach_profiles','coach_sessions','coach_evidence','coach_plans','coach_messages','coach_milestones']) await assert.rejects(db.query(`select * from ${table}`), /permission denied/);
+    for (const table of ['coach_profiles','coach_sessions','coach_next_sets','coach_evidence','coach_plans','coach_messages','coach_milestones']) await assert.rejects(db.query(`select * from ${table}`), /permission denied/);
     await assert.rejects(db.query('select coach_start_session($1,$2,true)', [bob, session]), /permission denied/);
     await assert.rejects(db.query('select coach_reset_progress($1)', [bob]), /permission denied/);
+    await assert.rejects(db.query('select coach_prepare_next_set($1,$2,$3,true)', [bob, one.id, nextData]), /permission denied/);
+    await assert.rejects(db.query('select coach_activate_next_set($1,$2,$3)', [bob, ready.id, true]), /permission denied/);
+    await assert.rejects(db.query('select coach_import_session($1,$2,true)', [bob, offlinePractice]), /permission denied/);
     await db.exec('reset role');
     await db.query('delete from auth.users where id=$1', [alice]);
     for (const table of ['coach_profiles','coach_sessions','coach_evidence','coach_plans','coach_messages','coach_milestones']) assert.equal((await db.query(`select count(*)::int n from ${table} where user_id=$1`, [alice])).rows[0].n, 0, `${table} erased on account deletion`);

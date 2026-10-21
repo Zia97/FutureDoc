@@ -1,3 +1,4 @@
+import Alert from '../services/appAlert';
 import { useState, useEffect, useRef } from 'react';
 import {
   Modal,
@@ -7,12 +8,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   KeyboardAvoidingView,
+  Keyboard,
   Platform,
   ActivityIndicator,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../context/ThemeContext';
 import { useTextSize } from '../context/TextSizeContext';
 import {
@@ -41,6 +43,9 @@ export default function ReportQuestionModal({
   const { isDark } = useTheme();
   const { colors, gradients } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
+  const insets = useSafeAreaInsets();
+  const scroll = useRef(null);
+  const inputFocused = useRef(false);
 
   const [selected, setSelected] = useState([]);
   const [comment, setComment] = useState('');
@@ -51,6 +56,14 @@ export default function ReportQuestionModal({
   const submittingRef = useRef(false);
   const isLessonReport = reportType === 'lesson';
   const reasons = isLessonReport ? LESSON_REPORT_REASONS : REPORT_REASONS;
+
+  useEffect(() => {
+    if (!visible) return;
+    const subscription = Keyboard.addListener('keyboardDidShow', () => {
+      if (inputFocused.current) scroll.current?.scrollToEnd({ animated: true });
+    });
+    return () => subscription.remove();
+  }, [visible]);
 
   useEffect(() => {
     setSelected([]);
@@ -105,6 +118,7 @@ export default function ReportQuestionModal({
         Alert.alert('Could not send report', res.error ?? 'Please try again.');
         return;
       }
+      Keyboard.dismiss();
       setSubmittedOk(true);
       closeTimer.current = setTimeout(onClose, 1100);
     } catch {
@@ -121,7 +135,6 @@ export default function ReportQuestionModal({
 
   const accent = colors.red;
   const title = isLessonReport ? 'Report this lesson' : 'Report this question';
-  const kicker = isLessonReport ? 'Help us keep lessons accurate' : 'Help us keep content sharp';
   const reasonPrompt = isLessonReport
     ? "What's wrong with this lesson? Pick all that apply."
     : "What's wrong with it? Pick all that apply.";
@@ -133,9 +146,9 @@ export default function ReportQuestionModal({
     <Modal visible={visible} transparent animationType="slide" statusBarTranslucent onRequestClose={onClose}>
       <KeyboardAvoidingView
         style={styles.overlay}
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        <View style={[styles.cardWrap, { borderColor: colors.border }]}>
+        <View style={[styles.cardWrap, { borderColor: colors.border, paddingBottom: Math.max(insets.bottom, 12) }]}>
           <LinearGradient
             colors={gradients.glass}
             start={{ x: 0, y: 0 }}
@@ -159,7 +172,6 @@ export default function ReportQuestionModal({
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
-                <Text style={[styles.kicker, { color: colors.textMuted }]}>{kicker}</Text>
               </View>
             </View>
             <TouchableOpacity
@@ -188,13 +200,15 @@ export default function ReportQuestionModal({
               >
                 <PremiumIcon name="check" size={26} color={colors.mint} />
               </View>
-              <Text style={[styles.successTitle, { color: colors.text }]}>Thanks!</Text>
+              <Text style={[styles.successTitle, { color: colors.text }]}>Report sent</Text>
               <Text style={[styles.successBody, { color: colors.textSecondary }]}>
-                Your report has been sent. We'll review it shortly.
+                View replies in Profile → Support.
               </Text>
             </View>
           ) : (
-            <ScrollView style={{ flexShrink: 1 }} keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 8 }}>
+            <>
+            <ScrollView ref={scroll} style={{ flexShrink: 1 }} keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag" contentContainerStyle={{ paddingBottom: 8 }}>
               <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
                 {reasonPrompt}
               </Text>
@@ -249,12 +263,17 @@ export default function ReportQuestionModal({
                 ]}
                 value={comment}
                 onChangeText={setComment}
+                accessibilityLabel="Report comments"
+                editable={!submitting}
+                onFocus={() => { inputFocused.current = true; scroll.current?.scrollToEnd({ animated: true }); }}
+                onBlur={() => { inputFocused.current = false; }}
                 placeholder={commentPlaceholder}
                 placeholderTextColor={colors.textMuted}
                 multiline
                 textAlignVertical="top"
                 maxLength={1000}
               />
+            </ScrollView>
 
               <TouchableOpacity
                 onPress={handleSubmit}
@@ -278,7 +297,7 @@ export default function ReportQuestionModal({
                   )}
                 </LinearGradient>
               </TouchableOpacity>
-            </ScrollView>
+            </>
           )}
         </View>
       </KeyboardAvoidingView>
@@ -335,13 +354,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '700',
     letterSpacing: 0.2,
-  },
-  kicker: {
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 0.6,
-    textTransform: 'uppercase',
-    marginTop: 2,
   },
   closeButton: {
     width: 32,

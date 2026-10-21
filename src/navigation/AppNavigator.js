@@ -47,6 +47,9 @@ import ProfileScreen from '../screens/home/ProfileScreen';
 import PrivacyPolicyScreen from '../screens/home/PrivacyPolicyScreen';
 import TermsOfServiceScreen from '../screens/home/TermsOfServiceScreen';
 import SupportScreen from '../screens/home/SupportScreen';
+import NewSupportTicketScreen from '../screens/home/NewSupportTicketScreen';
+import SupportConversationScreen from '../screens/home/SupportConversationScreen';
+import SupportQuestionScreen from '../screens/home/SupportQuestionScreen';
 import DecisionMakingLearnScreen from '../screens/learn/DecisionMakingLearnScreen';
 import DecisionMakingLessonScreen from '../screens/learn/DecisionMakingLessonScreen';
 import LearnSectionsScreen from '../screens/learn/LearnSectionsScreen';
@@ -122,7 +125,7 @@ function AppStack({ routeName }) {
       <Stack.Screen name="CoachHub" component={CoachHubScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CoachPlanIntro" component={CoachPlanIntroScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CoachSectionProgress" component={CoachSectionProgressScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="CoachSession" component={CoachSessionScreen} options={{ title: 'Coaching', headerRight: () => null }} />
+      <Stack.Screen name="CoachSession" component={CoachSessionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="CoachChat" component={CoachChatScreen} options={{ title: 'Chat with your coach' }} />
       <Stack.Screen name="CoachSampleResults" component={CoachSampleResultsScreen} options={{ title: 'Sample assessment', headerRight: () => null }} />
       <Stack.Screen name="PerformancePractice" component={PerformancePracticeScreen} options={{ headerShown: false }} />
@@ -168,6 +171,12 @@ function AppStack({ routeName }) {
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} options={{ headerShown: false }} />
       <Stack.Screen name="TermsOfService" component={TermsOfServiceScreen} options={{ headerShown: false }} />
       <Stack.Screen name="Support" component={SupportScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ManageSupport" component={SupportScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="NewSupportTicket" component={NewSupportTicketScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="SupportConversation" component={SupportConversationScreen} options={{ headerShown: false }}
+        getId={({ params }) => `${params?.ticketId}:${!!params?.admin}`} />
+      <Stack.Screen name="SupportQuestion" component={SupportQuestionScreen} options={{ headerShown: false }}
+        getId={({ params }) => `${params?.ticketId}:${!!params?.admin}`} />
       <Stack.Screen name="CreateForumPost" component={CreateForumPostScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ForumThread" component={ForumThreadScreen} options={{ headerShown: false }} />
       <Stack.Screen name="ForumAdmin" component={ForumAdminScreen} options={{ headerShown: false }} />

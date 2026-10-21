@@ -41,7 +41,7 @@ export default function CoachProgressOverview({ navigation, initialMode = 'combi
           </PerformanceCard>
         </Pressable>)}
       </View>
-      <CohortComparison sections={report.overview.sections} onRetry={refresh} />
+      {mode !== 'coaching' && <CohortComparison sections={report.overview.sections} onRetry={refresh} />}
       {!report.overview.questions && <PerformanceCard>
         <Text style={[s.title, { color: colors.text }]}>No results yet</Text>
         <PerformanceButton title={mode === 'coaching' ? 'Open your coach' : mode === 'timed' ? 'Explore timed tests' : 'Start practising'}

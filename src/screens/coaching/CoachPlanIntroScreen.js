@@ -3,7 +3,7 @@ import { ActivityIndicator, Pressable, ScrollView, StatusBar, StyleSheet, View }
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
-import { coachRequest } from '../../services/coachingService';
+import { coachRequest, loadCoachInitialPlan, loadCoachHubCache, saveCoachHubCache, queueCoachPreferences } from '../../services/coachingService';
 import { buildInitialPlan } from '../../lib/coaching/initialPlan';
 import { Button, useCoachTheme } from '../../components/coaching/CoachUI';
 import { CoachText, TextLink, ds } from '../../components/coaching/CoachDashboardUI';
@@ -16,24 +16,31 @@ export default function CoachPlanIntroScreen({ route, navigation }) {
   const { colors, isDark } = useCoachTheme();
   const [data, setData] = useState(null), [error, setError] = useState(null), [busy, setBusy] = useState(false);
   const [attempt, setAttempt] = useState(0);
-  const openCoaching = useCallback(() => navigation.popTo('MainTabs', { screen: 'Coaching' }), [navigation]);
+  const openCoaching = useCallback(async (plan) => {
+    const cached = await loadCoachHubCache(user.id);
+    if (cached && plan?.profile) await saveCoachHubCache(user.id, { ...cached, profile: plan.profile,
+      baseline: { id: route.params.id, report: plan.report }, active: null,
+      settings: { ...cached.settings, plan_intro_session_id: route.params.id } }, { local: true });
+    if (navigation.isFocused()) navigation.popTo('MainTabs', { screen: 'Coaching' });
+    void coachRequest(user.id, 'hub').then((dashboard) => saveCoachHubCache(user.id, dashboard)).catch(() => {});
+  }, [navigation, user.id, route.params.id]);
   useEffect(() => {
     let cancelled = false;
     setError(null);
-    coachRequest(user.id, 'initial_plan', { id: route.params.id }).then((result) => {
+    loadCoachInitialPlan(user.id, route.params.id).then((result) => {
       if (cancelled) return;
-      if (result.seen) openCoaching();
+      if (result.seen) return openCoaching();
       else setData(result);
     }).catch((e) => { if (!cancelled) setError(e.message); });
     return () => { cancelled = true; };
   }, [user.id, route.params.id, attempt, openCoaching]);
   const plan = useMemo(() => buildInitialPlan(data?.profile, data?.report), [data]);
 
-  async function continueToCoaching() {
+  async function continueToCoaching(acknowledge = true) {
     setBusy(true); setError(null);
     try {
-      await coachRequest(user.id, 'acknowledge_plan', { id: route.params.id });
-      openCoaching();
+      if (acknowledge) await queueCoachPreferences(user.id, { planIntroSessionId: route.params.id });
+      await openCoaching(data);
     } catch (e) { setError(e.message); }
     finally { setBusy(false); }
   }
@@ -52,7 +59,7 @@ export default function CoachPlanIntroScreen({ route, navigation }) {
       {error && <View accessibilityRole="alert" style={[ds.card, { backgroundColor: colors.surface, borderColor: colors.border, gap: 12 }]}>
         <CoachText>{error}</CoachText>
         {!data && <Button title="Try again" onPress={() => setAttempt((value) => value + 1)} />}
-        <TextLink title="Open coaching" onPress={openCoaching} />
+        <TextLink title="Open coaching" disabled={busy} onPress={() => continueToCoaching(false)} />
       </View>}
       {data && <>
         <Reveal><CoachIntroHero compact title="Your first plan is ready.">

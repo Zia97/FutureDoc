@@ -57,31 +57,31 @@ function SnapshotRing({ value, color }) {
     return () => animation.stop();
   }, [target, reducedMotion, progress]);
   const circumference = 2 * Math.PI * 21;
-  return <View style={{ width: 50, height: 50 }} importantForAccessibility="no-hide-descendants">
-    <Svg width={50} height={50}>
+  return <View style={{ width: 40, height: 40 }} importantForAccessibility="no-hide-descendants">
+    <Svg width={40} height={40} viewBox="0 0 50 50">
       <Circle cx={25} cy={25} r={21} fill="none" stroke={hexToRgba(color, 0.15)} strokeWidth={4} />
       <AnimatedCircle cx={25} cy={25} r={21} fill="none" stroke={color} strokeWidth={4} strokeLinecap="round"
         strokeDasharray={`${circumference} ${circumference}`} strokeDashoffset={progress.interpolate({ inputRange: [0, 100], outputRange: [circumference, 0] })}
         rotation={-90} origin="25,25" />
     </Svg>
     <View style={[StyleSheet.absoluteFill, ds.center]}>
-      <Text style={{ color: colors.text, fontWeight: '800', fontSize: 13, fontVariant: ['tabular-nums'] }}>{value == null ? '—' : `${value}%`}</Text>
+      <Text style={{ color: colors.text, fontWeight: '800', fontSize: 11, fontVariant: ['tabular-nums'] }}>{value == null ? '—' : `${value}%`}</Text>
     </View>
   </View>;
 }
 
 export function ProgressOverview({ story, sections, onProgress, onAccuracyInfo, onSection }) {
   const { colors, gradients } = useCoachTheme();
-  return <LinearGradient colors={gradients.hero} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[ds.card, { borderColor: colors.border }]}>
-    <View style={ds.between}>
-      <CoachText style={[ds.heroTitle, { flex: 1 }]}>Running accuracy</CoachText>
+  return <LinearGradient colors={gradients.hero} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[ds.card, { borderColor: colors.border, padding: 12, borderRadius: 20 }]}>
+    <View style={[ds.between, { gap: 6 }]}>
+      <CoachText style={[ds.cardTitle, { flex: 1 }]}>Running accuracy</CoachText>
       <Pressable onPress={onAccuracyInfo} accessibilityRole="button" accessibilityLabel="About your running accuracy" hitSlop={6}
         style={{ minWidth: 40, minHeight: 40, alignItems: 'center', justifyContent: 'center' }}>
         <Ionicons name="information-circle-outline" size={22} color={colors.textSecondary} />
       </Pressable>
       <TextLink title="View progress" icon="arrow-forward" onPress={onProgress} style={{ minHeight: 32 }} />
     </View>
-    {story.improvement && <View style={[ds.row, { alignItems: 'center', marginTop: 12 }]}>
+    {story.improvement && <View style={[ds.row, { alignItems: 'center', marginTop: 6 }]}>
       <View style={{ flex: 1, gap: 4 }}>
         <CoachText style={{ fontWeight: '700' }}>{story.improvement.skill.label}</CoachText>
         <CoachText muted style={ds.caption}>{sectionName(story.improvement.skill.section)} · {story.improvement.mode === 'timed' ? 'Timed' : 'Practice'}</CoachText>
@@ -89,7 +89,7 @@ export function ProgressOverview({ story, sections, onProgress, onAccuracyInfo, 
       <View style={[ds.gainBadge, { backgroundColor: hexToRgba(colors.mint, 0.12) }]}
         accessible accessibilityLabel={`${story.improvement.delta} percentage point improvement in ${story.improvement.skill.label} ${story.improvement.mode} marks`}>
         <Ionicons name="trending-up" size={17} color={colors.mint} />
-        <Text style={{ color: colors.mint, fontSize: 20, fontWeight: '800' }}>+{story.improvement.delta}</Text>
+        <Text style={{ color: colors.mint, fontSize: 16, fontWeight: '800' }}>+{story.improvement.delta}</Text>
         <Text style={{ color: colors.mint, fontSize: 10, fontWeight: '700' }}>percentage points</Text>
       </View>
     </View>}
@@ -104,12 +104,12 @@ export function ProgressOverview({ story, sections, onProgress, onAccuracyInfo, 
   </LinearGradient>;
 }
 
-export function NextPracticeCard({ focus, resume, busy, locked, preview, onContinue, onLesson, onChange, onPlan }) {
+export function NextPracticeCard({ focus, resume, busy, locked, preview, onContinue, onLesson, onPlan }) {
   const section = COACH_SECTIONS.find((item) => item.id === (resume?.section ?? focus?.section));
   const light = '#DCE8FF';
-  return <LinearGradient colors={['#163C75', '#303E91', '#50308C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[ds.practiceCard, !onChange && { paddingBottom: 20 }]}>
+  return <LinearGradient colors={['#163C75', '#303E91', '#50308C']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={[ds.practiceCard, { paddingBottom: 20 }]}>
     <View style={[ds.between, { gap: 4 }]}>
-      <Text style={[ds.eyebrow, { color: '#BFD7FF', flex: 1 }]}>{resume ? 'PICK UP WHERE YOU LEFT OFF' : 'NEXT IN YOUR PLAN'}</Text>
+      <Text style={[ds.eyebrow, { color: '#BFD7FF', flex: 1 }]}>NEXT LESSON</Text>
       {!resume && <TextLink title="View plan" color={light} onPress={onPlan} style={{ minHeight: 32 }} />}
     </View>
     <View style={[ds.row, { marginTop: 8 }]}>
@@ -120,16 +120,14 @@ export function NextPracticeCard({ focus, resume, busy, locked, preview, onConti
       </View>
     </View>
     <Text style={ds.practiceReason}>{resume?.detail ?? focus?.reason ?? 'Your coach will choose questions around your performance.'}</Text>
+    {onLesson && !resume && <TextLink title="Review lesson" icon="book-outline" color={light} onPress={onLesson}
+      style={{ alignSelf: 'flex-start', marginTop: 6 }} />}
     <Pressable onPress={onContinue} disabled={busy} accessibilityRole="button" accessibilityState={{ disabled: busy }}
       style={({ pressed }) => [ds.continueButton, { opacity: busy ? 0.55 : pressed ? 0.85 : 1 }]}>
       <Text style={ds.continueText}>{busy ? 'Preparing your questions…' : resume?.kind === 'assessment' ? 'Continue mini mock' : resume ? 'Continue practice' : locked ? 'Continue with Pro' : 'Continue practice'}</Text>
       <Ionicons name={resume ? 'play' : locked ? 'lock-open-outline' : 'arrow-forward'} size={19} color="#213B79" />
     </Pressable>
     {preview && !resume && <Text style={[ds.practiceMeta, { textAlign: 'center', marginTop: 8 }]}>Your first coached practice is free</Text>}
-    {onChange && <View style={[ds.between, { gap: 8, marginTop: 3 }]}>
-      {onLesson && !resume ? <TextLink title="Review the technique" icon="book-outline" color={light} onPress={onLesson} style={{ flexShrink: 1 }} /> : <View />}
-      <TextLink title="Change practice" color={light} onPress={onChange} />
-    </View>}
   </LinearGradient>;
 }
 
@@ -195,19 +193,6 @@ export function CoachSheet({ visible, title, onClose, children }) {
   </Modal>;
 }
 
-export function SectionChoices({ value, onChange }) {
-  const { colors } = useCoachTheme();
-  return <View style={ds.snapshotGrid}>{COACH_SECTIONS.map((section) => {
-    const selected = value === section.id, accent = colors[section.color];
-    return <Pressable key={section.id} onPress={() => onChange(section.id)} accessibilityRole="radio" accessibilityState={{ checked: selected }}
-      style={[ds.sectionChoice, { borderColor: selected ? accent : colors.border, backgroundColor: selected ? hexToRgba(accent, 0.1) : colors.surface }]}>
-      <PremiumIcon name={section.icon} size={22} color={accent} />
-      <CoachText style={{ fontSize: 12, fontWeight: '600', lineHeight: 17, flex: 1 }}>{section.title}</CoachText>
-      {selected && <Ionicons name="checkmark-circle" size={16} color={accent} />}
-    </Pressable>;
-  })}</View>;
-}
-
 export function SkillEvidence({ skill, color, onLesson }) {
   const { colors } = useCoachTheme();
   return <View style={[ds.evidenceRow, { borderColor: colors.border }]}>
@@ -242,10 +227,9 @@ export const ds = StyleSheet.create({
   cardTitle: { fontSize: 17, lineHeight: 23, fontWeight: '700' },
   textLink: { minHeight: 44, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6 },
   linkText: { fontSize: 12, lineHeight: 17, fontWeight: '700', flexShrink: 1 },
-  gainBadge: { borderRadius: 15, paddingVertical: 8, paddingHorizontal: 11, alignItems: 'center', gap: 2 },
-  snapshotGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginTop: 14 },
-  snapshotRow: { flexDirection: 'row', gap: 7, marginTop: 14 },
-  snapshotTile: { flex: 1, alignItems: 'center', gap: 5, borderRadius: 15, paddingVertical: 8 },
+  gainBadge: { borderRadius: 12, paddingVertical: 4, paddingHorizontal: 8, alignItems: 'center', gap: 2 },
+  snapshotRow: { flexDirection: 'row', gap: 6, marginTop: 6 },
+  snapshotTile: { flex: 1, alignItems: 'center', gap: 2, borderRadius: 12, paddingVertical: 4 },
   sectionName: { fontSize: 11, lineHeight: 15, fontWeight: '700' },
   practiceCard: { borderRadius: 25, paddingHorizontal: 20, paddingTop: 16, paddingBottom: 6, overflow: 'hidden' },
   sectionIcon: { width: 44, height: 44, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.12)', alignItems: 'center', justifyContent: 'center' },
@@ -265,7 +249,6 @@ export const ds = StyleSheet.create({
   sheetHeader: { padding: 20, paddingTop: 14, flexDirection: 'row', alignItems: 'center', gap: 12 },
   sheetTitle: { fontSize: 22, lineHeight: 28, fontWeight: '800' },
   sheetContent: { paddingHorizontal: 20, paddingBottom: 18, gap: 18 },
-  sectionChoice: { flexBasis: '46%', flexGrow: 1, borderWidth: 1, borderRadius: 16, padding: 12, minHeight: 76, gap: 8, flexDirection: 'row', alignItems: 'center' },
   evidenceRow: { borderWidth: 1, borderRadius: 18, padding: 15 },
   barTrack: { height: 6, overflow: 'hidden', borderRadius: 6 },
   barFill: { height: '100%', borderRadius: 6 },

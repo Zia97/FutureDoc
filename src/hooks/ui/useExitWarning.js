@@ -1,5 +1,5 @@
+import Alert from '../../services/appAlert';
 import { useEffect } from 'react';
-import { Alert } from 'react-native';
 
 // ============================================================
 // Blocks accidental navigation away from a screen with a confirm

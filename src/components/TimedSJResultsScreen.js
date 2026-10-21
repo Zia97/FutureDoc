@@ -57,7 +57,7 @@ function deriveScenarioTitle(stem, fallback) {
   return slice;
 }
 
-export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test, onDone }) {
+export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, isTimed = true }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const { multiplier } = useTextSize();
@@ -148,7 +148,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
       correctAnswer: item.answer,
       userAnswer: selectedAnswer ?? 'Not answered',
       explanation: item.answeringReason,
-      isTimed: true,
+      isTimed,
     };
 
     return (
@@ -220,8 +220,9 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
           showsVerticalScrollIndicator={false}
           contentContainerStyle={resultsStyles.scrollContent}
         >
+          {summaryContent}
           <ScoreOverviewCard
-            pct={pct}
+            pct={scoreSummary?.accuracy ?? pct}
             correctCount={correctCount}
             partialCount={partialCount}
             incorrectCount={incorrectCount}
@@ -235,7 +236,7 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
             incorrectLabel="No mark"
           />
 
-          <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>UCAT SCORE</Text>
+          {showUcatScore && <><Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>UCAT SCORE</Text>
           <View style={sjStyles.ucatRow}>
             <SJScoreCard
               region="UK"
@@ -257,8 +258,9 @@ export default function TimedSJResultsScreen({ scenarios, getAnswer, flags, test
               colors={colors}
               isDark={isDark}
             />
-          </View>
+          </View></>}
 
+          {actions}
           <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>
             QUESTION BREAKDOWN
           </Text>

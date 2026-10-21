@@ -8,6 +8,7 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test:reports": "node --test scripts/question-report-fixes.test.mjs",
+    "test:support": "node --test scripts/support-conversations.test.mjs scripts/support-notifications.test.mjs",
     "test:database": "node scripts/database-growth-regression.mjs && node --test scripts/database-client-regression.test.mjs",
     "test:coaching": "node --test scripts/coaching*.test.mjs",
     "coaching:build-forms": "node scripts/build-coach-forms.mjs",

@@ -36,6 +36,8 @@ import { loadCoachHubCache, saveCoachHubCache, coachRequest } from '../../servic
 import { buildDashboardStory, sectionSnapshot } from '../../lib/coaching/dashboard';
 import { StatRing, SECTION_COLOURS } from '../../components/performance/PerformanceUI';
 import AppLogo from '../../components/AppLogo';
+import { useSupportNotifications } from '../../context/SupportNotificationsContext';
+import SupportUnreadBadge from '../../components/support/SupportUnreadBadge';
 
 function getGreeting() {
   const hour = new Date().getHours();
@@ -136,6 +138,7 @@ function CoachingProgressCard({ data, colors, isDark, onPress }) {
 }
 
 function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
+  const { profileUnread } = useSupportNotifications();
   const avatarTint = isDark ? '#BDE2FF' : colors.blue;
   const insets = useSafeAreaInsets();
 
@@ -183,9 +186,10 @@ function HomeHeader({ navigation, isDark, toggleDark, initial, colors }) {
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Open profile"
+          accessibilityLabel={profileUnread ? `Open profile, ${profileUnread} unread support tickets` : 'Open profile'}
         >
           <Text style={[styles.avatarText, { color: avatarTint }]}>{initial}</Text>
+          <SupportUnreadBadge count={profileUnread} dot floating />
         </TouchableOpacity>
       </View>
     </View>
@@ -224,8 +228,8 @@ export default function HomeScreen({ navigation }) {
           try {
             const latest = await coachRequest(user.id, 'hub');
             if (cancelled) return;
-            setCoachData(latest);
-            void saveCoachHubCache(user.id, latest).catch(() => {});
+            const merged = await saveCoachHubCache(user.id, latest);
+            if (!cancelled) setCoachData(merged);
           } catch (_) { /* Keep the locally cached coaching summary available offline. */ }
         }
       })();

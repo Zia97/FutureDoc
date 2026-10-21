@@ -32,7 +32,7 @@ import {
   resultsStyles,
 } from './premium/PremiumResultsUI';
 
-export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onDone }) {
+export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary, isTimed = true }) {
   const { isDark } = useTheme();
   const { multiplier } = useTextSize();
   const qScaled = {
@@ -101,7 +101,7 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
       userAnswer: selectedAnswer ?? 'Not answered',
       explanation: q.answeringReason,
       stimulusData: set.stimulus,
-      isTimed: true,
+      isTimed,
     };
 
     return (
@@ -169,8 +169,10 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
           showsVerticalScrollIndicator={false}
           contentContainerStyle={resultsStyles.scrollContent}
         >
+          {summaryContent}
           <ScoreOverviewCard
-            pct={pct}
+            pct={scoreSummary?.accuracy ?? pct}
+            scoreSubLabel={scoreSummary ? `${scoreSummary.earned} of ${scoreSummary.possible} marks` : undefined}
             correctCount={correctCount}
             incorrectCount={incorrectCount}
             unansweredCount={unansweredCount}
@@ -180,15 +182,16 @@ export default function TimedQRResultsScreen({ sets, getAnswer, flags, test, onD
             isDark={isDark}
           />
 
-          <UcatScoreCard
+          {showUcatScore && <UcatScoreCard
             scaledScore={scaledScore}
             uncertainty={`±${SCORE_UNCERTAINTY}`}
             disclaimer={`* ${UCAT_SCORE_DISCLAIMER_SHORT}`}
             accent={accent}
             colors={colors}
             isDark={isDark}
-          />
+          />}
 
+          {actions}
           <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>
             QUESTION BREAKDOWN
           </Text>

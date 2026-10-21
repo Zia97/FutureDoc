@@ -53,6 +53,7 @@ export async function submitQuestionReport({
 
   try {
     const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return { ok: false, error: 'Please sign in again to send your report.' };
     const diagnostics = await collectReportDiagnostics(section, isTimed, context);
     const numericTestId = testId == null ? null : Number(String(testId).match(/(?:^|test-)(\d+)$/)?.[1]);
     const payload = {
@@ -118,6 +119,7 @@ export async function submitLessonReport({
   const finalComment = `${partPrefix}${trimmedComment}`;
 
   const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { ok: false, error: 'Please sign in again to send your report.' };
 
   const { error } = await supabase.from('lesson_reports').insert({
     lesson_id: lessonId,

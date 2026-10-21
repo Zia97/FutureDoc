@@ -38,7 +38,7 @@ export function sectionSnapshot(profile, baseline, mode = 'all') {
 export function buildDashboardStory(profile, baseline, history = []) {
   const skills = profile?.skills ?? [];
   const plan = (profile?.plan ?? []).map((item) => {
-    const skill = skills.find((candidate) => candidate.id === item.skillId);
+    const skill = (profile?.planSkills ?? skills).find((candidate) => candidate.id === item.skillId);
     return { ...item, skill, reason: recommendationReason(skill), sectionTitle: sectionName(item.section) };
   });
   const focus = plan[0] ?? null;
@@ -81,5 +81,5 @@ export function resumeSummary(session, active) {
     return typeof answer !== 'object' || Object.keys(answer).length > 0;
   }).length;
   return { section, kind: active.kind, sectionTitle: active.kind === 'assessment' ? 'All four UCAT sections' : sectionName(section), title: active.kind === 'assessment' ? 'Your mini mock' : title || 'Your saved questions',
-    detail: questions.length ? `${answered} of ${questions.length} questions answered` : 'Your answers are saved. Pick up where you left off.' };
+    detail: questions.length ? `${answered} of ${questions.length} questions answered` : 'Your answers are saved.' };
 }

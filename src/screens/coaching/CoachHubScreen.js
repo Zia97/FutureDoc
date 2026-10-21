@@ -1,32 +1,35 @@
+import Alert from '../../services/appAlert';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, ScrollView, StatusBar, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, StatusBar, View } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useAuth } from '../../context/AuthContext';
-import { coachRequest, saveCoachCheckpoint, readCoachSessionCache, loadCoachHubCache, saveCoachHubCache, queueCoachPreferences, flushCoachPreferences, flushCoachCheckpoints, resetCoachProgress } from '../../services/coachingService';
+import { coachRequest, startCoachSession, readCoachSessionCache, loadCoachHubCache, saveCoachHubCache, queueCoachPreferences, flushCoachPreferences, flushCoachCheckpoints, resetCoachProgress } from '../../services/coachingService';
 import { flushPracticeAttempts } from '../../services/practiceAttemptQueue';
+import { ensureCoachQuestionBanks } from '../../services/practiceContentService';
+import { useNetwork } from '../../context/NetworkContext';
+import { useSubscription } from '../../context/SubscriptionContext';
+import { hasCoachProAccess } from '../../lib/coaching/access';
+import CoachQuestionSetup from '../../components/coaching/CoachQuestionSetup';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { getExamDate, NOT_BOOKED, setExamDate } from '../../services/onboardingFlags';
 import { validExamDate } from '../../lib/coaching/engine';
-import { buildDashboardStory, resumeSummary, sectionSnapshot, sectionName } from '../../lib/coaching/dashboard';
+import { buildDashboardStory, resumeSummary, sectionSnapshot } from '../../lib/coaching/dashboard';
 import ExamDateCalendar, { formatLocalISO, parseLocalISO } from '../../components/ExamDateCalendar';
 import { Button, useCoachTheme } from '../../components/coaching/CoachUI';
 import { Segments } from '../../components/performance/PerformanceUI';
-import { hexToRgba } from '../../theme/premiumTheme';
-import { CoachText, DashboardHeader, ProgressOverview, NextPracticeCard, CoachInsightCard, CoachChatDock, CoachSheet, SectionChoices, TextLink, ds } from '../../components/coaching/CoachDashboardUI';
+import { CoachText, DashboardHeader, ProgressOverview, NextPracticeCard, CoachInsightCard, CoachChatDock, CoachSheet, TextLink, ds } from '../../components/coaching/CoachDashboardUI';
 import CoachProgressDetails from '../../components/coaching/CoachProgressDetails';
 import CoachWelcome from '../../components/coaching/CoachWelcome';
 import CoachProgressOverview from '../../components/coaching/CoachProgressOverview';
-
-const PRACTICE_MODES = [
-  { id: 'practice', title: 'Untimed practice', icon: 'sparkles-outline' },
-  { id: 'review', title: 'Review mistakes', icon: 'refresh-outline' },
-  { id: 'timed_check', title: 'Timed practice', icon: 'timer-outline' },
-];
+import CoachProgressChart from '../../components/coaching/CoachProgressChart';
 
 export default function CoachHubScreen({ navigation, route }) {
   const { user } = useAuth();
+  const { isOnline } = useNetwork();
+  const subscription = useSubscription();
+  const hasPro = hasCoachProAccess(subscription);
   const { colors, isDark } = useCoachTheme();
   const insets = useSafeAreaInsets();
   const [area, setArea] = useState(route?.params?.area === 'progress' ? 'progress' : 'coach');
@@ -38,11 +41,25 @@ export default function CoachHubScreen({ navigation, route }) {
   }, [route?.params?.area, navigation]);
   const [data, setData] = useState(null), [error, setError] = useState(null), [busy, setBusy] = useState(false);
   const [samplePreviewEnabled, setSamplePreviewEnabled] = useState(false);
+  const [questionSetup, setQuestionSetup] = useState(null), [setupError, setSetupError] = useState(null);
+  const [setupRetry, setSetupRetry] = useState(0);
+  const [questionsReady, setQuestionsReady] = useState(false);
+  useEffect(() => {
+    let active = true;
+    setSetupError(null);
+    void ensureCoachQuestionBanks((progress) => {
+      if (!active) return;
+      setQuestionsReady(!!progress.ready);
+      setQuestionSetup(progress.ready ? null : progress);
+    }).catch(() => {
+      if (active) setSetupError('Connect to the internet and check that your device has space, then retry.');
+    });
+    return () => { active = false; };
+  }, [isOnline, setupRetry]);
   const [sheet, setSheet] = useState(null), [progressTab, setProgressTab] = useState('overview');
   const [examDate, setDate] = useState(''), [multiplier, setMultiplier] = useState(1), [datePickerOpen, setDatePickerOpen] = useState(false);
   const [savedDate, setSavedDate] = useState('');
-  const [section, setSection] = useState('vr'), [skill, setSkill] = useState(null), [mode, setMode] = useState('practice');
-  const [skillPickerOpen, setSkillPickerOpen] = useState(false), [activeSession, setActiveSession] = useState(null);
+  const [activeSession, setActiveSession] = useState(null);
   const loadVersion = useRef(0), sheetRef = useRef(sheet);
   sheetRef.current = sheet;
 
@@ -53,24 +70,27 @@ export default function CoachHubScreen({ navigation, route }) {
       if (__DEV__) void isPreviewEnabled('coach_sample').then(setSamplePreviewEnabled).catch(() => {});
       const [cached, local] = await Promise.all([loadCoachHubCache(user.id), getExamDate()]);
       if (version !== loadVersion.current) return;
-      if (cached) setData((current) => current ?? cached);
+      // A completed session can replace or invalidate the dashboard while this
+      // screen stays mounted underneath the assessment and first-plan screens.
+      setData(cached ?? { settings: { time_multiplier: 1 }, profile: null, baseline: null, active: null, history: [], previewAvailable: true });
       if (sheetRef.current !== 'settings') {
         const date = local === NOT_BOOKED ? '' : local || cached?.settings.exam_date || '';
         setDate(date); setSavedDate(date);
         if (cached) setMultiplier(Number(cached.settings.time_multiplier));
       }
-      await Promise.allSettled([flushCoachPreferences(user.id), flushPracticeAttempts(user.id), flushCoachCheckpoints(user.id)]);
+      void Promise.allSettled([flushCoachPreferences(user.id), flushPracticeAttempts(user.id), flushCoachCheckpoints(user.id)]);
       const next = await coachRequest(user.id, 'hub');
       if (version !== loadVersion.current) return;
-      setData(next); setError(null);
+      const merged = await saveCoachHubCache(user.id, next);
+      if (version !== loadVersion.current) return;
+      setData(merged); setError(null);
       if (sheetRef.current !== 'settings') {
-        const date = local === NOT_BOOKED ? '' : local || next.settings.exam_date || '';
+        const date = local === NOT_BOOKED ? '' : local || merged.settings.exam_date || '';
         setDate(date); setSavedDate(date);
-        setMultiplier(Number(next.settings.time_multiplier));
+        setMultiplier(Number(merged.settings.time_multiplier));
       }
-      void saveCoachHubCache(user.id, next).catch(() => {});
     } catch (e) { if (version === loadVersion.current) setError(e.message); }
-  }, [user?.id]);
+  }, [user?.id, isOnline]);
   useFocusEffect(useCallback(() => { load(); return () => { loadVersion.current++; }; }, [load]));
   useEffect(() => {
     let cancelled = false;
@@ -84,15 +104,14 @@ export default function CoachHubScreen({ navigation, route }) {
   const sections = useMemo(() => sectionSnapshot(data?.profile, data?.baseline), [data]);
   const resume = resumeSummary(activeSession, data?.active);
   const profile = data?.profile;
-  const locked = data?.pro === false && !data?.previewAvailable;
-  const chosenSkill = profile?.skills?.find((item) => item.id === skill);
+  const locked = !hasPro && !data?.previewAvailable;
   const selectedExamDate = parseLocalISO(examDate);
   const savedExamDate = parseLocalISO(savedDate);
   const today = new Date(); today.setHours(0, 0, 0, 0);
   const days = savedExamDate ? Math.round((savedExamDate - today) / 86400000) : null;
   const examLabel = days == null ? null : days < 0 ? 'Update your exam date in settings' : days === 0 ? 'Your exam is today' : days === 1 ? 'Your exam is tomorrow' : days + ' days to your exam';
 
-  function closeSheet() { setSheet(null); setDatePickerOpen(false); setSkillPickerOpen(false); }
+  function closeSheet() { setSheet(null); setDatePickerOpen(false); }
   function openSettings() {
     if (!data) return;
     setDate(savedDate); setMultiplier(Number(data.settings.time_multiplier)); setSheet('settings');
@@ -107,10 +126,13 @@ export default function CoachHubScreen({ navigation, route }) {
   function go(screen, params) { closeSheet(); navigation.navigate(screen, params); }
   function lesson(item) { if (item?.lessonRoute) go(item.lessonRoute, { lessonId: item.lessonId }); }
   async function start(kind, focus = {}) {
+    if (kind !== 'assessment' && subscription?.loading) return;
+    if (kind !== 'assessment' && locked) return go('Paywall');
+    if (kind !== 'assessment' && !questionsReady) return;
     closeSheet(); setBusy(true);
     try {
-      const result = await coachRequest(user.id, 'start', { kind, ...focus });
-      await saveCoachCheckpoint(user.id, result.session, false);
+      const result = await startCoachSession(user.id, kind, focus, subscription);
+      setData(await loadCoachHubCache(user.id));
       navigation.navigate('CoachSession', { id: result.session.id });
     } catch (e) { if (e.code === 'pro_required') navigation.navigate('Paywall'); else Alert.alert('Your coach', e.message); }
     finally { setBusy(false); }
@@ -137,11 +159,7 @@ export default function CoachHubScreen({ navigation, route }) {
       await setExamDate(date ?? NOT_BOOKED, false);
       await queueCoachPreferences(user.id, { examDate: date, timeMultiplier: multiplier });
       setSavedDate(date ?? '');
-      if (data) {
-        const updated = { ...data, settings: { ...data.settings, exam_date: date, time_multiplier: multiplier } };
-        setData(updated);
-        void saveCoachHubCache(user.id, updated).catch(() => {});
-      }
+      setData(await loadCoachHubCache(user.id));
       closeSheet();
     } catch (e) { Alert.alert('Could not save', e.message); }
     finally { setBusy(false); }
@@ -173,7 +191,8 @@ export default function CoachHubScreen({ navigation, route }) {
     </View>
     {area === 'progress' ? <CoachProgressOverview navigation={navigation}
       onHistory={profile ? () => openProgress('history') : null} /> : <ScrollView style={ds.coachScroll} showsVerticalScrollIndicator={false} contentContainerStyle={ds.content}>
-      {error && <View style={[ds.option, { backgroundColor: colors.surfaceSoft, borderColor: colors.border }]}>
+      {questionSetup && <CoachQuestionSetup progress={questionSetup} error={setupError} onRetry={() => setSetupRetry((value) => value + 1)} />}
+      {error && !data && <View style={[ds.option, { backgroundColor: colors.surfaceSoft, borderColor: colors.border }]}>
         <View style={{ flex: 1 }}><CoachText style={{ fontSize: 12, fontWeight: '700' }}>{data ? 'Showing your saved progress' : 'Your coach could not connect'}</CoachText>
           <CoachText muted style={ds.caption}>{data ? 'Your plan is still here. Reconnect to update it.' : error}</CoachText></View>
         <TextLink title="Retry" onPress={load} />
@@ -186,14 +205,14 @@ export default function CoachHubScreen({ navigation, route }) {
           <TextLink title="How coaching works" icon="help-circle-outline" onPress={() => setSheet('how')} style={{ alignSelf: 'flex-start' }} />
           {__DEV__ && samplePreviewEnabled && !data.active && <Button title="Developer: preview sample results" secondary disabled={busy} onPress={previewSample} />}
         </> : <>
+          <CoachProgressChart history={profile.overallHistory} />
           <ProgressOverview story={story} sections={sections} onProgress={() => openProgress()}
             onSection={(section) => go('CoachSectionProgress', { section, mode: 'combined' })}
             onAccuracyInfo={showAccuracyInfo} />
-          <NextPracticeCard focus={story.focus} resume={resume} busy={busy} locked={locked} preview={data.previewAvailable && data.pro === false}
+          <NextPracticeCard focus={story.focus} resume={resume} busy={busy || (!data.active && (subscription?.loading || (!locked && !questionsReady)))} locked={locked} preview={data.previewAvailable && !hasPro}
             onContinue={() => practise('practice', story.focus ? { skillId: story.focus.skillId } : {})}
-            onLesson={story.focus?.lessonRoute ? () => lesson(story.focus) : null} onChange={() => setSheet('practice')} onPlan={() => openProgress('plan')} />
+            onLesson={story.focus?.lessonRoute ? () => lesson(story.focus) : null} onPlan={() => openProgress('plan')} />
           <CoachInsightCard story={story} strengths={profile.strengths} weaknesses={profile.weaknesses} onDetails={() => openProgress()} onHow={() => setSheet('how')} />
-          {data.pro === null && <CoachText muted style={ds.caption}>Reconnect to confirm Pro access. Your saved results remain available.</CoachText>}
         </>}
       {profile && <CoachChatDock onPress={() => go('CoachChat')} remaining={data.chatRemaining} />}
     </ScrollView>}
@@ -204,7 +223,7 @@ export default function CoachHubScreen({ navigation, route }) {
       </View>
     </View>}
 
-    <CoachSheet visible={!!sheet} title={sheet === 'settings' ? 'Coach settings' : sheet === 'practice' ? 'Choose your practice' : sheet === 'how' ? 'How coaching works' : 'Your progress'} onClose={closeSheet}>
+    <CoachSheet visible={!!sheet} title={sheet === 'settings' ? 'Coach settings' : sheet === 'how' ? 'How coaching works' : 'Your progress'} onClose={closeSheet}>
       {sheet === 'how' && <View style={{ gap: 16 }}>
         <View style={{ gap: 5 }}><CoachText style={ds.cardTitle}>Start with a mini mock</CoachText>
           <CoachText muted>Your timed assessment gives us a first picture of what you already do well and what to practise next.</CoachText></View>
@@ -239,36 +258,7 @@ export default function CoachHubScreen({ navigation, route }) {
           <TextLink title="Delete coaching data" icon="trash-outline" color={colors.red} disabled={busy} onPress={confirmReset} style={{ alignSelf: 'flex-start' }} />
         </View>
       </>}
-      {sheet === 'practice' && <>
-        <View><CoachText style={ds.cardTitle}>1. Choose a section</CoachText>
-          <SectionChoices value={section} onChange={(value) => { setSection(value); setSkill(null); setSkillPickerOpen(false); }} /></View>
-        <View style={{ gap: 10 }}>
-          <CoachText style={ds.cardTitle}>2. Pick a question type</CoachText>
-          <Pressable onPress={() => setSkillPickerOpen(!skillPickerOpen)} accessibilityRole="button" accessibilityState={{ expanded: skillPickerOpen }}
-            style={[ds.option, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-            <CoachText style={{ flex: 1 }}>{chosenSkill?.label ?? 'All question types'}</CoachText>
-            <Ionicons name={skillPickerOpen ? 'chevron-up' : 'chevron-down'} size={18} color={colors.textMuted} />
-          </Pressable>
-          {skillPickerOpen && [{ id: null, label: 'All question types' }, ...(profile?.skills ?? []).filter((item) => item.section === section)].map((item) =>
-            <Pressable key={item.id ?? 'all'} onPress={() => { setSkill(item.id); setSkillPickerOpen(false); }} accessibilityRole="radio" accessibilityState={{ checked: skill === item.id }}
-              style={[ds.option, { borderColor: skill === item.id ? colors.blue : colors.border, backgroundColor: colors.surface }]}>
-              <CoachText style={{ flex: 1, fontSize: 13 }}>{item.label}</CoachText>
-              {item.accuracy != null && <CoachText muted style={ds.caption}>{item.accuracy}%</CoachText>}
-              {skill === item.id && <Ionicons name="checkmark-circle" color={colors.blue} size={19} />}
-            </Pressable>)}
-        </View>
-        <CoachText style={ds.cardTitle}>3. How would you like to practise?</CoachText>
-        {PRACTICE_MODES.map((item) => <Pressable key={item.id} onPress={() => setMode(item.id)} accessibilityRole="radio" accessibilityState={{ checked: mode === item.id }}
-          style={[ds.option, { backgroundColor: mode === item.id ? colors.surfaceSoft : colors.surface, borderColor: mode === item.id ? colors.blue : colors.border }]}>
-          <Ionicons name={item.icon} size={23} color={colors.blue} />
-          <CoachText style={{ flex: 1, fontWeight: '700' }}>{item.title}</CoachText>
-          <Ionicons name={mode === item.id ? 'radio-button-on' : 'radio-button-off'} size={20} color={mode === item.id ? colors.blue : colors.textMuted} />
-        </Pressable>)}
-        {data?.active && <CoachText muted>Finish your current practice before switching focus. You can continue it below.</CoachText>}
-        <Button title={data?.active ? 'Resume current practice' : locked ? 'Continue with Pro' : 'Start ' + sectionName(section) + ' practice'}
-          disabled={busy} onPress={() => practise(mode, skill ? { skillId: skill } : { section })} />
-      </>}
-      {sheet === 'progress' && profile && <CoachProgressDetails data={data} story={story} tab={progressTab} onTabChange={setProgressTab}
+      {sheet === 'progress' && profile && <CoachProgressDetails data={{ ...data, pro: hasPro }} story={story} tab={progressTab} onTabChange={setProgressTab}
         onAccuracyInfo={showAccuracyInfo}
         onSection={(section) => go('CoachSectionProgress', { section, mode: 'combined' })}
         onSkill={(skillId) => go('PerformanceSkill', { skillId, mode: 'combined' })}

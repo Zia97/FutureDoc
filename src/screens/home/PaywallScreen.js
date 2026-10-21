@@ -1,7 +1,7 @@
+import Alert from '../../services/appAlert';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Platform,
   ScrollView,
   StatusBar,

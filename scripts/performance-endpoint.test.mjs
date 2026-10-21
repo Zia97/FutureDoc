@@ -41,7 +41,15 @@ function endpoint({ premium = false, secret = null, subscriber = {}, revenueCatS
     } })),
   };
   const client = {
-    rpc: async (name) => { if (name === 'coach_evidence_revision') return { data: 'fixture-revision', error: null }; assert.equal(name, 'get_performance_cohort'); if (cohortThrows) throw new Error('offline'); return { data: { rows: [] }, error: cohortError }; },
+    // PostgREST builders are PromiseLike: they expose then(), but not catch().
+    rpc: (name) => ({ then(resolve, reject) {
+      return Promise.resolve().then(() => {
+        if (name === 'coach_evidence_revision') return { data: 'fixture-revision', error: null };
+        assert.equal(name, 'get_performance_cohort');
+        if (cohortThrows) throw new Error('offline');
+        return { data: { rows: [] }, error: cohortError };
+      }).then(resolve, reject);
+    } }),
     auth: { getUser: async (token) => ({ data: { user: ['alice', 'bob'].includes(token) ? { id: token } : null }, error: null }) },
     from(table) {
       const query = { table, filters: [], limit: Infinity, single: false }; queries.push(query);

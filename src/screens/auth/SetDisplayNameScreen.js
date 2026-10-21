@@ -1,3 +1,4 @@
+import Alert from '../../services/appAlert';
 import React, { useState } from 'react';
 import {
   View,
@@ -5,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,

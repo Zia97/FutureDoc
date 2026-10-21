@@ -1,7 +1,7 @@
+import Alert from '../../services/appAlert';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   Image,
   KeyboardAvoidingView,

@@ -1,5 +1,6 @@
+import Alert from '../../services/appAlert';
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Alert, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking, Platform } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
 
 export default function ForceUpdateScreen({ storeUrl }) {

@@ -1,39 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { db } from '../../lib/dbQueries';
-import { getCached, saveCache } from '../../services/contentCache';
-import { withRetry } from '../../lib/withRetry';
+import { getCached } from '../../services/contentCache';
+import { syncPracticeContent } from '../../services/practiceContentService';
+import { mapSets } from '../../lib/practiceContent';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { flattenQRSets } from '../../lib/flattenQuestions';
 
 const SECTION = 'quantitative_reasoning';
-
-function mapSets(data, isPreview = false) {
-  const seen = new Set();
-  const unique = [];
-  for (const s of data) {
-    if (seen.has(s.id)) continue;
-    seen.add(s.id);
-    unique.push(s);
-  }
-  return unique.map((s) => ({
-    id: s.id,
-    setId: s.id,
-    title: s.title,
-    isFree: isPreview ? true : (s.is_free ?? s.isFree ?? false),
-    isPreview,
-    stimulus: s.stimulus,
-    questions: [...s.quantitative_reasoning_questions]
-      .sort((a, b) => a.order_index - b.order_index)
-      .map((q) => ({
-        questionId: q.id,
-        questionText: q.question_text,
-        options: q.options,
-        answer: q.correct_answer,
-        answeringReason: q.answer_reason,
-        difficulty: q.difficulty ?? 'normal',
-      })),
-  }));
-}
 
 export function useQuantitativeReasoningSets() {
   const [sets, setSets] = useState([]);
@@ -69,37 +41,16 @@ export function useQuantitativeReasoningSets() {
       setLoading(false);
     }
 
-    let versionRow;
     try {
-      versionRow = await withRetry(() => db.getContentVersion(SECTION));
-    } catch (versionError) {
-      if (!hasValidCache) setError(versionError);
-      setLoading(false);
-      return;
-    }
-
-    if (hasValidCache && cached.version === versionRow.version) {
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
-    if (!isMounted.current) return;
-    setSyncing(true);
-    setSyncProgress({ loaded: 0, total: null });
-
-    try {
-      let pagesLoaded = 0;
-      const raw = await db.fetchAllQRSetsPaginated(() => {
-        pagesLoaded++;
-        if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+      const fresh = await syncPracticeContent(SECTION, (progress) => {
+        if (!isMounted.current) return;
+        setSyncing(true);
+        setSyncProgress(progress);
       });
-      const fresh = mapSets(raw);
       if (isMounted.current) {
-        setSets(fresh);
+        setSets(fresh.data);
         setError(null);
       }
-      await saveCache(SECTION, versionRow.version, fresh);
     } catch (err) {
       if (!hasValidCache && isMounted.current) setError(err);
     } finally {

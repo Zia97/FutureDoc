@@ -210,7 +210,7 @@ export function FlagButton({ active, onPress, accent }) {
   );
 }
 
-export function PremiumPauseModal({ visible, onResume, onExit }) {
+export function PremiumPauseModal({ visible, onResume, onExit, resumeLabel = 'Resume Test', showExamReminder = true }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
 
@@ -249,12 +249,12 @@ export function PremiumPauseModal({ visible, onResume, onExit }) {
 
             <View style={[styles.pauseDivider, { backgroundColor: hexToRgba(colors.blue, isDark ? 0.18 : 0.14) }]} />
 
-            <View style={[styles.pauseReminderBox, { backgroundColor: hexToRgba(colors.amber, isDark ? 0.1 : 0.08), borderColor: hexToRgba(colors.amber, 0.32) }]}>
+            {showExamReminder && <View style={[styles.pauseReminderBox, { backgroundColor: hexToRgba(colors.amber, isDark ? 0.1 : 0.08), borderColor: hexToRgba(colors.amber, 0.32) }]}>
               <View style={[styles.pauseReminderDot, { backgroundColor: colors.amber }]} />
               <Text style={[styles.pauseReminder, { color: colors.textSecondary }]}>
                 You won't be able to pause during the real UCAT exam.
               </Text>
-            </View>
+            </View>}
 
             <TouchableOpacity
               style={styles.resumeButtonWrap}
@@ -269,7 +269,7 @@ export function PremiumPauseModal({ visible, onResume, onExit }) {
                 style={styles.resumeButton}
               >
                 <PremiumIcon name="play" size={17} color="#ffffff" />
-                <Text style={styles.resumeButtonText}>Resume Test</Text>
+                <Text style={styles.resumeButtonText}>{resumeLabel}</Text>
               </LinearGradient>
             </TouchableOpacity>
             {onExit && <TouchableOpacity onPress={onExit} accessibilityRole="button" style={{ padding: 16, alignItems: 'center' }}>

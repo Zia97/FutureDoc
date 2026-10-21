@@ -31,6 +31,10 @@ test('private SQL inbox, historical evidence, atomic triage, AI evidence preserv
       insert into user_profiles values('${admin}',true),('${student}',false);`);
     await db.exec(migration);
     await db.exec(original('20261020180000_admin_report_deletion.sql'));
+    // Exercise the existing triage/deletion workflows with support ticket
+    // triggers installed, as they are in production after the inbox rollout.
+    await db.exec(original('20261020200000_support_conversations.sql'));
+    await db.exec(original('20261020201000_support_question_viewer.sql'));
     const originalPolicies=(await db.query("select count(*)::int n from pg_policies where tablename='question_reports'")).rows[0].n;
     assert.equal(originalPolicies,1,'existing student report policy remains intact');
     const insertQuestion=async(mode=false,section='qr',state='new',created='2026-04-10T08:00:00Z')=>(await db.query(

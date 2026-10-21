@@ -111,7 +111,8 @@ Deno.serve(async (req) => {
     const [content, attempts, pro, cohortResult] = await Promise.all([
       catalogue(client), readAttempts(client, user.id, new Date(now).toISOString()),
       body.includeDetails === true ? hasPro(client, user.id) : Promise.resolve(false),
-      client.rpc('get_performance_cohort').catch(() => ({ error: true })),
+      // PostgREST queries are thenables, not native Promises with catch().
+      Promise.resolve(client.rpc('get_performance_cohort')).catch(() => ({ error: true })),
     ]);
     // A temporarily unavailable cohort must not hide the student's own report.
     const cohort = cohortResult.error || !Array.isArray(cohortResult.data?.rows) ? { status: 'unavailable' } : cohortResult.data;

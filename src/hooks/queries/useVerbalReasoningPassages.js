@@ -1,31 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { db } from '../../lib/dbQueries';
-import { getCached, saveCache } from '../../services/contentCache';
-import { withRetry } from '../../lib/withRetry';
+import { getCached } from '../../services/contentCache';
+import { syncPracticeContent } from '../../services/practiceContentService';
+import { mapPassages } from '../../lib/practiceContent';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { flattenVRPassages } from '../../lib/flattenQuestions';
 
 const SECTION = 'verbal_reasoning';
-
-function mapPassages(data, isPreview = false) {
-  return data.map((p) => ({
-    id: p.id,
-    title: p.title,
-    isFree: isPreview ? true : (p.is_free ?? p.isFree ?? false),
-    isPreview,
-    resource: p.body,
-    questions: [...p.verbal_reasoning_questions]
-      .sort((a, b) => a.order_index - b.order_index)
-      .map((q) => ({
-        questionId: q.id,
-        questionText: q.question_text,
-        options: q.options,
-        answer: q.correct_answer,
-        answeringReason: q.answer_reason,
-        difficulty: q.difficulty ?? 'normal',
-      })),
-  }));
-}
 
 export function useVerbalReasoningPassages() {
   const [passages, setPassages] = useState([]);
@@ -61,37 +41,16 @@ export function useVerbalReasoningPassages() {
       setLoading(false);
     }
 
-    let versionRow;
     try {
-      versionRow = await withRetry(() => db.getContentVersion(SECTION));
-    } catch (versionError) {
-      if (!hasValidCache) setError(versionError);
-      setLoading(false);
-      return;
-    }
-
-    if (hasValidCache && cached.version === versionRow.version) {
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
-    if (!isMounted.current) return;
-    setSyncing(true);
-    setSyncProgress({ loaded: 0, total: null });
-
-    try {
-      let pagesLoaded = 0;
-      const raw = await db.fetchAllVRPassagesPaginated(() => {
-        pagesLoaded++;
-        if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+      const fresh = await syncPracticeContent(SECTION, (progress) => {
+        if (!isMounted.current) return;
+        setSyncing(true);
+        setSyncProgress(progress);
       });
-      const fresh = mapPassages(raw);
       if (isMounted.current) {
-        setPassages(fresh);
+        setPassages(fresh.data);
         setError(null);
       }
-      await saveCache(SECTION, versionRow.version, fresh);
     } catch (err) {
       if (!hasValidCache && isMounted.current) setError(err);
     } finally {

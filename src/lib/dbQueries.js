@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import { createBoundedAsyncCache } from './boundedAsyncCache';
-const contentVersions = createBoundedAsyncCache({ ttlMs: 60_000, maxEntries: 1 });
+let contentVersions = createBoundedAsyncCache({ ttlMs: 60_000, maxEntries: 1 });
 
 class DatabaseService {
 
@@ -13,14 +13,16 @@ class DatabaseService {
    * Used to determine whether the local content cache is stale and needs refreshing.
    * @param {string} section - e.g. 'verbal_reasoning', 'decision_making'
    */
-  async getContentVersion(section) {
-    const rows = await this.getAllContentVersions();
+  async getContentVersion(section, options) {
+    const rows = await this.getAllContentVersions(options);
     const row = rows.find((entry) => entry.section === section);
     if (!row) throw new Error('Content version unavailable');
     return { version: row.version };
   }
 
-  async getAllContentVersions() {
+  async getAllContentVersions({ force = false } = {}) {
+    // A post-download check must not join a query started before that download.
+    if (force) contentVersions = createBoundedAsyncCache({ ttlMs: 60_000, maxEntries: 1 });
     return contentVersions.get('all', async () => {
       const { data, error } = await supabase.from('content_versions').select('section, version');
       if (error) throw error;

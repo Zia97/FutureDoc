@@ -1,3 +1,4 @@
+import Alert from '../../services/appAlert';
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -5,7 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ActivityIndicator,
   Switch,
   Modal,
@@ -23,6 +23,7 @@ import { useSubscription } from '../../context/SubscriptionContext';
 import { isPreviewEnabled, setPreviewEnabled } from '../../dev/previewStore';
 import { forceContentVersionCheck } from '../../services/contentUpdateService';
 import { getNotificationPreferences, setNotificationsEnabled } from '../../services/notificationService';
+import { useSupportNotifications } from '../../context/SupportNotificationsContext';
 import {
   AppHeader,
   GlassMenuCard,
@@ -63,6 +64,7 @@ export default function ProfileScreen() {
   const [notificationsEnabled, setNotificationsEnabledState] = useState(null);
   const [notificationLoadError, setNotificationLoadError] = useState(false);
   const [notificationSaving, setNotificationSaving] = useState(false);
+  const { counts: supportCounts } = useSupportNotifications();
 
   useEffect(() => {
     let active = true;
@@ -157,7 +159,7 @@ export default function ProfileScreen() {
       const staleCount = await forceContentVersionCheck();
       if (staleCount > 0) {
         Alert.alert(
-          'Content Updated',
+          'New Content Available',
           `${staleCount} section${staleCount > 1 ? 's have' : ' has'} new content. Navigate to any section to load the latest questions.`,
         );
       } else {
@@ -479,12 +481,19 @@ export default function ProfileScreen() {
         <Animated.View style={[styles.section, supportAnim]}>
           <Text style={[styles.sectionHeading, { color: colors.text }]}>Support</Text>
           <GlassMenuCard
-            title="Contact Support"
-            description="Send us a message about a bug, billing issue, or anything else."
+            title="Support"
+            unreadCount={supportCounts.unread}
             icon="shield-heart"
             accent={colors.cyan}
             onPress={() => navigation.navigate('Support')}
           />
+          {supportCounts?.is_admin && <GlassMenuCard
+            title="Manage support"
+            icon="notes"
+            accent={colors.cyan}
+            unreadCount={supportCounts.admin_unread}
+            onPress={() => navigation.navigate('ManageSupport')}
+          />}
         </Animated.View>
 
         {/* Legal */}

@@ -1,31 +1,11 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { db } from '../../lib/dbQueries';
-import { getCached, saveCache } from '../../services/contentCache';
-import { withRetry } from '../../lib/withRetry';
+import { getCached } from '../../services/contentCache';
+import { syncPracticeContent } from '../../services/practiceContentService';
+import { mapScenarios } from '../../lib/practiceContent';
 import { isPreviewEnabled } from '../../dev/previewStore';
 import { flattenSJScenarios } from '../../lib/flattenQuestions';
 
 const SECTION = 'situational_judgement';
-
-function mapScenarios(data, isPreview = false) {
-  return data.map((s) => ({
-    id: s.id,
-    scenarioId: s.id,
-    isFree: isPreview ? true : (s.is_free ?? s.isFree ?? false),
-    isPreview,
-    resource: s.body,
-    questions: [...s.situational_judgement_questions]
-      .sort((a, b) => a.order_index - b.order_index)
-      .map((q) => ({
-        questionId: q.id,
-        questionText: q.question_text,
-        answer: q.correct_answer,
-        answeringReason: q.answer_reason,
-        labelSet: q.label_set ?? s.label_set,
-        difficulty: q.difficulty ?? 'normal',
-      })),
-  }));
-}
 
 export function useSituationalJudgementScenarios() {
   const [scenarios, setScenarios] = useState([]);
@@ -61,37 +41,16 @@ export function useSituationalJudgementScenarios() {
       setLoading(false);
     }
 
-    let versionRow;
     try {
-      versionRow = await withRetry(() => db.getContentVersion(SECTION));
-    } catch (versionError) {
-      if (!hasValidCache) setError(versionError);
-      setLoading(false);
-      return;
-    }
-
-    if (hasValidCache && cached.version === versionRow.version) {
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
-    if (!isMounted.current) return;
-    setSyncing(true);
-    setSyncProgress({ loaded: 0, total: null });
-
-    try {
-      let pagesLoaded = 0;
-      const raw = await db.fetchAllSJScenariosPaginated(() => {
-        pagesLoaded++;
-        if (isMounted.current) setSyncProgress({ loaded: pagesLoaded, total: null });
+      const fresh = await syncPracticeContent(SECTION, (progress) => {
+        if (!isMounted.current) return;
+        setSyncing(true);
+        setSyncProgress(progress);
       });
-      const fresh = mapScenarios(raw);
       if (isMounted.current) {
-        setScenarios(fresh);
+        setScenarios(fresh.data);
         setError(null);
       }
-      await saveCache(SECTION, versionRow.version, fresh);
     } catch (err) {
       if (!hasValidCache && isMounted.current) setError(err);
     } finally {

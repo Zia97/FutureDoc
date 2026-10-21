@@ -1,3 +1,4 @@
+import Alert from '../services/appAlert';
 import { useState, useMemo } from 'react';
 import {
   View,
@@ -6,7 +7,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   StatusBar,
-  Alert,
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -28,6 +28,7 @@ export default function TimedTestReviewScreen({
   timerDisplay,
   isUrgent,
   title = 'Situational Judgement',
+  reviewLabel = 'END OF TEST REVIEW',
   endButtonLabel = 'End Test',
   endConfirmTitle = 'End Exam',
   endConfirmButtonLabel = 'End Exam',
@@ -111,12 +112,12 @@ export default function TimedTestReviewScreen({
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
-            <Text style={[styles.headerEyebrow, { color: colors.blue }]}>END OF TEST REVIEW</Text>
+            <Text style={[styles.headerEyebrow, { color: colors.blue }]}>{reviewLabel}</Text>
             <Text style={[styles.headerTitle, { color: colors.text }]} numberOfLines={1}>
               {title}
             </Text>
           </View>
-          <View
+          {timerDisplay && <View
             style={[
               styles.timerPill,
               {
@@ -127,7 +128,7 @@ export default function TimedTestReviewScreen({
           >
             <PremiumIcon name="timer" size={15} color={timerColor} strokeWidth={2.3} />
             <Text style={[styles.timerText, { color: timerColor }]}>{timerDisplay}</Text>
-          </View>
+          </View>}
         </View>
 
         {/* Stat cards */}

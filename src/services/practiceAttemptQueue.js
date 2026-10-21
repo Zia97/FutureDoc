@@ -8,9 +8,11 @@ const inFlight = new Map();
 export async function queuePracticeAttempt(payload) {
   const id = newCoachRequestId();
   await AsyncStorage.setItem(`${PREFIX}${payload.user_id}:${id}`, JSON.stringify({ ...payload, id, answered_at: new Date().toISOString() }));
-  await flushPracticeAttempts(payload.user_id);
-  // Close the small race between a drain's final empty scan and its completion.
-  if (await AsyncStorage.getItem(`${PREFIX}${payload.user_id}:${id}`)) return flushPracticeAttempts(payload.user_id);
+  // The UI waits only for the durable device write, never for an upload.
+  void flushPracticeAttempts(payload.user_id).then(async () => {
+    // An attempt may have arrived during a drain's final empty scan.
+    if (await AsyncStorage.getItem(`${PREFIX}${payload.user_id}:${id}`)) await flushPracticeAttempts(payload.user_id);
+  }).catch(() => {});
 }
 export function flushPracticeAttempts(userId) {
   if (!userId) return Promise.resolve();

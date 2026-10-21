@@ -3,12 +3,15 @@ import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useSupportNotifications } from '../context/SupportNotificationsContext';
+import SupportUnreadBadge from './support/SupportUnreadBadge';
 
 // Top-right header button — circular avatar with the user's initial → Profile.
 export default function HeaderAuthButton() {
   const navigation = useNavigation();
   const { user } = useAuth();
   const { theme: t } = useTheme();
+  const { profileUnread } = useSupportNotifications();
 
   const initial = user?.email?.[0]?.toUpperCase() ?? '?';
 
@@ -17,8 +20,11 @@ export default function HeaderAuthButton() {
       style={[styles.profileButton, { backgroundColor: t.bgCard, borderColor: t.border }]}
       onPress={() => navigation.navigate('Profile')}
       activeOpacity={0.8}
+      accessibilityRole="button"
+      accessibilityLabel={profileUnread ? `Open profile, ${profileUnread} unread support tickets` : 'Open profile'}
     >
       <Text style={[styles.profileInitial, { color: t.accent }]}>{initial}</Text>
+      <SupportUnreadBadge count={profileUnread} dot floating />
     </TouchableOpacity>
   );
 }

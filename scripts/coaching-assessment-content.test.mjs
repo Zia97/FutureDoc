@@ -99,13 +99,13 @@ test('private questions grade correctly, feed canonical skill evidence and hide 
 test('ordinary coached practice continues loading the shared practice bank', async () => {
   const content = contentModule(), calls = [];
   const tag = { id: 'practice-question', parentId: 'practice-passage', section: 'vr', answer: 'A' };
-  const client = { from(table) { calls.push(table); return { select() { return this; }, async in(_column, ids) {
+  const client = { from(table) { calls.push(table); if (table === 'content_versions') return { select: async () => ({ data: [{ section: 'verbal_reasoning', version: 3 }], error: null }) }; return { select() { return this; }, async in(_column, ids) {
     assert.deepEqual(Array.from(ids), ['practice-passage']);
     return { error: null, data: [{ id: 'practice-passage', title: 'Practice', body: 'A passage', verbal_reasoning_questions: [
       { id: 'practice-question', order_index: 1, question_text: 'A question', correct_answer: 'A', options: ['A', 'B'], answer_reason: 'Reason' },
     ] }] };
   } }; } };
   const questions = await content.loadQuestions(client, [tag]);
-  assert.equal(calls[0], 'verbal_reasoning_passages'); assert.equal(questions[0].context, 'A passage');
+  assert.deepEqual(calls, ['content_versions', 'verbal_reasoning_passages', 'content_versions']); assert.equal(questions[0].bankVersion, 3); assert.equal(questions[0].context, 'A passage');
   assert.equal(questions[0].tag.answer, 'A');
 });

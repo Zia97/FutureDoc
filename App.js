@@ -7,7 +7,9 @@ import { ThemeProvider } from './src/context/ThemeContext';
 import { TextSizeProvider } from './src/context/TextSizeContext';
 import { SubscriptionProvider } from './src/context/SubscriptionContext';
 import { NetworkProvider } from './src/context/NetworkContext';
+import { SupportNotificationsProvider } from './src/context/SupportNotificationsContext';
 import ErrorBoundary from './src/components/ErrorBoundary';
+import AppAlertHost from './src/components/AppAlertHost';
 import AppNavigator from './src/navigation/AppNavigator';
 import * as Sentry from '@sentry/react-native';
 
@@ -39,10 +41,13 @@ export default Sentry.wrap(function App() {
         <ErrorBoundary>
           <NetworkProvider>
             <ThemeProvider>
+              <AppAlertHost />
               <TextSizeProvider>
                 <AuthProvider>
                   <SubscriptionProvider>
-                    <AppNavigator />
+                    <SupportNotificationsProvider>
+                      <AppNavigator />
+                    </SupportNotificationsProvider>
                   </SubscriptionProvider>
                 </AuthProvider>
               </TextSizeProvider>

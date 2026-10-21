@@ -52,9 +52,17 @@ export function useTimedExamSyncOnForeground() {
       wasOnlineRef.current = isOnline;
     });
 
+    // Retry transient server failures even if the network never disconnects.
+    const retry = setInterval(() => {
+      if (AppState.currentState === 'active' && wasOnlineRef.current && userRef.current) {
+        void flushAll(userRef.current).catch(() => {});
+      }
+    }, 30000);
+
     return () => {
       appStateSub.remove();
       netSub();
+      clearInterval(retry);
     };
   }, [user]);
 }

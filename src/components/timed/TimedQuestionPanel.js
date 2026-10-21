@@ -7,7 +7,7 @@ import { DMStemContent, DMOptionsContent } from '../dm/DMQuestionRenderer';
 import QRStimulusRenderer from '../qr/QRStimulusRenderer';
 import AnswerOptionButton from '../AnswerOptionButton';
 
-// Shared by the four timed subtests and the coaching assessment. This component
+// Shared by the four timed subtests and all coaching sessions. This component
 // deliberately has no tutor, explanations, grading or submission side effects.
 export default function TimedQuestionPanel({ section, accent, context, text, stimulus, dmQuestion, choices = [], answer, flagged, onAnswer, onToggleFlag }) {
   const { colors } = getPremiumTheme(useTheme().isDark);

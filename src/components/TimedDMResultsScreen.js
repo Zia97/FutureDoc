@@ -33,6 +33,10 @@ function getQuestionResult(q, answers) {
   const qid = q.questionId ?? q.id;
   const selected = answers[qid];
   const isYesNo = YES_NO_TYPES.includes(q.type);
+  if (q.grade) {
+    if (selected == null || selected === '' || (typeof selected === 'object' && !Object.keys(selected).length)) return 'unanswered';
+    return q.grade.earned >= q.grade.possible ? 'correct' : q.grade.earned > 0 ? 'partial' : 'incorrect';
+  }
 
   if (isYesNo) {
     if (!selected || typeof selected !== 'object') return 'unanswered';
@@ -47,7 +51,7 @@ function getQuestionResult(q, answers) {
   return selected === q.answer ? 'correct' : 'incorrect';
 }
 
-export default function TimedDMResultsScreen({ questions, answers, flags, test, onDone }) {
+export default function TimedDMResultsScreen({ questions, answers, flags, test, onDone, summaryContent, actions, showUcatScore = true, scoreSummary }) {
   const { isDark } = useTheme();
   const { colors } = getPremiumTheme(isDark);
   const accent = colors.teal;
@@ -66,6 +70,7 @@ export default function TimedDMResultsScreen({ questions, answers, flags, test, 
   );
 
   const correctCount = questionResults.filter((q) => q.result === 'correct').length;
+  const partialCount = questionResults.filter((q) => q.result === 'partial').length;
   const incorrectCount = questionResults.filter((q) => q.result === 'incorrect').length;
   const unansweredCount = questionResults.filter((q) => q.result === 'unanswered').length;
   const total = questions.length;
@@ -125,8 +130,11 @@ export default function TimedDMResultsScreen({ questions, answers, flags, test, 
           showsVerticalScrollIndicator={false}
           contentContainerStyle={resultsStyles.scrollContent}
         >
+          {summaryContent}
           <ScoreOverviewCard
-            pct={pct}
+            pct={scoreSummary?.accuracy ?? pct}
+            scoreSubLabel={scoreSummary ? `${scoreSummary.earned} of ${scoreSummary.possible} marks` : undefined}
+            partialCount={scoreSummary ? partialCount : null}
             correctCount={correctCount}
             incorrectCount={incorrectCount}
             unansweredCount={unansweredCount}
@@ -136,15 +144,16 @@ export default function TimedDMResultsScreen({ questions, answers, flags, test, 
             isDark={isDark}
           />
 
-          <UcatScoreCard
+          {showUcatScore && <UcatScoreCard
             scaledScore={scaledScore}
             uncertainty={`±${SCORE_UNCERTAINTY}`}
             disclaimer={`* ${UCAT_SCORE_DISCLAIMER_SHORT}`}
             accent={accent}
             colors={colors}
             isDark={isDark}
-          />
+          />}
 
+          {actions}
           <Text style={[resultsStyles.sectionHeader, { color: colors.textMuted }]}>
             QUESTION BREAKDOWN
           </Text>

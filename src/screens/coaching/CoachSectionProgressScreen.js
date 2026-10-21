@@ -30,7 +30,7 @@ export default function CoachSectionProgressScreen({ navigation, route }) {
           <View style={{ gap: 8 }}><Text style={[s.title, { color: colors.text }]}>{stats.answered} answered</Text>
             <Text style={[s.body, { color: colors.textSecondary }]}>{stats.medianSeconds == null ? 'No timing results yet' : `${stats.medianSeconds}s typical time per question`}</Text></View>
         </View></PerformanceCard>
-        <CohortComparison sections={[stats]} onRetry={refresh} />
+        {mode !== 'coaching' && <CohortComparison sections={[stats]} onRetry={refresh} />}
         {mode === 'coaching' && stats.conditions?.some((item) => item.questions > 0) && <PerformanceCard>
           <Text style={[s.title, { color: colors.text }]}>Session types</Text>
           {stats.conditions.filter((item) => item.questions > 0).map((item) => <View key={item.kind} style={[s.between, { paddingVertical: 9 }]}>

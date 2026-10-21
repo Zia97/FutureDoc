@@ -9,6 +9,7 @@ export default function BottomToolbar({
   onNotes,
   onCalculator,
   onPause,
+  pauseLabel = 'Pause test',
   onNavigator,
   onBookmark,
   isBookmarked,
@@ -36,7 +37,7 @@ export default function BottomToolbar({
       iconColorOverride: isFirst ? colors.textMuted : accent,
       borderOpacity: isFirst ? 0.16 : 0.34,
     } : null,
-    onPause ? { key: 'pause', icon: 'pause', onPress: onPause, label: 'Pause test' } : null,
+    onPause ? { key: 'pause', icon: 'pause', onPress: onPause, label: pauseLabel } : null,
     onBookmark ? {
       key: 'bookmark',
       icon: isBookmarked ? 'bookmark-filled' : 'bookmark',
