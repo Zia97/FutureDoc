@@ -28,6 +28,6 @@ export default function CoachQuestionSetup({ progress, error, onRetry }) {
     {error ? <>
       <CoachText muted style={ds.caption}>{error}</CoachText>
       <Button title="Retry download" secondary onPress={onRetry} />
-    </> : <CoachText muted style={ds.caption}>Saved on this device for coaching and Free Practice.</CoachText>}
+    </> : <CoachText muted style={ds.caption}></CoachText>}
   </View>;
 }

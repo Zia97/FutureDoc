@@ -43,12 +43,6 @@ const KEY_POINTS = [
     body: 'UCAT Genius is an independent study tool, not affiliated with the UCAT Consortium or Pearson VUE.',
   },
   {
-    icon: 'chart',
-    accent: 'purple',
-    title: 'AI Tutor',
-    body: 'AI-generated answers may be inaccurate. Check them against reliable sources and use your own judgement.',
-  },
-  {
     icon: 'lock',
     accent: 'mint',
     title: 'Your data',

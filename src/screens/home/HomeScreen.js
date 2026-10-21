@@ -227,7 +227,7 @@ export default function HomeScreen({ navigation }) {
         setStreak(s);
         setLastActivityState(a);
         setExamDateState(e);
-        if (cached) setCoachData(cached);
+        setCoachData(cached ?? null);
         if (user?.id) {
           try {
             const latest = await coachRequest(user.id, 'hub');

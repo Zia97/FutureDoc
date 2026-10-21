@@ -35,14 +35,15 @@ function screenFixture(name, service, content = {}) {
   const components = new Proxy({ ds: {}, useCoachTheme: () => ({ colors: {} }) }, {
     get: (target, key) => target[key] ?? key,
   });
-  const source = ts.transpileModule(fs.readFileSync(`src/screens/coaching/${name}.js`, 'utf8'), {
+  const directory = name === 'HomeScreen' ? 'home' : 'coaching';
+  const source = ts.transpileModule(fs.readFileSync(`src/screens/${directory}/${name}.js`, 'utf8'), {
     fileName: `${name}.jsx`,
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.React },
   }).outputText;
   vm.runInNewContext(source, { exports, console, __DEV__: false, require(path) {
     if (path === 'react') return { ...react, default: react };
     if (path.endsWith('/services/appAlert')) return { default: { alert: (...args) => alerts.push(args) } };
-    if (path === 'react-native') return new Proxy({ StyleSheet: { create: (styles) => styles } }, {
+    if (path === 'react-native') return new Proxy({ Animated: { View: 'Animated.View' }, StyleSheet: { create: (styles) => styles } }, {
       get: (target, key) => target[key] ?? key,
     });
     if (path === '@react-navigation/native') return { useFocusEffect: (fn) => { focus = fn; } };
@@ -51,6 +52,10 @@ function screenFixture(name, service, content = {}) {
     if (path.endsWith('/coaching/access')) return coachAccess;
     if (path.endsWith('/dev/useMarketingDemo')) return { useMarketingDemo: () => content.marketingDemo === true, getMarketingDemo: () => buildMarketingDemo(marketingSkills) };
     if (path.endsWith('AuthContext')) return { useAuth: () => ({ user: { id: 'alice' } }) };
+    if (path.endsWith('ThemeContext')) return { useTheme: () => ({ isDark: false }) };
+    if (path.endsWith('streakService')) return { getDisplayStreak: async () => ({ currentStreak: 0 }) };
+    if (path.endsWith('lastActivityService')) return { getLastActivity: async () => null, getResumeNavTarget: () => null };
+    if (path.endsWith('PremiumPracticeUI')) return { ...components, premiumColors: {}, hexToRgba: () => '', useFadeSlide: () => ({}) };
     if (path.endsWith('coachingService')) return { ...service,
       loadCoachInitialPlan: service.loadCoachInitialPlan ?? ((user, id) => service.coachRequest(user, 'initial_plan', { id })),
       startCoachSession: service.startCoachSession ?? (async (user, kind, focus) => {
@@ -67,7 +72,7 @@ function screenFixture(name, service, content = {}) {
     if (path.endsWith('dashboard')) return { buildDashboardStory: () => ({}), sectionSnapshot: () => [], resumeSummary: () => null };
     if (path.endsWith('initialPlan')) return { buildInitialPlan: () => ({ priorities: [] }) };
     if (path.endsWith('ExamDateCalendar')) return { parseLocalISO: () => null };
-    if (path.endsWith('premiumTheme')) return { hexToRgba: () => '' };
+    if (path.endsWith('premiumTheme')) return { hexToRgba: () => '', getPremiumTheme: () => ({ colors: {} }) };
     return new Proxy({ ...components, default: path.split('/').at(-1) }, {
       get: (target, key) => target[key] ?? key,
     });
@@ -90,6 +95,36 @@ function nodes(tree) {
   if (Array.isArray(tree)) return tree.flatMap(nodes);
   return [tree, ...nodes(tree.props?.children)];
 }
+
+test('home clears retained coaching progress after deletion before the cloud refresh finishes or fails', async () => {
+  let cached = completed;
+  const refresh = deferred();
+  const f = screenFixture('HomeScreen', {
+    loadCoachHubCache: async () => cached,
+    coachRequest: async () => refresh.promise,
+    saveCoachHubCache: async (_user, data) => data,
+  });
+  const card = () => nodes(f.render()).find((node) => node.type?.name === 'CoachingProgressCard');
+  f.render();
+  const blur = f.focus();
+  await tick();
+  assert.equal(card().props.data, completed);
+
+  // Deleting from Coaching removes its cache while Home remains mounted.
+  blur();
+  cached = null;
+  f.render(); f.focus();
+  await tick();
+  assert.equal(card().props.data, null, 'clear progress without waiting for the network');
+  const defaultCard = card();
+  const renderedCard = defaultCard.type(defaultCard.props);
+  assert.ok(nodes(renderedCard).some((node) => node.props?.children?.includes('Meet your coach')));
+  assert.ok(!nodes(renderedCard).some((node) => node.props?.children?.includes('Your coaching progress')));
+
+  refresh.reject(new Error('offline'));
+  await tick();
+  assert.equal(card().props.data, null, 'a failed refresh must keep the default state');
+});
 
 test('marketing coaching renders a complete dashboard without touching real caches or starting sessions', async () => {
   const calls = [];
