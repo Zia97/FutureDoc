@@ -2663,7 +2663,7 @@
       "primarySkillId": "sj.boundaries",
       "secondarySkillIds": [],
       "confidence": "high",
-      "rationale": "Tests boundaries and conflicts when judging: How important is Dr Byrne's financial connection with the private centre when he advises the patient?",
+      "rationale": "Tests disclosure of financial conflicts of interest when discussing treatment options with a patient.",
       "difficulty": "normal",
       "format": "importance",
       "answer": "Very important",
@@ -2674,7 +2674,7 @@
         "Not important at all"
       ],
       "labelSet": 1,
-      "contentHash": "6a069c06fd4eaafd8d3b100b97b4867501073144d8ad2a8aae6128a1b99653a4"
+      "contentHash": "aabe656f4ea92f5c1c7bd9539941a9729d74a5715d120ba20df6f58907964c9d"
     },
     {
       "id": "cf41e81e-e926-4f70-9024-12206081f653",
